@@ -467,6 +467,17 @@ err:
     return result;
 }
 
+/* vcedit_open:
+ * @state: (out caller-allocates): the reader state after the header packets
+ *   have been read
+ * @file: (in): the Ogg file to read
+ * @error: (out) (allow-none): return location for a #GError, or %NULL
+ *
+ * Opens @file, reads the header (non-audio) packets and populates the
+ * header data in @state.
+ *
+ * Returns: %TRUE on success, or %FALSE on error with @error filled in
+ */
 gboolean
 vcedit_open (EtOggState *state,
              GFile *file,
@@ -779,6 +790,25 @@ err:
     return FALSE;
 }
 
+/* vcedit_write:
+ * @state: (in): the reader state from vcedit_open() with the header comments
+ *   modified as required
+ * @file: (in): the file to write, which may exist and may be the same as the
+ *   file being read with @state
+ * @error: (out) (allow-none): return location for a #GError, or %NULL
+ *
+ * Replaces contents of @file with an Ogg bitstream where the header packets
+ * are taken from data in @state and the subsequent (audio) packets are read
+ * read using the reader state @state.
+ *
+ * It is assumed that reading using the reader state @state gives the packets
+ * following the header packets.  Therefore, the reader state must be created
+ * using vcedit_open().  After writing, @state cannot be used to write again
+ * so it is cleared, which allows it to be used with a subsequent call to
+ * vcedit_open().
+ *
+ * Returns: %TRUE on success, or %FALSE on error with @error filled in
+ */
 gboolean
 vcedit_write (EtOggState *state,
               GFile *file,
@@ -792,30 +822,33 @@ vcedit_write (EtOggState *state,
     ogg_page ogout, ogin;
     ogg_packet op;
     ogg_int64_t granpos = 0;
-    gint result;
     gchar *buffer;
     glong bytes;
+    GError *read_error = NULL;
     gboolean needflush = FALSE;
     gboolean needout = FALSE;
     GOutputStream *ostream;
     gchar *buf;
     gsize size;
     GFileInfo *fileinfo;
+    gboolean result;
 
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    fileinfo = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE,
-                                  G_FILE_QUERY_INFO_NONE, NULL, error);
+    fileinfo = g_file_input_stream_query_info (state->in,
+                                               G_FILE_ATTRIBUTE_STANDARD_SIZE,
+                                               NULL, error);
     if (!fileinfo)
     {
+        vcedit_clear_internals (state);
+
         g_assert (error == NULL || *error != NULL);
         return FALSE;
     }
 
-    buf = g_malloc (g_file_info_get_size (fileinfo));
-    ostream = g_memory_output_stream_new (buf,
-                                          g_file_info_get_size (fileinfo),
-                                          g_realloc, g_free);
+    size = (gsize)(g_file_info_get_size (fileinfo));
+    buf = g_malloc (size);
+    ostream = g_memory_output_stream_new (buf, size, g_realloc, g_free);
     g_object_unref (fileinfo);
 
     state->eosin = FALSE;
@@ -845,7 +878,7 @@ vcedit_write (EtOggState *state,
         ogg_stream_packetin (&streamout, &header_codebooks);
     }
 
-    while ((result = ogg_stream_flush (&streamout, &ogout)))
+    while (ogg_stream_flush (&streamout, &ogout))
     {
         gsize bytes_written;
 
@@ -856,7 +889,7 @@ vcedit_write (EtOggState *state,
             g_debug ("Only %" G_GSIZE_FORMAT " bytes out of %ld bytes of data "
                      "were written", bytes_written, ogout.header_len);
             g_assert (error == NULL || *error != NULL);
-            goto cleanup;
+            goto err;
         }
 
         if (!g_output_stream_write_all (ostream, ogout.body, ogout.body_len,
@@ -865,11 +898,12 @@ vcedit_write (EtOggState *state,
             g_debug ("Only %" G_GSIZE_FORMAT " bytes out of %ld bytes of data "
                      "were written", bytes_written, ogout.body_len);
             g_assert (error == NULL || *error != NULL);
-            goto cleanup;
+            goto err;
         }
     }
 
-    while (_fetch_next_packet (state, &op, &ogin, error))
+    /* Always supply an error to determine why the loop terminates. */
+    while (_fetch_next_packet (state, &op, &ogin, &read_error))
     {
         if (needflush)
         {
@@ -884,7 +918,7 @@ vcedit_write (EtOggState *state,
                     g_debug ("Only %" G_GSIZE_FORMAT " bytes out of %ld bytes of "
                              "data were written", bytes_written, ogout.header_len);
                     g_assert (error == NULL || *error != NULL);
-                    goto cleanup;
+                    goto err;
                 }
 
                 if (!g_output_stream_write_all (ostream, ogout.body,
@@ -894,7 +928,7 @@ vcedit_write (EtOggState *state,
                     g_debug ("Only %" G_GSIZE_FORMAT " bytes out of %ld bytes of "
                              "data were written", bytes_written, ogout.body_len);
                     g_assert (error == NULL || *error != NULL);
-                    goto cleanup;
+                    goto err;
                 }
             }
         }
@@ -912,7 +946,7 @@ vcedit_write (EtOggState *state,
                              "of data were written", bytes_written,
                              ogout.header_len);
                     g_assert (error == NULL || *error != NULL);
-                    goto cleanup;
+                    goto err;
                 }
 
                 if (!g_output_stream_write_all (ostream, ogout.body,
@@ -923,7 +957,7 @@ vcedit_write (EtOggState *state,
                              "of data were written", bytes_written,
                              ogout.body_len);
                     g_assert (error == NULL || *error != NULL);
-                    goto cleanup;
+                    goto err;
                 }
             }
         }
@@ -974,18 +1008,26 @@ vcedit_write (EtOggState *state,
         }
     }
 
-    if (error != NULL)
+    if (read_error != NULL)
     {
-        if (g_error_matches (*error, ET_OGG_ERROR, ET_OGG_ERROR_EOF)
-            || g_error_matches (*error, ET_OGG_ERROR, ET_OGG_ERROR_EOS))
+        if (g_error_matches (read_error, ET_OGG_ERROR, ET_OGG_ERROR_EOF)
+            || g_error_matches (read_error, ET_OGG_ERROR, ET_OGG_ERROR_EOS))
         {
             /* While nominally errors, these are expected and can be safely
              * ignored. */
-            g_clear_error (error);
+            g_clear_error (&read_error);
         }
         else
         {
-            goto cleanup;
+            if (error != NULL)
+            {
+                *error = read_error;
+            }
+            else
+            {
+                g_clear_error (&read_error);
+            }
+            goto err;
         }
     }
 
@@ -1002,7 +1044,7 @@ vcedit_write (EtOggState *state,
             g_debug ("Only %" G_GSIZE_FORMAT " bytes out of %ld bytes of data "
                      "were written", bytes_written, ogout.header_len);
             g_assert (error == NULL || *error != NULL);
-            goto cleanup;
+            goto err;
         }
 
         if (!g_output_stream_write_all (ostream, ogout.body, ogout.body_len,
@@ -1011,7 +1053,7 @@ vcedit_write (EtOggState *state,
             g_debug ("Only %" G_GSIZE_FORMAT " bytes out of %ld bytes of data "
                      "were written", bytes_written, ogout.body_len);
             g_assert (error == NULL || *error != NULL);
-            goto cleanup;
+            goto err;
         }
     }
 
@@ -1026,7 +1068,7 @@ vcedit_write (EtOggState *state,
             g_debug ("Only %" G_GSIZE_FORMAT " bytes out of %ld bytes of data "
                      "were written", bytes_written, ogout.header_len);
             g_assert (error == NULL || *error != NULL);
-            goto cleanup;
+            goto err;
         }
 
         if (!g_output_stream_write_all (ostream, ogout.body, ogout.body_len,
@@ -1035,9 +1077,21 @@ vcedit_write (EtOggState *state,
             g_debug ("Only %" G_GSIZE_FORMAT " bytes out of %ld bytes of data "
                      "were written", bytes_written, ogout.body_len);
             g_assert (error == NULL || *error != NULL);
-            goto cleanup;
+            goto err;
         }
     }
+
+    if (!state->eosin)
+    {
+        if (error != NULL && *error == NULL)
+        {
+            g_set_error (error, ET_OGG_ERROR, ET_OGG_ERROR_OUTPUT,
+                         "Stream ended unexpectedly while writing out");
+        }
+        goto err;
+    }
+
+    g_assert (error == NULL || *error == NULL);
 
     state->eosin = FALSE; /* clear it, because not all paths to here do */
 
@@ -1047,7 +1101,7 @@ vcedit_write (EtOggState *state,
          * through, a page at a time. */
         while(1)
         {
-            result = ogg_sync_pageout (state->oy, &ogout);
+            int result = ogg_sync_pageout (state->oy, &ogout);
 
             if (result == 0)
             {
@@ -1069,7 +1123,7 @@ vcedit_write (EtOggState *state,
                                                 &bytes_written, NULL, error))
                 {
                     g_assert (error == NULL || *error != NULL);
-                    goto cleanup;
+                    goto err;
                 }
 
                 if (!g_output_stream_write_all (ostream, ogout.body,
@@ -1077,7 +1131,7 @@ vcedit_write (EtOggState *state,
                                                 NULL, error))
                 {
                     g_assert (error == NULL || *error != NULL);
-                    goto cleanup;
+                    goto err;
                 }
             }
         }
@@ -1090,7 +1144,7 @@ vcedit_write (EtOggState *state,
         if (bytes == -1)
         {
             g_assert (error == NULL || *error != NULL);
-            goto cleanup;
+            goto err;
         }
 
         ogg_sync_wrote (state->oy, bytes);
@@ -1102,37 +1156,12 @@ vcedit_write (EtOggState *state,
         }
     }
 
-
-cleanup:
-    ogg_stream_clear (&streamout);
-    ogg_packet_clear (&header_comments);
-
-    g_free (state->mainbuf);
-    g_free (state->bookbuf);
-    state->mainbuf = state->bookbuf = NULL;
-
-    if (!state->eosin)
-    {
-        if (!error)
-        {
-            g_set_error (error, ET_OGG_ERROR, ET_OGG_ERROR_OUTPUT,
-                         "Error writing stream to output. Output stream may be corrupted or truncated");
-        }
-    }
-
-    if (error == NULL || *error != NULL)
-    {
-        g_object_unref (ostream);
-        return FALSE;
-    }
-
     g_assert (error == NULL || *error == NULL);
 
     if (!g_output_stream_close (ostream, NULL, error))
     {
-        g_object_unref (ostream);
         g_assert (error == NULL || *error != NULL);
-        return FALSE;
+        goto err;
     }
 
     g_assert (error == NULL || *error == NULL);
@@ -1150,49 +1179,32 @@ cleanup:
         g_clear_error (error);
     }
 
-    g_object_unref (state->in);
-    state->in = NULL;
-
-    /* Write the in-memory data back out to the original file. */
+    /* Write the in-memory data to file. */
     if (!g_file_replace_contents (file, buf, size, NULL, FALSE,
                                   G_FILE_CREATE_NONE, NULL, NULL, error))
     {
-        GError *tmp_error = NULL;
-
-        g_object_unref (ostream);
         g_free (buf);
-
-        /* Re-open the file for reading, to keep the internal state
-         * consistent. */
-        state->in = g_file_read (file, NULL, &tmp_error);
-
-        if (!state->in)
-        {
-            g_warning ("Error opening Ogg file for reading after write failure: %s",
-                       tmp_error->message);
-            g_clear_error (&tmp_error);
-            g_assert (error == NULL || *error != NULL);
-            return FALSE;
-        }
-
         g_assert (error == NULL || *error != NULL);
-        return FALSE;
+        goto err;
     }
+
+    g_assert (error == NULL || *error == NULL);
 
     g_free (buf);
+
+    result = TRUE;
+    goto cleanup;
+
+err:
+    result = FALSE;
+
+cleanup:
+    ogg_stream_clear (&streamout);
+    ogg_packet_clear (&header_comments);
     g_object_unref (ostream);
+    vcedit_clear_internals (state);
 
-    /* Re-open the file, now that the write has completed. */
-    state->in = g_file_read (file, NULL, error);
-
-    if (!state->in)
-    {
-        g_assert (error == NULL || *error != NULL);
-        return FALSE;
-    }
-
-
-    return TRUE;
+    return result;
 }
 
 #endif /* ENABLE_OGG */
