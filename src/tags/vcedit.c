@@ -380,9 +380,8 @@ err_out:
 }
 
 /* vcedit_supported_stream:
- * @state: current reader state
- * @page: first page of the Ogg stream
- * @error: a #GError to set on failure to find a supported stream
+ * @page: (in): first page of the Ogg stream
+ * @error: (out) (allow-none): return location for a #GError, or %NULL
  *
  * Checks the type of the Ogg stream given by @page to see if it is supported.
  *
@@ -390,8 +389,7 @@ err_out:
  *          from #EtOggKind otherwise
  */
 static EtOggKind
-vcedit_supported_stream (EtOggState *state,
-                         ogg_page *page,
+vcedit_supported_stream (ogg_page *page,
                          GError **error)
 {
     ogg_stream_state stream_state;
@@ -569,7 +567,7 @@ vcedit_open (EtOggState *state,
     state->mainlen = header_main.bytes;
     state->mainbuf = g_memdup (header_main.packet, header_main.bytes);
 
-    state->oggtype = vcedit_supported_stream (state, &og, error);
+    state->oggtype = vcedit_supported_stream (&og, error);
 
     switch (state->oggtype)
     {
