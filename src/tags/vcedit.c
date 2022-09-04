@@ -587,7 +587,7 @@ vcedit_open (EtOggState *state,
             state->oi = g_slice_new (OpusHead);
 
             /* TODO: Check for success. */
-            opus_head_parse (state->oi, (unsigned char*)(&header_main)->packet,
+            i = opus_head_parse (state->oi, (unsigned char*)(&header_main)->packet,
                              (&header_main)->bytes);
             break;
 #endif
@@ -636,6 +636,7 @@ vcedit_open (EtOggState *state,
         case ET_OGG_KIND_OPUS:
 #endif
         case ET_OGG_KIND_UNKNOWN:
+        case ET_OGG_KIND_UNSUPPORTED:
         default:
             g_assert_not_reached ();
             break;
@@ -746,6 +747,7 @@ vcedit_open (EtOggState *state,
                         case ET_OGG_KIND_OPUS:
 #endif
                         case ET_OGG_KIND_UNKNOWN:
+                        case ET_OGG_KIND_UNSUPPORTED:
                         default:
                             g_assert_not_reached ();
                             break;
@@ -1099,14 +1101,14 @@ vcedit_write (EtOggState *state,
          * through, a page at a time. */
         while(1)
         {
-            int result = ogg_sync_pageout (state->oy, &ogout);
+            int resulti = ogg_sync_pageout (state->oy, &ogout);
 
-            if (result == 0)
+            if (resulti == 0)
             {
                 break;
             }
 
-            if (result < 0)
+            if (resulti < 0)
             {
                 g_debug ("%s", "Corrupt or missing data, continuing");
             }
