@@ -22,9 +22,7 @@
 #include <gio/gio.h>
 #include <gio/gdesktopappinfo.h>
 #include <glib/gi18n-lib.h>
-#include <libnautilus-extension/nautilus-extension-types.h>
-#include <libnautilus-extension/nautilus-file-info.h>
-#include <libnautilus-extension/nautilus-menu-provider.h>
+#include <nautilus-extension.h>
 
 #define NAUTILUS_TYPE_EASYTAG (nautilus_easytag_get_type ())
 #define NAUTILUS_EASYTAG(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), NAUTILUS_TYPE_EASYTAG, NautilusEasytag))
