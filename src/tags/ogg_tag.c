@@ -43,6 +43,7 @@
  ***************/
 
 #define MULTIFIELD_SEPARATOR " - "
+#define VERSION_EXTRACTOR " \\[([^\\[\\]]+)\\]$"
 
 /*
  * convert_to_byte_array:
@@ -251,6 +252,15 @@ values_list_foreach (gpointer data,
     }
 }
 
+static GRegex* get_version_regex(void)
+{
+	static GRegex* version_regex = NULL;
+
+  if (version_regex == NULL)
+      version_regex = g_regex_new (VERSION_EXTRACTOR, G_REGEX_DOLLAR_ENDONLY|G_REGEX_OPTIMIZE, 0, NULL);
+  return version_regex;
+}
+
 /*
  * et_add_file_tags_from_vorbis_comments:
  * @vc: Vorbis comment from which to fill @FileTag
@@ -279,6 +289,27 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
         g_slist_free (strings);
         g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_TITLE);
     }
+
+    /* Version. */
+    if ((strings = g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_VERSION)))
+    {
+        gchar *tmp = NULL;
+        g_slist_foreach (strings, values_list_foreach, &tmp);
+        g_slist_free (strings);
+        if (FileTag->title)
+        {
+            gchar *tmp2 = FileTag->title;
+            FileTag->title = g_strconcat (FileTag->title, " [", tmp, "]", NULL);
+            g_free(tmp2);
+        }
+        else
+            FileTag->title = g_strconcat (" [", tmp, "]", NULL);
+        g_free (tmp);
+        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_VERSION);
+    }
+    else if (FileTag->title && g_regex_match(get_version_regex(), FileTag->title, 0, NULL))
+        /* Mark modified because on write the version will be stored in the VERSION field. */
+        FileTag->saved = FALSE;
 
     /* Artist. */
     if ((strings = g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_ARTIST)))
@@ -871,6 +902,17 @@ et_ogg_set_tag (vorbis_comment *vc,
     }
 }
 
+static gboolean
+version_regex_cb (const GMatchInfo* match_info,
+                  GString* result,
+                  gpointer user_data)
+{
+    gchar *version = g_match_info_fetch (match_info, 1);
+    vorbis_comment_add_tag ((vorbis_comment*)user_data, ET_VORBIS_COMMENT_FIELD_VERSION, version);
+    g_free (version);
+    return FALSE;
+}
+
 gboolean
 ogg_tag_write_file_tag (const ET_File *ETFile,
                         GError **error)
@@ -882,6 +924,7 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
     vorbis_comment *vc;
     GList *l;
     EtPicture *pic;
+    gchar* title;
 
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -908,11 +951,18 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
     vorbis_comment_clear(vc);
     vorbis_comment_init(vc);
 
+    /***********
+     * Version *
+     ***********/
+    title = g_regex_replace_eval (get_version_regex(), FileTag->title, -1, 0, 0,
+                                  &version_regex_cb, vc, NULL);
+
     /*********
      * Title *
      *********/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_TITLE, FileTag->title,
+    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_TITLE, title,
                     g_settings_get_boolean (MainSettings, "ogg-split-title"));
+    g_free (title);
 
     /**********
      * Artist *
