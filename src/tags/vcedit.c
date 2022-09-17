@@ -404,7 +404,7 @@ vcedit_supported_stream (ogg_page *page,
         g_set_error (error, ET_OGG_ERROR, ET_OGG_ERROR_BOS,
                      "Beginning of stream packet not found");
         result = ET_OGG_KIND_UNSUPPORTED;
-        goto err;
+        goto end;
     }
 
     if (ogg_stream_pagein (&stream_state, page) < 0)
@@ -413,7 +413,7 @@ vcedit_supported_stream (ogg_page *page,
         g_set_error (error, ET_OGG_ERROR, ET_OGG_ERROR_PAGE,
                      "Error reading first page of Ogg bitstream");
         result = ET_OGG_KIND_UNSUPPORTED;
-        goto err;
+        goto end;
     }
 
     if (ogg_stream_packetout (&stream_state, &header) != 1)
@@ -422,18 +422,17 @@ vcedit_supported_stream (ogg_page *page,
         g_set_error (error, ET_OGG_ERROR, ET_OGG_ERROR_HEADER,
                      "Error reading initial header packet");
         result = ET_OGG_KIND_UNSUPPORTED;
-        goto err;
+        goto end;
     }
 
     if (vorbis_synthesis_idheader (&header) > 0)
     {
         result = ET_OGG_KIND_VORBIS;
+        goto end;
     }
-    else
-    {
-        result = ET_OGG_KIND_UNKNOWN;
 
 #ifdef ENABLE_SPEEX
+    {
         SpeexHeader *speex;
 
         /* Done after "Ogg test" to avoid to display an error message in
@@ -443,23 +442,24 @@ vcedit_supported_stream (ogg_page *page,
         {
             result = ET_OGG_KIND_SPEEX;
             speex_header_free (speex);
+            goto end;
         }
+    }
 #endif
 
 #ifdef ENABLE_OPUS
-        if (result == ET_OGG_KIND_UNKNOWN)
-        {
-            /* TODO: Check for other return values, such as OP_ENOTFORMAT. */
-            if (opus_head_parse (NULL, (unsigned char*)(&header)->packet,
-                                 (&header)->bytes) == 0)
-            {
-                result = ET_OGG_KIND_OPUS;
-            }
-        }
-#endif
+    /* TODO: Check for other return values, such as OP_ENOTFORMAT. */
+    if (opus_head_parse (NULL, (unsigned char*)(&header)->packet,
+                         (&header)->bytes) == 0)
+    {
+        result = ET_OGG_KIND_OPUS;
+        goto end;
     }
+#endif
 
-err:
+    result = ET_OGG_KIND_UNKNOWN;
+
+end:
     ogg_stream_clear (&stream_state);
 
     return result;
