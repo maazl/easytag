@@ -274,6 +274,17 @@ wavpack_tag_read_file_tag (GFile *file,
     memset (field, '\0', MAXLEN);
 
     /*
+     * Original year
+     */
+    length = WavpackGetTagItem(wpc, "original year", field, MAXLEN);
+
+    if ( length > 0 && FileTag->orig_year == NULL ) {
+        FileTag->orig_year = Try_To_Validate_Utf8_String(field);
+    }
+
+    memset (field, '\0', MAXLEN);
+
+    /*
      * Copyright
      */
     length = WavpackGetTagItem(wpc, "copyright", field, MAXLEN);
@@ -500,6 +511,12 @@ wavpack_tag_write_file_tag (const ET_File *ETFile,
     /* Original artist. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "original artist",
                                                FileTag->orig_artist))
+    {
+        goto err;
+    }
+
+    /* Year. */
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "original year", FileTag->orig_year))
     {
         goto err;
     }

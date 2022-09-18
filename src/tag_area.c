@@ -52,6 +52,8 @@ typedef struct
     GtkWidget *disc_number_entry;
     GtkWidget *year_label;
     GtkWidget *year_entry;
+    GtkWidget *orig_year_label;
+    GtkWidget *orig_year_entry;
     GtkWidget *track_label;
     GtkWidget *track_combo_entry;
     GtkWidget *track_total_entry;
@@ -316,6 +318,29 @@ on_apply_to_selection (GObject *object,
         else
         {
             msg = g_strdup (_("Removed year from selected files"));
+        }
+    }
+    else if (object == G_OBJECT (priv->orig_year_entry))
+    {
+        string_to_set = gtk_entry_get_text (GTK_ENTRY (priv->orig_year_entry));
+
+        for (l = etfilelist; l != NULL; l = g_list_next (l))
+        {
+            etfile = (ET_File *)l->data;
+            FileTag = et_file_tag_new ();
+            et_file_tag_copy_into (FileTag, etfile->FileTag->data);
+            et_file_tag_set_orig_year (FileTag, string_to_set);
+            ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
+        }
+
+        if (!et_str_empty (string_to_set))
+        {
+            msg = g_strdup_printf (_("Selected files tagged with original year ‘%s’"),
+                                   string_to_set);
+        }
+        else
+        {
+            msg = g_strdup (_("Removed original year from selected files"));
         }
     }
     else if (object == G_OBJECT (priv->track_total_entry))
@@ -1135,13 +1160,10 @@ Insert_Only_Digit (GtkEditable *editable,
  */
 #include <stdlib.h>
 static void
-Parse_Date (EtTagArea *self)
+Parse_Date (GtkWidget *entry)
 {
-    EtTagAreaPrivate *priv;
     const gchar *year;
     gchar *current_year;
-
-    priv = et_tag_area_get_instance_private (self);
 
     /* Early return. */
     if (!g_settings_get_boolean (MainSettings, "tag-date-autocomplete"))
@@ -1150,7 +1172,7 @@ Parse_Date (EtTagArea *self)
     }
 
     /* Get the info entered by user */
-    year = gtk_entry_get_text (GTK_ENTRY (priv->year_entry));
+    year = gtk_entry_get_text (GTK_ENTRY (entry));
 
     if (!et_str_empty (year) && strlen (year) < 4)
     {
@@ -1167,7 +1189,7 @@ Parse_Date (EtTagArea *self)
         {
             sprintf (current_year, "%d", atoi (current_year) - atoi (tmp));
             tmp1 = g_strdup_printf ("%d", atoi (current_year) + atoi (year));
-            gtk_entry_set_text (GTK_ENTRY (priv->year_entry), tmp1);
+            gtk_entry_set_text (GTK_ENTRY (entry), tmp1);
             g_free (tmp1);
         }
         else
@@ -1176,7 +1198,7 @@ Parse_Date (EtTagArea *self)
                      - (strlen (year) <= 0 ? 1 : strlen (year) <= 1 ? 10 :          // pow(10,strlen(year)) returns 99 instead of 100 under Win32...
                      strlen (year) <= 2 ? 100 : strlen (year) <= 3 ? 1000 : 0));
             tmp1 = g_strdup_printf ("%d", atoi (current_year) + atoi (year));
-            gtk_entry_set_text (GTK_ENTRY (priv->year_entry), tmp1);
+            gtk_entry_set_text (GTK_ENTRY (entry), tmp1);
             g_free (tmp1);
         }
 
@@ -1189,7 +1211,7 @@ on_year_entry_focus_out_event (GtkWidget *widget,
                                GdkEvent *event,
                                gpointer user_data)
 {
-    Parse_Date (ET_TAG_AREA (user_data));
+    Parse_Date (widget);
 
     return GDK_EVENT_PROPAGATE;
 }
@@ -1198,7 +1220,7 @@ static void
 on_year_entry_activate (GtkEntry *entry,
                         gpointer user_data)
 {
-    Parse_Date (ET_TAG_AREA (user_data));
+    Parse_Date ((GtkWidget*)entry);
 }
 
 static void
@@ -2132,6 +2154,7 @@ create_tag_area (EtTagArea *self)
     et_tag_field_connect_signals (GTK_ENTRY (priv->disc_number_entry), self);
     /* Year */
     et_tag_field_connect_signals (GTK_ENTRY (priv->year_entry), self);
+    et_tag_field_connect_signals (GTK_ENTRY (priv->orig_year_entry), self);
 
     /* Track and Track total */
     populate_track_combo (self);
@@ -2183,6 +2206,7 @@ create_tag_area (EtTagArea *self)
     focus_chain = g_list_prepend (focus_chain, priv->album_entry);
     focus_chain = g_list_prepend (focus_chain, priv->disc_number_entry);
     focus_chain = g_list_prepend (focus_chain, priv->year_entry);
+    focus_chain = g_list_prepend (focus_chain, priv->orig_year_entry);
     focus_chain = g_list_prepend (focus_chain, priv->track_combo_entry);
     focus_chain = g_list_prepend (focus_chain, priv->track_total_entry);
     focus_chain = g_list_prepend (focus_chain, priv->genre_combo_entry);
@@ -2260,6 +2284,10 @@ et_tag_area_class_init (EtTagAreaClass *klass)
                                                   year_label);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
                                                   year_entry);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
+                                                  orig_year_label);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
+                                                  orig_year_entry);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
                                                   track_label);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
@@ -2403,6 +2431,8 @@ et_tag_area_update_controls (EtTagArea *self,
     gtk_widget_show (priv->album_entry);
     gtk_widget_show (priv->year_label);
     gtk_widget_show (priv->year_entry);
+    gtk_widget_show (priv->orig_year_label);
+    gtk_widget_show (priv->orig_year_entry);
     gtk_widget_show (priv->track_label);
     gtk_widget_show (priv->track_combo_entry);
     gtk_widget_show (priv->track_total_entry);
@@ -2426,6 +2456,8 @@ et_tag_area_update_controls (EtTagArea *self,
                 gtk_widget_hide (priv->composer_entry);
                 gtk_widget_hide (priv->orig_artist_label);
                 gtk_widget_hide (priv->orig_artist_entry);
+                gtk_widget_hide (priv->orig_year_label);
+                gtk_widget_hide (priv->orig_year_entry);
                 gtk_widget_hide (priv->copyright_label);
                 gtk_widget_hide (priv->copyright_entry);
                 gtk_widget_hide (priv->url_label);
@@ -2442,6 +2474,8 @@ et_tag_area_update_controls (EtTagArea *self,
                 gtk_widget_show (priv->composer_entry);
                 gtk_widget_show (priv->orig_artist_label);
                 gtk_widget_show (priv->orig_artist_entry);
+                gtk_widget_show (priv->orig_year_label);
+                gtk_widget_show (priv->orig_year_entry);
                 gtk_widget_show (priv->copyright_label);
                 gtk_widget_show (priv->copyright_entry);
                 gtk_widget_show (priv->url_label);
@@ -2460,6 +2494,8 @@ et_tag_area_update_controls (EtTagArea *self,
             gtk_widget_show (priv->composer_entry);
             gtk_widget_show (priv->orig_artist_label);
             gtk_widget_show (priv->orig_artist_entry);
+            gtk_widget_show (priv->orig_year_label);
+            gtk_widget_show (priv->orig_year_entry);
             gtk_widget_show (priv->copyright_label);
             gtk_widget_show (priv->copyright_entry);
             gtk_widget_show (priv->url_label);
@@ -2478,6 +2514,8 @@ et_tag_area_update_controls (EtTagArea *self,
             gtk_widget_show (priv->composer_entry);
             gtk_widget_show (priv->orig_artist_label);
             gtk_widget_show (priv->orig_artist_entry);
+            gtk_widget_show (priv->orig_year_label);
+            gtk_widget_show (priv->orig_year_entry);
             gtk_widget_show (priv->copyright_label);
             gtk_widget_show (priv->copyright_entry);
             gtk_widget_show (priv->url_label);
@@ -2496,6 +2534,8 @@ et_tag_area_update_controls (EtTagArea *self,
             gtk_widget_show (priv->composer_entry);
             gtk_widget_show (priv->orig_artist_label);
             gtk_widget_show (priv->orig_artist_entry);
+            gtk_widget_show (priv->orig_year_label);
+            gtk_widget_show (priv->orig_year_entry);
             gtk_widget_show (priv->copyright_label);
             gtk_widget_show (priv->copyright_entry);
             gtk_widget_show (priv->url_label);
@@ -2513,6 +2553,8 @@ et_tag_area_update_controls (EtTagArea *self,
             gtk_widget_show (priv->composer_entry);
             gtk_widget_show (priv->orig_artist_label);
             gtk_widget_show (priv->orig_artist_entry);
+            gtk_widget_show (priv->orig_year_label);
+            gtk_widget_show (priv->orig_year_entry);
             gtk_widget_show (priv->copyright_label);
             gtk_widget_show (priv->copyright_entry);
             gtk_widget_show (priv->url_label);
@@ -2530,6 +2572,8 @@ et_tag_area_update_controls (EtTagArea *self,
             gtk_widget_show (priv->composer_entry);
             gtk_widget_hide (priv->orig_artist_label);
             gtk_widget_hide (priv->orig_artist_entry);
+            gtk_widget_hide (priv->orig_year_label);
+            gtk_widget_hide (priv->orig_year_entry);
             gtk_widget_show (priv->copyright_label);
             gtk_widget_show (priv->copyright_entry);
             gtk_widget_hide (priv->url_label);
@@ -2548,6 +2592,8 @@ et_tag_area_update_controls (EtTagArea *self,
             gtk_widget_show (priv->composer_entry);
             gtk_widget_show (priv->orig_artist_label);
             gtk_widget_show (priv->orig_artist_entry);
+            gtk_widget_show (priv->orig_year_label);
+            gtk_widget_show (priv->orig_year_entry);
             gtk_widget_show (priv->copyright_label);
             gtk_widget_show (priv->copyright_entry);
             gtk_widget_show (priv->url_label);
@@ -2581,6 +2627,8 @@ et_tag_area_update_controls (EtTagArea *self,
             gtk_widget_hide (priv->composer_entry);
             gtk_widget_hide (priv->orig_artist_label);
             gtk_widget_hide (priv->orig_artist_entry);
+            gtk_widget_hide (priv->orig_year_label);
+            gtk_widget_hide (priv->orig_year_entry);
             gtk_widget_hide (priv->copyright_label);
             gtk_widget_hide (priv->copyright_entry);
             gtk_widget_hide (priv->url_label);
@@ -2607,6 +2655,7 @@ et_tag_area_clear (EtTagArea *self)
     gtk_entry_set_text (GTK_ENTRY (priv->album_entry), "");
     gtk_entry_set_text (GTK_ENTRY (priv->disc_number_entry), "");
     gtk_entry_set_text (GTK_ENTRY (priv->year_entry), "");
+    gtk_entry_set_text (GTK_ENTRY (priv->orig_year_entry), "");
     gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->track_combo_entry))),
                         "");
     gtk_entry_set_text (GTK_ENTRY (priv->track_total_entry), "");
@@ -2750,6 +2799,20 @@ et_tag_area_create_file_tag (EtTagArea *self)
     else
     {
         FileTag->year = NULL;
+        g_free (buffer);
+    }
+
+    /* Original year */
+    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->orig_year_entry)));
+    g_strstrip (buffer);
+
+    if (*buffer)
+    {
+        FileTag->orig_year = buffer;
+    }
+    else
+    {
+        FileTag->orig_year = NULL;
         g_free (buffer);
     }
 
@@ -3086,6 +3149,18 @@ et_tag_area_display_et_file (EtTagArea *self,
     else
     {
         gtk_entry_set_text (GTK_ENTRY (priv->year_entry), "");
+    }
+
+    /* Show original year */
+    if (FileTag && FileTag->orig_year)
+    {
+        gchar *tmp = Try_To_Validate_Utf8_String (FileTag->orig_year);
+        gtk_entry_set_text (GTK_ENTRY (priv->orig_year_entry), tmp);
+        g_free (tmp);
+    }
+    else
+    {
+        gtk_entry_set_text (GTK_ENTRY (priv->orig_year_entry), "");
     }
 
     /* Show track */

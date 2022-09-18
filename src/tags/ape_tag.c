@@ -182,6 +182,10 @@ ape_tag_read_file_tag (GFile *file,
     string = apefrm_getstr (ape_cnt, "Original Artist");
     set_string_field (&FileTag->orig_artist, string);
 
+    /* Original year */
+    string = apefrm_getstr (ape_cnt, "Original Year");
+    set_string_field (&FileTag->orig_year, string);
+
     /* Copyright */
     string = apefrm_getstr (ape_cnt, APE_TAG_FIELD_COPYRIGHT);
     set_string_field (&FileTag->copyright, string);
@@ -339,6 +343,14 @@ ape_tag_write_file_tag (const ET_File *ETFile,
         apefrm_add(ape_mem, 0, "Original Artist", FileTag->orig_artist);
     else
         apefrm_remove(ape_mem,"Original Artist");
+
+    /*****************
+     * Original year *
+     ****************/
+    if (!et_str_empty (FileTag->orig_year))
+        apefrm_add(ape_mem, 0, "Original Year", FileTag->orig_year);
+    else
+        apefrm_remove(ape_mem, "Original Year");
 
     /*************
      * Copyright *

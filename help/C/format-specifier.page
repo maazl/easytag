@@ -140,6 +140,14 @@
       </tr>
       <tr>
         <td>
+          <p its:translate="no">%w</p>
+        </td>
+        <td>
+          <p>Original year</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
           <p its:translate="no">%n</p>
         </td>
         <td>

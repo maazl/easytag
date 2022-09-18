@@ -459,6 +459,16 @@ flac_tag_read_file_tag (GFile *file,
                 g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_PERFORMER);
             }
 
+            /* Original year. */
+            if ((strings = g_hash_table_lookup (tags,
+                                                ET_VORBIS_COMMENT_FIELD_ORIG_DATE)))
+            {
+                g_slist_foreach (strings, values_list_foreach,
+                                 &FileTag->orig_year);
+                g_slist_free (strings);
+                g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_ORIG_DATE);
+            }
+
             /* Copyright. */
             if ((strings = g_hash_table_lookup (tags,
                                                 ET_VORBIS_COMMENT_FIELD_COPYRIGHT)))
@@ -559,7 +569,7 @@ flac_tag_read_file_tag (GFile *file,
       && FileTag->album_artist == NULL
       && FileTag->album       == NULL
       && FileTag->disc_number == NULL
-      && FileTag->disc_total == NULL
+      && FileTag->disc_total  == NULL
       && FileTag->year        == NULL
       && FileTag->track       == NULL
       && FileTag->track_total == NULL
@@ -567,6 +577,7 @@ flac_tag_read_file_tag (GFile *file,
       && FileTag->comment     == NULL
       && FileTag->composer    == NULL
       && FileTag->orig_artist == NULL
+      && FileTag->orig_year   == NULL
       && FileTag->copyright   == NULL
       && FileTag->url         == NULL
       && FileTag->encoded_by  == NULL
@@ -581,7 +592,7 @@ flac_tag_read_file_tag (GFile *file,
           || FileTag->album_artist != NULL
           || FileTag->album       != NULL
           || FileTag->disc_number != NULL
-          || FileTag->disc_total != NULL
+          || FileTag->disc_total  != NULL
           || FileTag->year        != NULL
           || FileTag->track       != NULL
           || FileTag->track_total != NULL
@@ -589,6 +600,7 @@ flac_tag_read_file_tag (GFile *file,
           || FileTag->comment     != NULL
           || FileTag->composer    != NULL
           || FileTag->orig_artist != NULL
+          || FileTag->orig_year   != NULL
           || FileTag->copyright   != NULL
           || FileTag->url         != NULL
           || FileTag->encoded_by  != NULL
@@ -951,6 +963,12 @@ flac_tag_write_file_tag (const ET_File *ETFile,
                              FileTag->orig_artist,
                              g_settings_get_boolean (MainSettings,
                                                      "ogg-split-original-artist"));
+
+        /*****************
+         * Original year *
+         ****************/
+        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_ORIG_DATE,
+                             FileTag->orig_year, FALSE);
 
         /*************
          * Copyright *

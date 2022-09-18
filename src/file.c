@@ -499,6 +499,44 @@ ET_Comp_Func_Sort_File_By_Descending_Year (const ET_File *ETFile1,
 
 
 /*
+ * Comparison function for sorting by ascending original year.
+ */
+gint
+ET_Comp_Func_Sort_File_By_Ascending_Orig_Year (const ET_File *ETFile1,
+                                               const ET_File *ETFile2)
+{
+    gint year1, year2;
+
+    if ( !ETFile1->FileTag->data || !((File_Tag *)ETFile1->FileTag->data)->orig_year )
+        year1 = 0;
+    else
+        year1 = atoi( ((File_Tag *)ETFile1->FileTag->data)->orig_year );
+
+    if ( !ETFile2->FileTag->data || !((File_Tag *)ETFile2->FileTag->data)->orig_year )
+        year2 = 0;
+    else
+        year2 = atoi( ((File_Tag *)ETFile2->FileTag->data)->orig_year );
+
+    // Second criterion
+    if (year1 == year2)
+        return ET_Comp_Func_Sort_File_By_Ascending_Filename(ETFile1,ETFile2);
+
+    // First criterion
+    return (year1 - year2);
+}
+
+/*
+ * Comparison function for sorting by descending original year.
+ */
+gint
+ET_Comp_Func_Sort_File_By_Descending_Orig_Year (const ET_File *ETFile1,
+                                                const ET_File *ETFile2)
+{
+    return ET_Comp_Func_Sort_File_By_Ascending_Orig_Year(ETFile2,ETFile1);
+}
+
+
+/*
  * Comparison function for sorting by ascending genre.
  */
 gint
@@ -1153,6 +1191,17 @@ ET_Save_File_Tag_Internal (ET_File *ETFile, File_Tag *FileTag)
     } else
     {
         FileTag->year = NULL;
+    }
+
+
+    /* Original year */
+    if (!et_str_empty (FileTagCur->orig_year))
+    {
+        FileTag->orig_year = g_strdup(FileTagCur->orig_year);
+        g_strstrip (FileTag->orig_year);
+    } else
+    {
+        FileTag->orig_year = NULL;
     }
 
 

@@ -226,6 +226,18 @@
                 <section>
                     <item>
                         <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Ascending by original year</attribute>
+                        <attribute name="target">ascending-orig-year</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Descending by original year</attribute>
+                        <attribute name="target">descending-orig-year</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
                         <attribute name="label" translatable="yes">Ascending by genre</attribute>
                         <attribute name="target">ascending-genre</attribute>
                     </item>

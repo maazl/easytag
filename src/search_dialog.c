@@ -58,6 +58,7 @@ enum
     SEARCH_RESULT_ALBUM,
     SEARCH_RESULT_DISC_NUMBER,
     SEARCH_RESULT_YEAR,
+    SEARCH_RESULT_ORIGINAL_YEAR,
     SEARCH_RESULT_TRACK,
     SEARCH_RESULT_GENRE,
     SEARCH_RESULT_COMMENT,
@@ -75,6 +76,7 @@ enum
     SEARCH_RESULT_ALBUM_WEIGHT,
     SEARCH_RESULT_DISC_NUMBER_WEIGHT,
     SEARCH_RESULT_YEAR_WEIGHT,
+    SEARCH_RESULT_ORIGINAL_YEAR_WEIGHT,
     SEARCH_RESULT_TRACK_WEIGHT,
     SEARCH_RESULT_GENRE_WEIGHT,
     SEARCH_RESULT_COMMENT_WEIGHT,
@@ -92,6 +94,7 @@ enum
     SEARCH_RESULT_ALBUM_FOREGROUND,
     SEARCH_RESULT_DISC_NUMBER_FOREGROUND,
     SEARCH_RESULT_YEAR_FOREGROUND,
+    SEARCH_RESULT_ORIGINAL_YEAR_FOREGROUND,
     SEARCH_RESULT_TRACK_FOREGROUND,
     SEARCH_RESULT_GENRE_FOREGROUND,
     SEARCH_RESULT_COMMENT_FOREGROUND,
@@ -104,6 +107,11 @@ enum
     SEARCH_RESULT_POINTER,
     SEARCH_COLUMN_COUNT
 };
+
+/* Number of columns of a block above.
+ * THIS MUST MATCH THE ENUM BLOCK SIZE ABOVE.
+ */
+#define SEACH_RESULT_COLUMNS 16
 
 /*
  * Callback to select-row event
@@ -171,17 +179,9 @@ Add_Row_To_Search_Result_List (EtSearchDialog *self,
                                const gchar *string_to_search)
 {
     EtSearchDialogPrivate *priv;
-    const gchar *haystacks[15]; /* 15 columns to display. */
-    gint weights[15] = { PANGO_WEIGHT_NORMAL, PANGO_WEIGHT_NORMAL,
-                         PANGO_WEIGHT_NORMAL, PANGO_WEIGHT_NORMAL,
-                         PANGO_WEIGHT_NORMAL, PANGO_WEIGHT_NORMAL,
-                         PANGO_WEIGHT_NORMAL, PANGO_WEIGHT_NORMAL,
-                         PANGO_WEIGHT_NORMAL, PANGO_WEIGHT_NORMAL,
-                         PANGO_WEIGHT_NORMAL, PANGO_WEIGHT_NORMAL,
-                         PANGO_WEIGHT_NORMAL, PANGO_WEIGHT_NORMAL,
-                         PANGO_WEIGHT_NORMAL };
-    GdkRGBA *colors[15] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    const gchar *haystacks[SEACH_RESULT_COLUMNS];
+    gint weights[SEACH_RESULT_COLUMNS];
+    GdkRGBA *colors[SEACH_RESULT_COLUMNS] = { NULL };
     gchar *display_basename;
     const gchar *track;
     const gchar *track_total;
@@ -191,6 +191,9 @@ Add_Row_To_Search_Result_List (EtSearchDialog *self,
     gchar *tracks = NULL;
     gboolean case_sensitive;
     gsize column;
+
+    for (column = 0; column < SEACH_RESULT_COLUMNS; ++column)
+        weights[column] = PANGO_WEIGHT_NORMAL;
 
     priv = et_search_dialog_get_instance_private (self);
 
@@ -205,6 +208,7 @@ Add_Row_To_Search_Result_List (EtSearchDialog *self,
     haystacks[SEARCH_RESULT_ALBUM_ARTIST] = ((File_Tag *)ETFile->FileTag->data)->album_artist;
     haystacks[SEARCH_RESULT_ALBUM] = ((File_Tag *)ETFile->FileTag->data)->album;
     haystacks[SEARCH_RESULT_YEAR] = ((File_Tag *)ETFile->FileTag->data)->year;
+    haystacks[SEARCH_RESULT_ORIGINAL_YEAR] = ((File_Tag *)ETFile->FileTag->data)->orig_year;
     haystacks[SEARCH_RESULT_GENRE] = ((File_Tag *)ETFile->FileTag->data)->genre;
     haystacks[SEARCH_RESULT_COMMENT] = ((File_Tag *)ETFile->FileTag->data)->comment;
     haystacks[SEARCH_RESULT_COMPOSER] = ((File_Tag *)ETFile->FileTag->data)->composer;
@@ -333,6 +337,7 @@ Add_Row_To_Search_Result_List (EtSearchDialog *self,
                                        SEARCH_RESULT_ALBUM, haystacks[SEARCH_RESULT_ALBUM],
                                        SEARCH_RESULT_DISC_NUMBER, haystacks[SEARCH_RESULT_DISC_NUMBER],
                                        SEARCH_RESULT_YEAR, haystacks[SEARCH_RESULT_YEAR],
+                                       SEARCH_RESULT_ORIGINAL_YEAR, haystacks[SEARCH_RESULT_ORIGINAL_YEAR],
                                        SEARCH_RESULT_TRACK, haystacks[SEARCH_RESULT_TRACK],
                                        SEARCH_RESULT_GENRE, haystacks[SEARCH_RESULT_GENRE],
                                        SEARCH_RESULT_COMMENT, haystacks[SEARCH_RESULT_COMMENT],
@@ -349,6 +354,7 @@ Add_Row_To_Search_Result_List (EtSearchDialog *self,
                                        SEARCH_RESULT_ALBUM_WEIGHT, weights[SEARCH_RESULT_ALBUM],
                                        SEARCH_RESULT_DISC_NUMBER_WEIGHT, weights[SEARCH_RESULT_DISC_NUMBER],
                                        SEARCH_RESULT_YEAR_WEIGHT, weights[SEARCH_RESULT_YEAR],
+                                       SEARCH_RESULT_ORIGINAL_YEAR_WEIGHT, weights[SEARCH_RESULT_ORIGINAL_YEAR],
                                        SEARCH_RESULT_TRACK_WEIGHT, weights[SEARCH_RESULT_TRACK],
                                        SEARCH_RESULT_GENRE_WEIGHT, weights[SEARCH_RESULT_GENRE],
                                        SEARCH_RESULT_COMMENT_WEIGHT, weights[SEARCH_RESULT_COMMENT],
@@ -365,6 +371,7 @@ Add_Row_To_Search_Result_List (EtSearchDialog *self,
                                        SEARCH_RESULT_ALBUM_FOREGROUND, colors[SEARCH_RESULT_ALBUM],
                                        SEARCH_RESULT_DISC_NUMBER_FOREGROUND, colors[SEARCH_RESULT_DISC_NUMBER],
                                        SEARCH_RESULT_YEAR_FOREGROUND, colors[SEARCH_RESULT_YEAR],
+                                       SEARCH_RESULT_ORIGINAL_YEAR_FOREGROUND, colors[SEARCH_RESULT_ORIGINAL_YEAR],
                                        SEARCH_RESULT_TRACK_FOREGROUND, colors[SEARCH_RESULT_TRACK],
                                        SEARCH_RESULT_GENRE_FOREGROUND, colors[SEARCH_RESULT_GENRE],
                                        SEARCH_RESULT_COMMENT_FOREGROUND, colors[SEARCH_RESULT_COMMENT],
@@ -469,9 +476,9 @@ Search_File (GtkWidget *search_button,
         if (g_settings_get_boolean (MainSettings, "search-tag"))
         {
             gchar *title2, *artist2, *album_artist2, *album2, *disc_number2,
-                  *disc_total2, *year2, *track2, *track_total2, *genre2,
-                  *comment2, *composer2, *orig_artist2, *copyright2, *url2,
-                  *encoded_by2;
+                  *disc_total2, *year2, *orig_year2, *track2, *track_total2,
+                  *genre2, *comment2, *composer2, *orig_artist2, *copyright2,
+                  *url2, *encoded_by2;
             gchar *needle;
             const File_Tag *FileTag = (File_Tag *)ETFile->FileTag->data;
 
@@ -496,6 +503,8 @@ Search_File (GtkWidget *search_button,
                                                   : NULL;
                 year2 = FileTag->year ? g_utf8_casefold (FileTag->year, -1)
                                       : NULL;
+                orig_year2 = FileTag->orig_year ? g_utf8_casefold (FileTag->orig_year, -1)
+                                                : NULL;
                 track2 = FileTag->track ? g_utf8_casefold (FileTag->track, -1)
                                         : NULL;
                 track_total2 = FileTag->track_total ? g_utf8_casefold (FileTag->track_total,
@@ -551,6 +560,9 @@ Search_File (GtkWidget *search_button,
                 year2 = FileTag->year ? g_utf8_normalize (FileTag->year, -1,
                                                           G_NORMALIZE_DEFAULT)
                                       : NULL;
+                orig_year2 = FileTag->orig_year ? g_utf8_normalize (FileTag->orig_year, -1,
+                                                                    G_NORMALIZE_DEFAULT)
+                                                : NULL;
                 track2 = FileTag->track ? g_utf8_normalize (FileTag->track, -1,
                                                             G_NORMALIZE_DEFAULT)
                                         : NULL;
@@ -595,6 +607,7 @@ Search_File (GtkWidget *search_button,
                 || (disc_number2 && strstr (disc_number2, needle))
                 || (disc_total2 && strstr (disc_total2, needle))
                 || (year2 && strstr (year2, needle))
+                || (orig_year2 && strstr (orig_year2, needle))
                 || (track2 && strstr (track2, needle))
                 || (track_total2 && strstr (track_total2, needle))
                 || (genre2 && strstr (genre2, needle))
@@ -615,6 +628,7 @@ Search_File (GtkWidget *search_button,
             g_free (disc_number2);
             g_free (disc_total2);
             g_free (year2);
+            g_free (orig_year2);
             g_free (track2);
             g_free (track_total2);
             g_free (genre2);

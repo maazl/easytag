@@ -387,6 +387,17 @@
                                                 <property name="top-attach">5</property>
                                             </packing>
                                         </child>
+                                        <child>
+                                            <object class="GtkLabel" id="orig_year_label">
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">%w: original year</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">2</property>
+                                                <property name="top-attach">6</property>
+                                            </packing>
+                                        </child>
                                     </object>
                                 </child>
                             </object>

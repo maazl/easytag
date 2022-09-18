@@ -170,6 +170,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     gboolean has_comment     = FALSE;
     gboolean has_composer    = FALSE;
     gboolean has_orig_artist = FALSE;
+    gboolean has_orig_year   = FALSE;
     gboolean has_copyright   = FALSE;
     gboolean has_url         = FALSE;
     gboolean has_encoded_by  = FALSE;
@@ -456,6 +457,21 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     }
 
 
+    /*****************
+     * Original year *
+     ****************/
+    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_ORIGYEAR)) )
+        ID3Tag_RemoveFrame(id3_tag,id3_frame);
+
+    if (!et_str_empty (FileTag->orig_year))
+    {
+        id3_frame = ID3Frame_NewID(ID3FID_ORIGYEAR);
+        ID3Tag_AttachFrame(id3_tag,id3_frame);
+        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, FileTag->orig_year);
+        has_orig_year = TRUE;
+    }
+
+
     /*************
      * Copyright *
      *************/
@@ -623,8 +639,8 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
      * is set to TRUE, we strip the ID3v1.x and ID3v2 tags. Else, write ID3v2
      * and/or ID3v1. */
     if (g_settings_get_boolean (MainSettings, "id3-strip-empty")
-    && !has_title      && !has_artist   && !has_album_artist && !has_album       && !has_year      && !has_track
-    && !has_genre      && !has_composer && !has_orig_artist && !has_copyright && !has_url
+    && !has_title      && !has_artist   && !has_album_artist && !has_album     && !has_year      && !has_track
+    && !has_genre      && !has_composer && !has_orig_artist && !has_orig_year  && !has_copyright && !has_url
     && !has_encoded_by && !has_picture  && !has_comment     && !has_disc_number)//&& !has_song_len )
     {
         error_strip_id3v1 = ID3Tag_Strip(id3_tag,ID3TT_ID3V1);

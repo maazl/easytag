@@ -419,6 +419,19 @@ id3tag_read_file_tag (GFile *gfile,
     if ( (frame = id3_tag_findframe(tag, "TOPE", 0)) )
         update |= libid3tag_Get_Frame_Str(frame, ~0, &FileTag->orig_artist);
 
+    /*****************************
+     * Original year (TORY/TDOR) *
+     ****************************/
+    if ( (frame = id3_tag_findframe(tag, "TDOR", 0)) )
+    {
+        update |= libid3tag_Get_Frame_Str(frame, ~0, &string1);
+        if ( string1 )
+        {
+            g_strstrip (string1);
+            FileTag->orig_year = string1;
+        }
+    }
+
     /*******************
      * Copyright (TCOP)*
      *******************/
@@ -1150,6 +1163,11 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
      * Original artist *
      *******************/
     etag_set_tags(FileTag->orig_artist, "TOPE", ID3_FIELD_TYPE_STRINGLIST, NULL, v2tag, &strip_tags);
+
+    /*****************
+     * Original year *
+     ****************/
+    etag_set_tags(FileTag->orig_year, "TDOR", ID3_FIELD_TYPE_STRINGLIST, NULL, v2tag, &strip_tags);
 
     /*************
      * Copyright *

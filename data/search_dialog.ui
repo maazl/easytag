@@ -17,6 +17,7 @@
             <column type="gchararray"/>
             <column type="gchararray"/>
             <column type="gchararray"/>
+            <column type="gchararray"/>
             <column type="gint"/>
             <column type="gint"/>
             <column type="gint"/>
@@ -32,6 +33,8 @@
             <column type="gint"/>
             <column type="gint"/>
             <column type="gint"/>
+            <column type="gint"/>
+            <column type="GdkRGBA"/>
             <column type="GdkRGBA"/>
             <column type="GdkRGBA"/>
             <column type="GdkRGBA"/>
@@ -329,12 +332,25 @@
                                             </object>
                                         </child>
                                         <child>
+                                            <object class="GtkTreeViewColumn" id="orig_year_column">
+                                                <property name="title" translatable="yes">Orig. year</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="orig_year_renderer"/>
+                                                    <attributes>
+                                                        <attribute name="text">12</attribute>
+                                                        <attribute name="weight">21</attribute>
+                                                        <attribute name="foreground-rgba">36</attribute>
+                                                    </attributes>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
                                             <object class="GtkTreeViewColumn" id="copyright_column">
                                                 <property name="title" translatable="yes">Copyright</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="copyright_renderer"/>
                                                     <attributes>
-                                                        <attribute name="text">12</attribute>
+                                                        <attribute name="text">13</attribute>
                                                         <attribute name="weight">27</attribute>
                                                         <attribute name="foreground-rgba">42</attribute>
                                                     </attributes>
@@ -347,7 +363,7 @@
                                                 <child>
                                                     <object class="GtkCellRendererText" id="url_renderer"/>
                                                     <attributes>
-                                                        <attribute name="text">13</attribute>
+                                                        <attribute name="text">14</attribute>
                                                         <attribute name="weight">28</attribute>
                                                         <attribute name="foreground-rgba">43</attribute>
                                                     </attributes>
@@ -360,7 +376,7 @@
                                                 <child>
                                                     <object class="GtkCellRendererText" id="encoced_by_renderer"/>
                                                     <attributes>
-                                                        <attribute name="text">14</attribute>
+                                                        <attribute name="text">15</attribute>
                                                         <attribute name="weight">29</attribute>
                                                         <attribute name="foreground-rgba">44</attribute>
                                                     </attributes>

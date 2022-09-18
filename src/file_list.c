@@ -346,6 +346,13 @@ et_file_list_add (GList *file_list,
                    FileTag->year, display_path);
     }
 
+    if (FileTag->orig_year && g_utf8_strlen (FileTag->orig_year, -1) > 4)
+    {
+        Log_Print (LOG_WARNING,
+                   _("The original year value ‘%s’ seems to be invalid in file ‘%s’. The information will be lost when saving"),
+                   FileTag->orig_year, display_path);
+    }
+
     /* Fill the ET_File_Info structure */
     ETFileInfo = et_file_info_new ();
 
@@ -977,7 +984,7 @@ ET_Sort_File_List (GList *ETFileList,
         case ET_SORT_MODE_DESCENDING_ALBUM_ARTIST:
             etfilelist = g_list_sort(etfilelist,(GCompareFunc)ET_Comp_Func_Sort_File_By_Descending_Album_Artist);
             break;
-		case ET_SORT_MODE_ASCENDING_ALBUM:
+        case ET_SORT_MODE_ASCENDING_ALBUM:
             etfilelist = g_list_sort(etfilelist,(GCompareFunc)ET_Comp_Func_Sort_File_By_Ascending_Album);
             break;
         case ET_SORT_MODE_DESCENDING_ALBUM:
@@ -988,6 +995,12 @@ ET_Sort_File_List (GList *ETFileList,
             break;
         case ET_SORT_MODE_DESCENDING_YEAR:
             etfilelist = g_list_sort(etfilelist,(GCompareFunc)ET_Comp_Func_Sort_File_By_Descending_Year);
+            break;
+        case ET_SORT_MODE_ASCENDING_ORIG_YEAR:
+            etfilelist = g_list_sort(etfilelist,(GCompareFunc)ET_Comp_Func_Sort_File_By_Ascending_Orig_Year);
+            break;
+        case ET_SORT_MODE_DESCENDING_ORIG_YEAR:
+            etfilelist = g_list_sort(etfilelist,(GCompareFunc)ET_Comp_Func_Sort_File_By_Descending_Orig_Year);
             break;
         case ET_SORT_MODE_ASCENDING_DISC_NUMBER:
             etfilelist = g_list_sort (etfilelist,

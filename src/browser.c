@@ -126,6 +126,7 @@ enum
     LIST_FILE_COMMENT,
     LIST_FILE_COMPOSER,
     LIST_FILE_ORIG_ARTIST,
+    LIST_FILE_ORIG_YEAR,
     LIST_FILE_COPYRIGHT,
     LIST_FILE_URL,
     LIST_FILE_ENCODED_BY,
@@ -1356,27 +1357,22 @@ et_browser_load_file_list (EtBrowser *self,
                                            LIST_FILE_NAME, basename_utf8,
                                            LIST_FILE_POINTER, l->data,
                                            LIST_FILE_KEY, fileKey,
-                                           LIST_FILE_OTHERDIR,
-                                           activate_bg_color,
+                                           LIST_FILE_OTHERDIR, activate_bg_color,
                                            LIST_FILE_TITLE, FileTag->title,
                                            LIST_FILE_ARTIST, FileTag->artist,
-                                           LIST_FILE_ALBUM_ARTIST,
-                                           FileTag->album_artist,
+                                           LIST_FILE_ALBUM_ARTIST, FileTag->album_artist,
                                            LIST_FILE_ALBUM, FileTag->album,
                                            LIST_FILE_YEAR, FileTag->year,
                                            LIST_FILE_DISCNO, disc,
                                            LIST_FILE_TRACK, track,
                                            LIST_FILE_GENRE, FileTag->genre,
                                            LIST_FILE_COMMENT, FileTag->comment,
-                                           LIST_FILE_COMPOSER,
-                                           FileTag->composer,
-                                           LIST_FILE_ORIG_ARTIST,
-                                           FileTag->orig_artist,
-                                           LIST_FILE_COPYRIGHT,
-                                           FileTag->copyright,
+                                           LIST_FILE_COMPOSER, FileTag->composer,
+                                           LIST_FILE_ORIG_ARTIST, FileTag->orig_artist,
+                                           LIST_FILE_ORIG_YEAR, FileTag->orig_year,
+                                           LIST_FILE_COPYRIGHT, FileTag->copyright,
                                            LIST_FILE_URL, FileTag->url,
-                                           LIST_FILE_ENCODED_BY,
-                                           FileTag->encoded_by, -1);
+                                           LIST_FILE_ENCODED_BY, FileTag->encoded_by, -1);
         g_free(basename_utf8);
         g_free(track);
         g_free (disc);
@@ -1452,14 +1448,15 @@ et_browser_refresh_list (EtBrowser *self)
                            LIST_FILE_TITLE,         FileTag->title,
                            LIST_FILE_ARTIST,        FileTag->artist,
                            LIST_FILE_ALBUM_ARTIST,  FileTag->album_artist,
-						   LIST_FILE_ALBUM,         FileTag->album,
+                           LIST_FILE_ALBUM,         FileTag->album,
                            LIST_FILE_YEAR,          FileTag->year,
-                           LIST_FILE_DISCNO, disc,
+                           LIST_FILE_DISCNO,        disc,
                            LIST_FILE_TRACK,         track,
                            LIST_FILE_GENRE,         FileTag->genre,
                            LIST_FILE_COMMENT,       FileTag->comment,
                            LIST_FILE_COMPOSER,      FileTag->composer,
                            LIST_FILE_ORIG_ARTIST,   FileTag->orig_artist,
+                           LIST_FILE_ORIG_YEAR,     FileTag->orig_year,
                            LIST_FILE_COPYRIGHT,     FileTag->copyright,
                            LIST_FILE_URL,           FileTag->url,
                            LIST_FILE_ENCODED_BY,    FileTag->encoded_by,
@@ -1622,14 +1619,15 @@ et_browser_refresh_file_in_list (EtBrowser *self,
                        LIST_FILE_TITLE,         FileTag->title,
                        LIST_FILE_ARTIST,        FileTag->artist,
                        LIST_FILE_ALBUM_ARTIST,  FileTag->album_artist,
-					   LIST_FILE_ALBUM,         FileTag->album,
+                       LIST_FILE_ALBUM,         FileTag->album,
                        LIST_FILE_YEAR,          FileTag->year,
-                       LIST_FILE_DISCNO, disc,
+                       LIST_FILE_DISCNO,        disc,
                        LIST_FILE_TRACK,         track,
                        LIST_FILE_GENRE,         FileTag->genre,
                        LIST_FILE_COMMENT,       FileTag->comment,
                        LIST_FILE_COMPOSER,      FileTag->composer,
                        LIST_FILE_ORIG_ARTIST,   FileTag->orig_artist,
+                       LIST_FILE_ORIG_YEAR,     FileTag->orig_year,
                        LIST_FILE_COPYRIGHT,     FileTag->copyright,
                        LIST_FILE_URL,           FileTag->url,
                        LIST_FILE_ENCODED_BY,    FileTag->encoded_by,
@@ -2168,6 +2166,12 @@ Browser_List_Sort_Func (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
             break;
         case ET_SORT_MODE_DESCENDING_YEAR:
             result = ET_Comp_Func_Sort_File_By_Descending_Year(ETFile1, ETFile2);
+            break;
+        case ET_SORT_MODE_ASCENDING_ORIG_YEAR:
+            result = ET_Comp_Func_Sort_File_By_Ascending_Orig_Year(ETFile1, ETFile2);
+            break;
+        case ET_SORT_MODE_DESCENDING_ORIG_YEAR:
+            result = ET_Comp_Func_Sort_File_By_Descending_Orig_Year(ETFile1, ETFile2);
             break;
         case ET_SORT_MODE_ASCENDING_DISC_NUMBER:
             result = et_comp_func_sort_file_by_ascending_disc_number (ETFile1,

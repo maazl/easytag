@@ -244,6 +244,8 @@ Scan_Return_File_Tag_Field_From_Mask_Code (File_Tag *FileTag, gchar code)
             return &FileTag->disc_total;
         case 'y':    /* Year */
             return &FileTag->year;
+        case 'w':    /* Original year */
+            return &FileTag->orig_year;
         case 'n':    /* Track */
             return &FileTag->track;
         case 'l':    /* Track Total */
@@ -302,6 +304,10 @@ et_scan_dialog_set_file_tag_for_mask_item (File_Tag *file_tag,
         case 'y':
             if (!overwrite && !et_str_empty (file_tag->year)) return;
             et_file_tag_set_year (file_tag, item->string);
+            break;
+        case 'w':
+            if (!overwrite && !et_str_empty (file_tag->orig_year)) return;
+            et_file_tag_set_orig_year (file_tag, item->string);
             break;
         case 'n':
             if (!overwrite && !et_str_empty (file_tag->track)) return;

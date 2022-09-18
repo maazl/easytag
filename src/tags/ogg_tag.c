@@ -480,6 +480,14 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
         g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_PERFORMER);
     }
 
+    /* Original year. */
+    if ((strings = g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_ORIG_DATE)))
+    {
+        g_slist_foreach (strings, values_list_foreach, &FileTag->orig_year);
+        g_slist_free (strings);
+        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_ORIG_DATE);
+    }
+
     /* Copyright. */
     if ((strings = g_hash_table_lookup (tags,
                                         ET_VORBIS_COMMENT_FIELD_COPYRIGHT)))
@@ -1032,6 +1040,11 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
                     FileTag->orig_artist,
                     g_settings_get_boolean (MainSettings,
                                             "ogg-split-original-artist"));
+
+    /*****************
+     * Original year *
+     ****************/
+    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_ORIG_DATE, FileTag->orig_year, FALSE);
 
     /*************
      * Copyright *

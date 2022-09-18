@@ -58,14 +58,16 @@ et_file_tag_free (File_Tag *FileTag)
     g_free(FileTag->album_artist);
     g_free(FileTag->album);
     g_free(FileTag->disc_number);
-    g_free (FileTag->disc_total);
+    g_free(FileTag->disc_total);
     g_free(FileTag->year);
+    g_free(FileTag->release_year);
     g_free(FileTag->track);
     g_free(FileTag->track_total);
     g_free(FileTag->genre);
     g_free(FileTag->comment);
     g_free(FileTag->composer);
     g_free(FileTag->orig_artist);
+    g_free(FileTag->orig_year);
     g_free(FileTag->copyright);
     g_free(FileTag->url);
     g_free(FileTag->encoded_by);
@@ -116,12 +118,14 @@ et_file_tag_copy_into (File_Tag *destination,
     et_file_tag_set_disc_number (destination, source->disc_number);
     et_file_tag_set_disc_total (destination, source->disc_total);
     et_file_tag_set_year (destination, source->year);
+    et_file_tag_set_release_year (destination, source->release_year);
     et_file_tag_set_track_number (destination, source->track);
     et_file_tag_set_track_total (destination, source->track_total);
     et_file_tag_set_genre (destination, source->genre);
     et_file_tag_set_comment (destination, source->comment);
     et_file_tag_set_composer (destination, source->composer);
     et_file_tag_set_orig_artist (destination, source->orig_artist);
+    et_file_tag_set_orig_year (destination, source->orig_year);
     et_file_tag_set_copyright (destination, source->copyright);
     et_file_tag_set_url (destination, source->url);
     et_file_tag_set_encoded_by (destination, source->encoded_by);
@@ -226,6 +230,15 @@ et_file_tag_set_year (File_Tag *file_tag,
 }
 
 void
+et_file_tag_set_release_year (File_Tag *file_tag,
+                              const gchar *year)
+{
+    g_return_if_fail (file_tag != NULL);
+
+    et_file_tag_set_field (&file_tag->release_year, year);
+}
+
+void
 et_file_tag_set_track_number (File_Tag *file_tag,
                               const gchar *track_number)
 {
@@ -277,6 +290,15 @@ et_file_tag_set_orig_artist (File_Tag *file_tag,
     g_return_if_fail (file_tag != NULL);
 
     et_file_tag_set_field (&file_tag->orig_artist, orig_artist);
+}
+
+void
+et_file_tag_set_orig_year (File_Tag *file_tag,
+                           const gchar *year)
+{
+    g_return_if_fail (file_tag != NULL);
+
+    et_file_tag_set_field (&file_tag->orig_year, year);
 }
 
 void
@@ -391,6 +413,12 @@ et_file_tag_detect_difference (const File_Tag *FileTag1,
 
     /* Year */
     if (et_normalized_strcmp0 (FileTag1->year, FileTag2->year) != 0)
+    {
+        return TRUE;
+    }
+
+    /* Original year */
+    if (et_normalized_strcmp0 (FileTag1->orig_year, FileTag2->orig_year) != 0)
     {
         return TRUE;
     }
