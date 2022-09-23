@@ -198,6 +198,17 @@ wavpack_tag_read_file_tag (GFile *file,
     memset (field, '\0', MAXLEN);
 
     /*
+     * Release year
+     */
+    length = WavpackGetTagItem(wpc, "release year", field, MAXLEN);
+
+    if ( length > 0 && FileTag->release_year == NULL ) {
+        FileTag->release_year = Try_To_Validate_Utf8_String(field);
+    }
+
+    memset (field, '\0', MAXLEN);
+
+    /*
      * Tracknumber + tracktotal
      */
     length = WavpackGetTagItem(wpc, "track", field, MAXLEN);
@@ -460,6 +471,12 @@ wavpack_tag_write_file_tag (const ET_File *ETFile,
 
     /* Year. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "year", FileTag->year))
+    {
+        goto err;
+    }
+
+    /* Year. */
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "release year", FileTag->release_year))
     {
         goto err;
     }

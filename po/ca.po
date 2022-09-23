@@ -10,9 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: easytag\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
-"product=easytag&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-08-27 17:26+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-18 16:56+0200\n"
 "PO-Revision-Date: 2016-12-19 14:31+0100\n"
 "Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
 "Language-Team: Catalan <Catalan <info@softcatala.org>>\n"
@@ -62,14 +61,13 @@ msgstr ""
 msgid "Audio File Metadata Editor"
 msgstr "Editor de metadades de fitxers de so"
 
-#. Translators: Search terms to find this application. Do NOT translate or
-#. localize the semicolons! The list MUST also end with a semicolon!
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: ../data/org.gnome.EasyTAG.desktop.in.h:5
 msgid "mp3;tag;audio;music;"
 msgstr "mp3;etiqueta;àudio;música;"
 
 #: ../data/easytag-nautilus.metainfo.xml.in.h:1
-#: ../nautilus-extension/nautilus-easytag.c:247
+#: ../nautilus-extension/nautilus-easytag.c:245
 msgid "Open with EasyTAG"
 msgstr "Obre amb l'EasyTAG"
 
@@ -82,8 +80,8 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Escull un directori per a mostrar en el navegador"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3834
-#: ../src/tag_area.c:1524
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3842
+#: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "_Obre"
 
@@ -97,7 +95,7 @@ msgid "No files"
 msgstr "Cap fitxer"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:58
+#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:62
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Artista"
@@ -111,24 +109,24 @@ msgid "# Files"
 msgstr "# Fitxers"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:66
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Àlbum"
 
 #: ../data/browser.ui.h:9 ../data/cddb_dialog.ui.h:38
-#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:54
+#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:58
 #: ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "Nom del fitxer"
 
 #: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:56
+#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:60
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Títol"
 
-#: ../data/browser.ui.h:11 ../data/scan_dialog.ui.h:60
+#: ../data/browser.ui.h:11 ../data/scan_dialog.ui.h:64
 #: ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Artista de l'àlbum"
@@ -139,46 +137,56 @@ msgid "Year"
 msgstr "Any"
 
 #: ../data/browser.ui.h:13
+#, fuzzy
+msgid "Rel. year"
+msgstr "Artista original"
+
+#: ../data/browser.ui.h:14
 msgid "Disc"
 msgstr "Disc"
 
-#: ../data/browser.ui.h:14 ../data/search_dialog.ui.h:19
+#: ../data/browser.ui.h:15 ../data/search_dialog.ui.h:19
 msgid "Track"
 msgstr "Pista"
 
-#: ../data/browser.ui.h:15 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:64
+#: ../data/browser.ui.h:16 ../data/cddb_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:68
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Gènere"
 
-#: ../data/browser.ui.h:16 ../data/preferences_dialog.ui.h:69
-#: ../data/scan_dialog.ui.h:66 ../data/search_dialog.ui.h:21
+#: ../data/browser.ui.h:17 ../data/preferences_dialog.ui.h:69
+#: ../data/scan_dialog.ui.h:70 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Comentari"
 
-#: ../data/browser.ui.h:17 ../data/preferences_dialog.ui.h:71
-#: ../data/scan_dialog.ui.h:68 ../data/search_dialog.ui.h:22
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:71
+#: ../data/scan_dialog.ui.h:72 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Redactor"
 
-#: ../data/browser.ui.h:18 ../data/search_dialog.ui.h:23
+#: ../data/browser.ui.h:19 ../data/search_dialog.ui.h:23
 msgid "Original Artist"
 msgstr "Artista original"
 
-#: ../data/browser.ui.h:19 ../data/scan_dialog.ui.h:72
-#: ../data/search_dialog.ui.h:24
+#: ../data/browser.ui.h:20 ../data/search_dialog.ui.h:24
+#, fuzzy
+msgid "Orig. year"
+msgstr "Artista original"
+
+#: ../data/browser.ui.h:21 ../data/scan_dialog.ui.h:76
+#: ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "Copyright"
 
-#: ../data/browser.ui.h:20 ../data/scan_dialog.ui.h:74
-#: ../data/search_dialog.ui.h:25
+#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:78
+#: ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "URL"
 
-#: ../data/browser.ui.h:21 ../data/scan_dialog.ui.h:76
-#: ../data/search_dialog.ui.h:26
+#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:80
+#: ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "Codificat per"
 
@@ -198,10 +206,10 @@ msgstr ""
 "Introduïu el programa a executar; rebrà el directori actual com paràmetre"
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
-#: ../src/application_window.c:367 ../src/application_window.c:381
-#: ../src/application_window.c:3014 ../src/browser.c:914 ../src/browser.c:3833
-#: ../src/cddb_dialog.c:2138 ../src/easytag.c:464 ../src/easytag.c:471
-#: ../src/easytag.c:596 ../src/tag_area.c:1522 ../src/tag_area.c:1848
+#: ../src/application_window.c:368 ../src/application_window.c:382
+#: ../src/application_window.c:3015 ../src/browser.c:916 ../src/browser.c:3841
+#: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
+#: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
 msgid "_Cancel"
 msgstr "_Cancel·la"
 
@@ -219,12 +227,11 @@ msgid ""
 msgstr "Introduïu el programa a executar; rebrà el fitxer actual com paràmetre"
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:99 ../src/easytag.c:562
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:101 ../src/easytag.c:562
 msgid "Rename Directory"
 msgstr "Canvia el nom al directori"
 
-#. Translators: Used when renaming a directory to a literal name (entered in a
-#. text field) rather than using a name generated from a mask.
+#. Translators: Used when renaming a directory to a literal name (entered in a text field) rather than using a name generated from a mask.
 #: ../data/browser_dialogs.ui.h:11
 msgid "Literal name:"
 msgstr "Nom literal:"
@@ -432,12 +439,12 @@ msgstr ""
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
 #: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:160
-#: ../data/scan_dialog.ui.h:113 ../data/search_dialog.ui.h:11
+#: ../data/scan_dialog.ui.h:117 ../data/search_dialog.ui.h:11
 msgid "_Close"
 msgstr "_Tanca"
 
 #: ../data/cddb_dialog.ui.h:49 ../data/load_files_dialog.ui.h:17
-#: ../src/cddb_dialog.c:2139
+#: ../src/cddb_dialog.c:2140
 msgid "_Apply"
 msgstr "_Aplica"
 
@@ -448,7 +455,7 @@ msgstr ""
 "cap)"
 
 #. Default values are MPEG data.
-#: ../data/file_area.ui.h:1 ../src/application_window.c:2179
+#: ../data/file_area.ui.h:1 ../src/application_window.c:2180
 #: ../src/file_area.c:155
 msgid "File"
 msgstr "Fitxer"
@@ -664,7 +671,7 @@ msgstr "Mode d'escàner"
 msgid "Rename Files and Directories"
 msgstr "Canvia el nom a fitxers i directoris"
 
-#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:109
+#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:113
 msgid "Process Fields"
 msgstr "Processa els camps"
 
@@ -729,250 +736,260 @@ msgid "Descending by year"
 msgstr "Any descendent"
 
 #: ../data/menus.ui.h:42
+#, fuzzy
+msgid "Ascending by original year"
+msgstr "Artista original ascendent"
+
+#: ../data/menus.ui.h:43
+#, fuzzy
+msgid "Descending by original year"
+msgstr "Artista original descendent"
+
+#: ../data/menus.ui.h:44
 msgid "Ascending by genre"
 msgstr "Gènere ascendent"
 
-#: ../data/menus.ui.h:43
+#: ../data/menus.ui.h:45
 msgid "Descending by genre"
 msgstr "Gènere descendent"
 
-#: ../data/menus.ui.h:44
+#: ../data/menus.ui.h:46
 msgid "Ascending by comment"
 msgstr "Comentari ascendent"
 
-#: ../data/menus.ui.h:45
+#: ../data/menus.ui.h:47
 msgid "Descending by comment"
 msgstr "Comentari descendent"
 
-#: ../data/menus.ui.h:46
+#: ../data/menus.ui.h:48
 msgid "Ascending by composer"
 msgstr "Compositor ascendent"
 
-#: ../data/menus.ui.h:47
+#: ../data/menus.ui.h:49
 msgid "Descending by composer"
 msgstr "Compositor descendent"
 
-#: ../data/menus.ui.h:48
+#: ../data/menus.ui.h:50
 msgid "Ascending by original artist"
 msgstr "Artista original ascendent"
 
-#: ../data/menus.ui.h:49
+#: ../data/menus.ui.h:51
 msgid "Descending by original artist"
 msgstr "Artista original descendent"
 
-#: ../data/menus.ui.h:50
+#: ../data/menus.ui.h:52
 msgid "Ascending by copyright"
 msgstr "Copyright ascendent"
 
-#: ../data/menus.ui.h:51
+#: ../data/menus.ui.h:53
 msgid "Descending by copyright"
 msgstr "Copyright descendent"
 
-#: ../data/menus.ui.h:52
+#: ../data/menus.ui.h:54
 msgid "Ascending by URL"
 msgstr "URL ascendent"
 
-#: ../data/menus.ui.h:53
+#: ../data/menus.ui.h:55
 msgid "Descending by URL"
 msgstr "URL descendent"
 
-#: ../data/menus.ui.h:54
+#: ../data/menus.ui.h:56
 msgid "Ascending by encoder name"
 msgstr "Nom codificador ascendent"
 
-#: ../data/menus.ui.h:55
+#: ../data/menus.ui.h:57
 msgid "Descending by encoder name"
 msgstr "Nom codificador descendent"
 
-#: ../data/menus.ui.h:56
+#: ../data/menus.ui.h:58
 msgid "Sort List by Property"
 msgstr "Ordena per propietats"
 
-#: ../data/menus.ui.h:57
+#: ../data/menus.ui.h:59
 msgid "Ascending by filename"
 msgstr "Nom del fitxer ascendent"
 
-#: ../data/menus.ui.h:58
+#: ../data/menus.ui.h:60
 msgid "Descending by filename"
 msgstr "Nom del fitxer descendent"
 
-#: ../data/menus.ui.h:59
+#: ../data/menus.ui.h:61
 msgid "Ascending by creation date"
 msgstr "Data creació ascendent"
 
-#: ../data/menus.ui.h:60
+#: ../data/menus.ui.h:62
 msgid "Descending by creation date"
 msgstr "Data de creació descendent"
 
-#: ../data/menus.ui.h:61
+#: ../data/menus.ui.h:63
 msgid "Ascending by file type"
 msgstr "Tipus de fitxer ascendent"
 
-#: ../data/menus.ui.h:62
+#: ../data/menus.ui.h:64
 msgid "Descending by file type"
 msgstr "Tipus de fitxer descendent"
 
-#: ../data/menus.ui.h:63
+#: ../data/menus.ui.h:65
 msgid "Ascending by file size"
 msgstr "Mida de fitxer ascendent"
 
-#: ../data/menus.ui.h:64
+#: ../data/menus.ui.h:66
 msgid "Descending by file size"
 msgstr "Mida de fitxer descendent"
 
-#: ../data/menus.ui.h:65
+#: ../data/menus.ui.h:67
 msgid "Ascending by duration"
 msgstr "Duració ascendent"
 
-#: ../data/menus.ui.h:66
+#: ../data/menus.ui.h:68
 msgid "Descending by duration"
 msgstr "Duració ascendent"
 
-#: ../data/menus.ui.h:67
+#: ../data/menus.ui.h:69
 msgid "Ascending by bit rate"
 msgstr "Ascendent per taxa de bits"
 
-#: ../data/menus.ui.h:68
+#: ../data/menus.ui.h:70
 msgid "Descending by bit rate"
 msgstr "Descendent per taxa de bits"
 
-#: ../data/menus.ui.h:69
+#: ../data/menus.ui.h:71
 msgid "Ascending by sample rate"
 msgstr "Ascendent per freqüència de mostreig"
 
-#: ../data/menus.ui.h:70
+#: ../data/menus.ui.h:72
 msgid "Descending by sample rate"
 msgstr "Descendent per freqüència de mostreig"
 
-#: ../data/menus.ui.h:71
+#: ../data/menus.ui.h:73
 msgid "Collapse Tree"
 msgstr "Col·lapsa l'arbre"
 
-#: ../data/menus.ui.h:72
+#: ../data/menus.ui.h:74
 msgid "Reload Tree"
 msgstr "Torna a carregar l'arbre"
 
-#: ../data/menus.ui.h:73
+#: ../data/menus.ui.h:75
 msgid "Reload Directory"
 msgstr "Torna a carregar el directori"
 
-#: ../data/menus.ui.h:74
+#: ../data/menus.ui.h:76
 msgid "Show Hidden Directories"
 msgstr "Mostra els directoris ocults"
 
-#: ../data/menus.ui.h:75
+#: ../data/menus.ui.h:77
 msgid "_Browser"
 msgstr "_Navegador"
 
-#: ../data/menus.ui.h:76
+#: ../data/menus.ui.h:78
 msgid "Set _Current Path as Default"
 msgstr "Configura el _camí actual per defecte"
 
-#: ../data/menus.ui.h:77
+#: ../data/menus.ui.h:79
 msgid "Rename Directory…"
 msgstr "Canvia el nom al directori..."
 
-#: ../data/menus.ui.h:78
+#: ../data/menus.ui.h:80
 msgid "Browse Directory With…"
 msgstr "Navega el directori amb..."
 
-#: ../data/menus.ui.h:79
+#: ../data/menus.ui.h:81
 msgid "Browse _Subdirectories"
 msgstr "Navega _subdirectoris"
 
-#: ../data/menus.ui.h:80
+#: ../data/menus.ui.h:82
 msgid "_Miscellaneous"
 msgstr "_Miscel·lània"
 
-#: ../data/menus.ui.h:81
+#: ../data/menus.ui.h:83
 msgid "CDD_B Search…"
 msgstr "Cerca CDD_B..."
 
-#: ../data/menus.ui.h:82
+#: ../data/menus.ui.h:84
 msgid "Load Filenames From a Text File…"
 msgstr "Carrega els noms dels fitxers des d'un fitxer de text..."
 
-#: ../data/menus.ui.h:83 ../data/toolbar.ui.h:29
+#: ../data/menus.ui.h:85 ../data/toolbar.ui.h:29
 msgid "Generate Playlist…"
 msgstr "Genera llista de reproducció..."
 
-#: ../data/menus.ui.h:84
+#: ../data/menus.ui.h:86
 msgid "_Go"
 msgstr "_Ves"
 
-#: ../data/menus.ui.h:85
+#: ../data/menus.ui.h:87
 msgid "_Home Directory"
 msgstr "_Directori d'inici"
 
-#: ../data/menus.ui.h:86
+#: ../data/menus.ui.h:88
 msgid "Desktop Directory"
 msgstr "Directori escriptori"
 
-#: ../data/menus.ui.h:87
+#: ../data/menus.ui.h:89
 msgid "Documents Directory"
 msgstr "Directori documents"
 
-#: ../data/menus.ui.h:88
+#: ../data/menus.ui.h:90
 msgid "Downloads Directory"
 msgstr "Directori baixades"
 
-#: ../data/menus.ui.h:89
+#: ../data/menus.ui.h:91
 msgid "Music Directory"
 msgstr "Directori música"
 
-#: ../data/menus.ui.h:90
+#: ../data/menus.ui.h:92
 msgid "_Parent Directory"
 msgstr "Directori _pare"
 
-#: ../data/menus.ui.h:91
+#: ../data/menus.ui.h:93
 msgid "_Default Directory"
 msgstr "Directori per _defecte"
 
-#: ../data/menus.ui.h:92 ../data/toolbar.ui.h:1
+#: ../data/menus.ui.h:94 ../data/toolbar.ui.h:1
 msgid "_First File"
 msgstr "_Primer fitxer"
 
-#: ../data/menus.ui.h:93
+#: ../data/menus.ui.h:95
 msgid "Previous File"
 msgstr "Fitxer previ"
 
-#: ../data/menus.ui.h:94 ../data/toolbar.ui.h:5
+#: ../data/menus.ui.h:96 ../data/toolbar.ui.h:5
 msgid "_Next File"
 msgstr "_Fitxer següent"
 
-#: ../data/menus.ui.h:95 ../data/toolbar.ui.h:7
+#: ../data/menus.ui.h:97 ../data/toolbar.ui.h:7
 msgid "_Last File"
 msgstr "_Últim fitxer"
 
-#: ../data/menus.ui.h:96
+#: ../data/menus.ui.h:98
 msgid "Home Directory"
 msgstr "Directori d'inici"
 
-#: ../data/menus.ui.h:97
+#: ../data/menus.ui.h:99
 msgid "Default Directory"
 msgstr "Directori per defecte"
 
-#: ../data/menus.ui.h:98
+#: ../data/menus.ui.h:100
 msgid "Set Current Path as Default"
 msgstr "Configura el camí actual perquè sigui el predeterminat"
 
-#: ../data/menus.ui.h:100
+#: ../data/menus.ui.h:102
 msgid "Browse Subdirectories"
 msgstr "Navega els subdirectoris"
 
-#: ../data/menus.ui.h:101
+#: ../data/menus.ui.h:103
 msgid "Invert Selection"
 msgstr "Inverteix la selecció"
 
-#: ../data/menus.ui.h:102
+#: ../data/menus.ui.h:104
 msgid "CDDB Search Files…"
 msgstr "Cerca fitxers a la CDDB..."
 
-#: ../data/menus.ui.h:103
+#: ../data/menus.ui.h:105
 msgid "Find…"
 msgstr "Cerca…"
 
-#: ../data/menus.ui.h:104
+#: ../data/menus.ui.h:106
 msgid "Clear Log"
 msgstr "Neteja el registre"
 
@@ -1042,10 +1059,10 @@ msgstr "Escriu informació usant el nom del fitxer"
 msgid "Write information using:"
 msgstr "Escriu informació usant:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.c:915 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3016
+#: ../src/browser.c:917 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
-#: ../src/tag_area.c:1850
+#: ../src/tag_area.c:1737
 msgid "_Save"
 msgstr "De_sa"
 
@@ -1601,8 +1618,7 @@ msgstr "Etiquetes ID3"
 msgid "Character Conversion"
 msgstr "Conversió de caràcters"
 
-#. Translators: a section header in the Scanner section of the preferences
-#. dialog.
+#. Translators: a section header in the Scanner section of the preferences dialog.
 #: ../data/preferences_dialog.ui.h:113
 msgid "Fill Tag Scanner"
 msgstr "Escàner d'emplenament d'etiquetes"
@@ -1621,19 +1637,17 @@ msgstr "Converteix espais i «%20» a «_»"
 msgid "No conversion"
 msgstr "Cap conversió"
 
-#. Translators: a section header in the Scanner section of the preferences
-#. dialog.
+#. Translators: a section header in the Scanner section of the preferences dialog.
 #: ../data/preferences_dialog.ui.h:120
 msgid "Rename File and Directory Scanner"
 msgstr "Escàner de canvi de nom de fitxers i directoris"
 
-#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:91
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:894
+#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:95
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:784
 msgid "Remove spaces"
 msgstr "Treu els espais"
 
-#. Translators: a section header in the Scanner section of the preferences
-#. dialog.
+#. Translators: a section header in the Scanner section of the preferences dialog.
 #: ../data/preferences_dialog.ui.h:123
 msgid "Process Fields Scanner"
 msgstr "Escàner de processament de camps"
@@ -1887,58 +1901,58 @@ msgstr "Llegenda"
 
 #: ../data/scan_dialog.ui.h:14
 #, no-c-format
-msgid "%a: artist"
-msgstr "%a: artista"
+msgid "%t: title"
+msgstr "%t: títol"
 
 #: ../data/scan_dialog.ui.h:16
 #, no-c-format
-msgid "%z: album artist"
-msgstr "%z: àlbum de l'artista"
+msgid "%a: artist"
+msgstr "%a: artista"
 
 #: ../data/scan_dialog.ui.h:18
 #, no-c-format
-msgid "%b: album"
-msgstr "%b: àlbum"
+msgid "%y: year"
+msgstr "%y: any"
 
 #: ../data/scan_dialog.ui.h:20
 #, no-c-format
-msgid "%c: comment"
-msgstr "%c: comentari"
+msgid "%n: track number"
+msgstr "%n: número de pista"
 
 #: ../data/scan_dialog.ui.h:22
-#, no-c-format
-msgid "%p: composer"
-msgstr "%p: compositor"
-
-#: ../data/scan_dialog.ui.h:24
-#, no-c-format
-msgid "%r: copyright"
-msgstr "%r: copyright"
-
-#: ../data/scan_dialog.ui.h:26
 #, no-c-format
 msgid "%d: disc number"
 msgstr "%d: nombre de disc"
 
-#: ../data/scan_dialog.ui.h:28
+#: ../data/scan_dialog.ui.h:24
 #, no-c-format
-msgid "%e: encoded by"
-msgstr "%e: codificat per"
+msgid "%T: album"
+msgstr "%T: àlbum"
+
+#: ../data/scan_dialog.ui.h:26
+#, no-c-format
+msgid "%A: album artist"
+msgstr "%A: àlbum de l'artista"
+
+#: ../data/scan_dialog.ui.h:28
+#, fuzzy, no-c-format
+msgid "%Y: release year"
+msgstr "%o: artista original"
 
 #: ../data/scan_dialog.ui.h:30
 #, no-c-format
-msgid "%g: genre"
-msgstr "%g: gènere"
+msgid "%N: number of tracks"
+msgstr "%N: nombre de pistes"
 
 #: ../data/scan_dialog.ui.h:32
 #, no-c-format
-msgid "%i: ignored"
-msgstr "%i: ignorat"
+msgid "%D: number of discs"
+msgstr "%D: nombre de discs"
 
 #: ../data/scan_dialog.ui.h:34
 #, no-c-format
-msgid "%l: number of tracks"
-msgstr "%l: nombre de pistes"
+msgid "%g: genre"
+msgstr "%g: gènere"
 
 #: ../data/scan_dialog.ui.h:36
 #, no-c-format
@@ -1946,14 +1960,14 @@ msgid "%o: original artist"
 msgstr "%o: artista original"
 
 #: ../data/scan_dialog.ui.h:38
-#, no-c-format
-msgid "%n: track number"
-msgstr "%n: número de pista"
+#, fuzzy, no-c-format
+msgid "%w: original year"
+msgstr "%o: artista original"
 
 #: ../data/scan_dialog.ui.h:40
 #, no-c-format
-msgid "%t: title"
-msgstr "%t: títol"
+msgid "%c: comment"
+msgstr "%c: comentari"
 
 #: ../data/scan_dialog.ui.h:42
 #, no-c-format
@@ -1962,23 +1976,33 @@ msgstr "%u: URL"
 
 #: ../data/scan_dialog.ui.h:44
 #, no-c-format
-msgid "%x: number of discs"
-msgstr "%x: nombre de discs"
+msgid "%p: composer"
+msgstr "%p: compositor"
 
 #: ../data/scan_dialog.ui.h:46
 #, no-c-format
-msgid "%y: year"
-msgstr "%y: any"
+msgid "%r: copyright"
+msgstr "%r: copyright"
 
-#: ../data/scan_dialog.ui.h:47
+#: ../data/scan_dialog.ui.h:48
+#, no-c-format
+msgid "%e: encoded by"
+msgstr "%e: codificat per"
+
+#: ../data/scan_dialog.ui.h:50
+#, no-c-format
+msgid "%i: ignored"
+msgstr "%i: ignorat"
+
+#: ../data/scan_dialog.ui.h:51
 msgid "Fill Tag"
 msgstr "Emplena l'etiqueta"
 
-#: ../data/scan_dialog.ui.h:48
+#: ../data/scan_dialog.ui.h:52
 msgid "Prefix mask with current directory"
 msgstr "Prefixa la màscara amb el directori actual"
 
-#: ../data/scan_dialog.ui.h:49
+#: ../data/scan_dialog.ui.h:53
 msgid ""
 "Select or type in a mask using codes (see Legend) to parse tag fields. Used "
 "to rename the file.\n"
@@ -1990,113 +2014,113 @@ msgstr ""
 "Usa «/» per a crear directoris. Si el primer caràcter és «/», és un camí "
 "absolut, en cas contrari és relatiu a l'antic camí"
 
-#: ../data/scan_dialog.ui.h:51
+#: ../data/scan_dialog.ui.h:55
 msgid "Rename file preview"
 msgstr "Previsualització canvia el nom al fitxer"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:52 ../src/easytag.c:571
+#: ../data/scan_dialog.ui.h:56 ../src/easytag.c:571
 msgid "Rename File"
 msgstr "Canvia el nom del fitxer"
 
-#: ../data/scan_dialog.ui.h:53
+#: ../data/scan_dialog.ui.h:57
 msgid "Tag Fields"
 msgstr "Camps d'etiqueta"
 
-#: ../data/scan_dialog.ui.h:55
+#: ../data/scan_dialog.ui.h:59
 msgid "Process filename"
 msgstr "Processa el nom del fitxer"
 
-#: ../data/scan_dialog.ui.h:57
+#: ../data/scan_dialog.ui.h:61
 msgid "Process title field"
 msgstr "Processa el camp títol"
 
-#: ../data/scan_dialog.ui.h:59
+#: ../data/scan_dialog.ui.h:63
 msgid "Process artist field"
 msgstr "Processa el camp de l'artista"
 
-#: ../data/scan_dialog.ui.h:61
+#: ../data/scan_dialog.ui.h:65
 msgid "Process album artist field"
 msgstr "Processa el camp àlbum d'artista"
 
-#: ../data/scan_dialog.ui.h:63
+#: ../data/scan_dialog.ui.h:67
 msgid "Process album field"
 msgstr "Processa el camp àlbum"
 
-#: ../data/scan_dialog.ui.h:65
+#: ../data/scan_dialog.ui.h:69
 msgid "Process genre field"
 msgstr "Processa el camp gènere"
 
-#: ../data/scan_dialog.ui.h:67
+#: ../data/scan_dialog.ui.h:71
 msgid "Process comment field"
 msgstr "Processa el camp comentari"
 
-#: ../data/scan_dialog.ui.h:69
+#: ../data/scan_dialog.ui.h:73
 msgid "Process composer field"
 msgstr "Processa el camp compositor"
 
-#: ../data/scan_dialog.ui.h:70
+#: ../data/scan_dialog.ui.h:74
 msgid "Orig. Artist"
 msgstr "Artista original"
 
-#: ../data/scan_dialog.ui.h:71
+#: ../data/scan_dialog.ui.h:75
 msgid "Process original artist field"
 msgstr "Processa el camp artista original"
 
-#: ../data/scan_dialog.ui.h:73
+#: ../data/scan_dialog.ui.h:77
 msgid "Process copyright field"
 msgstr "Processa el camp copyright"
 
-#: ../data/scan_dialog.ui.h:75
+#: ../data/scan_dialog.ui.h:79
 msgid "Process URL field"
 msgstr "Processa el camp URL"
 
-#: ../data/scan_dialog.ui.h:77
+#: ../data/scan_dialog.ui.h:81
 msgid "Process encoded-by field"
 msgstr "Processa el camp codificat-per"
 
-#: ../data/scan_dialog.ui.h:78
+#: ../data/scan_dialog.ui.h:82
 msgid "Capitalization"
 msgstr "Majúscules o minúscules"
 
-#: ../data/scan_dialog.ui.h:79
+#: ../data/scan_dialog.ui.h:83
 msgid "Capitalize all"
 msgstr "Tot amb majúscules"
 
-#: ../data/scan_dialog.ui.h:80
+#: ../data/scan_dialog.ui.h:84
 msgid ""
 "Whether to upper-case all characters of the tag when processing tag fields"
 msgstr ""
 "Si escriure en majúscules tots els caràcters d'una etiqueta quan s'estiguin "
 "processant els camps d'etiqueta"
 
-#: ../data/scan_dialog.ui.h:81
+#: ../data/scan_dialog.ui.h:85
 msgid "Lowercase all"
 msgstr "Tot en minúscules"
 
-#: ../data/scan_dialog.ui.h:82
+#: ../data/scan_dialog.ui.h:86
 msgid ""
 "Whether to lower-case all characters of the tag when processing tag fields"
 msgstr ""
 "Si escriure en minúscules tots els caràcters de l'etiqueta quan s'estiguin "
 "processant els camps d'etiqueta"
 
-#: ../data/scan_dialog.ui.h:83
+#: ../data/scan_dialog.ui.h:87
 msgid "Capitalize first letter"
 msgstr "En majúscules la primera lletra"
 
-#: ../data/scan_dialog.ui.h:84
+#: ../data/scan_dialog.ui.h:88
 msgid ""
 "Whether to upper-case the first letter of the tag when processing tag fields"
 msgstr ""
 "Si posar en majúscula la primera lletra de l'etiqueta quan s'estiguin "
 "processant els camps de les etiquetes"
 
-#: ../data/scan_dialog.ui.h:85
+#: ../data/scan_dialog.ui.h:89
 msgid "Capitalize the first letter of each word"
 msgstr "En majúscules la primera lletra de cada paraula"
 
-#: ../data/scan_dialog.ui.h:86
+#: ../data/scan_dialog.ui.h:90
 msgid ""
 "Whether to upper-case the first letter of each word when processing tag "
 "fields"
@@ -2104,11 +2128,11 @@ msgstr ""
 "Si posar en majúscules la primera lletra de cada paraula quan s'estiguin "
 "processant els camps d'etiqueta"
 
-#: ../data/scan_dialog.ui.h:87
+#: ../data/scan_dialog.ui.h:91
 msgid "Detect Roman numerals"
 msgstr "Detecta numeració romana"
 
-#: ../data/scan_dialog.ui.h:88 ../data/org.gnome.EasyTAG.gschema.xml.h:132
+#: ../data/scan_dialog.ui.h:92 ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to detect Roman numerals when applying upper-case conversions while "
 "processing tag fields"
@@ -2116,55 +2140,55 @@ msgstr ""
 "Si detectar nombres romans quan s'estiguin aplicant les conversions a "
 "majúscules mentre es processen els camps d'etiqueta"
 
-#: ../data/scan_dialog.ui.h:89
+#: ../data/scan_dialog.ui.h:93
 msgid "Do not change capitalization"
 msgstr "No canvies les majúscules"
 
-#: ../data/scan_dialog.ui.h:90
+#: ../data/scan_dialog.ui.h:94
 msgid "Spaces Conversions"
 msgstr "Conversions d'espais"
 
-#: ../data/scan_dialog.ui.h:92 ../data/org.gnome.EasyTAG.gschema.xml.h:134
+#: ../data/scan_dialog.ui.h:96 ../data/org.gnome.EasyTAG.gschema.xml.h:134
 msgid "Whether to remove all spaces when processing tag fields"
 msgstr ""
 "Si eliminar tots els espais quan s'estiguin processant els camps d'etiqueta"
 
-#: ../data/scan_dialog.ui.h:93
+#: ../data/scan_dialog.ui.h:97
 msgid "Insert a space before uppercase letters"
 msgstr "Insereix un espai abans de les lletres majúscules"
 
-#: ../data/scan_dialog.ui.h:94 ../data/org.gnome.EasyTAG.gschema.xml.h:136
+#: ../data/scan_dialog.ui.h:98 ../data/org.gnome.EasyTAG.gschema.xml.h:136
 msgid ""
 "Whether to insert spaces before capital letters when processing tag fields"
 msgstr ""
 "Si inserir espais abans de lletres majúscules quan s'estiguin processant "
 "camps d'etiqueta"
 
-#: ../data/scan_dialog.ui.h:95
+#: ../data/scan_dialog.ui.h:99
 msgid "Remove duplicate spaces and underscores"
 msgstr "Suprimeix els espais duplicats i els subratllats"
 
-#: ../data/scan_dialog.ui.h:96 ../data/org.gnome.EasyTAG.gschema.xml.h:138
+#: ../data/scan_dialog.ui.h:100 ../data/org.gnome.EasyTAG.gschema.xml.h:138
 msgid ""
 "Whether to remove duplicate spaces and underscores when processing tag fields"
 msgstr ""
 "Si suprimir els espais duplicats i els subratllats quan s'estan processant "
 "els camps d'etiqueta"
 
-#: ../data/scan_dialog.ui.h:97
+#: ../data/scan_dialog.ui.h:101
 msgid "Do not change word separators"
 msgstr "No canviïs els separadors de paraules"
 
-#: ../data/scan_dialog.ui.h:98
+#: ../data/scan_dialog.ui.h:102
 msgid "Character Conversions"
 msgstr "Conversions de caràcters"
 
-#: ../data/scan_dialog.ui.h:100 ../src/tag_area.c:850
+#: ../data/scan_dialog.ui.h:104 ../src/tag_area.c:740
 #, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "Converteix «_» i «%20» en espais"
 
-#: ../data/scan_dialog.ui.h:102
+#: ../data/scan_dialog.ui.h:106
 #, no-c-format
 msgid ""
 "The underscore character or the string ‘%20’ is replaced by one space. "
@@ -2173,11 +2197,11 @@ msgstr ""
 "El caràcter «_» o la cadena «%20» han estat reemplaçats per un espai. "
 "Exemple, abans: «Text%20en%20una_entrada» després: «Text en una entrada»"
 
-#: ../data/scan_dialog.ui.h:103 ../src/tag_area.c:856
+#: ../data/scan_dialog.ui.h:107 ../src/tag_area.c:746
 msgid "Convert spaces to underscores"
 msgstr "Converteix els espais a «_»"
 
-#: ../data/scan_dialog.ui.h:104
+#: ../data/scan_dialog.ui.h:108
 msgid ""
 "The space character is replaced by one underscore character. Example, "
 "before: ‘Text In An Entry’, after: ‘Text_In_An_Entry’"
@@ -2185,40 +2209,40 @@ msgstr ""
 "El caràcter espai ha estat reemplaçat per un caràcter «_». Exemple, abans: "
 "«Text en una entrada» després: «Text%20en%20una_entrada»"
 
-#: ../data/scan_dialog.ui.h:105
+#: ../data/scan_dialog.ui.h:109
 msgid "Convert:"
 msgstr "Converteix:"
 
-#: ../data/scan_dialog.ui.h:106
+#: ../data/scan_dialog.ui.h:110
 msgid "Replace a string by another one. Note that the search is case sensitive"
 msgstr ""
 "Reemplaça una cadena per una altra. Noteu que la cerca detecta les majúscules"
 
-#: ../data/scan_dialog.ui.h:107
+#: ../data/scan_dialog.ui.h:111
 msgid "to: "
 msgstr "a: "
 
-#: ../data/scan_dialog.ui.h:108
+#: ../data/scan_dialog.ui.h:112
 msgid "Do not convert"
 msgstr "No converteixis"
 
-#: ../data/scan_dialog.ui.h:110
+#: ../data/scan_dialog.ui.h:114
 msgid "Show / Hide Masks Editor"
 msgstr "Mostra / Amaga l'editor de màscares"
 
-#: ../data/scan_dialog.ui.h:111
+#: ../data/scan_dialog.ui.h:115
 msgid "Show / Hide Legend"
 msgstr "Mostra / Amaga la llegenda"
 
-#: ../data/scan_dialog.ui.h:112
+#: ../data/scan_dialog.ui.h:116
 msgid "Scanner Preferences"
 msgstr "Preferències de l'escàner"
 
-#: ../data/scan_dialog.ui.h:114
+#: ../data/scan_dialog.ui.h:118
 msgid "Scan Files"
 msgstr "Escaneja fitxers"
 
-#: ../data/scan_dialog.ui.h:115
+#: ../data/scan_dialog.ui.h:119
 msgid "Scan selected files"
 msgstr "Explora els fitxers seleccionats"
 
@@ -2264,7 +2288,7 @@ msgstr "Distingeix entre majúscules i minúscules"
 msgid "CD"
 msgstr "CD"
 
-#: ../data/tag_area.ui.h:1 ../src/tag_area.c:2991
+#: ../data/tag_area.ui.h:1 ../src/tag_area.c:2755
 msgid "Tag"
 msgstr "Etiqueta"
 
@@ -2301,31 +2325,15 @@ msgid "Tag selected files with this album name"
 msgstr "Copia aquest nom d'àlbum als fitxers seleccionats"
 
 #: ../data/tag_area.ui.h:10
-msgid "CD:"
-msgstr "CD:"
+msgid "Track #:"
+msgstr "Pista número:"
 
 #: ../data/tag_area.ui.h:11
-msgid "Tag selected files with this disc number"
-msgstr "Copia aquest nombre de disc als fitxers seleccionats"
-
-#: ../data/tag_area.ui.h:12
-msgid "Year:"
-msgstr "Any:"
-
-#: ../data/tag_area.ui.h:13
-msgid "Tag selected files with this year"
-msgstr "Copia aquest any als fitxers seleccionats"
-
-#: ../data/tag_area.ui.h:14
 msgid "Number selected tracks sequentially. Starts at 01 in each subdirectory"
 msgstr ""
 "Posa números a les pistes seqüencialment. Comença amb 01 a cada subdirectori"
 
-#: ../data/tag_area.ui.h:15
-msgid "Track #:"
-msgstr "Pista número:"
-
-#: ../data/tag_area.ui.h:16
+#: ../data/tag_area.ui.h:12
 msgid ""
 "Set the number of files, in the same directory of the displayed file, to the "
 "selected tracks"
@@ -2333,91 +2341,126 @@ msgstr ""
 "Configura el nombre de fitxers, al mateix directori del fitxer mostrat, a "
 "les pistes seleccionades"
 
-#: ../data/tag_area.ui.h:17
+#: ../data/tag_area.ui.h:13
 msgid "Tag selected files with this number of tracks"
 msgstr "Copia aquest nombre de pistes als fitxers seleccionats"
 
+#: ../data/tag_area.ui.h:14
+msgid "CD:"
+msgstr "CD:"
+
+#: ../data/tag_area.ui.h:15
+msgid "Tag selected files with this disc number"
+msgstr "Copia aquest nombre de disc als fitxers seleccionats"
+
+#: ../data/tag_area.ui.h:16
+msgid "Year:"
+msgstr "Any:"
+
+#: ../data/tag_area.ui.h:17
+msgid "Tag selected files with this year"
+msgstr "Copia aquest any als fitxers seleccionats"
+
 #: ../data/tag_area.ui.h:18
+msgid "Release year:"
+msgstr ""
+
+#: ../data/tag_area.ui.h:19
+#, fuzzy
+msgid "Tag selected files with this release year"
+msgstr "Copia aquest any als fitxers seleccionats"
+
+#: ../data/tag_area.ui.h:20
 msgid "Genre:"
 msgstr "Gènere:"
 
-#: ../data/tag_area.ui.h:19
+#: ../data/tag_area.ui.h:21
 msgid "Comment:"
 msgstr "Comentari:"
 
-#: ../data/tag_area.ui.h:20
+#: ../data/tag_area.ui.h:22
 msgid "Tag selected files with this comment"
 msgstr "Copia aquest comentari als fitxers seleccionats"
 
-#: ../data/tag_area.ui.h:21
+#: ../data/tag_area.ui.h:23
 msgid "Composer:"
 msgstr "Compositor:"
 
-#: ../data/tag_area.ui.h:22
+#: ../data/tag_area.ui.h:24
 msgid "Tag selected files with this composer"
 msgstr "Copia aquest compositor als fitxers seleccionats"
 
-#: ../data/tag_area.ui.h:23
+#: ../data/tag_area.ui.h:25
 msgid "Orig. artist:"
 msgstr "Artista original:"
 
-#: ../data/tag_area.ui.h:24
+#: ../data/tag_area.ui.h:26
 msgid "Tag selected files with this original artist"
 msgstr "Copia aquest artista original als fitxers seleccionats"
 
-#: ../data/tag_area.ui.h:25
+#: ../data/tag_area.ui.h:27
+#, fuzzy
+msgid "year:"
+msgstr "Any:"
+
+#: ../data/tag_area.ui.h:28
+#, fuzzy
+msgid "Tag selected files with this original year"
+msgstr "Copia aquest artista original als fitxers seleccionats"
+
+#: ../data/tag_area.ui.h:29
 msgid "Copyright:"
 msgstr "Copyright:"
 
-#: ../data/tag_area.ui.h:26
+#: ../data/tag_area.ui.h:30
 msgid "Tag selected files with this copyright"
 msgstr "Copia aquest copyright als fitxers seleccionats"
 
-#: ../data/tag_area.ui.h:27
+#: ../data/tag_area.ui.h:31
 msgid "URL:"
 msgstr "URL:"
 
-#: ../data/tag_area.ui.h:28
+#: ../data/tag_area.ui.h:32
 msgid "Tag selected files with this URL"
 msgstr "Copia aquest URL als fitxers seleccionats"
 
-#: ../data/tag_area.ui.h:29
+#: ../data/tag_area.ui.h:33
 msgid "Encoded by:"
 msgstr "Codificat per:"
 
-#: ../data/tag_area.ui.h:30
+#: ../data/tag_area.ui.h:34
 msgid "Tag selected files with this encoder name"
 msgstr "Copia aquest codificador als fitxers seleccionats"
 
-#: ../data/tag_area.ui.h:31
+#: ../data/tag_area.ui.h:35
 msgid "Common"
 msgstr "Comú"
 
-#: ../data/tag_area.ui.h:32
+#: ../data/tag_area.ui.h:36
 msgid "You can use drag and drop to add an image"
 msgstr "Podeu usar arrossega i solta per a afegir una imatge"
 
-#: ../data/tag_area.ui.h:33
+#: ../data/tag_area.ui.h:37
 msgid "Add images to the tag"
 msgstr "Afegeix imatges a l'etiqueta"
 
-#: ../data/tag_area.ui.h:34
+#: ../data/tag_area.ui.h:38
 msgid "Remove selected images from the tag"
 msgstr "Suprimeix les imatges seleccionades de l'etiqueta"
 
-#: ../data/tag_area.ui.h:35
+#: ../data/tag_area.ui.h:39
 msgid "Save the selected images to files"
 msgstr "Desa les imatges seleccionades als fitxers"
 
-#: ../data/tag_area.ui.h:36
+#: ../data/tag_area.ui.h:40
 msgid "Edit image properties"
 msgstr "Edita les propietats de la imatge"
 
-#: ../data/tag_area.ui.h:37
+#: ../data/tag_area.ui.h:41
 msgid "Tag selected files with these images"
 msgstr "Etiqueta els fitxers seleccionats amb aquestes imatges"
 
-#: ../data/tag_area.ui.h:38 ../src/tag_area.c:3245 ../src/tag_area.c:3248
+#: ../data/tag_area.ui.h:42 ../src/tag_area.c:3033 ../src/tag_area.c:3036
 msgid "Images"
 msgstr "Imatges"
 
@@ -3121,15 +3164,15 @@ msgstr "Pàgina a mostrar al diàleg de preferències"
 msgid "The page in the notebook of the preferences dialog"
 msgstr "La pàgina al bloc de notes o el diàleg de preferències"
 
-#: ../nautilus-extension/nautilus-easytag.c:229
+#: ../nautilus-extension/nautilus-easytag.c:227
 msgid "Open in EasyTAG"
 msgstr "Obre a l'EasyTag"
 
-#: ../nautilus-extension/nautilus-easytag.c:230
+#: ../nautilus-extension/nautilus-easytag.c:228
 msgid "Open the selected directory in EasyTAG"
 msgstr "Obre el directori seleccionat a l'EasyTAG"
 
-#: ../nautilus-extension/nautilus-easytag.c:248
+#: ../nautilus-extension/nautilus-easytag.c:246
 msgid "Open the selected files in EasyTAG"
 msgstr "Obre els fitxers seleccionats a l'EasyTAG"
 
@@ -3177,7 +3220,7 @@ msgstr "Lloc web: %s"
 msgid "- Tag and rename audio files"
 msgstr "- Etiqueta i reanomena els fitxers d'àudio"
 
-#: ../src/application.c:429 ../src/file_list.c:435
+#: ../src/application.c:429 ../src/file_list.c:442
 #, c-format
 msgid "Error while querying information for file ‘%s’: %s"
 msgstr "Error mentre s'estava consultant informació sobre el fitxer: «%s» %s"
@@ -3187,7 +3230,7 @@ msgstr "Error mentre s'estava consultant informació sobre el fitxer: «%s» %s"
 msgid "Cannot open path ‘%s’"
 msgstr "No es pot obrir el camí «%s»"
 
-#: ../src/application_window.c:361 ../src/application_window.c:378
+#: ../src/application_window.c:361 ../src/application_window.c:379
 #, c-format
 msgid "Do you really want to delete the file ‘%s’?"
 msgstr "De veritat voleu suprimir el fitxer «%s»?"
@@ -3196,63 +3239,63 @@ msgstr "De veritat voleu suprimir el fitxer «%s»?"
 msgid "Repeat action for the remaining files"
 msgstr "Repeteix l'acció per als fitxers restants"
 
-#: ../src/application_window.c:366
+#: ../src/application_window.c:367
 msgid "_Skip"
 msgstr "_Omet"
 
-#: ../src/application_window.c:368 ../src/application_window.c:382
+#: ../src/application_window.c:369 ../src/application_window.c:383
 msgid "_Delete"
 msgstr "_Suprimeix"
 
-#: ../src/application_window.c:370 ../src/application_window.c:380
+#: ../src/application_window.c:371 ../src/application_window.c:381
 msgid "Delete File"
 msgstr "Suprimeix el fitxer"
 
-#: ../src/application_window.c:407
+#: ../src/application_window.c:408
 #, c-format
 msgid "File ‘%s’ deleted"
 msgstr "El fitxer «%s» ha estat suprimit"
 
-#: ../src/application_window.c:582
+#: ../src/application_window.c:583
 #, c-format
 msgid "Cannot delete file ‘%s’"
 msgstr "No es pot suprimir el fitxer «%s»"
 
-#: ../src/application_window.c:606
+#: ../src/application_window.c:607
 msgid "Some files were not deleted"
 msgstr "Alguns fitxers no s'han pogut suprimir"
 
-#: ../src/application_window.c:608
+#: ../src/application_window.c:609
 msgid "All files have been deleted"
 msgstr "S'han suprimit tots els fitxers"
 
-#: ../src/application_window.c:914
+#: ../src/application_window.c:915
 msgid "All tags have been removed"
 msgstr "S'han suprimit totes les etiquetes"
 
-#: ../src/application_window.c:1473 ../src/browser.c:360 ../src/browser.c:403
-#: ../src/browser.c:437 ../src/browser.c:4640 ../src/browser.c:4715
+#: ../src/application_window.c:1474 ../src/browser.c:362 ../src/browser.c:405
+#: ../src/browser.c:439 ../src/browser.c:4648 ../src/browser.c:4723
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "No s'ha pogut executar el programa «%s»"
 
-#: ../src/application_window.c:1987
+#: ../src/application_window.c:1988
 #, c-format
 msgid "Could not convert filename ‘%s’ to system filename encoding"
 msgstr ""
 "No s'ha pogut convertir el nom del fitxer «%s» a la codificació de noms de "
 "fitxer del sistema"
 
-#: ../src/application_window.c:1990
+#: ../src/application_window.c:1991
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Intenta configurar la variable d'entorn G_FILENAME_ENCODING."
 
-#: ../src/application_window.c:1992 ../src/scan_dialog.c:846
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:866
 msgid "Filename translation"
 msgstr "Traducció del nom de fitxer"
 
 #. And refresh the number of files in this directory
-#: ../src/application_window.c:2153
+#: ../src/application_window.c:2154
 #, c-format
 msgid "One file"
 msgid_plural "%u files"
@@ -3260,7 +3303,7 @@ msgstr[0] "Un fitxer"
 msgstr[1] "%u fitxers"
 
 #. Bitrate
-#: ../src/application_window.c:2186 ../src/tags/flac_header.c:189
+#: ../src/application_window.c:2187 ../src/tags/flac_header.c:189
 #: ../src/tags/monkeyaudio_header.c:76 ../src/tags/mp4_header.cc:144
 #: ../src/tags/mpeg_header.c:274 ../src/tags/musepack_header.c:78
 #: ../src/tags/ogg_header.c:411 ../src/tags/opus_header.c:231
@@ -3270,7 +3313,7 @@ msgid "%d kb/s"
 msgstr "%d kb/s"
 
 #. Samplerate
-#: ../src/application_window.c:2189 ../src/tags/flac_header.c:192
+#: ../src/application_window.c:2190 ../src/tags/flac_header.c:192
 #: ../src/tags/monkeyaudio_header.c:79 ../src/tags/mp4_header.cc:148
 #: ../src/tags/mpeg_header.c:279 ../src/tags/musepack_header.c:81
 #: ../src/tags/ogg_header.c:414 ../src/tags/opus_header.c:234
@@ -3279,97 +3322,97 @@ msgstr "%d kb/s"
 msgid "%d Hz"
 msgstr "%d Hz"
 
-#: ../src/application_window.c:2344 ../src/easytag.c:911
+#: ../src/application_window.c:2345 ../src/easytag.c:911
 #, c-format
 msgid "File: ‘%s’"
 msgstr "Fitxer: «%s»"
 
 #. Quit EasyTAG.
-#: ../src/application_window.c:2978
+#: ../src/application_window.c:2979
 msgid "Normal exit"
 msgstr "Sortida normal"
 
-#: ../src/application_window.c:3012 ../src/browser.c:909
+#: ../src/application_window.c:3013 ../src/browser.c:911
 msgid "Some files have been modified but not saved"
 msgstr "Alguns fitxers han estat modificats però no desats"
 
-#: ../src/application_window.c:3013 ../src/browser.c:913 ../src/easytag.c:233
+#: ../src/application_window.c:3014 ../src/browser.c:915 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr "_Descarta"
 
-#: ../src/application_window.c:3019 ../src/easytag.c:239
+#: ../src/application_window.c:3020 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Surt"
 
-#: ../src/application_window.c:3022
+#: ../src/application_window.c:3023
 msgid "Do you want to save them before quitting?"
 msgstr "Voleu desar-ho abans de sortir?"
 
-#: ../src/browser.c:610
+#: ../src/browser.c:612
 msgid "New default directory selected for browser"
 msgstr "Nou directori per defecte seleccionat per al navegador"
 
-#: ../src/browser.c:912
+#: ../src/browser.c:914
 msgid "Do you want to save them before changing directory?"
 msgstr "Voleu desar-los abans de canviar de directori?"
 
-#: ../src/browser.c:919
+#: ../src/browser.c:921
 msgid "Confirm Directory Change"
 msgstr "Confirma el canvi de directori"
 
-#: ../src/browser.c:2618
+#: ../src/browser.c:2626
 msgid "All albums"
 msgstr "Tots els àlbums"
 
-#: ../src/browser.c:3870
+#: ../src/browser.c:3878
 msgid "Select File"
 msgstr "Seleccioneu un fitxer"
 
-#: ../src/browser.c:3877
+#: ../src/browser.c:3885
 msgid "Select Directory"
 msgstr "Seleccioneu un directori"
 
-#: ../src/browser.c:4144
+#: ../src/browser.c:4152
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Canvia el nom del directori «%s» a:"
 
-#: ../src/browser.c:4280
+#: ../src/browser.c:4288
 msgid "You must type a directory name"
 msgstr "Cal que escriviu un nom de directori"
 
-#: ../src/browser.c:4281 ../src/browser.c:4303
+#: ../src/browser.c:4289 ../src/browser.c:4311
 msgid "Directory Name Error"
 msgstr "Error de nom de directori"
 
-#: ../src/browser.c:4299
+#: ../src/browser.c:4307
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "No s'ha pogut convertir «%s» a la codificació de noms de fitxer"
 
-#: ../src/browser.c:4302
+#: ../src/browser.c:4310
 msgid "Please use another name."
 msgstr "Useu un altre nom."
 
-#: ../src/browser.c:4374
+#: ../src/browser.c:4382
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "El nom del directori «%s» ja existeix."
 
-#: ../src/browser.c:4375 ../src/easytag.c:650
+#: ../src/browser.c:4383 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Error al canviar nom de fitxer"
 
-#: ../src/browser.c:4414 ../src/browser.c:4443
+#: ../src/browser.c:4422 ../src/browser.c:4451
 msgid "Rename Directory Error"
 msgstr "Error al canviar nom de directori"
 
-#: ../src/browser.c:4484
+#: ../src/browser.c:4492
 msgid "Directory renamed"
 msgstr "S'ha canviat el nom al directori"
 
-#: ../src/browser.c:4632 ../src/browser.c:4707
+#: ../src/browser.c:4640 ../src/browser.c:4715
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "S'ha executat l'ordre «%s»"
@@ -3388,103 +3431,105 @@ msgstr ""
 msgid "Cannot resolve host: ‘%s’: %s"
 msgstr "No es pot resoldre l'amfitrió: «%s»: %s"
 
-#: ../src/cddb_dialog.c:724
+#: ../src/cddb_dialog.c:725
 #, c-format
 msgid "Cannot connect to host: ‘%s’: %s"
 msgstr "No es pot connectar amb l'amfitrió: «%s»: %s"
 
 #. Send the request.
-#: ../src/cddb_dialog.c:797 ../src/cddb_dialog.c:1352 ../src/cddb_dialog.c:1640
+#: ../src/cddb_dialog.c:798 ../src/cddb_dialog.c:1353 ../src/cddb_dialog.c:1641
 msgid "Sending request…"
 msgstr "S'està enviant la petició…"
 
-#: ../src/cddb_dialog.c:841
+#: ../src/cddb_dialog.c:842
 #, c-format
 msgid "The server returned a bad response ‘%s’"
 msgstr "El servidor ha rebut una resposta incorrecta «%s»"
 
 #. Load the track list of the album
-#: ../src/cddb_dialog.c:1035
+#: ../src/cddb_dialog.c:1036
 msgid "Loading album track list…"
 msgstr "S'està carregant la llista de cançons de l'àlbum..."
 
+#.
 #. * Read the answer
-#: ../src/cddb_dialog.c:1382
+#.
+#: ../src/cddb_dialog.c:1383
 msgid "Receiving data…"
 msgstr "S'estan rebent dades..."
 
-#: ../src/cddb_dialog.c:1519
+#: ../src/cddb_dialog.c:1520
 #, c-format
 msgid "Sorry, the web-based search is currently not available"
 msgstr "Disculpeu, la cerca web no està disponible ara"
 
-#: ../src/cddb_dialog.c:1522 ../src/cddb_dialog.c:1855
+#: ../src/cddb_dialog.c:1523 ../src/cddb_dialog.c:1856
 #, c-format
 msgid "Found one matching album"
 msgid_plural "Found %u matching albums"
 msgstr[0] "S'ha trobat un àlbum coincident"
 msgstr[1] "S'han trobat %u àlbums coincidents"
 
-#: ../src/cddb_dialog.c:1670
+#: ../src/cddb_dialog.c:1671
 #, c-format
 msgid "Receiving data of page %d (album %d/%d)…"
 msgstr "S'estan rebent dades de la pàgina %d (àlbum %d/%d)…"
 
-#: ../src/cddb_dialog.c:1672
+#: ../src/cddb_dialog.c:1673
 #, c-format
 msgid "Receiving data of page %d…"
 msgstr "S'estan rebent dades de la pàgina %d..."
 
-#: ../src/cddb_dialog.c:1688
+#: ../src/cddb_dialog.c:1689
 msgid "The server returned a bad response"
 msgstr "El servidor ha rebut una resposta incorrecta"
 
-#: ../src/cddb_dialog.c:1827
+#: ../src/cddb_dialog.c:1828
 #, c-format
 msgid "More results to load…"
 msgstr "Més resultats per a carregar..."
 
-#: ../src/cddb_dialog.c:2137
+#: ../src/cddb_dialog.c:2138
 msgid "The number of CDDB results does not match the number of selected files"
 msgstr ""
 "El nombre de resultats CDDB no coincideix amb el nombre de fitxers "
 "seleccionats"
 
-#: ../src/cddb_dialog.c:2143
+#: ../src/cddb_dialog.c:2144
 msgid "Write Tag from CDDB"
 msgstr "Escriu l'etiqueta des de CDDB"
 
-#: ../src/cddb_dialog.c:2458
+#: ../src/cddb_dialog.c:2459
 msgid "Ready to search"
 msgstr "A punt per a cercar"
 
-#: ../src/cddb_dialog.c:2613
+#: ../src/cddb_dialog.c:2614
 #, c-format
 msgid "No file selected"
 msgstr "No s'ha seleccionat cap fitxer"
 
 #. The CD redbook standard defines the maximum number of tracks as 99, any
 #. queries with more than 99 tracks will never return a result.
-#: ../src/cddb_dialog.c:2622
+#: ../src/cddb_dialog.c:2623
 #, c-format
 msgid "More than 99 files selected. Cannot send request"
 msgstr "Més de 99 fitxers seleccionats. No es pot enviar la petició"
 
-#: ../src/cddb_dialog.c:2628
+#: ../src/cddb_dialog.c:2629
 #, c-format
 msgid "One file selected"
 msgid_plural "%u files selected"
 msgstr[0] "Un fitxer seleccionat"
 msgstr[1] "%u fitxers seleccionats"
 
-#: ../src/cddb_dialog.c:2755
+#: ../src/cddb_dialog.c:2756
 #, c-format
 msgid "Sending request (disc ID: %s, #tracks: %u, Disc length: %u)…"
 msgstr ""
 "S'està enviant la petició (ID de disc: %s, Nombre de pistes: %u, Longitud "
 "del disc: %u)…"
 
-#: ../src/cddb_dialog.c:2876
+#: ../src/cddb_dialog.c:2877
 #, c-format
 msgid "DiscID ‘%s’ gave one matching album"
 msgid_plural "DiscID ‘%s’ gave %u matching albums"
@@ -3920,7 +3965,16 @@ msgstr ""
 "El valor de l'any «%s» sembla ser invàlid al fitxer «%s». La informació es "
 "perdrà quan es desi"
 
-#: ../src/file_list.c:501
+#: ../src/file_list.c:352
+#, fuzzy, c-format
+msgid ""
+"The original year value ‘%s’ seems to be invalid in file ‘%s’. The "
+"information will be lost when saving"
+msgstr ""
+"El valor de l'any «%s» sembla ser invàlid al fitxer «%s». La informació es "
+"perdrà quan es desi"
+
+#: ../src/file_list.c:508
 #, c-format
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "S'han aplicat les correccions automàtiques per al fitxer «%s»"
@@ -4063,7 +4117,7 @@ msgstr "píxels"
 msgid "Type"
 msgstr "Tipus"
 
-#: ../src/picture.c:478 ../src/tags/id3_tag.c:1515 ../src/tags/vcedit.c:427
+#: ../src/picture.c:478 ../src/tags/id3_tag.c:1531 ../src/tags/vcedit.c:530
 #, c-format
 msgid "Input truncated or empty"
 msgstr "L'entrada està truncada o buida"
@@ -4082,8 +4136,8 @@ msgstr "Error del fitxer llista de reproducció"
 msgid "Wrote playlist file ‘%s’"
 msgstr "S'ha escrit el fitxer de llista de reproducció «%s»"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2639
-#: ../src/scan_dialog.c:2702
+#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2659
+#: ../src/scan_dialog.c:2722
 msgid "Invalid scanner mask"
 msgstr "Màscara d'escàner invàlida"
 
@@ -4104,67 +4158,67 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "Error de camí no vàlid"
 
-#: ../src/scan_dialog.c:432
+#: ../src/scan_dialog.c:452
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "No es pot calcular el valor CRC del fitxer «%s»"
 
-#: ../src/scan_dialog.c:447
+#: ../src/scan_dialog.c:467
 msgid "Tag successfully scanned"
 msgstr "Etiqueta escanejada amb èxit"
 
-#: ../src/scan_dialog.c:450
+#: ../src/scan_dialog.c:470
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Etiqueta escanejada amb èxit «%s»"
 
-#: ../src/scan_dialog.c:493
+#: ../src/scan_dialog.c:513
 #, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "No s'ha trobat l'extensió «%s» al nom de fitxer «%s»"
 
-#: ../src/scan_dialog.c:585 ../src/scan_dialog.c:616
+#: ../src/scan_dialog.c:605 ../src/scan_dialog.c:636
 #, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "No es pot trobar el separador «%s» dins de «%s»"
 
-#: ../src/scan_dialog.c:844
+#: ../src/scan_dialog.c:864
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "No s'ha pogut convertir el nom del fitxer «%s» a la codificació de noms de "
 "fitxer del sistema"
 
-#: ../src/scan_dialog.c:870
+#: ../src/scan_dialog.c:890
 msgid "New filename successfully scanned"
 msgstr "El nom del fitxer nou s'ha escanejat amb èxit"
 
-#: ../src/scan_dialog.c:874
+#: ../src/scan_dialog.c:894
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "El nom del fitxer nou s'ha escanejat amb èxit «%s»"
 
-#: ../src/scan_dialog.c:1243
+#: ../src/scan_dialog.c:1263
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Error mentre es processaven els camps «%s»"
 
-#: ../src/scan_dialog.c:2119
+#: ../src/scan_dialog.c:2139
 msgid "New_mask"
 msgstr "Màscara nova"
 
-#: ../src/scan_dialog.c:2769
+#: ../src/scan_dialog.c:2789
 msgid "All tags have been scanned"
 msgstr "Totes les etiquetes han estat escanejades"
 
-#: ../src/search_dialog.c:636
+#: ../src/search_dialog.c:576
 #, c-format
 msgid "Found one file"
 msgid_plural "Found %d files"
 msgstr[0] "S'ha trobat un fitxer"
 msgstr[1] "S'han trobat %d fitxers"
 
-#: ../src/search_dialog.c:718
+#: ../src/search_dialog.c:658
 msgid "Ready to search…"
 msgstr "A punt per a cercar..."
 
@@ -4188,198 +4242,217 @@ msgstr ""
 msgid "Ready to start"
 msgstr "Preparat per a començar"
 
-#: ../src/tag_area.c:169
+#: ../src/tag_area.c:180
 #, c-format
 msgid "Selected files tagged with title ‘%s’"
 msgstr "Els fitxers seleccionats s'han etiquetat amb el títol «%s»"
 
-#: ../src/tag_area.c:174
+#: ../src/tag_area.c:182
 msgid "Removed title from selected files"
 msgstr "S'ha suprimit el títol dels fitxers seleccionats"
 
-#: ../src/tag_area.c:192
+#: ../src/tag_area.c:191
 #, c-format
 msgid "Selected files tagged with artist ‘%s’"
 msgstr "Els fitxers seleccionats s'han etiquetat amb l'artista «%s»"
 
-#: ../src/tag_area.c:197
+#: ../src/tag_area.c:193
 msgid "Removed artist from selected files"
 msgstr "S'ha suprimit l'artista dels fitxers seleccionats"
 
-#: ../src/tag_area.c:215
+#: ../src/tag_area.c:202
 #, c-format
 msgid "Selected files tagged with album artist ‘%s’"
 msgstr "Els fitxers seleccionats s'han etiquetat amb l'artista d'àlbum «%s»"
 
-#: ../src/tag_area.c:220
+#: ../src/tag_area.c:204
 msgid "Removed album artist from selected files"
 msgstr "S'ha suprimit l'artista de l'àlbum dels fitxers seleccionats"
 
-#: ../src/tag_area.c:238
+#: ../src/tag_area.c:213
 #, c-format
 msgid "Selected files tagged with album ‘%s’"
 msgstr "Els fitxers seleccionats s'han etiquetat amb l'àlbum «%s»"
 
-#: ../src/tag_area.c:243
+#: ../src/tag_area.c:215
 msgid "Removed album name from selected files"
 msgstr "S'ha suprimit el nom de l'àlbum dels fitxers seleccionats"
 
-#: ../src/tag_area.c:281
+#: ../src/tag_area.c:252
 #, c-format
 msgid "Selected files tagged with disc number ‘%s/%s’"
 msgstr "Els fitxers seleccionats s'han etiquetat amb el nombre de disc «%s/%s»"
 
-#: ../src/tag_area.c:288
+#: ../src/tag_area.c:259
 #, c-format
 msgid "Selected files tagged with disc number like ‘xx’"
 msgstr ""
 "Els fitxers seleccionats s'han etiquetat amb el nombre de disc com «xx»"
 
-#: ../src/tag_area.c:293
+#: ../src/tag_area.c:264
 msgid "Removed disc number from selected files"
 msgstr "S'ha suprimit el número de disc dels fitxers seleccionats"
 
-#: ../src/tag_area.c:313
+#: ../src/tag_area.c:276
 #, c-format
 msgid "Selected files tagged with year ‘%s’"
 msgstr "Els fitxers seleccionats s'han etiquetat amb l'any «%s»"
 
-#: ../src/tag_area.c:318
+#: ../src/tag_area.c:278
 msgid "Removed year from selected files"
 msgstr "S'ha suprimit l'any dels fitxers seleccionats"
 
-#: ../src/tag_area.c:348 ../src/tag_area.c:453
+#: ../src/tag_area.c:287
+#, fuzzy, c-format
+msgid "Selected files tagged with release year ‘%s’"
+msgstr "Els fitxers seleccionats s'han etiquetat amb l'any «%s»"
+
+#: ../src/tag_area.c:289
+#, fuzzy
+msgid "Removed release year from selected files"
+msgstr "S'ha suprimit l'any dels fitxers seleccionats"
+
+#: ../src/tag_area.c:318 ../src/tag_area.c:423
 #, c-format
 msgid "Selected files tagged with track like ‘xx/%s’"
 msgstr "Els fitxers seleccionats s'han etiquetat amb la pista com «xx/%s»"
 
-#: ../src/tag_area.c:352
+#: ../src/tag_area.c:322
 #, c-format
 msgid "Selected files tagged with track like ‘xx’"
 msgstr "Els fitxers seleccionats s'han etiquetat amb la pista com «xx»"
 
-#: ../src/tag_area.c:357 ../src/tag_area.c:458
+#: ../src/tag_area.c:327 ../src/tag_area.c:428
 msgid "Removed track number from selected files"
 msgstr "S'ha suprimit el número de pista dels fitxers seleccionats"
 
-#. msg = g_strdup_printf(_("All %d tracks numbered sequentially."),
-#. ETCore->ETFileSelectionList_Length);
-#: ../src/tag_area.c:416
+#. msg = g_strdup_printf(_("All %d tracks numbered sequentially."), ETCore->ETFileSelectionList_Length);
+#: ../src/tag_area.c:386
 #, c-format
 msgid "Selected tracks numbered sequentially"
 msgstr "Les pistes seleccionades s'han numerat de forma seqüencial"
 
-#: ../src/tag_area.c:478
+#: ../src/tag_area.c:440
 #, c-format
 msgid "Selected files tagged with genre ‘%s’"
 msgstr "Els fitxers seleccionats s'han etiquetat amb el gènere «%s»"
 
-#: ../src/tag_area.c:483
+#: ../src/tag_area.c:442
 msgid "Removed genre from selected files"
 msgstr "S'ha suprimit el gènere dels fitxers seleccionats"
 
-#: ../src/tag_area.c:508
+#: ../src/tag_area.c:451
 #, c-format
 msgid "Selected files tagged with comment ‘%s’"
 msgstr "Els fitxers seleccionats s'han etiquetat amb el comentari «%s»"
 
-#: ../src/tag_area.c:513
+#: ../src/tag_area.c:453
 msgid "Removed comment from selected files"
 msgstr "S'ha suprimit el comentari dels fitxers seleccionats"
 
-#: ../src/tag_area.c:531
+#: ../src/tag_area.c:462
 #, c-format
 msgid "Selected files tagged with composer ‘%s’"
 msgstr "Els fitxers seleccionats s'han etiquetat amb el compositor «%s»"
 
-#: ../src/tag_area.c:536
+#: ../src/tag_area.c:464
 msgid "Removed composer from selected files"
 msgstr "S'ha suprimit el compositor dels fitxers seleccionats"
 
-#: ../src/tag_area.c:554
+#: ../src/tag_area.c:473
 #, c-format
 msgid "Selected files tagged with original artist ‘%s’"
 msgstr "Els fitxers seleccionats s'han etiquetat amb l'artista original «%s»"
 
-#: ../src/tag_area.c:559
+#: ../src/tag_area.c:475
 msgid "Removed original artist from selected files"
 msgstr "S'ha suprimit l'artista original dels fitxers seleccionats"
 
-#: ../src/tag_area.c:577
+#: ../src/tag_area.c:484
+#, fuzzy, c-format
+msgid "Selected files tagged with original year ‘%s’"
+msgstr "Els fitxers seleccionats s'han etiquetat amb l'artista original «%s»"
+
+#: ../src/tag_area.c:486
+#, fuzzy
+msgid "Removed original year from selected files"
+msgstr "S'ha suprimit l'artista original dels fitxers seleccionats"
+
+#: ../src/tag_area.c:495
 #, c-format
 msgid "Selected files tagged with copyright ‘%s’"
 msgstr "Els fitxers seleccionats s'han etiquetat amb el copyright «%s»"
 
-#: ../src/tag_area.c:582
+#: ../src/tag_area.c:497
 msgid "Removed copyright from selected files"
 msgstr "S'ha suprimit el copyright dels fitxers seleccionats"
 
-#: ../src/tag_area.c:600
+#: ../src/tag_area.c:506
 #, c-format
 msgid "Selected files tagged with URL ‘%s’"
 msgstr "Els fitxers seleccionats s'han etiquetat amb l'URL «%s»"
 
-#: ../src/tag_area.c:605
+#: ../src/tag_area.c:508
 msgid "Removed URL from selected files"
 msgstr "S'ha suprimit l'URL dels fitxers seleccionats"
 
-#: ../src/tag_area.c:623
+#: ../src/tag_area.c:517
 #, c-format
 msgid "Selected files tagged with encoder name ‘%s’"
 msgstr ""
 "Els fitxers seleccionats s'han etiquetat amb el nom de codificador «%s»"
 
-#: ../src/tag_area.c:628
+#: ../src/tag_area.c:519
 msgid "Removed encoder name from selected files"
 msgstr "S'ha suprimit el nom del codificador dels fitxers seleccionats"
 
-#: ../src/tag_area.c:664
+#: ../src/tag_area.c:554
 msgid "Selected files tagged with images"
 msgstr "Els fitxers seleccionats s'han etiquetat amb imatges"
 
-#: ../src/tag_area.c:668
+#: ../src/tag_area.c:558
 msgid "Removed images from selected files"
 msgstr "S'han suprimit les imatges dels fitxers seleccionats"
 
 #. Menu items
-#: ../src/tag_area.c:836
+#: ../src/tag_area.c:726
 msgid "Tag selected files with this field"
 msgstr "Copia amb aquest camp els fitxers seleccionats"
 
-#: ../src/tag_area.c:866
+#: ../src/tag_area.c:756
 msgid "All uppercase"
 msgstr "Tot en majúscules"
 
-#: ../src/tag_area.c:872
+#: ../src/tag_area.c:762
 msgid "All lowercase"
 msgstr "Tot en minúscules"
 
-#: ../src/tag_area.c:878
+#: ../src/tag_area.c:768
 msgid "First letter uppercase"
 msgstr "La primera lletra en majúscules"
 
-#: ../src/tag_area.c:884
+#: ../src/tag_area.c:774
 msgid "First letter uppercase of each word"
 msgstr "La primera lletra de cada paraula en majúscules"
 
-#: ../src/tag_area.c:900
+#: ../src/tag_area.c:790
 msgid "Insert space before uppercase letter"
 msgstr "Insereix un espai abans de cada lletra majúscula"
 
-#: ../src/tag_area.c:906
+#: ../src/tag_area.c:796
 msgid "Remove duplicate spaces or underscores"
 msgstr "Treu els espais duplicats o els subratllats"
 
-#: ../src/tag_area.c:912
+#: ../src/tag_area.c:802
 msgid "Remove all text"
 msgstr "Treu tot el text"
 
-#: ../src/tag_area.c:1273 ../src/tag_area.c:1366
+#: ../src/tag_area.c:1160 ../src/tag_area.c:1253
 #, c-format
 msgid "Error parsing image data ‘%s’"
 msgstr "Error quan s'estava analitzant les dades d'imatge «%s»"
 
-#: ../src/tag_area.c:1348
+#: ../src/tag_area.c:1235
 msgid ""
 "Cannot display the image because not enough data has been read to determine "
 "how to create the image buffer"
@@ -4387,99 +4460,99 @@ msgstr ""
 "No es pot mostrar la imatge, ja que no s'han llegit prou dades per a "
 "determinar com crear la memòria intermèdia d'imatges"
 
-#: ../src/tag_area.c:1355
+#: ../src/tag_area.c:1242
 msgid "Cannot display the image"
 msgstr "No es mostrarà la imatge"
 
-#: ../src/tag_area.c:1357
+#: ../src/tag_area.c:1244
 msgid ""
 "Not enough data has been read to determine how to create the image buffer."
 msgstr ""
 "No s'han llegit prou dades per a determinar com crear la imatge de la "
 "memòria intermèdia."
 
-#: ../src/tag_area.c:1359
+#: ../src/tag_area.c:1246
 msgid "Load Image File"
 msgstr "Carrega el fitxer imatge"
 
-#: ../src/tag_area.c:1404 ../src/tag_area.c:1429
+#: ../src/tag_area.c:1291 ../src/tag_area.c:1316
 #, c-format
 msgid "Image file not loaded ‘%s’"
 msgstr "Fitxer d'imatge no carregat «%s»"
 
-#: ../src/tag_area.c:1421
+#: ../src/tag_area.c:1308
 #, c-format
 msgid "Cannot open file ‘%s’"
 msgstr "No es pot obrir el fitxer «%s»"
 
-#: ../src/tag_area.c:1425
+#: ../src/tag_area.c:1312
 msgid "Image File Error"
 msgstr "Error al fitxer imatge"
 
-#: ../src/tag_area.c:1436
+#: ../src/tag_area.c:1323
 msgid "Image file loaded"
 msgstr "S'ha carregat el fitxer d'imatge"
 
-#: ../src/tag_area.c:1519
+#: ../src/tag_area.c:1406
 msgid "Add Images"
 msgstr "Afegeix imatges"
 
-#: ../src/tag_area.c:1529 ../src/tag_area.c:1857
+#: ../src/tag_area.c:1416 ../src/tag_area.c:1744
 msgid "All Files"
 msgstr "Tots els fitxers"
 
-#: ../src/tag_area.c:1536 ../src/tag_area.c:1864
+#: ../src/tag_area.c:1423 ../src/tag_area.c:1751
 msgid "PNG and JPEG"
 msgstr "PNG i JPEG"
 
-#: ../src/tag_area.c:1654
+#: ../src/tag_area.c:1541
 #, c-format
 msgid "Image Properties %d/%d"
 msgstr "Propietats d'imatge %d/%d"
 
-#: ../src/tag_area.c:1843
+#: ../src/tag_area.c:1730
 #, c-format
 msgid "Save Image %d/%d"
 msgstr "Desa la imatge %d/%d"
 
-#: ../src/tag_area.c:1923
+#: ../src/tag_area.c:1810
 #, c-format
 msgid "Image file not saved ‘%s’"
 msgstr "Fitxer d'imatge no desat «%s»"
 
-#: ../src/tag_area.c:2167
+#: ../src/tag_area.c:2055
 msgid "Tag selected files with this genre"
 msgstr "Copia aquest gènere als fitxers seleccionats"
 
-#: ../src/tag_area.c:2940
+#: ../src/tag_area.c:2704
 msgid "ID3 Tag"
 msgstr "Etiqueta ID3"
 
-#: ../src/tag_area.c:2945
+#: ../src/tag_area.c:2709
 msgid "Ogg Vorbis Tag"
 msgstr "Etiqueta Ogg Vorbis"
 
-#: ../src/tag_area.c:2950
+#: ../src/tag_area.c:2714
 msgid "FLAC Vorbis Tag"
 msgstr "Etiqueta FLAC Vorbis"
 
-#: ../src/tag_area.c:2954
+#: ../src/tag_area.c:2718
 msgid "APE Tag"
 msgstr "Etiqueta APE"
 
-#: ../src/tag_area.c:2958
+#: ../src/tag_area.c:2722
 msgid "MP4/M4A/AAC Tag"
 msgstr "Etiqueta MP4/M4A/AAC"
 
-#: ../src/tag_area.c:2963
+#: ../src/tag_area.c:2727
 msgid "Wavpack Tag"
 msgstr "Etiqueta Wavpack"
 
-#: ../src/tag_area.c:2968
+#: ../src/tag_area.c:2732
 msgid "Opus Tag"
 msgstr "Etiqueta Opus"
 
-#: ../src/tag_area.c:3226
+#: ../src/tag_area.c:3014
 #, c-format
 msgid "Images (%u)"
 msgstr "Imatges (%u)"
@@ -4492,7 +4565,7 @@ msgstr "Imatges (%u)"
 msgid "Error while opening file: %s"
 msgstr "Error mentre s'obria el fitxer: %s"
 
-#: ../src/tags/ape_tag.c:372
+#: ../src/tags/ape_tag.c:396
 msgid "Failed to write APE tag"
 msgstr "No s'ha pogut escriure l'etiqueta APE"
 
@@ -4514,120 +4587,120 @@ msgstr "Fitxer FLAC"
 msgid "Channels:"
 msgstr "Canals:"
 
-#: ../src/tags/flac_tag.c:761 ../src/tags/flac_tag.c:794
-#: ../src/tags/flac_tag.c:808
+#: ../src/tags/flac_tag.c:784 ../src/tags/flac_tag.c:817
+#: ../src/tags/flac_tag.c:831
 #, c-format
 msgid "Error while opening file ‘%s’ as FLAC: %s"
 msgstr "Error mentre s'obria el fitxer «%s» com FLAC: %s"
 
-#: ../src/tags/flac_tag.c:1108 ../src/tags/flac_tag.c:1120
-#: ../src/tags/flac_tag.c:1140
+#: ../src/tags/flac_tag.c:1143 ../src/tags/flac_tag.c:1155
+#: ../src/tags/flac_tag.c:1175
 #, c-format
 msgid "Failed to write comments to file ‘%s’: %s"
 msgstr "No s'han pogut escriure comentaris al fitxer «%s» %s"
 
-#: ../src/tags/id3_tag.c:217
+#: ../src/tags/id3_tag.c:218
 msgid "Corrupted file"
 msgstr "Fitxer corrupte"
 
-#: ../src/tags/id3_tag.c:635
+#: ../src/tags/id3_tag.c:651
 #, c-format
 msgid "Removed tag of ‘%s’"
 msgstr "S'ha eliminat l'etiqueta de «%s»"
 
-#: ../src/tags/id3_tag.c:642 ../src/tags/id3_tag.c:726
+#: ../src/tags/id3_tag.c:658 ../src/tags/id3_tag.c:742
 #, c-format
 msgid "Error while removing ID3v1 tag of ‘%s’: %s"
 msgstr "Error mentre s'estava traient l'etiqueta ID3v1 de «%s»: %s"
 
-#: ../src/tags/id3_tag.c:651 ../src/tags/id3_tag.c:689
+#: ../src/tags/id3_tag.c:667 ../src/tags/id3_tag.c:705
 #, c-format
 msgid "Error while removing ID3v2 tag of ‘%s’: %s"
 msgstr "Error mentre s'estava traient l'etiqueta ID3v2 de «%s»: %s"
 
-#: ../src/tags/id3_tag.c:677
+#: ../src/tags/id3_tag.c:693
 #, c-format
 msgid "Error while updating ID3v2 tag of ‘%s’: %s"
 msgstr "Error mentre s'estava actualitzant l'etiqueta ID3v2 de «%s» %s"
 
-#: ../src/tags/id3_tag.c:714
+#: ../src/tags/id3_tag.c:730
 #, c-format
 msgid "Error while updating ID3v1 tag of ‘%s’: %s"
 msgstr "Error mentre s'actualitzava l'etiqueta ID3v1 de «%s»: %s"
 
-#: ../src/tags/id3_tag.c:760
+#: ../src/tags/id3_tag.c:776
 msgid "Buggy id3lib"
 msgstr "id3lib erroni"
 
-#: ../src/tags/id3_tag.c:781
+#: ../src/tags/id3_tag.c:797
 msgid "No error reported"
 msgstr "Cap informe d'errors"
 
-#: ../src/tags/id3_tag.c:783
+#: ../src/tags/id3_tag.c:799
 msgid "No available memory"
 msgstr "Sense memòria disponible"
 
-#: ../src/tags/id3_tag.c:785
+#: ../src/tags/id3_tag.c:801
 msgid "No data to parse"
 msgstr "Sense dates per a analitzar"
 
-#: ../src/tags/id3_tag.c:787
+#: ../src/tags/id3_tag.c:803
 msgid "Improperly formatted data"
 msgstr "Dades amb format incorrecte"
 
-#: ../src/tags/id3_tag.c:789
+#: ../src/tags/id3_tag.c:805
 msgid "No buffer to write to"
 msgstr "No hi ha memòria intermèdia per a escriure en"
 
-#: ../src/tags/id3_tag.c:791
+#: ../src/tags/id3_tag.c:807
 msgid "Buffer is too small"
 msgstr "La memòria intermèdia és massa petita"
 
-#: ../src/tags/id3_tag.c:793
+#: ../src/tags/id3_tag.c:809
 msgid "Invalid frame ID"
 msgstr "ID de marc invàlid"
 
-#: ../src/tags/id3_tag.c:795
+#: ../src/tags/id3_tag.c:811
 msgid "Requested field not found"
 msgstr "No s'ha trobat el camp sol·licitat"
 
-#: ../src/tags/id3_tag.c:797
+#: ../src/tags/id3_tag.c:813
 msgid "Unknown field type"
 msgstr "Tipus de camp desconegut"
 
-#: ../src/tags/id3_tag.c:799
+#: ../src/tags/id3_tag.c:815
 msgid "Tag is already attached to a file"
 msgstr "L'etiqueta està incrustada a un fitxer"
 
-#: ../src/tags/id3_tag.c:801
+#: ../src/tags/id3_tag.c:817
 msgid "Invalid tag version"
 msgstr "Versió d'etiqueta invàlida"
 
-#: ../src/tags/id3_tag.c:803
+#: ../src/tags/id3_tag.c:819
 msgid "No file to parse"
 msgstr "Sense fitxer per a analitzar"
 
-#: ../src/tags/id3_tag.c:805
+#: ../src/tags/id3_tag.c:821
 msgid "Attempting to write to a read-only file"
 msgstr "S'està intentant escriure en un fitxer de sols lectura"
 
-#: ../src/tags/id3_tag.c:807
+#: ../src/tags/id3_tag.c:823
 msgid "Error in compression/uncompression"
 msgstr "Error en la compressió / descompressió"
 
-#: ../src/tags/id3_tag.c:809
+#: ../src/tags/id3_tag.c:825
 msgid "Unknown error message"
 msgstr "Missatge d'error desconegut"
 
-#: ../src/tags/id3_tag.c:1553
+#: ../src/tags/id3_tag.c:1569
 msgid "Error while creating temporary file"
 msgstr "Error mentre es creava el fitxer temporal"
 
 #: ../src/tags/id3v24_tag.c:135 ../src/tags/id3v24_tag.c:190
 #: ../src/tags/id3v24_tag.c:228 ../src/tags/id3v24_tag.c:238
-#: ../src/tags/id3v24_tag.c:247 ../src/tags/id3v24_tag.c:973
-#: ../src/tags/id3v24_tag.c:981 ../src/tags/id3v24_tag.c:988
-#: ../src/tags/id3v24_tag.c:1014 ../src/tags/id3v24_tag.c:1054
+#: ../src/tags/id3v24_tag.c:247 ../src/tags/id3v24_tag.c:999
+#: ../src/tags/id3v24_tag.c:1007 ../src/tags/id3v24_tag.c:1014
+#: ../src/tags/id3v24_tag.c:1040 ../src/tags/id3v24_tag.c:1080
 #: ../src/tags/mp4_tag.cc:102 ../src/tags/ogg_header.c:277
 msgid "Error reading tags from file"
 msgstr "Error en llegir etiquetes del fitxer"
@@ -4751,3 +4824,7 @@ msgstr "Fitxer Opus"
 #: ../src/tags/wavpack_header.c:137
 msgid "Wavpack File"
 msgstr "Fitxer Wavpack"
+
+#, fuzzy
+#~ msgid "Original year:"
+#~ msgstr "Artista original"

@@ -449,7 +449,7 @@
     <key name="playlist-filename-mask" type="s">
       <summary>Playlist filename mask</summary>
       <description>The default filename mask to use for a new playlist</description>
-      <default>'playlist_%a_-_%b'</default>
+      <default>'playlist_%a_-_%T'</default>
     </key>
 
     <key name="playlist-use-mask" type="b">
@@ -491,7 +491,7 @@
     <key name="playlist-default-mask" type="s">
       <summary>Playlist default mask</summary>
       <description>The default mask to use for files in a playlist</description>
-      <default>'%n/%l - %a - %b - %t'</default>
+      <default>'%n/%N - %a - %T - %t'</default>
     </key>
 
     <key name="search-case-sensitive" type="b">
@@ -515,7 +515,7 @@
     <key name="scan-tag-default-mask" type="s">
       <summary>Mask for filling tags from filenames</summary>
       <description>The default mask to use when automatically filling tags with information from filenames</description>
-      <default>'%b/%a - %t'</default>
+      <default>'%T/%a - %t'</default>
     </key>
 
     <key name="rename-file-default-mask" type="s">
@@ -527,7 +527,7 @@
     <key name="rename-directory-default-mask" type="s">
       <summary>Mask for renaming directories</summary>
       <description>The default mask to use when renaming directories</description>
-      <default>'%b'</default>
+      <default>'%T'</default>
     </key>
 
     <key name="rename-directory-with-mask" type="b">

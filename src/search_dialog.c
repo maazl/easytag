@@ -58,12 +58,13 @@ enum
     SEARCH_RESULT_ALBUM,
     SEARCH_RESULT_DISC_NUMBER,
     SEARCH_RESULT_YEAR,
-    SEARCH_RESULT_ORIGINAL_YEAR,
+    SEARCH_RESULT_RELEASE_YEAR,
     SEARCH_RESULT_TRACK,
     SEARCH_RESULT_GENRE,
     SEARCH_RESULT_COMMENT,
     SEARCH_RESULT_COMPOSER,
     SEARCH_RESULT_ORIG_ARTIST,
+    SEARCH_RESULT_ORIGINAL_YEAR,
     SEARCH_RESULT_COPYRIGHT,
     SEARCH_RESULT_URL,
     SEARCH_RESULT_ENCODED_BY,
@@ -76,12 +77,13 @@ enum
     SEARCH_RESULT_ALBUM_WEIGHT,
     SEARCH_RESULT_DISC_NUMBER_WEIGHT,
     SEARCH_RESULT_YEAR_WEIGHT,
-    SEARCH_RESULT_ORIGINAL_YEAR_WEIGHT,
+    SEARCH_RESULT_RELEASE_YEAR_WEIGHT,
     SEARCH_RESULT_TRACK_WEIGHT,
     SEARCH_RESULT_GENRE_WEIGHT,
     SEARCH_RESULT_COMMENT_WEIGHT,
     SEARCH_RESULT_COMPOSER_WEIGHT,
     SEARCH_RESULT_ORIG_ARTIST_WEIGHT,
+    SEARCH_RESULT_ORIGINAL_YEAR_WEIGHT,
     SEARCH_RESULT_COPYRIGHT_WEIGHT,
     SEARCH_RESULT_URL_WEIGHT,
     SEARCH_RESULT_ENCODED_BY_WEIGHT,
@@ -94,12 +96,13 @@ enum
     SEARCH_RESULT_ALBUM_FOREGROUND,
     SEARCH_RESULT_DISC_NUMBER_FOREGROUND,
     SEARCH_RESULT_YEAR_FOREGROUND,
-    SEARCH_RESULT_ORIGINAL_YEAR_FOREGROUND,
+    SEARCH_RESULT_RELEASE_YEAR_FOREGROUND,
     SEARCH_RESULT_TRACK_FOREGROUND,
     SEARCH_RESULT_GENRE_FOREGROUND,
     SEARCH_RESULT_COMMENT_FOREGROUND,
     SEARCH_RESULT_COMPOSER_FOREGROUND,
     SEARCH_RESULT_ORIG_ARTIST_FOREGROUND,
+    SEARCH_RESULT_ORIGINAL_YEAR_FOREGROUND,
     SEARCH_RESULT_COPYRIGHT_FOREGROUND,
     SEARCH_RESULT_URL_FOREGROUND,
     SEARCH_RESULT_ENCODED_BY_FOREGROUND,
@@ -111,7 +114,7 @@ enum
 /* Number of columns of a block above.
  * THIS MUST MATCH THE ENUM BLOCK SIZE ABOVE.
  */
-#define SEACH_RESULT_COLUMNS 16
+#define SEACH_RESULT_COLUMNS 17
 
 /*
  * Callback to select-row event
@@ -208,11 +211,12 @@ Add_Row_To_Search_Result_List (EtSearchDialog *self,
     haystacks[SEARCH_RESULT_ALBUM_ARTIST] = ((File_Tag *)ETFile->FileTag->data)->album_artist;
     haystacks[SEARCH_RESULT_ALBUM] = ((File_Tag *)ETFile->FileTag->data)->album;
     haystacks[SEARCH_RESULT_YEAR] = ((File_Tag *)ETFile->FileTag->data)->year;
-    haystacks[SEARCH_RESULT_ORIGINAL_YEAR] = ((File_Tag *)ETFile->FileTag->data)->orig_year;
+    haystacks[SEARCH_RESULT_RELEASE_YEAR] = ((File_Tag *)ETFile->FileTag->data)->release_year;
     haystacks[SEARCH_RESULT_GENRE] = ((File_Tag *)ETFile->FileTag->data)->genre;
     haystacks[SEARCH_RESULT_COMMENT] = ((File_Tag *)ETFile->FileTag->data)->comment;
     haystacks[SEARCH_RESULT_COMPOSER] = ((File_Tag *)ETFile->FileTag->data)->composer;
     haystacks[SEARCH_RESULT_ORIG_ARTIST] = ((File_Tag *)ETFile->FileTag->data)->orig_artist;
+    haystacks[SEARCH_RESULT_ORIGINAL_YEAR] = ((File_Tag *)ETFile->FileTag->data)->orig_year;
     haystacks[SEARCH_RESULT_COPYRIGHT] = ((File_Tag *)ETFile->FileTag->data)->copyright;
     haystacks[SEARCH_RESULT_URL] = ((File_Tag *)ETFile->FileTag->data)->url;
     haystacks[SEARCH_RESULT_ENCODED_BY] = ((File_Tag *)ETFile->FileTag->data)->encoded_by;
@@ -337,12 +341,13 @@ Add_Row_To_Search_Result_List (EtSearchDialog *self,
                                        SEARCH_RESULT_ALBUM, haystacks[SEARCH_RESULT_ALBUM],
                                        SEARCH_RESULT_DISC_NUMBER, haystacks[SEARCH_RESULT_DISC_NUMBER],
                                        SEARCH_RESULT_YEAR, haystacks[SEARCH_RESULT_YEAR],
-                                       SEARCH_RESULT_ORIGINAL_YEAR, haystacks[SEARCH_RESULT_ORIGINAL_YEAR],
+                                       SEARCH_RESULT_RELEASE_YEAR, haystacks[SEARCH_RESULT_RELEASE_YEAR],
                                        SEARCH_RESULT_TRACK, haystacks[SEARCH_RESULT_TRACK],
                                        SEARCH_RESULT_GENRE, haystacks[SEARCH_RESULT_GENRE],
                                        SEARCH_RESULT_COMMENT, haystacks[SEARCH_RESULT_COMMENT],
                                        SEARCH_RESULT_COMPOSER, haystacks[SEARCH_RESULT_COMPOSER],
                                        SEARCH_RESULT_ORIG_ARTIST, haystacks[SEARCH_RESULT_ORIG_ARTIST],
+                                       SEARCH_RESULT_ORIGINAL_YEAR, haystacks[SEARCH_RESULT_ORIGINAL_YEAR],
                                        SEARCH_RESULT_COPYRIGHT, haystacks[SEARCH_RESULT_COPYRIGHT],
                                        SEARCH_RESULT_URL, haystacks[SEARCH_RESULT_URL],
                                        SEARCH_RESULT_ENCODED_BY, haystacks[SEARCH_RESULT_ENCODED_BY],
@@ -354,12 +359,13 @@ Add_Row_To_Search_Result_List (EtSearchDialog *self,
                                        SEARCH_RESULT_ALBUM_WEIGHT, weights[SEARCH_RESULT_ALBUM],
                                        SEARCH_RESULT_DISC_NUMBER_WEIGHT, weights[SEARCH_RESULT_DISC_NUMBER],
                                        SEARCH_RESULT_YEAR_WEIGHT, weights[SEARCH_RESULT_YEAR],
-                                       SEARCH_RESULT_ORIGINAL_YEAR_WEIGHT, weights[SEARCH_RESULT_ORIGINAL_YEAR],
+                                       SEARCH_RESULT_RELEASE_YEAR_WEIGHT, weights[SEARCH_RESULT_RELEASE_YEAR],
                                        SEARCH_RESULT_TRACK_WEIGHT, weights[SEARCH_RESULT_TRACK],
                                        SEARCH_RESULT_GENRE_WEIGHT, weights[SEARCH_RESULT_GENRE],
                                        SEARCH_RESULT_COMMENT_WEIGHT, weights[SEARCH_RESULT_COMMENT],
                                        SEARCH_RESULT_COMPOSER_WEIGHT, weights[SEARCH_RESULT_COMPOSER],
                                        SEARCH_RESULT_ORIG_ARTIST_WEIGHT, weights[SEARCH_RESULT_ORIG_ARTIST],
+                                       SEARCH_RESULT_ORIGINAL_YEAR_WEIGHT, weights[SEARCH_RESULT_ORIGINAL_YEAR],
                                        SEARCH_RESULT_COPYRIGHT_WEIGHT, weights[SEARCH_RESULT_COPYRIGHT],
                                        SEARCH_RESULT_URL_WEIGHT, weights[SEARCH_RESULT_URL],
                                        SEARCH_RESULT_ENCODED_BY_WEIGHT, weights[SEARCH_RESULT_ENCODED_BY],
@@ -371,12 +377,13 @@ Add_Row_To_Search_Result_List (EtSearchDialog *self,
                                        SEARCH_RESULT_ALBUM_FOREGROUND, colors[SEARCH_RESULT_ALBUM],
                                        SEARCH_RESULT_DISC_NUMBER_FOREGROUND, colors[SEARCH_RESULT_DISC_NUMBER],
                                        SEARCH_RESULT_YEAR_FOREGROUND, colors[SEARCH_RESULT_YEAR],
-                                       SEARCH_RESULT_ORIGINAL_YEAR_FOREGROUND, colors[SEARCH_RESULT_ORIGINAL_YEAR],
+                                       SEARCH_RESULT_RELEASE_YEAR_FOREGROUND, colors[SEARCH_RESULT_RELEASE_YEAR],
                                        SEARCH_RESULT_TRACK_FOREGROUND, colors[SEARCH_RESULT_TRACK],
                                        SEARCH_RESULT_GENRE_FOREGROUND, colors[SEARCH_RESULT_GENRE],
                                        SEARCH_RESULT_COMMENT_FOREGROUND, colors[SEARCH_RESULT_COMMENT],
                                        SEARCH_RESULT_COMPOSER_FOREGROUND, colors[SEARCH_RESULT_COMPOSER],
                                        SEARCH_RESULT_ORIG_ARTIST_FOREGROUND, colors[SEARCH_RESULT_ORIG_ARTIST],
+                                       SEARCH_RESULT_ORIGINAL_YEAR_FOREGROUND, colors[SEARCH_RESULT_ORIGINAL_YEAR],
                                        SEARCH_RESULT_COPYRIGHT_FOREGROUND, colors[SEARCH_RESULT_COPYRIGHT],
                                        SEARCH_RESULT_URL_FOREGROUND, colors[SEARCH_RESULT_URL],
                                        SEARCH_RESULT_ENCODED_BY_FOREGROUND, colors[SEARCH_RESULT_ENCODED_BY],
@@ -388,6 +395,19 @@ Add_Row_To_Search_Result_List (EtSearchDialog *self,
     g_free (discs);
     g_free (tracks);
 }
+
+/* To search without case sensitivity. */
+static gchar* fetch_case_insensitive(const gchar* value)
+{
+	return value ? g_utf8_casefold (value, -1) : NULL;
+}
+
+/* To search with case-sensitivity. */
+static gchar* fetch_case_sensitive(const gchar* value)
+{
+	return value ? g_utf8_normalize (value, -1, G_NORMALIZE_DEFAULT) : NULL;
+}
+
 
 /*
  * This function and the one below could do with improving
@@ -476,129 +496,33 @@ Search_File (GtkWidget *search_button,
         if (g_settings_get_boolean (MainSettings, "search-tag"))
         {
             gchar *title2, *artist2, *album_artist2, *album2, *disc_number2,
-                  *disc_total2, *year2, *orig_year2, *track2, *track_total2,
-                  *genre2, *comment2, *composer2, *orig_artist2, *copyright2,
-                  *url2, *encoded_by2;
+                  *disc_total2, *year2, *release_year2, *track2, *track_total2,
+                  *genre2, *comment2, *composer2, *orig_artist2, *orig_year2,
+                  *copyright2, *url2, *encoded_by2;
             gchar *needle;
             const File_Tag *FileTag = (File_Tag *)ETFile->FileTag->data;
+            gchar *(*fetch)(const gchar*) = g_settings_get_boolean (MainSettings, "search-case-sensitive")
+                ? fetch_case_sensitive : fetch_case_insensitive;
 
-            if (!g_settings_get_boolean (MainSettings, "search-case-sensitive"))
-            {
-                /* To search without case sensitivity. */
-                title2 = FileTag->title ? g_utf8_casefold (FileTag->title, -1)
-                                        : NULL;
-                artist2 = FileTag->artist ? g_utf8_casefold (FileTag->artist,
-                                                             -1)
-                                          : NULL;
-                album_artist2 = FileTag->album_artist ? g_utf8_casefold (FileTag->album_artist,
-                                                                         -1)
-                                          : NULL;
-                album2 = FileTag->album ? g_utf8_casefold (FileTag->album, -1)
-                                          : NULL;
-                disc_number2 = FileTag->disc_number ? g_utf8_casefold (FileTag->disc_number,
-                                                                       -1)
-                                                    : NULL;
-                disc_total2 = FileTag->disc_total ? g_utf8_casefold (FileTag->disc_total,
-                                                                     -1)
-                                                  : NULL;
-                year2 = FileTag->year ? g_utf8_casefold (FileTag->year, -1)
-                                      : NULL;
-                orig_year2 = FileTag->orig_year ? g_utf8_casefold (FileTag->orig_year, -1)
-                                                : NULL;
-                track2 = FileTag->track ? g_utf8_casefold (FileTag->track, -1)
-                                        : NULL;
-                track_total2 = FileTag->track_total ? g_utf8_casefold (FileTag->track_total,
-                                                                       -1)
-                                                    : NULL;
-                genre2 = FileTag->genre ? g_utf8_casefold (FileTag->genre, -1)
-                                        : NULL;
-                comment2 = FileTag->comment ? g_utf8_casefold (FileTag->comment,
-                                                               -1)
-                                            : NULL;
-                composer2 = FileTag->composer ? g_utf8_casefold (FileTag->composer,
-                                                                 -1)
-                                              : NULL;
-                orig_artist2 = FileTag->orig_artist ? g_utf8_casefold (FileTag->orig_artist,
-                                                                       -1)
-                                                    : NULL;
-                copyright2 = FileTag->copyright ? g_utf8_casefold (FileTag->copyright,
-                                                                   -1)
-                                                : NULL;
-                url2 = FileTag->url ? g_utf8_casefold (FileTag->url, -1)
-                                    : NULL;
-                encoded_by2 = FileTag->encoded_by ? g_utf8_casefold (FileTag->encoded_by,
-                                                                     -1)
-                                                  : NULL;
-                needle = g_utf8_casefold (string_to_search, -1);
-            }
-            else
-            {
-                /* To search with case-sensitivity. */
-                title2 = FileTag->disc_number ? g_utf8_normalize (FileTag->title,
-                                                                  -1,
-                                                                  G_NORMALIZE_DEFAULT)
-                                              : NULL;
-                artist2 = FileTag->artist ? g_utf8_normalize (FileTag->artist,
-                                                              -1,
-                                                              G_NORMALIZE_DEFAULT)
-                                          : NULL;
-                album_artist2 = FileTag->album_artist ? g_utf8_normalize (FileTag->album_artist,
-                                                                          -1,
-                                                                          G_NORMALIZE_DEFAULT)
-                                                      : NULL;
-                album2 = FileTag->album ? g_utf8_normalize (FileTag->album, -1,
-                                                            G_NORMALIZE_DEFAULT)
-                                        : NULL;
-                disc_number2 = FileTag->disc_number ? g_utf8_normalize (FileTag->disc_number,
-                                                                        -1,
-                                                                        G_NORMALIZE_DEFAULT)
-                                                     : NULL;
-                disc_total2 = FileTag->disc_total ? g_utf8_normalize (FileTag->disc_total,
-                                                                      -1,
-                                                                      G_NORMALIZE_DEFAULT)
-                                                  : NULL;
-                year2 = FileTag->year ? g_utf8_normalize (FileTag->year, -1,
-                                                          G_NORMALIZE_DEFAULT)
-                                      : NULL;
-                orig_year2 = FileTag->orig_year ? g_utf8_normalize (FileTag->orig_year, -1,
-                                                                    G_NORMALIZE_DEFAULT)
-                                                : NULL;
-                track2 = FileTag->track ? g_utf8_normalize (FileTag->track, -1,
-                                                            G_NORMALIZE_DEFAULT)
-                                        : NULL;
-                track_total2 = FileTag->track_total ? g_utf8_normalize (FileTag->track_total,
-                                                                        -1,
-                                                                        G_NORMALIZE_DEFAULT)
-                                                    : NULL;
-                genre2 = FileTag->genre ? g_utf8_normalize (FileTag->genre, -1,
-                                                            G_NORMALIZE_DEFAULT)
-                                        : NULL;
-                comment2 = FileTag->comment ? g_utf8_normalize (FileTag->comment,
-                                                                -1,
-                                                                G_NORMALIZE_DEFAULT)
-                                            : NULL;
-                composer2 = FileTag->composer ? g_utf8_normalize (FileTag->composer,
-                                                                  -1,
-                                                                  G_NORMALIZE_DEFAULT)
-                                              : NULL;
-                orig_artist2 = FileTag->orig_artist ? g_utf8_normalize (FileTag->orig_artist,
-                                                                        -1,
-                                                                        G_NORMALIZE_DEFAULT)
-                                                    : NULL;
-                copyright2 = FileTag->copyright ? g_utf8_normalize (FileTag->copyright,
-                                                                    -1,
-                                                                    G_NORMALIZE_DEFAULT)
-                                                : NULL;
-                url2 = FileTag->url ? g_utf8_normalize (FileTag->url, -1,
-                                                        G_NORMALIZE_DEFAULT)
-                                    : NULL;
-                encoded_by2 = FileTag->encoded_by ? g_utf8_normalize (FileTag->encoded_by,
-                                                                      -1,
-                                                                      G_NORMALIZE_DEFAULT)
-                                                  : NULL;
-                needle = g_utf8_normalize (string_to_search, -1,
-                                           G_NORMALIZE_DEFAULT);
-            }
+            title2 = fetch(FileTag->title);
+            artist2 = fetch(FileTag->artist);
+            album_artist2 = fetch(FileTag->album_artist);
+            album2 = fetch(FileTag->album);
+            disc_number2 = fetch(FileTag->disc_number);
+            disc_total2 = fetch(FileTag->disc_total);
+            year2 = fetch(FileTag->year);
+            release_year2 = fetch(FileTag->release_year);
+            track2 = fetch(FileTag->track);
+            track_total2 = fetch(FileTag->track_total);
+            genre2 = fetch(FileTag->genre);
+            comment2 = fetch(FileTag->comment);
+            composer2 = fetch(FileTag->composer);
+            orig_artist2 = fetch(FileTag->orig_artist);
+            orig_year2 = fetch(FileTag->orig_year);
+            copyright2 = fetch(FileTag->copyright);
+            url2 = fetch(FileTag->url);
+            encoded_by2 = fetch(FileTag->encoded_by);
+            needle = fetch(string_to_search);
 
             if ((title2 && strstr (title2, needle))
                 || (artist2 && strstr (artist2, needle))
@@ -607,13 +531,14 @@ Search_File (GtkWidget *search_button,
                 || (disc_number2 && strstr (disc_number2, needle))
                 || (disc_total2 && strstr (disc_total2, needle))
                 || (year2 && strstr (year2, needle))
-                || (orig_year2 && strstr (orig_year2, needle))
+                || (release_year2 && strstr (orig_year2, needle))
                 || (track2 && strstr (track2, needle))
                 || (track_total2 && strstr (track_total2, needle))
                 || (genre2 && strstr (genre2, needle))
                 || (comment2 && strstr (comment2, needle))
                 || (composer2 && strstr (composer2, needle))
                 || (orig_artist2 && strstr (orig_artist2, needle))
+                || (orig_year2 && strstr (orig_year2, needle))
                 || (copyright2 && strstr (copyright2, needle))
                 || (url2 && strstr (url2, needle))
                 || (encoded_by2 && strstr (encoded_by2, needle)))
@@ -628,13 +553,14 @@ Search_File (GtkWidget *search_button,
             g_free (disc_number2);
             g_free (disc_total2);
             g_free (year2);
-            g_free (orig_year2);
+            g_free (release_year2);
             g_free (track2);
             g_free (track_total2);
             g_free (genre2);
             g_free (comment2);
             g_free (composer2);
             g_free (orig_artist2);
+            g_free (orig_year2);
             g_free (copyright2);
             g_free (url2);
             g_free (encoded_by2);

@@ -102,25 +102,25 @@ G_DEFINE_TYPE_WITH_PRIVATE (EtScanDialog, et_scan_dialog, GTK_TYPE_DIALOG)
 /* Some predefined masks -- IMPORTANT: Null-terminate me! */
 static const gchar *Scan_Masks [] =
 {
-    "%a - %b"G_DIR_SEPARATOR_S"%n - %t",
-    "%a_-_%b"G_DIR_SEPARATOR_S"%n_-_%t",
-    "%a - %b (%y)"G_DIR_SEPARATOR_S"%n - %a - %t",
-    "%a_-_%b_(%y)"G_DIR_SEPARATOR_S"%n_-_%a_-_%t",
-    "%a - %b (%y) - %g"G_DIR_SEPARATOR_S"%n - %a - %t",
-    "%a_-_%b_(%y)_-_%g"G_DIR_SEPARATOR_S"%n_-_%a_-_%t",
-    "%a - %b"G_DIR_SEPARATOR_S"%n. %t",
-    "%a_-_%b"G_DIR_SEPARATOR_S"%n._%t",
-    "%a-%b"G_DIR_SEPARATOR_S"%n-%t",
-    "%b"G_DIR_SEPARATOR_S"%n. %a - %t",
-    "%b"G_DIR_SEPARATOR_S"%n._%a_-_%t",
-    "%b"G_DIR_SEPARATOR_S"%n - %a - %t",
-    "%b"G_DIR_SEPARATOR_S"%n_-_%a_-_%t",
-    "%b"G_DIR_SEPARATOR_S"%n-%a-%t",
-    "%a-%b"G_DIR_SEPARATOR_S"%n-%t",
-    "%a"G_DIR_SEPARATOR_S"%b"G_DIR_SEPARATOR_S"%n. %t",
-    "%g"G_DIR_SEPARATOR_S"%a"G_DIR_SEPARATOR_S"%b"G_DIR_SEPARATOR_S"%t",
-    "%a_-_%b-%n-%t-%y",
-    "%a - %b"G_DIR_SEPARATOR_S"%n. %t(%c)",
+    "%a - %T"G_DIR_SEPARATOR_S"%n - %t",
+    "%a_-_%T"G_DIR_SEPARATOR_S"%n_-_%t",
+    "%a - %T (%y)"G_DIR_SEPARATOR_S"%n - %a - %t",
+    "%a_-_%T_(%y)"G_DIR_SEPARATOR_S"%n_-_%a_-_%t",
+    "%a - %T (%y) - %g"G_DIR_SEPARATOR_S"%n - %a - %t",
+    "%a_-_%T_(%y)_-_%g"G_DIR_SEPARATOR_S"%n_-_%a_-_%t",
+    "%a - %T"G_DIR_SEPARATOR_S"%n. %t",
+    "%a_-_%T"G_DIR_SEPARATOR_S"%n._%t",
+    "%a-%T"G_DIR_SEPARATOR_S"%n-%t",
+    "%T"G_DIR_SEPARATOR_S"%n. %a - %t",
+    "%T"G_DIR_SEPARATOR_S"%n._%a_-_%t",
+    "%T"G_DIR_SEPARATOR_S"%n - %a - %t",
+    "%T"G_DIR_SEPARATOR_S"%n_-_%a_-_%t",
+    "%T"G_DIR_SEPARATOR_S"%n-%a-%t",
+    "%a-%T"G_DIR_SEPARATOR_S"%n-%t",
+    "%a"G_DIR_SEPARATOR_S"%T"G_DIR_SEPARATOR_S"%n. %t",
+    "%g"G_DIR_SEPARATOR_S"%a"G_DIR_SEPARATOR_S"%T"G_DIR_SEPARATOR_S"%t",
+    "%a_-_%T-%n-%t-%y",
+    "%a - %T"G_DIR_SEPARATOR_S"%n. %t(%c)",
     "%t",
     "Track%n",
     "Track%i %n",
@@ -133,20 +133,20 @@ static const gchar *Rename_File_Masks [] =
     "%n_-_%a_-_%t",
     "%n. %a - %t",
     "%n._%a_-_%t",
-    "%a - %b"G_DIR_SEPARATOR_S"%n - %t",
-    "%a_-_%b"G_DIR_SEPARATOR_S"%n_-_%t",
-    "%a - %b (%y) - %g"G_DIR_SEPARATOR_S"%n - %t",
-    "%a_-_%b_(%y)_-_%g"G_DIR_SEPARATOR_S"%n_-_%t",
+    "%a - %T"G_DIR_SEPARATOR_S"%n - %t",
+    "%a_-_%T"G_DIR_SEPARATOR_S"%n_-_%t",
+    "%a - %T (%y) - %g"G_DIR_SEPARATOR_S"%n - %t",
+    "%a_-_%T_(%y)_-_%g"G_DIR_SEPARATOR_S"%n_-_%t",
     "%n - %t",
     "%n_-_%t",
     "%n. %t",
     "%n._%t",
-    "%n - %a - %b - %t",
-    "%n_-_%a_-_%b_-_%t",
-    "%a - %b - %t",
-    "%a_-_%b_-_%t",
-    "%a - %b - %n - %t",
-    "%a_-_%b_-_%n_-_%t",
+    "%n - %a - %T - %t",
+    "%n_-_%a_-_%T_-_%t",
+    "%a - %T - %t",
+    "%a_-_%T_-_%t",
+    "%a - %T - %n - %t",
+    "%a_-_%T_-_%n_-_%t",
     "%a - %t",
     "%a_-_%t",
     "Track %n",
@@ -155,12 +155,12 @@ static const gchar *Rename_File_Masks [] =
 
 /**gchar *Rename_Directory_Masks [] =
 {
-    "%a - %b",
-    "%a_-_%b",
-    "%a - %b (%y) - %g",
-    "%a_-_%b_(%y)_-_%g",
-    "VA - %b (%y)",
-    "VA_-_%b_(%y)",
+    "%a - %T",
+    "%a_-_%T",
+    "%a - %T (%y) - %g",
+    "%a_-_%T_(%y)_-_%g",
+    "VA - %T (%y)",
+    "VA_-_%T_(%y)",
     NULL
 };**/
 
@@ -232,39 +232,45 @@ Scan_Return_File_Tag_Field_From_Mask_Code (File_Tag *FileTag, gchar code)
 {
     switch (code)
     {
-        case 't':    /* Title */
+        case 't': /* Title */
             return &FileTag->title;
-        case 'a':    /* Artist */
+        case 'a': /* Artist */
             return &FileTag->artist;
-        case 'b':    /* Album */
+        case 'T': /* Album */
+        case 'b': /* for compatibility with earlier versions */
             return &FileTag->album;
-        case 'd':    /* Disc Number */
+        case 'd': /* Disc Number */
             return &FileTag->disc_number;
-        case 'x': /* Total number of discs. */
+        case 'D': /* Total number of discs. */
+        case 'x': /* for compatibility with earlier versions */
             return &FileTag->disc_total;
-        case 'y':    /* Year */
+        case 'y': /* Year */
             return &FileTag->year;
-        case 'w':    /* Original year */
-            return &FileTag->orig_year;
-        case 'n':    /* Track */
+        case 'Y': /* Release year */
+            return &FileTag->release_year;
+        case 'n': /* Track */
             return &FileTag->track;
-        case 'l':    /* Track Total */
+        case 'N': /* Track Total */
+        case 'l': /* for compatibility with earlier versions */
             return &FileTag->track_total;
-        case 'g':    /* Genre */
+        case 'g': /* Genre */
             return &FileTag->genre;
-        case 'c':    /* Comment */
+        case 'c': /* Comment */
             return &FileTag->comment;
-        case 'p':    /* Composer */
+        case 'p': /* Composer */
             return &FileTag->composer;
-        case 'o':    /* Orig. Artist */
+        case 'o': /* Orig. Artist */
             return &FileTag->orig_artist;
-        case 'r':    /* Copyright */
+        case 'w': /* Original year */
+            return &FileTag->orig_year;
+        case 'r': /* Copyright */
             return &FileTag->copyright;
-        case 'u':    /* URL */
+        case 'u': /* URL */
             return &FileTag->url;
-        case 'e':    /* Encoded by */
+        case 'e': /* Encoded by */
             return &FileTag->encoded_by;
-        case 'z':    /* Album Artist */
+        case 'A': /* Album Artist */
+        case 'z': /* for compatibility with earlier versions */
             return &FileTag->album_artist;
         case 'i':    /* Ignored */
             return NULL;
@@ -289,7 +295,13 @@ et_scan_dialog_set_file_tag_for_mask_item (File_Tag *file_tag,
             if (!overwrite && !et_str_empty (file_tag->artist)) return;
             et_file_tag_set_artist (file_tag, item->string);
             break;
-        case 'b':
+        case 'A':
+        case 'z': /* for compatibility with earlier versions */
+            if (!overwrite && !et_str_empty (file_tag->album_artist)) return;
+            et_file_tag_set_album_artist (file_tag, item->string);
+            break;
+        case 'T':
+        case 'b': /* for compatibility with earlier versions */
             if (!overwrite && !et_str_empty (file_tag->album)) return;
             et_file_tag_set_album (file_tag, item->string);
             break;
@@ -297,7 +309,8 @@ et_scan_dialog_set_file_tag_for_mask_item (File_Tag *file_tag,
             if (!overwrite && !et_str_empty (file_tag->disc_number)) return;
             et_file_tag_set_disc_number (file_tag, item->string);
             break;
-        case 'x':
+        case 'D':
+        case 'x': /* for compatibility with earlier versions */
             if (!overwrite && !et_str_empty (file_tag->disc_total)) return;
             et_file_tag_set_disc_total (file_tag, item->string);
             break;
@@ -305,15 +318,16 @@ et_scan_dialog_set_file_tag_for_mask_item (File_Tag *file_tag,
             if (!overwrite && !et_str_empty (file_tag->year)) return;
             et_file_tag_set_year (file_tag, item->string);
             break;
-        case 'w':
-            if (!overwrite && !et_str_empty (file_tag->orig_year)) return;
-            et_file_tag_set_orig_year (file_tag, item->string);
+        case 'Y':
+            if (!overwrite && !et_str_empty (file_tag->release_year)) return;
+            et_file_tag_set_release_year (file_tag, item->string);
             break;
         case 'n':
             if (!overwrite && !et_str_empty (file_tag->track)) return;
             et_file_tag_set_track_number (file_tag, item->string);
             break;
-        case 'l':
+        case 'N':
+        case 'l': /* for compatibility with earlier versions */
             if (!overwrite && !et_str_empty (file_tag->track_total)) return;
             et_file_tag_set_track_total (file_tag, item->string);
             break;
@@ -333,6 +347,10 @@ et_scan_dialog_set_file_tag_for_mask_item (File_Tag *file_tag,
             if (!overwrite && !et_str_empty (file_tag->orig_artist)) return;
             et_file_tag_set_orig_artist (file_tag, item->string);
             break;
+        case 'w':
+            if (!overwrite && !et_str_empty (file_tag->orig_year)) return;
+            et_file_tag_set_orig_year (file_tag, item->string);
+            break;
         case 'r':
             if (!overwrite && !et_str_empty (file_tag->copyright)) return;
             et_file_tag_set_copyright (file_tag, item->string);
@@ -344,10 +362,6 @@ et_scan_dialog_set_file_tag_for_mask_item (File_Tag *file_tag,
         case 'e':
             if (!overwrite && !et_str_empty (file_tag->encoded_by)) return;
             et_file_tag_set_encoded_by (file_tag, item->string);
-            break;
-        case 'z':
-            if (!overwrite && !et_str_empty (file_tag->album_artist)) return;
-            et_file_tag_set_album_artist (file_tag, item->string);
             break;
         case 'i':
             /* Ignored. */
@@ -934,7 +948,7 @@ et_scan_generate_new_filename_from_mask (const ET_File *ETFile,
      */
     while ( mask!=NULL && (tmp=strrchr(mask,'%'))!=NULL && strlen(tmp)>1 )
     {
-        // Mask contains some characters after the code ('%b__')
+        // Mask contains some characters after the code ('%T__')
         if (strlen(tmp)>2)
         {
             mask_item = g_slice_new0 (File_Mask_Item);

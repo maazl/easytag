@@ -143,6 +143,10 @@ ape_tag_read_file_tag (GFile *file,
     string = apefrm_getstr (ape_cnt, APE_TAG_FIELD_YEAR);
     set_string_field (&FileTag->year, string);
 
+    /* Release year */
+    string = apefrm_getstr (ape_cnt, "Release Year");
+    set_string_field (&FileTag->release_year, string);
+
     /* Track and Total Track */
     string = apefrm_getstr (ape_cnt, APE_TAG_FIELD_TRACK);
 
@@ -297,6 +301,14 @@ ape_tag_write_file_tag (const ET_File *ETFile,
         apefrm_add(ape_mem, 0, APE_TAG_FIELD_YEAR, FileTag->year);
     else
         apefrm_remove(ape_mem,APE_TAG_FIELD_YEAR);
+
+    /****************
+     * Release year *
+     ***************/
+    if (!et_str_empty (FileTag->release_year))
+        apefrm_add(ape_mem, 0, "Release Year", FileTag->release_year);
+    else
+        apefrm_remove(ape_mem, "Release Year");
 
     /*************************
      * Track and Total Track *

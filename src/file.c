@@ -309,9 +309,9 @@ gint
 ET_Comp_Func_Sort_File_By_Ascending_Title (const ET_File *ETFile1,
                                            const ET_File *ETFile2)
 {
-   // Compare pointers just in case they are the same (e.g. both are NULL)
-   if ((ETFile1->FileTag->data == ETFile2->FileTag->data)
-   ||  (((File_Tag *)ETFile1->FileTag->data)->title == ((File_Tag *)ETFile2->FileTag->data)->title))
+    // Compare pointers just in case they are the same (e.g. both are NULL)
+    if ((ETFile1->FileTag->data == ETFile2->FileTag->data)
+        || (((File_Tag *)ETFile1->FileTag->data)->title == ((File_Tag *)ETFile2->FileTag->data)->title))
         return 0;
 
     if (!ETFile1->FileTag->data)
@@ -502,20 +502,20 @@ ET_Comp_Func_Sort_File_By_Descending_Year (const ET_File *ETFile1,
  * Comparison function for sorting by ascending original year.
  */
 gint
-ET_Comp_Func_Sort_File_By_Ascending_Orig_Year (const ET_File *ETFile1,
-                                               const ET_File *ETFile2)
+ET_Comp_Func_Sort_File_By_Ascending_Release_Year (const ET_File *ETFile1,
+                                                  const ET_File *ETFile2)
 {
     gint year1, year2;
 
-    if ( !ETFile1->FileTag->data || !((File_Tag *)ETFile1->FileTag->data)->orig_year )
+    if ( !ETFile1->FileTag->data || !((File_Tag *)ETFile1->FileTag->data)->release_year )
         year1 = 0;
     else
-        year1 = atoi( ((File_Tag *)ETFile1->FileTag->data)->orig_year );
+        year1 = atoi( ((File_Tag *)ETFile1->FileTag->data)->release_year );
 
-    if ( !ETFile2->FileTag->data || !((File_Tag *)ETFile2->FileTag->data)->orig_year )
+    if ( !ETFile2->FileTag->data || !((File_Tag *)ETFile2->FileTag->data)->release_year )
         year2 = 0;
     else
-        year2 = atoi( ((File_Tag *)ETFile2->FileTag->data)->orig_year );
+        year2 = atoi( ((File_Tag *)ETFile2->FileTag->data)->release_year );
 
     // Second criterion
     if (year1 == year2)
@@ -529,10 +529,10 @@ ET_Comp_Func_Sort_File_By_Ascending_Orig_Year (const ET_File *ETFile1,
  * Comparison function for sorting by descending original year.
  */
 gint
-ET_Comp_Func_Sort_File_By_Descending_Orig_Year (const ET_File *ETFile1,
-                                                const ET_File *ETFile2)
+ET_Comp_Func_Sort_File_By_Descending_Release_Year (const ET_File *ETFile1,
+                                                   const ET_File *ETFile2)
 {
-    return ET_Comp_Func_Sort_File_By_Ascending_Orig_Year(ETFile2,ETFile1);
+    return ET_Comp_Func_Sort_File_By_Ascending_Release_Year(ETFile2,ETFile1);
 }
 
 
@@ -693,6 +693,44 @@ ET_Comp_Func_Sort_File_By_Descending_Orig_Artist (const ET_File *ETFile1,
                                                   const ET_File *ETFile2)
 {
     return ET_Comp_Func_Sort_File_By_Ascending_Orig_Artist(ETFile2,ETFile1);
+}
+
+
+/*
+ * Comparison function for sorting by ascending original year.
+ */
+gint
+ET_Comp_Func_Sort_File_By_Ascending_Orig_Year (const ET_File *ETFile1,
+                                               const ET_File *ETFile2)
+{
+    gint year1, year2;
+
+    if ( !ETFile1->FileTag->data || !((File_Tag *)ETFile1->FileTag->data)->orig_year )
+        year1 = 0;
+    else
+        year1 = atoi( ((File_Tag *)ETFile1->FileTag->data)->orig_year );
+
+    if ( !ETFile2->FileTag->data || !((File_Tag *)ETFile2->FileTag->data)->orig_year )
+        year2 = 0;
+    else
+        year2 = atoi( ((File_Tag *)ETFile2->FileTag->data)->orig_year );
+
+    // Second criterion
+    if (year1 == year2)
+        return ET_Comp_Func_Sort_File_By_Ascending_Filename(ETFile1,ETFile2);
+
+    // First criterion
+    return (year1 - year2);
+}
+
+/*
+ * Comparison function for sorting by descending original year.
+ */
+gint
+ET_Comp_Func_Sort_File_By_Descending_Orig_Year (const ET_File *ETFile1,
+                                                const ET_File *ETFile2)
+{
+    return ET_Comp_Func_Sort_File_By_Ascending_Orig_Year(ETFile2,ETFile1);
 }
 
 
@@ -1104,6 +1142,18 @@ ET_Save_File_Name_Internal (const ET_File *ETFile,
     return success;
 }
 
+static gchar* strip_value(const gchar* value)
+{
+    if (et_str_empty (value))
+        return NULL;
+    else
+    {
+        gchar *value2 = g_strdup(value);
+        g_strstrip (value2);
+        return value2;
+    }
+}
+
 /*
  * Do the same thing of et_tag_area_create_file_tag without getting the data from the UI.
  */
@@ -1119,57 +1169,19 @@ ET_Save_File_Tag_Internal (ET_File *ETFile, File_Tag *FileTag)
     FileTagCur = (File_Tag *)ETFile->FileTag->data;
 
     /* Title */
-    if (!et_str_empty (FileTagCur->title))
-    {
-        FileTag->title = g_strdup(FileTagCur->title);
-        g_strstrip (FileTag->title);
-    } else
-    {
-        FileTag->title = NULL;
-    }
+    FileTag->title = strip_value(FileTagCur->title);
 
     /* Artist */
-    if (!et_str_empty (FileTagCur->artist))
-    {
-        FileTag->artist = g_strdup(FileTagCur->artist);
-        g_strstrip (FileTag->artist);
-    } else
-    {
-        FileTag->artist = NULL;
-    }
+    FileTag->artist = strip_value(FileTagCur->artist);
 
     /* Album Artist */
-    if (!et_str_empty (FileTagCur->album_artist))
-    {
-        FileTag->album_artist = g_strdup(FileTagCur->album_artist);
-        g_strstrip (FileTag->album_artist);
-    } else
-    {
-        FileTag->album_artist = NULL;
-    }
-
+    FileTag->album_artist = strip_value(FileTagCur->album_artist);
 
     /* Album */
-    if (!et_str_empty (FileTagCur->album))
-    {
-        FileTag->album = g_strdup(FileTagCur->album);
-        g_strstrip (FileTag->album);
-    } else
-    {
-        FileTag->album = NULL;
-    }
-
+    FileTag->album = strip_value(FileTagCur->album);
 
     /* Disc Number */
-    if (!et_str_empty (FileTagCur->disc_number))
-    {
-        FileTag->disc_number = g_strdup(FileTagCur->disc_number);
-        g_strstrip (FileTag->disc_number);
-    } else
-    {
-        FileTag->disc_number = NULL;
-    }
-
+    FileTag->disc_number = strip_value(FileTagCur->disc_number);
 
     /* Discs Total */
     if (!et_str_empty (FileTagCur->disc_total))
@@ -1182,28 +1194,11 @@ ET_Save_File_Tag_Internal (ET_File *ETFile, File_Tag *FileTag)
         FileTag->disc_total = NULL;
     }
 
-
     /* Year */
-    if (!et_str_empty (FileTagCur->year))
-    {
-        FileTag->year = g_strdup(FileTagCur->year);
-        g_strstrip (FileTag->year);
-    } else
-    {
-        FileTag->year = NULL;
-    }
+    FileTag->year = strip_value(FileTagCur->year);
 
-
-    /* Original year */
-    if (!et_str_empty (FileTagCur->orig_year))
-    {
-        FileTag->orig_year = g_strdup(FileTagCur->orig_year);
-        g_strstrip (FileTag->orig_year);
-    } else
-    {
-        FileTag->orig_year = NULL;
-    }
-
+    /* Release year */
+    FileTag->release_year = strip_value(FileTagCur->release_year);
 
     /* Track */
     if (!et_str_empty (FileTagCur->track))
@@ -1222,7 +1217,6 @@ ET_Save_File_Tag_Internal (ET_File *ETFile, File_Tag *FileTag)
         FileTag->track = NULL;
     }
 
-
     /* Track Total */
     if (!et_str_empty (FileTagCur->track_total))
     {
@@ -1233,83 +1227,29 @@ ET_Save_File_Tag_Internal (ET_File *ETFile, File_Tag *FileTag)
         FileTag->track_total = NULL;
     }
 
-
     /* Genre */
-    if (!et_str_empty (FileTagCur->genre))
-    {
-        FileTag->genre = g_strdup(FileTagCur->genre);
-        g_strstrip (FileTag->genre);
-    } else
-    {
-        FileTag->genre = NULL;
-    }
-
+    FileTag->genre = strip_value(FileTagCur->genre);
 
     /* Comment */
-    if (!et_str_empty (FileTagCur->comment))
-    {
-        FileTag->comment = g_strdup(FileTagCur->comment);
-        g_strstrip (FileTag->comment);
-    } else
-    {
-        FileTag->comment = NULL;
-    }
-
+    FileTag->comment = strip_value(FileTagCur->comment);
 
     /* Composer */
-    if (!et_str_empty (FileTagCur->composer))
-    {
-        FileTag->composer = g_strdup(FileTagCur->composer);
-        g_strstrip (FileTag->composer);
-    } else
-    {
-        FileTag->composer = NULL;
-    }
-
+    FileTag->composer = strip_value(FileTagCur->composer);
 
     /* Original Artist */
-    if (!et_str_empty (FileTagCur->orig_artist))
-    {
-        FileTag->orig_artist = g_strdup(FileTagCur->orig_artist);
-        g_strstrip (FileTag->orig_artist);
-    } else
-    {
-        FileTag->orig_artist = NULL;
-    }
+    FileTag->orig_artist = strip_value(FileTagCur->orig_artist);
 
+    /* Original year */
+    FileTag->orig_year = strip_value(FileTagCur->orig_year);
 
     /* Copyright */
-    if (!et_str_empty (FileTagCur->copyright))
-    {
-        FileTag->copyright = g_strdup(FileTagCur->copyright);
-        g_strstrip (FileTag->copyright);
-    } else
-    {
-        FileTag->copyright = NULL;
-    }
-
+    FileTag->copyright = strip_value(FileTagCur->copyright);
 
     /* URL */
-    if (!et_str_empty (FileTagCur->url))
-    {
-        FileTag->url = g_strdup(FileTagCur->url);
-        g_strstrip (FileTag->url);
-    } else
-    {
-        FileTag->url = NULL;
-    }
-
+    FileTag->url = strip_value(FileTagCur->url);
 
     /* Encoded by */
-    if (!et_str_empty (FileTagCur->encoded_by))
-    {
-        FileTag->encoded_by = g_strdup(FileTagCur->encoded_by);
-        g_strstrip (FileTag->encoded_by);
-    } else
-    {
-        FileTag->encoded_by = NULL;
-    }
-
+    FileTag->encoded_by = strip_value(FileTagCur->encoded_by);
 
     /* Picture */
     et_file_tag_set_picture (FileTag, FileTagCur->picture);

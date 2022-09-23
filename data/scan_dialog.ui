@@ -191,7 +191,19 @@
                                             <packing>
                                                 <property name="left-attach">0</property>
                                                 <property name="top-attach">0</property>
-                                                <property name="width">3</property>
+                                                <property name="width">4</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkLabel" id="title_label">
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">%t: title</property>
+                                                <property name="margin-left">12</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">1</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -203,25 +215,13 @@
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
-                                                <property name="top-attach">1</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="album_artist_label">
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%z: album artist</property>
-                                                <property name="margin-left">12</property>
-                                                <property name="visible">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">0</property>
                                                 <property name="top-attach">2</property>
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="album_label">
+                                            <object class="GtkLabel" id="year_label">
                                                 <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%b: album</property>
+                                                <property name="label" translatable="yes">%y: year</property>
                                                 <property name="margin-left">12</property>
                                                 <property name="visible">True</property>
                                             </object>
@@ -231,9 +231,9 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="comment_label">
+                                            <object class="GtkLabel" id="track_label">
                                                 <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%c: comment</property>
+                                                <property name="label" translatable="yes">%n: track number</property>
                                                 <property name="margin-left">12</property>
                                                 <property name="visible">True</property>
                                             </object>
@@ -243,9 +243,9 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="composer_label">
+                                            <object class="GtkLabel" id="disc_number_label">
                                                 <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%p: composer</property>
+                                                <property name="label" translatable="yes">%d: disc number</property>
                                                 <property name="margin-left">12</property>
                                                 <property name="visible">True</property>
                                             </object>
@@ -255,21 +255,9 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="copyright_label">
+                                            <object class="GtkLabel" id="album_label">
                                                 <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%r: copyright</property>
-                                                <property name="margin-left">12</property>
-                                                <property name="visible">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">6</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="disc_number_label">
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%d: disc number</property>
+                                                <property name="label" translatable="yes">%T: album</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
@@ -278,14 +266,47 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="encoded_by_label">
+                                            <object class="GtkLabel" id="album_artist_label">
                                                 <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%e: encoded by</property>
+                                                <property name="label" translatable="yes">%A: album artist</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">1</property>
                                                 <property name="top-attach">2</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkLabel" id="release_year_label">
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">%Y: release year</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">1</property>
+                                                <property name="top-attach">3</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkLabel" id="number_of_tracks_label">
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">%N: number of tracks</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">1</property>
+                                                <property name="top-attach">4</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkLabel" id="number_of_discs_label">
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">%D: number of discs</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">1</property>
+                                                <property name="top-attach">5</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -295,30 +316,8 @@
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">3</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="ignored_label">
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%i: ignored</property>
-                                                <property name="visible">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">4</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="number_of_tracks_label">
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%l: number of tracks</property>
-                                                <property name="visible">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">5</property>
+                                                <property name="left-attach">2</property>
+                                                <property name="top-attach">1</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -328,63 +327,8 @@
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">6</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="track_label">
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%n: track number</property>
-                                                <property name="visible">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">2</property>
-                                                <property name="top-attach">1</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="title_label">
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%t: title</property>
-                                                <property name="visible">True</property>
-                                            </object>
-                                            <packing>
                                                 <property name="left-attach">2</property>
                                                 <property name="top-attach">2</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="url_label">
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%u: URL</property>
-                                                <property name="visible">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">2</property>
-                                                <property name="top-attach">3</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="number_of_discs_label">
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%x: number of discs</property>
-                                                <property name="visible">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">2</property>
-                                                <property name="top-attach">4</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="year_label">
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%y: year</property>
-                                                <property name="visible">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">2</property>
-                                                <property name="top-attach">5</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -395,7 +339,73 @@
                                             </object>
                                             <packing>
                                                 <property name="left-attach">2</property>
-                                                <property name="top-attach">6</property>
+                                                <property name="top-attach">3</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkLabel" id="comment_label">
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">%c: comment</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">2</property>
+                                                <property name="top-attach">4</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkLabel" id="url_label">
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">%u: URL</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">3</property>
+                                                <property name="top-attach">1</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkLabel" id="composer_label">
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">%p: composer</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">3</property>
+                                                <property name="top-attach">2</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkLabel" id="copyright_label">
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">%r: copyright</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">3</property>
+                                                <property name="top-attach">3</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkLabel" id="encoded_by_label">
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">%e: encoded by</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">3</property>
+                                                <property name="top-attach">4</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkLabel" id="ignored_label">
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">%i: ignored</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">3</property>
+                                                <property name="top-attach">5</property>
                                             </packing>
                                         </child>
                                     </object>

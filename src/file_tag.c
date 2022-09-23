@@ -417,8 +417,8 @@ et_file_tag_detect_difference (const File_Tag *FileTag1,
         return TRUE;
     }
 
-    /* Original year */
-    if (et_normalized_strcmp0 (FileTag1->orig_year, FileTag2->orig_year) != 0)
+    /* Release year */
+    if (et_normalized_strcmp0 (FileTag1->release_year, FileTag2->release_year) != 0)
     {
         return TRUE;
     }
@@ -450,6 +450,12 @@ et_file_tag_detect_difference (const File_Tag *FileTag1,
 
     /* Composer */
     if (et_normalized_strcmp0 (FileTag1->composer, FileTag2->composer) != 0)
+    {
+        return TRUE;
+    }
+
+    /* Original year */
+    if (et_normalized_strcmp0 (FileTag1->orig_year, FileTag2->orig_year) != 0)
     {
         return TRUE;
     }

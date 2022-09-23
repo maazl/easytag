@@ -386,6 +386,15 @@ flac_tag_read_file_tag (GFile *file,
                 g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_DATE);
             }
 
+            /* Release year. */
+            if ((strings = g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_RELEASE_DATE)))
+            {
+                g_slist_foreach (strings, values_list_foreach,
+                                 &FileTag->release_year);
+                g_slist_free (strings);
+                g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_RELEASE_DATE);
+            }
+
             /* Genre. */
             if ((strings = g_hash_table_lookup (tags,
                                                 ET_VORBIS_COMMENT_FIELD_GENRE)))
@@ -571,6 +580,7 @@ flac_tag_read_file_tag (GFile *file,
       && FileTag->disc_number == NULL
       && FileTag->disc_total  == NULL
       && FileTag->year        == NULL
+      && FileTag->release_year == NULL
       && FileTag->track       == NULL
       && FileTag->track_total == NULL
       && FileTag->genre       == NULL
@@ -594,6 +604,7 @@ flac_tag_read_file_tag (GFile *file,
           || FileTag->disc_number != NULL
           || FileTag->disc_total  != NULL
           || FileTag->year        != NULL
+          || FileTag->release_year != NULL
           || FileTag->track       != NULL
           || FileTag->track_total != NULL
           || FileTag->genre       != NULL
@@ -923,6 +934,12 @@ flac_tag_write_file_tag (const ET_File *ETFile,
          ********/
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_DATE,
                              FileTag->year, FALSE);
+
+        /****************
+         * Release year *
+         ***************/
+        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_RELEASE_DATE,
+                             FileTag->release_year, FALSE);
 
         /*************************
          * Track and Total Track *

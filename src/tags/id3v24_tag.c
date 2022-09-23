@@ -309,6 +309,19 @@ id3tag_read_file_tag (GFile *gfile,
         }
     }
 
+    /***********************
+     * Release year (TDRL) *
+     ***********************/
+    if ( (frame = id3_tag_findframe(tag, "TDRL", 0)) )
+    {
+        update |= libid3tag_Get_Frame_Str(frame, ~0, &string1);
+        if ( string1 )
+        {
+            g_strstrip (string1);
+            FileTag->release_year = string1;
+        }
+    }
+
     /********************************
      * Track and Total Track (TRCK) *
      ********************************/
@@ -1104,6 +1117,11 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
      * Year *
      ********/
     etag_set_tags(FileTag->year, ID3_FRAME_YEAR, ID3_FIELD_TYPE_STRINGLIST, v1tag, v2tag, &strip_tags);
+
+    /****************
+     * Release year *
+     ****************/
+    etag_set_tags(FileTag->release_year, "TDRL", ID3_FIELD_TYPE_STRINGLIST, NULL, v2tag, &strip_tags);
 
     /*************************
      * Track and Total Track *

@@ -102,8 +102,8 @@ gint ET_Comp_Func_Sort_File_By_Ascending_Album (const ET_File *ETFile1, const ET
 gint ET_Comp_Func_Sort_File_By_Descending_Album (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Ascending_Year (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Descending_Year (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Orig_Year (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Orig_Year (const ET_File *ETFile1, const ET_File *ETFile2);
+gint ET_Comp_Func_Sort_File_By_Ascending_Release_Year (const ET_File *ETFile1, const ET_File *ETFile2);
+gint ET_Comp_Func_Sort_File_By_Descending_Release_Year (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Ascending_Genre (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Descending_Genre (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Ascending_Comment (const ET_File *ETFile1, const ET_File *ETFile2);
@@ -112,6 +112,8 @@ gint ET_Comp_Func_Sort_File_By_Ascending_Composer (const ET_File *ETFile1, const
 gint ET_Comp_Func_Sort_File_By_Descending_Composer (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Ascending_Orig_Artist (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Descending_Orig_Artist (const ET_File *ETFile1, const ET_File *ETFile2);
+gint ET_Comp_Func_Sort_File_By_Ascending_Orig_Year (const ET_File *ETFile1, const ET_File *ETFile2);
+gint ET_Comp_Func_Sort_File_By_Descending_Orig_Year (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Ascending_Copyright (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Descending_Copyright (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Ascending_Url (const ET_File *ETFile1, const ET_File *ETFile2);

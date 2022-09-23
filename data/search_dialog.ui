@@ -18,6 +18,7 @@
             <column type="gchararray"/>
             <column type="gchararray"/>
             <column type="gchararray"/>
+            <column type="gchararray"/>
             <column type="gint"/>
             <column type="gint"/>
             <column type="gint"/>
@@ -34,6 +35,8 @@
             <column type="gint"/>
             <column type="gint"/>
             <column type="gint"/>
+            <column type="gint"/>
+            <column type="GdkRGBA"/>
             <column type="GdkRGBA"/>
             <column type="GdkRGBA"/>
             <column type="GdkRGBA"/>
@@ -182,8 +185,8 @@
                                                     <object class="GtkCellRendererText" id="filename_renderer"/>
                                                     <attributes>
                                                         <attribute name="text">0</attribute>
-                                                        <attribute name="weight">15</attribute>
-                                                        <attribute name="foreground-rgba">30</attribute>
+                                                        <attribute name="weight">17</attribute>
+                                                        <attribute name="foreground-rgba">34</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -195,8 +198,8 @@
                                                     <object class="GtkCellRendererText" id="title_renderer"/>
                                                     <attributes>
                                                         <attribute name="text">1</attribute>
-                                                        <attribute name="weight">16</attribute>
-                                                        <attribute name="foreground-rgba">31</attribute>
+                                                        <attribute name="weight">18</attribute>
+                                                        <attribute name="foreground-rgba">35</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -208,8 +211,8 @@
                                                     <object class="GtkCellRendererText" id="artist_renderer"/>
                                                     <attributes>
                                                         <attribute name="text">2</attribute>
-                                                        <attribute name="weight">17</attribute>
-                                                        <attribute name="foreground-rgba">32</attribute>
+                                                        <attribute name="weight">19</attribute>
+                                                        <attribute name="foreground-rgba">36</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -221,8 +224,8 @@
                                                     <object class="GtkCellRendererText" id="album_artist_renderer"/>
                                                     <attributes>
                                                         <attribute name="text">3</attribute>
-                                                        <attribute name="weight">18</attribute>
-                                                        <attribute name="foreground-rgba">33</attribute>
+                                                        <attribute name="weight">20</attribute>
+                                                        <attribute name="foreground-rgba">37</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -234,8 +237,8 @@
                                                     <object class="GtkCellRendererText" id="album_renderer"/>
                                                     <attributes>
                                                         <attribute name="text">4</attribute>
-                                                        <attribute name="weight">19</attribute>
-                                                        <attribute name="foreground-rgba">34</attribute>
+                                                        <attribute name="weight">21</attribute>
+                                                        <attribute name="foreground-rgba">38</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -247,8 +250,8 @@
                                                     <object class="GtkCellRendererText" id="cd_renderer"/>
                                                     <attributes>
                                                         <attribute name="text">5</attribute>
-                                                        <attribute name="weight">20</attribute>
-                                                        <attribute name="foreground-rgba">35</attribute>
+                                                        <attribute name="weight">22</attribute>
+                                                        <attribute name="foreground-rgba">39</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -260,8 +263,21 @@
                                                     <object class="GtkCellRendererText" id="year_renderer"/>
                                                     <attributes>
                                                         <attribute name="text">6</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="foreground-rgba">36</attribute>
+                                                        <attribute name="weight">23</attribute>
+                                                        <attribute name="foreground-rgba">40</attribute>
+                                                    </attributes>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="release_year_column">
+                                                <property name="title" translatable="yes">Year</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="release_year_renderer"/>
+                                                    <attributes>
+                                                        <attribute name="text">7</attribute>
+                                                        <attribute name="weight">24</attribute>
+                                                        <attribute name="foreground-rgba">41</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -272,9 +288,9 @@
                                                 <child>
                                                     <object class="GtkCellRendererText" id="track_renderer"/>
                                                     <attributes>
-                                                        <attribute name="text">7</attribute>
-                                                        <attribute name="weight">22</attribute>
-                                                        <attribute name="foreground-rgba">37</attribute>
+                                                        <attribute name="text">8</attribute>
+                                                        <attribute name="weight">25</attribute>
+                                                        <attribute name="foreground-rgba">42</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -285,9 +301,9 @@
                                                 <child>
                                                     <object class="GtkCellRendererText" id="genre_renderer"/>
                                                     <attributes>
-                                                        <attribute name="text">8</attribute>
-                                                        <attribute name="weight">23</attribute>
-                                                        <attribute name="foreground-rgba">38</attribute>
+                                                        <attribute name="text">9</attribute>
+                                                        <attribute name="weight">26</attribute>
+                                                        <attribute name="foreground-rgba">43</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -298,9 +314,9 @@
                                                 <child>
                                                     <object class="GtkCellRendererText" id="comment_renderer"/>
                                                     <attributes>
-                                                        <attribute name="text">9</attribute>
-                                                        <attribute name="weight">24</attribute>
-                                                        <attribute name="foreground-rgba">39</attribute>
+                                                        <attribute name="text">10</attribute>
+                                                        <attribute name="weight">27</attribute>
+                                                        <attribute name="foreground-rgba">44</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -311,9 +327,9 @@
                                                 <child>
                                                     <object class="GtkCellRendererText" id="composer_renderer"/>
                                                     <attributes>
-                                                        <attribute name="text">10</attribute>
-                                                        <attribute name="weight">25</attribute>
-                                                        <attribute name="foreground-rgba">40</attribute>
+                                                        <attribute name="text">11</attribute>
+                                                        <attribute name="weight">28</attribute>
+                                                        <attribute name="foreground-rgba">45</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -324,9 +340,9 @@
                                                 <child>
                                                     <object class="GtkCellRendererText" id="orig_artist_renderer"/>
                                                     <attributes>
-                                                        <attribute name="text">11</attribute>
-                                                        <attribute name="weight">26</attribute>
-                                                        <attribute name="foreground-rgba">41</attribute>
+                                                        <attribute name="text">12</attribute>
+                                                        <attribute name="weight">29</attribute>
+                                                        <attribute name="foreground-rgba">46</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -337,9 +353,9 @@
                                                 <child>
                                                     <object class="GtkCellRendererText" id="orig_year_renderer"/>
                                                     <attributes>
-                                                        <attribute name="text">12</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="foreground-rgba">36</attribute>
+                                                        <attribute name="text">13</attribute>
+                                                        <attribute name="weight">30</attribute>
+                                                        <attribute name="foreground-rgba">47</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -350,9 +366,9 @@
                                                 <child>
                                                     <object class="GtkCellRendererText" id="copyright_renderer"/>
                                                     <attributes>
-                                                        <attribute name="text">13</attribute>
-                                                        <attribute name="weight">27</attribute>
-                                                        <attribute name="foreground-rgba">42</attribute>
+                                                        <attribute name="text">14</attribute>
+                                                        <attribute name="weight">31</attribute>
+                                                        <attribute name="foreground-rgba">48</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -363,9 +379,9 @@
                                                 <child>
                                                     <object class="GtkCellRendererText" id="url_renderer"/>
                                                     <attributes>
-                                                        <attribute name="text">14</attribute>
-                                                        <attribute name="weight">28</attribute>
-                                                        <attribute name="foreground-rgba">43</attribute>
+                                                        <attribute name="text">15</attribute>
+                                                        <attribute name="weight">32</attribute>
+                                                        <attribute name="foreground-rgba">49</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>
@@ -376,9 +392,9 @@
                                                 <child>
                                                     <object class="GtkCellRendererText" id="encoced_by_renderer"/>
                                                     <attributes>
-                                                        <attribute name="text">15</attribute>
-                                                        <attribute name="weight">29</attribute>
-                                                        <attribute name="foreground-rgba">44</attribute>
+                                                        <attribute name="text">16</attribute>
+                                                        <attribute name="weight">33</attribute>
+                                                        <attribute name="foreground-rgba">50</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>

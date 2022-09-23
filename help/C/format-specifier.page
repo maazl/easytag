@@ -47,7 +47,7 @@
       </tr>
       <tr>
         <td>
-          <p its:translate="no">%z</p>
+          <p its:translate="no">%A %z</p>
         </td>
         <td>
           <p>Album artist</p>
@@ -55,7 +55,7 @@
       </tr>
       <tr>
         <td>
-          <p its:translate="no">%b</p>
+          <p its:translate="no">%T %b</p>
         </td>
         <td>
           <p>Album title</p>
@@ -124,7 +124,7 @@
       </tr>
       <tr>
         <td>
-          <p its:translate="no">%l</p>
+          <p its:translate="no">%N %l</p>
         </td>
         <td>
           <p>Number of tracks: the total number of tracks on the medium</p>
@@ -172,7 +172,7 @@
       </tr>
       <tr>
         <td>
-          <p its:translate="no">%x</p>
+          <p its:translate="no">%D %x</p>
         </td>
         <td>
           <p>Number of discs</p>
@@ -185,6 +185,14 @@
         <td>
           <p>Year of recording, sometimes the date of release is used
           instead</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p its:translate="no">%Y</p>
+        </td>
+        <td>
+          <p>Year of release</p>
         </td>
       </tr>
     </tbody>
