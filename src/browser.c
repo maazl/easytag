@@ -113,6 +113,7 @@ typedef enum
 
 enum
 {
+    LIST_FILE_PATH,
     LIST_FILE_NAME,
     /* Tag fields. */
     LIST_FILE_TITLE,
@@ -514,6 +515,21 @@ et_browser_get_current_path (EtBrowser *self)
     priv = et_browser_get_instance_private (self);
 
     return priv->current_path;
+}
+
+/*
+ * Modify path in place and strip the base component if it matches.
+ */
+static void et_browser_make_path_relative(gchar* path, const gchar* base)
+{
+    size_t baselen = strlen(base);
+    if (memcmp(path, base, baselen * sizeof(gchar)) == 0)
+    {
+        const gchar* start = path + baselen;
+        if (G_IS_DIR_SEPARATOR(*start))
+            ++start;
+        memmove(path, start, (strlen(start) + 1) * sizeof(gchar));
+    }
 }
 
 /*
@@ -1313,10 +1329,13 @@ et_browser_load_file_list (EtBrowser *self,
     GList *l;
     gboolean activate_bg_color = 0;
     GtkTreeIter rowIter;
+    gchar* previous_dirname_utf8 = NULL;
+    const gchar* browser_path;
 
     g_return_if_fail (ET_BROWSER (self));
 
     priv = et_browser_get_instance_private (self);
+    browser_path = g_file_peek_path(priv->current_path);
 
     et_browser_clear_file_model (self);
 
@@ -1325,25 +1344,18 @@ et_browser_load_file_list (EtBrowser *self,
         guint fileKey = ((ET_File *)l->data)->ETFileKey;
         const gchar *current_filename_utf8 = ((File_Name *)((ET_File *)l->data)->FileNameCur->data)->value_utf8;
         gchar *basename_utf8 = g_path_get_basename (current_filename_utf8);
+        gchar *dirname_utf8 = g_path_get_dirname(current_filename_utf8);
         File_Tag *FileTag = ((File_Tag *)((ET_File *)l->data)->FileTag->data);
         gchar *track;
         gchar *disc;
 
+        et_browser_make_path_relative(dirname_utf8, browser_path);
+
         // Change background color when changing directory (the first row must not be changed)
-        if (gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_model), NULL) > 0)
+        if (previous_dirname_utf8 && g_utf8_collate(previous_dirname_utf8, dirname_utf8) != 0)
         {
-            gchar *dir1_utf8;
-            gchar *dir2_utf8;
-            const gchar *previous_filename_utf8 = ((File_Name *)((ET_File *)l->prev->data)->FileNameCur->data)->value_utf8;
-
-            dir1_utf8 = g_path_get_dirname(previous_filename_utf8);
-            dir2_utf8 = g_path_get_dirname(current_filename_utf8);
-
-            if (g_utf8_collate(dir1_utf8, dir2_utf8) != 0)
-                activate_bg_color = !activate_bg_color;
-
-            g_free(dir1_utf8);
-            g_free(dir2_utf8);
+            activate_bg_color = !activate_bg_color;
+            g_free(previous_dirname_utf8);
         }
 
         /* File list displays the current filename (name on disc) and tag
@@ -1355,6 +1367,7 @@ et_browser_load_file_list (EtBrowser *self,
                              NULL);
 
         gtk_list_store_insert_with_values (priv->file_model, &rowIter, G_MAXINT,
+                                           LIST_FILE_PATH, dirname_utf8,
                                            LIST_FILE_NAME, basename_utf8,
                                            LIST_FILE_POINTER, l->data,
                                            LIST_FILE_KEY, fileKey,
@@ -1375,6 +1388,7 @@ et_browser_load_file_list (EtBrowser *self,
                                            LIST_FILE_COPYRIGHT, FileTag->copyright,
                                            LIST_FILE_URL, FileTag->url,
                                            LIST_FILE_ENCODED_BY, FileTag->encoded_by, -1);
+        previous_dirname_utf8 = dirname_utf8;
         g_free(basename_utf8);
         g_free(track);
         g_free (disc);
@@ -1388,6 +1402,8 @@ et_browser_load_file_list (EtBrowser *self,
         /* Set appearance of the row. */
         Browser_List_Set_Row_Appearance (self, &rowIter);
     }
+
+    g_free(previous_dirname_utf8);
 }
 
 
@@ -1404,15 +1420,14 @@ et_browser_refresh_list (EtBrowser *self)
     GtkTreePath *currentPath = NULL;
     GtkTreeIter iter;
     gint row;
-    gchar *current_basename_utf8;
-    gchar *track;
-    gchar *disc;
     gboolean valid;
     GVariant *variant;
+    const gchar* browser_path;
 
     g_return_if_fail (ET_BROWSER (self));
 
     priv = et_browser_get_instance_private (self);
+    browser_path = g_file_peek_path(priv->current_path);
 
     if (!ETCore->ETFileDisplayedList || !priv->file_view
     ||  gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_model), NULL) == 0)
@@ -1432,6 +1447,10 @@ et_browser_refresh_list (EtBrowser *self)
         const ET_File *ETFile;
         const File_Tag *FileTag;
         const File_Name *FileName;
+        gchar *current_basename_utf8;
+        gchar *current_dirname_utf8;
+        gchar *track;
+        gchar *disc;
         // Refresh filename and other fields
         gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter,
                            LIST_FILE_POINTER, &ETFile, -1);
@@ -1440,12 +1459,15 @@ et_browser_refresh_list (EtBrowser *self)
         FileTag  = (File_Tag *)ETFile->FileTag->data;
 
         current_basename_utf8 = g_path_get_basename(FileName->value_utf8);
+        current_dirname_utf8 = g_path_get_dirname(FileName->value_utf8);
+        et_browser_make_path_relative(current_dirname_utf8, browser_path);
         track = g_strconcat(FileTag->track ? FileTag->track : "",FileTag->track_total ? "/" : NULL,FileTag->track_total,NULL);
         disc  = g_strconcat (FileTag->disc_number ? FileTag->disc_number : "",
                              FileTag->disc_total ? "/" : NULL,
                              FileTag->disc_total, NULL);
 
         gtk_list_store_set(priv->file_model, &iter,
+                           LIST_FILE_PATH,          current_dirname_utf8,
                            LIST_FILE_NAME,          current_basename_utf8,
                            LIST_FILE_TITLE,         FileTag->title,
                            LIST_FILE_ARTIST,        FileTag->artist,
@@ -1464,6 +1486,7 @@ et_browser_refresh_list (EtBrowser *self)
                            LIST_FILE_URL,           FileTag->url,
                            LIST_FILE_ENCODED_BY,    FileTag->encoded_by,
                            -1);
+        g_free(current_dirname_utf8);
         g_free(current_basename_utf8);
         g_free(track);
         g_free (disc);
@@ -1530,6 +1553,7 @@ et_browser_refresh_file_in_list (EtBrowser *self,
     const File_Name *FileName;
     gboolean row_found = FALSE;
     gchar *current_basename_utf8;
+    gchar *current_dirname_utf8;
     gchar *track;
     gchar *disc;
     gboolean valid;
@@ -1612,12 +1636,15 @@ et_browser_refresh_file_in_list (EtBrowser *self,
     FileTag  = (File_Tag *)etfile->FileTag->data;
 
     current_basename_utf8 = g_path_get_basename(FileName->value_utf8);
+    current_dirname_utf8 = g_path_get_dirname(FileName->value_utf8);
+    et_browser_make_path_relative(current_dirname_utf8, g_file_peek_path(priv->current_path));
     track = g_strconcat(FileTag->track ? FileTag->track : "",FileTag->track_total ? "/" : NULL,FileTag->track_total,NULL);
     disc  = g_strconcat (FileTag->disc_number ? FileTag->disc_number : "",
                          FileTag->disc_total ? "/" : NULL, FileTag->disc_total,
                          NULL);
 
     gtk_list_store_set(priv->file_model, &selectedIter,
+                       LIST_FILE_PATH,          current_dirname_utf8,
                        LIST_FILE_NAME,          current_basename_utf8,
                        LIST_FILE_TITLE,         FileTag->title,
                        LIST_FILE_ARTIST,        FileTag->artist,
@@ -1636,6 +1663,7 @@ et_browser_refresh_file_in_list (EtBrowser *self,
                        LIST_FILE_URL,           FileTag->url,
                        LIST_FILE_ENCODED_BY,    FileTag->encoded_by,
                        -1);
+    g_free(current_dirname_utf8);
     g_free(current_basename_utf8);
     g_free(track);
     g_free (disc);

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: easytag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-18 16:56+0200\n"
+"POT-Creation-Date: 2022-09-25 15:22+0200\n"
 "PO-Revision-Date: 2016-12-27 06:04-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
@@ -79,7 +79,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Escolha um diretório para mostrar no navegador"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3842
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3870
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "_Abrir"
@@ -113,78 +113,82 @@ msgstr "# arquivos"
 msgid "Album"
 msgstr "Álbum"
 
-#: ../data/browser.ui.h:9 ../data/cddb_dialog.ui.h:38
+#: ../data/browser.ui.h:9
+msgid "Path"
+msgstr "Caminho"
+
+#: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
 #: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:58
 #: ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "Nome do arquivo"
 
-#: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:39
+#: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
 #: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:60
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Título"
 
-#: ../data/browser.ui.h:11 ../data/scan_dialog.ui.h:64
+#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:64
 #: ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Artista do álbum"
 
-#: ../data/browser.ui.h:12 ../data/cddb_dialog.ui.h:40
+#: ../data/browser.ui.h:13 ../data/cddb_dialog.ui.h:40
 #: ../data/search_dialog.ui.h:18
 msgid "Year"
 msgstr "Ano"
 
-#: ../data/browser.ui.h:13
+#: ../data/browser.ui.h:14
 #, fuzzy
 msgid "Rel. year"
 msgstr "Artista original"
 
-#: ../data/browser.ui.h:14
+#: ../data/browser.ui.h:15
 msgid "Disc"
 msgstr "Disco"
 
-#: ../data/browser.ui.h:15 ../data/search_dialog.ui.h:19
+#: ../data/browser.ui.h:16 ../data/search_dialog.ui.h:19
 msgid "Track"
 msgstr "Faixa"
 
-#: ../data/browser.ui.h:16 ../data/cddb_dialog.ui.h:43
+#: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
 #: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:68
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Gênero"
 
-#: ../data/browser.ui.h:17 ../data/preferences_dialog.ui.h:69
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
 #: ../data/scan_dialog.ui.h:70 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Comentário"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:71
+#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
 #: ../data/scan_dialog.ui.h:72 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Compositor"
 
-#: ../data/browser.ui.h:19 ../data/search_dialog.ui.h:23
+#: ../data/browser.ui.h:20 ../data/search_dialog.ui.h:23
 msgid "Original Artist"
 msgstr "Artista original"
 
-#: ../data/browser.ui.h:20 ../data/search_dialog.ui.h:24
+#: ../data/browser.ui.h:21 ../data/search_dialog.ui.h:24
 #, fuzzy
 msgid "Orig. year"
 msgstr "Artista original"
 
-#: ../data/browser.ui.h:21 ../data/scan_dialog.ui.h:76
+#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:76
 #: ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "Copyright"
 
-#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:78
+#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:78
 #: ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "URL"
 
-#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:80
+#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:80
 #: ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "Codificado por"
@@ -207,7 +211,7 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3015 ../src/browser.c:916 ../src/browser.c:3841
+#: ../src/application_window.c:3015 ../src/browser.c:932 ../src/browser.c:3869
 #: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
 #: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
 msgid "_Cancel"
@@ -1062,7 +1066,7 @@ msgid "Write information using:"
 msgstr "Gravar informações usando:"
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3016
-#: ../src/browser.c:917 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.c:933 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 msgid "_Save"
@@ -3269,8 +3273,8 @@ msgstr "Todos os arquivos foram excluídos"
 msgid "All tags have been removed"
 msgstr "Todas as etiquetas foram removidas"
 
-#: ../src/application_window.c:1474 ../src/browser.c:362 ../src/browser.c:405
-#: ../src/browser.c:439 ../src/browser.c:4648 ../src/browser.c:4723
+#: ../src/application_window.c:1474 ../src/browser.c:363 ../src/browser.c:406
+#: ../src/browser.c:440 ../src/browser.c:4676 ../src/browser.c:4751
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Falha ao iniciar programa “%s”"
@@ -3328,11 +3332,11 @@ msgstr "Arquivo: “%s”"
 msgid "Normal exit"
 msgstr "Saída normal"
 
-#: ../src/application_window.c:3013 ../src/browser.c:911
+#: ../src/application_window.c:3013 ../src/browser.c:927
 msgid "Some files have been modified but not saved"
 msgstr "Alguns arquivos foram modificados, mas não salvos"
 
-#: ../src/application_window.c:3014 ../src/browser.c:915 ../src/easytag.c:233
+#: ../src/application_window.c:3014 ../src/browser.c:931 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr "_Descartar"
@@ -3345,70 +3349,70 @@ msgstr "Sair"
 msgid "Do you want to save them before quitting?"
 msgstr "Você deseja salvá-los antes de sair?"
 
-#: ../src/browser.c:612
+#: ../src/browser.c:628
 msgid "New default directory selected for browser"
 msgstr "Nova pasta padrão selecionada para navegar"
 
-#: ../src/browser.c:914
+#: ../src/browser.c:930
 msgid "Do you want to save them before changing directory?"
 msgstr "Deseja salvá-los antes de alterar a pasta?"
 
-#: ../src/browser.c:921
+#: ../src/browser.c:937
 msgid "Confirm Directory Change"
 msgstr "Confirmar alteração do diretório"
 
-#: ../src/browser.c:2626
+#: ../src/browser.c:2654
 msgid "All albums"
 msgstr "Todos os álbuns"
 
-#: ../src/browser.c:3878
+#: ../src/browser.c:3906
 msgid "Select File"
 msgstr "Selecionar arquivo"
 
-#: ../src/browser.c:3885
+#: ../src/browser.c:3913
 msgid "Select Directory"
 msgstr "Selecionar diretório"
 
-#: ../src/browser.c:4152
+#: ../src/browser.c:4180
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Renomear pasta “%s” para:"
 
-#: ../src/browser.c:4288
+#: ../src/browser.c:4316
 msgid "You must type a directory name"
 msgstr "Você deve digitar um nome para o diretório"
 
-#: ../src/browser.c:4289 ../src/browser.c:4311
+#: ../src/browser.c:4317 ../src/browser.c:4339
 msgid "Directory Name Error"
 msgstr "Erro no nome do diretório"
 
-#: ../src/browser.c:4307
+#: ../src/browser.c:4335
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Não foi possível converter “%s” para a codificação do nome de arquivo"
 
-#: ../src/browser.c:4310
+#: ../src/browser.c:4338
 msgid "Please use another name."
 msgstr "Por favor, use um outro nome."
 
-#: ../src/browser.c:4382
+#: ../src/browser.c:4410
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "O nome da pasta “%s” já existe."
 
-#: ../src/browser.c:4383 ../src/easytag.c:650
+#: ../src/browser.c:4411 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Erro ao renomear o arquivo"
 
-#: ../src/browser.c:4422 ../src/browser.c:4451
+#: ../src/browser.c:4450 ../src/browser.c:4479
 msgid "Rename Directory Error"
 msgstr "Erro ao renomear o diretório"
 
-#: ../src/browser.c:4492
+#: ../src/browser.c:4520
 msgid "Directory renamed"
 msgstr "Diretório renomeado"
 
-#: ../src/browser.c:4640 ../src/browser.c:4715
+#: ../src/browser.c:4668 ../src/browser.c:4743
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "Comando executado “%s”"
@@ -5811,9 +5815,6 @@ msgstr "Arquivo Wavpack"
 
 #~ msgid "Local CDDB"
 #~ msgstr "CDDB local"
-
-#~ msgid "Path:"
-#~ msgstr "Caminho:"
 
 #~ msgid ""
 #~ "Specify the directory where the local CD database is located. The local "

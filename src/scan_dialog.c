@@ -935,7 +935,7 @@ et_scan_generate_new_filename_from_mask (const ET_File *ETFile,
         if (g_path_is_absolute(mask))
         {
             // Absolute directory
-        }else if (strrchr(mask,G_DIR_SEPARATOR)!=NULL) // This is '/' on UNIX machines and '\' under Windows
+        } else if (strrchr(mask,G_DIR_SEPARATOR)!=NULL) // This is '/' on UNIX machines and '\' under Windows
         {
             // Relative path => set beginning of the path
             path_utf8_cur = g_path_get_dirname( ((File_Name *)ETFile->FileNameCur->data)->value_utf8 );

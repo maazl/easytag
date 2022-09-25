@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 2.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-18 16:56+0200\n"
+"POT-Creation-Date: 2022-09-25 15:22+0200\n"
 "PO-Revision-Date: 2016-09-13 20:57+0800\n"
 "Last-Translator: Walter Cheuk <wwycheuk@gmail.com>\n"
 "Language-Team: \n"
@@ -74,7 +74,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "選擇要在瀏覽器顯示的目錄。"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3842
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3870
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "開啟(_O)"
@@ -108,78 +108,82 @@ msgstr "# 檔案"
 msgid "Album"
 msgstr "專輯"
 
-#: ../data/browser.ui.h:9 ../data/cddb_dialog.ui.h:38
+#: ../data/browser.ui.h:9
+msgid "Path"
+msgstr "路徑"
+
+#: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
 #: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:58
 #: ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "檔名"
 
-#: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:39
+#: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
 #: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:60
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "曲名"
 
-#: ../data/browser.ui.h:11 ../data/scan_dialog.ui.h:64
+#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:64
 #: ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "專輯演唱者"
 
-#: ../data/browser.ui.h:12 ../data/cddb_dialog.ui.h:40
+#: ../data/browser.ui.h:13 ../data/cddb_dialog.ui.h:40
 #: ../data/search_dialog.ui.h:18
 msgid "Year"
 msgstr "年份"
 
-#: ../data/browser.ui.h:13
+#: ../data/browser.ui.h:14
 #, fuzzy
 msgid "Rel. year"
 msgstr "原唱者"
 
-#: ../data/browser.ui.h:14
+#: ../data/browser.ui.h:15
 msgid "Disc"
 msgstr "碟片"
 
-#: ../data/browser.ui.h:15 ../data/search_dialog.ui.h:19
+#: ../data/browser.ui.h:16 ../data/search_dialog.ui.h:19
 msgid "Track"
 msgstr "曲目"
 
-#: ../data/browser.ui.h:16 ../data/cddb_dialog.ui.h:43
+#: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
 #: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:68
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "曲風"
 
-#: ../data/browser.ui.h:17 ../data/preferences_dialog.ui.h:69
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
 #: ../data/scan_dialog.ui.h:70 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "備註"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:71
+#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
 #: ../data/scan_dialog.ui.h:72 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "作曲者"
 
-#: ../data/browser.ui.h:19 ../data/search_dialog.ui.h:23
+#: ../data/browser.ui.h:20 ../data/search_dialog.ui.h:23
 msgid "Original Artist"
 msgstr "原唱者"
 
-#: ../data/browser.ui.h:20 ../data/search_dialog.ui.h:24
+#: ../data/browser.ui.h:21 ../data/search_dialog.ui.h:24
 #, fuzzy
 msgid "Orig. year"
 msgstr "原唱者"
 
-#: ../data/browser.ui.h:21 ../data/scan_dialog.ui.h:76
+#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:76
 #: ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "版權所有者"
 
-#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:78
+#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:78
 #: ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "網址"
 
-#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:80
+#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:80
 #: ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "編碼程式"
@@ -200,7 +204,7 @@ msgstr "輸入要執行的程式；當前目錄會自動引入為參數"
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3015 ../src/browser.c:916 ../src/browser.c:3841
+#: ../src/application_window.c:3015 ../src/browser.c:932 ../src/browser.c:3869
 #: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
 #: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
 msgid "_Cancel"
@@ -1036,7 +1040,7 @@ msgid "Write information using:"
 msgstr "以此寫入資訊："
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3016
-#: ../src/browser.c:917 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.c:933 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 msgid "_Save"
@@ -3059,8 +3063,8 @@ msgstr "已刪除所有檔案"
 msgid "All tags have been removed"
 msgstr "已移除所有標籤"
 
-#: ../src/application_window.c:1474 ../src/browser.c:362 ../src/browser.c:405
-#: ../src/browser.c:439 ../src/browser.c:4648 ../src/browser.c:4723
+#: ../src/application_window.c:1474 ../src/browser.c:363 ../src/browser.c:406
+#: ../src/browser.c:440 ../src/browser.c:4676 ../src/browser.c:4751
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "未能啟動「%s」程式"
@@ -3116,11 +3120,11 @@ msgstr "檔案：「%s」"
 msgid "Normal exit"
 msgstr "正常結束"
 
-#: ../src/application_window.c:3013 ../src/browser.c:911
+#: ../src/application_window.c:3013 ../src/browser.c:927
 msgid "Some files have been modified but not saved"
 msgstr "某些檔案已修改，但未有儲存"
 
-#: ../src/application_window.c:3014 ../src/browser.c:915 ../src/easytag.c:233
+#: ../src/application_window.c:3014 ../src/browser.c:931 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr "放棄(_D)"
@@ -3133,70 +3137,70 @@ msgstr "結束"
 msgid "Do you want to save them before quitting?"
 msgstr "結束前要儲存嗎？"
 
-#: ../src/browser.c:612
+#: ../src/browser.c:628
 msgid "New default directory selected for browser"
 msgstr "為瀏覽選取新預設目錄。"
 
-#: ../src/browser.c:914
+#: ../src/browser.c:930
 msgid "Do you want to save them before changing directory?"
 msgstr "變更目錄前要儲存嗎？"
 
-#: ../src/browser.c:921
+#: ../src/browser.c:937
 msgid "Confirm Directory Change"
 msgstr "確認變更目錄"
 
-#: ../src/browser.c:2626
+#: ../src/browser.c:2654
 msgid "All albums"
 msgstr "所有專輯"
 
-#: ../src/browser.c:3878
+#: ../src/browser.c:3906
 msgid "Select File"
 msgstr "選取檔案"
 
-#: ../src/browser.c:3885
+#: ../src/browser.c:3913
 msgid "Select Directory"
 msgstr "選取目錄"
 
-#: ../src/browser.c:4152
+#: ../src/browser.c:4180
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "「%s」目錄更名為："
 
-#: ../src/browser.c:4288
+#: ../src/browser.c:4316
 msgid "You must type a directory name"
 msgstr "必須輸入目錄名稱"
 
-#: ../src/browser.c:4289 ../src/browser.c:4311
+#: ../src/browser.c:4317 ../src/browser.c:4339
 msgid "Directory Name Error"
 msgstr "目錄名稱出錯"
 
-#: ../src/browser.c:4307
+#: ../src/browser.c:4335
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "無法將檔名「%s」轉換為檔名編碼"
 
-#: ../src/browser.c:4310
+#: ../src/browser.c:4338
 msgid "Please use another name."
 msgstr "請使用其他名稱。"
 
-#: ../src/browser.c:4382
+#: ../src/browser.c:4410
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "已有名為「%s」的目錄。"
 
-#: ../src/browser.c:4383 ../src/easytag.c:650
+#: ../src/browser.c:4411 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "檔案更名出錯"
 
-#: ../src/browser.c:4422 ../src/browser.c:4451
+#: ../src/browser.c:4450 ../src/browser.c:4479
 msgid "Rename Directory Error"
 msgstr "目錄更名出錯"
 
-#: ../src/browser.c:4492
+#: ../src/browser.c:4520
 msgid "Directory renamed"
 msgstr "目錄已更名"
 
-#: ../src/browser.c:4640 ../src/browser.c:4715
+#: ../src/browser.c:4668 ../src/browser.c:4743
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "執行命令「%s」"
@@ -5886,9 +5890,6 @@ msgstr "Wavpack 檔案"
 
 #~ msgid "Local CD Data Base"
 #~ msgstr "本機 CD 資料庫"
-
-#~ msgid "Path :"
-#~ msgstr "路徑 :"
 
 #~ msgid ""
 #~ "Specify the directory where are located the local cd data base. The local "

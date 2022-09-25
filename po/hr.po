@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-18 16:56+0200\n"
+"POT-Creation-Date: 2022-09-25 15:22+0200\n"
 "PO-Revision-Date: 2018-03-14 20:24+0100\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <hr@li.org>\n"
@@ -77,7 +77,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Odaberi mapu za prikaz u pregledniku"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3842
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3870
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "_Otvori"
@@ -111,78 +111,82 @@ msgstr "# Datoteke"
 msgid "Album"
 msgstr "Album"
 
-#: ../data/browser.ui.h:9 ../data/cddb_dialog.ui.h:38
+#: ../data/browser.ui.h:9
+msgid "Path"
+msgstr "Putanja"
+
+#: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
 #: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:58
 #: ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "Naziv datoteke"
 
-#: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:39
+#: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
 #: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:60
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Naslov"
 
-#: ../data/browser.ui.h:11 ../data/scan_dialog.ui.h:64
+#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:64
 #: ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Izvođač albuma"
 
-#: ../data/browser.ui.h:12 ../data/cddb_dialog.ui.h:40
+#: ../data/browser.ui.h:13 ../data/cddb_dialog.ui.h:40
 #: ../data/search_dialog.ui.h:18
 msgid "Year"
 msgstr "Godina"
 
-#: ../data/browser.ui.h:13
+#: ../data/browser.ui.h:14
 #, fuzzy
 msgid "Rel. year"
 msgstr "Izvorni izvođač"
 
-#: ../data/browser.ui.h:14
+#: ../data/browser.ui.h:15
 msgid "Disc"
 msgstr "Disk"
 
-#: ../data/browser.ui.h:15 ../data/search_dialog.ui.h:19
+#: ../data/browser.ui.h:16 ../data/search_dialog.ui.h:19
 msgid "Track"
 msgstr "Broj"
 
-#: ../data/browser.ui.h:16 ../data/cddb_dialog.ui.h:43
+#: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
 #: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:68
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Vrsta glazbe"
 
-#: ../data/browser.ui.h:17 ../data/preferences_dialog.ui.h:69
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
 #: ../data/scan_dialog.ui.h:70 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Komentar"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:71
+#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
 #: ../data/scan_dialog.ui.h:72 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Skladatelj"
 
-#: ../data/browser.ui.h:19 ../data/search_dialog.ui.h:23
+#: ../data/browser.ui.h:20 ../data/search_dialog.ui.h:23
 msgid "Original Artist"
 msgstr "Izvorni izvođač"
 
-#: ../data/browser.ui.h:20 ../data/search_dialog.ui.h:24
+#: ../data/browser.ui.h:21 ../data/search_dialog.ui.h:24
 #, fuzzy
 msgid "Orig. year"
 msgstr "Izvorni izvođač"
 
-#: ../data/browser.ui.h:21 ../data/scan_dialog.ui.h:76
+#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:76
 #: ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "Autorsko pravo"
 
-#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:78
+#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:78
 #: ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "URL"
 
-#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:80
+#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:80
 #: ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "Enkôdirao"
@@ -203,7 +207,7 @@ msgstr "Upišite program za pokretanje, primit će trenutnu mapu kao parametar"
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3015 ../src/browser.c:916 ../src/browser.c:3841
+#: ../src/application_window.c:3015 ../src/browser.c:932 ../src/browser.c:3869
 #: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
 #: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
 msgid "_Cancel"
@@ -1051,7 +1055,7 @@ msgid "Write information using:"
 msgstr "Zapiši informacije koristeći:"
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3016
-#: ../src/browser.c:917 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.c:933 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 msgid "_Save"
@@ -3192,8 +3196,8 @@ msgstr "Sve datoteke su obrisane"
 msgid "All tags have been removed"
 msgstr "Sve oznake su uklonjene"
 
-#: ../src/application_window.c:1474 ../src/browser.c:362 ../src/browser.c:405
-#: ../src/browser.c:439 ../src/browser.c:4648 ../src/browser.c:4723
+#: ../src/application_window.c:1474 ../src/browser.c:363 ../src/browser.c:406
+#: ../src/browser.c:440 ../src/browser.c:4676 ../src/browser.c:4751
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Neuspješno pokretanje programa '%s'"
@@ -3252,11 +3256,11 @@ msgstr "Datoteka: '%s'"
 msgid "Normal exit"
 msgstr "Normalno zatvaranje"
 
-#: ../src/application_window.c:3013 ../src/browser.c:911
+#: ../src/application_window.c:3013 ../src/browser.c:927
 msgid "Some files have been modified but not saved"
 msgstr "Neke datoteke su promijenjene ali nisu spremljene"
 
-#: ../src/application_window.c:3014 ../src/browser.c:915 ../src/easytag.c:233
+#: ../src/application_window.c:3014 ../src/browser.c:931 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr "_Zatvori"
@@ -3269,72 +3273,72 @@ msgstr "Zatvori"
 msgid "Do you want to save them before quitting?"
 msgstr "Želite li ih spremiti prije zatvaranja?"
 
-#: ../src/browser.c:612
+#: ../src/browser.c:628
 msgid "New default directory selected for browser"
 msgstr "Odabrana je nova zadana mapa za preglednik"
 
-#: ../src/browser.c:914
+#: ../src/browser.c:930
 msgid "Do you want to save them before changing directory?"
 msgstr "Želite li ih spremiti prije promjene mape?"
 
-#: ../src/browser.c:921
+#: ../src/browser.c:937
 msgid "Confirm Directory Change"
 msgstr "Potvrdi promjenu mape"
 
-#: ../src/browser.c:2626
+#: ../src/browser.c:2654
 msgid "All albums"
 msgstr "Svi albumi"
 
-#: ../src/browser.c:3878
+#: ../src/browser.c:3906
 msgid "Select File"
 msgstr "Odaberi datoteku"
 
-#: ../src/browser.c:3885
+#: ../src/browser.c:3913
 msgid "Select Directory"
 msgstr "Odaberi mapu"
 
-#: ../src/browser.c:4152
+#: ../src/browser.c:4180
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Preimenuj mapu '%s' u:"
 
-#: ../src/browser.c:4288
+#: ../src/browser.c:4316
 msgid "You must type a directory name"
 msgstr "Morate upisati naziv mape"
 
-#: ../src/browser.c:4289 ../src/browser.c:4311
+#: ../src/browser.c:4317 ../src/browser.c:4339
 msgid "Directory Name Error"
 msgstr "Mapa je preimenovana"
 
-#: ../src/browser.c:4307
+#: ../src/browser.c:4335
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr ""
 "Nemoguće je pomijeniti naziv datoteke '%s' u kôdiranje naziva datoteka "
 "sustava"
 
-#: ../src/browser.c:4310
+#: ../src/browser.c:4338
 msgid "Please use another name."
 msgstr "Koristite drugi naziv."
 
-#: ../src/browser.c:4382
+#: ../src/browser.c:4410
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Mapa naziva '%s' već postoji."
 
-#: ../src/browser.c:4383 ../src/easytag.c:650
+#: ../src/browser.c:4411 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Greška preimenovanja datoteke"
 
-#: ../src/browser.c:4422 ../src/browser.c:4451
+#: ../src/browser.c:4450 ../src/browser.c:4479
 msgid "Rename Directory Error"
 msgstr "Greška preimenovanja mape"
 
-#: ../src/browser.c:4492
+#: ../src/browser.c:4520
 msgid "Directory renamed"
 msgstr "Mapa je preimenovana"
 
-#: ../src/browser.c:4640 ../src/browser.c:4715
+#: ../src/browser.c:4668 ../src/browser.c:4743
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "Izvršna naredba: '%s'"
@@ -6327,9 +6331,6 @@ msgstr "Wavpack dateoteka"
 
 #~ msgid "Local CDDB"
 #~ msgstr "Lokalna CD baza podataka"
-
-#~ msgid "Path:"
-#~ msgstr "Putanja:"
 
 #~ msgid ""
 #~ "Specify the directory where the local CD database is located. The local "

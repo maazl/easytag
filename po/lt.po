@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 2.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-18 16:56+0200\n"
+"POT-Creation-Date: 2022-09-25 15:22+0200\n"
 "PO-Revision-Date: 2016-01-08 12:17+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
@@ -81,7 +81,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Įveskite kurį aplanką naršyti."
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3842
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3870
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr ""
@@ -115,78 +115,82 @@ msgstr "# Failai"
 msgid "Album"
 msgstr "Albumas"
 
-#: ../data/browser.ui.h:9 ../data/cddb_dialog.ui.h:38
+#: ../data/browser.ui.h:9
+msgid "Path"
+msgstr "Kelias"
+
+#: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
 #: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:58
 #: ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "Failo pavadinimas"
 
-#: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:39
+#: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
 #: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:60
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Pavadinimas"
 
-#: ../data/browser.ui.h:11 ../data/scan_dialog.ui.h:64
+#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:64
 #: ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Albumo atlikėjas"
 
-#: ../data/browser.ui.h:12 ../data/cddb_dialog.ui.h:40
+#: ../data/browser.ui.h:13 ../data/cddb_dialog.ui.h:40
 #: ../data/search_dialog.ui.h:18
 msgid "Year"
 msgstr "Metai"
 
-#: ../data/browser.ui.h:13
+#: ../data/browser.ui.h:14
 #, fuzzy
 msgid "Rel. year"
 msgstr "Originalus atlikėjas"
 
-#: ../data/browser.ui.h:14
+#: ../data/browser.ui.h:15
 msgid "Disc"
 msgstr "Diskas"
 
-#: ../data/browser.ui.h:15 ../data/search_dialog.ui.h:19
+#: ../data/browser.ui.h:16 ../data/search_dialog.ui.h:19
 msgid "Track"
 msgstr "Takelis"
 
-#: ../data/browser.ui.h:16 ../data/cddb_dialog.ui.h:43
+#: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
 #: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:68
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Žanras"
 
-#: ../data/browser.ui.h:17 ../data/preferences_dialog.ui.h:69
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
 #: ../data/scan_dialog.ui.h:70 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Komentaras"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:71
+#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
 #: ../data/scan_dialog.ui.h:72 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Kompozitorius"
 
-#: ../data/browser.ui.h:19 ../data/search_dialog.ui.h:23
+#: ../data/browser.ui.h:20 ../data/search_dialog.ui.h:23
 msgid "Original Artist"
 msgstr "Originalus atlikėjas"
 
-#: ../data/browser.ui.h:20 ../data/search_dialog.ui.h:24
+#: ../data/browser.ui.h:21 ../data/search_dialog.ui.h:24
 #, fuzzy
 msgid "Orig. year"
 msgstr "Originalus atlikėjas"
 
-#: ../data/browser.ui.h:21 ../data/scan_dialog.ui.h:76
+#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:76
 #: ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "Autorinės teisės"
 
-#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:78
+#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:78
 #: ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "URL"
 
-#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:80
+#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:80
 #: ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "Kodavo"
@@ -209,7 +213,7 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3015 ../src/browser.c:916 ../src/browser.c:3841
+#: ../src/application_window.c:3015 ../src/browser.c:932 ../src/browser.c:3869
 #: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
 #: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
 msgid "_Cancel"
@@ -1098,7 +1102,7 @@ msgid "Write information using:"
 msgstr "Rašyti informaciją naudojant:"
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3016
-#: ../src/browser.c:917 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.c:933 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 #, fuzzy
@@ -3301,8 +3305,8 @@ msgstr "Visi failai pašalinti"
 msgid "All tags have been removed"
 msgstr "Visos žymos pašalintos"
 
-#: ../src/application_window.c:1474 ../src/browser.c:362 ../src/browser.c:405
-#: ../src/browser.c:439 ../src/browser.c:4648 ../src/browser.c:4723
+#: ../src/application_window.c:1474 ../src/browser.c:363 ../src/browser.c:406
+#: ../src/browser.c:440 ../src/browser.c:4676 ../src/browser.c:4751
 #, fuzzy, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Nepavyko paleisti programos: %s"
@@ -3362,11 +3366,11 @@ msgstr "Failas: „%s“"
 msgid "Normal exit"
 msgstr "EasyTAG: Normalus išėjimas."
 
-#: ../src/application_window.c:3013 ../src/browser.c:911
+#: ../src/application_window.c:3013 ../src/browser.c:927
 msgid "Some files have been modified but not saved"
 msgstr "Kai kurie failai buvo pakeisti bet neįrašyti"
 
-#: ../src/application_window.c:3014 ../src/browser.c:915 ../src/easytag.c:233
+#: ../src/application_window.c:3014 ../src/browser.c:931 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 #, fuzzy
 msgid "_Discard"
@@ -3380,74 +3384,74 @@ msgstr "Išeiti"
 msgid "Do you want to save them before quitting?"
 msgstr "Ar norite juos įrašyti prieš išeidami?"
 
-#: ../src/browser.c:612
+#: ../src/browser.c:628
 #, fuzzy
 msgid "New default directory selected for browser"
 msgstr "Pasirinkite, kurį aplanką naršyti"
 
-#: ../src/browser.c:914
+#: ../src/browser.c:930
 #, fuzzy
 msgid "Do you want to save them before changing directory?"
 msgstr "Ar norite juos įrašyti prieš pakeisdami aplanką?"
 
-#: ../src/browser.c:921
+#: ../src/browser.c:937
 msgid "Confirm Directory Change"
 msgstr "Patvirtinkite aplanko pakeitimą"
 
-#: ../src/browser.c:2626
+#: ../src/browser.c:2654
 #, fuzzy
 msgid "All albums"
 msgstr "<Visi albumai>"
 
-#: ../src/browser.c:3878
+#: ../src/browser.c:3906
 msgid "Select File"
 msgstr "Pasirinkite failą"
 
-#: ../src/browser.c:3885
+#: ../src/browser.c:3913
 msgid "Select Directory"
 msgstr "Parinkite aplanką"
 
-#: ../src/browser.c:4152
+#: ../src/browser.c:4180
 #, fuzzy, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Pervadinti aplanką „%s“ į:"
 
-#: ../src/browser.c:4288
+#: ../src/browser.c:4316
 msgid "You must type a directory name"
 msgstr "Turite nurodyti aplanko pavadinimą"
 
-#: ../src/browser.c:4289 ../src/browser.c:4311
+#: ../src/browser.c:4317 ../src/browser.c:4339
 msgid "Directory Name Error"
 msgstr "Aplanko pavadinimo klaida"
 
-#: ../src/browser.c:4307
+#: ../src/browser.c:4335
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Nepavyko konvertuoti „%s“ į failo pavadinimo koduotę."
 
-#: ../src/browser.c:4310
+#: ../src/browser.c:4338
 #, fuzzy
 msgid "Please use another name."
 msgstr "Naudokite kitą pavadinimą"
 
-#: ../src/browser.c:4382
+#: ../src/browser.c:4410
 #, fuzzy, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Aplankas „%s“ jau yra"
 
-#: ../src/browser.c:4383 ../src/easytag.c:650
+#: ../src/browser.c:4411 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Failo pervadinimo klaida"
 
-#: ../src/browser.c:4422 ../src/browser.c:4451
+#: ../src/browser.c:4450 ../src/browser.c:4479
 msgid "Rename Directory Error"
 msgstr "Aplanko pervadinimo klaida"
 
-#: ../src/browser.c:4492
+#: ../src/browser.c:4520
 msgid "Directory renamed"
 msgstr "Aplankas pervadintas"
 
-#: ../src/browser.c:4640 ../src/browser.c:4715
+#: ../src/browser.c:4668 ../src/browser.c:4743
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "Vykdyta komanda: %s"
@@ -5808,9 +5812,6 @@ msgstr "Wavpack failas"
 
 #~ msgid "Local CDDB"
 #~ msgstr "Vietinė CDDB"
-
-#~ msgid "Path:"
-#~ msgstr "Kelias:"
 
 #~ msgid ""
 #~ "Specify the directory where the local CD database is located. The local "

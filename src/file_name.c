@@ -71,20 +71,18 @@ ET_Set_Filename_File_Name_Item (File_Name *FileName,
     {
         FileName->value_utf8 = g_strdup (filename_utf8);
         FileName->value = g_strdup (filename);
-        FileName->value_ck = g_utf8_collate_key_for_filename (FileName->value_utf8, -1);
     }
     else if (filename_utf8)
     {
         FileName->value_utf8 = g_strdup (filename_utf8);
         FileName->value = filename_from_display (filename_utf8);
-        FileName->value_ck = g_utf8_collate_key_for_filename (FileName->value_utf8, -1);
     }
     else if (filename)
     {
         FileName->value_utf8 = g_filename_display_name (filename);
         FileName->value = g_strdup (filename);
-        FileName->value_ck = g_utf8_collate_key_for_filename (FileName->value_utf8, -1);
     }
+    FileName->value_ck = g_utf8_collate_key_for_filename (FileName->value_utf8, -1);
 }
 
 gboolean

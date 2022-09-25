@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 1.99.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-18 16:56+0200\n"
+"POT-Creation-Date: 2022-09-25 15:22+0200\n"
 "PO-Revision-Date: 2004-11-21 19:20+0100\n"
 "Last-Translator: Vincent van Adrighem <adrighem@gnome.org>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -72,7 +72,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Geef een map in om te bekijken."
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3842
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3870
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr ""
@@ -108,84 +108,88 @@ msgstr "Bestanden"
 msgid "Album"
 msgstr "Album"
 
-#: ../data/browser.ui.h:9 ../data/cddb_dialog.ui.h:38
+#: ../data/browser.ui.h:9
+msgid "Path"
+msgstr "Pad"
+
+#: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
 #: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:58
 #: ../data/search_dialog.ui.h:12
 #, fuzzy
 msgid "Filename"
 msgstr "Bestandsnaam"
 
-#: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:39
+#: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
 #: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:60
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Titel"
 
-#: ../data/browser.ui.h:11 ../data/scan_dialog.ui.h:64
+#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:64
 #: ../data/search_dialog.ui.h:15
 #, fuzzy
 msgid "Album Artist"
 msgstr "Artiest"
 
-#: ../data/browser.ui.h:12 ../data/cddb_dialog.ui.h:40
+#: ../data/browser.ui.h:13 ../data/cddb_dialog.ui.h:40
 #: ../data/search_dialog.ui.h:18
 msgid "Year"
 msgstr "Jaar"
 
-#: ../data/browser.ui.h:13
+#: ../data/browser.ui.h:14
 #, fuzzy
 msgid "Rel. year"
 msgstr "Orig. artiest:"
 
-#: ../data/browser.ui.h:14
+#: ../data/browser.ui.h:15
 msgid "Disc"
 msgstr ""
 
-#: ../data/browser.ui.h:15 ../data/search_dialog.ui.h:19
+#: ../data/browser.ui.h:16 ../data/search_dialog.ui.h:19
 msgid "Track"
 msgstr "Track"
 
-#: ../data/browser.ui.h:16 ../data/cddb_dialog.ui.h:43
+#: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
 #: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:68
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Genre"
 
-#: ../data/browser.ui.h:17 ../data/preferences_dialog.ui.h:69
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
 #: ../data/scan_dialog.ui.h:70 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Commentaar"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:71
+#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
 #: ../data/scan_dialog.ui.h:72 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 #, fuzzy
 msgid "Composer"
 msgstr "Componist:"
 
-#: ../data/browser.ui.h:19 ../data/search_dialog.ui.h:23
+#: ../data/browser.ui.h:20 ../data/search_dialog.ui.h:23
 #, fuzzy
 msgid "Original Artist"
 msgstr "Orig. artiest:"
 
-#: ../data/browser.ui.h:20 ../data/search_dialog.ui.h:24
+#: ../data/browser.ui.h:21 ../data/search_dialog.ui.h:24
 #, fuzzy
 msgid "Orig. year"
 msgstr "Orig. artiest:"
 
-#: ../data/browser.ui.h:21 ../data/scan_dialog.ui.h:76
+#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:76
 #: ../data/search_dialog.ui.h:25
 #, fuzzy
 msgid "Copyright"
 msgstr "Copyright:"
 
-#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:78
+#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:78
 #: ../data/search_dialog.ui.h:26
 #, fuzzy
 msgid "URL"
 msgstr "URL:"
 
-#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:80
+#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:80
 #: ../data/search_dialog.ui.h:27
 #, fuzzy
 msgid "Encoded By"
@@ -211,7 +215,7 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3015 ../src/browser.c:916 ../src/browser.c:3841
+#: ../src/application_window.c:3015 ../src/browser.c:932 ../src/browser.c:3869
 #: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
 #: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
 #, fuzzy
@@ -1141,7 +1145,7 @@ msgid "Write information using:"
 msgstr "Bewaar info gebruik makend van: "
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3016
-#: ../src/browser.c:917 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.c:933 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 #, fuzzy
@@ -3353,8 +3357,8 @@ msgstr "Alle bestanden zijn gewist..."
 msgid "All tags have been removed"
 msgstr "Alle tags zijn verwijderd"
 
-#: ../src/application_window.c:1474 ../src/browser.c:362 ../src/browser.c:405
-#: ../src/browser.c:439 ../src/browser.c:4648 ../src/browser.c:4723
+#: ../src/application_window.c:1474 ../src/browser.c:363 ../src/browser.c:406
+#: ../src/browser.c:440 ../src/browser.c:4676 ../src/browser.c:4751
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr ""
@@ -3415,12 +3419,12 @@ msgstr "Bestand: '%s'"
 msgid "Normal exit"
 msgstr "EasyTAG: normaal afgesloten! Tot ziens..."
 
-#: ../src/application_window.c:3013 ../src/browser.c:911
+#: ../src/application_window.c:3013 ../src/browser.c:927
 #, fuzzy
 msgid "Some files have been modified but not saved"
 msgstr "Alle bestanden zijn bewaard..."
 
-#: ../src/application_window.c:3014 ../src/browser.c:915 ../src/easytag.c:233
+#: ../src/application_window.c:3014 ../src/browser.c:931 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr ""
@@ -3438,12 +3442,12 @@ msgstr ""
 "naar \n"
 "'%s' hernoemen?"
 
-#: ../src/browser.c:612
+#: ../src/browser.c:628
 #, fuzzy
 msgid "New default directory selected for browser"
 msgstr "Geef een map in om te bekijken."
 
-#: ../src/browser.c:914
+#: ../src/browser.c:930
 #, fuzzy
 msgid "Do you want to save them before changing directory?"
 msgstr ""
@@ -3452,71 +3456,71 @@ msgstr ""
 "naar \n"
 "'%s' hernoemen?"
 
-#: ../src/browser.c:921
+#: ../src/browser.c:937
 msgid "Confirm Directory Change"
 msgstr ""
 
-#: ../src/browser.c:2626
+#: ../src/browser.c:2654
 #, fuzzy
 msgid "All albums"
 msgstr "Albums"
 
-#: ../src/browser.c:3878
+#: ../src/browser.c:3906
 #, fuzzy
 msgid "Select File"
 msgstr "Verwijderen"
 
-#: ../src/browser.c:3885
+#: ../src/browser.c:3913
 #, fuzzy
 msgid "Select Directory"
 msgstr "Selecteer map..."
 
-#: ../src/browser.c:4152
+#: ../src/browser.c:4180
 #, fuzzy, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "De map '%s' hernoemen naar:"
 
-#: ../src/browser.c:4288
+#: ../src/browser.c:4316
 #, fuzzy
 msgid "You must type a directory name"
 msgstr "Je moet wel een naam invoeren!"
 
-#: ../src/browser.c:4289 ../src/browser.c:4311
+#: ../src/browser.c:4317 ../src/browser.c:4339
 #, fuzzy
 msgid "Directory Name Error"
 msgstr "Map hernoemd"
 
-#: ../src/browser.c:4307
+#: ../src/browser.c:4335
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Kan bestandsnaam '%s' niet omzetten naar systeemcodering."
 
-#: ../src/browser.c:4310
+#: ../src/browser.c:4338
 msgid "Please use another name."
 msgstr ""
 
-#: ../src/browser.c:4382
+#: ../src/browser.c:4410
 #, fuzzy, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr ""
 "Playlist bestand '%s' bestaat reeds!\n"
 "Overschrijven?"
 
-#: ../src/browser.c:4383 ../src/easytag.c:650
+#: ../src/browser.c:4411 ../src/easytag.c:650
 #, fuzzy
 msgid "Rename File Error"
 msgstr "Hernoem bestand"
 
-#: ../src/browser.c:4422 ../src/browser.c:4451
+#: ../src/browser.c:4450 ../src/browser.c:4479
 #, fuzzy
 msgid "Rename Directory Error"
 msgstr "Map hernoemen..."
 
-#: ../src/browser.c:4492
+#: ../src/browser.c:4520
 msgid "Directory renamed"
 msgstr "Map hernoemd"
 
-#: ../src/browser.c:4640 ../src/browser.c:4715
+#: ../src/browser.c:4668 ../src/browser.c:4743
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "Commando uitgevoerd: '%s %s'"
@@ -6215,10 +6219,6 @@ msgstr "MusePack-bestand"
 #, fuzzy
 #~ msgid "Local CD Data Base"
 #~ msgstr "Doorzoek CDDB"
-
-#, fuzzy
-#~ msgid "Path :"
-#~ msgstr "CGI-pad: "
 
 #~ msgid "Proxy Settings"
 #~ msgstr "Proxy"
