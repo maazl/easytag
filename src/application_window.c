@@ -2855,27 +2855,14 @@ et_application_window_browser_get_selection (EtApplicationWindow *self)
 }
 
 GtkTreeViewColumn *
-et_application_window_browser_get_column_for_column_id (EtApplicationWindow *self,
-                                                        gint column_id)
+et_application_window_browser_get_column_for_sort_mode (EtApplicationWindow *self,
+                                                        EtSortMode sort_mode)
 {
     EtApplicationWindowPrivate *priv;
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_browser_get_column_for_column_id (ET_BROWSER (priv->browser),
-                                                column_id);
-}
-
-GtkSortType
-et_application_window_browser_get_sort_order_for_column_id (EtApplicationWindow *self,
-                                                            gint column_id)
-{
-    EtApplicationWindowPrivate *priv;
-
-    priv = et_application_window_get_instance_private (self);
-
-    return et_browser_get_sort_order_for_column_id (ET_BROWSER (priv->browser),
-                                                    column_id);
+    return et_browser_get_column_for_sort_mode (ET_BROWSER (priv->browser), sort_mode);
 }
 
 void

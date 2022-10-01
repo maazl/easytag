@@ -41,7 +41,7 @@ dnl -------------------------------
 dnl Checks for programs.
 dnl -------------------------------
 AC_PROG_CC
-AM_PROG_CC_C_O
+AC_PROG_CC_C99
 AC_PROG_CXX
 AC_PROG_CXXCPP
 AC_PROG_SED
@@ -362,10 +362,10 @@ AC_SUBST([SOUP_DEPRECATION_FLAGS],
          ["-DSOUP_VERSION_MIN_REQUIRED=SOUP_VERSION_2_42 -DSOUP_VERSION_MAX_ALLOWED=SOUP_VERSION_2_42"])
 PKG_CHECK_MODULES([EASYTAG], [$CDDB_DEPS $GIO_DEPS $GTK_DEPS $OPUS_DEPS $OGG_DEPS $SPEEX_DEPS $FLAC_DEPS $ID3TAG_DEPS $TAGLIB_DEPS $WAVPACK_DEPS])
 
-dnl Set warning flags
-AX_IS_RELEASE([git-directory])
-AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS],
-                  [$ax_is_release])
+dnl Set warning flags - creates dozens of false positives in C99 mode
+dnl AX_IS_RELEASE([git-directory])
+dnl AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS],
+dnl                   [$ax_is_release])
 
 GLIB_GSETTINGS
 

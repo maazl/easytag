@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 #include "file_info.h"
 #include "file_name.h"
 #include "file_tag.h"
+#include "setting.h"
 
 /*
  * Description of each item of the ETFileList list
@@ -131,6 +132,8 @@ gint ET_Comp_Func_Sort_File_By_Ascending_File_Bitrate (const ET_File *ETFile1, c
 gint ET_Comp_Func_Sort_File_By_Descending_File_Bitrate (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Ascending_File_Samplerate (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Descending_File_Samplerate (const ET_File *ETFile1, const ET_File *ETFile2);
+
+gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1, const ET_File *ETFile2);
 
 G_END_DECLS
 

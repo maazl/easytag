@@ -113,8 +113,7 @@ GFile * et_browser_get_current_path (EtBrowser *self);
 GList * et_browser_get_selected_files (EtBrowser *self);
 GtkTreeSelection * et_browser_get_selection (EtBrowser *self);
 
-GtkTreeViewColumn * et_browser_get_column_for_column_id (EtBrowser *self, gint column_id);
-GtkSortType et_browser_get_sort_order_for_column_id (EtBrowser *self, gint column_id);
+GtkTreeViewColumn * et_browser_get_column_for_sort_mode (EtBrowser *self, EtSortMode sort_mode);
 
 G_END_DECLS
 

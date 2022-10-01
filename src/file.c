@@ -1004,6 +1004,114 @@ ET_Comp_Func_Sort_File_By_Descending_File_Samplerate (const ET_File *ETFile1,
     return ET_Comp_Func_Sort_File_By_Ascending_File_Samplerate(ETFile2,ETFile1);
 }
 
+/*
+ * Get sort function by sort mode.
+ */
+gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1, const ET_File *ETFile2)
+{
+	switch (sort_mode)
+	{
+	case ET_SORT_MODE_ASCENDING_FILEPATH:
+		return ET_Comp_Func_Sort_File_By_Ascending_Filename;
+	case ET_SORT_MODE_DESCENDING_FILEPATH:
+		return ET_Comp_Func_Sort_File_By_Descending_Filename;
+	case ET_SORT_MODE_ASCENDING_FILENAME:
+		return ET_Comp_Func_Sort_File_By_Ascending_Filename;
+	case ET_SORT_MODE_DESCENDING_FILENAME:
+		return ET_Comp_Func_Sort_File_By_Descending_Filename;
+	case ET_SORT_MODE_ASCENDING_TITLE:
+		return ET_Comp_Func_Sort_File_By_Ascending_Title;
+	case ET_SORT_MODE_DESCENDING_TITLE:
+		return ET_Comp_Func_Sort_File_By_Descending_Title;
+	case ET_SORT_MODE_ASCENDING_ARTIST:
+		return ET_Comp_Func_Sort_File_By_Ascending_Artist;
+	case ET_SORT_MODE_DESCENDING_ARTIST:
+		return ET_Comp_Func_Sort_File_By_Descending_Artist;
+	case ET_SORT_MODE_ASCENDING_ALBUM_ARTIST:
+		return ET_Comp_Func_Sort_File_By_Ascending_Album_Artist;
+	case ET_SORT_MODE_DESCENDING_ALBUM_ARTIST:
+		return ET_Comp_Func_Sort_File_By_Descending_Album_Artist;
+	case ET_SORT_MODE_ASCENDING_ALBUM:
+		return ET_Comp_Func_Sort_File_By_Ascending_Album;
+	case ET_SORT_MODE_DESCENDING_ALBUM:
+		return ET_Comp_Func_Sort_File_By_Descending_Album;
+	case ET_SORT_MODE_ASCENDING_YEAR:
+		return ET_Comp_Func_Sort_File_By_Ascending_Year;
+	case ET_SORT_MODE_DESCENDING_YEAR:
+		return ET_Comp_Func_Sort_File_By_Descending_Year;
+	case ET_SORT_MODE_ASCENDING_RELEASE_YEAR:
+		return ET_Comp_Func_Sort_File_By_Ascending_Release_Year;
+	case ET_SORT_MODE_DESCENDING_RELEASE_YEAR:
+		return ET_Comp_Func_Sort_File_By_Descending_Release_Year;
+	case ET_SORT_MODE_ASCENDING_DISC_NUMBER:
+		return et_comp_func_sort_file_by_ascending_disc_number;
+	case ET_SORT_MODE_DESCENDING_DISC_NUMBER:
+		return et_comp_func_sort_file_by_descending_disc_number;
+	case ET_SORT_MODE_ASCENDING_TRACK_NUMBER:
+		return ET_Comp_Func_Sort_File_By_Ascending_Track_Number;
+	case ET_SORT_MODE_DESCENDING_TRACK_NUMBER:
+		return ET_Comp_Func_Sort_File_By_Descending_Track_Number;
+	case ET_SORT_MODE_ASCENDING_GENRE:
+		return ET_Comp_Func_Sort_File_By_Ascending_Genre;
+	case ET_SORT_MODE_DESCENDING_GENRE:
+		return ET_Comp_Func_Sort_File_By_Descending_Genre;
+	case ET_SORT_MODE_ASCENDING_COMMENT:
+		return ET_Comp_Func_Sort_File_By_Ascending_Comment;
+	case ET_SORT_MODE_DESCENDING_COMMENT:
+		return ET_Comp_Func_Sort_File_By_Descending_Comment;
+	case ET_SORT_MODE_ASCENDING_COMPOSER:
+		return ET_Comp_Func_Sort_File_By_Ascending_Composer;
+	case ET_SORT_MODE_DESCENDING_COMPOSER:
+		return ET_Comp_Func_Sort_File_By_Descending_Composer;
+	case ET_SORT_MODE_ASCENDING_ORIG_ARTIST:
+		return ET_Comp_Func_Sort_File_By_Ascending_Orig_Artist;
+	case ET_SORT_MODE_DESCENDING_ORIG_ARTIST:
+		return ET_Comp_Func_Sort_File_By_Descending_Orig_Artist;
+	case ET_SORT_MODE_ASCENDING_ORIG_YEAR:
+		return ET_Comp_Func_Sort_File_By_Ascending_Orig_Year;
+	case ET_SORT_MODE_DESCENDING_ORIG_YEAR:
+		return ET_Comp_Func_Sort_File_By_Descending_Orig_Year;
+	case ET_SORT_MODE_ASCENDING_COPYRIGHT:
+		return ET_Comp_Func_Sort_File_By_Ascending_Copyright;
+	case ET_SORT_MODE_DESCENDING_COPYRIGHT:
+		return ET_Comp_Func_Sort_File_By_Descending_Copyright;
+	case ET_SORT_MODE_ASCENDING_URL:
+		return ET_Comp_Func_Sort_File_By_Ascending_Url;
+	case ET_SORT_MODE_DESCENDING_URL:
+		return ET_Comp_Func_Sort_File_By_Descending_Url;
+	case ET_SORT_MODE_ASCENDING_ENCODED_BY:
+		return ET_Comp_Func_Sort_File_By_Ascending_Encoded_By;
+	case ET_SORT_MODE_DESCENDING_ENCODED_BY:
+		return ET_Comp_Func_Sort_File_By_Descending_Encoded_By;
+	case ET_SORT_MODE_ASCENDING_CREATION_DATE:
+		return ET_Comp_Func_Sort_File_By_Ascending_Creation_Date;
+	case ET_SORT_MODE_DESCENDING_CREATION_DATE:
+		return ET_Comp_Func_Sort_File_By_Descending_Creation_Date;
+	case ET_SORT_MODE_ASCENDING_FILE_TYPE:
+		return ET_Comp_Func_Sort_File_By_Ascending_File_Type;
+	case ET_SORT_MODE_DESCENDING_FILE_TYPE:
+		return ET_Comp_Func_Sort_File_By_Descending_File_Type;
+	case ET_SORT_MODE_ASCENDING_FILE_SIZE:
+		return ET_Comp_Func_Sort_File_By_Ascending_File_Size;
+	case ET_SORT_MODE_DESCENDING_FILE_SIZE:
+		return ET_Comp_Func_Sort_File_By_Descending_File_Size;
+	case ET_SORT_MODE_ASCENDING_FILE_DURATION:
+		return ET_Comp_Func_Sort_File_By_Ascending_File_Duration;
+	case ET_SORT_MODE_DESCENDING_FILE_DURATION:
+		return ET_Comp_Func_Sort_File_By_Descending_File_Duration;
+	case ET_SORT_MODE_ASCENDING_FILE_BITRATE:
+		return ET_Comp_Func_Sort_File_By_Ascending_File_Bitrate;
+	case ET_SORT_MODE_DESCENDING_FILE_BITRATE:
+		return ET_Comp_Func_Sort_File_By_Descending_File_Bitrate;
+	case ET_SORT_MODE_ASCENDING_FILE_SAMPLERATE:
+		return ET_Comp_Func_Sort_File_By_Ascending_File_Samplerate;
+	case ET_SORT_MODE_DESCENDING_FILE_SAMPLERATE:
+		return ET_Comp_Func_Sort_File_By_Descending_File_Samplerate;
+	}
+	g_assert_not_reached ();
+	return NULL;
+}
+
 /*********************
  * Freeing functions *
  *********************/
