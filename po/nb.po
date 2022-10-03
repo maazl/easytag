@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: easytag-2-2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-25 15:22+0200\n"
+"POT-Creation-Date: 2022-10-03 19:20+0200\n"
 "PO-Revision-Date: 2015-09-07 22:24+0200\n"
 "Last-Translator: Åka Sikrom <a4@hush.com>\n"
 "Language-Team: Norwegian bokmål\n"
@@ -75,7 +75,7 @@ msgstr "Åpne mapper og lydfiler med EasyTAG via skrivebordets lokalmenyer"
 msgid "Choose a directory to show in the browser"
 msgstr "Velg en mappe som skal vises i utforskeren"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3870
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "_Åpne"
@@ -85,7 +85,7 @@ msgid "Select a directory to browse"
 msgstr "Velg en mappe som skal utforskes"
 
 #. Translators: No files, as in "0 files".
-#: ../data/browser.ui.h:4 ../src/easytag.c:978
+#: ../data/browser.ui.h:4 ../src/easytag.c:979
 msgid "No files"
 msgstr "Ingen filer"
 
@@ -207,7 +207,7 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3015 ../src/browser.c:932 ../src/browser.c:3869
+#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
 #: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
 #: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
 msgid "_Cancel"
@@ -229,7 +229,7 @@ msgstr ""
 "parameter."
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:101 ../src/easytag.c:562
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:562
 msgid "Rename Directory"
 msgstr "Gi nytt navn til mappe"
 
@@ -731,13 +731,13 @@ msgstr "år"
 
 #: ../data/menus.ui.h:42
 #, fuzzy
-msgid "Ascending by original year"
-msgstr "Stigende, etter opprinnelig artist"
+msgid "Ascending by release year"
+msgstr "Stigende, etter år"
 
 #: ../data/menus.ui.h:43
 #, fuzzy
-msgid "Descending by original year"
-msgstr "Synkende, etter opprinnelig artist"
+msgid "Descending by release year"
+msgstr "år"
 
 #: ../data/menus.ui.h:44
 msgid "Ascending by genre"
@@ -772,218 +772,238 @@ msgid "Descending by original artist"
 msgstr "Synkende, etter opprinnelig artist"
 
 #: ../data/menus.ui.h:52
+#, fuzzy
+msgid "Ascending by original year"
+msgstr "Stigende, etter opprinnelig artist"
+
+#: ../data/menus.ui.h:53
+#, fuzzy
+msgid "Descending by original year"
+msgstr "Synkende, etter opprinnelig artist"
+
+#: ../data/menus.ui.h:54
 msgid "Ascending by copyright"
 msgstr "Stigende, etter opphavsrett"
 
-#: ../data/menus.ui.h:53
+#: ../data/menus.ui.h:55
 msgid "Descending by copyright"
 msgstr "Synkende, etter opphavsrett"
 
-#: ../data/menus.ui.h:54
+#: ../data/menus.ui.h:56
 msgid "Ascending by URL"
 msgstr "Stigende, etter nettadresse"
 
-#: ../data/menus.ui.h:55
+#: ../data/menus.ui.h:57
 msgid "Descending by URL"
 msgstr "Synkende, etter nettadresse"
 
-#: ../data/menus.ui.h:56
+#: ../data/menus.ui.h:58
 msgid "Ascending by encoder name"
 msgstr "Stigende, etter kodeprogram"
 
-#: ../data/menus.ui.h:57
+#: ../data/menus.ui.h:59
 msgid "Descending by encoder name"
 msgstr "Synkende, etter kodeprogram"
 
-#: ../data/menus.ui.h:58
+#: ../data/menus.ui.h:60
 msgid "Sort List by Property"
 msgstr "Sorter liste etter egenskap"
 
-#: ../data/menus.ui.h:59
+#: ../data/menus.ui.h:61
+#, fuzzy
+msgid "Ascending by file path"
+msgstr "Stigende, etter filtype"
+
+#: ../data/menus.ui.h:62
+#, fuzzy
+msgid "Descending by file path"
+msgstr "Synkende, etter filtype"
+
+#: ../data/menus.ui.h:63
 msgid "Ascending by filename"
 msgstr "Stigende rekkefølge, etter filnavn"
 
-#: ../data/menus.ui.h:60
+#: ../data/menus.ui.h:64
 msgid "Descending by filename"
 msgstr "Synkende rekkefølge, etter filnavn"
 
-#: ../data/menus.ui.h:61
+#: ../data/menus.ui.h:65
 msgid "Ascending by creation date"
 msgstr "Stigende, etter opprettelsesdato"
 
-#: ../data/menus.ui.h:62
+#: ../data/menus.ui.h:66
 msgid "Descending by creation date"
 msgstr "Synkende, etter opprettelsesdato"
 
-#: ../data/menus.ui.h:63
+#: ../data/menus.ui.h:67
 msgid "Ascending by file type"
 msgstr "Stigende, etter filtype"
 
-#: ../data/menus.ui.h:64
+#: ../data/menus.ui.h:68
 msgid "Descending by file type"
 msgstr "Synkende, etter filtype"
 
-#: ../data/menus.ui.h:65
+#: ../data/menus.ui.h:69
 msgid "Ascending by file size"
 msgstr "Stigende, etter filstørrelse"
 
-#: ../data/menus.ui.h:66
+#: ../data/menus.ui.h:70
 msgid "Descending by file size"
 msgstr "Synkende, etter filstørrelse"
 
-#: ../data/menus.ui.h:67
+#: ../data/menus.ui.h:71
 msgid "Ascending by duration"
 msgstr "Stigende, etter varighet"
 
-#: ../data/menus.ui.h:68
+#: ../data/menus.ui.h:72
 msgid "Descending by duration"
 msgstr "Synkende, etter varighet"
 
-#: ../data/menus.ui.h:69
+#: ../data/menus.ui.h:73
 msgid "Ascending by bit rate"
 msgstr "Stigende, etter bitfrekvens"
 
-#: ../data/menus.ui.h:70
+#: ../data/menus.ui.h:74
 msgid "Descending by bit rate"
 msgstr "Synkende, etter bitfrekvens"
 
-#: ../data/menus.ui.h:71
+#: ../data/menus.ui.h:75
 msgid "Ascending by sample rate"
 msgstr "Stigende, etter sample-frekvens"
 
-#: ../data/menus.ui.h:72
+#: ../data/menus.ui.h:76
 msgid "Descending by sample rate"
 msgstr "Synkende, etter sample-frekvens"
 
-#: ../data/menus.ui.h:73
+#: ../data/menus.ui.h:77
 msgid "Collapse Tree"
 msgstr "Fold sammen tre"
 
-#: ../data/menus.ui.h:74
+#: ../data/menus.ui.h:78
 msgid "Reload Tree"
 msgstr "Last inn trevisning på nytt"
 
-#: ../data/menus.ui.h:75
+#: ../data/menus.ui.h:79
 msgid "Reload Directory"
 msgstr "Last inn mappe på nytt"
 
-#: ../data/menus.ui.h:76
+#: ../data/menus.ui.h:80
 msgid "Show Hidden Directories"
 msgstr "Vis skjulte mapper"
 
-#: ../data/menus.ui.h:77
+#: ../data/menus.ui.h:81
 msgid "_Browser"
 msgstr "_Filutforsker"
 
-#: ../data/menus.ui.h:78
+#: ../data/menus.ui.h:82
 msgid "Set _Current Path as Default"
 msgstr "Bruk _gjeldende filsti som standard"
 
-#: ../data/menus.ui.h:79
+#: ../data/menus.ui.h:83
 msgid "Rename Directory…"
 msgstr "Gi nytt navn til mappe …"
 
-#: ../data/menus.ui.h:80
+#: ../data/menus.ui.h:84
 msgid "Browse Directory With…"
 msgstr "Utforsk mappe med …"
 
-#: ../data/menus.ui.h:81
+#: ../data/menus.ui.h:85
 msgid "Browse _Subdirectories"
 msgstr "Søk gjennom _undermapper"
 
-#: ../data/menus.ui.h:82
+#: ../data/menus.ui.h:86
 msgid "_Miscellaneous"
 msgstr "_Diverse"
 
-#: ../data/menus.ui.h:83
+#: ../data/menus.ui.h:87
 msgid "CDD_B Search…"
 msgstr "CDD_B-søk …"
 
-#: ../data/menus.ui.h:84
+#: ../data/menus.ui.h:88
 msgid "Load Filenames From a Text File…"
 msgstr "Last inn filnavn fra en tekstfil …"
 
-#: ../data/menus.ui.h:85 ../data/toolbar.ui.h:29
+#: ../data/menus.ui.h:89 ../data/toolbar.ui.h:29
 msgid "Generate Playlist…"
 msgstr "Lag en spilleliste …"
 
-#: ../data/menus.ui.h:86
+#: ../data/menus.ui.h:90
 msgid "_Go"
 msgstr "_Gå"
 
-#: ../data/menus.ui.h:87
+#: ../data/menus.ui.h:91
 msgid "_Home Directory"
 msgstr "_Hjemmemappe"
 
-#: ../data/menus.ui.h:88
+#: ../data/menus.ui.h:92
 msgid "Desktop Directory"
 msgstr "Skrivebordsmappe"
 
-#: ../data/menus.ui.h:89
+#: ../data/menus.ui.h:93
 msgid "Documents Directory"
 msgstr "Dokumentmappe"
 
-#: ../data/menus.ui.h:90
+#: ../data/menus.ui.h:94
 msgid "Downloads Directory"
 msgstr "Nedlastinger-mappe"
 
-#: ../data/menus.ui.h:91
+#: ../data/menus.ui.h:95
 msgid "Music Directory"
 msgstr "Musikkmappe"
 
-#: ../data/menus.ui.h:92
+#: ../data/menus.ui.h:96
 msgid "_Parent Directory"
 msgstr "_Foreldermappe"
 
-#: ../data/menus.ui.h:93
+#: ../data/menus.ui.h:97
 msgid "_Default Directory"
 msgstr "_Standardmappe"
 
-#: ../data/menus.ui.h:94 ../data/toolbar.ui.h:1
+#: ../data/menus.ui.h:98 ../data/toolbar.ui.h:1
 msgid "_First File"
 msgstr "_Første fil"
 
-#: ../data/menus.ui.h:95
+#: ../data/menus.ui.h:99
 msgid "Previous File"
 msgstr "Forrige fil"
 
-#: ../data/menus.ui.h:96 ../data/toolbar.ui.h:5
+#: ../data/menus.ui.h:100 ../data/toolbar.ui.h:5
 msgid "_Next File"
 msgstr "_Neste fil"
 
-#: ../data/menus.ui.h:97 ../data/toolbar.ui.h:7
+#: ../data/menus.ui.h:101 ../data/toolbar.ui.h:7
 msgid "_Last File"
 msgstr "_Siste fil"
 
-#: ../data/menus.ui.h:98
+#: ../data/menus.ui.h:102
 msgid "Home Directory"
 msgstr "Hjemmemappe"
 
-#: ../data/menus.ui.h:99
+#: ../data/menus.ui.h:103
 msgid "Default Directory"
 msgstr "Standardmappe"
 
-#: ../data/menus.ui.h:100
+#: ../data/menus.ui.h:104
 msgid "Set Current Path as Default"
 msgstr "Bruk gjeldende filsti som standard"
 
-#: ../data/menus.ui.h:102
+#: ../data/menus.ui.h:106
 msgid "Browse Subdirectories"
 msgstr "Bla gjennom _undermapper"
 
-#: ../data/menus.ui.h:103
+#: ../data/menus.ui.h:107
 msgid "Invert Selection"
 msgstr "Inverter utvalg"
 
-#: ../data/menus.ui.h:104
+#: ../data/menus.ui.h:108
 msgid "CDDB Search Files…"
 msgstr "Søk etter filene på CDDB …"
 
-#: ../data/menus.ui.h:105
+#: ../data/menus.ui.h:109
 msgid "Find…"
 msgstr "Finn …"
 
-#: ../data/menus.ui.h:106
+#: ../data/menus.ui.h:110
 msgid "Clear Log"
 msgstr "Tøm logg"
 
@@ -1051,8 +1071,8 @@ msgstr "Skriv info ved bruk av filnavn"
 msgid "Write information using:"
 msgstr "Skriv info ved bruk av:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3016
-#: ../src/browser.c:933 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
+#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 msgid "_Save"
@@ -3115,7 +3135,7 @@ msgstr "Nettside: %s"
 msgid "- Tag and rename audio files"
 msgstr "- Gi tagger og nytt navn til lydfiler"
 
-#: ../src/application.c:429 ../src/file_list.c:442
+#: ../src/application.c:429 ../src/file_list.c:443
 #, c-format
 msgid "Error while querying information for file ‘%s’: %s"
 msgstr ""
@@ -3169,8 +3189,8 @@ msgstr "Alle filer er slettet"
 msgid "All tags have been removed"
 msgstr "Alle tagger er fjernet"
 
-#: ../src/application_window.c:1474 ../src/browser.c:363 ../src/browser.c:406
-#: ../src/browser.c:440 ../src/browser.c:4676 ../src/browser.c:4751
+#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
+#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Klarte ikke å starte programmet «%s»"
@@ -3223,91 +3243,91 @@ msgid "File: ‘%s’"
 msgstr "Fil: «%s»"
 
 #. Quit EasyTAG.
-#: ../src/application_window.c:2979
+#: ../src/application_window.c:2978
 msgid "Normal exit"
 msgstr "Normal avslutning"
 
-#: ../src/application_window.c:3013 ../src/browser.c:927
+#: ../src/application_window.c:3012 ../src/browser.c:948
 msgid "Some files have been modified but not saved"
 msgstr "Noen filer er markert for endringer, men endringene er ikke lagret"
 
-#: ../src/application_window.c:3014 ../src/browser.c:931 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr "_Forkast"
 
-#: ../src/application_window.c:3020 ../src/easytag.c:239
+#: ../src/application_window.c:3019 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Avslutt"
 
-#: ../src/application_window.c:3023
+#: ../src/application_window.c:3022
 msgid "Do you want to save them before quitting?"
 msgstr "Vil du lagre dem før du avslutter?"
 
-#: ../src/browser.c:628
+#: ../src/browser.c:649
 msgid "New default directory selected for browser"
 msgstr "Ny standardmappe for filutforsker er valgt"
 
-#: ../src/browser.c:930
+#: ../src/browser.c:951
 msgid "Do you want to save them before changing directory?"
 msgstr "VIl du lagre dem før du bytter mappe?"
 
-#: ../src/browser.c:937
+#: ../src/browser.c:958
 msgid "Confirm Directory Change"
 msgstr "Bekreft hopp til annen mappe"
 
-#: ../src/browser.c:2654
+#: ../src/browser.c:2531
 msgid "All albums"
 msgstr "Alle album"
 
-#: ../src/browser.c:3906
+#: ../src/browser.c:3771
 msgid "Select File"
 msgstr "Velg fil"
 
-#: ../src/browser.c:3913
+#: ../src/browser.c:3778
 msgid "Select Directory"
 msgstr "Velg mappe"
 
-#: ../src/browser.c:4180
+#: ../src/browser.c:4049
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Endre navn på mappen «%s» til:"
 
-#: ../src/browser.c:4316
+#: ../src/browser.c:4185
 msgid "You must type a directory name"
 msgstr "Du må skrive inn et mappenavn"
 
-#: ../src/browser.c:4317 ../src/browser.c:4339
+#: ../src/browser.c:4186 ../src/browser.c:4208
 msgid "Directory Name Error"
 msgstr "Feil i mappenavn"
 
-#: ../src/browser.c:4335
+#: ../src/browser.c:4204
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Klarte ikke å konvertere «%s» til filnavn-koding"
 
-#: ../src/browser.c:4338
+#: ../src/browser.c:4207
 msgid "Please use another name."
 msgstr "Bruk et annet navn."
 
-#: ../src/browser.c:4410
+#: ../src/browser.c:4279
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Mappenavnet «%s» finnes allerede."
 
-#: ../src/browser.c:4411 ../src/easytag.c:650
+#: ../src/browser.c:4280 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Feil ved navneendring av fil"
 
-#: ../src/browser.c:4450 ../src/browser.c:4479
+#: ../src/browser.c:4319 ../src/browser.c:4348
 msgid "Rename Directory Error"
 msgstr "Feil ved navneendring av mappe"
 
-#: ../src/browser.c:4520
+#: ../src/browser.c:4389
 msgid "Directory renamed"
 msgstr "Mappe har fått nytt navn"
 
-#: ../src/browser.c:4668 ../src/browser.c:4743
+#: ../src/browser.c:4537 ../src/browser.c:4612
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "Kjørt kommando «%s»"
@@ -3741,7 +3761,7 @@ msgstr "Klarte ikke å skrive tagg til filen «%s»"
 msgid "Tag Write Error"
 msgstr "Feil ved skriving av tagg"
 
-#: ../src/easytag.c:861 ../src/easytag.c:1095
+#: ../src/easytag.c:861 ../src/easytag.c:1096
 #, c-format
 msgid "Cannot read directory ‘%s’"
 msgstr "Klarte ikke å lese mappen «%s»"
@@ -3752,46 +3772,45 @@ msgstr "Feil ved lesing av mappe"
 
 #. Read the directory recursively
 #: ../src/easytag.c:886
-#, c-format
 msgid "Search in progress…"
 msgstr "Søker …"
 
-#: ../src/easytag.c:958
+#: ../src/easytag.c:959
 #, c-format
 msgid "Found one file in this directory and subdirectories"
 msgid_plural "Found %u files in this directory and subdirectories"
 msgstr[0] "Fant én fil i denne mappen inkl. undermapper"
 msgstr[1] "Fant %u filer i denne mappen inkl. undermapper"
 
-#: ../src/easytag.c:965
+#: ../src/easytag.c:966
 #, c-format
 msgid "Found one file in this directory"
 msgid_plural "Found %u files in this directory"
 msgstr[0] "Fant én fil i denne mappen"
 msgstr[1] "Fant %u filer i denne mappen"
 
-#: ../src/easytag.c:982
+#: ../src/easytag.c:983
 msgid "No file found in this directory and subdirectories"
 msgstr "Fant ingen filer i denne mappen, og heller ikke i undermapper"
 
-#: ../src/easytag.c:984
+#: ../src/easytag.c:985
 msgid "No file found in this directory"
 msgstr "Fant ingen filer i denne mappen"
 
-#: ../src/easytag.c:1060
+#: ../src/easytag.c:1061
 #, c-format
 msgid "Error opening directory ‘%s’: %s"
 msgstr "Det oppstod en feil under åpning av «%s». %s"
 
-#: ../src/easytag.c:1115
+#: ../src/easytag.c:1116
 msgid "Searching for audio files…"
 msgstr "Søker etter lydfiler …"
 
-#: ../src/easytag.c:1116
+#: ../src/easytag.c:1117
 msgid "Searching"
 msgstr "Søker"
 
-#: ../src/easytag.c:1117
+#: ../src/easytag.c:1118
 msgid "_Stop"
 msgstr "_Stopp"
 
@@ -3808,42 +3827,42 @@ msgstr "Klarte ikke å spørre etter filinformasjon «%s»"
 msgid "Read-only file"
 msgstr "Skrivebeskyttet fil"
 
-#: ../src/file_list.c:245
+#: ../src/file_list.c:246
 #, c-format
 msgid "Error reading ID3 tag from file ‘%s’: %s"
 msgstr "Det oppstod en feil under lesing av ID3-tagg fra filen «%s». %s"
 
-#: ../src/file_list.c:256
+#: ../src/file_list.c:257
 #, c-format
 msgid "Error reading tag from Ogg file ‘%s’: %s"
 msgstr "Det oppstod en feil under lesing av tagg fra ogg-filen «%s». %s"
 
-#: ../src/file_list.c:267
+#: ../src/file_list.c:268
 #, c-format
 msgid "Error reading tag from FLAC file ‘%s’: %s"
 msgstr "Det oppstod en feil under lesing av tagg fra FLAC-filen «%s». %s"
 
-#: ../src/file_list.c:277
+#: ../src/file_list.c:278
 #, c-format
 msgid "Error reading APE tag from file ‘%s’: %s"
 msgstr "Det oppstod en feil under lesing av tagg fra APE-filen «%s». %s"
 
-#: ../src/file_list.c:287
+#: ../src/file_list.c:288
 #, c-format
 msgid "Error reading tag from MP4 file ‘%s’: %s"
 msgstr "Det oppstod en feil under lesing av tagg fra MP4-filen «%s». %s"
 
-#: ../src/file_list.c:298
+#: ../src/file_list.c:299
 #, c-format
 msgid "Error reading tag from WavPack file ‘%s’: %s"
 msgstr "Det oppstod en feil under lesing av tagg fra WavPack-filen «%s». %s"
 
-#: ../src/file_list.c:309
+#: ../src/file_list.c:310
 #, c-format
 msgid "Error reading tag from Opus file ‘%s’: %s"
 msgstr "Det oppstod en feil under lesing av tagg fra Opus-filen «%s». %s"
 
-#: ../src/file_list.c:345
+#: ../src/file_list.c:346
 #, c-format
 msgid ""
 "The year value ‘%s’ seems to be invalid in file ‘%s’. The information will "
@@ -3852,7 +3871,7 @@ msgstr ""
 "År-verdien «%s» i filen «%s» ser ut til å være ugyldig. Denne informasjonen "
 "går tapt når du lagrer"
 
-#: ../src/file_list.c:352
+#: ../src/file_list.c:353
 #, fuzzy, c-format
 msgid ""
 "The original year value ‘%s’ seems to be invalid in file ‘%s’. The "
@@ -3861,7 +3880,7 @@ msgstr ""
 "År-verdien «%s» i filen «%s» ser ut til å være ugyldig. Denne informasjonen "
 "går tapt når du lagrer"
 
-#: ../src/file_list.c:508
+#: ../src/file_list.c:509
 #, c-format
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "filen «%s» ble automatisk korrigert."

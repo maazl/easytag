@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-25 15:22+0200\n"
+"POT-Creation-Date: 2022-10-03 19:20+0200\n"
 "PO-Revision-Date: 2017-02-03 08:39+0100\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
@@ -86,7 +86,7 @@ msgstr "Ordner und Audiodateien mit EasyTAG über das Kontextmenü öffnen"
 msgid "Choose a directory to show in the browser"
 msgstr "Wählen Sie einen Ordner, der im Baum angezeigt werden soll"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3870
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "Ö_ffnen"
@@ -96,7 +96,7 @@ msgid "Select a directory to browse"
 msgstr "Wählen Sie einen Ordner zum Durchsuchen aus"
 
 #. Translators: No files, as in "0 files".
-#: ../data/browser.ui.h:4 ../src/easytag.c:978
+#: ../data/browser.ui.h:4 ../src/easytag.c:979
 msgid "No files"
 msgstr "Keine Dateien"
 
@@ -216,7 +216,7 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3015 ../src/browser.c:932 ../src/browser.c:3869
+#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
 #: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
 #: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
 msgid "_Cancel"
@@ -238,7 +238,7 @@ msgstr ""
 "aktuelle Datei als Parameter verwendet"
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:101 ../src/easytag.c:562
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:562
 msgid "Rename Directory"
 msgstr "Ordner umbenennen"
 
@@ -745,12 +745,12 @@ msgid "Descending by year"
 msgstr "Absteigend nach Jahr"
 
 #: ../data/menus.ui.h:42
-msgid "Ascending by original year"
-msgstr "Aufsteigend nach Originaljahr"
+msgid "Ascending by release year"
+msgstr "Aufsteigend nach Erscheinungsjahr"
 
 #: ../data/menus.ui.h:43
-msgid "Descending by original year"
-msgstr "Absteigend nach Originaljahr"
+msgid "Descending by release year"
+msgstr "Absteigend nach Erscheinungsjahr"
 
 #: ../data/menus.ui.h:44
 msgid "Ascending by genre"
@@ -785,218 +785,234 @@ msgid "Descending by original artist"
 msgstr "Absteigend nach Originalkünstler"
 
 #: ../data/menus.ui.h:52
+msgid "Ascending by original year"
+msgstr "Aufsteigend nach Originaljahr"
+
+#: ../data/menus.ui.h:53
+msgid "Descending by original year"
+msgstr "Absteigend nach Originaljahr"
+
+#: ../data/menus.ui.h:54
 msgid "Ascending by copyright"
 msgstr "Aufsteigend nach Copyright"
 
-#: ../data/menus.ui.h:53
+#: ../data/menus.ui.h:55
 msgid "Descending by copyright"
 msgstr "Absteigend nach Copyright"
 
-#: ../data/menus.ui.h:54
+#: ../data/menus.ui.h:56
 msgid "Ascending by URL"
 msgstr "Aufsteigend nach URL"
 
-#: ../data/menus.ui.h:55
+#: ../data/menus.ui.h:57
 msgid "Descending by URL"
 msgstr "Absteigend nach URL"
 
-#: ../data/menus.ui.h:56
+#: ../data/menus.ui.h:58
 msgid "Ascending by encoder name"
 msgstr "Aufsteigend nach Kodierer"
 
-#: ../data/menus.ui.h:57
+#: ../data/menus.ui.h:59
 msgid "Descending by encoder name"
 msgstr "Absteigend nach Kodierer"
 
-#: ../data/menus.ui.h:58
+#: ../data/menus.ui.h:60
 msgid "Sort List by Property"
 msgstr "Liste nach Eigenschaft sortieren"
 
-#: ../data/menus.ui.h:59
+#: ../data/menus.ui.h:61
+msgid "Ascending by file path"
+msgstr "Aufsteigend nach Dateipfad"
+
+#: ../data/menus.ui.h:62
+msgid "Descending by file path"
+msgstr "Absteigend nach Dateipfad"
+
+#: ../data/menus.ui.h:63
 msgid "Ascending by filename"
 msgstr "Aufsteigend nach Dateinamen "
 
-#: ../data/menus.ui.h:60
+#: ../data/menus.ui.h:64
 msgid "Descending by filename"
 msgstr "Absteigend nach Dateinamen"
 
-#: ../data/menus.ui.h:61
+#: ../data/menus.ui.h:65
 msgid "Ascending by creation date"
 msgstr "Aufsteigend nach Erstellungsdatum"
 
-#: ../data/menus.ui.h:62
+#: ../data/menus.ui.h:66
 msgid "Descending by creation date"
 msgstr "Absteigend nach Erstellungsdatum"
 
-#: ../data/menus.ui.h:63
+#: ../data/menus.ui.h:67
 msgid "Ascending by file type"
 msgstr "Aufsteigend nach Dateityp"
 
-#: ../data/menus.ui.h:64
+#: ../data/menus.ui.h:68
 msgid "Descending by file type"
 msgstr "Absteigend nach Dateityp"
 
-#: ../data/menus.ui.h:65
+#: ../data/menus.ui.h:69
 msgid "Ascending by file size"
 msgstr "Aufsteigend nach Dateigröße"
 
-#: ../data/menus.ui.h:66
+#: ../data/menus.ui.h:70
 msgid "Descending by file size"
 msgstr "Absteigend nach Dateigröße"
 
-#: ../data/menus.ui.h:67
+#: ../data/menus.ui.h:71
 msgid "Ascending by duration"
 msgstr "Aufsteigend nach Länge"
 
-#: ../data/menus.ui.h:68
+#: ../data/menus.ui.h:72
 msgid "Descending by duration"
 msgstr "Absteigend nach Länge"
 
-#: ../data/menus.ui.h:69
+#: ../data/menus.ui.h:73
 msgid "Ascending by bit rate"
 msgstr "Aufsteigend nach Bitrate"
 
-#: ../data/menus.ui.h:70
+#: ../data/menus.ui.h:74
 msgid "Descending by bit rate"
 msgstr "Absteigend nach Bitrate"
 
-#: ../data/menus.ui.h:71
+#: ../data/menus.ui.h:75
 msgid "Ascending by sample rate"
 msgstr "Aufsteigend nach Abtastrate"
 
-#: ../data/menus.ui.h:72
+#: ../data/menus.ui.h:76
 msgid "Descending by sample rate"
 msgstr "Absteigend nach Abtastrate"
 
-#: ../data/menus.ui.h:73
+#: ../data/menus.ui.h:77
 msgid "Collapse Tree"
 msgstr "Baum einklappen"
 
-#: ../data/menus.ui.h:74
+#: ../data/menus.ui.h:78
 msgid "Reload Tree"
 msgstr "Baum neu lesen"
 
-#: ../data/menus.ui.h:75
+#: ../data/menus.ui.h:79
 msgid "Reload Directory"
 msgstr "Ordner neu einlesen"
 
-#: ../data/menus.ui.h:76
+#: ../data/menus.ui.h:80
 msgid "Show Hidden Directories"
 msgstr "Verborgene Ordner anzeigen"
 
-#: ../data/menus.ui.h:77
+#: ../data/menus.ui.h:81
 msgid "_Browser"
 msgstr "_Auswahl"
 
-#: ../data/menus.ui.h:78
+#: ../data/menus.ui.h:82
 msgid "Set _Current Path as Default"
 msgstr "_Aktuellen Pfad als Vorgabe festlegen"
 
-#: ../data/menus.ui.h:79
+#: ../data/menus.ui.h:83
 msgid "Rename Directory…"
 msgstr "Ordner umbenennen …"
 
-#: ../data/menus.ui.h:80
+#: ../data/menus.ui.h:84
 msgid "Browse Directory With…"
 msgstr "Ordner durchsuchen mit …"
 
-#: ../data/menus.ui.h:81
+#: ../data/menus.ui.h:85
 msgid "Browse _Subdirectories"
 msgstr "_Unterordner durchsuchen"
 
-#: ../data/menus.ui.h:82
+#: ../data/menus.ui.h:86
 msgid "_Miscellaneous"
 msgstr "_Verschiedenes"
 
-#: ../data/menus.ui.h:83
+#: ../data/menus.ui.h:87
 msgid "CDD_B Search…"
 msgstr "CDD_B-Dateisuche …"
 
-#: ../data/menus.ui.h:84
+#: ../data/menus.ui.h:88
 msgid "Load Filenames From a Text File…"
 msgstr "Dateinamen aus Textdatei laden …"
 
-#: ../data/menus.ui.h:85 ../data/toolbar.ui.h:29
+#: ../data/menus.ui.h:89 ../data/toolbar.ui.h:29
 msgid "Generate Playlist…"
 msgstr "Wiedergabeliste erzeugen …"
 
-#: ../data/menus.ui.h:86
+#: ../data/menus.ui.h:90
 msgid "_Go"
 msgstr "_Gehe zu"
 
-#: ../data/menus.ui.h:87
+#: ../data/menus.ui.h:91
 msgid "_Home Directory"
 msgstr "_Persönlicher Ordner"
 
-#: ../data/menus.ui.h:88
+#: ../data/menus.ui.h:92
 msgid "Desktop Directory"
 msgstr "Schreibtischordner"
 
-#: ../data/menus.ui.h:89
+#: ../data/menus.ui.h:93
 msgid "Documents Directory"
 msgstr "Dokumentenordner"
 
-#: ../data/menus.ui.h:90
+#: ../data/menus.ui.h:94
 msgid "Downloads Directory"
 msgstr "Download-Ordner"
 
-#: ../data/menus.ui.h:91
+#: ../data/menus.ui.h:95
 msgid "Music Directory"
 msgstr "Musikordner"
 
-#: ../data/menus.ui.h:92
+#: ../data/menus.ui.h:96
 msgid "_Parent Directory"
 msgstr "Ü_bergeordneter Ordner"
 
-#: ../data/menus.ui.h:93
+#: ../data/menus.ui.h:97
 msgid "_Default Directory"
 msgstr "_Vorgabeordner"
 
-#: ../data/menus.ui.h:94 ../data/toolbar.ui.h:1
+#: ../data/menus.ui.h:98 ../data/toolbar.ui.h:1
 msgid "_First File"
 msgstr "_Erste Datei"
 
-#: ../data/menus.ui.h:95
+#: ../data/menus.ui.h:99
 msgid "Previous File"
 msgstr "Vorherige Datei"
 
-#: ../data/menus.ui.h:96 ../data/toolbar.ui.h:5
+#: ../data/menus.ui.h:100 ../data/toolbar.ui.h:5
 msgid "_Next File"
 msgstr "_Nächste Datei"
 
-#: ../data/menus.ui.h:97 ../data/toolbar.ui.h:7
+#: ../data/menus.ui.h:101 ../data/toolbar.ui.h:7
 msgid "_Last File"
 msgstr "Let_zte Datei"
 
-#: ../data/menus.ui.h:98
+#: ../data/menus.ui.h:102
 msgid "Home Directory"
 msgstr "Persönlicher Ordner"
 
-#: ../data/menus.ui.h:99
+#: ../data/menus.ui.h:103
 msgid "Default Directory"
 msgstr "Vorgabeordner"
 
-#: ../data/menus.ui.h:100
+#: ../data/menus.ui.h:104
 msgid "Set Current Path as Default"
 msgstr "Aktuellen Pfad als Vorgabe festlegen"
 
-#: ../data/menus.ui.h:102
+#: ../data/menus.ui.h:106
 msgid "Browse Subdirectories"
 msgstr "Unterordner durchsuchen"
 
-#: ../data/menus.ui.h:103
+#: ../data/menus.ui.h:107
 msgid "Invert Selection"
 msgstr "Auswahl umkehren"
 
-#: ../data/menus.ui.h:104
+#: ../data/menus.ui.h:108
 msgid "CDDB Search Files…"
 msgstr "CDDB-Dateisuche …"
 
-#: ../data/menus.ui.h:105
+#: ../data/menus.ui.h:109
 msgid "Find…"
 msgstr "Suchen …"
 
-#: ../data/menus.ui.h:106
+#: ../data/menus.ui.h:110
 msgid "Clear Log"
 msgstr "Protokoll löschen"
 
@@ -1066,8 +1082,8 @@ msgstr "Dateinamen beim Schreiben der Informationen verwenden"
 msgid "Write information using:"
 msgstr "Information schreiben mit:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3016
-#: ../src/browser.c:933 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
+#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 msgid "_Save"
@@ -3236,7 +3252,7 @@ msgstr "Webseite: %s"
 msgid "- Tag and rename audio files"
 msgstr "- Metainformationen in Audio-Dateien einfügen und diese umbenennen"
 
-#: ../src/application.c:429 ../src/file_list.c:442
+#: ../src/application.c:429 ../src/file_list.c:443
 #, c-format
 msgid "Error while querying information for file ‘%s’: %s"
 msgstr "Fehler beim Abfragen von Informationen für die Datei »%s«: %s"
@@ -3289,8 +3305,8 @@ msgstr "Alle Dateien wurden gelöscht"
 msgid "All tags have been removed"
 msgstr "Alle Metainformationen wurden entfernt"
 
-#: ../src/application_window.c:1474 ../src/browser.c:363 ../src/browser.c:406
-#: ../src/browser.c:440 ../src/browser.c:4676 ../src/browser.c:4751
+#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
+#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Starten von Programm »%s« fehlgeschlagen"
@@ -3344,91 +3360,91 @@ msgid "File: ‘%s’"
 msgstr "Datei: »%s«"
 
 #. Quit EasyTAG.
-#: ../src/application_window.c:2979
+#: ../src/application_window.c:2978
 msgid "Normal exit"
 msgstr "Normal beenden"
 
-#: ../src/application_window.c:3013 ../src/browser.c:927
+#: ../src/application_window.c:3012 ../src/browser.c:948
 msgid "Some files have been modified but not saved"
 msgstr "Einige Dateien wurden geändert, aber noch nicht gespeichert"
 
-#: ../src/application_window.c:3014 ../src/browser.c:931 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr "_Verwerfen"
 
-#: ../src/application_window.c:3020 ../src/easytag.c:239
+#: ../src/application_window.c:3019 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Beenden"
 
-#: ../src/application_window.c:3023
+#: ../src/application_window.c:3022
 msgid "Do you want to save them before quitting?"
 msgstr "Wollen Sie diese vor dem Beenden speichern?"
 
-#: ../src/browser.c:628
+#: ../src/browser.c:649
 msgid "New default directory selected for browser"
 msgstr "Neuen Vorgabeordner für Dateiansicht ausgewählt"
 
-#: ../src/browser.c:930
+#: ../src/browser.c:951
 msgid "Do you want to save them before changing directory?"
 msgstr "Wollen Sie diese vor dem Ordnerwechsel speichern?"
 
-#: ../src/browser.c:937
+#: ../src/browser.c:958
 msgid "Confirm Directory Change"
 msgstr "Ordnerwechsel bestätigen"
 
-#: ../src/browser.c:2654
+#: ../src/browser.c:2531
 msgid "All albums"
 msgstr "Alle Alben"
 
-#: ../src/browser.c:3906
+#: ../src/browser.c:3771
 msgid "Select File"
 msgstr "Datei wählen"
 
-#: ../src/browser.c:3913
+#: ../src/browser.c:3778
 msgid "Select Directory"
 msgstr "Ordner auswählen"
 
-#: ../src/browser.c:4180
+#: ../src/browser.c:4049
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Ordner »%s« umbenennen in:"
 
-#: ../src/browser.c:4316
+#: ../src/browser.c:4185
 msgid "You must type a directory name"
 msgstr "Sie müssen einen Ordnernamen eingeben"
 
-#: ../src/browser.c:4317 ../src/browser.c:4339
+#: ../src/browser.c:4186 ../src/browser.c:4208
 msgid "Directory Name Error"
 msgstr "Fehler im Ordnernamen"
 
-#: ../src/browser.c:4335
+#: ../src/browser.c:4204
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "»%s« konnte nicht in die Dateinamenkodierung umgewandelt werden"
 
-#: ../src/browser.c:4338
+#: ../src/browser.c:4207
 msgid "Please use another name."
 msgstr "Bitte verwenden Sie einen anderen Namen."
 
-#: ../src/browser.c:4410
+#: ../src/browser.c:4279
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Der Ordnername »%s« existiert bereits."
 
-#: ../src/browser.c:4411 ../src/easytag.c:650
+#: ../src/browser.c:4280 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Fehler beim Umbenennen der Datei"
 
-#: ../src/browser.c:4450 ../src/browser.c:4479
+#: ../src/browser.c:4319 ../src/browser.c:4348
 msgid "Rename Directory Error"
 msgstr "Fehler beim Umbenennen des Ordners"
 
-#: ../src/browser.c:4520
+#: ../src/browser.c:4389
 msgid "Directory renamed"
 msgstr "Ordner umbenannt"
 
-#: ../src/browser.c:4668 ../src/browser.c:4743
+#: ../src/browser.c:4537 ../src/browser.c:4612
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "Befehl »%s« ausgeführt"
@@ -3868,7 +3884,7 @@ msgstr "Metainfo kann nicht in Datei »%s« geschrieben werden"
 msgid "Tag Write Error"
 msgstr "Fehler beim Schreiben der Metainfo"
 
-#: ../src/easytag.c:861 ../src/easytag.c:1095
+#: ../src/easytag.c:861 ../src/easytag.c:1096
 #, c-format
 msgid "Cannot read directory ‘%s’"
 msgstr "Der Ordner »%s« kann nicht gelesen werden"
@@ -3879,46 +3895,45 @@ msgstr "Ordner-Lesefehler"
 
 #. Read the directory recursively
 #: ../src/easytag.c:886
-#, c-format
 msgid "Search in progress…"
 msgstr "Suche läuft …"
 
-#: ../src/easytag.c:958
+#: ../src/easytag.c:959
 #, c-format
 msgid "Found one file in this directory and subdirectories"
 msgid_plural "Found %u files in this directory and subdirectories"
 msgstr[0] "Eine Datei wurde in diesem Ordner und Unterordnern gefunden"
 msgstr[1] "%u Dateien wurden in diesem Ordner und Unterordnern gefunden"
 
-#: ../src/easytag.c:965
+#: ../src/easytag.c:966
 #, c-format
 msgid "Found one file in this directory"
 msgid_plural "Found %u files in this directory"
 msgstr[0] "Eine Datei wurde in diesem Ordner gefunden"
 msgstr[1] "%u Dateien wurden in diesem Ordner gefunden"
 
-#: ../src/easytag.c:982
+#: ../src/easytag.c:983
 msgid "No file found in this directory and subdirectories"
 msgstr "Keine Datei in diesem Ordner oder Unterordnern gefunden"
 
-#: ../src/easytag.c:984
+#: ../src/easytag.c:985
 msgid "No file found in this directory"
 msgstr "Keine Datei in diesem Ordner gefunden"
 
-#: ../src/easytag.c:1060
+#: ../src/easytag.c:1061
 #, c-format
 msgid "Error opening directory ‘%s’: %s"
 msgstr "Fehler beim Öffnen des Ordners »%s«: %s"
 
-#: ../src/easytag.c:1115
+#: ../src/easytag.c:1116
 msgid "Searching for audio files…"
 msgstr "Suche nach Audio-Dateien läuft …"
 
-#: ../src/easytag.c:1116
+#: ../src/easytag.c:1117
 msgid "Searching"
 msgstr "Suche läuft …"
 
-#: ../src/easytag.c:1117
+#: ../src/easytag.c:1118
 msgid "_Stop"
 msgstr "_Stopp"
 
@@ -3935,42 +3950,42 @@ msgstr "Dateiinformation »%s« kann nicht abgefragt werden"
 msgid "Read-only file"
 msgstr "Datei ist nur lesbar"
 
-#: ../src/file_list.c:245
+#: ../src/file_list.c:246
 #, c-format
 msgid "Error reading ID3 tag from file ‘%s’: %s"
 msgstr "Fehler beim Lesen der ID3-Metainfo der Datei »%s«: %s"
 
-#: ../src/file_list.c:256
+#: ../src/file_list.c:257
 #, c-format
 msgid "Error reading tag from Ogg file ‘%s’: %s"
 msgstr "Fehler beim Lesen der Metainfo der Ogg-Datei »%s«: %s"
 
-#: ../src/file_list.c:267
+#: ../src/file_list.c:268
 #, c-format
 msgid "Error reading tag from FLAC file ‘%s’: %s"
 msgstr "Fehler beim Lesen der Metainfo der FLAC-Datei »%s«: %s"
 
-#: ../src/file_list.c:277
+#: ../src/file_list.c:278
 #, c-format
 msgid "Error reading APE tag from file ‘%s’: %s"
 msgstr "Fehler beim Lesen der APE-Metainfo der Datei »%s«: %s"
 
-#: ../src/file_list.c:287
+#: ../src/file_list.c:288
 #, c-format
 msgid "Error reading tag from MP4 file ‘%s’: %s"
 msgstr "Fehler beim Lesen der Metainfo der MP4-Datei »%s«: %s"
 
-#: ../src/file_list.c:298
+#: ../src/file_list.c:299
 #, c-format
 msgid "Error reading tag from WavPack file ‘%s’: %s"
 msgstr "Fehler beim Lesen der Metainfo der WavPack-Datei »%s«: %s"
 
-#: ../src/file_list.c:309
+#: ../src/file_list.c:310
 #, c-format
 msgid "Error reading tag from Opus file ‘%s’: %s"
 msgstr "Fehler beim Lesen der Metainfo der Opus-Datei »%s«: %s"
 
-#: ../src/file_list.c:345
+#: ../src/file_list.c:346
 #, c-format
 msgid ""
 "The year value ‘%s’ seems to be invalid in file ‘%s’. The information will "
@@ -3979,7 +3994,7 @@ msgstr ""
 "Der Wert »%s« für das Jahr scheint für die Datei »%s« ungültig zu sein. "
 "Diese Information wird beim Speichern verloren gehen"
 
-#: ../src/file_list.c:352
+#: ../src/file_list.c:353
 #, c-format
 msgid ""
 "The original year value ‘%s’ seems to be invalid in file ‘%s’. The "
@@ -3988,7 +4003,7 @@ msgstr ""
 "Der Wert »%s« für das Originaljahr scheint für die Datei »%s« ungültig zu "
 "sein. Diese Information wird beim Speichern verloren gehen"
 
-#: ../src/file_list.c:508
+#: ../src/file_list.c:509
 #, c-format
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "Automatische Korrekturen wurden für die Datei »%s« angewendet"

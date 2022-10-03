@@ -140,43 +140,41 @@ ET_Comp_Func_Sort_File_By_Descending_Filename (const ET_File *ETFile1,
 }
 
 /*
+ * Compare strings that areliekly integers (e.g. track number)
+ */
+static gint
+et_comp_int_value(const gchar* val1, const gchar* val2)
+{
+	if (!val2)
+		return !val1;
+	if (!val1)
+		return -1;
+
+	int i1, i2, l;
+	if (sscanf(val1, "%d%n", &i1, &l) == 1 && l == strlen(val1)
+		&& sscanf(val2, "%d%n", &i2, &l) == 1 && l == strlen(val2))
+		return i1 - i2;
+
+	// Fallback
+	return strcasecmp(val1, val2);
+}
+
+/*
  * Comparison function for sorting by ascending disc number.
  */
-/* FIXME: Handle non-numeric disc number. */
 gint
 et_comp_func_sort_file_by_ascending_disc_number (const ET_File *ETFile1,
                                                  const ET_File *ETFile2)
 {
-    gint track1, track2;
-
-    if (!ETFile1->FileTag->data
-        || !((File_Tag *)ETFile1->FileTag->data)->disc_number)
-    {
-        track1 = 0;
-    }
-    else
-    {
-        track1 = atoi (((File_Tag *)ETFile1->FileTag->data)->disc_number);
-    }
-
-    if (!ETFile2->FileTag->data
-        || !((File_Tag *)ETFile2->FileTag->data)->disc_number)
-    {
-        track2 = 0;
-    }
-    else
-    {
-        track2 = atoi (((File_Tag *)ETFile2->FileTag->data)->disc_number);
-    }
-
-    /* Second criterion. */
-    if (track1 == track2)
-    {
-        return ET_Comp_Func_Sort_File_By_Ascending_Filepath (ETFile1, ETFile2);
-    }
-
-    /* First criterion. */
-    return (track1 - track2);
+	gint r = et_comp_int_value(((File_Tag *)ETFile1->FileTag->data)->disc_number, ((File_Tag *)ETFile2->FileTag->data)->disc_number);
+	if (r)
+		return r;
+	// 2nd criterion
+	r = et_comp_int_value(((File_Tag *)ETFile1->FileTag->data)->disc_total, ((File_Tag *)ETFile2->FileTag->data)->disc_total);
+	if (r)
+		return r;
+	// 3rd criterion
+	return ET_Comp_Func_Sort_File_By_Ascending_Filepath (ETFile1, ETFile2);
 }
 
 /*
@@ -193,29 +191,19 @@ et_comp_func_sort_file_by_descending_disc_number (const ET_File *ETFile1,
 /*
  * Comparison function for sorting by ascending track number.
  */
-/* FIXME: Handle non-numeric track number. */
 gint
 ET_Comp_Func_Sort_File_By_Ascending_Track_Number (const ET_File *ETFile1,
                                                   const ET_File *ETFile2)
 {
-    gint track1, track2;
-
-    if ( !ETFile1->FileTag->data || !((File_Tag *)ETFile1->FileTag->data)->track )
-        track1 = 0;
-    else
-        track1 = atoi( ((File_Tag *)ETFile1->FileTag->data)->track );
-
-    if ( !ETFile2->FileTag->data || !((File_Tag *)ETFile2->FileTag->data)->track )
-        track2 = 0;
-    else
-        track2 = atoi( ((File_Tag *)ETFile2->FileTag->data)->track );
-
-    // Second criterion
-    if (track1 == track2)
-        return ET_Comp_Func_Sort_File_By_Ascending_Filepath(ETFile1,ETFile2);
-
-    // First criterion
-    return (track1 - track2);
+	gint r = et_comp_int_value(((File_Tag *)ETFile1->FileTag->data)->track, ((File_Tag *)ETFile2->FileTag->data)->track);
+	if (r)
+		return r;
+	// 2nd criterion
+	r = et_comp_int_value(((File_Tag *)ETFile1->FileTag->data)->track_total, ((File_Tag *)ETFile2->FileTag->data)->track_total);
+	if (r)
+		return r;
+	// 3rd criterion
+	return ET_Comp_Func_Sort_File_By_Ascending_Filepath (ETFile1, ETFile2);
 }
 
 /*
@@ -307,30 +295,21 @@ static gint
 et_file_list_sort_string (const gchar *str1,
                           const gchar *str2,
                           const ET_File *file1,
-                          const ET_File *file2,
-                          gboolean case_sensitive)
+                          const ET_File *file2)
 {
     gint result;
 
-    if (case_sensitive)
-    {
+    if (g_settings_get_boolean (MainSettings, "sort-case-sensitive"))
         result = et_normalized_strcmp0 (str1, str2);
-    }
     else
-    {
         result = et_normalized_strcasecmp0 (str1, str2);
-    }
 
     if (result == 0)
-    {
         /* Secondary criterion. */
         return ET_Comp_Func_Sort_File_By_Ascending_Filepath (file1, file2);
-    }
     else
-    {
         /* Primary criterion. */
         return result;
-    }
 }
 
 /*
@@ -357,9 +336,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Title (const ET_File *ETFile1,
 
     return et_file_list_sort_string (((File_Tag *)ETFile1->FileTag->data)->title,
                                      ((File_Tag *)ETFile2->FileTag->data)->title,
-                                     ETFile1, ETFile2,
-                                     g_settings_get_boolean (MainSettings,
-                                                             "sort-case-sensitive"));
+                                     ETFile1, ETFile2);
 }
 
 /*
@@ -397,9 +374,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Artist (const ET_File *ETFile1,
 
     return et_file_list_sort_string (((File_Tag *)ETFile1->FileTag->data)->artist,
                                      ((File_Tag *)ETFile2->FileTag->data)->artist,
-                                     ETFile1, ETFile2,
-                                     g_settings_get_boolean (MainSettings,
-                                                             "sort-case-sensitive"));
+                                     ETFile1, ETFile2);
 }
 
 /*
@@ -436,9 +411,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Album_Artist (const ET_File *ETFile1,
 
     return et_file_list_sort_string (((File_Tag *)ETFile1->FileTag->data)->album_artist,
                                      ((File_Tag *)ETFile2->FileTag->data)->album_artist,
-                                     ETFile1, ETFile2,
-                                     g_settings_get_boolean (MainSettings,
-                                                             "sort-case-sensitive"));
+                                     ETFile1, ETFile2);
 }
 
 /*
@@ -475,9 +448,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Album (const ET_File *ETFile1,
 
     return et_file_list_sort_string (((File_Tag *)ETFile1->FileTag->data)->album,
                                      ((File_Tag *)ETFile2->FileTag->data)->album,
-                                     ETFile1, ETFile2,
-                                     g_settings_get_boolean (MainSettings,
-                                                             "sort-case-sensitive"));
+                                     ETFile1, ETFile2);
 }
 
 /*
@@ -498,24 +469,11 @@ gint
 ET_Comp_Func_Sort_File_By_Ascending_Year (const ET_File *ETFile1,
                                           const ET_File *ETFile2)
 {
-    gint year1, year2;
-
-    if ( !ETFile1->FileTag->data || !((File_Tag *)ETFile1->FileTag->data)->year )
-        year1 = 0;
-    else
-        year1 = atoi( ((File_Tag *)ETFile1->FileTag->data)->year );
-
-    if ( !ETFile2->FileTag->data || !((File_Tag *)ETFile2->FileTag->data)->year )
-        year2 = 0;
-    else
-        year2 = atoi( ((File_Tag *)ETFile2->FileTag->data)->year );
-
-    // Second criterion
-    if (year1 == year2)
-        return ET_Comp_Func_Sort_File_By_Ascending_Filepath(ETFile1,ETFile2);
-
-    // First criterion
-    return (year1 - year2);
+	gint r = et_comp_int_value(((File_Tag *)ETFile1->FileTag->data)->year, ((File_Tag *)ETFile2->FileTag->data)->year);
+	if (r)
+		return r;
+	// 2nd criterion
+	return ET_Comp_Func_Sort_File_By_Ascending_Filepath (ETFile1, ETFile2);
 }
 
 /*
@@ -536,24 +494,11 @@ gint
 ET_Comp_Func_Sort_File_By_Ascending_Release_Year (const ET_File *ETFile1,
                                                   const ET_File *ETFile2)
 {
-    gint year1, year2;
-
-    if ( !ETFile1->FileTag->data || !((File_Tag *)ETFile1->FileTag->data)->release_year )
-        year1 = 0;
-    else
-        year1 = atoi( ((File_Tag *)ETFile1->FileTag->data)->release_year );
-
-    if ( !ETFile2->FileTag->data || !((File_Tag *)ETFile2->FileTag->data)->release_year )
-        year2 = 0;
-    else
-        year2 = atoi( ((File_Tag *)ETFile2->FileTag->data)->release_year );
-
-    // Second criterion
-    if (year1 == year2)
-        return ET_Comp_Func_Sort_File_By_Ascending_Filepath(ETFile1,ETFile2);
-
-    // First criterion
-    return (year1 - year2);
+	gint r = et_comp_int_value(((File_Tag *)ETFile1->FileTag->data)->release_year, ((File_Tag *)ETFile2->FileTag->data)->release_year);
+	if (r)
+		return r;
+	// 2nd criterion
+	return ET_Comp_Func_Sort_File_By_Ascending_Filepath (ETFile1, ETFile2);
 }
 
 /*
@@ -591,9 +536,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Genre (const ET_File *ETFile1,
 
     return et_file_list_sort_string (((File_Tag *)ETFile1->FileTag->data)->genre,
                                      ((File_Tag *)ETFile2->FileTag->data)->genre,
-                                     ETFile1, ETFile2,
-                                     g_settings_get_boolean (MainSettings,
-                                                             "sort-case-sensitive"));
+                                     ETFile1, ETFile2);
 }
 
 /*
@@ -631,9 +574,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Comment (const ET_File *ETFile1,
 
     return et_file_list_sort_string (((File_Tag *)ETFile1->FileTag->data)->comment,
                                      ((File_Tag *)ETFile2->FileTag->data)->comment,
-                                     ETFile1, ETFile2,
-                                     g_settings_get_boolean (MainSettings,
-                                                             "sort-case-sensitive"));
+                                     ETFile1, ETFile2);
 }
 
 /*
@@ -671,9 +612,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Composer (const ET_File *ETFile1,
 
     return et_file_list_sort_string (((File_Tag *)ETFile1->FileTag->data)->composer,
                                      ((File_Tag *)ETFile2->FileTag->data)->composer,
-                                     ETFile1, ETFile2,
-                                     g_settings_get_boolean (MainSettings,
-                                                             "sort-case-sensitive"));
+                                     ETFile1, ETFile2);
 }
 
 /*
@@ -711,9 +650,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Orig_Artist (const ET_File *ETFile1,
 
     return et_file_list_sort_string (((File_Tag *)ETFile1->FileTag->data)->orig_artist,
                                      ((File_Tag *)ETFile2->FileTag->data)->orig_artist,
-                                     ETFile1, ETFile2,
-                                     g_settings_get_boolean (MainSettings,
-                                                             "sort-case-sensitive"));
+                                     ETFile1, ETFile2);
 }
 
 /*
@@ -734,24 +671,11 @@ gint
 ET_Comp_Func_Sort_File_By_Ascending_Orig_Year (const ET_File *ETFile1,
                                                const ET_File *ETFile2)
 {
-    gint year1, year2;
-
-    if ( !ETFile1->FileTag->data || !((File_Tag *)ETFile1->FileTag->data)->orig_year )
-        year1 = 0;
-    else
-        year1 = atoi( ((File_Tag *)ETFile1->FileTag->data)->orig_year );
-
-    if ( !ETFile2->FileTag->data || !((File_Tag *)ETFile2->FileTag->data)->orig_year )
-        year2 = 0;
-    else
-        year2 = atoi( ((File_Tag *)ETFile2->FileTag->data)->orig_year );
-
-    // Second criterion
-    if (year1 == year2)
-        return ET_Comp_Func_Sort_File_By_Ascending_Filepath(ETFile1,ETFile2);
-
-    // First criterion
-    return (year1 - year2);
+	gint r = et_comp_int_value(((File_Tag *)ETFile1->FileTag->data)->orig_year, ((File_Tag *)ETFile2->FileTag->data)->orig_year);
+	if (r)
+		return r;
+	// 2nd criterion
+	return ET_Comp_Func_Sort_File_By_Ascending_Filepath (ETFile1, ETFile2);
 }
 
 /*
@@ -789,9 +713,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Copyright (const ET_File *ETFile1,
 
     return et_file_list_sort_string (((File_Tag *)ETFile1->FileTag->data)->copyright,
                                      ((File_Tag *)ETFile2->FileTag->data)->copyright,
-                                     ETFile1, ETFile2,
-                                     g_settings_get_boolean (MainSettings,
-                                                             "sort-case-sensitive"));
+                                     ETFile1, ETFile2);
 }
 
 /*
@@ -832,9 +754,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Url (const ET_File *ETFile1,
 
     return et_file_list_sort_string (((File_Tag *)ETFile1->FileTag->data)->url,
                                      ((File_Tag *)ETFile2->FileTag->data)->url,
-                                     ETFile1, ETFile2,
-                                     g_settings_get_boolean (MainSettings,
-                                                             "sort-case-sensitive"));
+                                     ETFile1, ETFile2);
 }
 
 /*
@@ -875,9 +795,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Encoded_By (const ET_File *ETFile1,
 
     return et_file_list_sort_string (((File_Tag *)ETFile1->FileTag->data)->encoded_by,
                                      ((File_Tag *)ETFile2->FileTag->data)->encoded_by,
-                                     ETFile1, ETFile2,
-                                     g_settings_get_boolean (MainSettings,
-                                                             "sort-case-sensitive"));
+                                     ETFile1, ETFile2);
 }
 
 /*

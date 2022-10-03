@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 2.1.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-25 15:22+0200\n"
+"POT-Creation-Date: 2022-10-03 19:20+0200\n"
 "PO-Revision-Date: 2016-03-13 10:20+0200\n"
 "Last-Translator: Cédric Valmary (totenoc.eu) <cvalmary@yahoo.fr>\n"
 "Language-Team: Tot En Òc\n"
@@ -77,7 +77,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Causir un repertòri per afichar dins lo navigador."
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3870
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "_Dobrir"
@@ -87,7 +87,7 @@ msgid "Select a directory to browse"
 msgstr "Seleccionar un repertòri a percórrer"
 
 #. Translators: No files, as in "0 files".
-#: ../data/browser.ui.h:4 ../src/easytag.c:978
+#: ../data/browser.ui.h:4 ../src/easytag.c:979
 msgid "No files"
 msgstr "Pas cap de fichièr"
 
@@ -208,7 +208,7 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3015 ../src/browser.c:932 ../src/browser.c:3869
+#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
 #: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
 #: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
 msgid "_Cancel"
@@ -230,7 +230,7 @@ msgstr ""
 "Sasissètz lo programa d'aviar. Il aura coma paramètre lo fichièr actual."
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:101 ../src/easytag.c:562
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:562
 msgid "Rename Directory"
 msgstr "Renomenar lo repertòri"
 
@@ -753,13 +753,13 @@ msgstr "Òrdre descreissent de las annadas"
 
 #: ../data/menus.ui.h:42
 #, fuzzy
-msgid "Ascending by original year"
-msgstr "Òrdre creissent dels artistas originals"
+msgid "Ascending by release year"
+msgstr "Òrdre creissent de las annadas"
 
 #: ../data/menus.ui.h:43
 #, fuzzy
-msgid "Descending by original year"
-msgstr "Òrdre descreissent dels artistas originals"
+msgid "Descending by release year"
+msgstr "Òrdre descreissent de las annadas"
 
 #: ../data/menus.ui.h:44
 msgid "Ascending by genre"
@@ -794,218 +794,238 @@ msgid "Descending by original artist"
 msgstr "Òrdre descreissent dels artistas originals"
 
 #: ../data/menus.ui.h:52
+#, fuzzy
+msgid "Ascending by original year"
+msgstr "Òrdre creissent dels artistas originals"
+
+#: ../data/menus.ui.h:53
+#, fuzzy
+msgid "Descending by original year"
+msgstr "Òrdre descreissent dels artistas originals"
+
+#: ../data/menus.ui.h:54
 msgid "Ascending by copyright"
 msgstr "Òrdre creissent dels copyrights"
 
-#: ../data/menus.ui.h:53
+#: ../data/menus.ui.h:55
 msgid "Descending by copyright"
 msgstr "Òrdre descreissent dels copyrights"
 
-#: ../data/menus.ui.h:54
+#: ../data/menus.ui.h:56
 msgid "Ascending by URL"
 msgstr "Òrdre creissent de las URL"
 
-#: ../data/menus.ui.h:55
+#: ../data/menus.ui.h:57
 msgid "Descending by URL"
 msgstr "Òrdre descreissent de las URL"
 
-#: ../data/menus.ui.h:56
+#: ../data/menus.ui.h:58
 msgid "Ascending by encoder name"
 msgstr "Òrdre creissent dels noms d'encodador"
 
-#: ../data/menus.ui.h:57
+#: ../data/menus.ui.h:59
 msgid "Descending by encoder name"
 msgstr "Òrdre descreissent dels noms d'encodador"
 
-#: ../data/menus.ui.h:58
+#: ../data/menus.ui.h:60
 msgid "Sort List by Property"
 msgstr "Triar la lista per proprietat"
 
-#: ../data/menus.ui.h:59
+#: ../data/menus.ui.h:61
+#, fuzzy
+msgid "Ascending by file path"
+msgstr "Òrdre creissent dels tipes de fichièrs"
+
+#: ../data/menus.ui.h:62
+#, fuzzy
+msgid "Descending by file path"
+msgstr "Òrdre descreissent dels tipes de fichièrs"
+
+#: ../data/menus.ui.h:63
 msgid "Ascending by filename"
 msgstr "Òrdre creissent dels noms de fichièrs"
 
-#: ../data/menus.ui.h:60
+#: ../data/menus.ui.h:64
 msgid "Descending by filename"
 msgstr "Òrdre descreissent dels noms de fichièrs"
 
-#: ../data/menus.ui.h:61
+#: ../data/menus.ui.h:65
 msgid "Ascending by creation date"
 msgstr "Òrdre creissent de las datas de creacion"
 
-#: ../data/menus.ui.h:62
+#: ../data/menus.ui.h:66
 msgid "Descending by creation date"
 msgstr "Òrdre descreissent de las datas de creacion"
 
-#: ../data/menus.ui.h:63
+#: ../data/menus.ui.h:67
 msgid "Ascending by file type"
 msgstr "Òrdre creissent dels tipes de fichièrs"
 
-#: ../data/menus.ui.h:64
+#: ../data/menus.ui.h:68
 msgid "Descending by file type"
 msgstr "Òrdre descreissent dels tipes de fichièrs"
 
-#: ../data/menus.ui.h:65
+#: ../data/menus.ui.h:69
 msgid "Ascending by file size"
 msgstr "Òrdre creissent de las talhas de fichièrs"
 
-#: ../data/menus.ui.h:66
+#: ../data/menus.ui.h:70
 msgid "Descending by file size"
 msgstr "Òrdre descreissent de las talhas de fichièrs"
 
-#: ../data/menus.ui.h:67
+#: ../data/menus.ui.h:71
 msgid "Ascending by duration"
 msgstr "Òrdre creissent de las duradas"
 
-#: ../data/menus.ui.h:68
+#: ../data/menus.ui.h:72
 msgid "Descending by duration"
 msgstr "Òrdre descreissent de las duradas"
 
-#: ../data/menus.ui.h:69
+#: ../data/menus.ui.h:73
 msgid "Ascending by bit rate"
 msgstr "Òrdre creissent dels debits"
 
-#: ../data/menus.ui.h:70
+#: ../data/menus.ui.h:74
 msgid "Descending by bit rate"
 msgstr "Òrdre descreissent dels debits"
 
-#: ../data/menus.ui.h:71
+#: ../data/menus.ui.h:75
 msgid "Ascending by sample rate"
 msgstr "Òrdre creissent de las frequéncias"
 
-#: ../data/menus.ui.h:72
+#: ../data/menus.ui.h:76
 msgid "Descending by sample rate"
 msgstr "Òrdre descreissent de las frequéncias"
 
-#: ../data/menus.ui.h:73
+#: ../data/menus.ui.h:77
 msgid "Collapse Tree"
 msgstr "Replegar l'arborescéncia"
 
-#: ../data/menus.ui.h:74
+#: ../data/menus.ui.h:78
 msgid "Reload Tree"
 msgstr "Recargar l'arborescéncia"
 
-#: ../data/menus.ui.h:75
+#: ../data/menus.ui.h:79
 msgid "Reload Directory"
 msgstr "Recargar lo repertòri"
 
-#: ../data/menus.ui.h:76
+#: ../data/menus.ui.h:80
 msgid "Show Hidden Directories"
 msgstr "Afichar los repertòris amagats"
 
-#: ../data/menus.ui.h:77
+#: ../data/menus.ui.h:81
 msgid "_Browser"
 msgstr "Selec_tor"
 
-#: ../data/menus.ui.h:78
+#: ../data/menus.ui.h:82
 msgid "Set _Current Path as Default"
 msgstr "Definir lo camin a_ctual per defaut"
 
-#: ../data/menus.ui.h:79
+#: ../data/menus.ui.h:83
 msgid "Rename Directory…"
 msgstr "Renomenar lo repertòri…"
 
-#: ../data/menus.ui.h:80
+#: ../data/menus.ui.h:84
 msgid "Browse Directory With…"
 msgstr "Percórrer lo repertòri amb…"
 
-#: ../data/menus.ui.h:81
+#: ../data/menus.ui.h:85
 msgid "Browse _Subdirectories"
 msgstr "Percórrer los _sosrepertòris"
 
-#: ../data/menus.ui.h:82
+#: ../data/menus.ui.h:86
 msgid "_Miscellaneous"
 msgstr "_Divers"
 
-#: ../data/menus.ui.h:83
+#: ../data/menus.ui.h:87
 msgid "CDD_B Search…"
 msgstr "Recercar dins la CDD_B…"
 
-#: ../data/menus.ui.h:84
+#: ../data/menus.ui.h:88
 msgid "Load Filenames From a Text File…"
 msgstr "Cargar los noms de fichièrs a partir d'un fichièr tèxte…"
 
-#: ../data/menus.ui.h:85 ../data/toolbar.ui.h:29
+#: ../data/menus.ui.h:89 ../data/toolbar.ui.h:29
 msgid "Generate Playlist…"
 msgstr "Generar una lista de lectura…"
 
-#: ../data/menus.ui.h:86
+#: ../data/menus.ui.h:90
 msgid "_Go"
 msgstr "A_ller"
 
-#: ../data/menus.ui.h:87
+#: ../data/menus.ui.h:91
 msgid "_Home Directory"
 msgstr "Repertòri _personal"
 
-#: ../data/menus.ui.h:88
+#: ../data/menus.ui.h:92
 msgid "Desktop Directory"
 msgstr "Repertòri Burèu"
 
-#: ../data/menus.ui.h:89
+#: ../data/menus.ui.h:93
 msgid "Documents Directory"
 msgstr "Repertòri Documents"
 
-#: ../data/menus.ui.h:90
+#: ../data/menus.ui.h:94
 msgid "Downloads Directory"
 msgstr "Repertòri Telecargaments"
 
-#: ../data/menus.ui.h:91
+#: ../data/menus.ui.h:95
 msgid "Music Directory"
 msgstr "Repertòri Musicas"
 
-#: ../data/menus.ui.h:92
+#: ../data/menus.ui.h:96
 msgid "_Parent Directory"
 msgstr "Repertòri parent"
 
-#: ../data/menus.ui.h:93
+#: ../data/menus.ui.h:97
 msgid "_Default Directory"
 msgstr "Repertòri per _defaut"
 
-#: ../data/menus.ui.h:94 ../data/toolbar.ui.h:1
+#: ../data/menus.ui.h:98 ../data/toolbar.ui.h:1
 msgid "_First File"
 msgstr "Primièr _fichièr"
 
-#: ../data/menus.ui.h:95
+#: ../data/menus.ui.h:99
 msgid "Previous File"
 msgstr "Fichièr precedent"
 
-#: ../data/menus.ui.h:96 ../data/toolbar.ui.h:5
+#: ../data/menus.ui.h:100 ../data/toolbar.ui.h:5
 msgid "_Next File"
 msgstr "Fichièr _seguent"
 
-#: ../data/menus.ui.h:97 ../data/toolbar.ui.h:7
+#: ../data/menus.ui.h:101 ../data/toolbar.ui.h:7
 msgid "_Last File"
 msgstr "_Darrièr fichièr"
 
-#: ../data/menus.ui.h:98
+#: ../data/menus.ui.h:102
 msgid "Home Directory"
 msgstr "Repertòri personal"
 
-#: ../data/menus.ui.h:99
+#: ../data/menus.ui.h:103
 msgid "Default Directory"
 msgstr "Repertòri per defaut"
 
-#: ../data/menus.ui.h:100
+#: ../data/menus.ui.h:104
 msgid "Set Current Path as Default"
 msgstr "Definir lo camin actual per defaut"
 
-#: ../data/menus.ui.h:102
+#: ../data/menus.ui.h:106
 msgid "Browse Subdirectories"
 msgstr "Percórrer los sosrepertòris"
 
-#: ../data/menus.ui.h:103
+#: ../data/menus.ui.h:107
 msgid "Invert Selection"
 msgstr "Inversar la seleccion"
 
-#: ../data/menus.ui.h:104
+#: ../data/menus.ui.h:108
 msgid "CDDB Search Files…"
 msgstr "Recercar de fichièrs dins la CDDB…"
 
-#: ../data/menus.ui.h:105
+#: ../data/menus.ui.h:109
 msgid "Find…"
 msgstr "Recercar…"
 
-#: ../data/menus.ui.h:106
+#: ../data/menus.ui.h:110
 msgid "Clear Log"
 msgstr "Escafar lo jornal"
 
@@ -1071,8 +1091,8 @@ msgstr "Escriure las informacions en utilizant lo nom del fichièr"
 msgid "Write information using:"
 msgstr "Escriure las informacions en utilizant :"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3016
-#: ../src/browser.c:933 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
+#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 #, fuzzy
@@ -3207,7 +3227,7 @@ msgstr "Site Web : %s"
 msgid "- Tag and rename audio files"
 msgstr "- Etiquetar e renomenar de fichièrs àudio"
 
-#: ../src/application.c:429 ../src/file_list.c:442
+#: ../src/application.c:429 ../src/file_list.c:443
 #, fuzzy, c-format
 msgid "Error while querying information for file ‘%s’: %s"
 msgstr ""
@@ -3264,8 +3284,8 @@ msgstr "Totes los fichièrs son estats suprimits"
 msgid "All tags have been removed"
 msgstr "Totas las etiquetas son etadas suprimidas"
 
-#: ../src/application_window.c:1474 ../src/browser.c:363 ../src/browser.c:406
-#: ../src/browser.c:440 ../src/browser.c:4676 ../src/browser.c:4751
+#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
+#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
 #, fuzzy, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Fracàs de l'aviada del programa : %s"
@@ -3321,96 +3341,96 @@ msgid "File: ‘%s’"
 msgstr "Fichièr : « %s »"
 
 #. Quit EasyTAG.
-#: ../src/application_window.c:2979
+#: ../src/application_window.c:2978
 #, fuzzy
 msgid "Normal exit"
 msgstr "EasyTAG : tampadura normala."
 
-#: ../src/application_window.c:3013 ../src/browser.c:927
+#: ../src/application_window.c:3012 ../src/browser.c:948
 msgid "Some files have been modified but not saved"
 msgstr "Certains fichièrs son estats modificats mas pas enregistrats"
 
-#: ../src/application_window.c:3014 ../src/browser.c:931 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 #, fuzzy
 msgid "_Discard"
 msgstr "Disc"
 
-#: ../src/application_window.c:3020 ../src/easytag.c:239
+#: ../src/application_window.c:3019 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Quitar"
 
-#: ../src/application_window.c:3023
+#: ../src/application_window.c:3022
 msgid "Do you want to save them before quitting?"
 msgstr "Los volètz enregistrar abans de quitar ?"
 
-#: ../src/browser.c:628
+#: ../src/browser.c:649
 #, fuzzy
 msgid "New default directory selected for browser"
 msgstr "Seleccionar un repertòri a percórrer"
 
-#: ../src/browser.c:930
+#: ../src/browser.c:951
 #, fuzzy
 msgid "Do you want to save them before changing directory?"
 msgstr "Los volètz enregistrar abans de cambiar de repertòri ?"
 
-#: ../src/browser.c:937
+#: ../src/browser.c:958
 msgid "Confirm Directory Change"
 msgstr "Confirmar lo cambiament de repertòri"
 
-#: ../src/browser.c:2654
+#: ../src/browser.c:2531
 msgid "All albums"
 msgstr "Totes los albums"
 
-#: ../src/browser.c:3906
+#: ../src/browser.c:3771
 msgid "Select File"
 msgstr "Seleccionar un fichièr"
 
-#: ../src/browser.c:3913
+#: ../src/browser.c:3778
 msgid "Select Directory"
 msgstr "Seleccionar un repertòri"
 
-#: ../src/browser.c:4180
+#: ../src/browser.c:4049
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Renomenar lo repertòri « %s » en :"
 
-#: ../src/browser.c:4316
+#: ../src/browser.c:4185
 msgid "You must type a directory name"
 msgstr "Vos cal sasir un nom de repertòri"
 
-#: ../src/browser.c:4317 ../src/browser.c:4339
+#: ../src/browser.c:4186 ../src/browser.c:4208
 msgid "Directory Name Error"
 msgstr "Error de nom de repertòri"
 
-#: ../src/browser.c:4335
+#: ../src/browser.c:4204
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Impossible de convertir « %s » dins l'encodatge del nom de fichièr."
 
-#: ../src/browser.c:4338
+#: ../src/browser.c:4207
 #, fuzzy
 msgid "Please use another name."
 msgstr "Causissètz un autre nom"
 
-#: ../src/browser.c:4410
+#: ../src/browser.c:4279
 #, fuzzy, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Lo nom del repertòri « %s » existe déjà"
 
-#: ../src/browser.c:4411 ../src/easytag.c:650
+#: ../src/browser.c:4280 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Error de cambiament de nom del fichièr"
 
-#: ../src/browser.c:4450 ../src/browser.c:4479
+#: ../src/browser.c:4319 ../src/browser.c:4348
 msgid "Rename Directory Error"
 msgstr "Error de cambiament de nom del repertòri"
 
-#: ../src/browser.c:4520
+#: ../src/browser.c:4389
 msgid "Directory renamed"
 msgstr "Repertòri renomenat"
 
-#: ../src/browser.c:4668 ../src/browser.c:4743
+#: ../src/browser.c:4537 ../src/browser.c:4612
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "Comanda executada : %s"
@@ -3853,7 +3873,7 @@ msgstr "Impossible d'escriure l'etiqueta dins lo fichièr « %s »"
 msgid "Tag Write Error"
 msgstr "Error d'escritura de l'etiqueta"
 
-#: ../src/easytag.c:861 ../src/easytag.c:1095
+#: ../src/easytag.c:861 ../src/easytag.c:1096
 #, fuzzy, c-format
 msgid "Cannot read directory ‘%s’"
 msgstr "Impossible de legir lo repertòri « %s »"
@@ -3864,46 +3884,45 @@ msgstr "Error de lectura del repertòri"
 
 #. Read the directory recursively
 #: ../src/easytag.c:886
-#, c-format
 msgid "Search in progress…"
 msgstr "Recèrca en cors…"
 
-#: ../src/easytag.c:958
+#: ../src/easytag.c:959
 #, fuzzy, c-format
 msgid "Found one file in this directory and subdirectories"
 msgid_plural "Found %u files in this directory and subdirectories"
 msgstr[0] "Un fichièr trobat dins aqueste repertòri e sos sosrepertòris."
 msgstr[1] "%d fichièrs trobats dins aqueste repertòri e sos sosrepertòris."
 
-#: ../src/easytag.c:965
+#: ../src/easytag.c:966
 #, fuzzy, c-format
 msgid "Found one file in this directory"
 msgid_plural "Found %u files in this directory"
 msgstr[0] "Un fichièr trobat dins aqueste repertòri."
 msgstr[1] "%d fichièrs trobats dins aqueste repertòri."
 
-#: ../src/easytag.c:982
+#: ../src/easytag.c:983
 msgid "No file found in this directory and subdirectories"
 msgstr "Cap de fichièr pas trobat dins aqueste repertòri e sos sosrepertòris"
 
-#: ../src/easytag.c:984
+#: ../src/easytag.c:985
 msgid "No file found in this directory"
 msgstr "Cap de fichièr pas trobat dins aqueste repertòri"
 
-#: ../src/easytag.c:1060
+#: ../src/easytag.c:1061
 #, fuzzy, c-format
 msgid "Error opening directory ‘%s’: %s"
 msgstr "Error al moment de la dobertura del repertòri « %s » (%s)"
 
-#: ../src/easytag.c:1115
+#: ../src/easytag.c:1116
 msgid "Searching for audio files…"
 msgstr "Recèrca de fichièrs àudio en cors…"
 
-#: ../src/easytag.c:1116
+#: ../src/easytag.c:1117
 msgid "Searching"
 msgstr "Recèrca en cors"
 
-#: ../src/easytag.c:1117
+#: ../src/easytag.c:1118
 msgid "_Stop"
 msgstr ""
 
@@ -3920,42 +3939,42 @@ msgstr "Impossible d'obtenir las informacions del fichièr (%s)"
 msgid "Read-only file"
 msgstr "Fichièr en lectura sola"
 
-#: ../src/file_list.c:245
+#: ../src/file_list.c:246
 #, fuzzy, c-format
 msgid "Error reading ID3 tag from file ‘%s’: %s"
 msgstr "Error al moment de la lectura de l'etiqueta del fichièr : « %s »"
 
-#: ../src/file_list.c:256
+#: ../src/file_list.c:257
 #, fuzzy, c-format
 msgid "Error reading tag from Ogg file ‘%s’: %s"
 msgstr "Error al moment de la lectura de l'etiqueta d'un fichièr ogg (%s)"
 
-#: ../src/file_list.c:267
+#: ../src/file_list.c:268
 #, fuzzy, c-format
 msgid "Error reading tag from FLAC file ‘%s’: %s"
 msgstr "Error al moment de la lectura de l'etiqueta del fichièr : « %s »"
 
-#: ../src/file_list.c:277
+#: ../src/file_list.c:278
 #, fuzzy, c-format
 msgid "Error reading APE tag from file ‘%s’: %s"
 msgstr "Error al moment de la lectura de l'etiqueta del fichièr : « %s »"
 
-#: ../src/file_list.c:287
+#: ../src/file_list.c:288
 #, fuzzy, c-format
 msgid "Error reading tag from MP4 file ‘%s’: %s"
 msgstr "Error al moment de la lectura de l'etiqueta del fichièr : « %s »"
 
-#: ../src/file_list.c:298
+#: ../src/file_list.c:299
 #, fuzzy, c-format
 msgid "Error reading tag from WavPack file ‘%s’: %s"
 msgstr "Error al moment de la lectura de l'etiqueta del fichièr : « %s »"
 
-#: ../src/file_list.c:309
+#: ../src/file_list.c:310
 #, fuzzy, c-format
 msgid "Error reading tag from Opus file ‘%s’: %s"
 msgstr "Error al moment de la lectura de l'etiqueta d'un fichièr Opus (%s)"
 
-#: ../src/file_list.c:345
+#: ../src/file_list.c:346
 #, fuzzy, c-format
 msgid ""
 "The year value ‘%s’ seems to be invalid in file ‘%s’. The information will "
@@ -3964,7 +3983,7 @@ msgstr ""
 "La valor de l'annada « %s » semble invalida dins lo fichièr « %s ». Aquesta "
 "informacion serà perduda al moment de l'enregistrament de l'etiqueta."
 
-#: ../src/file_list.c:352
+#: ../src/file_list.c:353
 #, fuzzy, c-format
 msgid ""
 "The original year value ‘%s’ seems to be invalid in file ‘%s’. The "
@@ -3973,7 +3992,7 @@ msgstr ""
 "La valor de l'annada « %s » semble invalida dins lo fichièr « %s ». Aquesta "
 "informacion serà perduda al moment de l'enregistrament de l'etiqueta."
 
-#: ../src/file_list.c:508
+#: ../src/file_list.c:509
 #, fuzzy, c-format
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "Correccion automatica aplicada sul fichièr « %s »."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-25 15:22+0200\n"
+"POT-Creation-Date: 2022-10-03 19:20+0200\n"
 "PO-Revision-Date: 2018-03-14 20:24+0100\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <hr@li.org>\n"
@@ -77,7 +77,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Odaberi mapu za prikaz u pregledniku"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3870
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "_Otvori"
@@ -87,7 +87,7 @@ msgid "Select a directory to browse"
 msgstr "Odaberi mapu za pregled"
 
 #. Translators: No files, as in "0 files".
-#: ../data/browser.ui.h:4 ../src/easytag.c:978
+#: ../data/browser.ui.h:4 ../src/easytag.c:979
 msgid "No files"
 msgstr "Nema datoteka"
 
@@ -207,7 +207,7 @@ msgstr "Upišite program za pokretanje, primit će trenutnu mapu kao parametar"
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3015 ../src/browser.c:932 ../src/browser.c:3869
+#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
 #: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
 #: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
 msgid "_Cancel"
@@ -228,7 +228,7 @@ msgstr ""
 "Upišite program za pokretanje, primit će trenutne datoteke kao parametar"
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:101 ../src/easytag.c:562
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:562
 msgid "Rename Directory"
 msgstr "Preimenuj mapu"
 
@@ -732,13 +732,13 @@ msgstr "Padajući, prema godini"
 
 #: ../data/menus.ui.h:42
 #, fuzzy
-msgid "Ascending by original year"
-msgstr "Rastući, prema izvornom izvođaču"
+msgid "Ascending by release year"
+msgstr "Rastući, prema godini"
 
 #: ../data/menus.ui.h:43
 #, fuzzy
-msgid "Descending by original year"
-msgstr "Padajući, prema izvornom izvođaču"
+msgid "Descending by release year"
+msgstr "Padajući, prema godini"
 
 #: ../data/menus.ui.h:44
 msgid "Ascending by genre"
@@ -773,218 +773,238 @@ msgid "Descending by original artist"
 msgstr "Padajući, prema izvornom izvođaču"
 
 #: ../data/menus.ui.h:52
+#, fuzzy
+msgid "Ascending by original year"
+msgstr "Rastući, prema izvornom izvođaču"
+
+#: ../data/menus.ui.h:53
+#, fuzzy
+msgid "Descending by original year"
+msgstr "Padajući, prema izvornom izvođaču"
+
+#: ../data/menus.ui.h:54
 msgid "Ascending by copyright"
 msgstr "Rastući, prema autorskim pravom"
 
-#: ../data/menus.ui.h:53
+#: ../data/menus.ui.h:55
 msgid "Descending by copyright"
 msgstr "Padajući, prema autorskim pravom"
 
-#: ../data/menus.ui.h:54
+#: ../data/menus.ui.h:56
 msgid "Ascending by URL"
 msgstr "Rastući, prema URL-u"
 
-#: ../data/menus.ui.h:55
+#: ../data/menus.ui.h:57
 msgid "Descending by URL"
 msgstr "Padajući, prema URL-u"
 
-#: ../data/menus.ui.h:56
+#: ../data/menus.ui.h:58
 msgid "Ascending by encoder name"
 msgstr "Rastući, prema nazivu enkôdera"
 
-#: ../data/menus.ui.h:57
+#: ../data/menus.ui.h:59
 msgid "Descending by encoder name"
 msgstr "Padajući, prema nazivu enkôdera"
 
-#: ../data/menus.ui.h:58
+#: ../data/menus.ui.h:60
 msgid "Sort List by Property"
 msgstr "Razvrstaj popis prema svojstvu datoteke"
 
-#: ../data/menus.ui.h:59
+#: ../data/menus.ui.h:61
+#, fuzzy
+msgid "Ascending by file path"
+msgstr "Rastući, prema vrsti datoteke"
+
+#: ../data/menus.ui.h:62
+#, fuzzy
+msgid "Descending by file path"
+msgstr "Padajući, prema vrsti datoteke"
+
+#: ../data/menus.ui.h:63
 msgid "Ascending by filename"
 msgstr "Rastući, prema nazivu datoteka"
 
-#: ../data/menus.ui.h:60
+#: ../data/menus.ui.h:64
 msgid "Descending by filename"
 msgstr "Padajući, prema nazivu datoteka"
 
-#: ../data/menus.ui.h:61
+#: ../data/menus.ui.h:65
 msgid "Ascending by creation date"
 msgstr "Rastući, prema datumu izrade"
 
-#: ../data/menus.ui.h:62
+#: ../data/menus.ui.h:66
 msgid "Descending by creation date"
 msgstr "Padajući, prema datumu izrade"
 
-#: ../data/menus.ui.h:63
+#: ../data/menus.ui.h:67
 msgid "Ascending by file type"
 msgstr "Rastući, prema vrsti datoteke"
 
-#: ../data/menus.ui.h:64
+#: ../data/menus.ui.h:68
 msgid "Descending by file type"
 msgstr "Padajući, prema vrsti datoteke"
 
-#: ../data/menus.ui.h:65
+#: ../data/menus.ui.h:69
 msgid "Ascending by file size"
 msgstr "Rastući, prema veličini datoteke"
 
-#: ../data/menus.ui.h:66
+#: ../data/menus.ui.h:70
 msgid "Descending by file size"
 msgstr "Padajući, prema veličini datoteke"
 
-#: ../data/menus.ui.h:67
+#: ../data/menus.ui.h:71
 msgid "Ascending by duration"
 msgstr "Rastući, prema vremenu trajanja"
 
-#: ../data/menus.ui.h:68
+#: ../data/menus.ui.h:72
 msgid "Descending by duration"
 msgstr "Padajući, prema vremenu trajanja"
 
-#: ../data/menus.ui.h:69
+#: ../data/menus.ui.h:73
 msgid "Ascending by bit rate"
 msgstr "Rasstući, prema brzini prijenosa"
 
-#: ../data/menus.ui.h:70
+#: ../data/menus.ui.h:74
 msgid "Descending by bit rate"
 msgstr "Padajući, prema brzini prijenosa"
 
-#: ../data/menus.ui.h:71
+#: ../data/menus.ui.h:75
 msgid "Ascending by sample rate"
 msgstr "Rastući, prema frekvenciji"
 
-#: ../data/menus.ui.h:72
+#: ../data/menus.ui.h:76
 msgid "Descending by sample rate"
 msgstr "Padajući, prema frekvenciji"
 
-#: ../data/menus.ui.h:73
+#: ../data/menus.ui.h:77
 msgid "Collapse Tree"
 msgstr "Suzi stablo"
 
-#: ../data/menus.ui.h:74
+#: ../data/menus.ui.h:78
 msgid "Reload Tree"
 msgstr "Ponovno učitaj stablo"
 
-#: ../data/menus.ui.h:75
+#: ../data/menus.ui.h:79
 msgid "Reload Directory"
 msgstr "Ponovno učitaj mapu"
 
-#: ../data/menus.ui.h:76
+#: ../data/menus.ui.h:80
 msgid "Show Hidden Directories"
 msgstr "Prikaži skrivene mape"
 
-#: ../data/menus.ui.h:77
+#: ../data/menus.ui.h:81
 msgid "_Browser"
 msgstr "_Preglednik"
 
-#: ../data/menus.ui.h:78
+#: ../data/menus.ui.h:82
 msgid "Set _Current Path as Default"
 msgstr "Postavi _trenutnu putanju kao zadanu"
 
-#: ../data/menus.ui.h:79
+#: ../data/menus.ui.h:83
 msgid "Rename Directory…"
 msgstr "Preimenuj mapu…"
 
-#: ../data/menus.ui.h:80
+#: ../data/menus.ui.h:84
 msgid "Browse Directory With…"
 msgstr "Pregledaj mapu s…"
 
-#: ../data/menus.ui.h:81
+#: ../data/menus.ui.h:85
 msgid "Browse _Subdirectories"
 msgstr "Pregledaj _podmape"
 
-#: ../data/menus.ui.h:82
+#: ../data/menus.ui.h:86
 msgid "_Miscellaneous"
 msgstr "_Ostalo"
 
-#: ../data/menus.ui.h:83
+#: ../data/menus.ui.h:87
 msgid "CDD_B Search…"
 msgstr "CDD_B pretraga…"
 
-#: ../data/menus.ui.h:84
+#: ../data/menus.ui.h:88
 msgid "Load Filenames From a Text File…"
 msgstr "Učitaj nazive datoteka iz tekstovne datoteke…"
 
-#: ../data/menus.ui.h:85 ../data/toolbar.ui.h:29
+#: ../data/menus.ui.h:89 ../data/toolbar.ui.h:29
 msgid "Generate Playlist…"
 msgstr "Stvori popis izvođenja…"
 
-#: ../data/menus.ui.h:86
+#: ../data/menus.ui.h:90
 msgid "_Go"
 msgstr "_Idi"
 
-#: ../data/menus.ui.h:87
+#: ../data/menus.ui.h:91
 msgid "_Home Directory"
 msgstr "_Osobna mapa"
 
-#: ../data/menus.ui.h:88
+#: ../data/menus.ui.h:92
 msgid "Desktop Directory"
 msgstr "Radna površina"
 
-#: ../data/menus.ui.h:89
+#: ../data/menus.ui.h:93
 msgid "Documents Directory"
 msgstr "Dokumenti"
 
-#: ../data/menus.ui.h:90
+#: ../data/menus.ui.h:94
 msgid "Downloads Directory"
 msgstr "Preuzimanja"
 
-#: ../data/menus.ui.h:91
+#: ../data/menus.ui.h:95
 msgid "Music Directory"
 msgstr "Glazba"
 
-#: ../data/menus.ui.h:92
+#: ../data/menus.ui.h:96
 msgid "_Parent Directory"
 msgstr "_Sadržajna mapa"
 
-#: ../data/menus.ui.h:93
+#: ../data/menus.ui.h:97
 msgid "_Default Directory"
 msgstr "_Zadana mapa"
 
-#: ../data/menus.ui.h:94 ../data/toolbar.ui.h:1
+#: ../data/menus.ui.h:98 ../data/toolbar.ui.h:1
 msgid "_First File"
 msgstr "_Prva datoteka"
 
-#: ../data/menus.ui.h:95
+#: ../data/menus.ui.h:99
 msgid "Previous File"
 msgstr "Prijašnja datoteka"
 
-#: ../data/menus.ui.h:96 ../data/toolbar.ui.h:5
+#: ../data/menus.ui.h:100 ../data/toolbar.ui.h:5
 msgid "_Next File"
 msgstr "_Sljedeća datoteka"
 
-#: ../data/menus.ui.h:97 ../data/toolbar.ui.h:7
+#: ../data/menus.ui.h:101 ../data/toolbar.ui.h:7
 msgid "_Last File"
 msgstr "_Posljednja datoteka"
 
-#: ../data/menus.ui.h:98
+#: ../data/menus.ui.h:102
 msgid "Home Directory"
 msgstr "Osobna mapa"
 
-#: ../data/menus.ui.h:99
+#: ../data/menus.ui.h:103
 msgid "Default Directory"
 msgstr "Zadana mapa"
 
-#: ../data/menus.ui.h:100
+#: ../data/menus.ui.h:104
 msgid "Set Current Path as Default"
 msgstr "Postavi trenutnu putanju kao zadanu"
 
-#: ../data/menus.ui.h:102
+#: ../data/menus.ui.h:106
 msgid "Browse Subdirectories"
 msgstr "Pregledaj podmape"
 
-#: ../data/menus.ui.h:103
+#: ../data/menus.ui.h:107
 msgid "Invert Selection"
 msgstr "Obrni odabir"
 
-#: ../data/menus.ui.h:104
+#: ../data/menus.ui.h:108
 msgid "CDDB Search Files…"
 msgstr "CDDB pretraživanje datoteka…"
 
-#: ../data/menus.ui.h:105
+#: ../data/menus.ui.h:109
 msgid "Find…"
 msgstr "Pretraži…"
 
-#: ../data/menus.ui.h:106
+#: ../data/menus.ui.h:110
 msgid "Clear Log"
 msgstr "Obriši dnevnik zapisa"
 
@@ -1054,8 +1074,8 @@ msgstr "Zapiši informacije koristeći naziv datoteke"
 msgid "Write information using:"
 msgstr "Zapiši informacije koristeći:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3016
-#: ../src/browser.c:933 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
+#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 msgid "_Save"
@@ -3143,7 +3163,7 @@ msgstr "Web stranica: %s"
 msgid "- Tag and rename audio files"
 msgstr "- Preimenuj i postavi oznaku u glazbene datoteke"
 
-#: ../src/application.c:429 ../src/file_list.c:442
+#: ../src/application.c:429 ../src/file_list.c:443
 #, c-format
 msgid "Error while querying information for file ‘%s’: %s"
 msgstr "Greška pri zahtjevu informacija za datoteku: '%s':%s"
@@ -3196,8 +3216,8 @@ msgstr "Sve datoteke su obrisane"
 msgid "All tags have been removed"
 msgstr "Sve oznake su uklonjene"
 
-#: ../src/application_window.c:1474 ../src/browser.c:363 ../src/browser.c:406
-#: ../src/browser.c:440 ../src/browser.c:4676 ../src/browser.c:4751
+#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
+#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Neuspješno pokretanje programa '%s'"
@@ -3252,93 +3272,93 @@ msgid "File: ‘%s’"
 msgstr "Datoteka: '%s'"
 
 #. Quit EasyTAG.
-#: ../src/application_window.c:2979
+#: ../src/application_window.c:2978
 msgid "Normal exit"
 msgstr "Normalno zatvaranje"
 
-#: ../src/application_window.c:3013 ../src/browser.c:927
+#: ../src/application_window.c:3012 ../src/browser.c:948
 msgid "Some files have been modified but not saved"
 msgstr "Neke datoteke su promijenjene ali nisu spremljene"
 
-#: ../src/application_window.c:3014 ../src/browser.c:931 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr "_Zatvori"
 
-#: ../src/application_window.c:3020 ../src/easytag.c:239
+#: ../src/application_window.c:3019 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Zatvori"
 
-#: ../src/application_window.c:3023
+#: ../src/application_window.c:3022
 msgid "Do you want to save them before quitting?"
 msgstr "Želite li ih spremiti prije zatvaranja?"
 
-#: ../src/browser.c:628
+#: ../src/browser.c:649
 msgid "New default directory selected for browser"
 msgstr "Odabrana je nova zadana mapa za preglednik"
 
-#: ../src/browser.c:930
+#: ../src/browser.c:951
 msgid "Do you want to save them before changing directory?"
 msgstr "Želite li ih spremiti prije promjene mape?"
 
-#: ../src/browser.c:937
+#: ../src/browser.c:958
 msgid "Confirm Directory Change"
 msgstr "Potvrdi promjenu mape"
 
-#: ../src/browser.c:2654
+#: ../src/browser.c:2531
 msgid "All albums"
 msgstr "Svi albumi"
 
-#: ../src/browser.c:3906
+#: ../src/browser.c:3771
 msgid "Select File"
 msgstr "Odaberi datoteku"
 
-#: ../src/browser.c:3913
+#: ../src/browser.c:3778
 msgid "Select Directory"
 msgstr "Odaberi mapu"
 
-#: ../src/browser.c:4180
+#: ../src/browser.c:4049
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Preimenuj mapu '%s' u:"
 
-#: ../src/browser.c:4316
+#: ../src/browser.c:4185
 msgid "You must type a directory name"
 msgstr "Morate upisati naziv mape"
 
-#: ../src/browser.c:4317 ../src/browser.c:4339
+#: ../src/browser.c:4186 ../src/browser.c:4208
 msgid "Directory Name Error"
 msgstr "Mapa je preimenovana"
 
-#: ../src/browser.c:4335
+#: ../src/browser.c:4204
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr ""
 "Nemoguće je pomijeniti naziv datoteke '%s' u kôdiranje naziva datoteka "
 "sustava"
 
-#: ../src/browser.c:4338
+#: ../src/browser.c:4207
 msgid "Please use another name."
 msgstr "Koristite drugi naziv."
 
-#: ../src/browser.c:4410
+#: ../src/browser.c:4279
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Mapa naziva '%s' već postoji."
 
-#: ../src/browser.c:4411 ../src/easytag.c:650
+#: ../src/browser.c:4280 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Greška preimenovanja datoteke"
 
-#: ../src/browser.c:4450 ../src/browser.c:4479
+#: ../src/browser.c:4319 ../src/browser.c:4348
 msgid "Rename Directory Error"
 msgstr "Greška preimenovanja mape"
 
-#: ../src/browser.c:4520
+#: ../src/browser.c:4389
 msgid "Directory renamed"
 msgstr "Mapa je preimenovana"
 
-#: ../src/browser.c:4668 ../src/browser.c:4743
+#: ../src/browser.c:4537 ../src/browser.c:4612
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "Izvršna naredba: '%s'"
@@ -3777,7 +3797,7 @@ msgstr "Nemoguće je zapisati oznaku u datoteku '%s'"
 msgid "Tag Write Error"
 msgstr "Greška zapisivanja oznake"
 
-#: ../src/easytag.c:861 ../src/easytag.c:1095
+#: ../src/easytag.c:861 ../src/easytag.c:1096
 #, c-format
 msgid "Cannot read directory ‘%s’"
 msgstr "Nemoguće je učitati mapu '%s'"
@@ -3788,11 +3808,10 @@ msgstr "Greška čitanja mape"
 
 #. Read the directory recursively
 #: ../src/easytag.c:886
-#, c-format
 msgid "Search in progress…"
 msgstr "Pretraga je u tijeku…"
 
-#: ../src/easytag.c:958
+#: ../src/easytag.c:959
 #, c-format
 msgid "Found one file in this directory and subdirectories"
 msgid_plural "Found %u files in this directory and subdirectories"
@@ -3800,7 +3819,7 @@ msgstr[0] "Pronađena je %u datoteka u ovoj mapi i podmapama"
 msgstr[1] "Pronađene su %u datoteke u ovoj mapi i podmapama"
 msgstr[2] "Pronađeno je %u datoteka u ovoj mapi i podmapama"
 
-#: ../src/easytag.c:965
+#: ../src/easytag.c:966
 #, c-format
 msgid "Found one file in this directory"
 msgid_plural "Found %u files in this directory"
@@ -3808,28 +3827,28 @@ msgstr[0] "Pronađena je %u datoteka u ovoj mapi"
 msgstr[1] "Pronađene su %u datoteke u ovoj mapi"
 msgstr[2] "Pronađeno je %u datoteka u ovoj mapi"
 
-#: ../src/easytag.c:982
+#: ../src/easytag.c:983
 msgid "No file found in this directory and subdirectories"
 msgstr "Nema pronađenih datoteka u ovoj mapi i podmapama"
 
-#: ../src/easytag.c:984
+#: ../src/easytag.c:985
 msgid "No file found in this directory"
 msgstr "Nema pronađenih datoteka u ovoj mapi"
 
-#: ../src/easytag.c:1060
+#: ../src/easytag.c:1061
 #, c-format
 msgid "Error opening directory ‘%s’: %s"
 msgstr "Greška pri otvaranju mape '%s': %s"
 
-#: ../src/easytag.c:1115
+#: ../src/easytag.c:1116
 msgid "Searching for audio files…"
 msgstr "Pretraživanje glazbenih datoteka…"
 
-#: ../src/easytag.c:1116
+#: ../src/easytag.c:1117
 msgid "Searching"
 msgstr "Pretraživanje"
 
-#: ../src/easytag.c:1117
+#: ../src/easytag.c:1118
 msgid "_Stop"
 msgstr "_Zaustavi"
 
@@ -3846,42 +3865,42 @@ msgstr "Greška pri zahtjevu informacija za datoteku '%s'"
 msgid "Read-only file"
 msgstr "Samo-za-čitanje datoteka"
 
-#: ../src/file_list.c:245
+#: ../src/file_list.c:246
 #, c-format
 msgid "Error reading ID3 tag from file ‘%s’: %s"
 msgstr "Greška pri čitanju ID3 oznake iz datoteke: '%s': %s"
 
-#: ../src/file_list.c:256
+#: ../src/file_list.c:257
 #, c-format
 msgid "Error reading tag from Ogg file ‘%s’: %s"
 msgstr "Greška pri čitanju oznaka iz Ogg datoteke '%s: '%s"
 
-#: ../src/file_list.c:267
+#: ../src/file_list.c:268
 #, c-format
 msgid "Error reading tag from FLAC file ‘%s’: %s"
 msgstr "Greška pri čitanju oznaka iz FLAC datoteke '%s: '%s"
 
-#: ../src/file_list.c:277
+#: ../src/file_list.c:278
 #, c-format
 msgid "Error reading APE tag from file ‘%s’: %s"
 msgstr "Greška pri čitanju APE oznake iz datoteke: '%s': %s"
 
-#: ../src/file_list.c:287
+#: ../src/file_list.c:288
 #, c-format
 msgid "Error reading tag from MP4 file ‘%s’: %s"
 msgstr "Greška pri čitanju oznaka iz MP4 datoteke ‘%s’: %s"
 
-#: ../src/file_list.c:298
+#: ../src/file_list.c:299
 #, c-format
 msgid "Error reading tag from WavPack file ‘%s’: %s"
 msgstr "Greška pri čitanju oznaka iz WavPack datoteke ‘%s’: %s"
 
-#: ../src/file_list.c:309
+#: ../src/file_list.c:310
 #, c-format
 msgid "Error reading tag from Opus file ‘%s’: %s"
 msgstr "Greška pri čitanju oznaka iz Opus datoteke '%s': %s"
 
-#: ../src/file_list.c:345
+#: ../src/file_list.c:346
 #, c-format
 msgid ""
 "The year value ‘%s’ seems to be invalid in file ‘%s’. The information will "
@@ -3890,7 +3909,7 @@ msgstr ""
 "Vrijednost godine '%s' čini se da nije valjana u datoteci '%s'. Informacija "
 "će biti izgubljena tijekom spremanja oznake"
 
-#: ../src/file_list.c:352
+#: ../src/file_list.c:353
 #, fuzzy, c-format
 msgid ""
 "The original year value ‘%s’ seems to be invalid in file ‘%s’. The "
@@ -3899,7 +3918,7 @@ msgstr ""
 "Vrijednost godine '%s' čini se da nije valjana u datoteci '%s'. Informacija "
 "će biti izgubljena tijekom spremanja oznake"
 
-#: ../src/file_list.c:508
+#: ../src/file_list.c:509
 #, c-format
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "Automatski ispravak primijenjen je za datoteku '%s'"

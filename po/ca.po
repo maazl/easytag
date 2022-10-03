@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: easytag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-25 15:22+0200\n"
+"POT-Creation-Date: 2022-10-03 19:20+0200\n"
 "PO-Revision-Date: 2016-12-19 14:31+0100\n"
 "Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
 "Language-Team: Catalan <Catalan <info@softcatala.org>>\n"
@@ -80,7 +80,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Escull un directori per a mostrar en el navegador"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3870
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "_Obre"
@@ -90,7 +90,7 @@ msgid "Select a directory to browse"
 msgstr "Selecciona un directori per a navegar"
 
 #. Translators: No files, as in "0 files".
-#: ../data/browser.ui.h:4 ../src/easytag.c:978
+#: ../data/browser.ui.h:4 ../src/easytag.c:979
 msgid "No files"
 msgstr "Cap fitxer"
 
@@ -211,7 +211,7 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3015 ../src/browser.c:932 ../src/browser.c:3869
+#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
 #: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
 #: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
 msgid "_Cancel"
@@ -231,7 +231,7 @@ msgid ""
 msgstr "Introduïu el programa a executar; rebrà el fitxer actual com paràmetre"
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:101 ../src/easytag.c:562
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:562
 msgid "Rename Directory"
 msgstr "Canvia el nom al directori"
 
@@ -741,13 +741,13 @@ msgstr "Any descendent"
 
 #: ../data/menus.ui.h:42
 #, fuzzy
-msgid "Ascending by original year"
-msgstr "Artista original ascendent"
+msgid "Ascending by release year"
+msgstr "Any ascendent"
 
 #: ../data/menus.ui.h:43
 #, fuzzy
-msgid "Descending by original year"
-msgstr "Artista original descendent"
+msgid "Descending by release year"
+msgstr "Any descendent"
 
 #: ../data/menus.ui.h:44
 msgid "Ascending by genre"
@@ -782,218 +782,238 @@ msgid "Descending by original artist"
 msgstr "Artista original descendent"
 
 #: ../data/menus.ui.h:52
+#, fuzzy
+msgid "Ascending by original year"
+msgstr "Artista original ascendent"
+
+#: ../data/menus.ui.h:53
+#, fuzzy
+msgid "Descending by original year"
+msgstr "Artista original descendent"
+
+#: ../data/menus.ui.h:54
 msgid "Ascending by copyright"
 msgstr "Copyright ascendent"
 
-#: ../data/menus.ui.h:53
+#: ../data/menus.ui.h:55
 msgid "Descending by copyright"
 msgstr "Copyright descendent"
 
-#: ../data/menus.ui.h:54
+#: ../data/menus.ui.h:56
 msgid "Ascending by URL"
 msgstr "URL ascendent"
 
-#: ../data/menus.ui.h:55
+#: ../data/menus.ui.h:57
 msgid "Descending by URL"
 msgstr "URL descendent"
 
-#: ../data/menus.ui.h:56
+#: ../data/menus.ui.h:58
 msgid "Ascending by encoder name"
 msgstr "Nom codificador ascendent"
 
-#: ../data/menus.ui.h:57
+#: ../data/menus.ui.h:59
 msgid "Descending by encoder name"
 msgstr "Nom codificador descendent"
 
-#: ../data/menus.ui.h:58
+#: ../data/menus.ui.h:60
 msgid "Sort List by Property"
 msgstr "Ordena per propietats"
 
-#: ../data/menus.ui.h:59
+#: ../data/menus.ui.h:61
+#, fuzzy
+msgid "Ascending by file path"
+msgstr "Tipus de fitxer ascendent"
+
+#: ../data/menus.ui.h:62
+#, fuzzy
+msgid "Descending by file path"
+msgstr "Tipus de fitxer descendent"
+
+#: ../data/menus.ui.h:63
 msgid "Ascending by filename"
 msgstr "Nom del fitxer ascendent"
 
-#: ../data/menus.ui.h:60
+#: ../data/menus.ui.h:64
 msgid "Descending by filename"
 msgstr "Nom del fitxer descendent"
 
-#: ../data/menus.ui.h:61
+#: ../data/menus.ui.h:65
 msgid "Ascending by creation date"
 msgstr "Data creació ascendent"
 
-#: ../data/menus.ui.h:62
+#: ../data/menus.ui.h:66
 msgid "Descending by creation date"
 msgstr "Data de creació descendent"
 
-#: ../data/menus.ui.h:63
+#: ../data/menus.ui.h:67
 msgid "Ascending by file type"
 msgstr "Tipus de fitxer ascendent"
 
-#: ../data/menus.ui.h:64
+#: ../data/menus.ui.h:68
 msgid "Descending by file type"
 msgstr "Tipus de fitxer descendent"
 
-#: ../data/menus.ui.h:65
+#: ../data/menus.ui.h:69
 msgid "Ascending by file size"
 msgstr "Mida de fitxer ascendent"
 
-#: ../data/menus.ui.h:66
+#: ../data/menus.ui.h:70
 msgid "Descending by file size"
 msgstr "Mida de fitxer descendent"
 
-#: ../data/menus.ui.h:67
+#: ../data/menus.ui.h:71
 msgid "Ascending by duration"
 msgstr "Duració ascendent"
 
-#: ../data/menus.ui.h:68
+#: ../data/menus.ui.h:72
 msgid "Descending by duration"
 msgstr "Duració ascendent"
 
-#: ../data/menus.ui.h:69
+#: ../data/menus.ui.h:73
 msgid "Ascending by bit rate"
 msgstr "Ascendent per taxa de bits"
 
-#: ../data/menus.ui.h:70
+#: ../data/menus.ui.h:74
 msgid "Descending by bit rate"
 msgstr "Descendent per taxa de bits"
 
-#: ../data/menus.ui.h:71
+#: ../data/menus.ui.h:75
 msgid "Ascending by sample rate"
 msgstr "Ascendent per freqüència de mostreig"
 
-#: ../data/menus.ui.h:72
+#: ../data/menus.ui.h:76
 msgid "Descending by sample rate"
 msgstr "Descendent per freqüència de mostreig"
 
-#: ../data/menus.ui.h:73
+#: ../data/menus.ui.h:77
 msgid "Collapse Tree"
 msgstr "Col·lapsa l'arbre"
 
-#: ../data/menus.ui.h:74
+#: ../data/menus.ui.h:78
 msgid "Reload Tree"
 msgstr "Torna a carregar l'arbre"
 
-#: ../data/menus.ui.h:75
+#: ../data/menus.ui.h:79
 msgid "Reload Directory"
 msgstr "Torna a carregar el directori"
 
-#: ../data/menus.ui.h:76
+#: ../data/menus.ui.h:80
 msgid "Show Hidden Directories"
 msgstr "Mostra els directoris ocults"
 
-#: ../data/menus.ui.h:77
+#: ../data/menus.ui.h:81
 msgid "_Browser"
 msgstr "_Navegador"
 
-#: ../data/menus.ui.h:78
+#: ../data/menus.ui.h:82
 msgid "Set _Current Path as Default"
 msgstr "Configura el _camí actual per defecte"
 
-#: ../data/menus.ui.h:79
+#: ../data/menus.ui.h:83
 msgid "Rename Directory…"
 msgstr "Canvia el nom al directori..."
 
-#: ../data/menus.ui.h:80
+#: ../data/menus.ui.h:84
 msgid "Browse Directory With…"
 msgstr "Navega el directori amb..."
 
-#: ../data/menus.ui.h:81
+#: ../data/menus.ui.h:85
 msgid "Browse _Subdirectories"
 msgstr "Navega _subdirectoris"
 
-#: ../data/menus.ui.h:82
+#: ../data/menus.ui.h:86
 msgid "_Miscellaneous"
 msgstr "_Miscel·lània"
 
-#: ../data/menus.ui.h:83
+#: ../data/menus.ui.h:87
 msgid "CDD_B Search…"
 msgstr "Cerca CDD_B..."
 
-#: ../data/menus.ui.h:84
+#: ../data/menus.ui.h:88
 msgid "Load Filenames From a Text File…"
 msgstr "Carrega els noms dels fitxers des d'un fitxer de text..."
 
-#: ../data/menus.ui.h:85 ../data/toolbar.ui.h:29
+#: ../data/menus.ui.h:89 ../data/toolbar.ui.h:29
 msgid "Generate Playlist…"
 msgstr "Genera llista de reproducció..."
 
-#: ../data/menus.ui.h:86
+#: ../data/menus.ui.h:90
 msgid "_Go"
 msgstr "_Ves"
 
-#: ../data/menus.ui.h:87
+#: ../data/menus.ui.h:91
 msgid "_Home Directory"
 msgstr "_Directori d'inici"
 
-#: ../data/menus.ui.h:88
+#: ../data/menus.ui.h:92
 msgid "Desktop Directory"
 msgstr "Directori escriptori"
 
-#: ../data/menus.ui.h:89
+#: ../data/menus.ui.h:93
 msgid "Documents Directory"
 msgstr "Directori documents"
 
-#: ../data/menus.ui.h:90
+#: ../data/menus.ui.h:94
 msgid "Downloads Directory"
 msgstr "Directori baixades"
 
-#: ../data/menus.ui.h:91
+#: ../data/menus.ui.h:95
 msgid "Music Directory"
 msgstr "Directori música"
 
-#: ../data/menus.ui.h:92
+#: ../data/menus.ui.h:96
 msgid "_Parent Directory"
 msgstr "Directori _pare"
 
-#: ../data/menus.ui.h:93
+#: ../data/menus.ui.h:97
 msgid "_Default Directory"
 msgstr "Directori per _defecte"
 
-#: ../data/menus.ui.h:94 ../data/toolbar.ui.h:1
+#: ../data/menus.ui.h:98 ../data/toolbar.ui.h:1
 msgid "_First File"
 msgstr "_Primer fitxer"
 
-#: ../data/menus.ui.h:95
+#: ../data/menus.ui.h:99
 msgid "Previous File"
 msgstr "Fitxer previ"
 
-#: ../data/menus.ui.h:96 ../data/toolbar.ui.h:5
+#: ../data/menus.ui.h:100 ../data/toolbar.ui.h:5
 msgid "_Next File"
 msgstr "_Fitxer següent"
 
-#: ../data/menus.ui.h:97 ../data/toolbar.ui.h:7
+#: ../data/menus.ui.h:101 ../data/toolbar.ui.h:7
 msgid "_Last File"
 msgstr "_Últim fitxer"
 
-#: ../data/menus.ui.h:98
+#: ../data/menus.ui.h:102
 msgid "Home Directory"
 msgstr "Directori d'inici"
 
-#: ../data/menus.ui.h:99
+#: ../data/menus.ui.h:103
 msgid "Default Directory"
 msgstr "Directori per defecte"
 
-#: ../data/menus.ui.h:100
+#: ../data/menus.ui.h:104
 msgid "Set Current Path as Default"
 msgstr "Configura el camí actual perquè sigui el predeterminat"
 
-#: ../data/menus.ui.h:102
+#: ../data/menus.ui.h:106
 msgid "Browse Subdirectories"
 msgstr "Navega els subdirectoris"
 
-#: ../data/menus.ui.h:103
+#: ../data/menus.ui.h:107
 msgid "Invert Selection"
 msgstr "Inverteix la selecció"
 
-#: ../data/menus.ui.h:104
+#: ../data/menus.ui.h:108
 msgid "CDDB Search Files…"
 msgstr "Cerca fitxers a la CDDB..."
 
-#: ../data/menus.ui.h:105
+#: ../data/menus.ui.h:109
 msgid "Find…"
 msgstr "Cerca…"
 
-#: ../data/menus.ui.h:106
+#: ../data/menus.ui.h:110
 msgid "Clear Log"
 msgstr "Neteja el registre"
 
@@ -1063,8 +1083,8 @@ msgstr "Escriu informació usant el nom del fitxer"
 msgid "Write information using:"
 msgstr "Escriu informació usant:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3016
-#: ../src/browser.c:933 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
+#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 msgid "_Save"
@@ -3224,7 +3244,7 @@ msgstr "Lloc web: %s"
 msgid "- Tag and rename audio files"
 msgstr "- Etiqueta i reanomena els fitxers d'àudio"
 
-#: ../src/application.c:429 ../src/file_list.c:442
+#: ../src/application.c:429 ../src/file_list.c:443
 #, c-format
 msgid "Error while querying information for file ‘%s’: %s"
 msgstr "Error mentre s'estava consultant informació sobre el fitxer: «%s» %s"
@@ -3277,8 +3297,8 @@ msgstr "S'han suprimit tots els fitxers"
 msgid "All tags have been removed"
 msgstr "S'han suprimit totes les etiquetes"
 
-#: ../src/application_window.c:1474 ../src/browser.c:363 ../src/browser.c:406
-#: ../src/browser.c:440 ../src/browser.c:4676 ../src/browser.c:4751
+#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
+#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "No s'ha pogut executar el programa «%s»"
@@ -3332,91 +3352,91 @@ msgid "File: ‘%s’"
 msgstr "Fitxer: «%s»"
 
 #. Quit EasyTAG.
-#: ../src/application_window.c:2979
+#: ../src/application_window.c:2978
 msgid "Normal exit"
 msgstr "Sortida normal"
 
-#: ../src/application_window.c:3013 ../src/browser.c:927
+#: ../src/application_window.c:3012 ../src/browser.c:948
 msgid "Some files have been modified but not saved"
 msgstr "Alguns fitxers han estat modificats però no desats"
 
-#: ../src/application_window.c:3014 ../src/browser.c:931 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr "_Descarta"
 
-#: ../src/application_window.c:3020 ../src/easytag.c:239
+#: ../src/application_window.c:3019 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Surt"
 
-#: ../src/application_window.c:3023
+#: ../src/application_window.c:3022
 msgid "Do you want to save them before quitting?"
 msgstr "Voleu desar-ho abans de sortir?"
 
-#: ../src/browser.c:628
+#: ../src/browser.c:649
 msgid "New default directory selected for browser"
 msgstr "Nou directori per defecte seleccionat per al navegador"
 
-#: ../src/browser.c:930
+#: ../src/browser.c:951
 msgid "Do you want to save them before changing directory?"
 msgstr "Voleu desar-los abans de canviar de directori?"
 
-#: ../src/browser.c:937
+#: ../src/browser.c:958
 msgid "Confirm Directory Change"
 msgstr "Confirma el canvi de directori"
 
-#: ../src/browser.c:2654
+#: ../src/browser.c:2531
 msgid "All albums"
 msgstr "Tots els àlbums"
 
-#: ../src/browser.c:3906
+#: ../src/browser.c:3771
 msgid "Select File"
 msgstr "Seleccioneu un fitxer"
 
-#: ../src/browser.c:3913
+#: ../src/browser.c:3778
 msgid "Select Directory"
 msgstr "Seleccioneu un directori"
 
-#: ../src/browser.c:4180
+#: ../src/browser.c:4049
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Canvia el nom del directori «%s» a:"
 
-#: ../src/browser.c:4316
+#: ../src/browser.c:4185
 msgid "You must type a directory name"
 msgstr "Cal que escriviu un nom de directori"
 
-#: ../src/browser.c:4317 ../src/browser.c:4339
+#: ../src/browser.c:4186 ../src/browser.c:4208
 msgid "Directory Name Error"
 msgstr "Error de nom de directori"
 
-#: ../src/browser.c:4335
+#: ../src/browser.c:4204
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "No s'ha pogut convertir «%s» a la codificació de noms de fitxer"
 
-#: ../src/browser.c:4338
+#: ../src/browser.c:4207
 msgid "Please use another name."
 msgstr "Useu un altre nom."
 
-#: ../src/browser.c:4410
+#: ../src/browser.c:4279
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "El nom del directori «%s» ja existeix."
 
-#: ../src/browser.c:4411 ../src/easytag.c:650
+#: ../src/browser.c:4280 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Error al canviar nom de fitxer"
 
-#: ../src/browser.c:4450 ../src/browser.c:4479
+#: ../src/browser.c:4319 ../src/browser.c:4348
 msgid "Rename Directory Error"
 msgstr "Error al canviar nom de directori"
 
-#: ../src/browser.c:4520
+#: ../src/browser.c:4389
 msgid "Directory renamed"
 msgstr "S'ha canviat el nom al directori"
 
-#: ../src/browser.c:4668 ../src/browser.c:4743
+#: ../src/browser.c:4537 ../src/browser.c:4612
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "S'ha executat l'ordre «%s»"
@@ -3857,7 +3877,7 @@ msgstr "No es pot escriure l'etiqueta al fitxer «%s»"
 msgid "Tag Write Error"
 msgstr "Error d'escriptura de l'etiqueta"
 
-#: ../src/easytag.c:861 ../src/easytag.c:1095
+#: ../src/easytag.c:861 ../src/easytag.c:1096
 #, c-format
 msgid "Cannot read directory ‘%s’"
 msgstr "No es pot llegir el directori «%s»"
@@ -3868,11 +3888,10 @@ msgstr "Error de lectura de directori"
 
 #. Read the directory recursively
 #: ../src/easytag.c:886
-#, c-format
 msgid "Search in progress…"
 msgstr "Cerca en procés..."
 
-#: ../src/easytag.c:958
+#: ../src/easytag.c:959
 #, c-format
 msgid "Found one file in this directory and subdirectories"
 msgid_plural "Found %u files in this directory and subdirectories"
@@ -3880,35 +3899,35 @@ msgstr[0] "S'ha trobat un fitxer en aquest directori i els seus subdirectoris"
 msgstr[1] ""
 "S'han trobat %u fitxers en aquest directori i els seus subdirectoris"
 
-#: ../src/easytag.c:965
+#: ../src/easytag.c:966
 #, c-format
 msgid "Found one file in this directory"
 msgid_plural "Found %u files in this directory"
 msgstr[0] "S'ha trobat un fitxer en aquest directori"
 msgstr[1] "S'han trobat %u fitxers en aquest directori"
 
-#: ../src/easytag.c:982
+#: ../src/easytag.c:983
 msgid "No file found in this directory and subdirectories"
 msgstr "No s'ha trobat cap fitxer en aquest directori i els seus subdirectoris"
 
-#: ../src/easytag.c:984
+#: ../src/easytag.c:985
 msgid "No file found in this directory"
 msgstr "No s'ha trobat cap fitxer en aquest directori"
 
-#: ../src/easytag.c:1060
+#: ../src/easytag.c:1061
 #, c-format
 msgid "Error opening directory ‘%s’: %s"
 msgstr "Error en obrir el directori «%s»: %s"
 
-#: ../src/easytag.c:1115
+#: ../src/easytag.c:1116
 msgid "Searching for audio files…"
 msgstr "S'estan cercant fitxers d'àudio..."
 
-#: ../src/easytag.c:1116
+#: ../src/easytag.c:1117
 msgid "Searching"
 msgstr "S'està cercant"
 
-#: ../src/easytag.c:1117
+#: ../src/easytag.c:1118
 msgid "_Stop"
 msgstr "_Atura"
 
@@ -3925,42 +3944,42 @@ msgstr "No es pot consultar la informació del fitxer «%s»"
 msgid "Read-only file"
 msgstr "Fitxer de sols lectura"
 
-#: ../src/file_list.c:245
+#: ../src/file_list.c:246
 #, c-format
 msgid "Error reading ID3 tag from file ‘%s’: %s"
 msgstr "Error en llegir l'etiqueta ID3 del fitxer «%s»: %s"
 
-#: ../src/file_list.c:256
+#: ../src/file_list.c:257
 #, c-format
 msgid "Error reading tag from Ogg file ‘%s’: %s"
 msgstr "Error en llegir l'etiqueta del fitxer ogg «%s»: %s"
 
-#: ../src/file_list.c:267
+#: ../src/file_list.c:268
 #, c-format
 msgid "Error reading tag from FLAC file ‘%s’: %s"
 msgstr "Error en llegir l'etiqueta del fitxer FLAC «%s»: %s"
 
-#: ../src/file_list.c:277
+#: ../src/file_list.c:278
 #, c-format
 msgid "Error reading APE tag from file ‘%s’: %s"
 msgstr "Error en llegir l'etiqueta APE del fitxer «%s»: %s"
 
-#: ../src/file_list.c:287
+#: ../src/file_list.c:288
 #, c-format
 msgid "Error reading tag from MP4 file ‘%s’: %s"
 msgstr "Error en llegir l'etiqueta del fitxer MP4 «%s»: %s"
 
-#: ../src/file_list.c:298
+#: ../src/file_list.c:299
 #, c-format
 msgid "Error reading tag from WavPack file ‘%s’: %s"
 msgstr "Error en llegir l'etiqueta del fitxer WavPack «%s»: %s"
 
-#: ../src/file_list.c:309
+#: ../src/file_list.c:310
 #, c-format
 msgid "Error reading tag from Opus file ‘%s’: %s"
 msgstr "Error en llegir l'etiqueta del fitxer Opus «%s»: %s"
 
-#: ../src/file_list.c:345
+#: ../src/file_list.c:346
 #, c-format
 msgid ""
 "The year value ‘%s’ seems to be invalid in file ‘%s’. The information will "
@@ -3969,7 +3988,7 @@ msgstr ""
 "El valor de l'any «%s» sembla ser invàlid al fitxer «%s». La informació es "
 "perdrà quan es desi"
 
-#: ../src/file_list.c:352
+#: ../src/file_list.c:353
 #, fuzzy, c-format
 msgid ""
 "The original year value ‘%s’ seems to be invalid in file ‘%s’. The "
@@ -3978,7 +3997,7 @@ msgstr ""
 "El valor de l'any «%s» sembla ser invàlid al fitxer «%s». La informació es "
 "perdrà quan es desi"
 
-#: ../src/file_list.c:508
+#: ../src/file_list.c:509
 #, c-format
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "S'han aplicat les correccions automàtiques per al fitxer «%s»"

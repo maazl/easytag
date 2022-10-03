@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 1.99.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-25 15:22+0200\n"
+"POT-Creation-Date: 2022-10-03 19:20+0200\n"
 "PO-Revision-Date: 2019-11-21 23:57+0200\n"
 "Last-Translator: Efstathios Iosifidis <iosifidis@opensuse.org>\n"
 "Language-Team: team@gnome.gr\n"
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Επιλέξτε έναν κατάλογο προς εμφάνιση στον περιήγηση."
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3870
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "Ά_νοιγμα"
@@ -92,7 +92,7 @@ msgid "Select a directory to browse"
 msgstr "Επιλέξτε έναν κατάλογο για περιήγηση"
 
 #. Translators: No files, as in "0 files".
-#: ../data/browser.ui.h:4 ../src/easytag.c:978
+#: ../data/browser.ui.h:4 ../src/easytag.c:979
 msgid "No files"
 msgstr "Δεν υπάρχουν αρχεία"
 
@@ -215,7 +215,7 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3015 ../src/browser.c:932 ../src/browser.c:3869
+#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
 #: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
 #: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
 msgid "_Cancel"
@@ -238,7 +238,7 @@ msgstr ""
 "του τρέχοντος αρχείου ως παράμετρο."
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:101 ../src/easytag.c:562
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:562
 msgid "Rename Directory"
 msgstr "Μετονομασία καταλόγου"
 
@@ -756,13 +756,13 @@ msgstr "Φθίνουσα, κατά χρονιά"
 
 #: ../data/menus.ui.h:42
 #, fuzzy
-msgid "Ascending by original year"
-msgstr "Αύξουσα, κατά όνομα αρχικού καλλιτέχνη"
+msgid "Ascending by release year"
+msgstr "Αύξουσα, κατά χρονιά"
 
 #: ../data/menus.ui.h:43
 #, fuzzy
-msgid "Descending by original year"
-msgstr "Φθίνουσα, κατά όνομα αρχικού καλλιτέχνη"
+msgid "Descending by release year"
+msgstr "Φθίνουσα, κατά χρονιά"
 
 #: ../data/menus.ui.h:44
 msgid "Ascending by genre"
@@ -797,225 +797,245 @@ msgid "Descending by original artist"
 msgstr "Φθίνουσα, κατά όνομα αρχικού καλλιτέχνη"
 
 #: ../data/menus.ui.h:52
+#, fuzzy
+msgid "Ascending by original year"
+msgstr "Αύξουσα, κατά όνομα αρχικού καλλιτέχνη"
+
+#: ../data/menus.ui.h:53
+#, fuzzy
+msgid "Descending by original year"
+msgstr "Φθίνουσα, κατά όνομα αρχικού καλλιτέχνη"
+
+#: ../data/menus.ui.h:54
 msgid "Ascending by copyright"
 msgstr "Αύξουσα, κατά πνευματικά δικαιώματα"
 
-#: ../data/menus.ui.h:53
+#: ../data/menus.ui.h:55
 msgid "Descending by copyright"
 msgstr "Φθίνουσα, κατά πνευματικά δικαιώματα"
 
-#: ../data/menus.ui.h:54
+#: ../data/menus.ui.h:56
 msgid "Ascending by URL"
 msgstr "Αύξουσα, κατά URL"
 
-#: ../data/menus.ui.h:55
+#: ../data/menus.ui.h:57
 msgid "Descending by URL"
 msgstr "Φθίνουσα, κατά URL"
 
-#: ../data/menus.ui.h:56
+#: ../data/menus.ui.h:58
 msgid "Ascending by encoder name"
 msgstr "Αύξουσα, κατά όνομα κωδικοποιητή"
 
-#: ../data/menus.ui.h:57
+#: ../data/menus.ui.h:59
 msgid "Descending by encoder name"
 msgstr "Φθίνουσα, κατά όνομα κωδικοποιητή"
 
-#: ../data/menus.ui.h:58
+#: ../data/menus.ui.h:60
 msgid "Sort List by Property"
 msgstr "Ταξινόμηση λίστας κατά ιδιότητα"
 
-#: ../data/menus.ui.h:59
+#: ../data/menus.ui.h:61
+#, fuzzy
+msgid "Ascending by file path"
+msgstr "Αύξουσα, κατά τύπο αρχείου"
+
+#: ../data/menus.ui.h:62
+#, fuzzy
+msgid "Descending by file path"
+msgstr "Φθίνουσα, κατά τύπο αρχείου"
+
+#: ../data/menus.ui.h:63
 msgid "Ascending by filename"
 msgstr "Αύξουσα, κατά όνομα αρχείου"
 
-#: ../data/menus.ui.h:60
+#: ../data/menus.ui.h:64
 msgid "Descending by filename"
 msgstr "Φθίνουσα, κατά όνομα αρχείου"
 
-#: ../data/menus.ui.h:61
+#: ../data/menus.ui.h:65
 msgid "Ascending by creation date"
 msgstr "Αύξουσα, κατά ημερομηνία δημιουργίας"
 
-#: ../data/menus.ui.h:62
+#: ../data/menus.ui.h:66
 msgid "Descending by creation date"
 msgstr "Φθίνουσα, κατά ημερομηνία δημιουργίας"
 
-#: ../data/menus.ui.h:63
+#: ../data/menus.ui.h:67
 msgid "Ascending by file type"
 msgstr "Αύξουσα, κατά τύπο αρχείου"
 
-#: ../data/menus.ui.h:64
+#: ../data/menus.ui.h:68
 msgid "Descending by file type"
 msgstr "Φθίνουσα, κατά τύπο αρχείου"
 
-#: ../data/menus.ui.h:65
+#: ../data/menus.ui.h:69
 msgid "Ascending by file size"
 msgstr "Αύξουσα, κατά μέγεθος αρχείου"
 
-#: ../data/menus.ui.h:66
+#: ../data/menus.ui.h:70
 msgid "Descending by file size"
 msgstr "Φθίνουσα, κατά μέγεθος αρχείου"
 
-#: ../data/menus.ui.h:67
+#: ../data/menus.ui.h:71
 msgid "Ascending by duration"
 msgstr "Αύξουσα, κατά διάρκεια"
 
-#: ../data/menus.ui.h:68
+#: ../data/menus.ui.h:72
 msgid "Descending by duration"
 msgstr "Φθίνουσα, κατά διάρκεια"
 
-#: ../data/menus.ui.h:69
+#: ../data/menus.ui.h:73
 #, fuzzy
 msgid "Ascending by bit rate"
 msgstr "Αύξουσα, κατά ρυθμό δυαδικών"
 
-#: ../data/menus.ui.h:70
+#: ../data/menus.ui.h:74
 #, fuzzy
 msgid "Descending by bit rate"
 msgstr "Φθίνουσα, κατά ρυθμό δυαδικών"
 
-#: ../data/menus.ui.h:71
+#: ../data/menus.ui.h:75
 #, fuzzy
 msgid "Ascending by sample rate"
 msgstr "Αύξουσα, κατά ρυθμό δειγματοληψίας"
 
-#: ../data/menus.ui.h:72
+#: ../data/menus.ui.h:76
 #, fuzzy
 msgid "Descending by sample rate"
 msgstr "Φθίνουσα, κατά ρυθμό δειγματοληψίας"
 
-#: ../data/menus.ui.h:73
+#: ../data/menus.ui.h:77
 #, fuzzy
 msgid "Collapse Tree"
 msgstr "_Σύμπτυξη δένδρου"
 
-#: ../data/menus.ui.h:74
+#: ../data/menus.ui.h:78
 #, fuzzy
 msgid "Reload Tree"
 msgstr "Ε_παναφόρτωση δένδρου"
 
-#: ../data/menus.ui.h:75
+#: ../data/menus.ui.h:79
 msgid "Reload Directory"
 msgstr "Επαναφόρτωση καταλόγου"
 
-#: ../data/menus.ui.h:76
+#: ../data/menus.ui.h:80
 msgid "Show Hidden Directories"
 msgstr "Εμφάνιση των κρυφών καταλόγων"
 
-#: ../data/menus.ui.h:77
+#: ../data/menus.ui.h:81
 msgid "_Browser"
 msgstr "_Περιηγητής"
 
-#: ../data/menus.ui.h:78
+#: ../data/menus.ui.h:82
 msgid "Set _Current Path as Default"
 msgstr "Ορισμός της _τρέχουσας διαδρομής ως προεπιλογής"
 
-#: ../data/menus.ui.h:79
+#: ../data/menus.ui.h:83
 msgid "Rename Directory…"
 msgstr "Μετονομασία καταλόγου…"
 
-#: ../data/menus.ui.h:80
+#: ../data/menus.ui.h:84
 msgid "Browse Directory With…"
 msgstr "Περιήγηση καταλόγου με…"
 
-#: ../data/menus.ui.h:81
+#: ../data/menus.ui.h:85
 msgid "Browse _Subdirectories"
 msgstr "Περιήγηση στους _υποκαταλόγους"
 
-#: ../data/menus.ui.h:82
+#: ../data/menus.ui.h:86
 msgid "_Miscellaneous"
 msgstr "_Διάφορα"
 
-#: ../data/menus.ui.h:83
+#: ../data/menus.ui.h:87
 msgid "CDD_B Search…"
 msgstr "Αναζήτηση CDD_B…"
 
-#: ../data/menus.ui.h:84
+#: ../data/menus.ui.h:88
 msgid "Load Filenames From a Text File…"
 msgstr "Φόρτωση ονομάτων αρχείων από αρχείο κειμένου…"
 
-#: ../data/menus.ui.h:85 ../data/toolbar.ui.h:29
+#: ../data/menus.ui.h:89 ../data/toolbar.ui.h:29
 msgid "Generate Playlist…"
 msgstr "Δημιουργία λίστας αναπαραγωγής…"
 
-#: ../data/menus.ui.h:86
+#: ../data/menus.ui.h:90
 msgid "_Go"
 msgstr "_Μετάβαση"
 
-#: ../data/menus.ui.h:87
+#: ../data/menus.ui.h:91
 msgid "_Home Directory"
 msgstr "_Προσωπικός κατάλογος"
 
-#: ../data/menus.ui.h:88
+#: ../data/menus.ui.h:92
 msgid "Desktop Directory"
 msgstr "Κατάλογος επιφάνειας εργασίας"
 
-#: ../data/menus.ui.h:89
+#: ../data/menus.ui.h:93
 msgid "Documents Directory"
 msgstr "Κατάλογος εγγράφων"
 
-#: ../data/menus.ui.h:90
+#: ../data/menus.ui.h:94
 msgid "Downloads Directory"
 msgstr "Λήψεις καταλόγου"
 
-#: ../data/menus.ui.h:91
+#: ../data/menus.ui.h:95
 msgid "Music Directory"
 msgstr "Κατάλογος μουσικής"
 
-#: ../data/menus.ui.h:92
+#: ../data/menus.ui.h:96
 msgid "_Parent Directory"
 msgstr "_Γονικός κατάλογος"
 
-#: ../data/menus.ui.h:93
+#: ../data/menus.ui.h:97
 msgid "_Default Directory"
 msgstr "_Προεπιλεγμένος κατάλογος"
 
-#: ../data/menus.ui.h:94 ../data/toolbar.ui.h:1
+#: ../data/menus.ui.h:98 ../data/toolbar.ui.h:1
 msgid "_First File"
 msgstr "_Πρώτο αρχείο"
 
-#: ../data/menus.ui.h:95
+#: ../data/menus.ui.h:99
 msgid "Previous File"
 msgstr "Προηγούμενο αρχείο"
 
-#: ../data/menus.ui.h:96 ../data/toolbar.ui.h:5
+#: ../data/menus.ui.h:100 ../data/toolbar.ui.h:5
 msgid "_Next File"
 msgstr "_Επόμενο αρχείο"
 
-#: ../data/menus.ui.h:97 ../data/toolbar.ui.h:7
+#: ../data/menus.ui.h:101 ../data/toolbar.ui.h:7
 msgid "_Last File"
 msgstr "_Τελευταίο αρχείο"
 
-#: ../data/menus.ui.h:98
+#: ../data/menus.ui.h:102
 msgid "Home Directory"
 msgstr "Προσωπικός κατάλογος"
 
-#: ../data/menus.ui.h:99
+#: ../data/menus.ui.h:103
 msgid "Default Directory"
 msgstr "Προεπιλεγμένος κατάλογος"
 
-#: ../data/menus.ui.h:100
+#: ../data/menus.ui.h:104
 msgid "Set Current Path as Default"
 msgstr "Ορισμός της τρέχουσας διαδρομής ως προεπιλογής"
 
-#: ../data/menus.ui.h:102
+#: ../data/menus.ui.h:106
 #, fuzzy
 msgid "Browse Subdirectories"
 msgstr "Περιήγηση στους _υποκαταλόγους"
 
-#: ../data/menus.ui.h:103
+#: ../data/menus.ui.h:107
 msgid "Invert Selection"
 msgstr "Αντιστροφή επιλογής"
 
-#: ../data/menus.ui.h:104
+#: ../data/menus.ui.h:108
 msgid "CDDB Search Files…"
 msgstr "Αναζήτηση αρχείων στη CDDB…"
 
-#: ../data/menus.ui.h:105
+#: ../data/menus.ui.h:109
 msgid "Find…"
 msgstr "Εύρεση…"
 
-#: ../data/menus.ui.h:106
+#: ../data/menus.ui.h:110
 msgid "Clear Log"
 msgstr "Καθαρισμός ιστορικού"
 
@@ -1084,8 +1104,8 @@ msgstr "Εγγραφή πληροφοριών με χρήση του ονόμα�
 msgid "Write information using:"
 msgstr "Εγγραφή πληροφοριών με χρήση:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3016
-#: ../src/browser.c:933 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
+#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 msgid "_Save"
@@ -3249,7 +3269,7 @@ msgstr "Ιστότοπος: %s"
 msgid "- Tag and rename audio files"
 msgstr "- Προσθήκη ετικετών και μετονομασία αρχείων ήχου"
 
-#: ../src/application.c:429 ../src/file_list.c:442
+#: ../src/application.c:429 ../src/file_list.c:443
 #, fuzzy, c-format
 msgid "Error while querying information for file ‘%s’: %s"
 msgstr "Σφάλμα κατά το ερώτημα πληροφοριών για το αρχείο: '%s' (%s)"
@@ -3303,8 +3323,8 @@ msgstr "Διαγράφηκαν όλα τα αρχεία"
 msgid "All tags have been removed"
 msgstr "Αφαιρέθηκαν όλες οι ετικέτες"
 
-#: ../src/application_window.c:1474 ../src/browser.c:363 ../src/browser.c:406
-#: ../src/browser.c:440 ../src/browser.c:4676 ../src/browser.c:4751
+#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
+#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
 #, fuzzy, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Αποτυχία εκκίνησης προγράμματος: %s"
@@ -3358,95 +3378,95 @@ msgid "File: ‘%s’"
 msgstr "Αρχείο: «%s»"
 
 #. Quit EasyTAG.
-#: ../src/application_window.c:2979
+#: ../src/application_window.c:2978
 #, fuzzy
 msgid "Normal exit"
 msgstr "EasyTAG: Κανονική έξοδος."
 
-#: ../src/application_window.c:3013 ../src/browser.c:927
+#: ../src/application_window.c:3012 ../src/browser.c:948
 msgid "Some files have been modified but not saved"
 msgstr "Μερικά αρχεία έχουν τροποποιηθεί αλλά δεν αποθηκεύτηκαν"
 
-#: ../src/application_window.c:3014 ../src/browser.c:931 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 #, fuzzy
 msgid "_Discard"
 msgstr "Δίσκος"
 
-#: ../src/application_window.c:3020 ../src/easytag.c:239
+#: ../src/application_window.c:3019 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Έξοδος"
 
-#: ../src/application_window.c:3023
+#: ../src/application_window.c:3022
 msgid "Do you want to save them before quitting?"
 msgstr "Θέλετε να τα αποθηκεύσετε πριν την έξοδο;"
 
-#: ../src/browser.c:628
+#: ../src/browser.c:649
 #, fuzzy
 msgid "New default directory selected for browser"
 msgstr "Επιλέξτε έναν κατάλογο για περιήγηση"
 
-#: ../src/browser.c:930
+#: ../src/browser.c:951
 #, fuzzy
 msgid "Do you want to save them before changing directory?"
 msgstr "Θέλετε να τα αποθηκεύσετε πριν την αλλαγή καταλόγου;"
 
-#: ../src/browser.c:937
+#: ../src/browser.c:958
 msgid "Confirm Directory Change"
 msgstr "Επιβεβαίωση αλλαγής καταλόγου"
 
-#: ../src/browser.c:2654
+#: ../src/browser.c:2531
 msgid "All albums"
 msgstr "Όλοι οι δίσκοι"
 
-#: ../src/browser.c:3906
+#: ../src/browser.c:3771
 msgid "Select File"
 msgstr "Επιλογή αρχείου"
 
-#: ../src/browser.c:3913
+#: ../src/browser.c:3778
 msgid "Select Directory"
 msgstr "Επιλογή καταλόγου"
 
-#: ../src/browser.c:4180
+#: ../src/browser.c:4049
 #, fuzzy, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Μετονομασία του καταλόγου '%s' σε:"
 
-#: ../src/browser.c:4316
+#: ../src/browser.c:4185
 msgid "You must type a directory name"
 msgstr "Πρέπει να πληκτρολογήσετε ένα όνομα καταλόγου"
 
-#: ../src/browser.c:4317 ../src/browser.c:4339
+#: ../src/browser.c:4186 ../src/browser.c:4208
 msgid "Directory Name Error"
 msgstr "Σφάλμα ονόματος καταλόγου"
 
-#: ../src/browser.c:4335
+#: ../src/browser.c:4204
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Αδύνατη η μετατροπή του '%s' στην κωδικοποίηση του ονόματος αρχείου."
 
-#: ../src/browser.c:4338
+#: ../src/browser.c:4207
 msgid "Please use another name."
 msgstr "Παρακαλούμε χρησιμοποιήστε ένα άλλο όνομα."
 
-#: ../src/browser.c:4410
+#: ../src/browser.c:4279
 #, fuzzy, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Το όνομα καταλόγου '%s' υπάρχει ήδη"
 
-#: ../src/browser.c:4411 ../src/easytag.c:650
+#: ../src/browser.c:4280 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Σφάλμα κατά τη μετονομασία αρχείου"
 
-#: ../src/browser.c:4450 ../src/browser.c:4479
+#: ../src/browser.c:4319 ../src/browser.c:4348
 msgid "Rename Directory Error"
 msgstr "Σφάλμα κατά τη μετονομασία καταλόγου"
 
-#: ../src/browser.c:4520
+#: ../src/browser.c:4389
 msgid "Directory renamed"
 msgstr "Ο κατάλογος μετονομάστηκε"
 
-#: ../src/browser.c:4668 ../src/browser.c:4743
+#: ../src/browser.c:4537 ../src/browser.c:4612
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "Εκτελέστηκε η εντολή: %s"
@@ -3886,7 +3906,7 @@ msgstr "Αδύνατη η εγγραφή ετικέτας στο αρχείο '%
 msgid "Tag Write Error"
 msgstr "Σφάλμα εγγραφής ετικέτας"
 
-#: ../src/easytag.c:861 ../src/easytag.c:1095
+#: ../src/easytag.c:861 ../src/easytag.c:1096
 #, fuzzy, c-format
 msgid "Cannot read directory ‘%s’"
 msgstr "Αδύνατη η ανάγνωση του καταλόγου '%s'"
@@ -3897,11 +3917,10 @@ msgstr "Σφάλμα ανάγνωσης καταλόγου"
 
 #. Read the directory recursively
 #: ../src/easytag.c:886
-#, c-format
 msgid "Search in progress…"
 msgstr "Αναζήτηση σε εξέλιξη…"
 
-#: ../src/easytag.c:958
+#: ../src/easytag.c:959
 #, fuzzy, c-format
 msgid "Found one file in this directory and subdirectories"
 msgid_plural "Found %u files in this directory and subdirectories"
@@ -3910,35 +3929,35 @@ msgstr[0] ""
 msgstr[1] ""
 "Βρέθηκαν %d αρχεία σε αυτόν τον κατάλογο και τους υποκαταλόγους του."
 
-#: ../src/easytag.c:965
+#: ../src/easytag.c:966
 #, fuzzy, c-format
 msgid "Found one file in this directory"
 msgid_plural "Found %u files in this directory"
 msgstr[0] "Βρέθηκε ένα αρχείο σε αυτόν τον κατάλογο."
 msgstr[1] "Βρέθηκαν %d αρχεία σε αυτόν τον κατάλογο."
 
-#: ../src/easytag.c:982
+#: ../src/easytag.c:983
 msgid "No file found in this directory and subdirectories"
 msgstr "Δε βρέθηκε κανένα αρχείο σε αυτόν τον κατάλογο και τους υποκαταλόγους"
 
-#: ../src/easytag.c:984
+#: ../src/easytag.c:985
 msgid "No file found in this directory"
 msgstr "Δε βρέθηκε κανένα αρχείο σε αυτόν τον κατάλογο"
 
-#: ../src/easytag.c:1060
+#: ../src/easytag.c:1061
 #, fuzzy, c-format
 msgid "Error opening directory ‘%s’: %s"
 msgstr "Σφάλμα ανοίγματος καταλόγου '%s' (%s)"
 
-#: ../src/easytag.c:1115
+#: ../src/easytag.c:1116
 msgid "Searching for audio files…"
 msgstr "Αναζήτηση για αρχεία ήχου…"
 
-#: ../src/easytag.c:1116
+#: ../src/easytag.c:1117
 msgid "Searching"
 msgstr "Αναζήτηση"
 
-#: ../src/easytag.c:1117
+#: ../src/easytag.c:1118
 msgid "_Stop"
 msgstr "_Διακοπή"
 
@@ -3955,42 +3974,42 @@ msgstr "Αδύνατο το ερώτημα πληροφοριών του αρχ�
 msgid "Read-only file"
 msgstr "Αρχείο μόνο για ανάγνωση"
 
-#: ../src/file_list.c:245
+#: ../src/file_list.c:246
 #, fuzzy, c-format
 msgid "Error reading ID3 tag from file ‘%s’: %s"
 msgstr "Σφάλμα κατά την ανάγνωση ετικετών από το αρχείο: '%s'"
 
-#: ../src/file_list.c:256
+#: ../src/file_list.c:257
 #, fuzzy, c-format
 msgid "Error reading tag from Ogg file ‘%s’: %s"
 msgstr "Σφάλμα κατά την ανάγνωση ετικετών από το αρχείο ogg (%s)"
 
-#: ../src/file_list.c:267
+#: ../src/file_list.c:268
 #, fuzzy, c-format
 msgid "Error reading tag from FLAC file ‘%s’: %s"
 msgstr "Σφάλμα κατά την ανάγνωση ετικετών από το αρχείο: '%s'"
 
-#: ../src/file_list.c:277
+#: ../src/file_list.c:278
 #, fuzzy, c-format
 msgid "Error reading APE tag from file ‘%s’: %s"
 msgstr "Σφάλμα κατά την ανάγνωση ετικετών από το αρχείο: '%s'"
 
-#: ../src/file_list.c:287
+#: ../src/file_list.c:288
 #, fuzzy, c-format
 msgid "Error reading tag from MP4 file ‘%s’: %s"
 msgstr "Σφάλμα κατά την ανάγνωση ετικετών από το αρχείο: '%s'"
 
-#: ../src/file_list.c:298
+#: ../src/file_list.c:299
 #, fuzzy, c-format
 msgid "Error reading tag from WavPack file ‘%s’: %s"
 msgstr "Σφάλμα κατά την ανάγνωση ετικετών από το αρχείο: '%s'"
 
-#: ../src/file_list.c:309
+#: ../src/file_list.c:310
 #, fuzzy, c-format
 msgid "Error reading tag from Opus file ‘%s’: %s"
 msgstr "Σφάλμα κατά την ανάγνωση ετικετών από το αρχείο Opus (%s)"
 
-#: ../src/file_list.c:345
+#: ../src/file_list.c:346
 #, fuzzy, c-format
 msgid ""
 "The year value ‘%s’ seems to be invalid in file ‘%s’. The information will "
@@ -3999,7 +4018,7 @@ msgstr ""
 "Η τιμή έτους '%s' φαίνεται να είναι άκυρη στο αρχείο '%s'. Οι πληροφορίες θα "
 "χαθούν κατά την αποθήκευση της ετικέτας."
 
-#: ../src/file_list.c:352
+#: ../src/file_list.c:353
 #, fuzzy, c-format
 msgid ""
 "The original year value ‘%s’ seems to be invalid in file ‘%s’. The "
@@ -4008,7 +4027,7 @@ msgstr ""
 "Η τιμή έτους '%s' φαίνεται να είναι άκυρη στο αρχείο '%s'. Οι πληροφορίες θα "
 "χαθούν κατά την αποθήκευση της ετικέτας."
 
-#: ../src/file_list.c:508
+#: ../src/file_list.c:509
 #, fuzzy, c-format
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "Αυτόματες διορθώσεις εφαρμόστηκαν για το αρχείο '%s'."

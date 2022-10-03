@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 2.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-25 15:22+0200\n"
+"POT-Creation-Date: 2022-10-03 19:20+0200\n"
 "PO-Revision-Date: 2016-01-08 12:17+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
@@ -81,7 +81,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Įveskite kurį aplanką naršyti."
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3870
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr ""
@@ -91,7 +91,7 @@ msgid "Select a directory to browse"
 msgstr "Pasirinkite, kurį aplanką naršyti"
 
 #. Translators: No files, as in "0 files".
-#: ../data/browser.ui.h:4 ../src/easytag.c:978
+#: ../data/browser.ui.h:4 ../src/easytag.c:979
 msgid "No files"
 msgstr "Nėra failų"
 
@@ -213,7 +213,7 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3015 ../src/browser.c:932 ../src/browser.c:3869
+#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
 #: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
 #: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
 msgid "_Cancel"
@@ -235,7 +235,7 @@ msgstr ""
 "Pasirinkite kurią programą vykdyti. JI kaip parametrą gaus esamą failą."
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:101 ../src/easytag.c:562
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:562
 msgid "Rename Directory"
 msgstr "Pervadinti aplanką"
 
@@ -765,13 +765,13 @@ msgstr "Pagal metus mažėjimo tvarka"
 
 #: ../data/menus.ui.h:42
 #, fuzzy
-msgid "Ascending by original year"
-msgstr "Pagal originalų atlikėją didėjimo tvarka"
+msgid "Ascending by release year"
+msgstr "Pagal metus didėjimo tvarka"
 
 #: ../data/menus.ui.h:43
 #, fuzzy
-msgid "Descending by original year"
-msgstr "Pagal originalų atlikėją mažėjimo tvarka"
+msgid "Descending by release year"
+msgstr "Pagal metus mažėjimo tvarka"
 
 #: ../data/menus.ui.h:44
 msgid "Ascending by genre"
@@ -806,231 +806,251 @@ msgid "Descending by original artist"
 msgstr "Pagal originalų atlikėją mažėjimo tvarka"
 
 #: ../data/menus.ui.h:52
+#, fuzzy
+msgid "Ascending by original year"
+msgstr "Pagal originalų atlikėją didėjimo tvarka"
+
+#: ../data/menus.ui.h:53
+#, fuzzy
+msgid "Descending by original year"
+msgstr "Pagal originalų atlikėją mažėjimo tvarka"
+
+#: ../data/menus.ui.h:54
 msgid "Ascending by copyright"
 msgstr "Pagal autorines teises didėjimo tvarka"
 
-#: ../data/menus.ui.h:53
+#: ../data/menus.ui.h:55
 msgid "Descending by copyright"
 msgstr "Pagal autorines teises mažėjimo tvarka"
 
-#: ../data/menus.ui.h:54
+#: ../data/menus.ui.h:56
 msgid "Ascending by URL"
 msgstr "Pagal URL didėjimo tvarka"
 
-#: ../data/menus.ui.h:55
+#: ../data/menus.ui.h:57
 msgid "Descending by URL"
 msgstr "Pagal URL mažėjimo tvarka"
 
-#: ../data/menus.ui.h:56
+#: ../data/menus.ui.h:58
 msgid "Ascending by encoder name"
 msgstr "Pagal kodavimą didėjimo tvarka"
 
-#: ../data/menus.ui.h:57
+#: ../data/menus.ui.h:59
 msgid "Descending by encoder name"
 msgstr "Pagal kodavimą mažėjimo tvarka"
 
-#: ../data/menus.ui.h:58
+#: ../data/menus.ui.h:60
 msgid "Sort List by Property"
 msgstr "Rikiuoti sąrašą pagal savybę"
 
-#: ../data/menus.ui.h:59
+#: ../data/menus.ui.h:61
+#, fuzzy
+msgid "Ascending by file path"
+msgstr "Pagal failo tipą didėjimo tvarka"
+
+#: ../data/menus.ui.h:62
+#, fuzzy
+msgid "Descending by file path"
+msgstr "Pagal failo tipą mažėjimo tvarka"
+
+#: ../data/menus.ui.h:63
 msgid "Ascending by filename"
 msgstr "Pagal failo vardą didėjimo tvarka"
 
-#: ../data/menus.ui.h:60
+#: ../data/menus.ui.h:64
 msgid "Descending by filename"
 msgstr "Pagal failo vardą mažėjimo tvarka"
 
-#: ../data/menus.ui.h:61
+#: ../data/menus.ui.h:65
 msgid "Ascending by creation date"
 msgstr "Pagal sukūrimo datą didėjimo tvarka"
 
-#: ../data/menus.ui.h:62
+#: ../data/menus.ui.h:66
 msgid "Descending by creation date"
 msgstr "Pagal sukūrimo datą mažėjimo tvarka"
 
-#: ../data/menus.ui.h:63
+#: ../data/menus.ui.h:67
 msgid "Ascending by file type"
 msgstr "Pagal failo tipą didėjimo tvarka"
 
-#: ../data/menus.ui.h:64
+#: ../data/menus.ui.h:68
 msgid "Descending by file type"
 msgstr "Pagal failo tipą mažėjimo tvarka"
 
-#: ../data/menus.ui.h:65
+#: ../data/menus.ui.h:69
 msgid "Ascending by file size"
 msgstr "Pagal failo dydį didėjimo tvarka"
 
-#: ../data/menus.ui.h:66
+#: ../data/menus.ui.h:70
 msgid "Descending by file size"
 msgstr "Pagal failo dydį mažėjimo tvarka"
 
-#: ../data/menus.ui.h:67
+#: ../data/menus.ui.h:71
 msgid "Ascending by duration"
 msgstr "Pagal trukmę didėjimo tvarka"
 
-#: ../data/menus.ui.h:68
+#: ../data/menus.ui.h:72
 msgid "Descending by duration"
 msgstr "Pagal trukmę mažėjimo tvarka"
 
-#: ../data/menus.ui.h:69
+#: ../data/menus.ui.h:73
 #, fuzzy
 msgid "Ascending by bit rate"
 msgstr "Pagal bitų dažnį didėjimo tvarka"
 
-#: ../data/menus.ui.h:70
+#: ../data/menus.ui.h:74
 #, fuzzy
 msgid "Descending by bit rate"
 msgstr "Pagal bitų dažnį mažėjimo tvarka"
 
-#: ../data/menus.ui.h:71
+#: ../data/menus.ui.h:75
 #, fuzzy
 msgid "Ascending by sample rate"
 msgstr "Pagal diskretizacijos dažnį didėjimo tvarka"
 
-#: ../data/menus.ui.h:72
+#: ../data/menus.ui.h:76
 #, fuzzy
 msgid "Descending by sample rate"
 msgstr "Pagal diskretizacijos dažnį mažėjimo tvarka"
 
-#: ../data/menus.ui.h:73
+#: ../data/menus.ui.h:77
 #, fuzzy
 msgid "Collapse Tree"
 msgstr "_Suskleisti medį"
 
-#: ../data/menus.ui.h:74
+#: ../data/menus.ui.h:78
 #, fuzzy
 msgid "Reload Tree"
 msgstr "Į_kelti medį iš naujo"
 
-#: ../data/menus.ui.h:75
+#: ../data/menus.ui.h:79
 msgid "Reload Directory"
 msgstr "Įkelti aplanką iš naujo"
 
-#: ../data/menus.ui.h:76
+#: ../data/menus.ui.h:80
 msgid "Show Hidden Directories"
 msgstr "Rodyti paslėptus aplankus"
 
-#: ../data/menus.ui.h:77
+#: ../data/menus.ui.h:81
 msgid "_Browser"
 msgstr "Naršyklė"
 
-#: ../data/menus.ui.h:78
+#: ../data/menus.ui.h:82
 msgid "Set _Current Path as Default"
 msgstr "Nustatyti _dabartinį kelią numatytuoju"
 
-#: ../data/menus.ui.h:79
+#: ../data/menus.ui.h:83
 msgid "Rename Directory…"
 msgstr "Pervadinti aplanką…"
 
-#: ../data/menus.ui.h:80
+#: ../data/menus.ui.h:84
 msgid "Browse Directory With…"
 msgstr "Naršyti aplanką su…"
 
-#: ../data/menus.ui.h:81
+#: ../data/menus.ui.h:85
 msgid "Browse _Subdirectories"
 msgstr "Naršyti _poaplankius"
 
-#: ../data/menus.ui.h:82
+#: ../data/menus.ui.h:86
 msgid "_Miscellaneous"
 msgstr "Į_vairūs"
 
-#: ../data/menus.ui.h:83
+#: ../data/menus.ui.h:87
 msgid "CDD_B Search…"
 msgstr "CDD_B paieška…"
 
-#: ../data/menus.ui.h:84
+#: ../data/menus.ui.h:88
 msgid "Load Filenames From a Text File…"
 msgstr "Įkelti failų pavadinimus iš tekstinio failo…"
 
-#: ../data/menus.ui.h:85 ../data/toolbar.ui.h:29
+#: ../data/menus.ui.h:89 ../data/toolbar.ui.h:29
 msgid "Generate Playlist…"
 msgstr "Generuoti grojaraštį…"
 
-#: ../data/menus.ui.h:86
+#: ../data/menus.ui.h:90
 msgid "_Go"
 msgstr "_Eiti"
 
-#: ../data/menus.ui.h:87
+#: ../data/menus.ui.h:91
 msgid "_Home Directory"
 msgstr "_Namų aplankas"
 
-#: ../data/menus.ui.h:88
+#: ../data/menus.ui.h:92
 msgid "Desktop Directory"
 msgstr "Darbalaukio katalogas"
 
-#: ../data/menus.ui.h:89
+#: ../data/menus.ui.h:93
 msgid "Documents Directory"
 msgstr "Dokumentų aplankas"
 
-#: ../data/menus.ui.h:90
+#: ../data/menus.ui.h:94
 msgid "Downloads Directory"
 msgstr "Parsiuntimų aplankas"
 
-#: ../data/menus.ui.h:91
+#: ../data/menus.ui.h:95
 msgid "Music Directory"
 msgstr "Muzikos aplankas"
 
-#: ../data/menus.ui.h:92
+#: ../data/menus.ui.h:96
 msgid "_Parent Directory"
 msgstr "_Tėvinis aplankas"
 
-#: ../data/menus.ui.h:93
+#: ../data/menus.ui.h:97
 msgid "_Default Directory"
 msgstr "_Numatytasis aplankas"
 
-#: ../data/menus.ui.h:94 ../data/toolbar.ui.h:1
+#: ../data/menus.ui.h:98 ../data/toolbar.ui.h:1
 msgid "_First File"
 msgstr "_Pirmas failas"
 
-#: ../data/menus.ui.h:95
+#: ../data/menus.ui.h:99
 #, fuzzy
 msgid "Previous File"
 msgstr "_Ankstesnis failas"
 
-#: ../data/menus.ui.h:96 ../data/toolbar.ui.h:5
+#: ../data/menus.ui.h:100 ../data/toolbar.ui.h:5
 msgid "_Next File"
 msgstr "_Sekantis failas"
 
-#: ../data/menus.ui.h:97 ../data/toolbar.ui.h:7
+#: ../data/menus.ui.h:101 ../data/toolbar.ui.h:7
 msgid "_Last File"
 msgstr "_Paskutinis failas"
 
-#: ../data/menus.ui.h:98
+#: ../data/menus.ui.h:102
 #, fuzzy
 msgid "Home Directory"
 msgstr "_Namų aplankas"
 
-#: ../data/menus.ui.h:99
+#: ../data/menus.ui.h:103
 #, fuzzy
 msgid "Default Directory"
 msgstr "_Numatytasis aplankas"
 
-#: ../data/menus.ui.h:100
+#: ../data/menus.ui.h:104
 #, fuzzy
 msgid "Set Current Path as Default"
 msgstr "Nustatyti _dabartinį kelią numatytuoju"
 
-#: ../data/menus.ui.h:102
+#: ../data/menus.ui.h:106
 #, fuzzy
 msgid "Browse Subdirectories"
 msgstr "Naršyti _poaplankius"
 
-#: ../data/menus.ui.h:103
+#: ../data/menus.ui.h:107
 #, fuzzy
 msgid "Invert Selection"
 msgstr "Apversti pasirinkimą"
 
-#: ../data/menus.ui.h:104
+#: ../data/menus.ui.h:108
 msgid "CDDB Search Files…"
 msgstr "CDDB failų paieška…"
 
-#: ../data/menus.ui.h:105
+#: ../data/menus.ui.h:109
 #, fuzzy
 msgid "Find…"
 msgstr "_Rasti…"
 
-#: ../data/menus.ui.h:106
+#: ../data/menus.ui.h:110
 #, fuzzy
 msgid "Clear Log"
 msgstr "Išvalyti žurnalą"
@@ -1101,8 +1121,8 @@ msgstr "Informaciją rašyti naudojant failo vardą"
 msgid "Write information using:"
 msgstr "Rašyti informaciją naudojant:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3016
-#: ../src/browser.c:933 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
+#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 #, fuzzy
@@ -3250,7 +3270,7 @@ msgstr "Tinklapis: %s"
 msgid "- Tag and rename audio files"
 msgstr "- žymėkite ir keiskite garso failus"
 
-#: ../src/application.c:429 ../src/file_list.c:442
+#: ../src/application.c:429 ../src/file_list.c:443
 #, fuzzy, c-format
 msgid "Error while querying information for file ‘%s’: %s"
 msgstr "Klaida užklausiant failo informacijos: „%s“ (%s)"
@@ -3305,8 +3325,8 @@ msgstr "Visi failai pašalinti"
 msgid "All tags have been removed"
 msgstr "Visos žymos pašalintos"
 
-#: ../src/application_window.c:1474 ../src/browser.c:363 ../src/browser.c:406
-#: ../src/browser.c:440 ../src/browser.c:4676 ../src/browser.c:4751
+#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
+#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
 #, fuzzy, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Nepavyko paleisti programos: %s"
@@ -3361,97 +3381,97 @@ msgid "File: ‘%s’"
 msgstr "Failas: „%s“"
 
 #. Quit EasyTAG.
-#: ../src/application_window.c:2979
+#: ../src/application_window.c:2978
 #, fuzzy
 msgid "Normal exit"
 msgstr "EasyTAG: Normalus išėjimas."
 
-#: ../src/application_window.c:3013 ../src/browser.c:927
+#: ../src/application_window.c:3012 ../src/browser.c:948
 msgid "Some files have been modified but not saved"
 msgstr "Kai kurie failai buvo pakeisti bet neįrašyti"
 
-#: ../src/application_window.c:3014 ../src/browser.c:931 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 #, fuzzy
 msgid "_Discard"
 msgstr "Diskas"
 
-#: ../src/application_window.c:3020 ../src/easytag.c:239
+#: ../src/application_window.c:3019 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Išeiti"
 
-#: ../src/application_window.c:3023
+#: ../src/application_window.c:3022
 msgid "Do you want to save them before quitting?"
 msgstr "Ar norite juos įrašyti prieš išeidami?"
 
-#: ../src/browser.c:628
+#: ../src/browser.c:649
 #, fuzzy
 msgid "New default directory selected for browser"
 msgstr "Pasirinkite, kurį aplanką naršyti"
 
-#: ../src/browser.c:930
+#: ../src/browser.c:951
 #, fuzzy
 msgid "Do you want to save them before changing directory?"
 msgstr "Ar norite juos įrašyti prieš pakeisdami aplanką?"
 
-#: ../src/browser.c:937
+#: ../src/browser.c:958
 msgid "Confirm Directory Change"
 msgstr "Patvirtinkite aplanko pakeitimą"
 
-#: ../src/browser.c:2654
+#: ../src/browser.c:2531
 #, fuzzy
 msgid "All albums"
 msgstr "<Visi albumai>"
 
-#: ../src/browser.c:3906
+#: ../src/browser.c:3771
 msgid "Select File"
 msgstr "Pasirinkite failą"
 
-#: ../src/browser.c:3913
+#: ../src/browser.c:3778
 msgid "Select Directory"
 msgstr "Parinkite aplanką"
 
-#: ../src/browser.c:4180
+#: ../src/browser.c:4049
 #, fuzzy, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Pervadinti aplanką „%s“ į:"
 
-#: ../src/browser.c:4316
+#: ../src/browser.c:4185
 msgid "You must type a directory name"
 msgstr "Turite nurodyti aplanko pavadinimą"
 
-#: ../src/browser.c:4317 ../src/browser.c:4339
+#: ../src/browser.c:4186 ../src/browser.c:4208
 msgid "Directory Name Error"
 msgstr "Aplanko pavadinimo klaida"
 
-#: ../src/browser.c:4335
+#: ../src/browser.c:4204
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Nepavyko konvertuoti „%s“ į failo pavadinimo koduotę."
 
-#: ../src/browser.c:4338
+#: ../src/browser.c:4207
 #, fuzzy
 msgid "Please use another name."
 msgstr "Naudokite kitą pavadinimą"
 
-#: ../src/browser.c:4410
+#: ../src/browser.c:4279
 #, fuzzy, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Aplankas „%s“ jau yra"
 
-#: ../src/browser.c:4411 ../src/easytag.c:650
+#: ../src/browser.c:4280 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Failo pervadinimo klaida"
 
-#: ../src/browser.c:4450 ../src/browser.c:4479
+#: ../src/browser.c:4319 ../src/browser.c:4348
 msgid "Rename Directory Error"
 msgstr "Aplanko pervadinimo klaida"
 
-#: ../src/browser.c:4520
+#: ../src/browser.c:4389
 msgid "Directory renamed"
 msgstr "Aplankas pervadintas"
 
-#: ../src/browser.c:4668 ../src/browser.c:4743
+#: ../src/browser.c:4537 ../src/browser.c:4612
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "Vykdyta komanda: %s"
@@ -3890,7 +3910,7 @@ msgstr "Įrašyti žymų faile „%s“ nepavyko"
 msgid "Tag Write Error"
 msgstr "Žymų rašymo klaida"
 
-#: ../src/easytag.c:861 ../src/easytag.c:1095
+#: ../src/easytag.c:861 ../src/easytag.c:1096
 #, fuzzy, c-format
 msgid "Cannot read directory ‘%s’"
 msgstr "Nepavyko perskaityti aplanko „%s“"
@@ -3901,11 +3921,10 @@ msgstr "Aplanko skaitymo klaida"
 
 #. Read the directory recursively
 #: ../src/easytag.c:886
-#, c-format
 msgid "Search in progress…"
 msgstr "Ieškoma…"
 
-#: ../src/easytag.c:958
+#: ../src/easytag.c:959
 #, fuzzy, c-format
 msgid "Found one file in this directory and subdirectories"
 msgid_plural "Found %u files in this directory and subdirectories"
@@ -3913,7 +3932,7 @@ msgstr[0] "Šiame aplanke ir poaplankiuose rastas %d failas."
 msgstr[1] "Šiame aplanke ir poaplankiuose rasti %d failai."
 msgstr[2] "Šiame aplanke ir poaplankiuose rasta %d failų."
 
-#: ../src/easytag.c:965
+#: ../src/easytag.c:966
 #, fuzzy, c-format
 msgid "Found one file in this directory"
 msgid_plural "Found %u files in this directory"
@@ -3921,28 +3940,28 @@ msgstr[0] "Šiame aplanke rastas %d failas."
 msgstr[1] "Šiame aplanke rasti %d failai."
 msgstr[2] "Šiame aplanke rasta %d failų."
 
-#: ../src/easytag.c:982
+#: ../src/easytag.c:983
 msgid "No file found in this directory and subdirectories"
 msgstr "Šiame aplanke ir poaplankiuose failų nerasta"
 
-#: ../src/easytag.c:984
+#: ../src/easytag.c:985
 msgid "No file found in this directory"
 msgstr "Šiame aplanke failų nerasta"
 
-#: ../src/easytag.c:1060
+#: ../src/easytag.c:1061
 #, fuzzy, c-format
 msgid "Error opening directory ‘%s’: %s"
 msgstr "Klaida atveriant aplanką „%s“ (%s)"
 
-#: ../src/easytag.c:1115
+#: ../src/easytag.c:1116
 msgid "Searching for audio files…"
 msgstr "Ieškoma garso failų…"
 
-#: ../src/easytag.c:1116
+#: ../src/easytag.c:1117
 msgid "Searching"
 msgstr "Ieškoma"
 
-#: ../src/easytag.c:1117
+#: ../src/easytag.c:1118
 msgid "_Stop"
 msgstr ""
 
@@ -3959,42 +3978,42 @@ msgstr "Nepavyko užklausti failo informacijos (%s)"
 msgid "Read-only file"
 msgstr "Failas tik skaitymui"
 
-#: ../src/file_list.c:245
+#: ../src/file_list.c:246
 #, fuzzy, c-format
 msgid "Error reading ID3 tag from file ‘%s’: %s"
 msgstr "Klaida skaitant žymas iš failo: „%s“"
 
-#: ../src/file_list.c:256
+#: ../src/file_list.c:257
 #, fuzzy, c-format
 msgid "Error reading tag from Ogg file ‘%s’: %s"
 msgstr "Klaida skaitant žymą iš ogg failo (%s)"
 
-#: ../src/file_list.c:267
+#: ../src/file_list.c:268
 #, fuzzy, c-format
 msgid "Error reading tag from FLAC file ‘%s’: %s"
 msgstr "Klaida skaitant žymas iš failo: „%s“"
 
-#: ../src/file_list.c:277
+#: ../src/file_list.c:278
 #, fuzzy, c-format
 msgid "Error reading APE tag from file ‘%s’: %s"
 msgstr "Klaida skaitant žymas iš failo: „%s“"
 
-#: ../src/file_list.c:287
+#: ../src/file_list.c:288
 #, fuzzy, c-format
 msgid "Error reading tag from MP4 file ‘%s’: %s"
 msgstr "Klaida skaitant žymas iš failo: „%s“"
 
-#: ../src/file_list.c:298
+#: ../src/file_list.c:299
 #, fuzzy, c-format
 msgid "Error reading tag from WavPack file ‘%s’: %s"
 msgstr "Klaida skaitant žymas iš failo: „%s“"
 
-#: ../src/file_list.c:309
+#: ../src/file_list.c:310
 #, fuzzy, c-format
 msgid "Error reading tag from Opus file ‘%s’: %s"
 msgstr "Klaida skaitant žymą iš Opus failo (%s)"
 
-#: ../src/file_list.c:345
+#: ../src/file_list.c:346
 #, fuzzy, c-format
 msgid ""
 "The year value ‘%s’ seems to be invalid in file ‘%s’. The information will "
@@ -4003,7 +4022,7 @@ msgstr ""
 "Metų reikšmė „%s“ faile „%s“ yra netinkama. Išsaugant žymę informacija bus "
 "prarasta."
 
-#: ../src/file_list.c:352
+#: ../src/file_list.c:353
 #, fuzzy, c-format
 msgid ""
 "The original year value ‘%s’ seems to be invalid in file ‘%s’. The "
@@ -4012,7 +4031,7 @@ msgstr ""
 "Metų reikšmė „%s“ faile „%s“ yra netinkama. Išsaugant žymę informacija bus "
 "prarasta."
 
-#: ../src/file_list.c:508
+#: ../src/file_list.c:509
 #, fuzzy, c-format
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "Failui „%s“ pritaikyti automatiniai pataisymai."
