@@ -2004,7 +2004,7 @@ set_et_file_from_cddb_album (ET_File * etfile,
         filename_new_utf8 = et_file_generate_name (etfile,
                                                    filename_generated_utf8);
 
-        ET_Set_Filename_File_Name_Item(FileName,filename_new_utf8,NULL);
+        ET_Set_Filename_File_Name_Item(FileName,etfile->FileNameCur->data,filename_new_utf8,NULL);
 
         g_free (track_number);
         g_free(filename_generated_utf8);

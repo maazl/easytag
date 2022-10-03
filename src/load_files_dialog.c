@@ -130,7 +130,7 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
             // Create a new 'File_Name' item
             FileName = et_file_name_new ();
             // Save changes of the 'File_Name' item
-            ET_Set_Filename_File_Name_Item(FileName,filename_new_utf8,NULL);
+            ET_Set_Filename_File_Name_Item(FileName, ETFile->FileNameCur->data, filename_new_utf8,NULL);
             ET_Manage_Changes_Of_File_Data(ETFile,FileName,NULL);
 
             g_free(filename_new_utf8);

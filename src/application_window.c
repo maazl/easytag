@@ -2023,7 +2023,7 @@ et_application_window_update_file_name_from_ui (EtApplicationWindow *self,
     g_free (filename);
     g_free (extension);
 
-    et_file_name_set_from_components (FileName, filename_new, dirname,
+    et_file_name_set_from_components (FileName, et_application_window_get_current_path_name(self), filename_new, dirname,
                                       g_settings_get_boolean (MainSettings,
                                                               "rename-replace-illegal-chars"));
 
@@ -2357,6 +2357,18 @@ et_application_window_get_current_path (EtApplicationWindow *self)
     priv = et_application_window_get_instance_private (self);
 
     return et_browser_get_current_path (ET_BROWSER (priv->browser));
+}
+
+const File_Name *
+et_application_window_get_current_path_name (EtApplicationWindow *self)
+{
+    EtApplicationWindowPrivate *priv;
+
+    g_return_val_if_fail (ET_APPLICATION_WINDOW (self), NULL);
+
+    priv = et_application_window_get_instance_private (self);
+
+    return et_browser_get_current_path_name (ET_BROWSER (priv->browser));
 }
 
 GtkWidget *

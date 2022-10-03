@@ -83,6 +83,8 @@ void ET_Mark_File_Name_As_Saved (ET_File *ETFile);
 gchar *et_file_generate_name (const ET_File *ETFile, const gchar *new_file_name);
 gchar * ET_File_Format_File_Extension (const ET_File *ETFile);
 
+gint ET_Comp_Func_Sort_File_By_Ascending_Filepath (const ET_File *ETFile1, const ET_File *ETFile2);
+gint ET_Comp_Func_Sort_File_By_Descending_Filepath (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Ascending_Filename (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Descending_Filename (const ET_File *ETFile1, const ET_File *ETFile2);
 gint ET_Comp_Func_Sort_File_By_Ascending_Creation_Date (const ET_File *ETFile1, const ET_File *ETFile2);

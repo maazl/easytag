@@ -31,14 +31,17 @@ typedef struct
     guint key;
     gboolean saved; /* Set to TRUE if this filename had been saved */
     gchar *value; /* The filename containing the full path and the extension of the file */
-    gchar *value_utf8; /* Same than "value", but converted to UTF-8 to avoid multiple call to the convertion function */
-    gchar *value_ck; /* Collate key of "value_utf8" to speed up comparison. */
+    gchar *value_utf8; /* Same than "value", but converted to UTF-8 to avoid multiple call to the conversion function */
+    const gchar *rel_value; /* part of value beyond the root path passed during initialization. */
+    const gchar *rel_value_utf8; /* part of value_utf8 beyond the root path passed during initialization. */
+    gchar *path_value_ck; /* part of value_ck beyond the root path passed during initialization. */
+    const gchar *file_value_ck; /* part of value_ck only containing the file name. */
 } File_Name;
 
 File_Name * et_file_name_new (void);
 void et_file_name_free (File_Name *file_name);
-void ET_Set_Filename_File_Name_Item (File_Name *FileName, const gchar *filename_utf8, const gchar *filename);
-gboolean et_file_name_set_from_components (File_Name *file_name, const gchar *new_name, const gchar *dir_name, gboolean replace_illegal);
+void ET_Set_Filename_File_Name_Item (File_Name *FileName, const File_Name *root, const gchar *filename_utf8, const gchar *filename);
+gboolean et_file_name_set_from_components (File_Name *file_name, const File_Name *root, const gchar *new_name, const gchar *dir_name, gboolean replace_illegal);
 gboolean et_file_name_detect_difference (const File_Name *a, const File_Name *b);
 
 G_END_DECLS

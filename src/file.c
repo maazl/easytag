@@ -82,19 +82,51 @@ ET_File_Item_New (void)
 }
 
 /*
+ * Comparison function for sorting by ascending path.
+ */
+gint
+ET_Comp_Func_Sort_File_By_Ascending_Filepath (const ET_File *ETFile1,
+                                              const ET_File *ETFile2)
+{
+    if (!ETFile2) return !!ETFile1;
+    if (!ETFile1) return -1;
+
+    const File_Name *file1 = ((GList *)ETFile1->FileNameCur)->data;
+    const File_Name *file2 = ((GList *)ETFile2->FileNameCur)->data;
+    // !!!! : Must be the same rules as "Cddb_Track_List_Sort_Func" to be
+    // able to sort in the same order files in cddb and in the file list.
+    gint r = strcmp (file1->path_value_ck, file2->path_value_ck);
+    if (r)
+        return r;
+    return strcmp (file1->file_value_ck, file2->file_value_ck);;
+}
+
+/*
+ * Comparison function for sorting by descending path.
+ */
+gint
+ET_Comp_Func_Sort_File_By_Descending_Filepath (const ET_File *ETFile1,
+                                               const ET_File *ETFile2)
+{
+    return ET_Comp_Func_Sort_File_By_Ascending_Filepath(ETFile2,ETFile1);
+}
+
+
+/*
  * Comparison function for sorting by ascending filename.
  */
 gint
 ET_Comp_Func_Sort_File_By_Ascending_Filename (const ET_File *ETFile1,
                                               const ET_File *ETFile2)
 {
-    const gchar *file1_ck = ((File_Name *)((GList *)ETFile1->FileNameCur)->data)->value_ck;
-    const gchar *file2_ck = ((File_Name *)((GList *)ETFile2->FileNameCur)->data)->value_ck;
+    if (!ETFile2) return !!ETFile1;
+    if (!ETFile1) return -1;
+
+    const gchar *file1_ck = ((File_Name *)((GList *)ETFile1->FileNameCur)->data)->file_value_ck;
+    const gchar *file2_ck = ((File_Name *)((GList *)ETFile2->FileNameCur)->data)->file_value_ck;
     // !!!! : Must be the same rules as "Cddb_Track_List_Sort_Func" to be
     // able to sort in the same order files in cddb and in the file list.
-    return g_settings_get_boolean (MainSettings,
-                                   "sort-case-sensitive") ? strcmp (file1_ck, file2_ck)
-                                                          : strcasecmp (file1_ck, file2_ck);
+    return strcmp (file1_ck, file2_ck);
 }
 
 /*
@@ -106,7 +138,6 @@ ET_Comp_Func_Sort_File_By_Descending_Filename (const ET_File *ETFile1,
 {
     return ET_Comp_Func_Sort_File_By_Ascending_Filename(ETFile2,ETFile1);
 }
-
 
 /*
  * Comparison function for sorting by ascending disc number.
@@ -141,7 +172,7 @@ et_comp_func_sort_file_by_ascending_disc_number (const ET_File *ETFile1,
     /* Second criterion. */
     if (track1 == track2)
     {
-        return ET_Comp_Func_Sort_File_By_Ascending_Filename (ETFile1, ETFile2);
+        return ET_Comp_Func_Sort_File_By_Ascending_Filepath (ETFile1, ETFile2);
     }
 
     /* First criterion. */
@@ -181,7 +212,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Track_Number (const ET_File *ETFile1,
 
     // Second criterion
     if (track1 == track2)
-        return ET_Comp_Func_Sort_File_By_Ascending_Filename(ETFile1,ETFile2);
+        return ET_Comp_Func_Sort_File_By_Ascending_Filepath(ETFile1,ETFile2);
 
     // First criterion
     return (track1 - track2);
@@ -240,7 +271,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Creation_Date (const ET_File *ETFile1,
     /* Second criterion. */
     if (time1 == time2)
     {
-        return ET_Comp_Func_Sort_File_By_Ascending_Filename (ETFile1, ETFile2);
+        return ET_Comp_Func_Sort_File_By_Ascending_Filepath (ETFile1, ETFile2);
     }
 
     /* First criterion. */
@@ -293,7 +324,7 @@ et_file_list_sort_string (const gchar *str1,
     if (result == 0)
     {
         /* Secondary criterion. */
-        return ET_Comp_Func_Sort_File_By_Ascending_Filename (file1, file2);
+        return ET_Comp_Func_Sort_File_By_Ascending_Filepath (file1, file2);
     }
     else
     {
@@ -481,7 +512,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Year (const ET_File *ETFile1,
 
     // Second criterion
     if (year1 == year2)
-        return ET_Comp_Func_Sort_File_By_Ascending_Filename(ETFile1,ETFile2);
+        return ET_Comp_Func_Sort_File_By_Ascending_Filepath(ETFile1,ETFile2);
 
     // First criterion
     return (year1 - year2);
@@ -519,7 +550,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Release_Year (const ET_File *ETFile1,
 
     // Second criterion
     if (year1 == year2)
-        return ET_Comp_Func_Sort_File_By_Ascending_Filename(ETFile1,ETFile2);
+        return ET_Comp_Func_Sort_File_By_Ascending_Filepath(ETFile1,ETFile2);
 
     // First criterion
     return (year1 - year2);
@@ -717,7 +748,7 @@ ET_Comp_Func_Sort_File_By_Ascending_Orig_Year (const ET_File *ETFile1,
 
     // Second criterion
     if (year1 == year2)
-        return ET_Comp_Func_Sort_File_By_Ascending_Filename(ETFile1,ETFile2);
+        return ET_Comp_Func_Sort_File_By_Ascending_Filepath(ETFile1,ETFile2);
 
     // First criterion
     return (year1 - year2);
@@ -872,7 +903,7 @@ ET_Comp_Func_Sort_File_By_Ascending_File_Type (const ET_File *ETFile1,
 
     // Second criterion
     if (ETFile1->ETFileDescription->FileType == ETFile2->ETFileDescription->FileType)
-        return ET_Comp_Func_Sort_File_By_Ascending_Filename(ETFile1,ETFile2);
+        return ET_Comp_Func_Sort_File_By_Ascending_Filepath(ETFile1,ETFile2);
 
     // First criterion
     return (ETFile1->ETFileDescription->FileType - ETFile2->ETFileDescription->FileType);
@@ -901,7 +932,7 @@ ET_Comp_Func_Sort_File_By_Ascending_File_Size (const ET_File *ETFile1,
 
     // Second criterion
     if (ETFile1->ETFileInfo->size == ETFile2->ETFileInfo->size)
-        return ET_Comp_Func_Sort_File_By_Ascending_Filename(ETFile1,ETFile2);
+        return ET_Comp_Func_Sort_File_By_Ascending_Filepath(ETFile1,ETFile2);
 
     // First criterion
     return (ETFile1->ETFileInfo->size - ETFile2->ETFileInfo->size);
@@ -930,7 +961,7 @@ ET_Comp_Func_Sort_File_By_Ascending_File_Duration (const ET_File *ETFile1,
 
     // Second criterion
     if (ETFile1->ETFileInfo->duration == ETFile2->ETFileInfo->duration)
-        return ET_Comp_Func_Sort_File_By_Ascending_Filename(ETFile1,ETFile2);
+        return ET_Comp_Func_Sort_File_By_Ascending_Filepath(ETFile1,ETFile2);
 
     // First criterion
     return (ETFile1->ETFileInfo->duration - ETFile2->ETFileInfo->duration);
@@ -959,7 +990,7 @@ ET_Comp_Func_Sort_File_By_Ascending_File_Bitrate (const ET_File *ETFile1,
 
     // Second criterion
     if (ETFile1->ETFileInfo->bitrate == ETFile2->ETFileInfo->bitrate)
-        return ET_Comp_Func_Sort_File_By_Ascending_Filename(ETFile1,ETFile2);
+        return ET_Comp_Func_Sort_File_By_Ascending_Filepath(ETFile1,ETFile2);
 
     // First criterion
     return (ETFile1->ETFileInfo->bitrate - ETFile2->ETFileInfo->bitrate);
@@ -988,7 +1019,7 @@ ET_Comp_Func_Sort_File_By_Ascending_File_Samplerate (const ET_File *ETFile1,
 
     // Second criterion
     if (ETFile1->ETFileInfo->samplerate == ETFile2->ETFileInfo->samplerate)
-        return ET_Comp_Func_Sort_File_By_Ascending_Filename(ETFile1,ETFile2);
+        return ET_Comp_Func_Sort_File_By_Ascending_Filepath(ETFile1,ETFile2);
 
     // First criterion
     return (ETFile1->ETFileInfo->samplerate - ETFile2->ETFileInfo->samplerate);
@@ -1012,9 +1043,9 @@ gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1,
 	switch (sort_mode)
 	{
 	case ET_SORT_MODE_ASCENDING_FILEPATH:
-		return ET_Comp_Func_Sort_File_By_Ascending_Filename;
+		return ET_Comp_Func_Sort_File_By_Ascending_Filepath;
 	case ET_SORT_MODE_DESCENDING_FILEPATH:
-		return ET_Comp_Func_Sort_File_By_Descending_Filename;
+		return ET_Comp_Func_Sort_File_By_Descending_Filepath;
 	case ET_SORT_MODE_ASCENDING_FILENAME:
 		return ET_Comp_Func_Sort_File_By_Ascending_Filename;
 	case ET_SORT_MODE_DESCENDING_FILENAME:
@@ -1240,7 +1271,7 @@ ET_Save_File_Name_Internal (const ET_File *ETFile,
     g_free(extension);
     g_free(filename);
 
-    success = et_file_name_set_from_components (FileName, filename_new,
+    success = et_file_name_set_from_components (FileName, ETFile->FileNameCur->data, filename_new,
                                                 dirname,
                                                 g_settings_get_boolean (MainSettings,
                                                                         "rename-replace-illegal-chars"));

@@ -196,7 +196,8 @@ et_core_read_file_info (GFile *file,
  */
 GList *
 et_file_list_add (GList *file_list,
-                  GFile *file)
+                  GFile *file,
+                  const File_Name *root)
 {
     GList *result;
     const ET_File_Description *description;
@@ -209,7 +210,7 @@ et_file_list_add (GList *file_list,
     guint         undo_key;
     GFileInfo *fileinfo;
     gchar *filename;
-    gchar *display_path;
+    const gchar *display_path;
     GError *error = NULL;
     gboolean success;
 
@@ -220,7 +221,6 @@ et_file_list_add (GList *file_list,
 
     /* Get description of the file */
     filename = g_file_get_path (file);
-    display_path = g_filename_display_name (filename);
     description = ET_Get_File_Description (filename);
 
     /* Get real extension of the file (keeping the case) */
@@ -229,7 +229,8 @@ et_file_list_add (GList *file_list,
     /* Fill the File_Name structure for FileNameList */
     FileName = et_file_name_new ();
     FileName->saved      = TRUE;    /* The file hasn't been changed, so it's saved */
-    ET_Set_Filename_File_Name_Item (FileName, display_path, filename);
+    ET_Set_Filename_File_Name_Item (FileName, root, NULL, filename);
+    display_path = FileName->value_utf8;
 
     /* Fill the File_Tag structure for FileTagList */
     FileTag = et_file_tag_new ();
@@ -515,7 +516,6 @@ et_file_list_add (GList *file_list,
     //ET_Debug_Print_File_List(ETCore->ETFileList,__FILE__,__LINE__,__FUNCTION__);
 
     g_free (filename);
-    g_free (display_path);
 
     return result;
 }
@@ -595,21 +595,6 @@ ET_Comp_Func_Sort_Album_Item_By_Ascending_Album (const GList *etfilelist1,
 }
 
 /*
- * Comparison function for sorting etfile in the ArtistAlbumList.
- * FIX ME : should use the default sorting!
- */
-static gint
-ET_Comp_Func_Sort_Etfile_Item_By_Ascending_Filename (const ET_File *ETFile1,
-                                                     const ET_File *ETFile2)
-{
-
-    if (!ETFile1) return -1;
-    if (!ETFile2) return  1;
-
-    return ET_Comp_Func_Sort_File_By_Ascending_Filename(ETFile1,ETFile2);
-}
-
-/*
  * The ETArtistAlbumFileList contains 3 levels of lists to sort the ETFile by artist then by album :
  *  - "ETArtistAlbumFileList" list is a list of "ArtistList" items,
  *  - "ArtistList" list is a list of "AlbumList" items,
@@ -679,7 +664,7 @@ et_artist_album_list_add_file (GList *file_list,
                      * Add the ETFile to this AlbumList item */
                     AlbumList->data = g_list_insert_sorted ((GList *)AlbumList->data,
                                                             ETFile,
-                                                            (GCompareFunc)ET_Comp_Func_Sort_Etfile_Item_By_Ascending_Filename);
+                                                            (GCompareFunc)ET_Comp_Func_Sort_File_By_Ascending_Filename);
                     return file_list;
                 }
 
@@ -1059,7 +1044,7 @@ et_file_list_update_directory_name (GList *file_list,
                                                     (new_path[strlen (new_path) - 1] == G_DIR_SEPARATOR) ? "" : G_DIR_SEPARATOR_S,
                                                     &filename[strlen (old_path_tmp)],NULL);
 
-                        ET_Set_Filename_File_Name_Item (FileName, NULL,
+                        ET_Set_Filename_File_Name_Item (FileName, FileName, NULL,
                                                         filename_tmp);
                         g_free (filename_tmp);
                     }

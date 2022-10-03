@@ -94,6 +94,7 @@ typedef struct
     GtkWidget *rename_directory_preview_label;
 
     GFile *current_path;
+    File_Name *current_path_name;
 } EtBrowserPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (EtBrowser, et_browser, GTK_TYPE_BIN)
@@ -495,11 +496,15 @@ et_browser_set_current_path (EtBrowser *self,
     g_object_ref (file);
 
     if (priv->current_path)
-    {
         g_object_unref (priv->current_path);
-    }
+    if (priv->current_path_name)
+        et_file_name_free(priv->current_path_name);
 
     priv->current_path = file;
+    priv->current_path_name = et_file_name_new();
+    gchar* filename = g_file_get_path (file);
+    ET_Set_Filename_File_Name_Item(priv->current_path_name, NULL, NULL, filename);
+    g_free(filename);
 }
 
 
@@ -516,6 +521,21 @@ et_browser_get_current_path (EtBrowser *self)
     priv = et_browser_get_instance_private (self);
 
     return priv->current_path;
+}
+
+/*
+ * Return the current path
+ */
+const File_Name *
+et_browser_get_current_path_name (EtBrowser *self)
+{
+    EtBrowserPrivate *priv;
+
+    g_return_val_if_fail (ET_BROWSER (self), NULL);
+
+    priv = et_browser_get_instance_private (self);
+
+    return priv->current_path_name;
 }
 
 /*
@@ -4851,6 +4871,8 @@ et_browser_finalize (GObject *object)
     priv = et_browser_get_instance_private (ET_BROWSER (object));
 
     g_clear_object (&priv->current_path);
+    et_file_name_free(priv->current_path_name);
+    priv->current_path_name = NULL;
     g_clear_object (&priv->run_program_model);
 
     G_OBJECT_CLASS (et_browser_parent_class)->finalize (object);

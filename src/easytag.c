@@ -883,9 +883,9 @@ Read_Directory (const gchar *path_real)
     Open_Quit_Recursion_Function_Window();
 
     /* Read the directory recursively */
-    msg = g_strdup_printf(_("Search in progress…"));
-    et_application_window_status_bar_message (window, msg, FALSE);
-    g_free (msg);
+    et_application_window_status_bar_message (window, _("Search in progress…"), FALSE);
+    File_Name *root_path = et_file_name_new();
+    ET_Set_Filename_File_Name_Item(root_path, et_application_window_get_current_path_name(window), NULL, path_real);
     /* Search the supported files. */
     FileList = read_directory_recursively (FileList, dir_enumerator,
                                            g_settings_get_boolean (MainSettings,
@@ -914,7 +914,7 @@ Read_Directory (const gchar *path_real)
         g_free (filename_real);
         g_free (display_path);
 
-        ETCore->ETFileList = et_file_list_add (ETCore->ETFileList, file);
+        ETCore->ETFileList = et_file_list_add (ETCore->ETFileList, file, root_path);
 
         /* Update the progress bar. */
         fraction = (++progress_bar_index) / (double) nbrfile;
@@ -927,6 +927,7 @@ Read_Directory (const gchar *path_real)
     }
 
     g_list_free_full (FileList, g_object_unref);
+    et_file_name_free(root_path);
     et_application_window_progress_set_text (window, "");
 
     /* Close window to quit recursion */
