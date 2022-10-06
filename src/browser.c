@@ -1363,7 +1363,7 @@ et_browser_load_file_list (EtBrowser *self,
     for (l = g_list_first (etfilelist); l != NULL; l = g_list_next (l))
     {
         guint fileKey = ((ET_File *)l->data)->ETFileKey;
-        const gchar *current_filename_utf8 = ((File_Name *)((ET_File *)l->data)->FileNameCur->data)->value_utf8;
+        const gchar *current_filename_utf8 = ((File_Name *)((ET_File *)l->data)->FileNameNew->data)->value_utf8;
         gchar *basename_utf8 = g_path_get_basename (current_filename_utf8);
         gchar *dirname_utf8 = g_path_get_dirname(current_filename_utf8);
         File_Tag *FileTag = ((File_Tag *)((ET_File *)l->data)->FileTag->data);
@@ -1476,7 +1476,7 @@ et_browser_refresh_list (EtBrowser *self)
         gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter,
                            LIST_FILE_POINTER, &ETFile, -1);
 
-        FileName = (File_Name *)ETFile->FileNameCur->data;
+        FileName = (File_Name *)ETFile->FileNameNew->data;
         FileTag  = (File_Tag *)ETFile->FileTag->data;
 
         current_basename_utf8 = g_path_get_basename(FileName->value_utf8);
@@ -1653,7 +1653,7 @@ et_browser_refresh_file_in_list (EtBrowser *self,
         return;
 
     // Displayed the filename and refresh other fields
-    FileName = (File_Name *)etfile->FileNameCur->data;
+    FileName = (File_Name *)etfile->FileNameNew->data;
     FileTag  = (File_Tag *)etfile->FileTag->data;
 
     current_basename_utf8 = g_path_get_basename(FileName->value_utf8);
