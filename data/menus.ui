@@ -846,6 +846,18 @@
                 <section>
                     <item>
                         <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Ascending by file path</attribute>
+                        <attribute name="target">ascending-filepath</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Descending by file path</attribute>
+                        <attribute name="target">descending-filepath</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
                         <attribute name="label" translatable="yes">Ascending by filename</attribute>
                         <attribute name="target">ascending-filename</attribute>
                     </item>
