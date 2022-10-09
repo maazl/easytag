@@ -1671,7 +1671,7 @@ msgstr "Keine Umwandlung"
 #. Translators: a section header in the Scanner section of the preferences dialog.
 #: ../data/preferences_dialog.ui.h:120
 msgid "Rename File and Directory Scanner"
-msgstr "Dateiumbenennungs- und Ordner-Scanner"
+msgstr "Datei- und Ordnerumbenennungs-Scanner"
 
 #: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:95
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:784
