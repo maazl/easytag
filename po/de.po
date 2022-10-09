@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-03 19:20+0200\n"
+"POT-Creation-Date: 2022-10-09 19:30+0200\n"
 "PO-Revision-Date: 2017-02-03 08:39+0100\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
@@ -101,7 +101,7 @@ msgid "No files"
 msgstr "Keine Dateien"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Künstler"
@@ -115,7 +115,7 @@ msgid "# Files"
 msgstr "# Dateien"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Album"
@@ -125,18 +125,18 @@ msgid "Path"
 msgstr "Pfad"
 
 #: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
-#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:58
+#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:59
 #: ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "Dateiname"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Titel"
 
-#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:64
+#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:65
 #: ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Künstler des Albums"
@@ -159,18 +159,18 @@ msgid "Track"
 msgstr "Titel"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Genre"
 
 #: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
-#: ../data/scan_dialog.ui.h:70 ../data/search_dialog.ui.h:21
+#: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Kommentar"
 
 #: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
-#: ../data/scan_dialog.ui.h:72 ../data/search_dialog.ui.h:22
+#: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Komponist"
@@ -183,17 +183,17 @@ msgstr "Originalkünstler"
 msgid "Orig. year"
 msgstr "Orig.jahr"
 
-#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:76
+#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:77
 #: ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "Copyright"
 
-#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:78
+#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:79
 #: ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "Adresse"
 
-#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:80
+#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:81
 #: ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "Kodiert mit"
@@ -450,7 +450,7 @@ msgstr ""
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
 #: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:160
-#: ../data/scan_dialog.ui.h:117 ../data/search_dialog.ui.h:11
+#: ../data/scan_dialog.ui.h:118 ../data/search_dialog.ui.h:11
 msgid "_Close"
 msgstr "S_chließen"
 
@@ -680,7 +680,7 @@ msgstr "Scanner-Modus"
 msgid "Rename Files and Directories"
 msgstr "Dateien und Ordner umbenennen"
 
-#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:113
+#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:114
 msgid "Process Fields"
 msgstr "Felder verarbeiten"
 
@@ -1673,7 +1673,7 @@ msgstr "Keine Umwandlung"
 msgid "Rename File and Directory Scanner"
 msgstr "Datei- und Ordnerumbenennungs-Scanner"
 
-#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:96
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:784
 msgid "Remove spaces"
 msgstr "Leerzeichen entfernen"
@@ -2008,38 +2008,42 @@ msgstr "%c: Kommentar"
 
 #: ../data/scan_dialog.ui.h:42
 #, no-c-format
+msgid "%i: ignored"
+msgstr "%i: wird ignoriert"
+
+#: ../data/scan_dialog.ui.h:44
+#, no-c-format
 msgid "%u: URL"
 msgstr "%u: URL"
 
-#: ../data/scan_dialog.ui.h:44
+#: ../data/scan_dialog.ui.h:46
 #, no-c-format
 msgid "%p: composer"
 msgstr "%p: Komponist"
 
-#: ../data/scan_dialog.ui.h:46
+#: ../data/scan_dialog.ui.h:48
 #, no-c-format
 msgid "%r: copyright"
 msgstr "%r: Copyright"
 
-#: ../data/scan_dialog.ui.h:48
+#: ../data/scan_dialog.ui.h:50
 #, no-c-format
 msgid "%e: encoded by"
 msgstr "%e: Kodierer"
 
-#: ../data/scan_dialog.ui.h:50
-#, no-c-format
-msgid "%i: ignored"
-msgstr "%i: wird ignoriert"
-
 #: ../data/scan_dialog.ui.h:51
+msgid "{…|…}: alternatives group"
+msgstr "{…|…}: Gruppe mit Alternativen"
+
+#: ../data/scan_dialog.ui.h:52
 msgid "Fill Tag"
 msgstr "Metainfo füllen"
 
-#: ../data/scan_dialog.ui.h:52
+#: ../data/scan_dialog.ui.h:53
 msgid "Prefix mask with current directory"
 msgstr "Aktuellen Ordner vor die Maske stellen"
 
-#: ../data/scan_dialog.ui.h:53
+#: ../data/scan_dialog.ui.h:54
 msgid ""
 "Select or type in a mask using codes (see Legend) to parse tag fields. Used "
 "to rename the file.\n"
@@ -2052,113 +2056,113 @@ msgstr ""
 "Verwenden Sie »/« zum Anlegen von Ordnern. Wenn das erste Zeichen »/« ist, "
 "so ist es ein absoluter Pfad, andernfalls relativ zum bisherigen Pfad"
 
-#: ../data/scan_dialog.ui.h:55
+#: ../data/scan_dialog.ui.h:56
 msgid "Rename file preview"
 msgstr "Vorschau der Datei-Umbenennung"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:56 ../src/easytag.c:571
+#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:571
 msgid "Rename File"
 msgstr "Datei umbenennen"
 
-#: ../data/scan_dialog.ui.h:57
+#: ../data/scan_dialog.ui.h:58
 msgid "Tag Fields"
 msgstr "Felder füllen"
 
-#: ../data/scan_dialog.ui.h:59
+#: ../data/scan_dialog.ui.h:60
 msgid "Process filename"
 msgstr "Dateinamen verarbeiten"
 
-#: ../data/scan_dialog.ui.h:61
+#: ../data/scan_dialog.ui.h:62
 msgid "Process title field"
 msgstr "Titelfeld bearbeiten"
 
-#: ../data/scan_dialog.ui.h:63
+#: ../data/scan_dialog.ui.h:64
 msgid "Process artist field"
 msgstr "Künstlerfeld bearbeiten"
 
-#: ../data/scan_dialog.ui.h:65
+#: ../data/scan_dialog.ui.h:66
 msgid "Process album artist field"
 msgstr "Künstlerfeld dieses Albums bearbeiten"
 
-#: ../data/scan_dialog.ui.h:67
+#: ../data/scan_dialog.ui.h:68
 msgid "Process album field"
 msgstr "Albumfeld bearbeiten"
 
-#: ../data/scan_dialog.ui.h:69
+#: ../data/scan_dialog.ui.h:70
 msgid "Process genre field"
 msgstr "Genrefeld bearbeiten"
 
-#: ../data/scan_dialog.ui.h:71
+#: ../data/scan_dialog.ui.h:72
 msgid "Process comment field"
 msgstr "Kommentarfeld bearbeiten"
 
-#: ../data/scan_dialog.ui.h:73
+#: ../data/scan_dialog.ui.h:74
 msgid "Process composer field"
 msgstr "Komponistenfeld bearbeiten"
 
-#: ../data/scan_dialog.ui.h:74
+#: ../data/scan_dialog.ui.h:75
 msgid "Orig. Artist"
 msgstr "Originalkünstler"
 
-#: ../data/scan_dialog.ui.h:75
+#: ../data/scan_dialog.ui.h:76
 msgid "Process original artist field"
 msgstr "Originalkünstlerfeld dieser Datei bearbeiten"
 
-#: ../data/scan_dialog.ui.h:77
+#: ../data/scan_dialog.ui.h:78
 msgid "Process copyright field"
 msgstr "Copyright-Feld bearbeiten"
 
-#: ../data/scan_dialog.ui.h:79
+#: ../data/scan_dialog.ui.h:80
 msgid "Process URL field"
 msgstr "URL-Feld bearbeiten"
 
-#: ../data/scan_dialog.ui.h:81
+#: ../data/scan_dialog.ui.h:82
 msgid "Process encoded-by field"
 msgstr "Feld »codiert von« bearbeiten"
 
-#: ../data/scan_dialog.ui.h:82
+#: ../data/scan_dialog.ui.h:83
 msgid "Capitalization"
 msgstr "Großschreibung"
 
-#: ../data/scan_dialog.ui.h:83
+#: ../data/scan_dialog.ui.h:84
 msgid "Capitalize all"
 msgstr "Alles in Großbuchstaben umwandeln"
 
-#: ../data/scan_dialog.ui.h:84
+#: ../data/scan_dialog.ui.h:85
 msgid ""
 "Whether to upper-case all characters of the tag when processing tag fields"
 msgstr ""
 "Legt fest, ob beim Verarbeiten von Metainformationsfeldern alle Buchstaben "
 "groß geschrieben werden"
 
-#: ../data/scan_dialog.ui.h:85
+#: ../data/scan_dialog.ui.h:86
 msgid "Lowercase all"
 msgstr "Alles in Kleinbuchstaben umwandeln"
 
-#: ../data/scan_dialog.ui.h:86
+#: ../data/scan_dialog.ui.h:87
 msgid ""
 "Whether to lower-case all characters of the tag when processing tag fields"
 msgstr ""
 "Legt fest, ob beim Verarbeiten von Metainformationsfeldern alle Buchstaben "
 "klein geschrieben werden"
 
-#: ../data/scan_dialog.ui.h:87
+#: ../data/scan_dialog.ui.h:88
 msgid "Capitalize first letter"
 msgstr "Ersten Buchstaben groß schreiben"
 
-#: ../data/scan_dialog.ui.h:88
+#: ../data/scan_dialog.ui.h:89
 msgid ""
 "Whether to upper-case the first letter of the tag when processing tag fields"
 msgstr ""
 "Legt fest, ob beim Verarbeiten von Metainformationsfeldern der erste "
 "Buchstabe des Feldes groß geschrieben wird"
 
-#: ../data/scan_dialog.ui.h:89
+#: ../data/scan_dialog.ui.h:90
 msgid "Capitalize the first letter of each word"
 msgstr "Der erste Buchstabe jeden Wortes groß schreiben"
 
-#: ../data/scan_dialog.ui.h:90
+#: ../data/scan_dialog.ui.h:91
 msgid ""
 "Whether to upper-case the first letter of each word when processing tag "
 "fields"
@@ -2166,11 +2170,11 @@ msgstr ""
 "Legt fest, ob beim Verarbeiten von Metainformationsfeldern der erste "
 "Buchstabe eines jeden Wortes groß geschrieben wird"
 
-#: ../data/scan_dialog.ui.h:91
+#: ../data/scan_dialog.ui.h:92
 msgid "Detect Roman numerals"
 msgstr "Römische Zahlen erkennen"
 
-#: ../data/scan_dialog.ui.h:92 ../data/org.gnome.EasyTAG.gschema.xml.h:132
+#: ../data/scan_dialog.ui.h:93 ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to detect Roman numerals when applying upper-case conversions while "
 "processing tag fields"
@@ -2178,56 +2182,56 @@ msgstr ""
 "Legt fest, ob römische Zahlen im Falle von Großschreibungs-Operationen beim "
 "Verarbeiten von Metainformationsfeldern erkannt werden sollen"
 
-#: ../data/scan_dialog.ui.h:93
+#: ../data/scan_dialog.ui.h:94
 msgid "Do not change capitalization"
 msgstr "Großschreibung nicht ändern"
 
-#: ../data/scan_dialog.ui.h:94
+#: ../data/scan_dialog.ui.h:95
 msgid "Spaces Conversions"
 msgstr "Umwandlung von Leerzeichen"
 
-#: ../data/scan_dialog.ui.h:96 ../data/org.gnome.EasyTAG.gschema.xml.h:134
+#: ../data/scan_dialog.ui.h:97 ../data/org.gnome.EasyTAG.gschema.xml.h:134
 msgid "Whether to remove all spaces when processing tag fields"
 msgstr ""
 "Legt fest, ob beim Verarbeiten von Metainformationsfeldern alle Leerzeichen "
 "entfernt werden"
 
-#: ../data/scan_dialog.ui.h:97
+#: ../data/scan_dialog.ui.h:98
 msgid "Insert a space before uppercase letters"
 msgstr "Vor Großbuchstaben ein Leerzeichen einfügen"
 
-#: ../data/scan_dialog.ui.h:98 ../data/org.gnome.EasyTAG.gschema.xml.h:136
+#: ../data/scan_dialog.ui.h:99 ../data/org.gnome.EasyTAG.gschema.xml.h:136
 msgid ""
 "Whether to insert spaces before capital letters when processing tag fields"
 msgstr ""
 "Legt fest, ob beim Verarbeiten von Metainformationsfeldern Leerzeichen vor "
 "Großbuchstaben eingefügt werden sollen"
 
-#: ../data/scan_dialog.ui.h:99
+#: ../data/scan_dialog.ui.h:100
 msgid "Remove duplicate spaces and underscores"
 msgstr "Doppelte Leerzeichen und Unterstriche entfernen"
 
-#: ../data/scan_dialog.ui.h:100 ../data/org.gnome.EasyTAG.gschema.xml.h:138
+#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:138
 msgid ""
 "Whether to remove duplicate spaces and underscores when processing tag fields"
 msgstr ""
 "Legt fest, ob beim Verarbeiten von Metainformationsfeldern doppelte "
 "Leerzeichen und Unterstriche entfernt werden sollen"
 
-#: ../data/scan_dialog.ui.h:101
+#: ../data/scan_dialog.ui.h:102
 msgid "Do not change word separators"
 msgstr "Worttrenner nicht ändern"
 
-#: ../data/scan_dialog.ui.h:102
+#: ../data/scan_dialog.ui.h:103
 msgid "Character Conversions"
 msgstr "Zeichenumwandlung"
 
-#: ../data/scan_dialog.ui.h:104 ../src/tag_area.c:740
+#: ../data/scan_dialog.ui.h:105 ../src/tag_area.c:740
 #, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "»_« und »%20« in Leerzeichen umwandeln"
 
-#: ../data/scan_dialog.ui.h:106
+#: ../data/scan_dialog.ui.h:107
 #, no-c-format
 msgid ""
 "The underscore character or the string ‘%20’ is replaced by one space. "
@@ -2237,11 +2241,11 @@ msgstr ""
 "ersetzt. Beispiel: Zuvor: »Text%20in%20einem_Eintrag«, danach: »Text in "
 "einem Eintrag«)."
 
-#: ../data/scan_dialog.ui.h:107 ../src/tag_area.c:746
+#: ../data/scan_dialog.ui.h:108 ../src/tag_area.c:746
 msgid "Convert spaces to underscores"
 msgstr "Leerzeichen in Unterstriche umwandeln"
 
-#: ../data/scan_dialog.ui.h:108
+#: ../data/scan_dialog.ui.h:109
 msgid ""
 "The space character is replaced by one underscore character. Example, "
 "before: ‘Text In An Entry’, after: ‘Text_In_An_Entry’"
@@ -2249,41 +2253,41 @@ msgstr ""
 "Ein Leerzeichen wird durch einen Unterstrich ersetzt. Beispiel: Vorher: "
 "»Text in einem Eintrag«, danach: »Text_in_einem_Eintrag«."
 
-#: ../data/scan_dialog.ui.h:109
+#: ../data/scan_dialog.ui.h:110
 msgid "Convert:"
 msgstr "Umwandeln:"
 
-#: ../data/scan_dialog.ui.h:110
+#: ../data/scan_dialog.ui.h:111
 msgid "Replace a string by another one. Note that the search is case sensitive"
 msgstr ""
 "Eine Zeichenkette durch eine andere ersetzen. Beachten Sie, dass die Suche "
 "Groß- und Kleinschreibung berücksichtigt."
 
-#: ../data/scan_dialog.ui.h:111
+#: ../data/scan_dialog.ui.h:112
 msgid "to: "
 msgstr "nach: "
 
-#: ../data/scan_dialog.ui.h:112
+#: ../data/scan_dialog.ui.h:113
 msgid "Do not convert"
 msgstr "Nicht umwandeln"
 
-#: ../data/scan_dialog.ui.h:114
+#: ../data/scan_dialog.ui.h:115
 msgid "Show / Hide Masks Editor"
 msgstr "Maskeneditor anzeigen/verstecken"
 
-#: ../data/scan_dialog.ui.h:115
+#: ../data/scan_dialog.ui.h:116
 msgid "Show / Hide Legend"
 msgstr "Legende anzeigen/verstecken"
 
-#: ../data/scan_dialog.ui.h:116
+#: ../data/scan_dialog.ui.h:117
 msgid "Scanner Preferences"
 msgstr "Scanner-Einstellungen"
 
-#: ../data/scan_dialog.ui.h:118
+#: ../data/scan_dialog.ui.h:119
 msgid "Scan Files"
 msgstr "Datei(en) einlesen"
 
-#: ../data/scan_dialog.ui.h:119
+#: ../data/scan_dialog.ui.h:120
 msgid "Scan selected files"
 msgstr "Ausgewählte Dateien einlesen"
 
@@ -3322,7 +3326,7 @@ msgstr ""
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Versuchen Sie, die Umgebungsvariable G_FILENAME_ENCODING festzulegen."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:866
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
 msgid "Filename translation"
 msgstr "Dateinamensübersetzung"
 
@@ -4034,6 +4038,23 @@ msgstr "Diese Zeile nach oben verschieben"
 msgid "Move this line down"
 msgstr "Diese Zeile nach unten verschieben"
 
+#: ../src/mask.cc:191
+msgid "Incomplete placeholder at end of mask."
+msgstr "Unvollständiger Platzhalter am Ende der Maske."
+
+#: ../src/mask.cc:193
+#, c-format
+msgid "Invalid placeholder '%%%c'."
+msgstr "Ungültiger Platzhalter '%%%c'."
+
+#: ../src/mask.cc:197
+msgid "Opening brace '{' without closing brace '}'."
+msgstr "Öffnende Klammer '{' ohne schließende Klammer '}'."
+
+#: ../src/mask.cc:199
+msgid "Closing brace '}' without opening brace '{'."
+msgstr "Schließende Klammer '}' ohne öffnende Klammer '{'."
+
 #: ../src/misc.c:176
 msgid "You must type a program name"
 msgstr "Sie müssen einen Programmnamen angeben"
@@ -4165,8 +4186,7 @@ msgstr "Fehler in der Wiedergabelistendatei"
 msgid "Wrote playlist file ‘%s’"
 msgstr "Wiedergabelistendatei »%s« wurde geschrieben"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2659
-#: ../src/scan_dialog.c:2722
+#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
 msgid "Invalid scanner mask"
 msgstr "Ungültige Scannermaske"
 
@@ -4187,56 +4207,60 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "Fehler durch ungültigen Pfad"
 
-#: ../src/scan_dialog.c:452
+#: ../src/scan_dialog.c:383
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "CRC-Wert der Datei »%s« kann nicht berechnet werden"
 
-#: ../src/scan_dialog.c:467
+#: ../src/scan_dialog.c:398
 msgid "Tag successfully scanned"
 msgstr "Metainfo wurde erfolgreich eingelesen"
 
-#: ../src/scan_dialog.c:470
+#: ../src/scan_dialog.c:401
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Metainfo wurde erfolgreich gescannt »%s«"
 
-#: ../src/scan_dialog.c:513
+#: ../src/scan_dialog.c:444
 #, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "Die Erweiterung »%s« wurde nicht im Dateinamen »%s« gefunden"
 
-#: ../src/scan_dialog.c:605 ../src/scan_dialog.c:636
+#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
 #, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "Trenner »%s« in »%s« nicht auffindbar"
 
-#: ../src/scan_dialog.c:864
+#: ../src/scan_dialog.c:795
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "Dateiname »%s« konnte nicht in die Dateinamenskodierung des Systems "
 "konvertiert werden"
 
-#: ../src/scan_dialog.c:890
+#: ../src/scan_dialog.c:821
 msgid "New filename successfully scanned"
 msgstr "Neuer Dateiname wurde erfolgreich eingelesen"
 
-#: ../src/scan_dialog.c:894
+#: ../src/scan_dialog.c:825
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Neuer Dateiname wurde erfolgreich eingelesen »%s«"
 
-#: ../src/scan_dialog.c:1263
+#: ../src/scan_dialog.c:1206
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Fehler beim Verarbeiten der Felder »%s«"
 
-#: ../src/scan_dialog.c:2139
+#: ../src/scan_dialog.c:2082
 msgid "New_mask"
 msgstr "Neue_Maske"
 
-#: ../src/scan_dialog.c:2789
+#: ../src/scan_dialog.c:2559
+msgid "Empty scanner mask."
+msgstr "Leere Scannermaske"
+
+#: ../src/scan_dialog.c:2695
 msgid "All tags have been scanned"
 msgstr "Alle Metainformationen wurden durchsucht"
 

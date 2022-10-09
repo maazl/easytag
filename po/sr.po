@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-03 19:20+0200\n"
+"POT-Creation-Date: 2022-10-09 19:30+0200\n"
 "PO-Revision-Date: 2017-02-25 19:14+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <(nothing)>\n"
@@ -94,7 +94,7 @@ msgid "No files"
 msgstr "Нема датотека"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Извођач"
@@ -108,7 +108,7 @@ msgid "# Files"
 msgstr "# Датотеке"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Албум"
@@ -119,18 +119,18 @@ msgid "Path"
 msgstr "Путања"
 
 #: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
-#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:58
+#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:59
 #: ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "Назив датотеке"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Наслов"
 
-#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:64
+#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:65
 #: ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Извођач албума"
@@ -154,18 +154,18 @@ msgid "Track"
 msgstr "Нумера"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Жанр"
 
 #: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
-#: ../data/scan_dialog.ui.h:70 ../data/search_dialog.ui.h:21
+#: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Коментар"
 
 #: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
-#: ../data/scan_dialog.ui.h:72 ../data/search_dialog.ui.h:22
+#: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Композитор"
@@ -179,17 +179,17 @@ msgstr "Ориг. извођач"
 msgid "Orig. year"
 msgstr "Ориг. извођач"
 
-#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:76
+#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:77
 #: ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "Ауторско право"
 
-#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:78
+#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:79
 #: ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "Адреса"
 
-#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:80
+#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:81
 #: ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "Кодирано помоћу"
@@ -441,7 +441,7 @@ msgstr ""
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
 #: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:160
-#: ../data/scan_dialog.ui.h:117 ../data/search_dialog.ui.h:11
+#: ../data/scan_dialog.ui.h:118 ../data/search_dialog.ui.h:11
 msgid "_Close"
 msgstr "_Затвори"
 
@@ -672,7 +672,7 @@ msgstr "Режим прегледача"
 msgid "Rename Files and Directories"
 msgstr "Преименујте датотеке и директоријуме"
 
-#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:113
+#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:114
 msgid "Process Fields"
 msgstr "Обради поља"
 
@@ -1631,7 +1631,7 @@ msgstr "Без претварања"
 msgid "Rename File and Directory Scanner"
 msgstr "Преименуј датотеку и прегледача директоријума"
 
-#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:96
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:784
 msgid "Remove spaces"
 msgstr "Уклони размаке"
@@ -1957,38 +1957,42 @@ msgstr "%c: коментар"
 
 #: ../data/scan_dialog.ui.h:42
 #, no-c-format
+msgid "%i: ignored"
+msgstr "%i: занемарено"
+
+#: ../data/scan_dialog.ui.h:44
+#, no-c-format
 msgid "%u: URL"
 msgstr "%u: адреса"
 
-#: ../data/scan_dialog.ui.h:44
+#: ../data/scan_dialog.ui.h:46
 #, no-c-format
 msgid "%p: composer"
 msgstr "%p: композитор"
 
-#: ../data/scan_dialog.ui.h:46
+#: ../data/scan_dialog.ui.h:48
 #, no-c-format
 msgid "%r: copyright"
 msgstr "%r: ауторско право"
 
-#: ../data/scan_dialog.ui.h:48
+#: ../data/scan_dialog.ui.h:50
 #, no-c-format
 msgid "%e: encoded by"
 msgstr "%e: кодирано помоћу"
 
-#: ../data/scan_dialog.ui.h:50
-#, no-c-format
-msgid "%i: ignored"
-msgstr "%i: занемарено"
-
 #: ../data/scan_dialog.ui.h:51
+msgid "{…|…}: alternatives group"
+msgstr ""
+
+#: ../data/scan_dialog.ui.h:52
 msgid "Fill Tag"
 msgstr "Попуни ознаку"
 
-#: ../data/scan_dialog.ui.h:52
+#: ../data/scan_dialog.ui.h:53
 msgid "Prefix mask with current directory"
 msgstr "Маска префикса са тренутним директоријумом"
 
-#: ../data/scan_dialog.ui.h:53
+#: ../data/scan_dialog.ui.h:54
 msgid ""
 "Select or type in a mask using codes (see Legend) to parse tag fields. Used "
 "to rename the file.\n"
@@ -2000,110 +2004,110 @@ msgstr ""
 "Користите / за директоријуме. Уколико је први знак /, путања је апсолутна, у "
 "супротном је релативна према старој путањи"
 
-#: ../data/scan_dialog.ui.h:55
+#: ../data/scan_dialog.ui.h:56
 msgid "Rename file preview"
 msgstr "Преглед преименовања датотеке"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:56 ../src/easytag.c:571
+#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:571
 msgid "Rename File"
 msgstr "Преименуј датотеку"
 
-#: ../data/scan_dialog.ui.h:57
+#: ../data/scan_dialog.ui.h:58
 msgid "Tag Fields"
 msgstr "Поља ознаке"
 
-#: ../data/scan_dialog.ui.h:59
+#: ../data/scan_dialog.ui.h:60
 msgid "Process filename"
 msgstr "Обрадите назив датотеке"
 
-#: ../data/scan_dialog.ui.h:61
+#: ../data/scan_dialog.ui.h:62
 msgid "Process title field"
 msgstr "Обрадите поље наслова"
 
-#: ../data/scan_dialog.ui.h:63
+#: ../data/scan_dialog.ui.h:64
 msgid "Process artist field"
 msgstr "Обрадите поље извођача"
 
-#: ../data/scan_dialog.ui.h:65
+#: ../data/scan_dialog.ui.h:66
 msgid "Process album artist field"
 msgstr "Обрадите поље извођача албума"
 
-#: ../data/scan_dialog.ui.h:67
+#: ../data/scan_dialog.ui.h:68
 msgid "Process album field"
 msgstr "Обрадите поље албума"
 
-#: ../data/scan_dialog.ui.h:69
+#: ../data/scan_dialog.ui.h:70
 msgid "Process genre field"
 msgstr "Обрадите поље жанра"
 
-#: ../data/scan_dialog.ui.h:71
+#: ../data/scan_dialog.ui.h:72
 msgid "Process comment field"
 msgstr "Обрадите поље напомене"
 
-#: ../data/scan_dialog.ui.h:73
+#: ../data/scan_dialog.ui.h:74
 msgid "Process composer field"
 msgstr "Обрадите поље композитора"
 
-#: ../data/scan_dialog.ui.h:74
+#: ../data/scan_dialog.ui.h:75
 msgid "Orig. Artist"
 msgstr "Ориг. извођач"
 
-#: ../data/scan_dialog.ui.h:75
+#: ../data/scan_dialog.ui.h:76
 msgid "Process original artist field"
 msgstr "Обрадите поље оригиналног извођача"
 
-#: ../data/scan_dialog.ui.h:77
+#: ../data/scan_dialog.ui.h:78
 msgid "Process copyright field"
 msgstr "Обрадите поље ауторских права"
 
-#: ../data/scan_dialog.ui.h:79
+#: ../data/scan_dialog.ui.h:80
 msgid "Process URL field"
 msgstr "Обрадите поље адресе"
 
-#: ../data/scan_dialog.ui.h:81
+#: ../data/scan_dialog.ui.h:82
 msgid "Process encoded-by field"
 msgstr "Обрадите поље назива енкодера"
 
-#: ../data/scan_dialog.ui.h:82
+#: ../data/scan_dialog.ui.h:83
 msgid "Capitalization"
 msgstr "Велика слова"
 
-#: ../data/scan_dialog.ui.h:83
+#: ../data/scan_dialog.ui.h:84
 msgid "Capitalize all"
 msgstr "Сва слова велика"
 
-#: ../data/scan_dialog.ui.h:84
+#: ../data/scan_dialog.ui.h:85
 msgid ""
 "Whether to upper-case all characters of the tag when processing tag fields"
 msgstr ""
 "Да ли да испише све знаке ознаке великим словима када обрађује поља ознаке"
 
-#: ../data/scan_dialog.ui.h:85
+#: ../data/scan_dialog.ui.h:86
 msgid "Lowercase all"
 msgstr "Сва слова мала"
 
-#: ../data/scan_dialog.ui.h:86
+#: ../data/scan_dialog.ui.h:87
 msgid ""
 "Whether to lower-case all characters of the tag when processing tag fields"
 msgstr ""
 "Да ли да испише све знаке ознаке малим словима када обрађује поља ознаке"
 
-#: ../data/scan_dialog.ui.h:87
+#: ../data/scan_dialog.ui.h:88
 msgid "Capitalize first letter"
 msgstr "Прво слово велико"
 
-#: ../data/scan_dialog.ui.h:88
+#: ../data/scan_dialog.ui.h:89
 msgid ""
 "Whether to upper-case the first letter of the tag when processing tag fields"
 msgstr ""
 "Да ли да испише прво слово ознаке великим словом када обрађује поља ознаке"
 
-#: ../data/scan_dialog.ui.h:89
+#: ../data/scan_dialog.ui.h:90
 msgid "Capitalize the first letter of each word"
 msgstr "Прво слово сваке речи велико"
 
-#: ../data/scan_dialog.ui.h:90
+#: ../data/scan_dialog.ui.h:91
 msgid ""
 "Whether to upper-case the first letter of each word when processing tag "
 "fields"
@@ -2111,11 +2115,11 @@ msgstr ""
 "Да ли да испише прво слово сваке речи великим словом када обрађује поља "
 "ознаке"
 
-#: ../data/scan_dialog.ui.h:91
+#: ../data/scan_dialog.ui.h:92
 msgid "Detect Roman numerals"
 msgstr "Откриј римске бројеве"
 
-#: ../data/scan_dialog.ui.h:92 ../data/org.gnome.EasyTAG.gschema.xml.h:132
+#: ../data/scan_dialog.ui.h:93 ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to detect Roman numerals when applying upper-case conversions while "
 "processing tag fields"
@@ -2123,50 +2127,50 @@ msgstr ""
 "Да ли да открије римске бројеве када примењује претварања великих слова када "
 "обрађује поља ознаке"
 
-#: ../data/scan_dialog.ui.h:93
+#: ../data/scan_dialog.ui.h:94
 msgid "Do not change capitalization"
 msgstr "Не мењај величину слова"
 
-#: ../data/scan_dialog.ui.h:94
+#: ../data/scan_dialog.ui.h:95
 msgid "Spaces Conversions"
 msgstr "Претварања размака"
 
-#: ../data/scan_dialog.ui.h:96 ../data/org.gnome.EasyTAG.gschema.xml.h:134
+#: ../data/scan_dialog.ui.h:97 ../data/org.gnome.EasyTAG.gschema.xml.h:134
 msgid "Whether to remove all spaces when processing tag fields"
 msgstr "Да ли да уклони све размаке када обрађује поља ознаке"
 
-#: ../data/scan_dialog.ui.h:97
+#: ../data/scan_dialog.ui.h:98
 msgid "Insert a space before uppercase letters"
 msgstr "Убаци размак пре великог слова"
 
-#: ../data/scan_dialog.ui.h:98 ../data/org.gnome.EasyTAG.gschema.xml.h:136
+#: ../data/scan_dialog.ui.h:99 ../data/org.gnome.EasyTAG.gschema.xml.h:136
 msgid ""
 "Whether to insert spaces before capital letters when processing tag fields"
 msgstr "Да ли да убаци размаке пре почетних слова када обрађује поља ознаке"
 
-#: ../data/scan_dialog.ui.h:99
+#: ../data/scan_dialog.ui.h:100
 msgid "Remove duplicate spaces and underscores"
 msgstr "Уклони дупле размаке и доње цртице"
 
-#: ../data/scan_dialog.ui.h:100 ../data/org.gnome.EasyTAG.gschema.xml.h:138
+#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:138
 msgid ""
 "Whether to remove duplicate spaces and underscores when processing tag fields"
 msgstr "Да ли да уклони дупле размаке и доње цртице када обрађује поља ознаке"
 
-#: ../data/scan_dialog.ui.h:101
+#: ../data/scan_dialog.ui.h:102
 msgid "Do not change word separators"
 msgstr "Не мењај раздвајаче речи"
 
-#: ../data/scan_dialog.ui.h:102
+#: ../data/scan_dialog.ui.h:103
 msgid "Character Conversions"
 msgstr "Претварања знакова"
 
-#: ../data/scan_dialog.ui.h:104 ../src/tag_area.c:740
+#: ../data/scan_dialog.ui.h:105 ../src/tag_area.c:740
 #, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "Преведи „_“ и „%20“ у размаке"
 
-#: ../data/scan_dialog.ui.h:106
+#: ../data/scan_dialog.ui.h:107
 #, no-c-format
 msgid ""
 "The underscore character or the string ‘%20’ is replaced by one space. "
@@ -2175,11 +2179,11 @@ msgstr ""
 "Доње цртице или ниска „%20“ између речи ће бити замењени размаком. На "
 "пример: „Текст%20у%20неком_пољу“ ће постати „Текст у неком пољу“"
 
-#: ../data/scan_dialog.ui.h:107 ../src/tag_area.c:746
+#: ../data/scan_dialog.ui.h:108 ../src/tag_area.c:746
 msgid "Convert spaces to underscores"
 msgstr "Преведи размаке у доње цртице"
 
-#: ../data/scan_dialog.ui.h:108
+#: ../data/scan_dialog.ui.h:109
 msgid ""
 "The space character is replaced by one underscore character. Example, "
 "before: ‘Text In An Entry’, after: ‘Text_In_An_Entry’"
@@ -2187,40 +2191,40 @@ msgstr ""
 "Размак између речи биће замењен доњом цртицом. На пример „Текст у неком "
 "пољу“ ће постати „Текст_у_неком_пољу“"
 
-#: ../data/scan_dialog.ui.h:109
+#: ../data/scan_dialog.ui.h:110
 msgid "Convert:"
 msgstr "Претвори:"
 
-#: ../data/scan_dialog.ui.h:110
+#: ../data/scan_dialog.ui.h:111
 msgid "Replace a string by another one. Note that the search is case sensitive"
 msgstr ""
 "Замените једну ниску другом. Знајте да је претрага осетљива на величину слова"
 
-#: ../data/scan_dialog.ui.h:111
+#: ../data/scan_dialog.ui.h:112
 msgid "to: "
 msgstr "у: "
 
-#: ../data/scan_dialog.ui.h:112
+#: ../data/scan_dialog.ui.h:113
 msgid "Do not convert"
 msgstr "Не претварај"
 
-#: ../data/scan_dialog.ui.h:114
+#: ../data/scan_dialog.ui.h:115
 msgid "Show / Hide Masks Editor"
 msgstr "Прикажите / сакријте уређивач маски"
 
-#: ../data/scan_dialog.ui.h:115
+#: ../data/scan_dialog.ui.h:116
 msgid "Show / Hide Legend"
 msgstr "Прикажите / сакријте легенду"
 
-#: ../data/scan_dialog.ui.h:116
+#: ../data/scan_dialog.ui.h:117
 msgid "Scanner Preferences"
 msgstr "Поставке прегледача"
 
-#: ../data/scan_dialog.ui.h:118
+#: ../data/scan_dialog.ui.h:119
 msgid "Scan Files"
 msgstr "Прегледај датотеке"
 
-#: ../data/scan_dialog.ui.h:119
+#: ../data/scan_dialog.ui.h:120
 msgid "Scan selected files"
 msgstr "Прегледајте изабране датотеке"
 
@@ -3237,7 +3241,7 @@ msgstr ""
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Покушавам да поставим променљиву окружења Г_КОДИРАЊЕ_НАЗИВАДАТОТЕКЕ."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:866
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
 msgid "Filename translation"
 msgstr "Превод назива датотеке"
 
@@ -3959,6 +3963,23 @@ msgstr "Померите овај ред на горе"
 msgid "Move this line down"
 msgstr "Померите овај ред на доле"
 
+#: ../src/mask.cc:191
+msgid "Incomplete placeholder at end of mask."
+msgstr ""
+
+#: ../src/mask.cc:193
+#, c-format
+msgid "Invalid placeholder '%%%c'."
+msgstr ""
+
+#: ../src/mask.cc:197
+msgid "Opening brace '{' without closing brace '}'."
+msgstr ""
+
+#: ../src/mask.cc:199
+msgid "Closing brace '}' without opening brace '{'."
+msgstr ""
+
 #: ../src/misc.c:176
 msgid "You must type a program name"
 msgstr "Морате да унесете назив програма"
@@ -4090,8 +4111,7 @@ msgstr "Грешка датотеке списка нумера"
 msgid "Wrote playlist file ‘%s’"
 msgstr "Датотека списка нумера „%s“ је записана"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2659
-#: ../src/scan_dialog.c:2722
+#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
 msgid "Invalid scanner mask"
 msgstr "Неисправна маска прегледача"
 
@@ -4112,55 +4132,60 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "Грешка неисправне путање"
 
-#: ../src/scan_dialog.c:452
+#: ../src/scan_dialog.c:383
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Не могу да срачунам ЦРЦ вредност датотеке „%s“"
 
-#: ../src/scan_dialog.c:467
+#: ../src/scan_dialog.c:398
 msgid "Tag successfully scanned"
 msgstr "Ознака је успешно скенирана"
 
-#: ../src/scan_dialog.c:470
+#: ../src/scan_dialog.c:401
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Ознака је успешно прегледана „%s“"
 
-#: ../src/scan_dialog.c:513
+#: ../src/scan_dialog.c:444
 #, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "Нисам нашао проширење „%s“ у називу датотеке „%s“"
 
-#: ../src/scan_dialog.c:605 ../src/scan_dialog.c:636
+#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
 #, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "Не могу да нађем раздвајач „%s“ у „%s“"
 
-#: ../src/scan_dialog.c:864
+#: ../src/scan_dialog.c:795
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "Не могу да претворим назив датотеке „%s“ у кодирање назива датотеке система"
 
-#: ../src/scan_dialog.c:890
+#: ../src/scan_dialog.c:821
 msgid "New filename successfully scanned"
 msgstr "Нови назив датотеке је успешно скениран"
 
-#: ../src/scan_dialog.c:894
+#: ../src/scan_dialog.c:825
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Нови назив датотеке је успешно скениран %s"
 
-#: ../src/scan_dialog.c:1263
+#: ../src/scan_dialog.c:1206
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Грешка приликом обраде поља „%s“"
 
-#: ../src/scan_dialog.c:2139
+#: ../src/scan_dialog.c:2082
 msgid "New_mask"
 msgstr "Нова _маска"
 
-#: ../src/scan_dialog.c:2789
+#: ../src/scan_dialog.c:2559
+#, fuzzy
+msgid "Empty scanner mask."
+msgstr "Неисправна маска прегледача"
+
+#: ../src/scan_dialog.c:2695
 msgid "All tags have been scanned"
 msgstr "Све ознаке су прегледане"
 

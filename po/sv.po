@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-03 19:20+0200\n"
+"POT-Creation-Date: 2022-10-09 19:30+0200\n"
 "PO-Revision-Date: 2016-12-21 23:19+0100\n"
 "Last-Translator: Josef Andersson <josef.andersson@fripost.org>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -94,7 +94,7 @@ msgid "No files"
 msgstr "Inga filer"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Artist"
@@ -108,7 +108,7 @@ msgid "# Files"
 msgstr "# Filer"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Album"
@@ -118,18 +118,18 @@ msgid "Path"
 msgstr "Sökväg"
 
 #: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
-#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:58
+#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:59
 #: ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "Filnamn"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Titel"
 
-#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:64
+#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:65
 #: ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Albumartist"
@@ -153,18 +153,18 @@ msgid "Track"
 msgstr "Spår"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Genre"
 
 #: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
-#: ../data/scan_dialog.ui.h:70 ../data/search_dialog.ui.h:21
+#: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Kommentar"
 
 #: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
-#: ../data/scan_dialog.ui.h:72 ../data/search_dialog.ui.h:22
+#: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Kompositör"
@@ -178,17 +178,17 @@ msgstr "Ursprungsartist"
 msgid "Orig. year"
 msgstr "Ursprungsartist"
 
-#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:76
+#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:77
 #: ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "Copyright"
 
-#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:78
+#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:79
 #: ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "Webbadress"
 
-#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:80
+#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:81
 #: ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "Kodad av"
@@ -443,7 +443,7 @@ msgstr ""
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
 #: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:160
-#: ../data/scan_dialog.ui.h:117 ../data/search_dialog.ui.h:11
+#: ../data/scan_dialog.ui.h:118 ../data/search_dialog.ui.h:11
 msgid "_Close"
 msgstr "_Stäng"
 
@@ -671,7 +671,7 @@ msgstr "Avsökningsläge"
 msgid "Rename Files and Directories"
 msgstr "Byt namn på filer och mappar"
 
-#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:113
+#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:114
 msgid "Process Fields"
 msgstr "Bearbeta fält"
 
@@ -1629,7 +1629,7 @@ msgstr "Ingen omvandling"
 msgid "Rename File and Directory Scanner"
 msgstr "Byt namn på fil och mapp"
 
-#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:96
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:784
 msgid "Remove spaces"
 msgstr "Avlägsna mellanslag"
@@ -1957,38 +1957,42 @@ msgstr "%c: kommentar"
 
 #: ../data/scan_dialog.ui.h:42
 #, no-c-format
+msgid "%i: ignored"
+msgstr "%i: ignorerad"
+
+#: ../data/scan_dialog.ui.h:44
+#, no-c-format
 msgid "%u: URL"
 msgstr "%u: webbadress"
 
-#: ../data/scan_dialog.ui.h:44
+#: ../data/scan_dialog.ui.h:46
 #, no-c-format
 msgid "%p: composer"
 msgstr "%p: kompositör"
 
-#: ../data/scan_dialog.ui.h:46
+#: ../data/scan_dialog.ui.h:48
 #, no-c-format
 msgid "%r: copyright"
 msgstr "%r: copyright"
 
-#: ../data/scan_dialog.ui.h:48
+#: ../data/scan_dialog.ui.h:50
 #, no-c-format
 msgid "%e: encoded by"
 msgstr "%e: kodad av"
 
-#: ../data/scan_dialog.ui.h:50
-#, no-c-format
-msgid "%i: ignored"
-msgstr "%i: ignorerad"
-
 #: ../data/scan_dialog.ui.h:51
+msgid "{…|…}: alternatives group"
+msgstr ""
+
+#: ../data/scan_dialog.ui.h:52
 msgid "Fill Tag"
 msgstr "Fyll tagg"
 
-#: ../data/scan_dialog.ui.h:52
+#: ../data/scan_dialog.ui.h:53
 msgid "Prefix mask with current directory"
 msgstr "Inled mask med nuvarande sökväg"
 
-#: ../data/scan_dialog.ui.h:53
+#: ../data/scan_dialog.ui.h:54
 msgid ""
 "Select or type in a mask using codes (see Legend) to parse tag fields. Used "
 "to rename the file.\n"
@@ -2000,118 +2004,118 @@ msgstr ""
 "Använd ”/” för att skapa mappar. Om det första tecknet är ”/” så är det en "
 "absolut sökväg, i annat fall är den relativ till den gamla sökvägen"
 
-#: ../data/scan_dialog.ui.h:55
+#: ../data/scan_dialog.ui.h:56
 msgid "Rename file preview"
 msgstr "Förhandsgranskning av förändring"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:56 ../src/easytag.c:571
+#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:571
 msgid "Rename File"
 msgstr "Byt namn på fil"
 
-#: ../data/scan_dialog.ui.h:57
+#: ../data/scan_dialog.ui.h:58
 msgid "Tag Fields"
 msgstr "Taggfält"
 
-#: ../data/scan_dialog.ui.h:59
+#: ../data/scan_dialog.ui.h:60
 msgid "Process filename"
 msgstr "Bearbeta filnamn"
 
-#: ../data/scan_dialog.ui.h:61
+#: ../data/scan_dialog.ui.h:62
 msgid "Process title field"
 msgstr "Bearbeta titelfält"
 
-#: ../data/scan_dialog.ui.h:63
+#: ../data/scan_dialog.ui.h:64
 msgid "Process artist field"
 msgstr "Bearbeta artistfält"
 
-#: ../data/scan_dialog.ui.h:65
+#: ../data/scan_dialog.ui.h:66
 msgid "Process album artist field"
 msgstr "Bearbeta albumartistfält"
 
-#: ../data/scan_dialog.ui.h:67
+#: ../data/scan_dialog.ui.h:68
 msgid "Process album field"
 msgstr "Bearbeta albumfält"
 
-#: ../data/scan_dialog.ui.h:69
+#: ../data/scan_dialog.ui.h:70
 msgid "Process genre field"
 msgstr "Bearbeta genrefält"
 
-#: ../data/scan_dialog.ui.h:71
+#: ../data/scan_dialog.ui.h:72
 msgid "Process comment field"
 msgstr "Bearbeta kommentarsfält"
 
-#: ../data/scan_dialog.ui.h:73
+#: ../data/scan_dialog.ui.h:74
 msgid "Process composer field"
 msgstr "Bearbeta kompositörsfält"
 
-#: ../data/scan_dialog.ui.h:74
+#: ../data/scan_dialog.ui.h:75
 msgid "Orig. Artist"
 msgstr "Originalartist"
 
-#: ../data/scan_dialog.ui.h:75
+#: ../data/scan_dialog.ui.h:76
 msgid "Process original artist field"
 msgstr "Bearbeta ursprungsartist-fält"
 
-#: ../data/scan_dialog.ui.h:77
+#: ../data/scan_dialog.ui.h:78
 msgid "Process copyright field"
 msgstr "Bearbeta copyrightfält"
 
-#: ../data/scan_dialog.ui.h:79
+#: ../data/scan_dialog.ui.h:80
 msgid "Process URL field"
 msgstr "Bearbeta webbadressfält"
 
-#: ../data/scan_dialog.ui.h:81
+#: ../data/scan_dialog.ui.h:82
 msgid "Process encoded-by field"
 msgstr "Bearbeta ”kodad av”-fält"
 
-#: ../data/scan_dialog.ui.h:82
+#: ../data/scan_dialog.ui.h:83
 msgid "Capitalization"
 msgstr "Stora bokstäver"
 
-#: ../data/scan_dialog.ui.h:83
+#: ../data/scan_dialog.ui.h:84
 msgid "Capitalize all"
 msgstr "Enbart versaler"
 
-#: ../data/scan_dialog.ui.h:84
+#: ../data/scan_dialog.ui.h:85
 msgid ""
 "Whether to upper-case all characters of the tag when processing tag fields"
 msgstr "Huruvida alla tecken i taggen ska vara versaler när taggfält bearbetas"
 
-#: ../data/scan_dialog.ui.h:85
+#: ../data/scan_dialog.ui.h:86
 msgid "Lowercase all"
 msgstr "Enbart gemener"
 
-#: ../data/scan_dialog.ui.h:86
+#: ../data/scan_dialog.ui.h:87
 msgid ""
 "Whether to lower-case all characters of the tag when processing tag fields"
 msgstr "Huruvida alla tecken i taggen ska vara gemener när taggfält bearbetas"
 
-#: ../data/scan_dialog.ui.h:87
+#: ../data/scan_dialog.ui.h:88
 msgid "Capitalize first letter"
 msgstr "Inledande versal i varje tagg"
 
-#: ../data/scan_dialog.ui.h:88
+#: ../data/scan_dialog.ui.h:89
 msgid ""
 "Whether to upper-case the first letter of the tag when processing tag fields"
 msgstr ""
 "Huruvida alla taggar ska få inledande versal vid bearbetning av taggfält"
 
-#: ../data/scan_dialog.ui.h:89
+#: ../data/scan_dialog.ui.h:90
 msgid "Capitalize the first letter of each word"
 msgstr "Inledande versal i varje ord"
 
-#: ../data/scan_dialog.ui.h:90
+#: ../data/scan_dialog.ui.h:91
 msgid ""
 "Whether to upper-case the first letter of each word when processing tag "
 "fields"
 msgstr "Huruvida alla ord ska få inledande versal vid bearbetning av taggfält"
 
-#: ../data/scan_dialog.ui.h:91
+#: ../data/scan_dialog.ui.h:92
 msgid "Detect Roman numerals"
 msgstr "Upptäck romerska siffror"
 
-#: ../data/scan_dialog.ui.h:92 ../data/org.gnome.EasyTAG.gschema.xml.h:132
+#: ../data/scan_dialog.ui.h:93 ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to detect Roman numerals when applying upper-case conversions while "
 "processing tag fields"
@@ -2119,53 +2123,53 @@ msgstr ""
 "Huruvida romerska siffror ska identifieras vid versalomvandling till gemener "
 "sker vid bearbetning av taggfält"
 
-#: ../data/scan_dialog.ui.h:93
+#: ../data/scan_dialog.ui.h:94
 msgid "Do not change capitalization"
 msgstr "Ändra inte skiftlägen"
 
-#: ../data/scan_dialog.ui.h:94
+#: ../data/scan_dialog.ui.h:95
 msgid "Spaces Conversions"
 msgstr "Mellanslagsomvandling"
 
-#: ../data/scan_dialog.ui.h:96 ../data/org.gnome.EasyTAG.gschema.xml.h:134
+#: ../data/scan_dialog.ui.h:97 ../data/org.gnome.EasyTAG.gschema.xml.h:134
 msgid "Whether to remove all spaces when processing tag fields"
 msgstr "Huruvida alla blanksteg ska tas bort vid bearbetning av taggfält"
 
-#: ../data/scan_dialog.ui.h:97
+#: ../data/scan_dialog.ui.h:98
 msgid "Insert a space before uppercase letters"
 msgstr "Infoga mellanslag före varje versal"
 
-#: ../data/scan_dialog.ui.h:98 ../data/org.gnome.EasyTAG.gschema.xml.h:136
+#: ../data/scan_dialog.ui.h:99 ../data/org.gnome.EasyTAG.gschema.xml.h:136
 msgid ""
 "Whether to insert spaces before capital letters when processing tag fields"
 msgstr ""
 "Huruvida ett blanksteg ska införas före versaler vid bearbetning av taggfält"
 
-#: ../data/scan_dialog.ui.h:99
+#: ../data/scan_dialog.ui.h:100
 msgid "Remove duplicate spaces and underscores"
 msgstr "Avlägsna dubbletter av mellanslag och understreck"
 
-#: ../data/scan_dialog.ui.h:100 ../data/org.gnome.EasyTAG.gschema.xml.h:138
+#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:138
 msgid ""
 "Whether to remove duplicate spaces and underscores when processing tag fields"
 msgstr ""
 "Huruvida dubbletter av mellanslag och understreck ska tas bort vid "
 "bearbetning av taggfält"
 
-#: ../data/scan_dialog.ui.h:101
+#: ../data/scan_dialog.ui.h:102
 msgid "Do not change word separators"
 msgstr "Ändra inte ordavskiljare"
 
-#: ../data/scan_dialog.ui.h:102
+#: ../data/scan_dialog.ui.h:103
 msgid "Character Conversions"
 msgstr "Teckenkonverteringar"
 
-#: ../data/scan_dialog.ui.h:104 ../src/tag_area.c:740
+#: ../data/scan_dialog.ui.h:105 ../src/tag_area.c:740
 #, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "Konvertera ”_” och ”%20” till mellanslag"
 
-#: ../data/scan_dialog.ui.h:106
+#: ../data/scan_dialog.ui.h:107
 #, no-c-format
 msgid ""
 "The underscore character or the string ‘%20’ is replaced by one space. "
@@ -2174,11 +2178,11 @@ msgstr ""
 "Understreck och strängen ”%20” byts ut mot ett mellanslag. Exempelvis, före: "
 "”Text%20i%20en_tagg”, efter: ”Text i en tagg”"
 
-#: ../data/scan_dialog.ui.h:107 ../src/tag_area.c:746
+#: ../data/scan_dialog.ui.h:108 ../src/tag_area.c:746
 msgid "Convert spaces to underscores"
 msgstr "Konvertera mellanslag till understreck"
 
-#: ../data/scan_dialog.ui.h:108
+#: ../data/scan_dialog.ui.h:109
 msgid ""
 "The space character is replaced by one underscore character. Example, "
 "before: ‘Text In An Entry’, after: ‘Text_In_An_Entry’"
@@ -2186,40 +2190,40 @@ msgstr ""
 "Mellanslag byts ut mot understreck. Exempelvis, före: ”Text i en tagg”, "
 "Efter: ”Text_i_en_tagg”"
 
-#: ../data/scan_dialog.ui.h:109
+#: ../data/scan_dialog.ui.h:110
 msgid "Convert:"
 msgstr "Konvertera:"
 
-#: ../data/scan_dialog.ui.h:110
+#: ../data/scan_dialog.ui.h:111
 msgid "Replace a string by another one. Note that the search is case sensitive"
 msgstr ""
 "Byt ut en sträng mot en annan. Notera att sökningen är skiftlägeskänslig"
 
-#: ../data/scan_dialog.ui.h:111
+#: ../data/scan_dialog.ui.h:112
 msgid "to: "
 msgstr "till: "
 
-#: ../data/scan_dialog.ui.h:112
+#: ../data/scan_dialog.ui.h:113
 msgid "Do not convert"
 msgstr "Omvandla inte"
 
-#: ../data/scan_dialog.ui.h:114
+#: ../data/scan_dialog.ui.h:115
 msgid "Show / Hide Masks Editor"
 msgstr "Visa / dölj maskredigerare"
 
-#: ../data/scan_dialog.ui.h:115
+#: ../data/scan_dialog.ui.h:116
 msgid "Show / Hide Legend"
 msgstr "Visa / dölj symbolförklaring"
 
-#: ../data/scan_dialog.ui.h:116
+#: ../data/scan_dialog.ui.h:117
 msgid "Scanner Preferences"
 msgstr "Avsökningsinställningar"
 
-#: ../data/scan_dialog.ui.h:118
+#: ../data/scan_dialog.ui.h:119
 msgid "Scan Files"
 msgstr "Sök av filer"
 
-#: ../data/scan_dialog.ui.h:119
+#: ../data/scan_dialog.ui.h:120
 msgid "Scan selected files"
 msgstr "Sök av de valda filerna"
 
@@ -3222,7 +3226,7 @@ msgstr "Kunde inte konvertera filnamnet ”%s” till systemets filnamnskodning"
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Försök att ställa in miljövariabeln G_FILENAME_ENCODING."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:866
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
 msgid "Filename translation"
 msgstr "Filnamnsöversättning"
 
@@ -3927,6 +3931,23 @@ msgstr "Flytta denna rad upp"
 msgid "Move this line down"
 msgstr "Flytta denna rad ner"
 
+#: ../src/mask.cc:191
+msgid "Incomplete placeholder at end of mask."
+msgstr ""
+
+#: ../src/mask.cc:193
+#, c-format
+msgid "Invalid placeholder '%%%c'."
+msgstr ""
+
+#: ../src/mask.cc:197
+msgid "Opening brace '{' without closing brace '}'."
+msgstr ""
+
+#: ../src/mask.cc:199
+msgid "Closing brace '}' without opening brace '{'."
+msgstr ""
+
 #: ../src/misc.c:176
 msgid "You must type a program name"
 msgstr "Du måste skriva in ett programnamn"
@@ -4058,8 +4079,7 @@ msgstr "Fel i spellistan"
 msgid "Wrote playlist file ‘%s’"
 msgstr "Skrev spellista ”%s”"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2659
-#: ../src/scan_dialog.c:2722
+#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
 msgid "Invalid scanner mask"
 msgstr "Ogiltig avsökningsmask"
 
@@ -4080,54 +4100,59 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "Ogiltig sökväg"
 
-#: ../src/scan_dialog.c:452
+#: ../src/scan_dialog.c:383
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Kan inte räkna ut CRC-värdet av ”%s”"
 
-#: ../src/scan_dialog.c:467
+#: ../src/scan_dialog.c:398
 msgid "Tag successfully scanned"
 msgstr "Taggavsökningen lyckades"
 
-#: ../src/scan_dialog.c:470
+#: ../src/scan_dialog.c:401
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Taggavsökningen lyckades ”%s”"
 
-#: ../src/scan_dialog.c:513
+#: ../src/scan_dialog.c:444
 #, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "Ändelsen ”%s” kunde inte hittas i filnamnet ”%s”"
 
-#: ../src/scan_dialog.c:605 ../src/scan_dialog.c:636
+#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
 #, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "Kan inte finna avskiljare ”%s” inuti ”%s”"
 
-#: ../src/scan_dialog.c:864
+#: ../src/scan_dialog.c:795
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr "Kunde inte konvertera filnamnet ”%s” till systemets filnamnskodning"
 
-#: ../src/scan_dialog.c:890
+#: ../src/scan_dialog.c:821
 msgid "New filename successfully scanned"
 msgstr "Nytt filnamn har avsökts"
 
-#: ../src/scan_dialog.c:894
+#: ../src/scan_dialog.c:825
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Nytt filnamn har avsökts ”%s”"
 
-#: ../src/scan_dialog.c:1263
+#: ../src/scan_dialog.c:1206
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Fel vid bearbetning av fält ”%s”"
 
-#: ../src/scan_dialog.c:2139
+#: ../src/scan_dialog.c:2082
 msgid "New_mask"
 msgstr "Ny_mask"
 
-#: ../src/scan_dialog.c:2789
+#: ../src/scan_dialog.c:2559
+#, fuzzy
+msgid "Empty scanner mask."
+msgstr "Ogiltig avsökningsmask"
+
+#: ../src/scan_dialog.c:2695
 msgid "All tags have been scanned"
 msgstr "Alla taggar har sökts av"
 

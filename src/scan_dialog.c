@@ -39,6 +39,7 @@
 #include "et_core.h"
 #include "crc32.h"
 #include "charset.h"
+#include "mask.h"
 
 typedef struct
 {
@@ -129,14 +130,14 @@ static const gchar *Scan_Masks [] =
 
 static const gchar *Rename_File_Masks [] =
 {
-    "%n - %a - %t",
-    "%n_-_%a_-_%t",
-    "%n. %a - %t",
-    "%n._%a_-_%t",
-    "%a - %T"G_DIR_SEPARATOR_S"%n - %t",
-    "%a_-_%T"G_DIR_SEPARATOR_S"%n_-_%t",
-    "%a - %T (%y) - %g"G_DIR_SEPARATOR_S"%n - %t",
-    "%a_-_%T_(%y)_-_%g"G_DIR_SEPARATOR_S"%n_-_%t",
+    "{%n - |}%a - %t",
+    "{%n_-_|}%a_-_%t",
+    "%{n. |}%a - %t",
+    "%{n._|}%a_-_%t",
+    "{%A|%a} - %T"G_DIR_SEPARATOR_S"%n - %t",
+    "{%A|%a} - %T ({%Y|%y}){ - %g|}"G_DIR_SEPARATOR_S"{%d.|}%n - %t",
+    "{%A|%a} - %T ({%Y|%y}){ - %g|}"G_DIR_SEPARATOR_S"%n - %t",
+    "{%A|%a}"G_DIR_SEPARATOR_S"%T ({%Y|%y})"G_DIR_SEPARATOR_S"{%n - %t|Track %n}",
     "%n - %t",
     "%n_-_%t",
     "%n. %t",
@@ -152,20 +153,6 @@ static const gchar *Rename_File_Masks [] =
     "Track %n",
     NULL
 };
-
-/**gchar *Rename_Directory_Masks [] =
-{
-    "%a - %T",
-    "%a_-_%T",
-    "%a - %T (%y) - %g",
-    "%a_-_%T_(%y)_-_%g",
-    "VA - %T (%y)",
-    "VA_-_%T_(%y)",
-    NULL
-};**/
-
-/* Keep up to date with the format specifiers shown in the UI. */
-static const gchar allowed_specifiers[] = "abcdegilnoprtuxyz";
 
 typedef enum
 {
@@ -210,7 +197,6 @@ struct _Scan_Mask_Item
  * Prototypes *
  **************/
 static void Scan_Option_Button (void);
-static void entry_check_scan_tag_mask (GtkEntry *entry, gpointer user_data);
 
 static GList *Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, gchar *mask);
 static void Scan_Free_File_Rename_List (GList *list);
@@ -223,62 +209,6 @@ static void et_scan_on_response (GtkDialog *dialog, gint response_id,
 /*************
  * Functions *
  *************/
-
-/*
- * Return the field of a 'File_Tag' structure corresponding to the mask code
- */
-static gchar **
-Scan_Return_File_Tag_Field_From_Mask_Code (File_Tag *FileTag, gchar code)
-{
-    switch (code)
-    {
-        case 't': /* Title */
-            return &FileTag->title;
-        case 'a': /* Artist */
-            return &FileTag->artist;
-        case 'T': /* Album */
-        case 'b': /* for compatibility with earlier versions */
-            return &FileTag->album;
-        case 'd': /* Disc Number */
-            return &FileTag->disc_number;
-        case 'D': /* Total number of discs. */
-        case 'x': /* for compatibility with earlier versions */
-            return &FileTag->disc_total;
-        case 'y': /* Year */
-            return &FileTag->year;
-        case 'Y': /* Release year */
-            return &FileTag->release_year;
-        case 'n': /* Track */
-            return &FileTag->track;
-        case 'N': /* Track Total */
-        case 'l': /* for compatibility with earlier versions */
-            return &FileTag->track_total;
-        case 'g': /* Genre */
-            return &FileTag->genre;
-        case 'c': /* Comment */
-            return &FileTag->comment;
-        case 'p': /* Composer */
-            return &FileTag->composer;
-        case 'o': /* Orig. Artist */
-            return &FileTag->orig_artist;
-        case 'w': /* Original year */
-            return &FileTag->orig_year;
-        case 'r': /* Copyright */
-            return &FileTag->copyright;
-        case 'u': /* URL */
-            return &FileTag->url;
-        case 'e': /* Encoded by */
-            return &FileTag->encoded_by;
-        case 'A': /* Album Artist */
-        case 'z': /* for compatibility with earlier versions */
-            return &FileTag->album_artist;
-        case 'i':    /* Ignored */
-            return NULL;
-        default:
-            Log_Print(LOG_ERROR,"Scanner: Invalid code '%%%c' found!",code);
-            return NULL;
-    }
-}
 
 static void
 et_scan_dialog_set_file_tag_for_mask_item (File_Tag *file_tag,
@@ -913,23 +843,13 @@ et_scan_generate_new_filename_from_mask (const ET_File *ETFile,
                                          const gchar *mask,
                                          gboolean no_dir_check_or_conversion)
 {
-    gchar *tmp;
-    gchar **source = NULL;
-    gchar *path_utf8_cur = NULL;
-    gchar *filename_new_utf8 = NULL;
-    gchar *filename_tmp = NULL;
-    GList *rename_file_list = NULL;
-    GList *l;
-    File_Mask_Item *mask_item;
-    File_Mask_Item *mask_item_prev;
-    File_Mask_Item *mask_item_next;
-    gint counter = 0;
-
     g_return_val_if_fail (ETFile != NULL && mask != NULL, NULL);
+    gchar *filename_new_utf8 = NULL;
 
     /*
      * Check for a directory in the mask
      */
+    gchar *path_utf8_cur = NULL;
     if (!no_dir_check_or_conversion)
     {
         if (g_path_is_absolute(mask))
@@ -947,192 +867,210 @@ et_scan_generate_new_filename_from_mask (const ET_File *ETFile,
     }
 
 
-    /*
-     * Parse the codes to generate a list (1rst item = 1rst code)
-     */
-    while ( mask!=NULL && (tmp=strrchr(mask,'%'))!=NULL && strlen(tmp)>1 )
+    if (strchr(mask, '|') != NULL)
     {
-        // Mask contains some characters after the code ('%T__')
-        if (strlen(tmp)>2)
+        /* new parser */
+        filename_new_utf8 = et_evaluate_mask(ETFile, mask, no_dir_check_or_conversion);
+    }
+    else
+    {
+        /* old parser */
+        gchar *tmp;
+        const gchar *source = NULL;
+        gchar *path_utf8_cur = NULL;
+        GList *rename_file_list = NULL;
+        GList *l;
+        File_Mask_Item *mask_item;
+        File_Mask_Item *mask_item_prev;
+        File_Mask_Item *mask_item_next;
+        gint counter = 0;
+
+        /*
+         * Parse the codes to generate a list (1rst item = 1rst code)
+         */
+        while ( mask!=NULL && (tmp=strrchr(mask,'%'))!=NULL && strlen(tmp)>1 )
+        {
+            // Mask contains some characters after the code ('%T__')
+            if (strlen(tmp)>2)
+            {
+                mask_item = g_slice_new0 (File_Mask_Item);
+                if (counter)
+                {
+                    if (strchr(tmp+2,G_DIR_SEPARATOR))
+                        mask_item->type = DIRECTORY_SEPARATOR;
+                    else
+                        mask_item->type = SEPARATOR;
+                } else
+                {
+                    mask_item->type = TRAILING_SEPARATOR;
+                }
+                mask_item->string = g_strdup(tmp+2);
+                rename_file_list = g_list_prepend(rename_file_list,mask_item);
+            }
+
+            // Now, parses the code to get the corresponding string (from tag)
+            source = et_tag_field_from_mask_code((File_Tag *)ETFile->FileTag->data,tmp[1]);
+            mask_item = g_slice_new0 (File_Mask_Item);
+
+            if (source && !et_str_empty (source))
+            {
+                mask_item->type = FIELD;
+                mask_item->string = g_strdup(source);
+
+                // Replace invalid characters for this field
+                /* Do not replace characters in a playlist information field. */
+                if (!no_dir_check_or_conversion)
+                {
+                    EtConvertSpaces convert_mode;
+
+                    convert_mode = g_settings_get_enum (MainSettings,
+                                                        "rename-convert-spaces");
+
+                    switch (convert_mode)
+                    {
+                        case ET_CONVERT_SPACES_SPACES:
+                            Scan_Convert_Underscore_Into_Space (mask_item->string);
+                            Scan_Convert_P20_Into_Space (mask_item->string);
+                            break;
+                        case ET_CONVERT_SPACES_UNDERSCORES:
+                            Scan_Convert_Space_Into_Underscore (mask_item->string);
+                            break;
+                        case ET_CONVERT_SPACES_REMOVE:
+                            Scan_Remove_Spaces (mask_item->string);
+                            break;
+                        /* FIXME: Check that this is intended. */
+                        case ET_CONVERT_SPACES_NO_CHANGE:
+                        default:
+                            g_assert_not_reached ();
+                    }
+
+                    /* This must occur after the space processing, to ensure that a
+                     * trailing space cannot be present (if illegal characters are to be
+                     * replaced). */
+                    et_filename_prepare (mask_item->string,
+                                         g_settings_get_boolean (MainSettings,
+                                                                 "rename-replace-illegal-chars"));
+                }
+            }else
+            {
+                mask_item->type = EMPTY_FIELD;
+                mask_item->string = NULL;
+            }
+            rename_file_list = g_list_prepend(rename_file_list,mask_item);
+            *tmp = '\0'; // Cut parsed data of mask
+            counter++; // To indicate that we made at least one loop to identifiate 'separator' or 'trailing_separator'
+        }
+
+        // It may have some characters before the last remaining code ('__%a')
+        if (!et_str_empty (mask))
         {
             mask_item = g_slice_new0 (File_Mask_Item);
-            if (counter)
-            {
-                if (strchr(tmp+2,G_DIR_SEPARATOR))
-                    mask_item->type = DIRECTORY_SEPARATOR;
-                else
-                    mask_item->type = SEPARATOR;
-            } else
-            {
-                mask_item->type = TRAILING_SEPARATOR;
-            }
-            mask_item->string = g_strdup(tmp+2);
+            mask_item->type = LEADING_SEPARATOR;
+            mask_item->string = g_strdup(mask);
             rename_file_list = g_list_prepend(rename_file_list,mask_item);
         }
 
-        // Now, parses the code to get the corresponding string (from tag)
-        source = Scan_Return_File_Tag_Field_From_Mask_Code((File_Tag *)ETFile->FileTag->data,tmp[1]);
-        mask_item = g_slice_new0 (File_Mask_Item);
+        if (!rename_file_list) return NULL;
 
-        if (source && !et_str_empty (*source))
-        {
-            mask_item->type = FIELD;
-            mask_item->string = g_strdup(*source);
-
-            // Replace invalid characters for this field
-            /* Do not replace characters in a playlist information field. */
-            if (!no_dir_check_or_conversion)
+        /*
+         * For Debugging : display the "rename_file_list" list
+         */
+        /***{
+            GList *list = g_list_first(rename_file_list);
+            gint i = 0;
+            g_print("## rename_file_list - start\n");
+            while (list)
             {
-                EtConvertSpaces convert_mode;
+                File_Mask_Item *mask_item = (File_Mask_Item *)list->data;
+                Mask_Item_Type  type      = mask_item->type;
+                gchar          *string    = mask_item->string;
 
-                convert_mode = g_settings_get_enum (MainSettings,
-                                                    "rename-convert-spaces");
+                //g_print("item %d : \n",i++);
+                //g_print("  - type   : '%s'\n",type==UNKNOWN?"UNKNOWN":type==LEADING_SEPARATOR?"LEADING_SEPARATOR":type==TRAILING_SEPARATOR?"TRAILING_SEPARATOR":type==SEPARATOR?"SEPARATOR":type==DIRECTORY_SEPARATOR?"DIRECTORY_SEPARATOR":type==FIELD?"FIELD":type==EMPTY_FIELD?"EMPTY_FIELD":"???");
+                //g_print("  - string : '%s'\n",string);
+                g_print("%d -> %s (%s) | ",i++,type==UNKNOWN?"UNKNOWN":type==LEADING_SEPARATOR?"LEADING_SEPARATOR":type==TRAILING_SEPARATOR?"TRAILING_SEPARATOR":type==SEPARATOR?"SEPARATOR":type==DIRECTORY_SEPARATOR?"DIRECTORY_SEPARATOR":type==FIELD?"FIELD":type==EMPTY_FIELD?"EMPTY_FIELD":"???",string);
 
-                switch (convert_mode)
+                list = list->next;
+            }
+            g_print("\n## rename_file_list - end\n\n");
+        }***/
+
+        /*
+         * Build the new filename with items placed into the list
+         * (read the list from the end to the beginning)
+         */
+        filename_new_utf8 = g_strdup("");
+
+        for (l = g_list_last (rename_file_list); l != NULL;
+             l = g_list_previous (l))
+        {
+            File_Mask_Item *mask_item2 = l->data;
+
+            /* Trailing mask characters. */
+            if (mask_item2->type == TRAILING_SEPARATOR)
+            {
+                // Doesn't write it if previous field is empty
+                if (l->prev
+                    && ((File_Mask_Item *)l->prev->data)->type != EMPTY_FIELD)
                 {
-                    case ET_CONVERT_SPACES_SPACES:
-                        Scan_Convert_Underscore_Into_Space (mask_item->string);
-                        Scan_Convert_P20_Into_Space (mask_item->string);
-                        break;
-                    case ET_CONVERT_SPACES_UNDERSCORES:
-                        Scan_Convert_Space_Into_Underscore (mask_item->string);
-                        break;
-                    case ET_CONVERT_SPACES_REMOVE:
-                        Scan_Remove_Spaces (mask_item->string);
-                        break;
-                    /* FIXME: Check that this is intended. */
-                    case ET_CONVERT_SPACES_NO_CHANGE:
-                    default:
-                        g_assert_not_reached ();
+                    gchar *filename_tmp = filename_new_utf8;
+                    filename_new_utf8 = g_strconcat (mask_item2->string,
+                                                     filename_new_utf8, NULL);
+                    g_free(filename_tmp);
+                }
+            }
+            else if (mask_item2->type == EMPTY_FIELD)
+            // We don't concatenate the field value (empty) and the previous
+            // separator (except leading separator) to the filename.
+            // If the empty field is the 'first', we don't concatenate it, and the
+            // next separator too.
+            {
+                if (l->prev)
+                {
+                    // The empty field isn't the first.
+                    // If previous string is a separator, we don't use it, except if the next
+                    // string is a FIELD (not empty)
+                    mask_item_prev = l->prev->data;
+                    if ( mask_item_prev->type==SEPARATOR )
+                    {
+                        if (!(l->next
+                            && (mask_item_next = rename_file_list->next->data)
+                            && mask_item_next->type == FIELD))
+                        {
+                            l = l->prev;
+                        }
+                    }
+                }else
+                if (l->next && (mask_item_next = l->next->data)
+                    && mask_item_next->type == SEPARATOR)
+                // We are at the 'beginning' of the mask (so empty field is the first)
+                // and next field is a separator. As the separator may have been already added, we remove it
+                {
+                    if ( filename_new_utf8 && mask_item_next->string && (strncmp(filename_new_utf8,mask_item_next->string,strlen(mask_item_next->string))==0) ) // To avoid crash if filename_new_utf8 is 'empty'
+                    {
+                        gchar *filename_tmp = filename_new_utf8;
+                        filename_new_utf8 = g_strdup(filename_new_utf8+strlen(mask_item_next->string));
+                        g_free(filename_tmp);
+                     }
                 }
 
-                /* This must occur after the space processing, to ensure that a
-                 * trailing space cannot be present (if illegal characters are to be
-                 * replaced). */
-                et_filename_prepare (mask_item->string,
-                                     g_settings_get_boolean (MainSettings,
-                                                             "rename-replace-illegal-chars"));
-            }
-        }else
-        {
-            mask_item->type = EMPTY_FIELD;
-            mask_item->string = NULL;
-        }
-        rename_file_list = g_list_prepend(rename_file_list,mask_item);
-        *tmp = '\0'; // Cut parsed data of mask
-        counter++; // To indicate that we made at least one loop to identifiate 'separator' or 'trailing_separator'
-    }
-
-    // It may have some characters before the last remaining code ('__%a')
-    if (!et_str_empty (mask))
-    {
-        mask_item = g_slice_new0 (File_Mask_Item);
-        mask_item->type = LEADING_SEPARATOR;
-        mask_item->string = g_strdup(mask);
-        rename_file_list = g_list_prepend(rename_file_list,mask_item);
-    }
-
-    if (!rename_file_list) return NULL;
-
-    /*
-     * For Debugging : display the "rename_file_list" list
-     */
-    /***{
-        GList *list = g_list_first(rename_file_list);
-        gint i = 0;
-        g_print("## rename_file_list - start\n");
-        while (list)
-        {
-            File_Mask_Item *mask_item = (File_Mask_Item *)list->data;
-            Mask_Item_Type  type      = mask_item->type;
-            gchar          *string    = mask_item->string;
-
-            //g_print("item %d : \n",i++);
-            //g_print("  - type   : '%s'\n",type==UNKNOWN?"UNKNOWN":type==LEADING_SEPARATOR?"LEADING_SEPARATOR":type==TRAILING_SEPARATOR?"TRAILING_SEPARATOR":type==SEPARATOR?"SEPARATOR":type==DIRECTORY_SEPARATOR?"DIRECTORY_SEPARATOR":type==FIELD?"FIELD":type==EMPTY_FIELD?"EMPTY_FIELD":"???");
-            //g_print("  - string : '%s'\n",string);
-            g_print("%d -> %s (%s) | ",i++,type==UNKNOWN?"UNKNOWN":type==LEADING_SEPARATOR?"LEADING_SEPARATOR":type==TRAILING_SEPARATOR?"TRAILING_SEPARATOR":type==SEPARATOR?"SEPARATOR":type==DIRECTORY_SEPARATOR?"DIRECTORY_SEPARATOR":type==FIELD?"FIELD":type==EMPTY_FIELD?"EMPTY_FIELD":"???",string);
-
-            list = list->next;
-        }
-        g_print("\n## rename_file_list - end\n\n");
-    }***/
-
-    /*
-     * Build the new filename with items placed into the list
-     * (read the list from the end to the beginning)
-     */
-    filename_new_utf8 = g_strdup("");
-
-    for (l = g_list_last (rename_file_list); l != NULL;
-         l = g_list_previous (l))
-    {
-        File_Mask_Item *mask_item2 = l->data;
-
-        /* Trailing mask characters. */
-        if (mask_item2->type == TRAILING_SEPARATOR)
-        {
-            // Doesn't write it if previous field is empty
-            if (l->prev
-                && ((File_Mask_Item *)l->prev->data)->type != EMPTY_FIELD)
+            }else // SEPARATOR, FIELD, LEADING_SEPARATOR, DIRECTORY_SEPARATOR
             {
-                filename_tmp = filename_new_utf8;
+                gchar *filename_tmp = filename_new_utf8;
                 filename_new_utf8 = g_strconcat (mask_item2->string,
                                                  filename_new_utf8, NULL);
                 g_free(filename_tmp);
             }
         }
-        else if (mask_item2->type == EMPTY_FIELD)
-        // We don't concatenate the field value (empty) and the previous
-        // separator (except leading separator) to the filename.
-        // If the empty field is the 'first', we don't concatenate it, and the
-        // next separator too.
-        {
-            if (l->prev)
-            {
-                // The empty field isn't the first.
-                // If previous string is a separator, we don't use it, except if the next
-                // string is a FIELD (not empty)
-                mask_item_prev = l->prev->data;
-                if ( mask_item_prev->type==SEPARATOR )
-                {
-                    if (!(l->next
-                        && (mask_item_next = rename_file_list->next->data)
-                        && mask_item_next->type == FIELD))
-                    {
-                        l = l->prev;
-                    }
-                }
-            }else
-            if (l->next && (mask_item_next = l->next->data)
-                && mask_item_next->type == SEPARATOR)
-            // We are at the 'beginning' of the mask (so empty field is the first)
-            // and next field is a separator. As the separator may have been already added, we remove it
-            {
-                if ( filename_new_utf8 && mask_item_next->string && (strncmp(filename_new_utf8,mask_item_next->string,strlen(mask_item_next->string))==0) ) // To avoid crash if filename_new_utf8 is 'empty'
-                {
-                    filename_tmp = filename_new_utf8;
-                    filename_new_utf8 = g_strdup(filename_new_utf8+strlen(mask_item_next->string));
-                    g_free(filename_tmp);
-                 }
-            }
 
-        }else // SEPARATOR, FIELD, LEADING_SEPARATOR, DIRECTORY_SEPARATOR
-        {
-            filename_tmp = filename_new_utf8;
-            filename_new_utf8 = g_strconcat (mask_item2->string,
-                                             filename_new_utf8, NULL);
-            g_free(filename_tmp);
-        }
+        // Free the list
+        Scan_Free_File_Rename_List(rename_file_list);
     }
-
-    // Free the list
-    Scan_Free_File_Rename_List(rename_file_list);
-
 
     // Add current path if relative path entered
     if (path_utf8_cur)
     {
-        filename_tmp = filename_new_utf8; // in UTF-8!
+        gchar *filename_tmp = filename_new_utf8; // in UTF-8!
         filename_new_utf8 = g_build_filename (path_utf8_cur, filename_new_utf8,
                                               NULL);
         g_free(filename_tmp);
@@ -2396,8 +2334,7 @@ create_scan_dialog (EtScanDialog *self)
     /* Mask status icon. Signal connection to check if mask is correct in the
      * mask entry. */
     g_signal_connect (gtk_bin_get_child (GTK_BIN (priv->fill_combo)),
-                      "changed", G_CALLBACK (entry_check_scan_tag_mask),
-                      NULL);
+                      "changed", G_CALLBACK (entry_check_mask), NULL);
 
     /* Frame for Rename File. */
     /* Signal to generate preview (preview of the new filename). */
@@ -2418,8 +2355,7 @@ create_scan_dialog (EtScanDialog *self)
     /* Mask status icon. Signal connection to check if mask is correct to the
      * mask entry. */
     g_signal_connect (gtk_bin_get_child (GTK_BIN (priv->rename_combo)),
-                      "changed", G_CALLBACK (entry_check_rename_file_mask),
-                      NULL);
+                      "changed", G_CALLBACK (entry_check_mask), NULL);
 
     /* Group: select entry fields to process */
     init_process_field_check (priv->process_filename_check);
@@ -2598,138 +2534,34 @@ Scan_Option_Button (void)
 
 
 /*
- * entry_check_rename_file_mask:
+ * entry_check_mask:
  * @entry: the entry for which to check the mask
  * @user_data: user data set when the signal was connected
  *
- * Display an icon in the entry if the current text contains an invalid mask
- * for scanning tags.
- */
-static void
-entry_check_scan_tag_mask (GtkEntry *entry, gpointer user_data)
-{
-    gchar *tmp  = NULL;
-    gchar *mask = NULL;
-    gint loop = 0;
-
-    g_return_if_fail (entry != NULL);
-
-    mask = g_strdup (gtk_entry_get_text (entry));
-
-    if (et_str_empty (mask))
-        goto Bad_Mask;
-
-    while (mask)
-    {
-        if ( (tmp=strrchr(mask,'%'))==NULL )
-        {
-            if (loop==0)
-                /* There is no code the first time => not accepted */
-                goto Bad_Mask;
-            else
-                /* There is no more code => accepted */
-                goto Good_Mask;
-        }
-        if (strlen (tmp) > 1 && strchr (allowed_specifiers, tmp[1]))
-        {
-            /* Code is correct */
-            *(mask+strlen(mask)-strlen(tmp)) = '\0';
-        }else
-        {
-            goto Bad_Mask;
-        }
-
-        /* Check the following code and separator */
-        if ( (tmp=strrchr(mask,'%'))==NULL )
-            /* There is no more code => accepted */
-            goto Good_Mask;
-
-        if (strlen (tmp) > 2 && strchr (allowed_specifiers, tmp[1]))
-        {
-            /* There is a separator and code is correct */
-            *(mask+strlen(mask)-strlen(tmp)) = '\0';
-        }else
-        {
-            goto Bad_Mask;
-        }
-        loop++;
-    }
-
-    Bad_Mask:
-        g_free(mask);
-        gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY,
-                                           "emblem-unreadable");
-        gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY,
-                                         _("Invalid scanner mask"));
-        return;
-
-    Good_Mask:
-        g_free(mask);
-        gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY,
-                                           NULL);
-}
-
-/*
- * entry_check_rename_file_mask:
- * @entry: the entry for which to check the mask
- * @user_data: user data set when the signal was connected
- *
- * Display an icon in the entry if the current text contains an invalid mask
- * for renaming files.
+ * Display an icon in the entry if the current text contains an invalid mask.
  */
 void
-entry_check_rename_file_mask (GtkEntry *entry, gpointer user_data)
+entry_check_mask (GtkEntry *entry, gpointer user_data)
 {
-    gchar *tmp = NULL;
-    gchar *mask = NULL;
-
     g_return_if_fail (entry != NULL);
 
-    mask = g_strdup (gtk_entry_get_text (entry));
+    const gchar* mask = gtk_entry_get_text (entry);
+    gchar* error;
 
     if (et_str_empty (mask))
-        goto Bad_Mask;
+        error = strdup(_("Empty scanner mask."));
+    else
+        error = et_check_mask(mask);
 
-    // Not a valid path....
-    if ( strstr(mask,"//") != NULL
-    ||   strstr(mask,"./") != NULL
-    ||   strstr(mask,"data/") != NULL)
-        goto Bad_Mask;
-
-    do
+    if (error == NULL)
     {
-        if ( (tmp=strrchr(mask,'%'))==NULL )
-        {
-            /* There is no more code. */
-            /* No code in mask is accepted. */
-            goto Good_Mask;
-        }
-        if ( strlen(tmp)>1
-        && (tmp[1]=='a' || tmp[1]=='b' || tmp[1]=='c' || tmp[1]=='d' || tmp[1]=='p' ||
-            tmp[1]=='r' || tmp[1]=='e' || tmp[1]=='g' || tmp[1]=='i' || tmp[1]=='l' ||
-            tmp[1]=='o' || tmp[1]=='n' || tmp[1]=='t' || tmp[1]=='u' || tmp[1]=='y' ) )
-        {
-            /* The code is valid. */
-            /* No separator is accepted. */
-            *(mask+strlen(mask)-strlen(tmp)) = '\0';
-        }else
-        {
-            goto Bad_Mask;
-        }
-    } while (mask);
-
-    Bad_Mask:
-        g_free(mask);
-        gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY,
-                                           "emblem-unreadable");
-        gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY,
-                                         _("Invalid scanner mask"));
+        gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
         return;
+    }
 
-    Good_Mask:
-        g_free(mask);
-        gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY,
-                                           NULL);
+    gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, "emblem-unreadable");
+    gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY, error);
+    g_free(error);
 }
 
 void
@@ -2924,7 +2756,7 @@ et_scan_dialog_class_init (EtScanDialogClass *klass)
     gtk_widget_class_bind_template_child_private (widget_class, EtScanDialog,
                                                   rename_preview_label);
     gtk_widget_class_bind_template_callback (widget_class,
-                                             entry_check_scan_tag_mask);
+                                             entry_check_mask);
     gtk_widget_class_bind_template_callback (widget_class, et_scan_on_hide);
     gtk_widget_class_bind_template_callback (widget_class,
                                              et_scan_on_response);

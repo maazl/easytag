@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 2.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-03 19:20+0200\n"
+"POT-Creation-Date: 2022-10-09 19:30+0200\n"
 "PO-Revision-Date: 2016-12-17 17:07+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
@@ -96,7 +96,7 @@ msgid "No files"
 msgstr "žádný soubor"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Umělec"
@@ -110,7 +110,7 @@ msgid "# Files"
 msgstr "Počet souborů"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Album"
@@ -120,18 +120,18 @@ msgid "Path"
 msgstr "Cesta"
 
 #: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
-#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:58
+#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:59
 #: ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "Název souboru"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Název"
 
-#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:64
+#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:65
 #: ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Umělec alba"
@@ -155,18 +155,18 @@ msgid "Track"
 msgstr "Skladba"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Žánr"
 
 #: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
-#: ../data/scan_dialog.ui.h:70 ../data/search_dialog.ui.h:21
+#: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Poznámka"
 
 #: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
-#: ../data/scan_dialog.ui.h:72 ../data/search_dialog.ui.h:22
+#: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Skladatel"
@@ -180,17 +180,17 @@ msgstr "Původní umělec"
 msgid "Orig. year"
 msgstr "Původní umělec"
 
-#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:76
+#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:77
 #: ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "Copyright"
 
-#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:78
+#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:79
 #: ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "Adresa URL"
 
-#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:80
+#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:81
 #: ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "Kódováno pomocí"
@@ -442,7 +442,7 @@ msgstr "Zda pro srovnání výsledků CDDB vůči souborům použít algoritmus 
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
 #: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:160
-#: ../data/scan_dialog.ui.h:117 ../data/search_dialog.ui.h:11
+#: ../data/scan_dialog.ui.h:118 ../data/search_dialog.ui.h:11
 msgid "_Close"
 msgstr "_Zavřít"
 
@@ -672,7 +672,7 @@ msgstr "Režim průzkumníka"
 msgid "Rename Files and Directories"
 msgstr "Přejmenovat soubory a složky"
 
-#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:113
+#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:114
 msgid "Process Fields"
 msgstr "Zpracovat pole"
 
@@ -1629,7 +1629,7 @@ msgstr "Nic nepřevádět"
 msgid "Rename File and Directory Scanner"
 msgstr "Průzkumník Přejmenování souborů a složek"
 
-#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:96
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:784
 msgid "Remove spaces"
 msgstr "Odstranit mezery"
@@ -1954,38 +1954,42 @@ msgstr "%c: poznámka"
 
 #: ../data/scan_dialog.ui.h:42
 #, no-c-format
+msgid "%i: ignored"
+msgstr "%i: ignorováno"
+
+#: ../data/scan_dialog.ui.h:44
+#, no-c-format
 msgid "%u: URL"
 msgstr "%u: adresa URL"
 
-#: ../data/scan_dialog.ui.h:44
+#: ../data/scan_dialog.ui.h:46
 #, no-c-format
 msgid "%p: composer"
 msgstr "%p: skladatel"
 
-#: ../data/scan_dialog.ui.h:46
+#: ../data/scan_dialog.ui.h:48
 #, no-c-format
 msgid "%r: copyright"
 msgstr "%r: copyright"
 
-#: ../data/scan_dialog.ui.h:48
+#: ../data/scan_dialog.ui.h:50
 #, no-c-format
 msgid "%e: encoded by"
 msgstr "%e: kódováno pomocí"
 
-#: ../data/scan_dialog.ui.h:50
-#, no-c-format
-msgid "%i: ignored"
-msgstr "%i: ignorováno"
-
 #: ../data/scan_dialog.ui.h:51
+msgid "{…|…}: alternatives group"
+msgstr ""
+
+#: ../data/scan_dialog.ui.h:52
 msgid "Fill Tag"
 msgstr "Vyplnění štítků"
 
-#: ../data/scan_dialog.ui.h:52
+#: ../data/scan_dialog.ui.h:53
 msgid "Prefix mask with current directory"
 msgstr "Úvodní maska s aktuální složkou"
 
-#: ../data/scan_dialog.ui.h:53
+#: ../data/scan_dialog.ui.h:54
 msgid ""
 "Select or type in a mask using codes (see Legend) to parse tag fields. Used "
 "to rename the file.\n"
@@ -1997,109 +2001,109 @@ msgstr ""
 "K vytvoření složek použijte „/“. Pokud je „/“ prvním znakem, bude to "
 "považováno za absolutní cestu, jinak za relativní vůči staré cestě"
 
-#: ../data/scan_dialog.ui.h:55
+#: ../data/scan_dialog.ui.h:56
 msgid "Rename file preview"
 msgstr "Náhled přejmenování souboru"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:56 ../src/easytag.c:571
+#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:571
 msgid "Rename File"
 msgstr "Přejmenování souboru"
 
-#: ../data/scan_dialog.ui.h:57
+#: ../data/scan_dialog.ui.h:58
 msgid "Tag Fields"
 msgstr "Pole štítku"
 
-#: ../data/scan_dialog.ui.h:59
+#: ../data/scan_dialog.ui.h:60
 msgid "Process filename"
 msgstr "Upravit název souboru"
 
-#: ../data/scan_dialog.ui.h:61
+#: ../data/scan_dialog.ui.h:62
 msgid "Process title field"
 msgstr "Upravit pole s názvem"
 
-#: ../data/scan_dialog.ui.h:63
+#: ../data/scan_dialog.ui.h:64
 msgid "Process artist field"
 msgstr "Upravit pole s umělcem"
 
-#: ../data/scan_dialog.ui.h:65
+#: ../data/scan_dialog.ui.h:66
 msgid "Process album artist field"
 msgstr "Upravit pole s umělcem alba"
 
-#: ../data/scan_dialog.ui.h:67
+#: ../data/scan_dialog.ui.h:68
 msgid "Process album field"
 msgstr "Upravit pole s albem"
 
-#: ../data/scan_dialog.ui.h:69
+#: ../data/scan_dialog.ui.h:70
 msgid "Process genre field"
 msgstr "Upravit pole se žánrem"
 
-#: ../data/scan_dialog.ui.h:71
+#: ../data/scan_dialog.ui.h:72
 msgid "Process comment field"
 msgstr "Upravit pole s poznámkou"
 
-#: ../data/scan_dialog.ui.h:73
+#: ../data/scan_dialog.ui.h:74
 msgid "Process composer field"
 msgstr "Upravit pole se skladatelem"
 
-#: ../data/scan_dialog.ui.h:74
+#: ../data/scan_dialog.ui.h:75
 msgid "Orig. Artist"
 msgstr "Pův. umělec"
 
-#: ../data/scan_dialog.ui.h:75
+#: ../data/scan_dialog.ui.h:76
 msgid "Process original artist field"
 msgstr "Upravit pole s původním umělcem"
 
-#: ../data/scan_dialog.ui.h:77
+#: ../data/scan_dialog.ui.h:78
 msgid "Process copyright field"
 msgstr "Upravit pole s copyrightem"
 
-#: ../data/scan_dialog.ui.h:79
+#: ../data/scan_dialog.ui.h:80
 msgid "Process URL field"
 msgstr "Upravit pole s adresou URL"
 
-#: ../data/scan_dialog.ui.h:81
+#: ../data/scan_dialog.ui.h:82
 msgid "Process encoded-by field"
 msgstr "Upravit pole s názvem kodéru"
 
-#: ../data/scan_dialog.ui.h:82
+#: ../data/scan_dialog.ui.h:83
 msgid "Capitalization"
 msgstr "Převody velikosti písmen"
 
-#: ../data/scan_dialog.ui.h:83
+#: ../data/scan_dialog.ui.h:84
 msgid "Capitalize all"
 msgstr "Vše na velká písmena"
 
-#: ../data/scan_dialog.ui.h:84
+#: ../data/scan_dialog.ui.h:85
 msgid ""
 "Whether to upper-case all characters of the tag when processing tag fields"
 msgstr ""
 "Zda se mají při zpracování polí štítku převést všechna písmena na velká"
 
-#: ../data/scan_dialog.ui.h:85
+#: ../data/scan_dialog.ui.h:86
 msgid "Lowercase all"
 msgstr "Vše na malá písmena"
 
-#: ../data/scan_dialog.ui.h:86
+#: ../data/scan_dialog.ui.h:87
 msgid ""
 "Whether to lower-case all characters of the tag when processing tag fields"
 msgstr "Zda se mají při zpracování polí štítku převést všechna písmena na malá"
 
-#: ../data/scan_dialog.ui.h:87
+#: ../data/scan_dialog.ui.h:88
 msgid "Capitalize first letter"
 msgstr "První písmeno na velké"
 
-#: ../data/scan_dialog.ui.h:88
+#: ../data/scan_dialog.ui.h:89
 msgid ""
 "Whether to upper-case the first letter of the tag when processing tag fields"
 msgstr ""
 "Zda se mají při zpracování polí štítku převést první písmena štítku na velká"
 
-#: ../data/scan_dialog.ui.h:89
+#: ../data/scan_dialog.ui.h:90
 msgid "Capitalize the first letter of each word"
 msgstr "První písmeno každého slova na velké"
 
-#: ../data/scan_dialog.ui.h:90
+#: ../data/scan_dialog.ui.h:91
 msgid ""
 "Whether to upper-case the first letter of each word when processing tag "
 "fields"
@@ -2107,11 +2111,11 @@ msgstr ""
 "Zda se mají při zpracování polí štítku převést u všech slov první písmena na "
 "malá"
 
-#: ../data/scan_dialog.ui.h:91
+#: ../data/scan_dialog.ui.h:92
 msgid "Detect Roman numerals"
 msgstr "Detekovat římské číslice"
 
-#: ../data/scan_dialog.ui.h:92 ../data/org.gnome.EasyTAG.gschema.xml.h:132
+#: ../data/scan_dialog.ui.h:93 ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to detect Roman numerals when applying upper-case conversions while "
 "processing tag fields"
@@ -2119,50 +2123,50 @@ msgstr ""
 "Zda při převodu velikosti písmen při zpracování polí šítku zjišťovat, jestli "
 "se nejedná o římské číslice"
 
-#: ../data/scan_dialog.ui.h:93
+#: ../data/scan_dialog.ui.h:94
 msgid "Do not change capitalization"
 msgstr "Neměnit velikost písmen"
 
-#: ../data/scan_dialog.ui.h:94
+#: ../data/scan_dialog.ui.h:95
 msgid "Spaces Conversions"
 msgstr "Převody mezer"
 
-#: ../data/scan_dialog.ui.h:96 ../data/org.gnome.EasyTAG.gschema.xml.h:134
+#: ../data/scan_dialog.ui.h:97 ../data/org.gnome.EasyTAG.gschema.xml.h:134
 msgid "Whether to remove all spaces when processing tag fields"
 msgstr "Zda při zpracování polí štítku odstranit všechny mezery"
 
-#: ../data/scan_dialog.ui.h:97
+#: ../data/scan_dialog.ui.h:98
 msgid "Insert a space before uppercase letters"
 msgstr "Vložit mezeru před velká písmena"
 
-#: ../data/scan_dialog.ui.h:98 ../data/org.gnome.EasyTAG.gschema.xml.h:136
+#: ../data/scan_dialog.ui.h:99 ../data/org.gnome.EasyTAG.gschema.xml.h:136
 msgid ""
 "Whether to insert spaces before capital letters when processing tag fields"
 msgstr "Zda při zpracování polí štítku vložit mezery před velká písmena"
 
-#: ../data/scan_dialog.ui.h:99
+#: ../data/scan_dialog.ui.h:100
 msgid "Remove duplicate spaces and underscores"
 msgstr "Odstranit zdvojené mezery a podtržítka"
 
-#: ../data/scan_dialog.ui.h:100 ../data/org.gnome.EasyTAG.gschema.xml.h:138
+#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:138
 msgid ""
 "Whether to remove duplicate spaces and underscores when processing tag fields"
 msgstr "Zda při zpracování polí štítku odstranit zdvojené mezery a podtržítka"
 
-#: ../data/scan_dialog.ui.h:101
+#: ../data/scan_dialog.ui.h:102
 msgid "Do not change word separators"
 msgstr "Neměnit oddělovače slov"
 
-#: ../data/scan_dialog.ui.h:102
+#: ../data/scan_dialog.ui.h:103
 msgid "Character Conversions"
 msgstr "Převody znaků"
 
-#: ../data/scan_dialog.ui.h:104 ../src/tag_area.c:740
+#: ../data/scan_dialog.ui.h:105 ../src/tag_area.c:740
 #, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "Převést „_“ a „%20“ na mezery"
 
-#: ../data/scan_dialog.ui.h:106
+#: ../data/scan_dialog.ui.h:107
 #, no-c-format
 msgid ""
 "The underscore character or the string ‘%20’ is replaced by one space. "
@@ -2171,11 +2175,11 @@ msgstr ""
 "Podtržítka nebo řetězec „%20“ budou nahrazovány jednou mezerou. Příklad "
 "před: „Text%20v%20nějaké_položce“ a po: „Text v nějaké položce“"
 
-#: ../data/scan_dialog.ui.h:107 ../src/tag_area.c:746
+#: ../data/scan_dialog.ui.h:108 ../src/tag_area.c:746
 msgid "Convert spaces to underscores"
 msgstr "Převést mezery na podržítka"
 
-#: ../data/scan_dialog.ui.h:108
+#: ../data/scan_dialog.ui.h:109
 msgid ""
 "The space character is replaced by one underscore character. Example, "
 "before: ‘Text In An Entry’, after: ‘Text_In_An_Entry’"
@@ -2183,41 +2187,41 @@ msgstr ""
 "Mezera bude nahrazována jedním podtržítkem. Příklad před: „Text v nějaké "
 "položce“ a po: „Text_v_nějaké_položce“"
 
-#: ../data/scan_dialog.ui.h:109
+#: ../data/scan_dialog.ui.h:110
 msgid "Convert:"
 msgstr "Převést:"
 
-#: ../data/scan_dialog.ui.h:110
+#: ../data/scan_dialog.ui.h:111
 msgid "Replace a string by another one. Note that the search is case sensitive"
 msgstr ""
 "Nahradit jeden řetězec jiným řetězcem. Upozorňujeme, že se při hledání "
 "rozlišuje velikost písmen"
 
-#: ../data/scan_dialog.ui.h:111
+#: ../data/scan_dialog.ui.h:112
 msgid "to: "
 msgstr "na: "
 
-#: ../data/scan_dialog.ui.h:112
+#: ../data/scan_dialog.ui.h:113
 msgid "Do not convert"
 msgstr "Nepřevádět"
 
-#: ../data/scan_dialog.ui.h:114
+#: ../data/scan_dialog.ui.h:115
 msgid "Show / Hide Masks Editor"
 msgstr "Zobrazit/skrýt editor masky"
 
-#: ../data/scan_dialog.ui.h:115
+#: ../data/scan_dialog.ui.h:116
 msgid "Show / Hide Legend"
 msgstr "Zobrazit/skrýt legendu"
 
-#: ../data/scan_dialog.ui.h:116
+#: ../data/scan_dialog.ui.h:117
 msgid "Scanner Preferences"
 msgstr "Předvolby průzkumníka"
 
-#: ../data/scan_dialog.ui.h:118
+#: ../data/scan_dialog.ui.h:119
 msgid "Scan Files"
 msgstr "Prozkoumat soubory"
 
-#: ../data/scan_dialog.ui.h:119
+#: ../data/scan_dialog.ui.h:120
 msgid "Scan selected files"
 msgstr "Prozkoumat vybrané soubory"
 
@@ -3223,7 +3227,7 @@ msgstr "Nelze převést název souboru „%s“ do systémového kódování ná
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Zkuste nastavit proměnnou prostředí G_FILENAME_ENCODING"
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:866
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
 msgid "Filename translation"
 msgstr "Překlad názvu souboru"
 
@@ -3937,6 +3941,23 @@ msgstr "Posunout tento řádek výš"
 msgid "Move this line down"
 msgstr "Posunout tento řádek níž"
 
+#: ../src/mask.cc:191
+msgid "Incomplete placeholder at end of mask."
+msgstr ""
+
+#: ../src/mask.cc:193
+#, c-format
+msgid "Invalid placeholder '%%%c'."
+msgstr ""
+
+#: ../src/mask.cc:197
+msgid "Opening brace '{' without closing brace '}'."
+msgstr ""
+
+#: ../src/mask.cc:199
+msgid "Closing brace '}' without opening brace '{'."
+msgstr ""
+
 #: ../src/misc.c:176
 msgid "You must type a program name"
 msgstr "Musíte vyplnit název programu"
@@ -4068,8 +4089,7 @@ msgstr "Chyba souboru se seznamem k přehrání"
 msgid "Wrote playlist file ‘%s’"
 msgstr "Zapsán soubor „%s“ se seznamem k přehrání"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2659
-#: ../src/scan_dialog.c:2722
+#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
 msgid "Invalid scanner mask"
 msgstr "Neplatná maska průzkumníka"
 
@@ -4090,54 +4110,59 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "Chyba způsobená neplatnou cestou"
 
-#: ../src/scan_dialog.c:452
+#: ../src/scan_dialog.c:383
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Nelze vypočítat hodnotu kontrolního součtu pro soubor „%s“"
 
-#: ../src/scan_dialog.c:467
+#: ../src/scan_dialog.c:398
 msgid "Tag successfully scanned"
 msgstr "Štítek byl úspěšně prozkoumán"
 
-#: ../src/scan_dialog.c:470
+#: ../src/scan_dialog.c:401
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Štítek v souboru „%s“ byl úspěšně prozkoumán"
 
-#: ../src/scan_dialog.c:513
+#: ../src/scan_dialog.c:444
 #, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "Přípona „%s“ nebyla v názvu souboru „%s“ nalezena"
 
-#: ../src/scan_dialog.c:605 ../src/scan_dialog.c:636
+#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
 #, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "Nelze nalézt oddělovač „%s“ vrámci „%s“"
 
-#: ../src/scan_dialog.c:864
+#: ../src/scan_dialog.c:795
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr "Nelze převést název souboru „%s“ do systémového kódování názvů soborů"
 
-#: ../src/scan_dialog.c:890
+#: ../src/scan_dialog.c:821
 msgid "New filename successfully scanned"
 msgstr "Nový název souboru byl úspěšně prozkoumán"
 
-#: ../src/scan_dialog.c:894
+#: ../src/scan_dialog.c:825
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Nový název souboru „%s“ byl úspěšně prozkoumán"
 
-#: ../src/scan_dialog.c:1263
+#: ../src/scan_dialog.c:1206
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Chyba při zpracování polí: %s"
 
-#: ../src/scan_dialog.c:2139
+#: ../src/scan_dialog.c:2082
 msgid "New_mask"
 msgstr "Nová _maska"
 
-#: ../src/scan_dialog.c:2789
+#: ../src/scan_dialog.c:2559
+#, fuzzy
+msgid "Empty scanner mask."
+msgstr "Neplatná maska průzkumníka"
+
+#: ../src/scan_dialog.c:2695
 msgid "All tags have been scanned"
 msgstr "Všechny štítky byly prozkoumány"
 

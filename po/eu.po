@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: easytag easytag-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-03 19:20+0200\n"
+"POT-Creation-Date: 2022-10-09 19:30+0200\n"
 "PO-Revision-Date: 2022-04-18 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
@@ -91,7 +91,7 @@ msgid "No files"
 msgstr "Fitxategirik ez"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Artista"
@@ -105,7 +105,7 @@ msgid "# Files"
 msgstr "# Fitxategiak"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Albuma"
@@ -115,18 +115,18 @@ msgid "Path"
 msgstr "Bidea"
 
 #: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
-#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:58
+#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:59
 #: ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "Fitxategia"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Titulua"
 
-#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:64
+#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:65
 #: ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Albumaren artista"
@@ -150,18 +150,18 @@ msgid "Track"
 msgstr "Pista"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Generoa"
 
 #: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
-#: ../data/scan_dialog.ui.h:70 ../data/search_dialog.ui.h:21
+#: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Iruzkina"
 
 #: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
-#: ../data/scan_dialog.ui.h:72 ../data/search_dialog.ui.h:22
+#: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Konpositorea"
@@ -175,17 +175,17 @@ msgstr "Jatorrizko artista"
 msgid "Orig. year"
 msgstr "Jatorrizko artista"
 
-#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:76
+#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:77
 #: ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "Copyright-a"
 
-#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:78
+#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:79
 #: ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "URLa"
 
-#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:80
+#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:81
 #: ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "Kodeketa:"
@@ -437,7 +437,7 @@ msgstr ""
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
 #: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:160
-#: ../data/scan_dialog.ui.h:117 ../data/search_dialog.ui.h:11
+#: ../data/scan_dialog.ui.h:118 ../data/search_dialog.ui.h:11
 msgid "_Close"
 msgstr "It_xi"
 
@@ -668,7 +668,7 @@ msgstr "Eskaner modua"
 msgid "Rename Files and Directories"
 msgstr "Aldatu fitxategien eta direktorioen izenak"
 
-#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:113
+#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:114
 msgid "Process Fields"
 msgstr "Prozesatu eremuak"
 
@@ -1650,7 +1650,7 @@ msgstr "Bihurketarik ez"
 msgid "Rename File and Directory Scanner"
 msgstr "Aldatu izena fitxategien eta direktorioen eskanerrari"
 
-#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:96
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:784
 msgid "Remove spaces"
 msgstr "Kendu zuriuneak"
@@ -1983,38 +1983,42 @@ msgstr "%c: iruzkina"
 
 #: ../data/scan_dialog.ui.h:42
 #, no-c-format
+msgid "%i: ignored"
+msgstr "%i: ezikusia"
+
+#: ../data/scan_dialog.ui.h:44
+#, no-c-format
 msgid "%u: URL"
 msgstr "%u: URLa"
 
-#: ../data/scan_dialog.ui.h:44
+#: ../data/scan_dialog.ui.h:46
 #, no-c-format
 msgid "%p: composer"
 msgstr "%p: konpositorea"
 
-#: ../data/scan_dialog.ui.h:46
+#: ../data/scan_dialog.ui.h:48
 #, no-c-format
 msgid "%r: copyright"
 msgstr "%r: copyright-a"
 
-#: ../data/scan_dialog.ui.h:48
+#: ../data/scan_dialog.ui.h:50
 #, no-c-format
 msgid "%e: encoded by"
 msgstr "%e: kodetzailea"
 
-#: ../data/scan_dialog.ui.h:50
-#, no-c-format
-msgid "%i: ignored"
-msgstr "%i: ezikusia"
-
 #: ../data/scan_dialog.ui.h:51
+msgid "{…|…}: alternatives group"
+msgstr ""
+
+#: ../data/scan_dialog.ui.h:52
 msgid "Fill Tag"
 msgstr "Bete etiketa"
 
-#: ../data/scan_dialog.ui.h:52
+#: ../data/scan_dialog.ui.h:53
 msgid "Prefix mask with current directory"
 msgstr "Ezarri aurrizkia maskarari uneko direktorioarekin"
 
-#: ../data/scan_dialog.ui.h:53
+#: ../data/scan_dialog.ui.h:54
 msgid ""
 "Select or type in a mask using codes (see Legend) to parse tag fields. Used "
 "to rename the file.\n"
@@ -2026,113 +2030,113 @@ msgstr ""
 "direktorioak sortzeko. Lehen karakterea ‘/’  bada, bide-izen absolutua da; "
 "bestela, bide-izen zaharrarekiko erlatiboa da"
 
-#: ../data/scan_dialog.ui.h:55
+#: ../data/scan_dialog.ui.h:56
 msgid "Rename file preview"
 msgstr "Aldatu fitxategi-aurrebistaren izena"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:56 ../src/easytag.c:571
+#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:571
 msgid "Rename File"
 msgstr "Aldatu fitxategiaren izena"
 
-#: ../data/scan_dialog.ui.h:57
+#: ../data/scan_dialog.ui.h:58
 msgid "Tag Fields"
 msgstr "Etiketa-eremuak"
 
-#: ../data/scan_dialog.ui.h:59
+#: ../data/scan_dialog.ui.h:60
 msgid "Process filename"
 msgstr "Prozesatu fitxategi-izena"
 
-#: ../data/scan_dialog.ui.h:61
+#: ../data/scan_dialog.ui.h:62
 msgid "Process title field"
 msgstr "Prozesatu tituluaren eremua"
 
-#: ../data/scan_dialog.ui.h:63
+#: ../data/scan_dialog.ui.h:64
 msgid "Process artist field"
 msgstr "Prozesatu artistaren eremua"
 
-#: ../data/scan_dialog.ui.h:65
+#: ../data/scan_dialog.ui.h:66
 msgid "Process album artist field"
 msgstr "Prozesatu albumaren artistaren eremua"
 
-#: ../data/scan_dialog.ui.h:67
+#: ../data/scan_dialog.ui.h:68
 msgid "Process album field"
 msgstr "Prozesatu albumaren eremua"
 
-#: ../data/scan_dialog.ui.h:69
+#: ../data/scan_dialog.ui.h:70
 msgid "Process genre field"
 msgstr "Prozesatu generoaren eremua"
 
-#: ../data/scan_dialog.ui.h:71
+#: ../data/scan_dialog.ui.h:72
 msgid "Process comment field"
 msgstr "Prozesatu iruzkinaren eremua"
 
-#: ../data/scan_dialog.ui.h:73
+#: ../data/scan_dialog.ui.h:74
 msgid "Process composer field"
 msgstr "Prozesatu konposatzailearen eremua"
 
-#: ../data/scan_dialog.ui.h:74
+#: ../data/scan_dialog.ui.h:75
 msgid "Orig. Artist"
 msgstr "Jatorrizko artista"
 
-#: ../data/scan_dialog.ui.h:75
+#: ../data/scan_dialog.ui.h:76
 msgid "Process original artist field"
 msgstr "Prozesatu jatorrizko artistaren eremua"
 
-#: ../data/scan_dialog.ui.h:77
+#: ../data/scan_dialog.ui.h:78
 msgid "Process copyright field"
 msgstr "Prozesatu copyright-aren eremua"
 
-#: ../data/scan_dialog.ui.h:79
+#: ../data/scan_dialog.ui.h:80
 msgid "Process URL field"
 msgstr "Prozesatu URLaren eremua"
 
-#: ../data/scan_dialog.ui.h:81
+#: ../data/scan_dialog.ui.h:82
 msgid "Process encoded-by field"
 msgstr "Prozesatu kodetzailearen eremua"
 
-#: ../data/scan_dialog.ui.h:82
+#: ../data/scan_dialog.ui.h:83
 msgid "Capitalization"
 msgstr "Maiuskulak"
 
-#: ../data/scan_dialog.ui.h:83
+#: ../data/scan_dialog.ui.h:84
 msgid "Capitalize all"
 msgstr "Maiuskulak denetan"
 
-#: ../data/scan_dialog.ui.h:84
+#: ../data/scan_dialog.ui.h:85
 msgid ""
 "Whether to upper-case all characters of the tag when processing tag fields"
 msgstr ""
 "Etiketa-eremuak prozesatzean karaktere guztiak maiuskulaz idatziko diren ala "
 "ez"
 
-#: ../data/scan_dialog.ui.h:85
+#: ../data/scan_dialog.ui.h:86
 msgid "Lowercase all"
 msgstr "Minuskulak denetan"
 
-#: ../data/scan_dialog.ui.h:86
+#: ../data/scan_dialog.ui.h:87
 msgid ""
 "Whether to lower-case all characters of the tag when processing tag fields"
 msgstr ""
 "Etiketa-eremuak prozesatzean karaktere guztiak minuskulaz idatziko diren ala "
 "ez"
 
-#: ../data/scan_dialog.ui.h:87
+#: ../data/scan_dialog.ui.h:88
 msgid "Capitalize first letter"
 msgstr "Maiuskulak lehen letran"
 
-#: ../data/scan_dialog.ui.h:88
+#: ../data/scan_dialog.ui.h:89
 msgid ""
 "Whether to upper-case the first letter of the tag when processing tag fields"
 msgstr ""
 "Etiketa-eremuak prozesatzean etiketaren lehen letra maiuskulaz idatziko "
 "diren ala ez"
 
-#: ../data/scan_dialog.ui.h:89
+#: ../data/scan_dialog.ui.h:90
 msgid "Capitalize the first letter of each word"
 msgstr "Maiuskulak hitz bakoitzaren lehen letran"
 
-#: ../data/scan_dialog.ui.h:90
+#: ../data/scan_dialog.ui.h:91
 msgid ""
 "Whether to upper-case the first letter of each word when processing tag "
 "fields"
@@ -2140,11 +2144,11 @@ msgstr ""
 "Etiketa-eremuak prozesatzean hitz bakoitzaren lehen letra maiuskulaz "
 "idatziko diren ala ez"
 
-#: ../data/scan_dialog.ui.h:91
+#: ../data/scan_dialog.ui.h:92
 msgid "Detect Roman numerals"
 msgstr "Detektatu zenbaki erromatarrak"
 
-#: ../data/scan_dialog.ui.h:92 ../data/org.gnome.EasyTAG.gschema.xml.h:132
+#: ../data/scan_dialog.ui.h:93 ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to detect Roman numerals when applying upper-case conversions while "
 "processing tag fields"
@@ -2152,54 +2156,54 @@ msgstr ""
 "Etiketa-eremuak prozesatzean maiuskulen bihurketak aplikatzen badira, "
 "zenbaki erromatarrak detektatuko diren ala ez"
 
-#: ../data/scan_dialog.ui.h:93
+#: ../data/scan_dialog.ui.h:94
 msgid "Do not change capitalization"
 msgstr "Ez aldatu maiuskulak"
 
-#: ../data/scan_dialog.ui.h:94
+#: ../data/scan_dialog.ui.h:95
 msgid "Spaces Conversions"
 msgstr "Zuriuneen bihurketak"
 
-#: ../data/scan_dialog.ui.h:96 ../data/org.gnome.EasyTAG.gschema.xml.h:134
+#: ../data/scan_dialog.ui.h:97 ../data/org.gnome.EasyTAG.gschema.xml.h:134
 msgid "Whether to remove all spaces when processing tag fields"
 msgstr "Zuriune guztiak kenduko diren ala ez etiketa-eremuak prozesatzean"
 
-#: ../data/scan_dialog.ui.h:97
+#: ../data/scan_dialog.ui.h:98
 msgid "Insert a space before uppercase letters"
 msgstr "Txertatu zuriune bat maiuskulen aurretik"
 
-#: ../data/scan_dialog.ui.h:98 ../data/org.gnome.EasyTAG.gschema.xml.h:136
+#: ../data/scan_dialog.ui.h:99 ../data/org.gnome.EasyTAG.gschema.xml.h:136
 msgid ""
 "Whether to insert spaces before capital letters when processing tag fields"
 msgstr ""
 "Etiketa-eremuak prozesatzean maiuskulen aurretik zuriuneak txertatuko diren "
 "ala ez"
 
-#: ../data/scan_dialog.ui.h:99
+#: ../data/scan_dialog.ui.h:100
 msgid "Remove duplicate spaces and underscores"
 msgstr "Kendu zuriune eta azpimarra bikoiztuak"
 
-#: ../data/scan_dialog.ui.h:100 ../data/org.gnome.EasyTAG.gschema.xml.h:138
+#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:138
 msgid ""
 "Whether to remove duplicate spaces and underscores when processing tag fields"
 msgstr ""
 "Etiketa-eremuak prozesatzean zuriune eta azpimarra bikoiztuak kenduko diren "
 "ala ez"
 
-#: ../data/scan_dialog.ui.h:101
+#: ../data/scan_dialog.ui.h:102
 msgid "Do not change word separators"
 msgstr "Ez aldatu hitzen bereizleak"
 
-#: ../data/scan_dialog.ui.h:102
+#: ../data/scan_dialog.ui.h:103
 msgid "Character Conversions"
 msgstr "Karaktere-bihurketak"
 
-#: ../data/scan_dialog.ui.h:104 ../src/tag_area.c:740
+#: ../data/scan_dialog.ui.h:105 ../src/tag_area.c:740
 #, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "Bihurtu ‘_’ eta ‘%20’ karaktereak zuriune"
 
-#: ../data/scan_dialog.ui.h:106
+#: ../data/scan_dialog.ui.h:107
 #, no-c-format
 msgid ""
 "The underscore character or the string ‘%20’ is replaced by one space. "
@@ -2208,11 +2212,11 @@ msgstr ""
 "'%20' kateak azpimarra-karaktereekin ordezten dira: Adibidea, aurretik: "
 "‘Testu%20Bat%20Sarrera%20Batean’, ondoren: ‘Testu_Bat_Sarrera_Batean’"
 
-#: ../data/scan_dialog.ui.h:107 ../src/tag_area.c:746
+#: ../data/scan_dialog.ui.h:108 ../src/tag_area.c:746
 msgid "Convert spaces to underscores"
 msgstr "Bihurtu zuriuneak azpimarra"
 
-#: ../data/scan_dialog.ui.h:108
+#: ../data/scan_dialog.ui.h:109
 msgid ""
 "The space character is replaced by one underscore character. Example, "
 "before: ‘Text In An Entry’, after: ‘Text_In_An_Entry’"
@@ -2220,41 +2224,41 @@ msgstr ""
 "Zuriune-karakterea azpimarra batekin ordezten da. Adibidea, aurretik: ‘Testu "
 "Bat Sarrera Batean‘, ondoren: ‘Testu_Bat_Sarrera_Batean’"
 
-#: ../data/scan_dialog.ui.h:109
+#: ../data/scan_dialog.ui.h:110
 msgid "Convert:"
 msgstr "Bihurtu:"
 
-#: ../data/scan_dialog.ui.h:110
+#: ../data/scan_dialog.ui.h:111
 msgid "Replace a string by another one. Note that the search is case sensitive"
 msgstr ""
 "Ordeztu etiketa bat beste batekin. Kontuan izan bilaketak maiuskulak eta "
 "minuskulak kontuan hartzen dituela"
 
-#: ../data/scan_dialog.ui.h:111
+#: ../data/scan_dialog.ui.h:112
 msgid "to: "
 msgstr "hona: "
 
-#: ../data/scan_dialog.ui.h:112
+#: ../data/scan_dialog.ui.h:113
 msgid "Do not convert"
 msgstr "Ez bihurtu"
 
-#: ../data/scan_dialog.ui.h:114
+#: ../data/scan_dialog.ui.h:115
 msgid "Show / Hide Masks Editor"
 msgstr "Erakutsi / ezkutatu maskaren editorea"
 
-#: ../data/scan_dialog.ui.h:115
+#: ../data/scan_dialog.ui.h:116
 msgid "Show / Hide Legend"
 msgstr "Erakutsi / ezkutatu legenda"
 
-#: ../data/scan_dialog.ui.h:116
+#: ../data/scan_dialog.ui.h:117
 msgid "Scanner Preferences"
 msgstr "Eskaner-hobespenak"
 
-#: ../data/scan_dialog.ui.h:118
+#: ../data/scan_dialog.ui.h:119
 msgid "Scan Files"
 msgstr "Eskaneatu fitxategiak"
 
-#: ../data/scan_dialog.ui.h:119
+#: ../data/scan_dialog.ui.h:120
 msgid "Scan selected files"
 msgstr "Eskaneatu hautatutako fitxategiak"
 
@@ -3275,7 +3279,7 @@ msgstr ""
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Saiatu G_FILENAME_ENCODING ingurune-aldagaia ezartzen."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:866
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
 msgid "Filename translation"
 msgstr "Fitxategi-izenaren itzulpena"
 
@@ -3989,6 +3993,23 @@ msgstr "Mugitu lerro hau gora"
 msgid "Move this line down"
 msgstr "Mugitu lerro hau behera"
 
+#: ../src/mask.cc:191
+msgid "Incomplete placeholder at end of mask."
+msgstr ""
+
+#: ../src/mask.cc:193
+#, c-format
+msgid "Invalid placeholder '%%%c'."
+msgstr ""
+
+#: ../src/mask.cc:197
+msgid "Opening brace '{' without closing brace '}'."
+msgstr ""
+
+#: ../src/mask.cc:199
+msgid "Closing brace '}' without opening brace '{'."
+msgstr ""
+
 #: ../src/misc.c:176
 msgid "You must type a program name"
 msgstr "Programa-izen bat idatzi behar duzu"
@@ -4120,8 +4141,7 @@ msgstr "Erreprodukzio-zerrendaren fitxategiaren errorea"
 msgid "Wrote playlist file ‘%s’"
 msgstr "‘%s’ erreprodukzio-zerrenda idatzi da"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2659
-#: ../src/scan_dialog.c:2722
+#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
 msgid "Invalid scanner mask"
 msgstr "Eskanerraren maskara baliogabea"
 
@@ -4142,56 +4162,61 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "Bide baliogabearen errorea"
 
-#: ../src/scan_dialog.c:452
+#: ../src/scan_dialog.c:383
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Ezin da ‘%s’ fitxategiaren CRC balioa kalkulatu"
 
-#: ../src/scan_dialog.c:467
+#: ../src/scan_dialog.c:398
 msgid "Tag successfully scanned"
 msgstr "Etiketa ongi eskaneatu da"
 
-#: ../src/scan_dialog.c:470
+#: ../src/scan_dialog.c:401
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "‘%s’ etiketa berria ongi eskaneatu da"
 
-#: ../src/scan_dialog.c:513
+#: ../src/scan_dialog.c:444
 #, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "‘%s’ luzapena ez da aurkitu ‘%s’ fitxategi-izenean"
 
-#: ../src/scan_dialog.c:605 ../src/scan_dialog.c:636
+#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
 #, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "Ez da aurkitu ‘%s’ bereizlea ‘%s’ barruan"
 
-#: ../src/scan_dialog.c:864
+#: ../src/scan_dialog.c:795
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "Ezin izan da ‘%s’ fitxategi-izena bihurtu sistemako fitxategi-izenen "
 "kodeketara"
 
-#: ../src/scan_dialog.c:890
+#: ../src/scan_dialog.c:821
 msgid "New filename successfully scanned"
 msgstr "Fitxategi-izen berria ongi eskaneatu da"
 
-#: ../src/scan_dialog.c:894
+#: ../src/scan_dialog.c:825
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "‘%s’ fitxategi-izen berria ongi eskaneatu da"
 
-#: ../src/scan_dialog.c:1263
+#: ../src/scan_dialog.c:1206
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Errorea ‘%s’ eremuak prozesatzean"
 
-#: ../src/scan_dialog.c:2139
+#: ../src/scan_dialog.c:2082
 msgid "New_mask"
 msgstr "Maskara_berria"
 
-#: ../src/scan_dialog.c:2789
+#: ../src/scan_dialog.c:2559
+#, fuzzy
+msgid "Empty scanner mask."
+msgstr "Eskanerraren maskara baliogabea"
+
+#: ../src/scan_dialog.c:2695
 msgid "All tags have been scanned"
 msgstr "Etiketa guztiak eskaneatu dira"
 

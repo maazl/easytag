@@ -30,6 +30,7 @@ src/file_list.c
 src/file.c
 src/load_files_dialog.c
 src/log.c
+src/mask.cc
 src/misc.c
 src/picture.c
 src/playlist_dialog.c

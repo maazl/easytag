@@ -56,7 +56,7 @@ void Scan_Select_Mode_And_Run_Scanner (EtScanDialog *self, ET_File *ETFile);
 gchar * et_scan_generate_new_filename_from_mask (const ET_File *ETFile, const gchar *mask, gboolean no_dir_check_or_conversion);
 gchar * et_scan_generate_new_directory_name_from_mask (const ET_File *ETFile, const gchar *mask, gboolean no_dir_check_or_conversion);
 
-void entry_check_rename_file_mask (GtkEntry *entry, gpointer user_data);
+void entry_check_mask (GtkEntry *entry, gpointer user_data);
 
 G_END_DECLS
 

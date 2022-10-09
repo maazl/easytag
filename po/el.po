@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 1.99.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-03 19:20+0200\n"
+"POT-Creation-Date: 2022-10-09 19:30+0200\n"
 "PO-Revision-Date: 2019-11-21 23:57+0200\n"
 "Last-Translator: Efstathios Iosifidis <iosifidis@opensuse.org>\n"
 "Language-Team: team@gnome.gr\n"
@@ -97,7 +97,7 @@ msgid "No files"
 msgstr "Δεν υπάρχουν αρχεία"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Καλλιτέχνης"
@@ -111,7 +111,7 @@ msgid "# Files"
 msgstr "# Αρχείων"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Δίσκος"
@@ -121,18 +121,18 @@ msgid "Path"
 msgstr "Διαδρομή"
 
 #: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
-#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:58
+#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:59
 #: ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "Όνομα αρχείου"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Τίτλο"
 
-#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:64
+#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:65
 #: ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Καλλιτέχνης δίσκου"
@@ -156,18 +156,18 @@ msgid "Track"
 msgstr "Τίτλος κομματιού"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Είδος"
 
 #: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
-#: ../data/scan_dialog.ui.h:70 ../data/search_dialog.ui.h:21
+#: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Σχόλιο"
 
 #: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
-#: ../data/scan_dialog.ui.h:72 ../data/search_dialog.ui.h:22
+#: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Συνθέτης"
@@ -181,17 +181,17 @@ msgstr "Αρχικός καλλιτέχνης"
 msgid "Orig. year"
 msgstr "Αρχικός καλλιτέχνης"
 
-#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:76
+#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:77
 #: ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "Πνευματικά δικαιώματα"
 
-#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:78
+#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:79
 #: ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "Διεύθυνση"
 
-#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:80
+#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:81
 #: ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "Κωδικοποιήθηκε από"
@@ -455,7 +455,7 @@ msgstr ""
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
 #: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:160
-#: ../data/scan_dialog.ui.h:117 ../data/search_dialog.ui.h:11
+#: ../data/scan_dialog.ui.h:118 ../data/search_dialog.ui.h:11
 msgid "_Close"
 msgstr "_Κλείσιμο"
 
@@ -689,7 +689,7 @@ msgstr "Κατάσταση σαρωτή"
 msgid "Rename Files and Directories"
 msgstr "_Μετονομασία αρχείων και καταλόγων…"
 
-#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:113
+#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:114
 msgid "Process Fields"
 msgstr "Επεξεργασία πεδίων"
 
@@ -1672,7 +1672,7 @@ msgstr ""
 msgid "Rename File and Directory Scanner"
 msgstr "Μετονομασία αρχείου και καταλόγου"
 
-#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:96
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:784
 msgid "Remove spaces"
 msgstr "Αφαίρεση κενών"
@@ -2013,39 +2013,43 @@ msgstr "%c: σχόλιο"
 
 #: ../data/scan_dialog.ui.h:42
 #, no-c-format
+msgid "%i: ignored"
+msgstr "%i: να αγνοηθεί"
+
+#: ../data/scan_dialog.ui.h:44
+#, no-c-format
 msgid "%u: URL"
 msgstr "%u: URL"
 
-#: ../data/scan_dialog.ui.h:44
+#: ../data/scan_dialog.ui.h:46
 #, no-c-format
 msgid "%p: composer"
 msgstr "%p: όνομα συνθέτη"
 
-#: ../data/scan_dialog.ui.h:46
+#: ../data/scan_dialog.ui.h:48
 #, no-c-format
 msgid "%r: copyright"
 msgstr "%r: πνευματικά δικαιώματα"
 
-#: ../data/scan_dialog.ui.h:48
+#: ../data/scan_dialog.ui.h:50
 #, no-c-format
 msgid "%e: encoded by"
 msgstr "%e: κωδικοποιήθηκε από"
 
-#: ../data/scan_dialog.ui.h:50
-#, no-c-format
-msgid "%i: ignored"
-msgstr "%i: να αγνοηθεί"
-
 #: ../data/scan_dialog.ui.h:51
+msgid "{…|…}: alternatives group"
+msgstr ""
+
+#: ../data/scan_dialog.ui.h:52
 msgid "Fill Tag"
 msgstr "Συμπλήρωση ετικέτας"
 
-#: ../data/scan_dialog.ui.h:52
+#: ../data/scan_dialog.ui.h:53
 #, fuzzy
 msgid "Prefix mask with current directory"
 msgstr "Μάσκα προθέματος με την τρέχουσα διαδρομή"
 
-#: ../data/scan_dialog.ui.h:53
+#: ../data/scan_dialog.ui.h:54
 #, fuzzy
 msgid ""
 "Select or type in a mask using codes (see Legend) to parse tag fields. Used "
@@ -2060,112 +2064,112 @@ msgstr ""
 "είναι /, τότε η διαδρομή θεωρείται απόλυτη, αλλιώς θεωρείται σχετική με την "
 "παλιά διαδρομή."
 
-#: ../data/scan_dialog.ui.h:55
+#: ../data/scan_dialog.ui.h:56
 msgid "Rename file preview"
 msgstr "Προεπισκόπηση μετονομασίας αρχείου"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:56 ../src/easytag.c:571
+#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:571
 msgid "Rename File"
 msgstr "Μετονομασία αρχείου"
 
-#: ../data/scan_dialog.ui.h:57
+#: ../data/scan_dialog.ui.h:58
 #, fuzzy
 msgid "Tag Fields"
 msgstr "Πεδία"
 
-#: ../data/scan_dialog.ui.h:59
+#: ../data/scan_dialog.ui.h:60
 #, fuzzy
 msgid "Process filename"
 msgstr "Επεξεργασία πεδίου ονόματος αρχείου"
 
-#: ../data/scan_dialog.ui.h:61
+#: ../data/scan_dialog.ui.h:62
 msgid "Process title field"
 msgstr "Επεξεργασία πεδίου τίτλου"
 
-#: ../data/scan_dialog.ui.h:63
+#: ../data/scan_dialog.ui.h:64
 #, fuzzy
 msgid "Process artist field"
 msgstr "Επεξεργασία του πεδίου καλλιτέχνη"
 
-#: ../data/scan_dialog.ui.h:65
+#: ../data/scan_dialog.ui.h:66
 msgid "Process album artist field"
 msgstr "Επεξεργασία πεδίου δίσκου καλλιτέχνη"
 
-#: ../data/scan_dialog.ui.h:67
+#: ../data/scan_dialog.ui.h:68
 msgid "Process album field"
 msgstr "Επεξεργασία πεδίου δίσκου"
 
-#: ../data/scan_dialog.ui.h:69
+#: ../data/scan_dialog.ui.h:70
 msgid "Process genre field"
 msgstr "Επεξεργασία πεδίου είδους"
 
-#: ../data/scan_dialog.ui.h:71
+#: ../data/scan_dialog.ui.h:72
 msgid "Process comment field"
 msgstr "Επεξεργασία πεδίου σχολίου"
 
-#: ../data/scan_dialog.ui.h:73
+#: ../data/scan_dialog.ui.h:74
 msgid "Process composer field"
 msgstr "Επεξεργασία πεδίου συνθέτη"
 
-#: ../data/scan_dialog.ui.h:74
+#: ../data/scan_dialog.ui.h:75
 #, fuzzy
 msgid "Orig. Artist"
 msgstr "Αρχ. καλλιτέχνης:"
 
-#: ../data/scan_dialog.ui.h:75
+#: ../data/scan_dialog.ui.h:76
 msgid "Process original artist field"
 msgstr "Επεξεργασία πεδίου αρχικού καλλιτέχνη"
 
-#: ../data/scan_dialog.ui.h:77
+#: ../data/scan_dialog.ui.h:78
 msgid "Process copyright field"
 msgstr "Επεξεργασία πεδίου πνευματικών δικαιωμάτων"
 
-#: ../data/scan_dialog.ui.h:79
+#: ../data/scan_dialog.ui.h:80
 msgid "Process URL field"
 msgstr "Επεξεργασία πεδίου URL"
 
-#: ../data/scan_dialog.ui.h:81
+#: ../data/scan_dialog.ui.h:82
 #, fuzzy
 msgid "Process encoded-by field"
 msgstr "Επεξεργασία πεδίου ονόματος κωδικοποιητή"
 
-#: ../data/scan_dialog.ui.h:82
+#: ../data/scan_dialog.ui.h:83
 msgid "Capitalization"
 msgstr "Όλα κεφαλαία"
 
-#: ../data/scan_dialog.ui.h:83
+#: ../data/scan_dialog.ui.h:84
 msgid "Capitalize all"
 msgstr "Όλα κεφαλαία"
 
-#: ../data/scan_dialog.ui.h:84
+#: ../data/scan_dialog.ui.h:85
 msgid ""
 "Whether to upper-case all characters of the tag when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:85
+#: ../data/scan_dialog.ui.h:86
 msgid "Lowercase all"
 msgstr "Όλα πεζά"
 
-#: ../data/scan_dialog.ui.h:86
+#: ../data/scan_dialog.ui.h:87
 msgid ""
 "Whether to lower-case all characters of the tag when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:87
+#: ../data/scan_dialog.ui.h:88
 msgid "Capitalize first letter"
 msgstr "Κεφαλαίο το πρώτο γράμμα"
 
-#: ../data/scan_dialog.ui.h:88
+#: ../data/scan_dialog.ui.h:89
 msgid ""
 "Whether to upper-case the first letter of the tag when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:89
+#: ../data/scan_dialog.ui.h:90
 msgid "Capitalize the first letter of each word"
 msgstr "Κεφαλαίο το πρώτο γράμμα κάθε λέξης"
 
-#: ../data/scan_dialog.ui.h:90
+#: ../data/scan_dialog.ui.h:91
 #, fuzzy
 msgid ""
 "Whether to upper-case the first letter of each word when processing tag "
@@ -2174,62 +2178,62 @@ msgstr ""
 "Μην βάζετε κεφαλαίο το πρώτο γράμμα των λέξεων για μερικές προθέσεις και "
 "άρθρα."
 
-#: ../data/scan_dialog.ui.h:91
+#: ../data/scan_dialog.ui.h:92
 msgid "Detect Roman numerals"
 msgstr "Ανίχνευση ρωμαϊκών αριθμών"
 
-#: ../data/scan_dialog.ui.h:92 ../data/org.gnome.EasyTAG.gschema.xml.h:132
+#: ../data/scan_dialog.ui.h:93 ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to detect Roman numerals when applying upper-case conversions while "
 "processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:93
+#: ../data/scan_dialog.ui.h:94
 msgid "Do not change capitalization"
 msgstr "Να μην αλλαχτεί η κεφαλαιοποίηση"
 
-#: ../data/scan_dialog.ui.h:94
+#: ../data/scan_dialog.ui.h:95
 msgid "Spaces Conversions"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:96 ../data/org.gnome.EasyTAG.gschema.xml.h:134
+#: ../data/scan_dialog.ui.h:97 ../data/org.gnome.EasyTAG.gschema.xml.h:134
 msgid "Whether to remove all spaces when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:97
+#: ../data/scan_dialog.ui.h:98
 msgid "Insert a space before uppercase letters"
 msgstr "Εισαγωγή κενού πριν από κάθε κεφαλαίο γράμμα"
 
-#: ../data/scan_dialog.ui.h:98 ../data/org.gnome.EasyTAG.gschema.xml.h:136
+#: ../data/scan_dialog.ui.h:99 ../data/org.gnome.EasyTAG.gschema.xml.h:136
 msgid ""
 "Whether to insert spaces before capital letters when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:99
+#: ../data/scan_dialog.ui.h:100
 msgid "Remove duplicate spaces and underscores"
 msgstr "Αφαίρεση διπλών κενών και υπογραμμίσεων"
 
-#: ../data/scan_dialog.ui.h:100 ../data/org.gnome.EasyTAG.gschema.xml.h:138
+#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:138
 #, fuzzy
 msgid ""
 "Whether to remove duplicate spaces and underscores when processing tag fields"
 msgstr "Αφαίρεση διπλών κενών και υπογραμμίσεων"
 
-#: ../data/scan_dialog.ui.h:101
+#: ../data/scan_dialog.ui.h:102
 msgid "Do not change word separators"
 msgstr "Να μην αλλαχτούν τα διαχωριστικά λέξεων"
 
-#: ../data/scan_dialog.ui.h:102
+#: ../data/scan_dialog.ui.h:103
 #, fuzzy
 msgid "Character Conversions"
 msgstr "Σαρωτής συμπλήρωσης ετικέτας - μετατροπή χαρακτήρων"
 
-#: ../data/scan_dialog.ui.h:104 ../src/tag_area.c:740
+#: ../data/scan_dialog.ui.h:105 ../src/tag_area.c:740
 #, fuzzy, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "Μετατροπή του '_' και του '%20' σε κενά"
 
-#: ../data/scan_dialog.ui.h:106
+#: ../data/scan_dialog.ui.h:107
 #, fuzzy, no-c-format
 msgid ""
 "The underscore character or the string ‘%20’ is replaced by one space. "
@@ -2239,12 +2243,12 @@ msgstr ""
 "κενό. Π.χ., το 'Κείμενο%20σε%20μια_καταχώριση' γίνεται 'Κείμενο σε μία "
 "καταχώριση'."
 
-#: ../data/scan_dialog.ui.h:107 ../src/tag_area.c:746
+#: ../data/scan_dialog.ui.h:108 ../src/tag_area.c:746
 #, fuzzy
 msgid "Convert spaces to underscores"
 msgstr "Μετατροπή του κενού ' ' σε υπογράμμιση '_'"
 
-#: ../data/scan_dialog.ui.h:108
+#: ../data/scan_dialog.ui.h:109
 #, fuzzy
 msgid ""
 "The space character is replaced by one underscore character. Example, "
@@ -2253,42 +2257,42 @@ msgstr ""
 "Ο χαρακτήρας κενού αντικαθίσταται από έναν υπογραμμισμένο χαρακτήρα. Π.χ., "
 "το 'Κείμενο σε μια καταχώριση' γίνεται 'Κείμενο_σε_μία_καταχώριση'."
 
-#: ../data/scan_dialog.ui.h:109
+#: ../data/scan_dialog.ui.h:110
 msgid "Convert:"
 msgstr "Μετατροπή:"
 
-#: ../data/scan_dialog.ui.h:110
+#: ../data/scan_dialog.ui.h:111
 #, fuzzy
 msgid "Replace a string by another one. Note that the search is case sensitive"
 msgstr ""
 "Αντικατάσταση μιας συμβολοσειράς από μία άλλη. Σημειώστε ότι η αναζήτηση "
 "εξαρτάται από πεζά/κεφαλαία."
 
-#: ../data/scan_dialog.ui.h:111
+#: ../data/scan_dialog.ui.h:112
 msgid "to: "
 msgstr "σε: "
 
-#: ../data/scan_dialog.ui.h:112
+#: ../data/scan_dialog.ui.h:113
 msgid "Do not convert"
 msgstr "Να μην μετατραπεί"
 
-#: ../data/scan_dialog.ui.h:114
+#: ../data/scan_dialog.ui.h:115
 msgid "Show / Hide Masks Editor"
 msgstr "Εμφάνιση / Απόκρυψη επεξεργαστή μασκών"
 
-#: ../data/scan_dialog.ui.h:115
+#: ../data/scan_dialog.ui.h:116
 msgid "Show / Hide Legend"
 msgstr "Εμφάνιση / Απόκρυψη υπομνήματος"
 
-#: ../data/scan_dialog.ui.h:116
+#: ../data/scan_dialog.ui.h:117
 msgid "Scanner Preferences"
 msgstr "Προτιμήσεις σαρωτή"
 
-#: ../data/scan_dialog.ui.h:118
+#: ../data/scan_dialog.ui.h:119
 msgid "Scan Files"
 msgstr "Σάρωση αρχείων"
 
-#: ../data/scan_dialog.ui.h:119
+#: ../data/scan_dialog.ui.h:120
 msgid "Scan selected files"
 msgstr "Σάρωση των επιλεγμένων αρχείων"
 
@@ -3340,7 +3344,7 @@ msgstr ""
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Προσπάθεια ορισμού της μεταβλητής περιβάλλοντος G_FILENAME_ENCODING."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:866
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
 msgid "Filename translation"
 msgstr "Μετάφραση ονόματος αρχείου"
 
@@ -4060,6 +4064,23 @@ msgstr "Μετακίνηση προς τα πάνω αυτής της γραμμ
 msgid "Move this line down"
 msgstr "Μετακίνηση προς τα πάνω αυτής της γραμμής"
 
+#: ../src/mask.cc:191
+msgid "Incomplete placeholder at end of mask."
+msgstr ""
+
+#: ../src/mask.cc:193
+#, c-format
+msgid "Invalid placeholder '%%%c'."
+msgstr ""
+
+#: ../src/mask.cc:197
+msgid "Opening brace '{' without closing brace '}'."
+msgstr ""
+
+#: ../src/mask.cc:199
+msgid "Closing brace '}' without opening brace '{'."
+msgstr ""
+
 #: ../src/misc.c:176
 msgid "You must type a program name"
 msgstr "Πρέπει να πληκτρολογήσετε ένα όνομα προγράμματος"
@@ -4193,8 +4214,7 @@ msgstr "Σφάλμα αρχείου λίστας αναπαραγωγής"
 msgid "Wrote playlist file ‘%s’"
 msgstr "Γράφτηκε το αρχείο λίστας αναπαραγωγής '%s'"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2659
-#: ../src/scan_dialog.c:2722
+#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
 msgid "Invalid scanner mask"
 msgstr "Ακατάλληλη μάσκα σάρωσης"
 
@@ -4217,57 +4237,62 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "Σφάλμα άκυρης διαδρομής"
 
-#: ../src/scan_dialog.c:452
+#: ../src/scan_dialog.c:383
 #, fuzzy, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Αδύνατος ο υπολογισμός της τιμής CRC του αρχείου (%s)"
 
-#: ../src/scan_dialog.c:467
+#: ../src/scan_dialog.c:398
 msgid "Tag successfully scanned"
 msgstr "Η ετικέτα σαρώθηκε επιτυχώς"
 
-#: ../src/scan_dialog.c:470
+#: ../src/scan_dialog.c:401
 #, fuzzy, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Η ετικέτα σαρώθηκε επιτυχώς: %s"
 
-#: ../src/scan_dialog.c:513
+#: ../src/scan_dialog.c:444
 #, fuzzy, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr ""
 "Σαρωτής ετικέτας: περίεργο… η επέκταση '%s' δε βρέθηκε στο όνομα αρχείου '%s'"
 
-#: ../src/scan_dialog.c:605 ../src/scan_dialog.c:636
+#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
 #, fuzzy, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "Σφάλμα σάρωσης: αδύνατη η εύρεση του διαχωριστικού '%s' στο '%s'"
 
-#: ../src/scan_dialog.c:864
+#: ../src/scan_dialog.c:795
 #, fuzzy, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "Αδύνατη η μετατροπή του ονόματος αρχείου '%s' στην κωδικοποίηση ονόματος "
 "αρχείου του συστήματος"
 
-#: ../src/scan_dialog.c:890
+#: ../src/scan_dialog.c:821
 msgid "New filename successfully scanned"
 msgstr "Το νέο όνομα αρχείου σαρώθηκε με επιτυχία"
 
-#: ../src/scan_dialog.c:894
+#: ../src/scan_dialog.c:825
 #, fuzzy, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Το νέο όνομα αρχείου σαρώθηκε με επιτυχία: %s"
 
-#: ../src/scan_dialog.c:1263
+#: ../src/scan_dialog.c:1206
 #, fuzzy, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Σφάλμα κατά την επεξεργασία πεδίων: %s"
 
-#: ../src/scan_dialog.c:2139
+#: ../src/scan_dialog.c:2082
 msgid "New_mask"
 msgstr "Νέα_μάσκα"
 
-#: ../src/scan_dialog.c:2789
+#: ../src/scan_dialog.c:2559
+#, fuzzy
+msgid "Empty scanner mask."
+msgstr "Ακατάλληλη μάσκα σάρωσης"
+
+#: ../src/scan_dialog.c:2695
 msgid "All tags have been scanned"
 msgstr "Σαρώθηκαν όλες οι ετικέτες"
 

@@ -354,6 +354,17 @@
                                             </packing>
                                         </child>
                                         <child>
+                                            <object class="GtkLabel" id="ignored_label">
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">%i: ignored</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">2</property>
+                                                <property name="top-attach">5</property>
+                                            </packing>
+                                        </child>
+                                        <child>
                                             <object class="GtkLabel" id="url_label">
                                                 <property name="halign">start</property>
                                                 <property name="label" translatable="yes">%u: URL</property>
@@ -398,9 +409,9 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="ignored_label">
+                                            <object class="GtkLabel" id="group_label">
                                                 <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%i: ignored</property>
+                                                <property name="label" translatable="yes">{…|…}: alternatives group</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>

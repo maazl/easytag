@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 2.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-03 19:20+0200\n"
+"POT-Creation-Date: 2022-10-09 19:30+0200\n"
 "PO-Revision-Date: 2007-06-13 08:59+0300\n"
 "Last-Translator: Yuval Hager <yuval@avramzon.net>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -87,7 +87,7 @@ msgid "No files"
 msgstr "אין קובץ לעיבוד"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "אמן"
@@ -101,7 +101,7 @@ msgid "# Files"
 msgstr "# קבצים"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "אלבום"
@@ -112,19 +112,19 @@ msgid "Path"
 msgstr "מסלול :"
 
 #: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
-#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:58
+#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:59
 #: ../data/search_dialog.ui.h:12
 #, fuzzy
 msgid "Filename"
 msgstr "שם קובץ"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "כותרת"
 
-#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:64
+#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:65
 #: ../data/search_dialog.ui.h:15
 #, fuzzy
 msgid "Album Artist"
@@ -149,18 +149,18 @@ msgid "Track"
 msgstr "רצועה"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "ז'אנר"
 
 #: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
-#: ../data/scan_dialog.ui.h:70 ../data/search_dialog.ui.h:21
+#: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "הערה"
 
 #: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
-#: ../data/scan_dialog.ui.h:72 ../data/search_dialog.ui.h:22
+#: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "מלחין"
@@ -175,17 +175,17 @@ msgstr "אמן מקורי"
 msgid "Orig. year"
 msgstr "אמן מקורי:"
 
-#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:76
+#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:77
 #: ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "זכויות"
 
-#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:78
+#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:79
 #: ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "אתר"
 
-#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:80
+#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:81
 #: ../data/search_dialog.ui.h:27
 #, fuzzy
 msgid "Encoded By"
@@ -460,7 +460,7 @@ msgstr ""
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
 #: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:160
-#: ../data/scan_dialog.ui.h:117 ../data/search_dialog.ui.h:11
+#: ../data/scan_dialog.ui.h:118 ../data/search_dialog.ui.h:11
 #, fuzzy
 msgid "_Close"
 msgstr "סגור"
@@ -715,7 +715,7 @@ msgstr "סורק"
 msgid "Rename Files and Directories"
 msgstr "שנה שם קובץ ותיקייה"
 
-#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:113
+#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:114
 msgid "Process Fields"
 msgstr "עבד שדות"
 
@@ -1706,7 +1706,7 @@ msgstr ""
 msgid "Rename File and Directory Scanner"
 msgstr "שנה שם קובץ ותיקייה"
 
-#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:96
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:784
 msgid "Remove spaces"
 msgstr "מחק רווחים"
@@ -2042,39 +2042,43 @@ msgstr "%c : הערה"
 
 #: ../data/scan_dialog.ui.h:42
 #, fuzzy, no-c-format
+msgid "%i: ignored"
+msgstr "%i : ignored"
+
+#: ../data/scan_dialog.ui.h:44
+#, fuzzy, no-c-format
 msgid "%u: URL"
 msgstr "%u : אתר"
 
-#: ../data/scan_dialog.ui.h:44
+#: ../data/scan_dialog.ui.h:46
 #, fuzzy, no-c-format
 msgid "%p: composer"
 msgstr "%p : מלחין"
 
-#: ../data/scan_dialog.ui.h:46
+#: ../data/scan_dialog.ui.h:48
 #, fuzzy, no-c-format
 msgid "%r: copyright"
 msgstr "%r : זכויות"
 
-#: ../data/scan_dialog.ui.h:48
+#: ../data/scan_dialog.ui.h:50
 #, fuzzy, no-c-format
 msgid "%e: encoded by"
 msgstr "%e : מקודד ע\"י"
 
-#: ../data/scan_dialog.ui.h:50
-#, fuzzy, no-c-format
-msgid "%i: ignored"
-msgstr "%i : ignored"
-
 #: ../data/scan_dialog.ui.h:51
+msgid "{…|…}: alternatives group"
+msgstr ""
+
+#: ../data/scan_dialog.ui.h:52
 msgid "Fill Tag"
 msgstr "מלא תג"
 
-#: ../data/scan_dialog.ui.h:52
+#: ../data/scan_dialog.ui.h:53
 #, fuzzy
 msgid "Prefix mask with current directory"
 msgstr "צור רשימת השמעה בתיקיית האב"
 
-#: ../data/scan_dialog.ui.h:53
+#: ../data/scan_dialog.ui.h:54
 msgid ""
 "Select or type in a mask using codes (see Legend) to parse tag fields. Used "
 "to rename the file.\n"
@@ -2082,231 +2086,231 @@ msgid ""
 "absolute path, otherwise it is relative to the old path"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:55
+#: ../data/scan_dialog.ui.h:56
 #, fuzzy
 msgid "Rename file preview"
 msgstr "תצוגה מקדימה לשינוי השם..."
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:56 ../src/easytag.c:571
+#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:571
 #, fuzzy
 msgid "Rename File"
 msgstr "שנה שם קובץ..."
 
-#: ../data/scan_dialog.ui.h:57
+#: ../data/scan_dialog.ui.h:58
 #, fuzzy
 msgid "Tag Fields"
 msgstr "שדות"
 
-#: ../data/scan_dialog.ui.h:59
+#: ../data/scan_dialog.ui.h:60
 #, fuzzy
 msgid "Process filename"
 msgstr "עבד את שדה שם הקובץ"
 
-#: ../data/scan_dialog.ui.h:61
+#: ../data/scan_dialog.ui.h:62
 msgid "Process title field"
 msgstr "עבד את שדה הכותרת"
 
-#: ../data/scan_dialog.ui.h:63
+#: ../data/scan_dialog.ui.h:64
 #, fuzzy
 msgid "Process artist field"
 msgstr "עבד את שדה האומן"
 
-#: ../data/scan_dialog.ui.h:65
+#: ../data/scan_dialog.ui.h:66
 #, fuzzy
 msgid "Process album artist field"
 msgstr "עבד את שדה האומן"
 
-#: ../data/scan_dialog.ui.h:67
+#: ../data/scan_dialog.ui.h:68
 msgid "Process album field"
 msgstr "עבד את שדה האלבום"
 
-#: ../data/scan_dialog.ui.h:69
+#: ../data/scan_dialog.ui.h:70
 msgid "Process genre field"
 msgstr "עבד את שדה הז'אנר"
 
-#: ../data/scan_dialog.ui.h:71
+#: ../data/scan_dialog.ui.h:72
 msgid "Process comment field"
 msgstr "עבד את שדה ההערה"
 
-#: ../data/scan_dialog.ui.h:73
+#: ../data/scan_dialog.ui.h:74
 msgid "Process composer field"
 msgstr "עבד את שדה המלחין"
 
-#: ../data/scan_dialog.ui.h:74
+#: ../data/scan_dialog.ui.h:75
 msgid "Orig. Artist"
 msgstr "אמן מקורי"
 
-#: ../data/scan_dialog.ui.h:75
+#: ../data/scan_dialog.ui.h:76
 msgid "Process original artist field"
 msgstr "עבד את שדה האומן המקורי"
 
-#: ../data/scan_dialog.ui.h:77
+#: ../data/scan_dialog.ui.h:78
 msgid "Process copyright field"
 msgstr "עבד את שדה הזכויות"
 
-#: ../data/scan_dialog.ui.h:79
+#: ../data/scan_dialog.ui.h:80
 msgid "Process URL field"
 msgstr "עבד את שדה האתר"
 
-#: ../data/scan_dialog.ui.h:81
+#: ../data/scan_dialog.ui.h:82
 #, fuzzy
 msgid "Process encoded-by field"
 msgstr "עבד את שדה המקודד"
 
-#: ../data/scan_dialog.ui.h:82
+#: ../data/scan_dialog.ui.h:83
 msgid "Capitalization"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:83
+#: ../data/scan_dialog.ui.h:84
 msgid "Capitalize all"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:84
+#: ../data/scan_dialog.ui.h:85
 msgid ""
 "Whether to upper-case all characters of the tag when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:85
+#: ../data/scan_dialog.ui.h:86
 #, fuzzy
 msgid "Lowercase all"
 msgstr "אותיות קטנות"
 
-#: ../data/scan_dialog.ui.h:86
+#: ../data/scan_dialog.ui.h:87
 msgid ""
 "Whether to lower-case all characters of the tag when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:87
+#: ../data/scan_dialog.ui.h:88
 msgid "Capitalize first letter"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:88
+#: ../data/scan_dialog.ui.h:89
 msgid ""
 "Whether to upper-case the first letter of the tag when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:89
+#: ../data/scan_dialog.ui.h:90
 #, fuzzy
 msgid "Capitalize the first letter of each word"
 msgstr "אות ראשונה גדולה בכל מילה"
 
-#: ../data/scan_dialog.ui.h:90
+#: ../data/scan_dialog.ui.h:91
 msgid ""
 "Whether to upper-case the first letter of each word when processing tag "
 "fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:91
+#: ../data/scan_dialog.ui.h:92
 msgid "Detect Roman numerals"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:92 ../data/org.gnome.EasyTAG.gschema.xml.h:132
+#: ../data/scan_dialog.ui.h:93 ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to detect Roman numerals when applying upper-case conversions while "
 "processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:93
+#: ../data/scan_dialog.ui.h:94
 msgid "Do not change capitalization"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:94
+#: ../data/scan_dialog.ui.h:95
 msgid "Spaces Conversions"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:96 ../data/org.gnome.EasyTAG.gschema.xml.h:134
+#: ../data/scan_dialog.ui.h:97 ../data/org.gnome.EasyTAG.gschema.xml.h:134
 msgid "Whether to remove all spaces when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:97
+#: ../data/scan_dialog.ui.h:98
 #, fuzzy
 msgid "Insert a space before uppercase letters"
 msgstr "הכנס רווח לפני אות גדולה"
 
-#: ../data/scan_dialog.ui.h:98 ../data/org.gnome.EasyTAG.gschema.xml.h:136
+#: ../data/scan_dialog.ui.h:99 ../data/org.gnome.EasyTAG.gschema.xml.h:136
 msgid ""
 "Whether to insert spaces before capital letters when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:99
+#: ../data/scan_dialog.ui.h:100
 #, fuzzy
 msgid "Remove duplicate spaces and underscores"
 msgstr "מחק רווחים או קוים תחתונים כפולים"
 
-#: ../data/scan_dialog.ui.h:100 ../data/org.gnome.EasyTAG.gschema.xml.h:138
+#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:138
 #, fuzzy
 msgid ""
 "Whether to remove duplicate spaces and underscores when processing tag fields"
 msgstr "מחק רווחים או קוים תחתונים כפולים"
 
-#: ../data/scan_dialog.ui.h:101
+#: ../data/scan_dialog.ui.h:102
 msgid "Do not change word separators"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:102
+#: ../data/scan_dialog.ui.h:103
 #, fuzzy
 msgid "Character Conversions"
 msgstr "סורק למילוי תגים - המרת תוים"
 
-#: ../data/scan_dialog.ui.h:104 ../src/tag_area.c:740
+#: ../data/scan_dialog.ui.h:105 ../src/tag_area.c:740
 #, fuzzy, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "המר '_' ו '%20' לרווחים"
 
-#: ../data/scan_dialog.ui.h:106
+#: ../data/scan_dialog.ui.h:107
 #, no-c-format
 msgid ""
 "The underscore character or the string ‘%20’ is replaced by one space. "
 "Example, before: ‘Text%20In%20An_Entry‘, after: ‘Text In An Entry’"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:107 ../src/tag_area.c:746
+#: ../data/scan_dialog.ui.h:108 ../src/tag_area.c:746
 #, fuzzy
 msgid "Convert spaces to underscores"
 msgstr "המר רווחים ' ' לקו תחתי '_'"
 
-#: ../data/scan_dialog.ui.h:108
+#: ../data/scan_dialog.ui.h:109
 msgid ""
 "The space character is replaced by one underscore character. Example, "
 "before: ‘Text In An Entry’, after: ‘Text_In_An_Entry’"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:109
+#: ../data/scan_dialog.ui.h:110
 msgid "Convert:"
 msgstr "המר:"
 
-#: ../data/scan_dialog.ui.h:110
+#: ../data/scan_dialog.ui.h:111
 msgid "Replace a string by another one. Note that the search is case sensitive"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:111
+#: ../data/scan_dialog.ui.h:112
 msgid "to: "
 msgstr "אל:"
 
-#: ../data/scan_dialog.ui.h:112
+#: ../data/scan_dialog.ui.h:113
 msgid "Do not convert"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:114
+#: ../data/scan_dialog.ui.h:115
 msgid "Show / Hide Masks Editor"
 msgstr "הצג / החבא את עורך המסכות"
 
-#: ../data/scan_dialog.ui.h:115
+#: ../data/scan_dialog.ui.h:116
 msgid "Show / Hide Legend"
 msgstr "הצג / החבא מקרא"
 
-#: ../data/scan_dialog.ui.h:116
+#: ../data/scan_dialog.ui.h:117
 #, fuzzy
 msgid "Scanner Preferences"
 msgstr "העדפות..."
 
-#: ../data/scan_dialog.ui.h:118
+#: ../data/scan_dialog.ui.h:119
 #, fuzzy
 msgid "Scan Files"
 msgstr "סרוק קבצים"
 
-#: ../data/scan_dialog.ui.h:119
+#: ../data/scan_dialog.ui.h:120
 #, fuzzy
 msgid "Scan selected files"
 msgstr "כלול רק את הקבצים הנבחרים"
@@ -3361,7 +3365,7 @@ msgstr "לא ניתן להמיר '%s' לקידוד שם קובץ. אנא השת�
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr ""
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:866
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
 msgid "Filename translation"
 msgstr "תרגום שם קובץ"
 
@@ -4133,6 +4137,23 @@ msgstr "הזז מסכה זו למעלה"
 msgid "Move this line down"
 msgstr "הזז מסכה זו למעלה"
 
+#: ../src/mask.cc:191
+msgid "Incomplete placeholder at end of mask."
+msgstr ""
+
+#: ../src/mask.cc:193
+#, c-format
+msgid "Invalid placeholder '%%%c'."
+msgstr ""
+
+#: ../src/mask.cc:197
+msgid "Opening brace '{' without closing brace '}'."
+msgstr ""
+
+#: ../src/mask.cc:199
+msgid "Closing brace '}' without opening brace '{'."
+msgstr ""
+
 #: ../src/misc.c:176
 #, fuzzy
 msgid "You must type a program name"
@@ -4273,8 +4294,7 @@ msgstr "קובץ התמונה לא הועלה..."
 msgid "Wrote playlist file ‘%s’"
 msgstr "רשימת ההשמעה נכתבה '%s'"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2659
-#: ../src/scan_dialog.c:2722
+#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
 #, fuzzy
 msgid "Invalid scanner mask"
 msgstr "מסכת סורק לא תקפה"
@@ -4299,56 +4319,61 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "גרסה לא תקפה של התג"
 
-#: ../src/scan_dialog.c:452
+#: ../src/scan_dialog.c:383
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr ""
 
-#: ../src/scan_dialog.c:467
+#: ../src/scan_dialog.c:398
 #, fuzzy
 msgid "Tag successfully scanned"
 msgstr "תגים נסרקו בהצלחה..."
 
-#: ../src/scan_dialog.c:470
+#: ../src/scan_dialog.c:401
 #, fuzzy, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "תגים נסרקו בהצלחה...(%s)"
 
-#: ../src/scan_dialog.c:513
+#: ../src/scan_dialog.c:444
 #, fuzzy, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "סורק תגים: מוזר..., הסיומת '%s' לא נמצאה בקובץ '%s'!"
 
-#: ../src/scan_dialog.c:605 ../src/scan_dialog.c:636
+#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
 #, fuzzy, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "שגיאת סריקה: לא ניתן למצוא את המפריד '%s' בתוך '%s'"
 
-#: ../src/scan_dialog.c:864
+#: ../src/scan_dialog.c:795
 #, fuzzy, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr "לא ניתן להמיר '%s' לקידוד שם קובץ. אנא השתמש בשם אחר."
 
-#: ../src/scan_dialog.c:890
+#: ../src/scan_dialog.c:821
 #, fuzzy
 msgid "New filename successfully scanned"
 msgstr "שם קובץ חדש נסרק בהצלחה..."
 
-#: ../src/scan_dialog.c:894
+#: ../src/scan_dialog.c:825
 #, fuzzy, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "שם קובץ חדש נסרק בהצלחה...(%s)"
 
-#: ../src/scan_dialog.c:1263
+#: ../src/scan_dialog.c:1206
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr ""
 
-#: ../src/scan_dialog.c:2139
+#: ../src/scan_dialog.c:2082
 msgid "New_mask"
 msgstr ""
 
-#: ../src/scan_dialog.c:2789
+#: ../src/scan_dialog.c:2559
+#, fuzzy
+msgid "Empty scanner mask."
+msgstr "מסכת סורק לא תקפה"
+
+#: ../src/scan_dialog.c:2695
 msgid "All tags have been scanned"
 msgstr "כל התגים נסרקו"
 

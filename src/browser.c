@@ -4088,7 +4088,7 @@ et_browser_show_rename_directory_dialog (EtBrowser *self)
     /* Mask status icon. Signal connection to check if mask is correct to the
      * mask entry. */
     g_signal_connect (priv->rename_directory_mask_entry, "changed",
-                      G_CALLBACK (entry_check_rename_file_mask), NULL);
+                      G_CALLBACK (entry_check_mask), NULL);
 
     /* Preview label. */
     priv->rename_directory_preview_label = GTK_WIDGET (gtk_builder_get_object (builder,
