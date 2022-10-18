@@ -22,6 +22,11 @@
 #include "misc.h"
 
 #include <string.h>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+static gchar empty_singleton[] = "";
 
 /*
  * Create a new File_Name structure
@@ -36,8 +41,9 @@ et_file_name_new (void)
     file_name->saved = FALSE;
     file_name->value = NULL;
     file_name->value_utf8 = NULL;
-    file_name->rel_value = NULL;
     file_name->rel_value_utf8 = NULL;
+    file_name->path_value_utf8 = NULL;
+    file_name->file_value_utf8 = NULL;
     file_name->path_value_ck = NULL;
     file_name->file_value_ck = NULL;
 
@@ -50,7 +56,11 @@ et_file_name_free_value(File_Name *file_name)
     g_free (file_name->value);
     if (file_name->value_utf8 != file_name->value)
         g_free (file_name->value_utf8);
-    g_free (file_name->path_value_ck);
+    if (file_name->path_value_utf8 != empty_singleton)
+        g_free (file_name->path_value_utf8);
+    if (file_name->path_value_ck != empty_singleton)
+        g_free (file_name->path_value_ck);
+    g_free (file_name->file_value_ck);
 }
 
 /*
@@ -64,19 +74,6 @@ et_file_name_free (File_Name *file_name)
     g_slice_free (File_Name, file_name);
 }
 
-static const gchar*
-et_file_name_skip_root(const gchar* value, const gchar* root, const gchar* root_rel)
-{	if (!root || !*root)
-		return value;
-	size_t len = root_rel - root;
-	if (len && strncmp(value, root, len) == 0)
-	{
-		value += len;
-		value += G_IS_DIR_SEPARATOR(*value);
-	}
-	return value;
-}
-
 /*
  * Fill content of a FileName item according to the filename passed in argument (UTF-8 filename or not)
  * Calculate also the collate key.
@@ -88,17 +85,21 @@ ET_Set_Filename_File_Name_Item (File_Name *FileName,
                                 const gchar *filename_utf8,
                                 const gchar *filename)
 {
-    const gchar *root_value, *root_value_utf8, *root_value_ck;
+    string root_value_utf8;
 
     g_return_if_fail (FileName != NULL);
-    et_file_name_free_value(FileName);
 
-    /* be aware of aliasing root == FileName */
+    // be aware of aliasing root == FileName
     if (root)
     {
-        root_value = root->value;
-        root_value_utf8 = root->value_utf8;
+        size_t len = root->rel_value_utf8 - root->value_utf8;
+        if (--len > 0)
+            root_value_utf8 = string(root->value_utf8, len);
+        else
+            root_value_utf8 = root->value_utf8;
     }
+
+    et_file_name_free_value(FileName);
 
     if (filename_utf8 && filename)
     {
@@ -131,40 +132,27 @@ ET_Set_Filename_File_Name_Item (File_Name *FileName,
         }
     }
 
-    if (root)
-    {
-        FileName->rel_value = et_file_name_skip_root(FileName->value, root_value, root->rel_value);
-        FileName->rel_value_utf8 = et_file_name_skip_root(FileName->value_utf8, root_value_utf8, root->rel_value_utf8);
-    }
-    else
-    {
-        FileName->rel_value = FileName->value + strlen(FileName->value);
-        FileName->rel_value_utf8 = FileName->value_utf8 + strlen(FileName->value_utf8);
-    }
+    FileName->rel_value_utf8 = FileName->value_utf8;
+    if (strncmp(FileName->value_utf8, root_value_utf8.c_str(), root_value_utf8.length()) == 0
+        && FileName->rel_value_utf8[root_value_utf8.length()] == G_DIR_SEPARATOR)
+        FileName->rel_value_utf8 += root_value_utf8.length() + 1;
 
-    gchar* mod = g_strdup(FileName->rel_value_utf8);
-    gchar* file_ck = NULL;
-    // Replace dir separator by dot for more reasonable sort order
-    gchar* cp = mod;
-    for (;;)
+    gchar* separator = strrchr(FileName->rel_value_utf8, G_DIR_SEPARATOR);
+    if (separator)
     {
-        gchar* cp2 = strchr(cp, G_DIR_SEPARATOR);
-        if (!cp2)
-        {
-            file_ck = g_utf8_collate_key_for_filename(cp, -1);
-            break;
-        }
-        *cp2 = '.';
-        cp = cp2 + 1;
-    }
-    FileName->file_value_ck = FileName->path_value_ck = g_utf8_collate_key_for_filename(mod, -1);
-    if (file_ck)
+        FileName->file_value_utf8 = separator + 1;
+        string path(FileName->rel_value_utf8, separator - FileName->rel_value_utf8);
+        FileName->path_value_utf8 = g_strdup(path.c_str());
+        // Replace dir separator by dot for more reasonable sort order
+        replace(path.begin(), path.end(), G_DIR_SEPARATOR, '.');
+        FileName->path_value_ck = g_utf8_collate_key_for_filename(path.c_str(), -1);
+    } else
     {
-        FileName->file_value_ck += strlen(FileName->path_value_ck) - strlen(file_ck);
-        ((gchar*)FileName->file_value_ck)[-1] = '\0'; // Terminate path before filename
+        FileName->file_value_utf8 = FileName->rel_value_utf8;
+        FileName->path_value_utf8 = empty_singleton;
+        FileName->path_value_ck = empty_singleton;
     }
-    g_free(file_ck);
-    g_free(mod);
+    FileName->file_value_ck = g_utf8_collate_key_for_filename(FileName->file_value_utf8, -1);
 }
 
 gboolean
@@ -226,5 +214,6 @@ et_file_name_detect_difference (const File_Name *a,
     /* Compare collate keys (with FileName->value converted to UTF-8 as it
      * contains raw data). */
     /* Filename changed ? (we check path + file). */
-    return strcmp (a->path_value_ck, b->path_value_ck) != 0;
+    return strcmp (a->file_value_ck, b->file_value_ck) != 0
+        || strcmp (a->path_value_ck, b->path_value_ck) != 0;
 }

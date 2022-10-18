@@ -27,6 +27,8 @@
 
 #include "et_core.h"
 
+G_BEGIN_DECLS
+
 /* Variable to force to quit recursive functions (reading dirs) or stop saving files */
 extern gboolean Main_Stop_Button_Pressed;
 
@@ -50,5 +52,7 @@ gint Save_All_Files_With_Answer         (gboolean force_saving_files);
 void Action_Main_Stop_Button_Pressed    (void);
 
 gboolean Read_Directory (const gchar *path);
+
+G_END_DECLS
 
 #endif /* __EASYTAG_H__ */

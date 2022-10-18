@@ -48,6 +48,9 @@
 
 #include "win32/win32dep.h"
 
+#include <functional>
+using namespace std;
+
 typedef struct
 {
     GtkWidget *files_label;
@@ -59,7 +62,7 @@ typedef struct
     GtkWidget *directory_album_artist_notebook;
 
     GtkListStore *file_model;
-    GtkWidget *file_view;
+    GtkTreeView *file_view;
     GtkWidget *file_menu;
     guint file_selected_handler;
     EtSortMode file_sort_mode;
@@ -97,7 +100,11 @@ typedef struct
     File_Name *current_path_name;
 } EtBrowserPrivate;
 
+// learn correct return type for et_browser_get_instance_private
+#define et_browser_get_instance_private et_browser_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtBrowser, et_browser, GTK_TYPE_BIN)
+#undef et_browser_get_instance_private
+#define et_browser_get_instance_private(x) (EtBrowserPrivate*)et_browser_get_instance_private_(x)
 
 /*
  * EtPathState:
@@ -115,33 +122,7 @@ typedef enum
 
 enum
 {
-    LIST_FILE_PATH,
-    LIST_FILE_NAME,
-    /* Tag fields. */
-    LIST_FILE_TITLE,
-    LIST_FILE_ARTIST,
-    LIST_FILE_ALBUM_ARTIST,
-    LIST_FILE_ALBUM,
-    LIST_FILE_YEAR,
-    LIST_FILE_RELEASE_YEAR,
-    LIST_FILE_DISCNO,
-    LIST_FILE_TRACK,
-    LIST_FILE_GENRE,
-    LIST_FILE_COMMENT,
-    LIST_FILE_COMPOSER,
-    LIST_FILE_ORIG_ARTIST,
-    LIST_FILE_ORIG_YEAR,
-    LIST_FILE_COPYRIGHT,
-    LIST_FILE_URL,
-    LIST_FILE_ENCODED_BY,
-    /* End of columns with associated UI columns. */
-    LIST_FILE_POINTER,
-    LIST_FILE_KEY,
-    LIST_FILE_OTHERDIR, /* To change color for alternate directories. */
-    LIST_FONT_WEIGHT,
-    LIST_ROW_BACKGROUND,
-    LIST_ROW_FOREGROUND,
-    LIST_COLUMN_COUNT
+    LIST_FILE_POINTER
 };
 
 enum
@@ -188,7 +169,6 @@ static void Browser_Tree_Handle_Rename (EtBrowser *self,
                                         const gchar *old_path,
                                         const gchar *new_path);
 
-static void Browser_List_Set_Row_Appearance (EtBrowser *self, GtkTreeIter *iter);
 static gint Browser_List_Sort_Func (GtkTreeModel *model, GtkTreeIter *a,
                                     GtkTreeIter *b, gpointer data);
 static void Browser_List_Select_File_By_Iter (EtBrowser *self,
@@ -241,6 +221,7 @@ static void et_browser_on_column_clicked (GtkTreeViewColumn *column,
 /*************
  * Functions *
  *************/
+
 /*
  * Load home directory
  */
@@ -393,7 +374,7 @@ et_browser_run_player_for_artist_list (EtBrowser *self)
 
     for (; l != NULL; l = g_list_next (l))
     {
-        for (m = l->data; m != NULL; m = g_list_next (m))
+        for (m = (GList*)l->data; m != NULL; m = g_list_next (m))
         {
             ET_File *etfile = (ET_File *)m->data;
             const gchar *path = ((File_Name *)etfile->FileNameCur->data)->value;
@@ -425,12 +406,12 @@ et_browser_run_player_for_selection (EtBrowser *self)
 
     priv = et_browser_get_instance_private (self);
 
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->file_view));
+    selection = gtk_tree_view_get_selection (priv->file_view);
     selfilelist = gtk_tree_selection_get_selected_rows(selection, NULL);
 
     for (l = selfilelist; l != NULL; l = g_list_next (l))
     {
-        ET_File *etfile = et_browser_get_et_file_from_path (self, l->data);
+        ET_File *etfile = et_browser_get_et_file_from_path (self, (GtkTreePath*)l->data);
         const gchar *path = ((File_Name *)etfile->FileNameCur->data)->value;
         file_list = g_list_prepend (file_list, g_file_new_for_path (path));
     }
@@ -539,21 +520,6 @@ et_browser_get_current_path_name (EtBrowser *self)
 }
 
 /*
- * Modify path in place and strip the base component if it matches.
- */
-static void et_browser_make_path_relative(gchar* path, const gchar* base)
-{
-    size_t baselen = strlen(base);
-    if (memcmp(path, base, baselen * sizeof(gchar)) == 0)
-    {
-        const gchar* start = path + baselen;
-        if (G_IS_DIR_SEPARATOR(*start))
-            ++start;
-        memmove(path, start, (strlen(start) + 1) * sizeof(gchar));
-    }
-}
-
-/*
  * et_browser_get_selected_files:
  * @self: an #EtBrowser from which to get a list of selected files
  *
@@ -574,7 +540,7 @@ et_browser_get_selected_files (EtBrowser *self)
     g_return_val_if_fail (ET_BROWSER (self), NULL);
 
     priv = et_browser_get_instance_private (self);
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->file_view));
+    selection = gtk_tree_view_get_selection (priv->file_view);
     selfilelist = gtk_tree_selection_get_selected_rows (selection, NULL);
 
     for (l = selfilelist; l != NULL; l = g_list_next (l))
@@ -600,7 +566,7 @@ et_browser_get_selection (EtBrowser *self)
 
     priv = et_browser_get_instance_private (self);
 
-    return gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->file_view));
+    return gtk_tree_view_get_selection (priv->file_view);
 }
 
 /*
@@ -884,8 +850,7 @@ et_browser_set_row_visible (EtBrowser *self, GtkTreeIter *rowIter)
 
     rowPath = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->file_model),
                                        rowIter);
-    gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->file_view), rowPath,
-                                  NULL, FALSE, 0, 0);
+    gtk_tree_view_scroll_to_cell (priv->file_view, rowPath, NULL, FALSE, 0, 0);
     gtk_tree_path_free (rowPath);
 }
 
@@ -1284,8 +1249,7 @@ Browser_List_Row_Selected (EtBrowser *self, GtkTreeSelection *selection)
         return;
     }
 
-    gtk_tree_view_get_cursor (GTK_TREE_VIEW (priv->file_view),
-                              &cursor_path, NULL);
+    gtk_tree_view_get_cursor (priv->file_view, &cursor_path, NULL);
 
     if (!cursor_path)
     {
@@ -1326,12 +1290,12 @@ et_browser_clear_file_model (EtBrowser *self)
 
     priv = et_browser_get_instance_private (self);
 
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->file_view));
+    selection = gtk_tree_view_get_selection (priv->file_view);
 
     g_signal_handler_block (selection, priv->file_selected_handler);
 
     gtk_list_store_clear (priv->file_model);
-    gtk_tree_view_columns_autosize (GTK_TREE_VIEW (priv->file_view));
+    gtk_tree_view_columns_autosize (priv->file_view);
 
     g_signal_handler_unblock (selection, priv->file_selected_handler);
 }
@@ -1350,81 +1314,35 @@ et_browser_load_file_list (EtBrowser *self,
     GList *l;
     gboolean activate_bg_color = 0;
     GtkTreeIter rowIter;
-    gchar* previous_dirname_utf8 = NULL;
-    const gchar* browser_path;
+    const gchar* previous_dirname_utf8 = NULL;
 
     g_return_if_fail (ET_BROWSER (self));
 
     priv = et_browser_get_instance_private (self);
-    browser_path = g_file_peek_path(priv->current_path);
 
     et_browser_clear_file_model (self);
 
     for (l = g_list_first (etfilelist); l != NULL; l = g_list_next (l))
     {
-        guint fileKey = ((ET_File *)l->data)->ETFileKey;
-        const gchar *current_filename_utf8 = ((File_Name *)((ET_File *)l->data)->FileNameNew->data)->value_utf8;
-        gchar *basename_utf8 = g_path_get_basename (current_filename_utf8);
-        gchar *dirname_utf8 = g_path_get_dirname(current_filename_utf8);
-        File_Tag *FileTag = ((File_Tag *)((ET_File *)l->data)->FileTag->data);
-        gchar *track;
-        gchar *disc;
-
-        et_browser_make_path_relative(dirname_utf8, browser_path);
+        ET_File* file = (ET_File*)l->data;
+        File_Name* filename = file->FileName();
 
         // Change background color when changing directory (the first row must not be changed)
-        if (previous_dirname_utf8 && g_utf8_collate(previous_dirname_utf8, dirname_utf8) != 0)
-        {
+        if (previous_dirname_utf8 && g_utf8_collate(previous_dirname_utf8, filename->path_value_utf8) != 0)
             activate_bg_color = !activate_bg_color;
-            g_free(previous_dirname_utf8);
-        }
+        file->activate_bg_color = activate_bg_color;
 
         /* File list displays the current filename (name on disc) and tag
          * fields. */
-        track = g_strconcat(FileTag->track ? FileTag->track : "",FileTag->track_total ? "/" : NULL,FileTag->track_total,NULL);
-        disc  = g_strconcat (FileTag->disc_number ? FileTag->disc_number : "",
-                             FileTag->disc_total ? "/"
-                                                 : NULL, FileTag->disc_total,
-                             NULL);
-
         gtk_list_store_insert_with_values (priv->file_model, &rowIter, G_MAXINT,
-                                           LIST_FILE_PATH, dirname_utf8,
-                                           LIST_FILE_NAME, basename_utf8,
-                                           LIST_FILE_POINTER, l->data,
-                                           LIST_FILE_KEY, fileKey,
-                                           LIST_FILE_OTHERDIR, activate_bg_color,
-                                           LIST_FILE_TITLE, FileTag->title,
-                                           LIST_FILE_ARTIST, FileTag->artist,
-                                           LIST_FILE_ALBUM_ARTIST, FileTag->album_artist,
-                                           LIST_FILE_ALBUM, FileTag->album,
-                                           LIST_FILE_YEAR, FileTag->year,
-                                           LIST_FILE_RELEASE_YEAR, FileTag->release_year,
-                                           LIST_FILE_DISCNO, disc,
-                                           LIST_FILE_TRACK, track,
-                                           LIST_FILE_GENRE, FileTag->genre,
-                                           LIST_FILE_COMMENT, FileTag->comment,
-                                           LIST_FILE_COMPOSER, FileTag->composer,
-                                           LIST_FILE_ORIG_ARTIST, FileTag->orig_artist,
-                                           LIST_FILE_ORIG_YEAR, FileTag->orig_year,
-                                           LIST_FILE_COPYRIGHT, FileTag->copyright,
-                                           LIST_FILE_URL, FileTag->url,
-                                           LIST_FILE_ENCODED_BY, FileTag->encoded_by, -1);
-        previous_dirname_utf8 = dirname_utf8;
-        g_free(basename_utf8);
-        g_free(track);
-        g_free (disc);
+                                           LIST_FILE_POINTER, l->data, -1);
+        previous_dirname_utf8 = filename->path_value_utf8;
 
         if (etfile_to_select == l->data)
         {
             Browser_List_Select_File_By_Iter (self, &rowIter, TRUE);
-            //ET_Display_File_Data_To_UI (l->data);
         }
-
-        /* Set appearance of the row. */
-        Browser_List_Set_Row_Appearance (self, &rowIter);
     }
-
-    g_free(previous_dirname_utf8);
 }
 
 
@@ -1441,82 +1359,17 @@ et_browser_refresh_list (EtBrowser *self)
     GtkTreePath *currentPath = NULL;
     GtkTreeIter iter;
     gint row;
-    gboolean valid;
     GVariant *variant;
-    const gchar* browser_path;
 
     g_return_if_fail (ET_BROWSER (self));
 
     priv = et_browser_get_instance_private (self);
-    browser_path = g_file_peek_path(priv->current_path);
 
     if (!ETCore->ETFileDisplayedList || !priv->file_view
     ||  gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_model), NULL) == 0)
     {
         return;
     }
-
-    // Browse the full list for changes
-    //gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->file_model), &iter);
-    //    g_print("above worked %d rows\n", gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_model), NULL));
-
-    currentPath = gtk_tree_path_new_first();
-
-    valid = gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_model), &iter, currentPath);
-    while (valid)
-    {
-        const ET_File *ETFile;
-        const File_Tag *FileTag;
-        const File_Name *FileName;
-        gchar *current_basename_utf8;
-        gchar *current_dirname_utf8;
-        gchar *track;
-        gchar *disc;
-        // Refresh filename and other fields
-        gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter,
-                           LIST_FILE_POINTER, &ETFile, -1);
-
-        FileName = (File_Name *)ETFile->FileNameNew->data;
-        FileTag  = (File_Tag *)ETFile->FileTag->data;
-
-        current_basename_utf8 = g_path_get_basename(FileName->value_utf8);
-        current_dirname_utf8 = g_path_get_dirname(FileName->value_utf8);
-        et_browser_make_path_relative(current_dirname_utf8, browser_path);
-        track = g_strconcat(FileTag->track ? FileTag->track : "",FileTag->track_total ? "/" : NULL,FileTag->track_total,NULL);
-        disc  = g_strconcat (FileTag->disc_number ? FileTag->disc_number : "",
-                             FileTag->disc_total ? "/" : NULL,
-                             FileTag->disc_total, NULL);
-
-        gtk_list_store_set(priv->file_model, &iter,
-                           LIST_FILE_PATH,          current_dirname_utf8,
-                           LIST_FILE_NAME,          current_basename_utf8,
-                           LIST_FILE_TITLE,         FileTag->title,
-                           LIST_FILE_ARTIST,        FileTag->artist,
-                           LIST_FILE_ALBUM_ARTIST,  FileTag->album_artist,
-                           LIST_FILE_ALBUM,         FileTag->album,
-                           LIST_FILE_YEAR,          FileTag->year,
-                           LIST_FILE_RELEASE_YEAR,  FileTag->release_year,
-                           LIST_FILE_DISCNO,        disc,
-                           LIST_FILE_TRACK,         track,
-                           LIST_FILE_GENRE,         FileTag->genre,
-                           LIST_FILE_COMMENT,       FileTag->comment,
-                           LIST_FILE_COMPOSER,      FileTag->composer,
-                           LIST_FILE_ORIG_ARTIST,   FileTag->orig_artist,
-                           LIST_FILE_ORIG_YEAR,     FileTag->orig_year,
-                           LIST_FILE_COPYRIGHT,     FileTag->copyright,
-                           LIST_FILE_URL,           FileTag->url,
-                           LIST_FILE_ENCODED_BY,    FileTag->encoded_by,
-                           -1);
-        g_free(current_dirname_utf8);
-        g_free(current_basename_utf8);
-        g_free(track);
-        g_free (disc);
-
-        Browser_List_Set_Row_Appearance (self, &iter);
-
-        valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_model), &iter);
-    }
-    gtk_tree_path_free(currentPath);
 
     variant = g_action_group_get_action_state (G_ACTION_GROUP (MainWindow),
                                                "file-artist-view");
@@ -1570,13 +1423,7 @@ et_browser_refresh_file_in_list (EtBrowser *self,
     GtkTreeSelection *selection;
     GtkTreeIter selectedIter;
     const ET_File *etfile;
-    const File_Tag *FileTag;
-    const File_Name *FileName;
     gboolean row_found = FALSE;
-    gchar *current_basename_utf8;
-    gchar *current_dirname_utf8;
-    gchar *track;
-    gchar *disc;
     gboolean valid;
     gchar *artist, *album;
 
@@ -1609,7 +1456,7 @@ et_browser_refresh_file_in_list (EtBrowser *self,
     // 2/3. Try with the selected file in list (works only if we select the same file)
     if (row_found == FALSE)
     {
-        selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->file_view));
+        selection = gtk_tree_view_get_selection (priv->file_view);
         selectedRow = gtk_tree_selection_get_selected_rows(selection, NULL);
         if (selectedRow && selectedRow->data != NULL)
         {
@@ -1653,44 +1500,9 @@ et_browser_refresh_file_in_list (EtBrowser *self,
         return;
 
     // Displayed the filename and refresh other fields
-    FileName = (File_Name *)etfile->FileNameNew->data;
-    FileTag  = (File_Tag *)etfile->FileTag->data;
-
-    current_basename_utf8 = g_path_get_basename(FileName->value_utf8);
-    current_dirname_utf8 = g_path_get_dirname(FileName->value_utf8);
-    et_browser_make_path_relative(current_dirname_utf8, g_file_peek_path(priv->current_path));
-    track = g_strconcat(FileTag->track ? FileTag->track : "",FileTag->track_total ? "/" : NULL,FileTag->track_total,NULL);
-    disc  = g_strconcat (FileTag->disc_number ? FileTag->disc_number : "",
-                         FileTag->disc_total ? "/" : NULL, FileTag->disc_total,
-                         NULL);
-
-    gtk_list_store_set(priv->file_model, &selectedIter,
-                       LIST_FILE_PATH,          current_dirname_utf8,
-                       LIST_FILE_NAME,          current_basename_utf8,
-                       LIST_FILE_TITLE,         FileTag->title,
-                       LIST_FILE_ARTIST,        FileTag->artist,
-                       LIST_FILE_ALBUM_ARTIST,  FileTag->album_artist,
-                       LIST_FILE_ALBUM,         FileTag->album,
-                       LIST_FILE_YEAR,          FileTag->year,
-                       LIST_FILE_RELEASE_YEAR,  FileTag->release_year,
-                       LIST_FILE_DISCNO,        disc,
-                       LIST_FILE_TRACK,         track,
-                       LIST_FILE_GENRE,         FileTag->genre,
-                       LIST_FILE_COMMENT,       FileTag->comment,
-                       LIST_FILE_COMPOSER,      FileTag->composer,
-                       LIST_FILE_ORIG_ARTIST,   FileTag->orig_artist,
-                       LIST_FILE_ORIG_YEAR,     FileTag->orig_year,
-                       LIST_FILE_COPYRIGHT,     FileTag->copyright,
-                       LIST_FILE_URL,           FileTag->url,
-                       LIST_FILE_ENCODED_BY,    FileTag->encoded_by,
-                       -1);
-    g_free(current_dirname_utf8);
-    g_free(current_basename_utf8);
-    g_free(track);
-    g_free (disc);
-
-    /* Change appearance (line to red) if filename changed. */
-    Browser_List_Set_Row_Appearance (self, &selectedIter);
+    GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->file_model), &selectedIter);
+    gtk_tree_model_row_changed(GTK_TREE_MODEL(priv->file_model), path, &selectedIter);
+    gtk_tree_path_free(path);
 
     variant = g_action_group_get_action_state (G_ACTION_GROUP (MainWindow),
                                                "file-artist-view");
@@ -1759,91 +1571,6 @@ et_browser_refresh_file_in_list (EtBrowser *self,
     }
 
     g_variant_unref (variant);
-}
-
-
-/*
- * Set the appearance of the row
- *  - change background according LIST_FILE_OTHERDIR
- *  - change foreground according file status (saved or not)
- */
-static void
-Browser_List_Set_Row_Appearance (EtBrowser *self, GtkTreeIter *iter)
-{
-    EtBrowserPrivate *priv;
-    ET_File *rowETFile = NULL;
-    gboolean otherdir = FALSE;
-    const GdkRGBA LIGHT_BLUE = { 0.866, 0.933, 1.0, 1.0 };
-    const GdkRGBA *background;
-    //gchar *temp = NULL;
-
-    priv = et_browser_get_instance_private (self);
-
-    if (iter == NULL)
-        return;
-
-    // Get the ETFile reference
-    gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), iter,
-                       LIST_FILE_POINTER,   &rowETFile,
-                       LIST_FILE_OTHERDIR,  &otherdir,
-                       //LIST_FILE_NAME,      &temp,
-                       -1);
-
-    // Must change background color?
-    if (otherdir)
-        background = &LIGHT_BLUE;
-    else
-        background = NULL;
-
-    // Set text to bold/red if 'filename' or 'tag' changed
-    if (!et_file_check_saved (rowETFile))
-    {
-        if (g_settings_get_boolean (MainSettings, "file-changed-bold"))
-        {
-            gtk_list_store_set(priv->file_model, iter,
-                               LIST_FONT_WEIGHT,    PANGO_WEIGHT_BOLD,
-                               LIST_ROW_BACKGROUND, background,
-                               LIST_ROW_FOREGROUND, NULL, -1);
-        } else
-        {
-            gtk_list_store_set(priv->file_model, iter,
-                               LIST_FONT_WEIGHT,    PANGO_WEIGHT_NORMAL,
-                               LIST_ROW_BACKGROUND, background,
-                               LIST_ROW_FOREGROUND, &RED, -1);
-        }
-    } else
-    {
-        gtk_list_store_set(priv->file_model, iter,
-                           LIST_FONT_WEIGHT,    PANGO_WEIGHT_NORMAL,
-                           LIST_ROW_BACKGROUND, background,
-                           LIST_ROW_FOREGROUND, NULL ,-1);
-    }
-
-    // Update text fields
-    // Don't do it here
-    /*if (rowETFile)
-    {
-        File_Tag *FileTag = ((File_Tag *)((ET_File *)rowETFile)->FileTag->data);
-
-        gtk_list_store_set(priv->file_model, iter,
-                           LIST_FILE_TITLE,         FileTag->title,
-                           LIST_FILE_ARTIST,        FileTag->artist,
-                           LIST_FILE_ALBUM_ARTIST,  FileTag->album_artist,
-						   LIST_FILE_ALBUM,         FileTag->album,
-                           LIST_FILE_YEAR,          FileTag->year,
-                           LIST_FILE_TRACK,         FileTag->track,
-                           LIST_FILE_GENRE,         FileTag->genre,
-                           LIST_FILE_COMMENT,       FileTag->comment,
-                           LIST_FILE_COMPOSER,      FileTag->composer,
-                           LIST_FILE_ORIG_ARTIST,   FileTag->orig_artist,
-                           LIST_FILE_COPYRIGHT,     FileTag->copyright,
-                           LIST_FILE_URL,           FileTag->url,
-                           LIST_FILE_ENCODED_BY,    FileTag->encoded_by,
-                           -1);
-    }*/
-
-    // Frees allocated item from gtk_tree_model_get...
-    //g_free(temp);
 }
 
 
@@ -2034,7 +1761,7 @@ Browser_List_Select_File_By_Iter (EtBrowser *self,
 
     if (select_it)
     {
-        GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->file_view));
+        GtkTreeSelection *selection = gtk_tree_view_get_selection (priv->file_view);
 
         if (selection)
         {
@@ -2066,7 +1793,7 @@ et_browser_select_file_by_iter_string (EtBrowser *self,
     {
         if (select_it)
         {
-            GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->file_view));
+            GtkTreeSelection *selection = gtk_tree_view_get_selection(priv->file_view);
 
             // FIX ME : Why signal was blocked if selected? Don't remember...
             if (selection)
@@ -2094,8 +1821,7 @@ et_browser_select_file_by_dlm (EtBrowser *self,
     GtkTreeIter iter2;
     GtkTreeSelection *selection;
     ET_File *current_etfile = NULL, *retval = NULL;
-    gchar *current_filename = NULL, *current_title = NULL;
-    int max = 0, this;
+    int max = 0, cur;
 
     priv = et_browser_get_instance_private (self);
 
@@ -2107,23 +1833,21 @@ et_browser_select_file_by_dlm (EtBrowser *self,
         do
         {
             gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter,
-                               LIST_FILE_NAME,    &current_filename,
                                LIST_FILE_POINTER, &current_etfile, -1);
-            current_title = ((File_Tag *)current_etfile->FileTag->data)->title;
+            gchar *current_title = current_etfile->Tag()->title;
 
-            if ((this = dlm((current_title ? current_title : current_filename), string)) > max) // See "dlm.c"
+            if ((cur = dlm((current_title ? current_title : current_etfile->FileName()->file_value_utf8), string)) > max) // See "dlm.c"
             {
-                max = this;
+                max = cur;
                 iter2 = iter;
                 retval = current_etfile;
             }
 
-            g_free (current_filename);
         } while (gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_model), &iter));
 
         if (select_it)
         {
-            selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->file_view));
+            selection = gtk_tree_view_get_selection(priv->file_view);
             if (selection)
             {
                 g_signal_handler_block (selection,
@@ -2181,7 +1905,7 @@ Browser_List_Sort_Func (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
     gtk_tree_model_get(model, a, LIST_FILE_POINTER, &ETFile1, -1);
     gtk_tree_model_get(model, b, LIST_FILE_POINTER, &ETFile2, -1);
 
-    return ET_Get_Comp_Func_Sort_File(g_settings_get_enum(MainSettings, "sort-mode"))(ETFile1, ETFile2);
+    return ET_Get_Comp_Func_Sort_File((EtSortMode)g_settings_get_enum(MainSettings, "sort-mode"))(ETFile1, ETFile2);
 }
 
 /*
@@ -2946,8 +2670,7 @@ on_file_tree_button_press_event (GtkWidget *widget,
             select_row_for_button_press_event (GTK_TREE_VIEW (widget), event);
         }
 
-        do_popup_menu (self, event, GTK_TREE_VIEW (priv->file_view),
-                       priv->file_menu);
+        do_popup_menu (self, event, priv->file_view, priv->file_menu);
 
         return GDK_EVENT_STOP;
     }
@@ -3123,16 +2846,12 @@ et_browser_reload (EtBrowser *self)
     {
         GFile *file;
 
-        g_signal_handlers_block_by_func (selection,
-                                         G_CALLBACK (Browser_Tree_Node_Selected),
-                                         self);
+        g_signal_handlers_block_by_func (selection, (gpointer)Browser_Tree_Node_Selected, self);
         Browser_Tree_Initialize (self);
         file = g_file_new_for_path (current_path);
         et_browser_select_dir (self, file);
         g_object_unref (file);
-        g_signal_handlers_unblock_by_func (selection,
-                                           G_CALLBACK (Browser_Tree_Node_Selected),
-                                           self);
+        g_signal_handlers_unblock_by_func (selection, (gpointer)(Browser_Tree_Node_Selected), self);
     }
     g_free(current_path);
 
@@ -3676,7 +3395,7 @@ collapse_cb (EtBrowser *self, GtkTreeIter *iter, GtkTreePath *treePath, GtkTreeV
 }
 
 static void
-on_sort_mode_changed (EtBrowser *self, gchar *key, GSettings *settings)
+on_sort_mode_changed (EtBrowser *self, const gchar *key, GSettings *settings)
 {
     EtBrowserPrivate *priv;
     EtSortMode sort_mode;
@@ -3684,7 +3403,7 @@ on_sort_mode_changed (EtBrowser *self, gchar *key, GSettings *settings)
 
     priv = et_browser_get_instance_private (self);
 
-    sort_mode = g_settings_get_enum (settings, key);
+    sort_mode = (EtSortMode)g_settings_get_enum (settings, key);
 
     /* If the column to sort is different than the old sorted column. */
     if (sort_mode / 2 != priv->file_sort_mode / 2)
@@ -3792,6 +3511,119 @@ album_list_separator_func (GtkTreeModel *model,
     return separator_row;
 }
 
+class ColumnRenderer
+{
+protected:
+	virtual void Render(GtkCellRendererText* renderer, const ET_File* file) const;
+public:
+	static void set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkTreeModel* model, GtkTreeIter* iter, gpointer data);
+};
+
+class FileColumnRenderer : public ColumnRenderer
+{
+protected:
+	gchar* File_Name::* const Field;
+	virtual void Render(GtkCellRendererText* renderer, const ET_File* file) const;
+public:
+	FileColumnRenderer(gchar* File_Name::* const field) : Field(field) {}
+};
+
+class TagColumnRenderer : public ColumnRenderer
+{
+protected:
+	gchar* File_Tag::* const Field;
+	virtual void Render(GtkCellRendererText* renderer, const ET_File* file) const;
+public:
+	TagColumnRenderer(gchar* File_Tag::* const field) : Field(field) {}
+};
+
+class TagPartColumnRenderer : public TagColumnRenderer
+{
+	gchar* File_Tag::* const Field2;
+protected:
+	virtual void Render(GtkCellRendererText* renderer, const ET_File* file) const;
+public:
+	TagPartColumnRenderer(gchar* File_Tag::* const field1, gchar* File_Tag::* const field2)
+	: TagColumnRenderer(field1), Field2(field2) {}
+};
+
+/**
+ * Map with renderers, must match the sequence and count of the columns declared in browser.ui.
+ */
+static const reference<const ColumnRenderer> Renderers[] =
+{
+	FileColumnRenderer(&File_Name::path_value_utf8),
+	FileColumnRenderer(&File_Name::file_value_utf8),
+	TagColumnRenderer(&File_Tag::title),
+	TagColumnRenderer(&File_Tag::artist),
+	TagColumnRenderer(&File_Tag::album_artist),
+	TagColumnRenderer(&File_Tag::album),
+	TagColumnRenderer(&File_Tag::year),
+	TagColumnRenderer(&File_Tag::release_year),
+	TagPartColumnRenderer(&File_Tag::disc_number, &File_Tag::disc_total),
+	TagPartColumnRenderer(&File_Tag::track, &File_Tag::track_total),
+	TagColumnRenderer(&File_Tag::genre),
+	TagColumnRenderer(&File_Tag::comment),
+	TagColumnRenderer(&File_Tag::composer),
+	TagColumnRenderer(&File_Tag::orig_artist),
+	TagColumnRenderer(&File_Tag::orig_year),
+	TagColumnRenderer(&File_Tag::copyright),
+	TagColumnRenderer(&File_Tag::url),
+	TagColumnRenderer(&File_Tag::encoded_by)
+};
+
+void ColumnRenderer::set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkTreeModel* model, GtkTreeIter* iter, gpointer data)
+{
+	const ET_File *file;
+	gtk_tree_model_get(model, iter, LIST_FILE_POINTER, &file, -1);
+	((const ColumnRenderer*)data)->Render(GTK_CELL_RENDERER_TEXT(cell), file);
+}
+
+static const GdkRGBA LIGHT_BLUE = { 0.866, 0.933, 1.0, 1.0 };
+
+void ColumnRenderer::Render(GtkCellRendererText* renderer, const ET_File* file) const
+{
+	gboolean bold = g_settings_get_boolean (MainSettings, "file-changed-bold");
+	gboolean saved = et_file_check_saved(file);
+
+	g_object_set(renderer,
+		"weight", saved || !bold ? PANGO_WEIGHT_NORMAL : PANGO_WEIGHT_BOLD,
+		"foreground-rgba", saved || bold ? NULL : &RED,
+		"background-rgba", file->activate_bg_color ? &LIGHT_BLUE : NULL,
+		NULL);
+}
+
+void FileColumnRenderer::Render(GtkCellRendererText* renderer, const ET_File* file) const
+{
+	const gchar* value = file->FileName()->*Field;
+	g_object_set(renderer, "text", value, NULL);
+	ColumnRenderer::Render(renderer, file);
+}
+
+void TagColumnRenderer::Render(GtkCellRendererText* renderer, const ET_File* file) const
+{
+	const gchar* value = file->Tag()->*Field;
+	g_object_set(renderer, "text", value, NULL);
+	ColumnRenderer::Render(renderer, file);
+}
+
+void TagPartColumnRenderer::Render(GtkCellRendererText* renderer, const ET_File* file) const
+{
+	const gchar* value = file->Tag()->*Field;
+	const gchar* value2 = file->Tag()->*Field2;
+	string svalue;
+	if (!et_str_empty(value2))
+	{
+		if (!et_str_empty(value))
+			svalue += value;
+		svalue += "/";
+		svalue += value2;
+		value = svalue.c_str();
+	}
+	g_object_set(renderer, "text", value, NULL);
+	ColumnRenderer::Render(renderer, file);
+}
+
 /*
  * Create item of the browser (Entry + Tree + List).
  */
@@ -3859,14 +3691,19 @@ create_browser (EtBrowser *self)
 
     /* The file list */
     /* Add columns to tree view. See ET_FILE_LIST_COLUMN. */
-    GEnumClass *enum_class = g_type_class_ref(ET_TYPE_SORT_MODE);
-    for (i = 0; i < LIST_FILE_POINTER; i++)
+    GEnumClass *enum_class = (GEnumClass*)g_type_class_ref(ET_TYPE_SORT_MODE);
+    for (i = 0; i < gtk_tree_view_get_n_columns(priv->file_view); i++)
     {
-        GtkTreeViewColumn *column = gtk_tree_view_get_column (GTK_TREE_VIEW (priv->file_view), i);
+        GtkTreeViewColumn *column = gtk_tree_view_get_column (priv->file_view, i);
+        const gchar* id = gtk_buildable_get_name(GTK_BUILDABLE(column));
 
         g_object_set_data (G_OBJECT (column), "browser", self);
 
-        const gchar* id = gtk_buildable_get_name(GTK_BUILDABLE(column));
+        // rendering method
+        GtkCellRenderer* renderer = GTK_CELL_RENDERER(GTK_CELL_LAYOUT_GET_IFACE(column)->get_cells(GTK_CELL_LAYOUT(column))->data);
+        gtk_tree_view_column_set_cell_data_func(column, renderer, &ColumnRenderer::set_cell_data, (gpointer)(&Renderers[i].Ref), NULL);
+
+        // sort action
         gchar* nick = g_strconcat("ascending-", id, NULL);
         nick[strlen(nick) - 7] = 0; // strip "-column"
 
@@ -3886,7 +3723,7 @@ create_browser (EtBrowser *self)
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->file_model), 0, GTK_SORT_ASCENDING);
     on_sort_mode_changed(self, "sort-mode", MainSettings);
 
-    priv->file_selected_handler = g_signal_connect_swapped (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->file_view)),
+    priv->file_selected_handler = g_signal_connect_swapped (gtk_tree_view_get_selection (priv->file_view),
                                                             "changed",
                                                             G_CALLBACK (Browser_List_Row_Selected),
                                                             self);
@@ -3894,7 +3731,7 @@ create_browser (EtBrowser *self)
     /* Create popup menu on file list. */
     menu_model = G_MENU_MODEL (gtk_builder_get_object (builder, "file-menu"));
     priv->file_menu = gtk_menu_new_from_model (menu_model);
-    gtk_menu_attach_to_widget (GTK_MENU (priv->file_menu), priv->file_view,
+    gtk_menu_attach_to_widget (GTK_MENU (priv->file_menu), GTK_WIDGET(priv->file_view),
                                NULL);
 
     g_object_unref (builder);
@@ -3922,7 +3759,7 @@ create_browser (EtBrowser *self)
 static void
 et_browser_on_column_clicked (GtkTreeViewColumn *column, gpointer data)
 {
-    GEnumValue* ev = data;
+    GEnumValue* ev = (GEnumValue*)data;
     if (ev == NULL)
         return;
 
@@ -4150,8 +3987,8 @@ Rename_Directory (EtBrowser *self)
 
     g_return_if_fail (priv->rename_directory_dialog != NULL);
 
-    directory_parent    = g_object_get_data(G_OBJECT(priv->rename_directory_dialog),"Parent_Directory");
-    directory_last_name = g_object_get_data(G_OBJECT(priv->rename_directory_dialog),"Current_Directory");
+    directory_parent    = (gchar*)g_object_get_data(G_OBJECT(priv->rename_directory_dialog),"Parent_Directory");
+    directory_last_name = (gchar*)g_object_get_data(G_OBJECT(priv->rename_directory_dialog),"Current_Directory");
 
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->rename_directory_mask_toggle)))
     {
@@ -4513,8 +4350,7 @@ Run_Program_With_Directory (EtBrowser *self)
     priv = et_browser_get_instance_private (self);
 
     program_name = g_strdup (gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->open_directory_with_combobox)))));
-    current_directory = g_object_get_data (G_OBJECT (priv->open_directory_with_combobox),
-                                           "Current_Directory");
+    current_directory = (gchar*)g_object_get_data (G_OBJECT (priv->open_directory_with_combobox), "Current_Directory");
 
     // List of parameters (here only one! : the current directory)
     args_list = g_list_append(args_list,current_directory);
@@ -4571,7 +4407,7 @@ Run_Program_With_Selected_Files (EtBrowser *self)
     program_name = g_strdup (gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->open_files_with_combobox)))));
 
     // List of files to pass as parameters
-    selected_paths = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->file_view)), NULL);
+    selected_paths = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(priv->file_view), NULL);
 
     for (l = selected_paths; l != NULL; l = g_list_next (l))
     {
@@ -4829,15 +4665,14 @@ GtkTreeViewColumn *
 et_browser_get_column_for_sort_mode(EtBrowser *self, EtSortMode sort_mode)
 {
     EtBrowserPrivate *priv = et_browser_get_instance_private(self);
-    GtkTreeView *tree = GTK_TREE_VIEW(priv->file_view);
 
-    GEnumValue* ev = g_enum_get_value(g_type_class_ref(ET_TYPE_SORT_MODE), sort_mode);
+    GEnumValue* ev = g_enum_get_value((GEnumClass*)g_type_class_ref(ET_TYPE_SORT_MODE), sort_mode);
     /* remove ascending/descending, append "-column" */
     gchar* column_id = g_strconcat(strchr(ev->value_nick, '-') + 1, "-column", NULL);
 
     GtkTreeViewColumn *column;
     gint i = 0;
-    while ((column = gtk_tree_view_get_column(tree, i++)) != NULL)
+    while ((column = gtk_tree_view_get_column(priv->file_view, i++)) != NULL)
     	if (strcmp(gtk_buildable_get_name(GTK_BUILDABLE(column)), column_id) == 0)
     		break;
 
@@ -4959,5 +4794,5 @@ void et_browser_class_init (EtBrowserClass *klass)
 EtBrowser *
 et_browser_new (void)
 {
-    return g_object_new (ET_TYPE_BROWSER, NULL);
+    return (EtBrowser*)g_object_new (ET_TYPE_BROWSER, NULL);
 }

@@ -22,11 +22,11 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
-
 #include <gdk/gdk.h>
 
 #include "file.h"
+
+G_BEGIN_DECLS
 
 /*
  * Colors Used (see declaration into et_core.c)

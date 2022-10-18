@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: easytag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 19:30+0200\n"
+"POT-Creation-Date: 2022-10-15 16:35+0200\n"
 "PO-Revision-Date: 2014-04-08 16:07+0200\n"
 "Last-Translator: Gianvito Cavasoli <gianvito@gmx.it>\n"
 "Language-Team: Italiano <gnome-it-list@gnome.org>\n"
@@ -80,7 +80,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Immettere una directory da esplorare."
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3736
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr ""
@@ -213,9 +213,10 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
-#: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
-#: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
+#: ../src/application_window.c:3014 ../src/browser.cc:954
+#: ../src/browser.cc:3735 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
+#: ../src/tag_area.c:1735
 msgid "_Cancel"
 msgstr ""
 
@@ -1126,7 +1127,7 @@ msgid "Write information using:"
 msgstr "Scrivere informazioni usando:"
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.cc:955 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 #, fuzzy
@@ -3349,8 +3350,8 @@ msgstr "Tutti i file sono stati eliminati"
 msgid "All tags have been removed"
 msgstr "Tutte le etichette sono state rimosse"
 
-#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
-#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
+#: ../src/application_window.c:1474 ../src/browser.cc:366 ../src/browser.cc:409
+#: ../src/browser.cc:443 ../src/browser.cc:4570 ../src/browser.cc:4645
 #, fuzzy, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Avvio del programma non riuscito: %s"
@@ -3366,7 +3367,7 @@ msgstr ""
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Provare a impostare la variabile d'ambiente G_FILENAME_ENCODING."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:796
 msgid "Filename translation"
 msgstr "Traduzione nome del file"
 
@@ -3409,11 +3410,11 @@ msgstr "File: «%s»"
 msgid "Normal exit"
 msgstr "EasyTAG: uscita normale."
 
-#: ../src/application_window.c:3012 ../src/browser.c:948
+#: ../src/application_window.c:3012 ../src/browser.cc:949
 msgid "Some files have been modified but not saved"
 msgstr "Alcuni file sono stati modificati ma non salvati"
 
-#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.cc:953 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 #, fuzzy
 msgid "_Discard"
@@ -3427,74 +3428,74 @@ msgstr "Esce"
 msgid "Do you want to save them before quitting?"
 msgstr "Salvare prima di uscire?"
 
-#: ../src/browser.c:649
+#: ../src/browser.cc:650
 #, fuzzy
 msgid "New default directory selected for browser"
 msgstr "Seleziona una directory da esplorare"
 
-#: ../src/browser.c:951
+#: ../src/browser.cc:952
 #, fuzzy
 msgid "Do you want to save them before changing directory?"
 msgstr "Salvarli prima di cambiare directory?"
 
-#: ../src/browser.c:958
+#: ../src/browser.cc:959
 msgid "Confirm Directory Change"
 msgstr "Conferma cambio directory"
 
-#: ../src/browser.c:2531
+#: ../src/browser.cc:2532
 #, fuzzy
 msgid "All albums"
 msgstr "<Tutti gli album>"
 
-#: ../src/browser.c:3771
+#: ../src/browser.cc:3772
 msgid "Select File"
 msgstr "Seleziona file"
 
-#: ../src/browser.c:3778
+#: ../src/browser.cc:3779
 msgid "Select Directory"
 msgstr "Seleziona directory"
 
-#: ../src/browser.c:4049
+#: ../src/browser.cc:4074
 #, fuzzy, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Rinomina la directory «%s» in:"
 
-#: ../src/browser.c:4185
+#: ../src/browser.cc:4210
 msgid "You must type a directory name"
 msgstr "Digitare un nome directory"
 
-#: ../src/browser.c:4186 ../src/browser.c:4208
+#: ../src/browser.cc:4211 ../src/browser.cc:4233
 msgid "Directory Name Error"
 msgstr "Errore nome directory"
 
-#: ../src/browser.c:4204
+#: ../src/browser.cc:4229
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Impossibile convertire «%s» nella codifica nome del file"
 
-#: ../src/browser.c:4207
+#: ../src/browser.cc:4232
 #, fuzzy
 msgid "Please use another name."
 msgstr "Usare un altro nome"
 
-#: ../src/browser.c:4279
+#: ../src/browser.cc:4304
 #, fuzzy, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Il nome directory «%s» esiste già."
 
-#: ../src/browser.c:4280 ../src/easytag.c:650
+#: ../src/browser.cc:4305 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Errore rinomina file"
 
-#: ../src/browser.c:4319 ../src/browser.c:4348
+#: ../src/browser.cc:4344 ../src/browser.cc:4373
 msgid "Rename Directory Error"
 msgstr "Errore rinomina directory"
 
-#: ../src/browser.c:4389
+#: ../src/browser.cc:4414
 msgid "Directory renamed"
 msgstr "Directory rinominata"
 
-#: ../src/browser.c:4537 ../src/browser.c:4612
+#: ../src/browser.cc:4562 ../src/browser.cc:4637
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "Comando eseguito: %s"
@@ -4234,7 +4235,7 @@ msgstr "Errore file di scaletta"
 msgid "Wrote playlist file ‘%s’"
 msgstr "File di scaletta «%s» scritto"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
+#: ../src/playlist_dialog.c:625
 msgid "Invalid scanner mask"
 msgstr "Maschera dello scanner non valida"
 
@@ -4257,64 +4258,64 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "Errore percorso non valido"
 
-#: ../src/scan_dialog.c:383
+#: ../src/scan_dialog.c:382
 #, fuzzy, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Impossibile calcolare il valore CRC del file (%s)"
 
-#: ../src/scan_dialog.c:398
+#: ../src/scan_dialog.c:397
 msgid "Tag successfully scanned"
 msgstr "Etichetta scansionata con successo"
 
-#: ../src/scan_dialog.c:401
+#: ../src/scan_dialog.c:400
 #, fuzzy, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Etichetta scansionata con successo: %s"
 
-#: ../src/scan_dialog.c:444
+#: ../src/scan_dialog.c:443
 #, fuzzy, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr ""
 "Scanner etichetta: l'estensione «%s» non è stata trovata nel nome del file "
 "«%s»"
 
-#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
+#: ../src/scan_dialog.c:535 ../src/scan_dialog.c:566
 #, fuzzy, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr ""
 "Errore scansione: impossibile trovare il separatore «%s» all'interno di «%s»"
 
-#: ../src/scan_dialog.c:795
+#: ../src/scan_dialog.c:794
 #, fuzzy, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "Impossibile convertire il nome del file «%s» nella codifica di sistema per i "
 "nomi di file"
 
-#: ../src/scan_dialog.c:821
+#: ../src/scan_dialog.c:820
 msgid "New filename successfully scanned"
 msgstr "Nome del file nuovo scansionato con successo"
 
-#: ../src/scan_dialog.c:825
+#: ../src/scan_dialog.c:824
 #, fuzzy, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Nome del file nuovo scansionato con successo: %s"
 
-#: ../src/scan_dialog.c:1206
+#: ../src/scan_dialog.c:1205
 #, fuzzy, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Errore durante l'elaborazione dei campi: %s"
 
-#: ../src/scan_dialog.c:2082
+#: ../src/scan_dialog.c:2081
 msgid "New_mask"
 msgstr "Nuova_maschera"
 
-#: ../src/scan_dialog.c:2559
+#: ../src/scan_dialog.c:2552
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "Maschera dello scanner non valida"
 
-#: ../src/scan_dialog.c:2695
+#: ../src/scan_dialog.c:2625
 msgid "All tags have been scanned"
 msgstr "Tutte le etichette sono state scansionate"
 

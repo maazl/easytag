@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 2.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 19:30+0200\n"
+"POT-Creation-Date: 2022-10-15 16:35+0200\n"
 "PO-Revision-Date: 2007-06-13 08:59+0300\n"
 "Last-Translator: Yuval Hager <yuval@avramzon.net>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -70,7 +70,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "הכנס תיקייה לעיון"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3736
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr ""
@@ -209,9 +209,10 @@ msgstr "הכנס את שם התוכנית להרצה. התוכנית תקבל א
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
-#: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
-#: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
+#: ../src/application_window.c:3014 ../src/browser.cc:954
+#: ../src/browser.cc:3735 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
+#: ../src/tag_area.c:1735
 #, fuzzy
 msgid "_Cancel"
 msgstr "בטל"
@@ -1156,7 +1157,7 @@ msgid "Write information using:"
 msgstr "כתוב מידע מתוך:"
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.cc:955 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 #, fuzzy
@@ -3350,8 +3351,8 @@ msgstr "כל הקבצים נמחקו..."
 msgid "All tags have been removed"
 msgstr "כל התגים נמחקו"
 
-#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
-#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
+#: ../src/application_window.c:1474 ../src/browser.cc:366 ../src/browser.cc:409
+#: ../src/browser.cc:443 ../src/browser.cc:4570 ../src/browser.cc:4645
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr ""
@@ -3365,7 +3366,7 @@ msgstr "לא ניתן להמיר '%s' לקידוד שם קובץ. אנא השת�
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr ""
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:796
 msgid "Filename translation"
 msgstr "תרגום שם קובץ"
 
@@ -3408,12 +3409,12 @@ msgstr "קובץ: '%s'"
 msgid "Normal exit"
 msgstr "EasyTAG: יציאה מסודרת."
 
-#: ../src/application_window.c:3012 ../src/browser.c:948
+#: ../src/application_window.c:3012 ../src/browser.cc:949
 #, fuzzy
 msgid "Some files have been modified but not saved"
 msgstr "כל הקבצים נשמרו..."
 
-#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.cc:953 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr ""
@@ -3431,12 +3432,12 @@ msgstr ""
 "אל \n"
 "'%s' ?"
 
-#: ../src/browser.c:649
+#: ../src/browser.cc:650
 #, fuzzy
 msgid "New default directory selected for browser"
 msgstr "הכנס תיקייה לעיון"
 
-#: ../src/browser.c:951
+#: ../src/browser.cc:952
 #, fuzzy
 msgid "Do you want to save them before changing directory?"
 msgstr ""
@@ -3445,71 +3446,71 @@ msgstr ""
 "אל \n"
 "'%s' ?"
 
-#: ../src/browser.c:958
+#: ../src/browser.cc:959
 msgid "Confirm Directory Change"
 msgstr ""
 
-#: ../src/browser.c:2531
+#: ../src/browser.cc:2532
 #, fuzzy
 msgid "All albums"
 msgstr "<כל האלבומים>"
 
-#: ../src/browser.c:3771
+#: ../src/browser.cc:3772
 #, fuzzy
 msgid "Select File"
 msgstr "מחק"
 
-#: ../src/browser.c:3778
+#: ../src/browser.cc:3779
 #, fuzzy
 msgid "Select Directory"
 msgstr "בחר תיקייה..."
 
-#: ../src/browser.c:4049
+#: ../src/browser.cc:4074
 #, fuzzy, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "שנה שם תיקייה '%s' ל:"
 
-#: ../src/browser.c:4185
+#: ../src/browser.cc:4210
 #, fuzzy
 msgid "You must type a directory name"
 msgstr "יש להכניס שם תיקייה!"
 
-#: ../src/browser.c:4186 ../src/browser.c:4208
+#: ../src/browser.cc:4211 ../src/browser.cc:4233
 #, fuzzy
 msgid "Directory Name Error"
 msgstr "שם התיקייה שונה"
 
-#: ../src/browser.c:4204
+#: ../src/browser.cc:4229
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "לא ניתן להמיר '%s' לקידוד שם קובץ. אנא השתמש בשם אחר."
 
-#: ../src/browser.c:4207
+#: ../src/browser.cc:4232
 msgid "Please use another name."
 msgstr ""
 
-#: ../src/browser.c:4279
+#: ../src/browser.cc:4304
 #, fuzzy, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr ""
 "קובץ רשימת ההשמעה '%s' כבר קיים!\n"
 "לשכתב?"
 
-#: ../src/browser.c:4280 ../src/easytag.c:650
+#: ../src/browser.cc:4305 ../src/easytag.c:650
 #, fuzzy
 msgid "Rename File Error"
 msgstr "שנה שם קובץ ותיקייה"
 
-#: ../src/browser.c:4319 ../src/browser.c:4348
+#: ../src/browser.cc:4344 ../src/browser.cc:4373
 #, fuzzy
 msgid "Rename Directory Error"
 msgstr "שנה שם תיקייה ..."
 
-#: ../src/browser.c:4389
+#: ../src/browser.cc:4414
 msgid "Directory renamed"
 msgstr "שם התיקייה שונה"
 
-#: ../src/browser.c:4537 ../src/browser.c:4612
+#: ../src/browser.cc:4562 ../src/browser.cc:4637
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "הפקודה שהורצה: '%s %s'"
@@ -4294,7 +4295,7 @@ msgstr "קובץ התמונה לא הועלה..."
 msgid "Wrote playlist file ‘%s’"
 msgstr "רשימת ההשמעה נכתבה '%s'"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
+#: ../src/playlist_dialog.c:625
 #, fuzzy
 msgid "Invalid scanner mask"
 msgstr "מסכת סורק לא תקפה"
@@ -4319,61 +4320,61 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "גרסה לא תקפה של התג"
 
-#: ../src/scan_dialog.c:383
+#: ../src/scan_dialog.c:382
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr ""
 
-#: ../src/scan_dialog.c:398
+#: ../src/scan_dialog.c:397
 #, fuzzy
 msgid "Tag successfully scanned"
 msgstr "תגים נסרקו בהצלחה..."
 
-#: ../src/scan_dialog.c:401
+#: ../src/scan_dialog.c:400
 #, fuzzy, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "תגים נסרקו בהצלחה...(%s)"
 
-#: ../src/scan_dialog.c:444
+#: ../src/scan_dialog.c:443
 #, fuzzy, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "סורק תגים: מוזר..., הסיומת '%s' לא נמצאה בקובץ '%s'!"
 
-#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
+#: ../src/scan_dialog.c:535 ../src/scan_dialog.c:566
 #, fuzzy, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "שגיאת סריקה: לא ניתן למצוא את המפריד '%s' בתוך '%s'"
 
-#: ../src/scan_dialog.c:795
+#: ../src/scan_dialog.c:794
 #, fuzzy, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr "לא ניתן להמיר '%s' לקידוד שם קובץ. אנא השתמש בשם אחר."
 
-#: ../src/scan_dialog.c:821
+#: ../src/scan_dialog.c:820
 #, fuzzy
 msgid "New filename successfully scanned"
 msgstr "שם קובץ חדש נסרק בהצלחה..."
 
-#: ../src/scan_dialog.c:825
+#: ../src/scan_dialog.c:824
 #, fuzzy, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "שם קובץ חדש נסרק בהצלחה...(%s)"
 
-#: ../src/scan_dialog.c:1206
+#: ../src/scan_dialog.c:1205
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr ""
 
-#: ../src/scan_dialog.c:2082
+#: ../src/scan_dialog.c:2081
 msgid "New_mask"
 msgstr ""
 
-#: ../src/scan_dialog.c:2559
+#: ../src/scan_dialog.c:2552
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "מסכת סורק לא תקפה"
 
-#: ../src/scan_dialog.c:2695
+#: ../src/scan_dialog.c:2625
 msgid "All tags have been scanned"
 msgstr "כל התגים נסרקו"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 2.1.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 19:30+0200\n"
+"POT-Creation-Date: 2022-10-15 16:35+0200\n"
 "PO-Revision-Date: 2016-03-13 10:20+0200\n"
 "Last-Translator: Cédric Valmary (totenoc.eu) <cvalmary@yahoo.fr>\n"
 "Language-Team: Tot En Òc\n"
@@ -77,7 +77,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Causir un repertòri per afichar dins lo navigador."
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3736
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "_Dobrir"
@@ -208,9 +208,10 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
-#: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
-#: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
+#: ../src/application_window.c:3014 ../src/browser.cc:954
+#: ../src/browser.cc:3735 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
+#: ../src/tag_area.c:1735
 msgid "_Cancel"
 msgstr ""
 
@@ -1092,7 +1093,7 @@ msgid "Write information using:"
 msgstr "Escriure las informacions en utilizant :"
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.cc:955 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 #, fuzzy
@@ -3288,8 +3289,8 @@ msgstr "Totes los fichièrs son estats suprimits"
 msgid "All tags have been removed"
 msgstr "Totas las etiquetas son etadas suprimidas"
 
-#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
-#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
+#: ../src/application_window.c:1474 ../src/browser.cc:366 ../src/browser.cc:409
+#: ../src/browser.cc:443 ../src/browser.cc:4570 ../src/browser.cc:4645
 #, fuzzy, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Fracàs de l'aviada del programa : %s"
@@ -3306,7 +3307,7 @@ msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr ""
 "Ensag de parametratge de la variabla d'environament G_FILENAME_ENCODING."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:796
 msgid "Filename translation"
 msgstr "Conversion del nom de fichièr"
 
@@ -3350,11 +3351,11 @@ msgstr "Fichièr : « %s »"
 msgid "Normal exit"
 msgstr "EasyTAG : tampadura normala."
 
-#: ../src/application_window.c:3012 ../src/browser.c:948
+#: ../src/application_window.c:3012 ../src/browser.cc:949
 msgid "Some files have been modified but not saved"
 msgstr "Certains fichièrs son estats modificats mas pas enregistrats"
 
-#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.cc:953 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 #, fuzzy
 msgid "_Discard"
@@ -3368,73 +3369,73 @@ msgstr "Quitar"
 msgid "Do you want to save them before quitting?"
 msgstr "Los volètz enregistrar abans de quitar ?"
 
-#: ../src/browser.c:649
+#: ../src/browser.cc:650
 #, fuzzy
 msgid "New default directory selected for browser"
 msgstr "Seleccionar un repertòri a percórrer"
 
-#: ../src/browser.c:951
+#: ../src/browser.cc:952
 #, fuzzy
 msgid "Do you want to save them before changing directory?"
 msgstr "Los volètz enregistrar abans de cambiar de repertòri ?"
 
-#: ../src/browser.c:958
+#: ../src/browser.cc:959
 msgid "Confirm Directory Change"
 msgstr "Confirmar lo cambiament de repertòri"
 
-#: ../src/browser.c:2531
+#: ../src/browser.cc:2532
 msgid "All albums"
 msgstr "Totes los albums"
 
-#: ../src/browser.c:3771
+#: ../src/browser.cc:3772
 msgid "Select File"
 msgstr "Seleccionar un fichièr"
 
-#: ../src/browser.c:3778
+#: ../src/browser.cc:3779
 msgid "Select Directory"
 msgstr "Seleccionar un repertòri"
 
-#: ../src/browser.c:4049
+#: ../src/browser.cc:4074
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Renomenar lo repertòri « %s » en :"
 
-#: ../src/browser.c:4185
+#: ../src/browser.cc:4210
 msgid "You must type a directory name"
 msgstr "Vos cal sasir un nom de repertòri"
 
-#: ../src/browser.c:4186 ../src/browser.c:4208
+#: ../src/browser.cc:4211 ../src/browser.cc:4233
 msgid "Directory Name Error"
 msgstr "Error de nom de repertòri"
 
-#: ../src/browser.c:4204
+#: ../src/browser.cc:4229
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Impossible de convertir « %s » dins l'encodatge del nom de fichièr."
 
-#: ../src/browser.c:4207
+#: ../src/browser.cc:4232
 #, fuzzy
 msgid "Please use another name."
 msgstr "Causissètz un autre nom"
 
-#: ../src/browser.c:4279
+#: ../src/browser.cc:4304
 #, fuzzy, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Lo nom del repertòri « %s » existe déjà"
 
-#: ../src/browser.c:4280 ../src/easytag.c:650
+#: ../src/browser.cc:4305 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Error de cambiament de nom del fichièr"
 
-#: ../src/browser.c:4319 ../src/browser.c:4348
+#: ../src/browser.cc:4344 ../src/browser.cc:4373
 msgid "Rename Directory Error"
 msgstr "Error de cambiament de nom del repertòri"
 
-#: ../src/browser.c:4389
+#: ../src/browser.cc:4414
 msgid "Directory renamed"
 msgstr "Repertòri renomenat"
 
-#: ../src/browser.c:4537 ../src/browser.c:4612
+#: ../src/browser.cc:4562 ../src/browser.cc:4637
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "Comanda executada : %s"
@@ -4179,7 +4180,7 @@ msgstr "Error del fichièr lista de lectura"
 msgid "Wrote playlist file ‘%s’"
 msgstr "La lista de lectura « %s » es estada escricha"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
+#: ../src/playlist_dialog.c:625
 msgid "Invalid scanner mask"
 msgstr "Masqueta de numerizar invalida"
 
@@ -4202,64 +4203,64 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "Error de camin invalid"
 
-#: ../src/scan_dialog.c:383
+#: ../src/scan_dialog.c:382
 #, fuzzy, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Impossible de calculer la valor CRC del fichièr (%s)"
 
-#: ../src/scan_dialog.c:398
+#: ../src/scan_dialog.c:397
 msgid "Tag successfully scanned"
 msgstr "Etiqueta numerizada amb succès"
 
-#: ../src/scan_dialog.c:401
+#: ../src/scan_dialog.c:400
 #, fuzzy, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Etiqueta numerizada amb succès : %s"
 
-#: ../src/scan_dialog.c:444
+#: ../src/scan_dialog.c:443
 #, fuzzy, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr ""
 "Numerizar d'etiquetas : estranh… l'extension « %s » es pas estada trobada "
 "dins lo nom de fichièr « %s »"
 
-#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
+#: ../src/scan_dialog.c:535 ../src/scan_dialog.c:566
 #, fuzzy, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr ""
 "Error de numerizar : impossible de trobar lo separador « %s » dins « %s »"
 
-#: ../src/scan_dialog.c:795
+#: ../src/scan_dialog.c:794
 #, fuzzy, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "Impossible de convertir lo nom del fichièr « %s » cap a l'encodatge del nom "
 "de fichièrs sistèma"
 
-#: ../src/scan_dialog.c:821
+#: ../src/scan_dialog.c:820
 msgid "New filename successfully scanned"
 msgstr "Novèl nom de fichièr numerizat amb succès"
 
-#: ../src/scan_dialog.c:825
+#: ../src/scan_dialog.c:824
 #, fuzzy, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Novèl nom de fichièr numerizat amb succès : %s"
 
-#: ../src/scan_dialog.c:1206
+#: ../src/scan_dialog.c:1205
 #, fuzzy, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Error al moment del tractament dels camps : %s"
 
-#: ../src/scan_dialog.c:2082
+#: ../src/scan_dialog.c:2081
 msgid "New_mask"
 msgstr "_Maquesta novèla"
 
-#: ../src/scan_dialog.c:2559
+#: ../src/scan_dialog.c:2552
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "Masqueta de numerizar invalida"
 
-#: ../src/scan_dialog.c:2695
+#: ../src/scan_dialog.c:2625
 msgid "All tags have been scanned"
 msgstr "Totas las etiquetas son etadas numerizadas"
 

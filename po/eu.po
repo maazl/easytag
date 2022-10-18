@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: easytag easytag-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 19:30+0200\n"
+"POT-Creation-Date: 2022-10-15 16:35+0200\n"
 "PO-Revision-Date: 2022-04-18 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
@@ -76,7 +76,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Aukeratu arakatzailean erakutsiko den direktorioa"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3736
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "_Ireki"
@@ -207,9 +207,10 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
-#: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
-#: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
+#: ../src/application_window.c:3014 ../src/browser.cc:954
+#: ../src/browser.cc:3735 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
+#: ../src/tag_area.c:1735
 msgid "_Cancel"
 msgstr "_Utzi"
 
@@ -1077,7 +1078,7 @@ msgid "Write information using:"
 msgstr "Idatzi informazioa honakoa erabilita:"
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.cc:955 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 msgid "_Save"
@@ -3262,8 +3263,8 @@ msgstr "Fitxategi guztiak ezabatu dira"
 msgid "All tags have been removed"
 msgstr "Etiketa guztiak kendu dira"
 
-#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
-#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
+#: ../src/application_window.c:1474 ../src/browser.cc:366 ../src/browser.cc:409
+#: ../src/browser.cc:443 ../src/browser.cc:4570 ../src/browser.cc:4645
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Huts egin du  ‘%s’ programa abiarazteak"
@@ -3279,7 +3280,7 @@ msgstr ""
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Saiatu G_FILENAME_ENCODING ingurune-aldagaia ezartzen."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:796
 msgid "Filename translation"
 msgstr "Fitxategi-izenaren itzulpena"
 
@@ -3321,11 +3322,11 @@ msgstr "Fitxategia: ‘%s’"
 msgid "Normal exit"
 msgstr "Irteera normala"
 
-#: ../src/application_window.c:3012 ../src/browser.c:948
+#: ../src/application_window.c:3012 ../src/browser.cc:949
 msgid "Some files have been modified but not saved"
 msgstr "Zenbait fitxategi aldatu egin dira baina ez dira gorde"
 
-#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.cc:953 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr "_Baztertu"
@@ -3338,70 +3339,70 @@ msgstr "Irten"
 msgid "Do you want to save them before quitting?"
 msgstr "Gorde nahi dituzu irten baino lehenago?"
 
-#: ../src/browser.c:649
+#: ../src/browser.cc:650
 msgid "New default directory selected for browser"
 msgstr "Beste direktorio lehenetsi bat hautatu da arakatzailerako"
 
-#: ../src/browser.c:951
+#: ../src/browser.cc:952
 msgid "Do you want to save them before changing directory?"
 msgstr "Haiek gorde nahi dituzu direktorioz aldatu baino lehen?"
 
-#: ../src/browser.c:958
+#: ../src/browser.cc:959
 msgid "Confirm Directory Change"
 msgstr "Baieztatu direktorio-aldaketa"
 
-#: ../src/browser.c:2531
+#: ../src/browser.cc:2532
 msgid "All albums"
 msgstr "Album guztiak"
 
-#: ../src/browser.c:3771
+#: ../src/browser.cc:3772
 msgid "Select File"
 msgstr "Hautatu fitxategia"
 
-#: ../src/browser.c:3778
+#: ../src/browser.cc:3779
 msgid "Select Directory"
 msgstr "Hautatu direktorioa"
 
-#: ../src/browser.c:4049
+#: ../src/browser.cc:4074
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Aldatu ‘%s’ direktorioaren izena eta ezarri honakoa:"
 
-#: ../src/browser.c:4185
+#: ../src/browser.cc:4210
 msgid "You must type a directory name"
 msgstr "Direktorio-izen bat idatzi behar duzu"
 
-#: ../src/browser.c:4186 ../src/browser.c:4208
+#: ../src/browser.cc:4211 ../src/browser.cc:4233
 msgid "Directory Name Error"
 msgstr "Errorea direktorio-izenean"
 
-#: ../src/browser.c:4204
+#: ../src/browser.cc:4229
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Ezin izan da ‘%s’ fitxategi-izenen kodeketara bihurtu"
 
-#: ../src/browser.c:4207
+#: ../src/browser.cc:4232
 msgid "Please use another name."
 msgstr "Erabili beste izen bat"
 
-#: ../src/browser.c:4279
+#: ../src/browser.cc:4304
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "‘%s’ direktorio-izena badago lehendik ere."
 
-#: ../src/browser.c:4280 ../src/easytag.c:650
+#: ../src/browser.cc:4305 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Errorea fitxategiaren izena aldatzean"
 
-#: ../src/browser.c:4319 ../src/browser.c:4348
+#: ../src/browser.cc:4344 ../src/browser.cc:4373
 msgid "Rename Directory Error"
 msgstr "Errorea direktorioaren izena aldatzean"
 
-#: ../src/browser.c:4389
+#: ../src/browser.cc:4414
 msgid "Directory renamed"
 msgstr "Direktorioaren izena aldatu da"
 
-#: ../src/browser.c:4537 ../src/browser.c:4612
+#: ../src/browser.cc:4562 ../src/browser.cc:4637
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "Exekutatutako komandoa: ‘%s’"
@@ -4141,7 +4142,7 @@ msgstr "Erreprodukzio-zerrendaren fitxategiaren errorea"
 msgid "Wrote playlist file ‘%s’"
 msgstr "‘%s’ erreprodukzio-zerrenda idatzi da"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
+#: ../src/playlist_dialog.c:625
 msgid "Invalid scanner mask"
 msgstr "Eskanerraren maskara baliogabea"
 
@@ -4162,61 +4163,61 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "Bide baliogabearen errorea"
 
-#: ../src/scan_dialog.c:383
+#: ../src/scan_dialog.c:382
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Ezin da ‘%s’ fitxategiaren CRC balioa kalkulatu"
 
-#: ../src/scan_dialog.c:398
+#: ../src/scan_dialog.c:397
 msgid "Tag successfully scanned"
 msgstr "Etiketa ongi eskaneatu da"
 
-#: ../src/scan_dialog.c:401
+#: ../src/scan_dialog.c:400
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "‘%s’ etiketa berria ongi eskaneatu da"
 
-#: ../src/scan_dialog.c:444
+#: ../src/scan_dialog.c:443
 #, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "‘%s’ luzapena ez da aurkitu ‘%s’ fitxategi-izenean"
 
-#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
+#: ../src/scan_dialog.c:535 ../src/scan_dialog.c:566
 #, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "Ez da aurkitu ‘%s’ bereizlea ‘%s’ barruan"
 
-#: ../src/scan_dialog.c:795
+#: ../src/scan_dialog.c:794
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "Ezin izan da ‘%s’ fitxategi-izena bihurtu sistemako fitxategi-izenen "
 "kodeketara"
 
-#: ../src/scan_dialog.c:821
+#: ../src/scan_dialog.c:820
 msgid "New filename successfully scanned"
 msgstr "Fitxategi-izen berria ongi eskaneatu da"
 
-#: ../src/scan_dialog.c:825
+#: ../src/scan_dialog.c:824
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "‘%s’ fitxategi-izen berria ongi eskaneatu da"
 
-#: ../src/scan_dialog.c:1206
+#: ../src/scan_dialog.c:1205
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Errorea ‘%s’ eremuak prozesatzean"
 
-#: ../src/scan_dialog.c:2082
+#: ../src/scan_dialog.c:2081
 msgid "New_mask"
 msgstr "Maskara_berria"
 
-#: ../src/scan_dialog.c:2559
+#: ../src/scan_dialog.c:2552
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "Eskanerraren maskara baliogabea"
 
-#: ../src/scan_dialog.c:2695
+#: ../src/scan_dialog.c:2625
 msgid "All tags have been scanned"
 msgstr "Etiketa guztiak eskaneatu dira"
 

@@ -41,7 +41,7 @@ easytag_SOURCES = \
 	src/about.c \
 	src/application.c \
 	src/application_window.c \
-	src/browser.c \
+	src/browser.cc \
 	src/browser.h \
 	src/cddb_dialog.c \
 	src/charset.c \
@@ -55,7 +55,7 @@ easytag_SOURCES = \
 	src/file_description.c \
 	src/file_info.c \
 	src/file_list.c \
-	src/file_name.c \
+	src/file_name.cc \
 	src/file_tag.c \
 	src/load_files_dialog.c \
 	src/log.c \

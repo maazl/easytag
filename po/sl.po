@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: easytag master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 19:30+0200\n"
+"POT-Creation-Date: 2022-10-15 16:35+0200\n"
 "PO-Revision-Date: 2020-06-17 13:27+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
@@ -79,7 +79,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Izbor mape za prikaz v brskalniku"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3736
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "_Open"
@@ -211,9 +211,10 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
-#: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
-#: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
+#: ../src/application_window.c:3014 ../src/browser.cc:954
+#: ../src/browser.cc:3735 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
+#: ../src/tag_area.c:1735
 msgid "_Cancel"
 msgstr "_Prekliči"
 
@@ -1073,7 +1074,7 @@ msgid "Write information using:"
 msgstr "Zapiši podatke z uporabo:"
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.cc:955 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 msgid "_Save"
@@ -3175,8 +3176,8 @@ msgstr "Vse datoteke so bile izbrisane"
 msgid "All tags have been removed"
 msgstr "Vsi oznake so bile odstranjene"
 
-#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
-#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
+#: ../src/application_window.c:1474 ../src/browser.cc:366 ../src/browser.cc:409
+#: ../src/browser.cc:443 ../src/browser.cc:4570 ../src/browser.cc:4645
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Zaganjanje programa %s je spodletelo"
@@ -3190,7 +3191,7 @@ msgstr "Imena datoteke »%s« ni mogoče pretvoriti v sistemski kodni nabor"
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Poskusite nastaviti okoljsko spremenljivko G_FILENAME_ENCODING."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:796
 msgid "Filename translation"
 msgstr "Prevod imena datoteke"
 
@@ -3234,11 +3235,11 @@ msgstr "Datoteka: »%s«"
 msgid "Normal exit"
 msgstr "Običajen izhod"
 
-#: ../src/application_window.c:3012 ../src/browser.c:948
+#: ../src/application_window.c:3012 ../src/browser.cc:949
 msgid "Some files have been modified but not saved"
 msgstr "Nekatere datoteke so bile spremenjene, ne pa tudi shranjene"
 
-#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.cc:953 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr "_Zavrzi"
@@ -3251,70 +3252,70 @@ msgstr "Končaj"
 msgid "Do you want to save them before quitting?"
 msgstr "Ali jih želite shraniti pred zapiranjem?"
 
-#: ../src/browser.c:649
+#: ../src/browser.cc:650
 msgid "New default directory selected for browser"
 msgstr "Za brskalnik je izbrana nova privzeta mapa"
 
-#: ../src/browser.c:951
+#: ../src/browser.cc:952
 msgid "Do you want to save them before changing directory?"
 msgstr "Ali želite spremembe shraniti pred spreminjamnem mape?"
 
-#: ../src/browser.c:958
+#: ../src/browser.cc:959
 msgid "Confirm Directory Change"
 msgstr "Potrdi spremembo mape"
 
-#: ../src/browser.c:2531
+#: ../src/browser.cc:2532
 msgid "All albums"
 msgstr "Vsi albumi"
 
-#: ../src/browser.c:3771
+#: ../src/browser.cc:3772
 msgid "Select File"
 msgstr "Izbor datoteke"
 
-#: ../src/browser.c:3778
+#: ../src/browser.cc:3779
 msgid "Select Directory"
 msgstr "Izbor mape"
 
-#: ../src/browser.c:4049
+#: ../src/browser.cc:4074
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Preimenuj mapo »%s« v:"
 
-#: ../src/browser.c:4185
+#: ../src/browser.cc:4210
 msgid "You must type a directory name"
 msgstr "Vnesti je treba ime mape."
 
-#: ../src/browser.c:4186 ../src/browser.c:4208
+#: ../src/browser.cc:4211 ../src/browser.cc:4233
 msgid "Directory Name Error"
 msgstr "Napaka imena mape"
 
-#: ../src/browser.c:4204
+#: ../src/browser.cc:4229
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Imena datoteke »%s« ni mogoče pretvoriti v sistemski kodni nabor"
 
-#: ../src/browser.c:4207
+#: ../src/browser.cc:4232
 msgid "Please use another name."
 msgstr "Uporabiti je traba drugo ime."
 
-#: ../src/browser.c:4279
+#: ../src/browser.cc:4304
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Mapa z imenom »%s« že obstaja."
 
-#: ../src/browser.c:4280 ../src/easytag.c:650
+#: ../src/browser.cc:4305 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Napaka preimenovanja datoteke"
 
-#: ../src/browser.c:4319 ../src/browser.c:4348
+#: ../src/browser.cc:4344 ../src/browser.cc:4373
 msgid "Rename Directory Error"
 msgstr "Napaka preimenovanja mape"
 
-#: ../src/browser.c:4389
+#: ../src/browser.cc:4414
 msgid "Directory renamed"
 msgstr "Mapa je preimenovana"
 
-#: ../src/browser.c:4537 ../src/browser.c:4612
+#: ../src/browser.cc:4562 ../src/browser.cc:4637
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "Izveden ukaz »%s«"
@@ -4047,7 +4048,7 @@ msgstr "Napaka datoteke seznama predvajanja"
 msgid "Wrote playlist file ‘%s’"
 msgstr "Zapisana je datoteka seznama predvajanja »%s«."
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
+#: ../src/playlist_dialog.c:625
 msgid "Invalid scanner mask"
 msgstr "Neveljavna maska preiskovalnika"
 
@@ -4068,59 +4069,59 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "Napaka neveljavne poti"
 
-#: ../src/scan_dialog.c:383
+#: ../src/scan_dialog.c:382
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Ni mogoče iz računati vrednosti CRC datoteke »%s«."
 
-#: ../src/scan_dialog.c:398
+#: ../src/scan_dialog.c:397
 msgid "Tag successfully scanned"
 msgstr "Oznaka je uspešno vpisana"
 
-#: ../src/scan_dialog.c:401
+#: ../src/scan_dialog.c:400
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Oznaka je uspešno preiskana »%s«"
 
-#: ../src/scan_dialog.c:444
+#: ../src/scan_dialog.c:443
 #, fuzzy, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "Pogovornega okna razširitve »%s« ni mogoče najti."
 
-#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
+#: ../src/scan_dialog.c:535 ../src/scan_dialog.c:566
 #, fuzzy, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "Ni mogoče najti potrdila za »%s«"
 
-#: ../src/scan_dialog.c:795
+#: ../src/scan_dialog.c:794
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr "Imena datoteke »%s« ni mogoče pretvoriti v sistemski kodni nabor"
 
-#: ../src/scan_dialog.c:821
+#: ../src/scan_dialog.c:820
 msgid "New filename successfully scanned"
 msgstr "Ime nove datoteke je uspešno vpisano"
 
-#: ../src/scan_dialog.c:825
+#: ../src/scan_dialog.c:824
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Ime nove datoteke je uspešno preiskano »%s«"
 
-#: ../src/scan_dialog.c:1206
+#: ../src/scan_dialog.c:1205
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Napaka med obdelavo polj »%s«"
 
-#: ../src/scan_dialog.c:2082
+#: ../src/scan_dialog.c:2081
 msgid "New_mask"
 msgstr "Nova maska"
 
-#: ../src/scan_dialog.c:2559
+#: ../src/scan_dialog.c:2552
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "Neveljavna maska preiskovalnika"
 
-#: ../src/scan_dialog.c:2695
+#: ../src/scan_dialog.c:2625
 msgid "All tags have been scanned"
 msgstr "Vse oznake so bile preiskane"
 

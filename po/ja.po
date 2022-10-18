@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: easytag 2.1.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 19:30+0200\n"
+"POT-Creation-Date: 2022-10-15 16:35+0200\n"
 "PO-Revision-Date: 2019-08-25 02:37+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -71,7 +71,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "ブラウザーで表示するディレクトリを選択する"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3736
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "開く(_O)"
@@ -202,9 +202,10 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
-#: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
-#: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
+#: ../src/application_window.c:3014 ../src/browser.cc:954
+#: ../src/browser.cc:3735 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
+#: ../src/tag_area.c:1735
 msgid "_Cancel"
 msgstr "キャンセル(_C)"
 
@@ -1061,7 +1062,7 @@ msgid "Write information using:"
 msgstr "書き込む情報:"
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.cc:955 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 msgid "_Save"
@@ -3103,8 +3104,8 @@ msgstr "すべてのファイルを削除しました"
 msgid "All tags have been removed"
 msgstr "すべてのタグを削除しました"
 
-#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
-#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
+#: ../src/application_window.c:1474 ../src/browser.cc:366 ../src/browser.cc:409
+#: ../src/browser.cc:443 ../src/browser.cc:4570 ../src/browser.cc:4645
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "‘%s’ の起動に失敗しました"
@@ -3118,7 +3119,7 @@ msgstr "ファイル名 ‘%s’ をシステムのエンコーディングに�
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "環境変数 G_FILENAME_ENCODING を設定してみてください"
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:796
 msgid "Filename translation"
 msgstr "ファイル名の翻訳"
 
@@ -3159,11 +3160,11 @@ msgstr "ファイル: ‘%s’"
 msgid "Normal exit"
 msgstr ""
 
-#: ../src/application_window.c:3012 ../src/browser.c:948
+#: ../src/application_window.c:3012 ../src/browser.cc:949
 msgid "Some files have been modified but not saved"
 msgstr "いくつかのファイルが変更されていますが保存していません"
 
-#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.cc:953 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr "破棄(_D)"
@@ -3176,70 +3177,70 @@ msgstr "終了します"
 msgid "Do you want to save them before quitting?"
 msgstr "終了する前に保存しますか?"
 
-#: ../src/browser.c:649
+#: ../src/browser.cc:650
 msgid "New default directory selected for browser"
 msgstr ""
 
-#: ../src/browser.c:951
+#: ../src/browser.cc:952
 msgid "Do you want to save them before changing directory?"
 msgstr "ディレクトリを変更する前に保存しますか?"
 
-#: ../src/browser.c:958
+#: ../src/browser.cc:959
 msgid "Confirm Directory Change"
 msgstr "ディレクトリ変更の確認"
 
-#: ../src/browser.c:2531
+#: ../src/browser.cc:2532
 msgid "All albums"
 msgstr "すべてのアルバム"
 
-#: ../src/browser.c:3771
+#: ../src/browser.cc:3772
 msgid "Select File"
 msgstr "ファイルの選択"
 
-#: ../src/browser.c:3778
+#: ../src/browser.cc:3779
 msgid "Select Directory"
 msgstr "ディレクトリの選択"
 
-#: ../src/browser.c:4049
+#: ../src/browser.cc:4074
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "‘%s’ の名前を次に変更:"
 
-#: ../src/browser.c:4185
+#: ../src/browser.cc:4210
 msgid "You must type a directory name"
 msgstr "ディレクトリ名を入力してください"
 
-#: ../src/browser.c:4186 ../src/browser.c:4208
+#: ../src/browser.cc:4211 ../src/browser.cc:4233
 msgid "Directory Name Error"
 msgstr "ディレクトリ名エラー"
 
-#: ../src/browser.c:4204
+#: ../src/browser.cc:4229
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "‘%s’ をファイル名のエンコーディングに変換できませんでした"
 
-#: ../src/browser.c:4207
+#: ../src/browser.cc:4232
 msgid "Please use another name."
 msgstr "別の名前を使用してください。"
 
-#: ../src/browser.c:4279
+#: ../src/browser.cc:4304
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "‘%s’ はすでに存在します。"
 
-#: ../src/browser.c:4280 ../src/easytag.c:650
+#: ../src/browser.cc:4305 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "ファイル名変更エラー"
 
-#: ../src/browser.c:4319 ../src/browser.c:4348
+#: ../src/browser.cc:4344 ../src/browser.cc:4373
 msgid "Rename Directory Error"
 msgstr "ディレクトリ名変更エラー"
 
-#: ../src/browser.c:4389
+#: ../src/browser.cc:4414
 msgid "Directory renamed"
 msgstr "ディレクトリ名を変更しました"
 
-#: ../src/browser.c:4537 ../src/browser.c:4612
+#: ../src/browser.cc:4562 ../src/browser.cc:4637
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "コマンド ‘%s’ を実行しました"
@@ -3965,7 +3966,7 @@ msgstr "プレイリストファイルエラー"
 msgid "Wrote playlist file ‘%s’"
 msgstr "プレイリストファイル ‘%s’ を書き込みました"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
+#: ../src/playlist_dialog.c:625
 msgid "Invalid scanner mask"
 msgstr "スキャナーマスクが正しくありません"
 
@@ -3986,59 +3987,59 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "不正なパスエラー"
 
-#: ../src/scan_dialog.c:383
+#: ../src/scan_dialog.c:382
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr ""
 
-#: ../src/scan_dialog.c:398
+#: ../src/scan_dialog.c:397
 msgid "Tag successfully scanned"
 msgstr "タグのスキャンに成功しました"
 
-#: ../src/scan_dialog.c:401
+#: ../src/scan_dialog.c:400
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "‘%s’ のタグのスキャンに成功しました"
 
-#: ../src/scan_dialog.c:444
+#: ../src/scan_dialog.c:443
 #, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "拡張子 ‘%s’ がファイル名 ‘%s’ の中に見つかりません"
 
-#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
+#: ../src/scan_dialog.c:535 ../src/scan_dialog.c:566
 #, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "‘%2$s’ にセパレーター ‘%1$s’ が見つかりません"
 
-#: ../src/scan_dialog.c:795
+#: ../src/scan_dialog.c:794
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr "ファイル名 ‘%s’ をシステムのエンコーディングに変換できませんでした"
 
-#: ../src/scan_dialog.c:821
+#: ../src/scan_dialog.c:820
 msgid "New filename successfully scanned"
 msgstr "新しいファイル名のスキャンに成功しました"
 
-#: ../src/scan_dialog.c:825
+#: ../src/scan_dialog.c:824
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "新しいファイル名 ‘%s’ のスキャンに成功しました"
 
-#: ../src/scan_dialog.c:1206
+#: ../src/scan_dialog.c:1205
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "フィールド ‘%s’ の処理中にエラー"
 
-#: ../src/scan_dialog.c:2082
+#: ../src/scan_dialog.c:2081
 msgid "New_mask"
 msgstr "新しいマスク(_M)"
 
-#: ../src/scan_dialog.c:2559
+#: ../src/scan_dialog.c:2552
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "スキャナーマスクが正しくありません"
 
-#: ../src/scan_dialog.c:2695
+#: ../src/scan_dialog.c:2625
 msgid "All tags have been scanned"
 msgstr "すべてのタグはスキャン済みです"
 

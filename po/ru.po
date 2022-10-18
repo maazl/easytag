@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easytag 1.99.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 19:30+0200\n"
+"POT-Creation-Date: 2022-10-15 16:35+0200\n"
 "PO-Revision-Date: 2017-01-11 13:34+0300\n"
 "Last-Translator: Aleksey Kabanov <ak099@mail.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -80,7 +80,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Выберите папку для просмотра в обозревателе"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3736
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "_Открыть"
@@ -211,9 +211,10 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
-#: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
-#: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
+#: ../src/application_window.c:3014 ../src/browser.cc:954
+#: ../src/browser.cc:3735 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
+#: ../src/tag_area.c:1735
 msgid "_Cancel"
 msgstr "О_тменить"
 
@@ -1082,7 +1083,7 @@ msgid "Write information using:"
 msgstr "Записать информацию, используя:"
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.cc:955 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 msgid "_Save"
@@ -3215,8 +3216,8 @@ msgstr "Все файлы были удалены"
 msgid "All tags have been removed"
 msgstr "Все теги были удалены"
 
-#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
-#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
+#: ../src/application_window.c:1474 ../src/browser.cc:366 ../src/browser.cc:409
+#: ../src/browser.cc:443 ../src/browser.cc:4570 ../src/browser.cc:4645
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Не удалось запустить программу «%s»"
@@ -3232,7 +3233,7 @@ msgstr ""
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Попробуйте установить переменную окружения G_FILENAME_ENCODING."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:796
 msgid "Filename translation"
 msgstr "Перевод имени файла"
 
@@ -3276,11 +3277,11 @@ msgstr "Файл: «%s»"
 msgid "Normal exit"
 msgstr "EasyTAG: Выход."
 
-#: ../src/application_window.c:3012 ../src/browser.c:948
+#: ../src/application_window.c:3012 ../src/browser.cc:949
 msgid "Some files have been modified but not saved"
 msgstr "Некоторые файлы были изменены, но не сохранены"
 
-#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.cc:953 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 #, fuzzy
 msgid "_Discard"
@@ -3294,76 +3295,76 @@ msgstr "Выйти"
 msgid "Do you want to save them before quitting?"
 msgstr "Сохранить их перед выходом?"
 
-#: ../src/browser.c:649
+#: ../src/browser.cc:650
 #, fuzzy
 msgid "New default directory selected for browser"
 msgstr "Выберите папку для просмотра"
 
-#: ../src/browser.c:951
+#: ../src/browser.cc:952
 #, fuzzy
 msgid "Do you want to save them before changing directory?"
 msgstr "Сохранить их перед изменением папки?"
 
-#: ../src/browser.c:958
+#: ../src/browser.cc:959
 msgid "Confirm Directory Change"
 msgstr "Подтвердить изменение папки"
 
-#: ../src/browser.c:2531
+#: ../src/browser.cc:2532
 #, fuzzy
 msgid "All albums"
 msgstr "<Все альбомы>"
 
-#: ../src/browser.c:3771
+#: ../src/browser.cc:3772
 #, fuzzy
 msgid "Select File"
 msgstr "Удалить файл"
 
-#: ../src/browser.c:3778
+#: ../src/browser.cc:3779
 #, fuzzy
 msgid "Select Directory"
 msgstr "Выберите папку…"
 
-#: ../src/browser.c:4049
+#: ../src/browser.cc:4074
 #, fuzzy, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Изменить имя папки «%s» на:"
 
-#: ../src/browser.c:4185
+#: ../src/browser.cc:4210
 msgid "You must type a directory name"
 msgstr "Необходимо ввести имя папки"
 
-#: ../src/browser.c:4186 ../src/browser.c:4208
+#: ../src/browser.cc:4211 ../src/browser.cc:4233
 msgid "Directory Name Error"
 msgstr "Ошибка в имени папки"
 
-#: ../src/browser.c:4204
+#: ../src/browser.cc:4229
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr ""
 "Не удалось преобразовать «%s» в системную кодировку наименования файлов."
 
-#: ../src/browser.c:4207
+#: ../src/browser.cc:4232
 msgid "Please use another name."
 msgstr "Используйте другое имя."
 
-#: ../src/browser.c:4279
+#: ../src/browser.cc:4304
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Папка «%s» уже существует."
 
-#: ../src/browser.c:4280 ../src/easytag.c:650
+#: ../src/browser.cc:4305 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Ошибка переименования файла"
 
-#: ../src/browser.c:4319 ../src/browser.c:4348
+#: ../src/browser.cc:4344 ../src/browser.cc:4373
 msgid "Rename Directory Error"
 msgstr "Ошибка переименования папки"
 
-#: ../src/browser.c:4389
+#: ../src/browser.cc:4414
 msgid "Directory renamed"
 msgstr "Папка переименована"
 
-#: ../src/browser.c:4537 ../src/browser.c:4612
+#: ../src/browser.cc:4562 ../src/browser.cc:4637
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "Выполненная команда: «%s %s»"
@@ -4105,7 +4106,7 @@ msgstr "Ошибка в списке воспроизведения"
 msgid "Wrote playlist file ‘%s’"
 msgstr "Записан файл списка воспроизведения «%s»"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
+#: ../src/playlist_dialog.c:625
 #, fuzzy
 msgid "Invalid scanner mask"
 msgstr "Недопустимая маска для сканера"
@@ -4127,63 +4128,63 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "Ошибка неверного пути"
 
-#: ../src/scan_dialog.c:383
+#: ../src/scan_dialog.c:382
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Не удалось вычислить значение CRC для файла «%s»"
 
-#: ../src/scan_dialog.c:398
+#: ../src/scan_dialog.c:397
 #, fuzzy
 msgid "Tag successfully scanned"
 msgstr "Теги успешно прочитаны…"
 
-#: ../src/scan_dialog.c:401
+#: ../src/scan_dialog.c:400
 #, fuzzy, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Теги успешно прочитаны… (%s)"
 
-#: ../src/scan_dialog.c:444
+#: ../src/scan_dialog.c:443
 #, fuzzy, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "Сканер тегов: расширение «%s» не найдено в имени файла «%s»"
 
-#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
+#: ../src/scan_dialog.c:535 ../src/scan_dialog.c:566
 #, fuzzy, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "Ошибка сканирования: не найден разделитель «%s» в «%s»"
 
-#: ../src/scan_dialog.c:795
+#: ../src/scan_dialog.c:794
 #, fuzzy, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "Не удалось преобразовать имя файла «%s» в системную кодировку наименования "
 "файлов"
 
-#: ../src/scan_dialog.c:821
+#: ../src/scan_dialog.c:820
 #, fuzzy
 msgid "New filename successfully scanned"
 msgstr "Новое имя файла было успешно прочитано…"
 
-#: ../src/scan_dialog.c:825
+#: ../src/scan_dialog.c:824
 #, fuzzy, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Новое имя файла было успешно прочитано… (%s)"
 
-#: ../src/scan_dialog.c:1206
+#: ../src/scan_dialog.c:1205
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Ошибка при обработке полей «%s»"
 
-#: ../src/scan_dialog.c:2082
+#: ../src/scan_dialog.c:2081
 msgid "New_mask"
 msgstr "Новая_маска"
 
-#: ../src/scan_dialog.c:2559
+#: ../src/scan_dialog.c:2552
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "Недопустимая маска для сканера"
 
-#: ../src/scan_dialog.c:2695
+#: ../src/scan_dialog.c:2625
 msgid "All tags have been scanned"
 msgstr "Все теги были просканированы"
 

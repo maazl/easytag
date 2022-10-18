@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 2.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 19:30+0200\n"
+"POT-Creation-Date: 2022-10-15 16:35+0200\n"
 "PO-Revision-Date: 2016-09-13 20:57+0800\n"
 "Last-Translator: Walter Cheuk <wwycheuk@gmail.com>\n"
 "Language-Team: \n"
@@ -74,7 +74,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "選擇要在瀏覽器顯示的目錄。"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3736
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "開啟(_O)"
@@ -204,9 +204,10 @@ msgstr "輸入要執行的程式；當前目錄會自動引入為參數"
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
-#: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
-#: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
+#: ../src/application_window.c:3014 ../src/browser.cc:954
+#: ../src/browser.cc:3735 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
+#: ../src/tag_area.c:1735
 msgid "_Cancel"
 msgstr "取消(_C)"
 
@@ -1060,7 +1061,7 @@ msgid "Write information using:"
 msgstr "以此寫入資訊："
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.cc:955 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 msgid "_Save"
@@ -3087,8 +3088,8 @@ msgstr "已刪除所有檔案"
 msgid "All tags have been removed"
 msgstr "已移除所有標籤"
 
-#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
-#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
+#: ../src/application_window.c:1474 ../src/browser.cc:366 ../src/browser.cc:409
+#: ../src/browser.cc:443 ../src/browser.cc:4570 ../src/browser.cc:4645
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "未能啟動「%s」程式"
@@ -3102,7 +3103,7 @@ msgstr "無法將檔名「%s」轉換為系統檔名編碼"
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "請嘗試設置環境變量 G_FILENAME_ENCODING。"
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:796
 msgid "Filename translation"
 msgstr "檔名翻譯"
 
@@ -3144,11 +3145,11 @@ msgstr "檔案：「%s」"
 msgid "Normal exit"
 msgstr "正常結束"
 
-#: ../src/application_window.c:3012 ../src/browser.c:948
+#: ../src/application_window.c:3012 ../src/browser.cc:949
 msgid "Some files have been modified but not saved"
 msgstr "某些檔案已修改，但未有儲存"
 
-#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.cc:953 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr "放棄(_D)"
@@ -3161,70 +3162,70 @@ msgstr "結束"
 msgid "Do you want to save them before quitting?"
 msgstr "結束前要儲存嗎？"
 
-#: ../src/browser.c:649
+#: ../src/browser.cc:650
 msgid "New default directory selected for browser"
 msgstr "為瀏覽選取新預設目錄。"
 
-#: ../src/browser.c:951
+#: ../src/browser.cc:952
 msgid "Do you want to save them before changing directory?"
 msgstr "變更目錄前要儲存嗎？"
 
-#: ../src/browser.c:958
+#: ../src/browser.cc:959
 msgid "Confirm Directory Change"
 msgstr "確認變更目錄"
 
-#: ../src/browser.c:2531
+#: ../src/browser.cc:2532
 msgid "All albums"
 msgstr "所有專輯"
 
-#: ../src/browser.c:3771
+#: ../src/browser.cc:3772
 msgid "Select File"
 msgstr "選取檔案"
 
-#: ../src/browser.c:3778
+#: ../src/browser.cc:3779
 msgid "Select Directory"
 msgstr "選取目錄"
 
-#: ../src/browser.c:4049
+#: ../src/browser.cc:4074
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "「%s」目錄更名為："
 
-#: ../src/browser.c:4185
+#: ../src/browser.cc:4210
 msgid "You must type a directory name"
 msgstr "必須輸入目錄名稱"
 
-#: ../src/browser.c:4186 ../src/browser.c:4208
+#: ../src/browser.cc:4211 ../src/browser.cc:4233
 msgid "Directory Name Error"
 msgstr "目錄名稱出錯"
 
-#: ../src/browser.c:4204
+#: ../src/browser.cc:4229
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "無法將檔名「%s」轉換為檔名編碼"
 
-#: ../src/browser.c:4207
+#: ../src/browser.cc:4232
 msgid "Please use another name."
 msgstr "請使用其他名稱。"
 
-#: ../src/browser.c:4279
+#: ../src/browser.cc:4304
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "已有名為「%s」的目錄。"
 
-#: ../src/browser.c:4280 ../src/easytag.c:650
+#: ../src/browser.cc:4305 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "檔案更名出錯"
 
-#: ../src/browser.c:4319 ../src/browser.c:4348
+#: ../src/browser.cc:4344 ../src/browser.cc:4373
 msgid "Rename Directory Error"
 msgstr "目錄更名出錯"
 
-#: ../src/browser.c:4389
+#: ../src/browser.cc:4414
 msgid "Directory renamed"
 msgstr "目錄已更名"
 
-#: ../src/browser.c:4537 ../src/browser.c:4612
+#: ../src/browser.cc:4562 ../src/browser.cc:4637
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "執行命令「%s」"
@@ -3950,7 +3951,7 @@ msgstr "播放清單檔案出錯"
 msgid "Wrote playlist file ‘%s’"
 msgstr "播放清單檔案「%s」已寫入"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
+#: ../src/playlist_dialog.c:625
 msgid "Invalid scanner mask"
 msgstr "掃瞄遮罩條件無效"
 
@@ -3971,59 +3972,59 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "無效路徑錯誤"
 
-#: ../src/scan_dialog.c:383
+#: ../src/scan_dialog.c:382
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr ""
 
-#: ../src/scan_dialog.c:398
+#: ../src/scan_dialog.c:397
 msgid "Tag successfully scanned"
 msgstr "標籤已成功掃描"
 
-#: ../src/scan_dialog.c:401
+#: ../src/scan_dialog.c:400
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "標籤已成功掃描「%s」"
 
-#: ../src/scan_dialog.c:444
+#: ../src/scan_dialog.c:443
 #, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "於檔名「%1$s」找不到副檔名「%2$s」"
 
-#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
+#: ../src/scan_dialog.c:535 ../src/scan_dialog.c:566
 #, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "於「%2$s」找不到分隔字元「%1$s」"
 
-#: ../src/scan_dialog.c:795
+#: ../src/scan_dialog.c:794
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr "無法將檔名「%s」轉換為系統檔名編碼"
 
-#: ../src/scan_dialog.c:821
+#: ../src/scan_dialog.c:820
 msgid "New filename successfully scanned"
 msgstr "新檔名已成功掃瞄"
 
-#: ../src/scan_dialog.c:825
+#: ../src/scan_dialog.c:824
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "新檔名已成功掃瞄「%s」"
 
-#: ../src/scan_dialog.c:1206
+#: ../src/scan_dialog.c:1205
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "處理欄位「%s」時出錯"
 
-#: ../src/scan_dialog.c:2082
+#: ../src/scan_dialog.c:2081
 msgid "New_mask"
 msgstr "新遮罩條件(_M)"
 
-#: ../src/scan_dialog.c:2559
+#: ../src/scan_dialog.c:2552
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "掃瞄遮罩條件無效"
 
-#: ../src/scan_dialog.c:2695
+#: ../src/scan_dialog.c:2625
 msgid "All tags have been scanned"
 msgstr "已掃瞄所有標籤"
 

@@ -21,8 +21,6 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
-
 /*
  * Description of each item of the FileNameList list
  */
@@ -32,11 +30,14 @@ typedef struct
     gboolean saved; /* Set to TRUE if this filename had been saved */
     gchar *value; /* The filename containing the full path and the extension of the file */
     gchar *value_utf8; /* Same than "value", but converted to UTF-8 to avoid multiple call to the conversion function */
-    const gchar *rel_value; /* part of value beyond the root path passed during initialization. */
-    const gchar *rel_value_utf8; /* part of value_utf8 beyond the root path passed during initialization. */
-    gchar *path_value_ck; /* part of value_ck beyond the root path passed during initialization. */
-    const gchar *file_value_ck; /* part of value_ck only containing the file name. */
+    gchar *rel_value_utf8; /* part of value_utf8 beyond the root path passed during initialization. */
+    gchar *path_value_utf8; /* directory part of rel_value_utf8 if any, "" in doubj. */
+    gchar *file_value_utf8; /* file base name part of (rel_)value_utf8. */
+    gchar *path_value_ck; /* collation string for path_value_utf8. */
+    gchar *file_value_ck; /* collation string for file_value_utf8. */
 } File_Name;
+
+G_BEGIN_DECLS
 
 File_Name * et_file_name_new (void);
 void et_file_name_free (File_Name *file_name);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 2.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 19:30+0200\n"
+"POT-Creation-Date: 2022-10-15 16:35+0200\n"
 "PO-Revision-Date: 2016-01-08 12:17+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
@@ -81,7 +81,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Įveskite kurį aplanką naršyti."
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3735
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3736
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr ""
@@ -213,9 +213,10 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.c:953 ../src/browser.c:3734
-#: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
-#: ../src/easytag.c:596 ../src/tag_area.c:1409 ../src/tag_area.c:1735
+#: ../src/application_window.c:3014 ../src/browser.cc:954
+#: ../src/browser.cc:3735 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
+#: ../src/tag_area.c:1735
 msgid "_Cancel"
 msgstr ""
 
@@ -1122,7 +1123,7 @@ msgid "Write information using:"
 msgstr "Rašyti informaciją naudojant:"
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.c:954 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.cc:955 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 #, fuzzy
@@ -3329,8 +3330,8 @@ msgstr "Visi failai pašalinti"
 msgid "All tags have been removed"
 msgstr "Visos žymos pašalintos"
 
-#: ../src/application_window.c:1474 ../src/browser.c:365 ../src/browser.c:408
-#: ../src/browser.c:442 ../src/browser.c:4545 ../src/browser.c:4620
+#: ../src/application_window.c:1474 ../src/browser.cc:366 ../src/browser.cc:409
+#: ../src/browser.cc:443 ../src/browser.cc:4570 ../src/browser.cc:4645
 #, fuzzy, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Nepavyko paleisti programos: %s"
@@ -3346,7 +3347,7 @@ msgstr ""
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Pabandykite nustatyti aplinkos kintamąjį G_FILENAME_ENCODING."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:797
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:796
 msgid "Filename translation"
 msgstr "Failo vardo vertimas"
 
@@ -3390,11 +3391,11 @@ msgstr "Failas: „%s“"
 msgid "Normal exit"
 msgstr "EasyTAG: Normalus išėjimas."
 
-#: ../src/application_window.c:3012 ../src/browser.c:948
+#: ../src/application_window.c:3012 ../src/browser.cc:949
 msgid "Some files have been modified but not saved"
 msgstr "Kai kurie failai buvo pakeisti bet neįrašyti"
 
-#: ../src/application_window.c:3013 ../src/browser.c:952 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.cc:953 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 #, fuzzy
 msgid "_Discard"
@@ -3408,74 +3409,74 @@ msgstr "Išeiti"
 msgid "Do you want to save them before quitting?"
 msgstr "Ar norite juos įrašyti prieš išeidami?"
 
-#: ../src/browser.c:649
+#: ../src/browser.cc:650
 #, fuzzy
 msgid "New default directory selected for browser"
 msgstr "Pasirinkite, kurį aplanką naršyti"
 
-#: ../src/browser.c:951
+#: ../src/browser.cc:952
 #, fuzzy
 msgid "Do you want to save them before changing directory?"
 msgstr "Ar norite juos įrašyti prieš pakeisdami aplanką?"
 
-#: ../src/browser.c:958
+#: ../src/browser.cc:959
 msgid "Confirm Directory Change"
 msgstr "Patvirtinkite aplanko pakeitimą"
 
-#: ../src/browser.c:2531
+#: ../src/browser.cc:2532
 #, fuzzy
 msgid "All albums"
 msgstr "<Visi albumai>"
 
-#: ../src/browser.c:3771
+#: ../src/browser.cc:3772
 msgid "Select File"
 msgstr "Pasirinkite failą"
 
-#: ../src/browser.c:3778
+#: ../src/browser.cc:3779
 msgid "Select Directory"
 msgstr "Parinkite aplanką"
 
-#: ../src/browser.c:4049
+#: ../src/browser.cc:4074
 #, fuzzy, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Pervadinti aplanką „%s“ į:"
 
-#: ../src/browser.c:4185
+#: ../src/browser.cc:4210
 msgid "You must type a directory name"
 msgstr "Turite nurodyti aplanko pavadinimą"
 
-#: ../src/browser.c:4186 ../src/browser.c:4208
+#: ../src/browser.cc:4211 ../src/browser.cc:4233
 msgid "Directory Name Error"
 msgstr "Aplanko pavadinimo klaida"
 
-#: ../src/browser.c:4204
+#: ../src/browser.cc:4229
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Nepavyko konvertuoti „%s“ į failo pavadinimo koduotę."
 
-#: ../src/browser.c:4207
+#: ../src/browser.cc:4232
 #, fuzzy
 msgid "Please use another name."
 msgstr "Naudokite kitą pavadinimą"
 
-#: ../src/browser.c:4279
+#: ../src/browser.cc:4304
 #, fuzzy, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Aplankas „%s“ jau yra"
 
-#: ../src/browser.c:4280 ../src/easytag.c:650
+#: ../src/browser.cc:4305 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Failo pervadinimo klaida"
 
-#: ../src/browser.c:4319 ../src/browser.c:4348
+#: ../src/browser.cc:4344 ../src/browser.cc:4373
 msgid "Rename Directory Error"
 msgstr "Aplanko pervadinimo klaida"
 
-#: ../src/browser.c:4389
+#: ../src/browser.cc:4414
 msgid "Directory renamed"
 msgstr "Aplankas pervadintas"
 
-#: ../src/browser.c:4537 ../src/browser.c:4612
+#: ../src/browser.cc:4562 ../src/browser.cc:4637
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "Vykdyta komanda: %s"
@@ -4218,7 +4219,7 @@ msgstr "Grojaraščio failo klaida"
 msgid "Wrote playlist file ‘%s’"
 msgstr "Grojaraščio failas „%s“ įrašytas"
 
-#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2628
+#: ../src/playlist_dialog.c:625
 msgid "Invalid scanner mask"
 msgstr "Netinkama skenerio kaukė"
 
@@ -4240,61 +4241,61 @@ msgstr ""
 msgid "Invalid Path Error"
 msgstr "Netinkamo kelio klaida"
 
-#: ../src/scan_dialog.c:383
+#: ../src/scan_dialog.c:382
 #, fuzzy, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Nepavyko failo CRC vertės (%s)"
 
-#: ../src/scan_dialog.c:398
+#: ../src/scan_dialog.c:397
 msgid "Tag successfully scanned"
 msgstr "Žymos sėkmingai nuskaitytos"
 
-#: ../src/scan_dialog.c:401
+#: ../src/scan_dialog.c:400
 #, fuzzy, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Žyma sėkmingai nuskaityta %s"
 
-#: ../src/scan_dialog.c:444
+#: ../src/scan_dialog.c:443
 #, fuzzy, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "Žymių skaityklė: keista…, plėtinys „%s“ failo pavadinime „%s“ nerastas"
 
-#: ../src/scan_dialog.c:536 ../src/scan_dialog.c:567
+#: ../src/scan_dialog.c:535 ../src/scan_dialog.c:566
 #, fuzzy, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "Skenavimo klaida: nepavyko rasti skirtuko „%s“ faile „%s“"
 
-#: ../src/scan_dialog.c:795
+#: ../src/scan_dialog.c:794
 #, fuzzy, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "Nepavyko konvertuoti failo pavadinimo „%s“ į sistemos failų pavadinimų "
 "koduotę"
 
-#: ../src/scan_dialog.c:821
+#: ../src/scan_dialog.c:820
 msgid "New filename successfully scanned"
 msgstr "Naujo failo pavadinimas sėkmingai nuskaitytas"
 
-#: ../src/scan_dialog.c:825
+#: ../src/scan_dialog.c:824
 #, fuzzy, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Naujo failo pavadinimas sėkmingai nuskaitytas: %s"
 
-#: ../src/scan_dialog.c:1206
+#: ../src/scan_dialog.c:1205
 #, fuzzy, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Klaida apdorojant laukus: %s."
 
-#: ../src/scan_dialog.c:2082
+#: ../src/scan_dialog.c:2081
 msgid "New_mask"
 msgstr "Naujas _šablonas"
 
-#: ../src/scan_dialog.c:2559
+#: ../src/scan_dialog.c:2552
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "Netinkama skenerio kaukė"
 
-#: ../src/scan_dialog.c:2695
+#: ../src/scan_dialog.c:2625
 msgid "All tags have been scanned"
 msgstr "Visos žymos nuskaitytos"
 

@@ -21,8 +21,6 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
-
 #include "core_types.h"
 #include "file_description.h"
 #include "file_info.h"
@@ -53,6 +51,13 @@ typedef struct
     GList *FileTag;           /* Points to the current item used of FileTagList */
     GList *FileTagList;       /* Contains the history of changes about file tag data */
     GList *FileTagListBak;    /* Contains items of FileTagList removed by 'undo' procedure but have data currently saved */
+
+    gboolean activate_bg_color; // For browser list: alternating background due to sub directory change.
+
+    #ifdef __cplusplus
+    File_Name* FileName() const { return (File_Name*)FileNameNew->data; }
+    File_Tag* Tag() const { return (File_Tag*)FileTag->data; }
+    #endif
 } ET_File;
 
 /*
@@ -62,6 +67,8 @@ typedef struct
 {
     ET_File *ETFile;           /* Pointer to item of ETFileList changed */
 } ET_History_File;
+
+G_BEGIN_DECLS
 
 gboolean et_file_check_saved (const ET_File *ETFile);
 

@@ -7,30 +7,7 @@
     </object>
     <object class="GtkListStore" id="file_model">
         <columns>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
             <column type="gpointer"/>
-            <column type="gint"/>
-            <column type="gboolean"/>
-            <column type="gint"/>
-            <column type="GdkRGBA"/>
-            <column type="GdkRGBA"/>
         </columns>
     </object>
     <object class="GtkTreeStore" id="directory_model">
@@ -310,12 +287,6 @@
                                                 <property name="title" translatable="yes">Path</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="filepath_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">0</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -326,12 +297,6 @@
                                                 <property name="title" translatable="yes">Filename</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="filename_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">1</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -342,12 +307,6 @@
                                                 <property name="title" translatable="yes">Title</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="title_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">2</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -358,12 +317,6 @@
                                                 <property name="title" translatable="yes">Artist</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="artist_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">3</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -374,12 +327,6 @@
                                                 <property name="title" translatable="yes">Album Artist</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="album_artist_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">4</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -390,12 +337,6 @@
                                                 <property name="title" translatable="yes">Album</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="album_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">5</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -406,12 +347,6 @@
                                                 <property name="title" translatable="yes">Year</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="year_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">6</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -422,12 +357,6 @@
                                                 <property name="title" translatable="yes">Rel. year</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="release_year_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">7</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -438,12 +367,6 @@
                                                 <property name="title" translatable="yes">Disc</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="disc_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">8</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -454,12 +377,6 @@
                                                 <property name="title" translatable="yes">Track</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="track_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">9</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -470,12 +387,6 @@
                                                 <property name="title" translatable="yes">Genre</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="genre_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">10</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -486,12 +397,6 @@
                                                 <property name="title" translatable="yes">Comment</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="comment_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">11</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -502,12 +407,6 @@
                                                 <property name="title" translatable="yes">Composer</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="composer_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">12</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -518,12 +417,6 @@
                                                 <property name="title" translatable="yes">Original Artist</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="orig_artist_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">13</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -534,12 +427,6 @@
                                                 <property name="title" translatable="yes">Orig. year</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="orig_year_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">14</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -550,12 +437,6 @@
                                                 <property name="title" translatable="yes">Copyright</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="copyright_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">15</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -566,12 +447,6 @@
                                                 <property name="title" translatable="yes">URL</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="url_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">16</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -582,12 +457,6 @@
                                                 <property name="title" translatable="yes">Encoded By</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="encoded_by_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">17</attribute>
-                                                        <attribute name="weight">21</attribute>
-                                                        <attribute name="background-rgba">22</attribute>
-                                                        <attribute name="foreground-rgba">23</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>

@@ -22,6 +22,23 @@
 
 #include <gtk/gtk.h>
 
+#ifdef __cplusplus
+
+#define MAKE_FLAGS_ENUM(t) \
+inline t operator|(t l, t r) { return (t)((int)l | (int)r); } \
+inline t operator&(t l, t r) { return (t)((int)l & (int)r); }
+
+MAKE_FLAGS_ENUM(GtkDialogFlags)
+
+// Reference helper to allow array of references
+template <typename T>
+struct reference
+{	T& Ref;
+	constexpr operator T&() const { return Ref; }
+};
+
+#endif
+
 G_BEGIN_DECLS
 
 /*
