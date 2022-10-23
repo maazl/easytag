@@ -270,7 +270,8 @@ et_run_audio_player (GList *files,
     GAppInfo *app_info;
     GdkAppLaunchContext *context;
 
-    g_return_val_if_fail (files != NULL, FALSE);
+    if (files == NULL)
+    	return TRUE; // no files, no error
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
     info = g_file_query_info (files->data,
