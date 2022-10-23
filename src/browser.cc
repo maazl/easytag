@@ -2653,6 +2653,22 @@ on_directory_tree_button_press_event (GtkWidget *widget,
     return GDK_EVENT_PROPAGATE;
 }
 
+static GtkTreeViewColumn* gtk_tree_view_get_column_by_pos(GtkTreeView* view, guint x)
+{
+	GList* columns = gtk_tree_view_get_columns(view);
+	GtkTreeViewColumn *checkcol = nullptr;
+	guint colx = 0;
+	for (GList* node = columns; node != NULL; node = node->next)
+	{	checkcol = (GtkTreeViewColumn*)node->data;
+		colx += gtk_tree_view_column_get_width(checkcol);
+		if (x < colx)
+			break;
+		checkcol = nullptr;
+	}
+	g_list_free(columns);
+	return checkcol;
+}
+
 /*
  * Browser_Popup_Menu_Handler : displays the corresponding menu
  */
@@ -2682,10 +2698,6 @@ on_file_tree_button_press_event (GtkWidget *widget,
         /* Double left mouse click. Select files of the same directory (useful
          * when browsing sub-directories). */
         GdkWindow *bin_window;
-        GList *l;
-        gchar *path_ref = NULL;
-        gchar *patch_check = NULL;
-        GtkTreePath *currentPath = NULL;
 
         if (!ETCore->ETFileDisplayed)
         {
@@ -2701,36 +2713,35 @@ on_file_tree_button_press_event (GtkWidget *widget,
             return GDK_EVENT_PROPAGATE;
         }
 
-        /* File taken as reference. */
-        path_ref = g_path_get_dirname (((File_Name *)ETCore->ETFileDisplayed->FileNameCur->data)->value);
+        // column clicked
+        GtkTreeViewColumn* column = gtk_tree_view_get_column_by_pos(GTK_TREE_VIEW (widget), event->x);
+        if (!column)
+            return GDK_EVENT_PROPAGATE;
 
-        /* Search and select files of the same directory. */
-        for (l = g_list_first (ETCore->ETFileDisplayedList); l != NULL;
-             l = g_list_next (l))
-        {
-            /* Path of the file to check if it is in the same directory. */
-            patch_check = g_path_get_dirname (((File_Name *)((ET_File *)l->data)->FileNameCur->data)->value);
+        // matching compare function
+        const gchar* id = gtk_buildable_get_name(GTK_BUILDABLE(column));
+        gchar* nick = g_strconcat("ascending-", id, NULL);
+        nick[strlen(nick) - 7] = 0; // strip "-column"
+        GEnumClass *enum_class = (GEnumClass*)g_type_class_ref(ET_TYPE_SORT_MODE);
+        GEnumValue* enum_value = g_enum_get_value_by_nick(enum_class, nick);
+        g_type_class_unref(enum_class);
+        g_free(nick);
+        if (!enum_value)
+            return GDK_EVENT_PROPAGATE;
+        auto cmp = ET_Get_Comp_Func_Sort_File((EtSortMode)enum_value->value);
 
-            if (path_ref && patch_check && strcmp (path_ref, patch_check) == 0)
-            {
-                /* Use of 'currentPath' to try to increase speed. Indeed, in
-                 * many cases, the next file to select, is the next in the
-                 * list. */
-                currentPath = et_browser_select_file_by_et_file2 (self,
-                                                                  (ET_File *)l->data,
-                                                                  TRUE,
-                                                                  currentPath);
-            }
+        /* Search and select files of the property. */
+        EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-            g_free (patch_check);
-        }
-
-        g_free (path_ref);
-
-        if (currentPath)
-        {
-            gtk_tree_path_free (currentPath);
-        }
+        GtkTreeModel* model = GTK_TREE_MODEL(priv->file_model);
+        GtkTreeIter iter;
+        gtk_tree_model_get_iter_first(model, &iter);
+        do
+        {   ET_File *file;
+            gtk_tree_model_get(model, &iter, LIST_FILE_POINTER, &file, -1);
+            if (abs(cmp(ETCore->ETFileDisplayed, file)) != 1)
+                Browser_List_Select_File_By_Iter(self, &iter, TRUE);
+        } while (gtk_tree_model_iter_next(model, &iter));
 
         return GDK_EVENT_STOP;
     }
