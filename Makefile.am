@@ -50,7 +50,7 @@ easytag_SOURCES = \
 	src/easytag.c \
 	src/enums.c \
 	src/et_core.c \
-	src/file.c \
+	src/file.cc \
 	src/file_area.c \
 	src/file_description.c \
 	src/file_info.c \

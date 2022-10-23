@@ -1300,6 +1300,23 @@ et_browser_clear_file_model (EtBrowser *self)
     g_signal_handler_unblock (selection, priv->file_selected_handler);
 }
 
+/** Change background color of item depending of equality according to the current sort order. */
+static void set_zebra(GtkTreeModel* model)
+{
+	GtkTreeIter iter;
+	if (!gtk_tree_model_get_iter_first(model, &iter))
+		return;
+	ET_File* last = nullptr;
+	auto cmp = ET_Get_Comp_Func_Sort_File((EtSortMode)g_settings_get_enum(MainSettings, "sort-mode"));
+	bool activate_bg_color = false;
+	do
+	{	ET_File *file;
+		gtk_tree_model_get(model, &iter, LIST_FILE_POINTER, &file, -1);
+		file->activate_bg_color = activate_bg_color ^= last && abs(cmp(last, file)) == 1;
+		last = file;
+	} while (gtk_tree_model_iter_next(model, &iter));
+}
+
 /*
  * Loads the specified etfilelist into the browser list
  * Also supports optionally selecting a specific etfile
@@ -1312,10 +1329,7 @@ et_browser_load_file_list (EtBrowser *self,
 {
     EtBrowserPrivate *priv;
     GList *l;
-    gboolean activate_bg_color = 0;
     GtkTreeIter rowIter;
-    const gchar* previous_dirname_utf8 = NULL;
-
     g_return_if_fail (ET_BROWSER (self));
 
     priv = et_browser_get_instance_private (self);
@@ -1324,25 +1338,16 @@ et_browser_load_file_list (EtBrowser *self,
 
     for (l = g_list_first (etfilelist); l != NULL; l = g_list_next (l))
     {
-        ET_File* file = (ET_File*)l->data;
-        File_Name* filename = file->FileName();
-
-        // Change background color when changing directory (the first row must not be changed)
-        if (previous_dirname_utf8 && g_utf8_collate(previous_dirname_utf8, filename->path_value_utf8) != 0)
-            activate_bg_color = !activate_bg_color;
-        file->activate_bg_color = activate_bg_color;
-
         /* File list displays the current filename (name on disc) and tag
          * fields. */
-        gtk_list_store_insert_with_values (priv->file_model, &rowIter, G_MAXINT,
-                                           LIST_FILE_POINTER, l->data, -1);
-        previous_dirname_utf8 = filename->path_value_utf8;
+        gtk_list_store_insert_with_values(priv->file_model, &rowIter, G_MAXINT,
+                                          LIST_FILE_POINTER, l->data, -1);
 
         if (etfile_to_select == l->data)
-        {
-            Browser_List_Select_File_By_Iter (self, &rowIter, TRUE);
-        }
+            Browser_List_Select_File_By_Iter(self, &rowIter, TRUE);
     }
+
+    set_zebra(GTK_TREE_MODEL(priv->file_model));
 }
 
 
@@ -1881,14 +1886,11 @@ et_browser_clear (EtBrowser *self)
 void
 et_browser_refresh_sort (EtBrowser *self)
 {
-    EtBrowserPrivate *priv;
+	g_return_if_fail (ET_BROWSER (self));
+	EtBrowserPrivate* priv = et_browser_get_instance_private (self);
+	gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(priv->file_model), 0, Browser_List_Sort_Func, NULL, NULL);
 
-    g_return_if_fail (ET_BROWSER (self));
-
-    priv = et_browser_get_instance_private (self);
-
-    gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->file_model), 0,
-                                     Browser_List_Sort_Func, NULL, NULL);
+	set_zebra(GTK_TREE_MODEL(priv->file_model));
 }
 
 /*

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bosnianuniversetranslation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-15 16:35+0200\n"
+"POT-Creation-Date: 2022-10-23 14:31+0200\n"
 "PO-Revision-Date: 2015-02-28 14:21+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -79,7 +79,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Odaberite direktoriji za prikaz u brauzer"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3736
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3456
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr "_Otvori"
@@ -210,8 +210,8 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.cc:954
-#: ../src/browser.cc:3735 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
+#: ../src/application_window.c:3014 ../src/browser.cc:918
+#: ../src/browser.cc:3455 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
 #: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
 #: ../src/tag_area.c:1735
 msgid "_Cancel"
@@ -1080,7 +1080,7 @@ msgid "Write information using:"
 msgstr "Pisi informacije koristeci:"
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.cc:955 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.cc:919 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 msgid "_Save"
@@ -3238,8 +3238,8 @@ msgstr "Sve datoteke su obrisane"
 msgid "All tags have been removed"
 msgstr "Svi tagovi su obrisani"
 
-#: ../src/application_window.c:1474 ../src/browser.cc:366 ../src/browser.cc:409
-#: ../src/browser.cc:443 ../src/browser.cc:4570 ../src/browser.cc:4645
+#: ../src/application_window.c:1474 ../src/browser.cc:346 ../src/browser.cc:389
+#: ../src/browser.cc:423 ../src/browser.cc:4383 ../src/browser.cc:4458
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Nije uspjelo pokretanje programa'%s'"
@@ -3296,11 +3296,11 @@ msgstr "Datoteka: '%s'"
 msgid "Normal exit"
 msgstr "Normalni izlaz"
 
-#: ../src/application_window.c:3012 ../src/browser.cc:949
+#: ../src/application_window.c:3012 ../src/browser.cc:913
 msgid "Some files have been modified but not saved"
 msgstr "Neke datoteke su modifikovane ali ne i spašene"
 
-#: ../src/application_window.c:3013 ../src/browser.cc:953 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.cc:917 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
 msgstr "_Odbaci"
@@ -3313,70 +3313,70 @@ msgstr "Izađi"
 msgid "Do you want to save them before quitting?"
 msgstr "Da li želite da ih spasite prije zatvaranja?"
 
-#: ../src/browser.cc:650
+#: ../src/browser.cc:615
 msgid "New default directory selected for browser"
 msgstr "Novi podrazumjevani direktorij odabran za pretazivac"
 
-#: ../src/browser.cc:952
+#: ../src/browser.cc:916
 msgid "Do you want to save them before changing directory?"
 msgstr "Da li želite da se spase prije promjene direktorija?"
 
-#: ../src/browser.cc:959
+#: ../src/browser.cc:923
 msgid "Confirm Directory Change"
 msgstr "Potvrdi Promjenu Direktorija"
 
-#: ../src/browser.cc:2532
+#: ../src/browser.cc:2257
 msgid "All albums"
 msgstr "Svi albumi"
 
-#: ../src/browser.cc:3772
+#: ../src/browser.cc:3492
 msgid "Select File"
 msgstr "Označi datoteku"
 
-#: ../src/browser.cc:3779
+#: ../src/browser.cc:3499
 msgid "Select Directory"
 msgstr "Označi direktorij"
 
-#: ../src/browser.cc:4074
+#: ../src/browser.cc:3888
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Preimenovanje direktorija '%s' na:"
 
-#: ../src/browser.cc:4210
+#: ../src/browser.cc:4024
 msgid "You must type a directory name"
 msgstr "Morate unijeti ime direktorija"
 
-#: ../src/browser.cc:4211 ../src/browser.cc:4233
+#: ../src/browser.cc:4025 ../src/browser.cc:4047
 msgid "Directory Name Error"
 msgstr "Greška u imenu direktorija"
 
-#: ../src/browser.cc:4229
+#: ../src/browser.cc:4043
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Ne može se pretvoriti '%s' u kodirano ime datoteke"
 
-#: ../src/browser.cc:4232
+#: ../src/browser.cc:4046
 msgid "Please use another name."
 msgstr "Molimo koristite drugo ime."
 
-#: ../src/browser.cc:4304
+#: ../src/browser.cc:4118
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Ime direktorija '%s' već postoji."
 
-#: ../src/browser.cc:4305 ../src/easytag.c:650
+#: ../src/browser.cc:4119 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Preimenuj Grešku Datoteke"
 
-#: ../src/browser.cc:4344 ../src/browser.cc:4373
+#: ../src/browser.cc:4158 ../src/browser.cc:4187
 msgid "Rename Directory Error"
 msgstr "Preimenuj Grešku Direktorija"
 
-#: ../src/browser.cc:4414
+#: ../src/browser.cc:4228
 msgid "Directory renamed"
 msgstr "Direktorij preimenovan"
 
-#: ../src/browser.cc:4562 ../src/browser.cc:4637
+#: ../src/browser.cc:4375 ../src/browser.cc:4450
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "Izvršena naredba '%s'"

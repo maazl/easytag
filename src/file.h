@@ -56,6 +56,7 @@ typedef struct
 
     #ifdef __cplusplus
     File_Name* FileName() const { return (File_Name*)FileNameNew->data; }
+    File_Name* CurFileName() const { return (File_Name*)FileNameCur->data; }
     File_Tag* Tag() const { return (File_Tag*)FileTag->data; }
     #endif
 } ET_File;
@@ -89,58 +90,6 @@ gboolean ET_Manage_Changes_Of_File_Data (ET_File *ETFile, File_Name *FileName, F
 void ET_Mark_File_Name_As_Saved (ET_File *ETFile);
 gchar *et_file_generate_name (const ET_File *ETFile, const gchar *new_file_name);
 gchar * ET_File_Format_File_Extension (const ET_File *ETFile);
-
-gint ET_Comp_Func_Sort_File_By_Ascending_Filepath (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Filepath (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Filename (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Filename (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Creation_Date (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Creation_Date (const ET_File *ETFile1, const ET_File *ETFile2);
-gint et_comp_func_sort_file_by_ascending_disc_number (const ET_File *ETFile1,
-                                                      const ET_File *ETFile2);
-gint et_comp_func_sort_file_by_descending_disc_number (const ET_File *ETFile1,
-                                                       const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Track_Number (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Track_Number (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Title (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Title (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Artist (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Artist (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Album_Artist (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Album_Artist (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Album (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Album (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Year (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Year (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Release_Year (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Release_Year (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Genre (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Genre (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Comment (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Comment (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Composer (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Composer (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Orig_Artist (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Orig_Artist (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Orig_Year (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Orig_Year (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Copyright (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Copyright (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Url (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Url (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_Encoded_By (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_Encoded_By (const ET_File *ETFile1, const ET_File *ETFile2);
-
-gint ET_Comp_Func_Sort_File_By_Ascending_File_Type (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_File_Type (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_File_Size (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_File_Size (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_File_Duration (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_File_Duration (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_File_Bitrate (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_File_Bitrate (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Ascending_File_Samplerate (const ET_File *ETFile1, const ET_File *ETFile2);
-gint ET_Comp_Func_Sort_File_By_Descending_File_Samplerate (const ET_File *ETFile1, const ET_File *ETFile2);
 
 gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1, const ET_File *ETFile2);
 

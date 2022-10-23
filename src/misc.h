@@ -24,6 +24,9 @@
 
 #ifdef __cplusplus
 
+template <typename T>
+inline T sign(T value) { return (value > 0) - (value < 0); }
+
 #define MAKE_FLAGS_ENUM(t) \
 inline t operator|(t l, t r) { return (t)((int)l | (int)r); } \
 inline t operator&(t l, t r) { return (t)((int)l & (int)r); }

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: easytag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-15 16:35+0200\n"
+"POT-Creation-Date: 2022-10-23 14:31+0200\n"
 "PO-Revision-Date: 2014-04-08 16:07+0200\n"
 "Last-Translator: Gianvito Cavasoli <gianvito@gmx.it>\n"
 "Language-Team: Italiano <gnome-it-list@gnome.org>\n"
@@ -80,7 +80,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Immettere una directory da esplorare."
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3736
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3456
 #: ../src/tag_area.c:1411
 msgid "_Open"
 msgstr ""
@@ -213,8 +213,8 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.cc:954
-#: ../src/browser.cc:3735 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
+#: ../src/application_window.c:3014 ../src/browser.cc:918
+#: ../src/browser.cc:3455 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
 #: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
 #: ../src/tag_area.c:1735
 msgid "_Cancel"
@@ -1127,7 +1127,7 @@ msgid "Write information using:"
 msgstr "Scrivere informazioni usando:"
 
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.cc:955 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/browser.cc:919 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
 #: ../src/tag_area.c:1737
 #, fuzzy
@@ -3350,8 +3350,8 @@ msgstr "Tutti i file sono stati eliminati"
 msgid "All tags have been removed"
 msgstr "Tutte le etichette sono state rimosse"
 
-#: ../src/application_window.c:1474 ../src/browser.cc:366 ../src/browser.cc:409
-#: ../src/browser.cc:443 ../src/browser.cc:4570 ../src/browser.cc:4645
+#: ../src/application_window.c:1474 ../src/browser.cc:346 ../src/browser.cc:389
+#: ../src/browser.cc:423 ../src/browser.cc:4383 ../src/browser.cc:4458
 #, fuzzy, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Avvio del programma non riuscito: %s"
@@ -3410,11 +3410,11 @@ msgstr "File: «%s»"
 msgid "Normal exit"
 msgstr "EasyTAG: uscita normale."
 
-#: ../src/application_window.c:3012 ../src/browser.cc:949
+#: ../src/application_window.c:3012 ../src/browser.cc:913
 msgid "Some files have been modified but not saved"
 msgstr "Alcuni file sono stati modificati ma non salvati"
 
-#: ../src/application_window.c:3013 ../src/browser.cc:953 ../src/easytag.c:233
+#: ../src/application_window.c:3013 ../src/browser.cc:917 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 #, fuzzy
 msgid "_Discard"
@@ -3428,74 +3428,74 @@ msgstr "Esce"
 msgid "Do you want to save them before quitting?"
 msgstr "Salvare prima di uscire?"
 
-#: ../src/browser.cc:650
+#: ../src/browser.cc:615
 #, fuzzy
 msgid "New default directory selected for browser"
 msgstr "Seleziona una directory da esplorare"
 
-#: ../src/browser.cc:952
+#: ../src/browser.cc:916
 #, fuzzy
 msgid "Do you want to save them before changing directory?"
 msgstr "Salvarli prima di cambiare directory?"
 
-#: ../src/browser.cc:959
+#: ../src/browser.cc:923
 msgid "Confirm Directory Change"
 msgstr "Conferma cambio directory"
 
-#: ../src/browser.cc:2532
+#: ../src/browser.cc:2257
 #, fuzzy
 msgid "All albums"
 msgstr "<Tutti gli album>"
 
-#: ../src/browser.cc:3772
+#: ../src/browser.cc:3492
 msgid "Select File"
 msgstr "Seleziona file"
 
-#: ../src/browser.cc:3779
+#: ../src/browser.cc:3499
 msgid "Select Directory"
 msgstr "Seleziona directory"
 
-#: ../src/browser.cc:4074
+#: ../src/browser.cc:3888
 #, fuzzy, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Rinomina la directory «%s» in:"
 
-#: ../src/browser.cc:4210
+#: ../src/browser.cc:4024
 msgid "You must type a directory name"
 msgstr "Digitare un nome directory"
 
-#: ../src/browser.cc:4211 ../src/browser.cc:4233
+#: ../src/browser.cc:4025 ../src/browser.cc:4047
 msgid "Directory Name Error"
 msgstr "Errore nome directory"
 
-#: ../src/browser.cc:4229
+#: ../src/browser.cc:4043
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Impossibile convertire «%s» nella codifica nome del file"
 
-#: ../src/browser.cc:4232
+#: ../src/browser.cc:4046
 #, fuzzy
 msgid "Please use another name."
 msgstr "Usare un altro nome"
 
-#: ../src/browser.cc:4304
+#: ../src/browser.cc:4118
 #, fuzzy, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Il nome directory «%s» esiste già."
 
-#: ../src/browser.cc:4305 ../src/easytag.c:650
+#: ../src/browser.cc:4119 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Errore rinomina file"
 
-#: ../src/browser.cc:4344 ../src/browser.cc:4373
+#: ../src/browser.cc:4158 ../src/browser.cc:4187
 msgid "Rename Directory Error"
 msgstr "Errore rinomina directory"
 
-#: ../src/browser.cc:4414
+#: ../src/browser.cc:4228
 msgid "Directory renamed"
 msgstr "Directory rinominata"
 
-#: ../src/browser.cc:4562 ../src/browser.cc:4637
+#: ../src/browser.cc:4375 ../src/browser.cc:4450
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "Comando eseguito: %s"

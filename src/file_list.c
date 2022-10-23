@@ -664,7 +664,7 @@ et_artist_album_list_add_file (GList *file_list,
                      * Add the ETFile to this AlbumList item */
                     AlbumList->data = g_list_insert_sorted ((GList *)AlbumList->data,
                                                             ETFile,
-                                                            (GCompareFunc)ET_Comp_Func_Sort_File_By_Ascending_Filename);
+                                                            (GCompareFunc)ET_Get_Comp_Func_Sort_File(ET_SORT_MODE_ASCENDING_FILENAME));
                     return file_list;
                 }
 
@@ -676,7 +676,7 @@ et_artist_album_list_add_file (GList *file_list,
             etfilelist = g_list_append (NULL, ETFile);
             ArtistList->data = g_list_insert_sorted ((GList *)ArtistList->data,
                                                      etfilelist,
-                                                     (GCompareFunc)ET_Comp_Func_Sort_Album_Item_By_Ascending_Album);
+                                                     (GCompareFunc)ET_Get_Comp_Func_Sort_File(ET_SORT_MODE_ASCENDING_ALBUM));
             return file_list;
         }
     }
