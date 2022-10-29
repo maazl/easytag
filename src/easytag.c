@@ -495,8 +495,11 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
 
                 // if 'SF_HideMsgbox_Write_Tag is TRUE', then errors are displayed only in log
                 rc = Write_File_Tag(ETFile,SF_HideMsgbox_Write_Tag);
+                if (rc)
+                    /* Mark after writing tag. */
+                    ETFile->FileTagCur = ETFile->FileTag;
                 // if an error occurs when 'SF_HideMsgbox_Write_Tag is TRUE', we don't stop saving...
-                if (rc != TRUE && !SF_HideMsgbox_Write_Tag)
+                else if (!SF_HideMsgbox_Write_Tag)
                 {
                     stop_loop = -1;
 

@@ -468,11 +468,12 @@ et_file_list_add (GList *file_list,
     ETFile->ETFileKey            = ETFileKey;
     ETFile->ETFileDescription    = description;
     ETFile->ETFileExtension      = ETFileExtension;
-    ETFile->FileNameList         = g_list_append(NULL,FileName);
-    ETFile->FileNameCur          = ETFile->FileNameList;
-    ETFile->FileNameNew          = ETFile->FileNameList;
-    ETFile->FileTagList          = g_list_append(NULL,FileTag);
-    ETFile->FileTag              = ETFile->FileTagList;
+    ETFile->FileNameList         =
+    ETFile->FileNameCur          =
+    ETFile->FileNameNew          = g_list_append(NULL,FileName);
+    ETFile->FileTagList          =
+    ETFile->FileTagCur           =
+    ETFile->FileTag              = g_list_append(NULL,FileTag);
     ETFile->ETFileInfo           = ETFileInfo;
 
     /* Add the item to the "main list" */
@@ -980,8 +981,7 @@ et_displayed_file_list_set (GList *ETFileList)
 
     /* Sort the file list. */
     ET_Sort_File_List (ETCore->ETFileDisplayedList,
-                       g_settings_get_enum (MainSettings,
-                                            "sort-mode"));
+        (EtSortMode)g_settings_get_enum(MainSettings, "sort-mode"));
 
     /* Synchronize, so that the core file list pointer always points to the
      * head of the list. */
@@ -1024,7 +1024,7 @@ et_file_list_update_directory_name (GList *file_list,
     for (filelist = g_list_first (file_list); filelist != NULL;
          filelist = g_list_next (filelist))
     {
-        if ((file = filelist->data))
+        if ((file = (ET_File*)filelist->data))
         {
             for (filenamelist = file->FileNameList; filenamelist != NULL;
                  filenamelist = g_list_next (filenamelist))

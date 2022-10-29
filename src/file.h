@@ -1,5 +1,6 @@
 /* EasyTAG - tag editor for audio files
  * Copyright (C) 2014,2015  David King <amigadave@amigadave.com>
+ * Copyright (C) 2022  Marcel Müller <gitlab@maazl.de>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -48,7 +49,8 @@ typedef struct
     GList *FileNameList; /* Contains the history of changes about the filename. */
     GList *FileNameListBak;   /* Contains items of FileNameList removed by 'undo' procedure but have data currently saved (for example, when you save your last changes, make some 'undo', then make new changes) */
 
-    GList *FileTag;           /* Points to the current item used of FileTagList */
+    GList *FileTagCur;        /* Points to the current item used of FileTagList */
+    GList *FileTag;           /* Points to the new item used of FileTagList */
     GList *FileTagList;       /* Contains the history of changes about file tag data */
     GList *FileTagListBak;    /* Contains items of FileTagList removed by 'undo' procedure but have data currently saved */
 
@@ -56,8 +58,9 @@ typedef struct
 
     #ifdef __cplusplus
     File_Name* FileName() const { return (File_Name*)FileNameNew->data; }
-    File_Name* CurFileName() const { return (File_Name*)FileNameCur->data; }
+    const File_Name* CurFileName() const { return (File_Name*)FileNameCur->data; }
     File_Tag* Tag() const { return (File_Tag*)FileTag->data; }
+    const File_Tag* CurTag() const { return (File_Tag*)FileTagCur->data; }
     #endif
 } ET_File;
 

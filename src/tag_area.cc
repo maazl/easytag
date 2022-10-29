@@ -97,7 +97,11 @@ typedef struct
     GtkWidget *apply_image_toolitem;
 } EtTagAreaPrivate;
 
+// learn correct return type for et_browser_get_instance_private
+#define et_tag_area_get_instance_private et_tag_area_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtTagArea, et_tag_area, GTK_TYPE_BIN)
+#undef et_tag_area_get_instance_private
+#define et_tag_area_get_instance_private(x) (EtTagAreaPrivate*)et_tag_area_get_instance_private_(x)
 
 enum
 {
@@ -140,7 +144,7 @@ apply_field_to_selection(const gchar *string_to_set,
     {
         ET_File *etfile = (ET_File *)l->data;
         File_Tag *FileTag = et_file_tag_new ();
-        et_file_tag_copy_into (FileTag, etfile->FileTag->data);
+        et_file_tag_copy_into (FileTag, etfile->Tag());
         apply_func (FileTag, string_to_set);
         ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
     }
@@ -216,7 +220,7 @@ on_apply_to_selection (GObject *object,
     }
     else if (object == G_OBJECT (priv->disc_number_entry))
     {
-        gchar *separator;
+        const gchar *separator;
         gchar *disc_number = NULL;
 
         string_to_set = gtk_entry_get_text (GTK_ENTRY (priv->disc_number_entry));
@@ -238,7 +242,7 @@ on_apply_to_selection (GObject *object,
         {
             etfile = (ET_File *)l->data;
             FileTag = et_file_tag_new ();
-            et_file_tag_copy_into (FileTag, etfile->FileTag->data);
+            et_file_tag_copy_into (FileTag, etfile->Tag());
             et_file_tag_set_disc_number (FileTag, disc_number ? disc_number
                                                               : string_to_set);
             et_file_tag_set_disc_total (FileTag, string_to_set1);
@@ -298,7 +302,7 @@ on_apply_to_selection (GObject *object,
         {
             etfile = (ET_File *)l->data;
             FileTag = et_file_tag_new ();
-            et_file_tag_copy_into (FileTag, etfile->FileTag->data);
+            et_file_tag_copy_into (FileTag, etfile->Tag());
 
             // We apply the TrackEntry field to all others files only if it is to delete
             // the field (string=""). Else we don't overwrite the track number
@@ -333,7 +337,7 @@ on_apply_to_selection (GObject *object,
          * So we must browse the whole 'etfilelistfull' to get position of each selected file.
          * Note : 'etfilelistfull' and 'etfilelist' must be sorted in the same order */
         GList *etfilelistfull = NULL;
-        gint sort_mode;
+        EtSortMode sort_mode;
         gchar *path = NULL;
         gchar *path1 = NULL;
         gint i = 0;
@@ -342,7 +346,7 @@ on_apply_to_selection (GObject *object,
         etfilelistfull = ETCore->ETFileList;
 
         /* Sort 'etfilelistfull' and 'etfilelist' in the same order. */
-        sort_mode = g_settings_get_enum (MainSettings, "sort-mode");
+        sort_mode = (EtSortMode)g_settings_get_enum (MainSettings, "sort-mode");
         etfilelist = ET_Sort_File_List (etfilelist, sort_mode);
         etfilelistfull = ET_Sort_File_List (etfilelistfull, sort_mode);
 
@@ -350,9 +354,9 @@ on_apply_to_selection (GObject *object,
         {
             gchar *track_string;
             // To get the path of the file
-            const File_Name *FileNameCur = (File_Name *)((ET_File *)etfilelistfull->data)->FileNameCur->data;
+            const File_Name *FileNameCur = ((ET_File *)etfilelistfull->data)->FileName();
             // The ETFile in the selected file list
-            etfile = etfilelist->data;
+            etfile = (ET_File*)etfilelist->data;
 
             // Restart counter when entering a new directory
             g_free(path1);
@@ -366,7 +370,7 @@ on_apply_to_selection (GObject *object,
             if ( (ET_File *)etfilelistfull->data == etfile )
             {
                 FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, etfile->FileTag->data);
+                et_file_tag_copy_into (FileTag, etfile->Tag());
                 et_file_tag_set_track_number (FileTag, track_string);
                 ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
 
@@ -411,7 +415,7 @@ on_apply_to_selection (GObject *object,
             }
 
             FileTag = et_file_tag_new ();
-            et_file_tag_copy_into (FileTag, etfile->FileTag->data);
+            et_file_tag_copy_into (FileTag, etfile->Tag());
             et_file_tag_set_track_total (FileTag, track_string);
             ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
 
@@ -545,7 +549,7 @@ on_apply_to_selection (GObject *object,
         {
             etfile = (ET_File *)l->data;
             FileTag = et_file_tag_new ();
-            et_file_tag_copy_into (FileTag, etfile->FileTag->data);
+            et_file_tag_copy_into (FileTag, etfile->Tag());
             et_file_tag_set_picture (FileTag, res);
             ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
         }
@@ -703,9 +707,7 @@ static void
 on_apply_to_selection_menu_item (GObject *entry,
                                  GtkMenuItem *menu_item)
 {
-    EtTagArea *self;
-
-    self = g_object_get_data (G_OBJECT (menu_item), "tag-area");
+    EtTagArea *self = (EtTagArea*)g_object_get_data (G_OBJECT (menu_item), "tag-area");
 
     on_apply_to_selection (entry, self);
 }
@@ -994,7 +996,7 @@ Insert_Only_Digit (GtkEditable *editable,
     }
 
     g_signal_stop_emission_by_name(G_OBJECT(editable),"insert_text");
-    result = g_malloc0(length+1);
+    result = (gchar*)g_malloc0(length+1);
     result[0] = inserted_text[0];
 
     // Check the rest, if any...
@@ -1014,9 +1016,9 @@ Insert_Only_Digit (GtkEditable *editable,
         return;
     }
 
-    g_signal_handlers_block_by_func(G_OBJECT(editable),G_CALLBACK(Insert_Only_Digit),data);
+    g_signal_handlers_block_by_func(G_OBJECT(editable),(gpointer)Insert_Only_Digit,data);
     gtk_editable_insert_text(editable, result, j, position);
-    g_signal_handlers_unblock_by_func(G_OBJECT(editable),G_CALLBACK(Insert_Only_Digit),data);
+    g_signal_handlers_unblock_by_func(G_OBJECT(editable),(gpointer)Insert_Only_Digit,data);
     g_free(result);
 }
 
@@ -1494,7 +1496,6 @@ on_picture_properties_button_clicked (GObject *object,
     GList *l;
     gint selection_nbr, selection_i = 1;
     gint response;
-    EtPictureType pic_type;
 
     self = ET_TAG_AREA (user_data);
     priv = et_tag_area_get_instance_private (self);
@@ -1515,7 +1516,7 @@ on_picture_properties_button_clicked (GObject *object,
     for (l = selection_list; l != NULL; l = g_list_next (l))
     {
         GtkWidget *PictureTypesWindow;
-        GtkTreePath *path = l->data;
+        GtkTreePath *path = (GtkTreePath*)l->data;
         EtPicture *pic = NULL;
         GtkTreeSelection *selectiontype;
         gchar *title;
@@ -1573,14 +1574,14 @@ on_picture_properties_button_clicked (GObject *object,
         /* Other tag types. */
         {
             /* Load pictures types. */
-            for (pic_type = ET_PICTURE_TYPE_OTHER; pic_type < ET_PICTURE_TYPE_UNDEFINED; pic_type++)
+            for (gint pic_type = ET_PICTURE_TYPE_OTHER; pic_type < ET_PICTURE_TYPE_UNDEFINED; pic_type++)
             {
                 GtkTreeIter itertype;
 
                 gtk_list_store_insert_with_values (store, &itertype,
                                                    G_MAXINT,
                                                    PICTURE_TYPE_COLUMN_TEXT,
-                                                   _(Picture_Type_String (pic_type)),
+                                                   _(Picture_Type_String ((EtPictureType)pic_type)),
                                                    PICTURE_TYPE_COLUMN_TYPE_CODE,
                                                    pic_type, -1);
                 /* Line to select by default. */
@@ -1641,7 +1642,7 @@ on_picture_properties_button_clicked (GObject *object,
 
                 gtk_tree_model_get (modeltype, &itertype,
                                    PICTURE_TYPE_COLUMN_TYPE_CODE, &t, -1);
-                pic->type = t;
+                pic->type = (EtPictureType)t;
 
                 buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (desc)));
                 g_strstrip (buffer);
@@ -1707,7 +1708,7 @@ on_picture_save_button_clicked (GObject *object,
 
     for (l = selection_list; l != NULL; l = g_list_next (l))
     {
-        GtkTreePath *path = l->data;
+        GtkTreePath *path = (GtkTreePath*)l->data;
         GtkTreeIter iter;
         EtPicture *pic;
         gchar *title;
@@ -1933,14 +1934,14 @@ on_picture_clear_button_clicked (GObject *object,
     for (l = paths; l != NULL; l = g_list_next (l))
     {
         refs = g_list_prepend (refs, gtk_tree_row_reference_new (model,
-                                                                 l->data));
+                                                                 (GtkTreePath*)l->data));
     }
 
     g_list_free_full (paths, (GDestroyNotify)gtk_tree_path_free);
 
     for (l = refs; l != NULL; l = g_list_next (l))
     {
-        GtkTreePath *path = gtk_tree_row_reference_get_path (l->data);
+        GtkTreePath *path = gtk_tree_row_reference_get_path ((GtkTreeRowReference*)l->data);
 
         if (gtk_tree_model_get_iter (model, &iter, path))
         {
@@ -1948,7 +1949,7 @@ on_picture_clear_button_clicked (GObject *object,
         }
 
         gtk_tree_path_free(path);
-        gtk_tree_row_reference_free (l->data);
+        gtk_tree_row_reference_free ((GtkTreeRowReference*)l->data);
     }
 
     et_application_window_update_et_file_from_ui (ET_APPLICATION_WINDOW (MainWindow));
@@ -2253,7 +2254,7 @@ et_tag_area_class_init (EtTagAreaClass *klass)
 GtkWidget *
 et_tag_area_new (void)
 {
-    return g_object_new (ET_TYPE_TAG_AREA, NULL);
+    return (GtkWidget*)g_object_new (ET_TYPE_TAG_AREA, NULL);
 }
 
 static void

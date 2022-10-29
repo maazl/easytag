@@ -46,7 +46,11 @@ typedef struct
     guint status_bar_context;
 } EtSearchDialogPrivate;
 
+// learn correct return type for et_browser_get_instance_private
+#define et_search_dialog_get_instance_private et_search_dialog_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtSearchDialog, et_search_dialog, GTK_TYPE_DIALOG)
+#undef et_search_dialog_get_instance_private
+#define et_search_dialog_get_instance_private(x) (EtSearchDialogPrivate*)et_search_dialog_get_instance_private_(x)
 
 enum
 {
@@ -722,5 +726,5 @@ et_search_dialog_new (GtkWindow *parent)
 {
     g_return_val_if_fail (GTK_WINDOW (parent), NULL);
 
-    return g_object_new (ET_TYPE_SEARCH_DIALOG, "transient-for", parent, NULL);
+    return (EtSearchDialog*)g_object_new (ET_TYPE_SEARCH_DIALOG, "transient-for", parent, NULL);
 }

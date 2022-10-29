@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include "browser.h"
+#include "file_renderer.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
@@ -3524,117 +3525,18 @@ album_list_separator_func (GtkTreeModel *model,
     return separator_row;
 }
 
-class ColumnRenderer
-{
-protected:
-	virtual void Render(GtkCellRendererText* renderer, const ET_File* file) const;
-public:
-	static void set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkTreeModel* model, GtkTreeIter* iter, gpointer data);
-};
-
-class FileColumnRenderer : public ColumnRenderer
-{
-protected:
-	gchar* File_Name::* const Field;
-	virtual void Render(GtkCellRendererText* renderer, const ET_File* file) const;
-public:
-	FileColumnRenderer(gchar* File_Name::* const field) : Field(field) {}
-};
-
-class TagColumnRenderer : public ColumnRenderer
-{
-protected:
-	gchar* File_Tag::* const Field;
-	virtual void Render(GtkCellRendererText* renderer, const ET_File* file) const;
-public:
-	TagColumnRenderer(gchar* File_Tag::* const field) : Field(field) {}
-};
-
-class TagPartColumnRenderer : public TagColumnRenderer
-{
-	gchar* File_Tag::* const Field2;
-protected:
-	virtual void Render(GtkCellRendererText* renderer, const ET_File* file) const;
-public:
-	TagPartColumnRenderer(gchar* File_Tag::* const field1, gchar* File_Tag::* const field2)
-	: TagColumnRenderer(field1), Field2(field2) {}
-};
-
-/**
- * Map with renderers, must match the sequence and count of the columns declared in browser.ui.
- */
-static const reference<const ColumnRenderer> Renderers[] =
-{
-	FileColumnRenderer(&File_Name::path_value_utf8),
-	FileColumnRenderer(&File_Name::file_value_utf8),
-	TagColumnRenderer(&File_Tag::title),
-	TagColumnRenderer(&File_Tag::artist),
-	TagColumnRenderer(&File_Tag::album_artist),
-	TagColumnRenderer(&File_Tag::album),
-	TagColumnRenderer(&File_Tag::year),
-	TagColumnRenderer(&File_Tag::release_year),
-	TagPartColumnRenderer(&File_Tag::disc_number, &File_Tag::disc_total),
-	TagPartColumnRenderer(&File_Tag::track, &File_Tag::track_total),
-	TagColumnRenderer(&File_Tag::genre),
-	TagColumnRenderer(&File_Tag::comment),
-	TagColumnRenderer(&File_Tag::composer),
-	TagColumnRenderer(&File_Tag::orig_artist),
-	TagColumnRenderer(&File_Tag::orig_year),
-	TagColumnRenderer(&File_Tag::copyright),
-	TagColumnRenderer(&File_Tag::url),
-	TagColumnRenderer(&File_Tag::encoded_by)
-};
-
-void ColumnRenderer::set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkTreeModel* model, GtkTreeIter* iter, gpointer data)
+static void set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkTreeModel* model, GtkTreeIter* iter, gpointer data)
 {
 	const ET_File *file;
 	gtk_tree_model_get(model, iter, LIST_FILE_POINTER, &file, -1);
-	((const ColumnRenderer*)data)->Render(GTK_CELL_RENDERER_TEXT(cell), file);
-}
-
-static const GdkRGBA LIGHT_BLUE = { 0.866, 0.933, 1.0, 1.0 };
-
-void ColumnRenderer::Render(GtkCellRendererText* renderer, const ET_File* file) const
-{
-	gboolean bold = g_settings_get_boolean (MainSettings, "file-changed-bold");
-	gboolean saved = et_file_check_saved(file);
-
-	g_object_set(renderer,
-		"weight", saved || !bold ? PANGO_WEIGHT_NORMAL : PANGO_WEIGHT_BOLD,
-		"foreground-rgba", saved || bold ? NULL : &RED,
-		"background-rgba", file->activate_bg_color ? &LIGHT_BLUE : NULL,
-		NULL);
-}
-
-void FileColumnRenderer::Render(GtkCellRendererText* renderer, const ET_File* file) const
-{
-	const gchar* value = file->FileName()->*Field;
-	g_object_set(renderer, "text", value, NULL);
-	ColumnRenderer::Render(renderer, file);
-}
-
-void TagColumnRenderer::Render(GtkCellRendererText* renderer, const ET_File* file) const
-{
-	const gchar* value = file->Tag()->*Field;
-	g_object_set(renderer, "text", value, NULL);
-	ColumnRenderer::Render(renderer, file);
-}
-
-void TagPartColumnRenderer::Render(GtkCellRendererText* renderer, const ET_File* file) const
-{
-	const gchar* value = file->Tag()->*Field;
-	const gchar* value2 = file->Tag()->*Field2;
-	string svalue;
-	if (!et_str_empty(value2))
-	{
-		if (!et_str_empty(value))
-			svalue += value;
-		svalue += "/";
-		svalue += value2;
-		value = svalue.c_str();
-	}
-	g_object_set(renderer, "text", value, NULL);
-	ColumnRenderer::Render(renderer, file);
+	auto renderer = (const FileColumnRenderer*)data;
+	string text = renderer->RenderText(file);
+	bool saved = et_file_check_saved(file);
+	bool changed = !saved && text != renderer->RenderText(file, true);
+	if (changed && text.length() == 0)
+		text = "\xe2\x90\x80"; // "␀" Unicode 0x2400 as UTF-8
+	FileColumnRenderer::SetText(GTK_CELL_RENDERER_TEXT(cell),
+		text.c_str(), file->activate_bg_color, saved ? FileColumnRenderer::NORMAL : changed ? FileColumnRenderer::STRONGHIGHLIGHT : FileColumnRenderer::HIGHLIGHT);
 }
 
 /*
@@ -3714,7 +3616,9 @@ create_browser (EtBrowser *self)
 
         // rendering method
         GtkCellRenderer* renderer = GTK_CELL_RENDERER(GTK_CELL_LAYOUT_GET_IFACE(column)->get_cells(GTK_CELL_LAYOUT(column))->data);
-        gtk_tree_view_column_set_cell_data_func(column, renderer, &ColumnRenderer::set_cell_data, (gpointer)(&Renderers[i].Ref), NULL);
+        auto rdr = FileColumnRenderer::Get_Renderer(id);
+        g_assert(rdr);
+        gtk_tree_view_column_set_cell_data_func(column, renderer, &set_cell_data, (gpointer)rdr, NULL);
 
         // sort action
         gchar* nick = g_strconcat("ascending-", id, NULL);

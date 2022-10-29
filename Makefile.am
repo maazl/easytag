@@ -54,8 +54,9 @@ easytag_SOURCES = \
 	src/file_area.c \
 	src/file_description.c \
 	src/file_info.c \
-	src/file_list.c \
+	src/file_list.cc \
 	src/file_name.cc \
+	src/file_renderer.cc \
 	src/file_tag.c \
 	src/load_files_dialog.c \
 	src/log.c \
@@ -68,10 +69,10 @@ easytag_SOURCES = \
 	src/progress_bar.c \
 	src/scan.c \
 	src/scan_dialog.c \
-	src/search_dialog.c \
+	src/search_dialog.cc \
 	src/setting.c \
 	src/status_bar.c \
-	src/tag_area.c \
+	src/tag_area.cc \
 	src/tags/id3lib/c_wrapper.cpp \
 	src/tags/libapetag/apetaglib.c \
 	src/tags/libapetag/is_tag.c \
@@ -118,6 +119,7 @@ easytag_headers = \
 	src/file_info.h \
 	src/file_list.h \
 	src/file_name.h \
+	src/file_renderer.h \
 	src/file_tag.h \
 	src/genres.h \
 	src/load_files_dialog.h \
