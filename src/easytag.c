@@ -835,6 +835,7 @@ Read_Directory (const gchar *path_real)
 
     /* Initialize browser list */
     et_application_window_browser_clear (window);
+    et_application_window_search_dialog_clear (window);
 
     /* Clear entry boxes  */
     et_application_window_file_area_clear (window);

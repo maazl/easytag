@@ -1920,6 +1920,20 @@ et_application_window_browser_clear_artist_model (EtApplicationWindow *self)
 }
 
 void
+et_application_window_search_dialog_clear (EtApplicationWindow *self)
+{
+    EtApplicationWindowPrivate *priv;
+
+    g_return_if_fail (ET_APPLICATION_WINDOW (self));
+
+    priv = et_application_window_get_instance_private (self);
+
+    g_return_if_fail (priv->browser != NULL);
+
+    et_search_dialog_clear (ET_SEARCH_DIALOG(priv->search_dialog));
+}
+
+void
 et_application_window_select_dir (EtApplicationWindow *self,
                                   GFile *file)
 {

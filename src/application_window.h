@@ -65,6 +65,7 @@ void et_application_window_browser_set_sensitive (EtApplicationWindow *self, gbo
 void et_application_window_browser_clear (EtApplicationWindow *self);
 void et_application_window_browser_clear_album_model (EtApplicationWindow *self);
 void et_application_window_browser_clear_artist_model (EtApplicationWindow *self);
+void et_application_window_search_dialog_clear (EtApplicationWindow *self);
 void et_application_window_select_dir (EtApplicationWindow *self, GFile *file);
 void et_application_window_select_file_by_et_file (EtApplicationWindow *self, ET_File *ETFile);
 GFile * et_application_window_get_current_path (EtApplicationWindow *self);
