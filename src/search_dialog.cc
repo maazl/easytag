@@ -205,20 +205,11 @@ Search_File (GtkWidget *search_button,
     gtk_widget_set_sensitive (GTK_WIDGET (priv->search_results_view), resultCount > 0);
 }
 
-static void
-on_close_clicked (GtkButton *button, gpointer user_data)
-{
-    EtSearchDialog *self = ET_SEARCH_DIALOG (user_data);
-    EtSearchDialogPrivate *priv = et_search_dialog_get_instance_private (self);
-
-    et_search_dialog_apply_changes (self);
-    gtk_widget_hide (GTK_WIDGET (self));
-}
-
 static gboolean
 on_delete_event (GtkWidget *widget)
 {
     et_search_dialog_apply_changes (ET_SEARCH_DIALOG (widget));
+    gtk_widget_hide (widget);
 
     return TRUE;
 }
@@ -330,29 +321,18 @@ et_search_dialog_class_init (EtSearchDialogClass *klass)
 {
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-    gtk_widget_class_set_template_from_resource (widget_class,
-                                                 "/org/gnome/EasyTAG/search_dialog.ui");
-    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog,
-                                                  search_find_button);
-    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog,
-                                                  search_string_combo);
-    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog,
-                                                  search_filename_check);
-    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog,
-                                                  search_tag_check);
-    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog,
-                                                  search_case_check);
-    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog,
-                                                  search_results_model);
-    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog,
-                                                  search_results_view);
-    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog,
-                                                  status_bar);
-    gtk_widget_class_bind_template_callback (widget_class, on_close_clicked);
+    gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/EasyTAG/search_dialog.ui");
+    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog, search_find_button);
+    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog, search_string_combo);
+    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog, search_filename_check);
+    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog, search_tag_check);
+    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog, search_case_check);
+    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog, search_results_model);
+    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog, search_results_view);
+    gtk_widget_class_bind_template_child_private (widget_class, EtSearchDialog, status_bar);
     gtk_widget_class_bind_template_callback (widget_class, on_delete_event);
     gtk_widget_class_bind_template_callback (widget_class, Search_File);
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             Search_Result_List_Row_Selected);
+    gtk_widget_class_bind_template_callback (widget_class, Search_Result_List_Row_Selected);
 }
 
 /*

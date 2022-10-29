@@ -100,18 +100,6 @@
                             </packing>
                         </child>
                         <child>
-                            <object class="GtkButton" id="search_close_button">
-                                <property name="label" translatable="yes">_Close</property>
-                                <property name="use-underline">True</property>
-                                <property name="visible">True</property>
-                                <signal name="clicked" handler="on_close_clicked"/>
-                            </object>
-                            <packing>
-                                <property name="left-attach">2</property>
-                                <property name="top-attach">1</property>
-                            </packing>
-                        </child>
-                        <child>
                             <object class="GtkScrolledWindow" id="search_scrolled">
                                 <property name="min-content-height">300</property>
                                 <property name="min-content-width">400</property>
