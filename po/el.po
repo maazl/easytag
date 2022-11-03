@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 1.99.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-23 14:31+0200\n"
+"POT-Creation-Date: 2022-11-03 20:54+0100\n"
 "PO-Revision-Date: 2019-11-21 23:57+0200\n"
 "Last-Translator: Efstathios Iosifidis <iosifidis@opensuse.org>\n"
 "Language-Team: team@gnome.gr\n"
@@ -82,8 +82,8 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Επιλέξτε έναν κατάλογο προς εμφάνιση στον περιήγηση."
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3456
-#: ../src/tag_area.c:1411
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3469
+#: ../src/tag_area.cc:1413
 msgid "_Open"
 msgstr "Ά_νοιγμα"
 
@@ -92,12 +92,12 @@ msgid "Select a directory to browse"
 msgstr "Επιλέξτε έναν κατάλογο για περιήγηση"
 
 #. Translators: No files, as in "0 files".
-#: ../data/browser.ui.h:4 ../src/easytag.c:979
+#: ../data/browser.ui.h:4 ../src/easytag.c:983
 msgid "No files"
 msgstr "Δεν υπάρχουν αρχεία"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:63
+#: ../data/preferences_dialog.ui.h:68 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Καλλιτέχνης"
@@ -111,12 +111,12 @@ msgid "# Files"
 msgstr "# Αρχείων"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:67
+#: ../data/preferences_dialog.ui.h:70 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Δίσκος"
 
-#: ../data/browser.ui.h:9
+#: ../data/browser.ui.h:9 ../data/search_dialog.ui.h:11
 msgid "Path"
 msgstr "Διαδρομή"
 
@@ -127,7 +127,7 @@ msgid "Filename"
 msgstr "Όνομα αρχείου"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:66 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Τίτλο"
@@ -156,17 +156,17 @@ msgid "Track"
 msgstr "Τίτλος κομματιού"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:69
+#: ../data/preferences_dialog.ui.h:72 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Είδος"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:74
 #: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Σχόλιο"
 
-#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
+#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:76
 #: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
@@ -215,10 +215,10 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.cc:918
-#: ../src/browser.cc:3455 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
-#: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
-#: ../src/tag_area.c:1735
+#: ../src/application_window.c:3028 ../src/browser.cc:920
+#: ../src/browser.cc:3468 ../src/cddb_dialog.cc:2124 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:599 ../src/tag_area.cc:1411
+#: ../src/tag_area.cc:1736
 msgid "_Cancel"
 msgstr "_Ακύρωση"
 
@@ -239,7 +239,7 @@ msgstr ""
 "του τρέχοντος αρχείου ως παράμετρο."
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:562
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:565
 msgid "Rename Directory"
 msgstr "Μετονομασία καταλόγου"
 
@@ -326,7 +326,7 @@ msgstr "Πεδία αναζήτησης"
 msgid "Track Name"
 msgstr "Τίτλος κομματιού"
 
-#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:91
+#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:96
 #: ../src/picture.c:191
 msgid "Other"
 msgstr "Άλλο"
@@ -449,19 +449,19 @@ msgstr ""
 msgid "Match lines with the Levenshtein algorithm"
 msgstr "Συμφωνία γραμμών με τον αλγόριθμο Levenshtein"
 
-#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:143
+#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:148
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:24
 msgid "Whether to use the DLM algorithm to match CDDB results to files"
 msgstr ""
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
-#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:160
-#: ../data/scan_dialog.ui.h:118 ../data/search_dialog.ui.h:11
+#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:165
+#: ../data/scan_dialog.ui.h:118
 msgid "_Close"
 msgstr "_Κλείσιμο"
 
 #: ../data/cddb_dialog.ui.h:49 ../data/load_files_dialog.ui.h:17
-#: ../src/cddb_dialog.c:2140
+#: ../src/cddb_dialog.cc:2125
 msgid "_Apply"
 msgstr "_Εφαρμογή"
 
@@ -473,7 +473,7 @@ msgstr ""
 "γραμμή)."
 
 #. Default values are MPEG data.
-#: ../data/file_area.ui.h:1 ../src/application_window.c:2180
+#: ../data/file_area.ui.h:1 ../src/application_window.c:2194
 #: ../src/file_area.c:155
 msgid "File"
 msgstr "Αρχείο"
@@ -558,8 +558,8 @@ msgstr "Εισαγωγή μιας κενής γραμμής πριν από τη
 msgid "Delete the selected line"
 msgstr "Διαγραφή της επιλεγμένης γραμμής"
 
-#: ../data/load_files_dialog.ui.h:8 ../src/load_files_dialog.c:750
-#: ../src/load_files_dialog.c:853
+#: ../data/load_files_dialog.ui.h:8 ../src/load_files_dialog.cc:753
+#: ../src/load_files_dialog.cc:856
 msgid "Delete all blank lines"
 msgstr "Διαγραφή όλων των κενών γραμμών"
 
@@ -573,8 +573,8 @@ msgstr "Μετακίνηση προς τα πάνω της επιλεγμένη�
 msgid "Move the selected line down"
 msgstr "Μετακίνηση προς τα πάνω της επιλεγμένης γραμμής"
 
-#: ../data/load_files_dialog.ui.h:11 ../src/load_files_dialog.c:768
-#: ../src/load_files_dialog.c:871
+#: ../data/load_files_dialog.ui.h:11 ../src/load_files_dialog.cc:771
+#: ../src/load_files_dialog.cc:874
 msgid "Reload"
 msgstr "Επαναφόρτωση"
 
@@ -1105,10 +1105,10 @@ msgstr "Εγγραφή πληροφοριών με χρήση του ονόμα�
 msgid "Write information using:"
 msgstr "Εγγραφή πληροφοριών με χρήση:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.cc:919 ../src/easytag.c:234 ../src/easytag.c:465
-#: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
-#: ../src/tag_area.c:1737
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3029
+#: ../src/browser.cc:921 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/easytag.c:472 ../src/easytag.c:600 ../src/easytag.c:607
+#: ../src/tag_area.cc:1738
 msgid "_Save"
 msgstr "_Αποθήκευση"
 
@@ -1271,76 +1271,100 @@ msgid "Filenames"
 msgstr "Ονόματα αρχείων"
 
 #: ../data/preferences_dialog.ui.h:32
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
 #, fuzzy
-msgid "Replace illegal characters when renaming"
+msgid "Replace illegal characters when renaming:"
 msgstr ""
 "Αντικατάσταση απαράδεκτων χαρακτήρων στο όνομα του αρχείου (για Windows και "
 "σε CD-ROM)"
 
 #: ../data/preferences_dialog.ui.h:33
 msgid ""
-"Convert characters which cannot be represented in filenames on the FAT32/16 "
-"and Joliet filesystems (‘\\’, ‘:’, ‘;’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’)"
+"Convert characters which cannot be represented in filenames on some "
+"filesystems (‘\\’, ‘/’, ‘:’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’)"
 msgstr ""
 
 #: ../data/preferences_dialog.ui.h:34
+msgid "by ASCII characters"
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:35
+msgid "Use the ASCII characters (‘-’, ‘+’, ‘_’, ‘'’, ‘(’, ‘)’) as replacement."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:36
+msgid "by Unicode characters"
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:37
+msgid ""
+"Use similar Unicode characters (‘&#8726;’, ‘&#8725;’, ‘&#8758;’, ‘&#8727;’, "
+"‘&#8253;’, ‘&#8221;’, ‘&#8826;’, ‘&#8827;’, ‘&#8739;’) as replacement."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:38
+#, fuzzy
+msgid "No change"
+msgstr "Καμία αλλαγή"
+
+#: ../data/preferences_dialog.ui.h:39
+msgid "You must manually ensure valid file characters."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:40
 msgid "Convert filename extension to:"
 msgstr "Μετατροπή της επέκτασης του ονόματος αρχείου σε:"
 
-#: ../data/preferences_dialog.ui.h:35
-msgid "Lower Case"
+#: ../data/preferences_dialog.ui.h:41
+#, fuzzy
+msgid "Lower case"
 msgstr "Πεζά"
 
-#: ../data/preferences_dialog.ui.h:36
+#: ../data/preferences_dialog.ui.h:42
 #, fuzzy
 msgid "For example, the extension will be converted to ‘.mp3’"
 msgstr "Π.χ., η επέκταση θα μετατραπεί σε '.mp3'"
 
-#: ../data/preferences_dialog.ui.h:37
-msgid "Upper Case"
+#: ../data/preferences_dialog.ui.h:43
+#, fuzzy
+msgid "Upper case"
 msgstr "Κεφαλαία"
 
-#: ../data/preferences_dialog.ui.h:38
+#: ../data/preferences_dialog.ui.h:44
 #, fuzzy
 msgid "For example, the extension will be converted to ‘.MP3’"
 msgstr "Π.χ., η επέκταση θα μετατραπεί σε '.MP3'"
 
-#: ../data/preferences_dialog.ui.h:39
-msgid "No Change"
-msgstr "Καμία αλλαγή"
-
-#: ../data/preferences_dialog.ui.h:40
+#: ../data/preferences_dialog.ui.h:45
 msgid "The extension will not be modified"
 msgstr "Η επέκταση δε θα τροποποιηθεί"
 
-#: ../data/preferences_dialog.ui.h:41
+#: ../data/preferences_dialog.ui.h:46
 #, fuzzy
 msgid "Filename Encoding"
 msgstr "Μετάφραση ονόματος αρχείου"
 
-#: ../data/preferences_dialog.ui.h:42
+#: ../data/preferences_dialog.ui.h:47
 msgid "Try another character encoding"
 msgstr "Δοκιμάστε μίας άλλη κωδικοποίηση χαρακτήρων"
 
-#: ../data/preferences_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:48
 msgid ""
 "Try to use the encoding associated with your locale and if this fails, try "
 "the ISO-8859-1 character encoding"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:44
+#: ../data/preferences_dialog.ui.h:49
 #, fuzzy
 msgid "Transliterate characters into the system character encoding"
 msgstr "Δοκιμάστε μίας άλλη κωδικοποίηση χαρακτήρων"
 
-#: ../data/preferences_dialog.ui.h:45
+#: ../data/preferences_dialog.ui.h:50
 msgid ""
 "Replace unsupported characters with a similar character from the target "
 "character encoding"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:46
+#: ../data/preferences_dialog.ui.h:51
 #, fuzzy
 msgid ""
 "Use the system character encoding and silently discard unsupported characters"
@@ -1348,7 +1372,7 @@ msgstr ""
 "Αναγκαστική χρήση της κωδικοποίησης χαρακτήρων του συστήματος και σιωπηρή "
 "απόρριψη μερικών χαρακτήρων"
 
-#: ../data/preferences_dialog.ui.h:47
+#: ../data/preferences_dialog.ui.h:52
 #, fuzzy
 msgid ""
 "Discard characters which cannot be represented in the target character "
@@ -1357,66 +1381,66 @@ msgstr ""
 "Με την επιλογή αυτή, όταν ένας χαρακτήρας δεν μπορεί να αναπαρασταθεί στο "
 "σύνολο χαρακτήρων προορισμού, θα απορρίπτεται σιωπηρά."
 
-#: ../data/preferences_dialog.ui.h:48
+#: ../data/preferences_dialog.ui.h:53
 msgid "Files"
 msgstr "Αρχεία"
 
-#: ../data/preferences_dialog.ui.h:49
+#: ../data/preferences_dialog.ui.h:54
 msgid "Automatically complete date field"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:50
+#: ../data/preferences_dialog.ui.h:55
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:82
 msgid "Whether to automatically complete the date tag"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:51
+#: ../data/preferences_dialog.ui.h:56
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:87
 msgid "Automatically select the type of the image based on its filename"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:52
+#: ../data/preferences_dialog.ui.h:57
 msgid ""
 "Whether to, when adding cover art, automatically select a type for an image "
 "based on its filename"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:53
+#: ../data/preferences_dialog.ui.h:58
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:93
 msgid "Preserve the tag field focus"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:54
+#: ../data/preferences_dialog.ui.h:59
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:94
 msgid "Whether to preserve focus on the current tag field when switching file"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:55
+#: ../data/preferences_dialog.ui.h:60
 msgid "Pad the number of digits in the disc field to:"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:56
+#: ../data/preferences_dialog.ui.h:61
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:84
 #, fuzzy
 msgid "Whether the disc number tag field should be padded with leading zeroes"
 msgstr "Αν θα συμπληρωθεί το πεδίο του δίσκου με μηδενικό στην αρχή \t"
 
-#: ../data/preferences_dialog.ui.h:57
+#: ../data/preferences_dialog.ui.h:62
 msgid "Pad the number of digits in the track field to:"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:58
+#: ../data/preferences_dialog.ui.h:63
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:90
 #, fuzzy
 msgid "Whether the track number tag field should be padded with leading zeroes"
 msgstr "Αν θα συμπληρωθεί το πεδίο του δίσκου με μηδενικό στην αρχή \t"
 
-#: ../data/preferences_dialog.ui.h:59
+#: ../data/preferences_dialog.ui.h:64
 #, fuzzy
 msgid "Splitting"
 msgstr "Διαίρεση ετικετών"
 
-#: ../data/preferences_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:65
 msgid ""
 "For Vorbis tags, selected fields will be split at dashes and saved as "
 "separate tags"
@@ -1424,101 +1448,101 @@ msgstr ""
 "Για τις ετικέτες Vorbis, τα επιλεγμένα πεδία θα διαιρεθούν στις παύλες και "
 "θα αποθηκευτούν ως ξεχωριστές ετικέτες"
 
-#: ../data/preferences_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:67
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:186
 msgid "Whether to split title fields at a “ - ” separator in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:64
+#: ../data/preferences_dialog.ui.h:69
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:188
 msgid "Whether to split artist fields at a “ - ” separator in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:71
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:190
 msgid "Whether to split album fields at a “ - ” separator in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:73
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:192
 msgid "Whether to split genre fields at a “ - ” separator in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:70
+#: ../data/preferences_dialog.ui.h:75
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:194
 msgid "Whether to split comment fields at a “ - ” separator in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:72
+#: ../data/preferences_dialog.ui.h:77
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:196
 msgid "Whether to split composer fields at a “ - ” separator in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:73
+#: ../data/preferences_dialog.ui.h:78
 msgid "Original artist"
 msgstr "Αρχικός καλλιτέχνης"
 
-#: ../data/preferences_dialog.ui.h:74
+#: ../data/preferences_dialog.ui.h:79
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:198
 msgid ""
 "Whether to split original artist fields at a “ - ” separator in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:75
+#: ../data/preferences_dialog.ui.h:80
 msgid "Tags"
 msgstr "Ετικέτες"
 
-#: ../data/preferences_dialog.ui.h:76
+#: ../data/preferences_dialog.ui.h:81
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:51
 #, fuzzy
 msgid "Strip ID3 tags if all ID3 tags are empty"
 msgstr "Αφαίρεση των ετικετών αν όλα τα πεδία είναι κενά"
 
-#: ../data/preferences_dialog.ui.h:77
+#: ../data/preferences_dialog.ui.h:82
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:52
 msgid ""
 "Whether to remove the ID3 tag from the audio file if all the individual tag "
 "fields are empty"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:78
+#: ../data/preferences_dialog.ui.h:83
 #, fuzzy
 msgid "Non-standard encoding for reading ID3 tags:"
 msgstr ""
 "Χρήση μη-τυπικού συνόλου χαρακτήρων για την ανάγνωση των ετικετών ID3: "
 
-#: ../data/preferences_dialog.ui.h:79
+#: ../data/preferences_dialog.ui.h:84
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:50
 #, fuzzy
 msgid "Whether to use a non-standard character encoding when reading ID3 tags"
 msgstr ""
 "Χρήση μη-τυπικού συνόλου χαρακτήρων για την ανάγνωση των ετικετών ID3: "
 
-#: ../data/preferences_dialog.ui.h:80
+#: ../data/preferences_dialog.ui.h:85
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:60
 #, fuzzy
 msgid "Choose the character set to be used when reading ID3v1 and ID3v2 tags"
 msgstr ""
 "Χρήση μη-τυπικού συνόλου χαρακτήρων για την ανάγνωση των ετικετών ID3: "
 
-#: ../data/preferences_dialog.ui.h:81
+#: ../data/preferences_dialog.ui.h:86
 msgid "ID3v2"
 msgstr "ID3v2"
 
-#: ../data/preferences_dialog.ui.h:82
+#: ../data/preferences_dialog.ui.h:87
 msgid "Write ID3v2 tag"
 msgstr "Δημιουργία ετικέτας ID3v2"
 
-#: ../data/preferences_dialog.ui.h:83
+#: ../data/preferences_dialog.ui.h:88
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:62
 msgid "Whether to write ID3v2 tags when writing ID3 tags into audio files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:84
+#: ../data/preferences_dialog.ui.h:89
 msgid "Version:"
 msgstr "Έκδοση:"
 
-#: ../data/preferences_dialog.ui.h:85
+#: ../data/preferences_dialog.ui.h:90
 #, fuzzy
 msgid ""
 "Select the ID3v2 tag version to write:\n"
@@ -1529,36 +1553,36 @@ msgstr ""
 " - η ID3v2.3 γράφεται χρησιμοποιώντας id3lib,\n"
 " - η ID3v2.4 γράφεται χρησιμοποιώντας libid3tag (συνιστάται)."
 
-#: ../data/preferences_dialog.ui.h:88
+#: ../data/preferences_dialog.ui.h:93
 #, fuzzy
 msgid "Character encoding:"
 msgstr "Δοκιμάστε μίας άλλη κωδικοποίηση χαρακτήρων"
 
-#: ../data/preferences_dialog.ui.h:89
+#: ../data/preferences_dialog.ui.h:94
 msgid "Unicode"
 msgstr "Unicode"
 
-#: ../data/preferences_dialog.ui.h:90
+#: ../data/preferences_dialog.ui.h:95
 msgid ""
 "Choose the Unicode character encoding to be used when writing ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:92
+#: ../data/preferences_dialog.ui.h:97
 #, fuzzy
 msgid ""
 "Override the standard Unicode character encoding to be used when writing "
 "ID3v2 tags"
 msgstr "Χρήση μη-τυπικού συνόλου χαρακτήρων για την εγγραφή των ετικετών ID3: "
 
-#: ../data/preferences_dialog.ui.h:93
+#: ../data/preferences_dialog.ui.h:98
 msgid "When encoding conversion fails:"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:94
+#: ../data/preferences_dialog.ui.h:99
 msgid "Report error"
 msgstr "Αναφορά σφάλματος"
 
-#: ../data/preferences_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:100
 #, fuzzy
 msgid ""
 "Display an error message when a character cannot be represented in the "
@@ -1567,169 +1591,169 @@ msgstr ""
 "Με την επιλογή αυτή, όταν ένας χαρακτήρας δεν μπορεί να αναπαρασταθεί στο "
 "σύνολο χαρακτήρων προορισμού, θα απορρίπτεται σιωπηρά."
 
-#: ../data/preferences_dialog.ui.h:96
+#: ../data/preferences_dialog.ui.h:101
 msgid "Transliterate"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:97
+#: ../data/preferences_dialog.ui.h:102
 #, fuzzy
 msgid "Discard"
 msgstr "Δίσκος"
 
-#: ../data/preferences_dialog.ui.h:98
+#: ../data/preferences_dialog.ui.h:103
 msgid "Automatically convert old ID3v2 tag versions"
 msgstr "Αυτόματη μετατροπή των παλαιών εκδόσεων ετικετών ID3v2"
 
-#: ../data/preferences_dialog.ui.h:99
+#: ../data/preferences_dialog.ui.h:104
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:66
 msgid ""
 "Whether to convert ID3 tags written against old version of the "
 "specification, such as ID3v2.2, to newer ones, such as ID3v2.3 or ID3v2.4"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:100
+#: ../data/preferences_dialog.ui.h:105
 msgid "Use CRC-32"
 msgstr "Χρήση CRC-32"
 
-#: ../data/preferences_dialog.ui.h:101
+#: ../data/preferences_dialog.ui.h:106
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:70
 msgid "Whether to embed a CRC-32 checksum of the audio file data in ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:102
+#: ../data/preferences_dialog.ui.h:107
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:67
 #, fuzzy
 msgid "Compress data in ID3v2 tags"
 msgstr "Ορισμός συμπίεσης στις ετικέτες ID3v2"
 
-#: ../data/preferences_dialog.ui.h:103
+#: ../data/preferences_dialog.ui.h:108
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:68
 #, fuzzy
 msgid "Whether to compress data in ID3v2 tags"
 msgstr "Ορισμός συμπίεσης στις ετικέτες ID3v2"
 
-#: ../data/preferences_dialog.ui.h:104
+#: ../data/preferences_dialog.ui.h:109
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:71
 msgid "Use text-only genre in ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:105
+#: ../data/preferences_dialog.ui.h:110
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:72
 msgid ""
 "Whether to use only a string, and not the integer-base ID3v1 genre field, "
 "when writing a genre field to ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:106
+#: ../data/preferences_dialog.ui.h:111
 msgid "ID3v1"
 msgstr "ID3v1"
 
-#: ../data/preferences_dialog.ui.h:107
+#: ../data/preferences_dialog.ui.h:112
 msgid "Write ID3v1 tag"
 msgstr "Εγγραφή ετικέτας ID3v1"
 
-#: ../data/preferences_dialog.ui.h:108
+#: ../data/preferences_dialog.ui.h:113
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:54
 msgid "Whether to write ID3v1 tags when writing ID3 tags into audio files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:109
+#: ../data/preferences_dialog.ui.h:114
 #, fuzzy
 msgid "Choose the character set to be used when writing ID3v1 tag"
 msgstr "Σύνολο χαρακτήρων για εγγραφή ετικετών ID3"
 
-#: ../data/preferences_dialog.ui.h:110
+#: ../data/preferences_dialog.ui.h:115
 msgid "ID3 Tags"
 msgstr "Ετικέτες ID3"
 
-#: ../data/preferences_dialog.ui.h:111
+#: ../data/preferences_dialog.ui.h:116
 #, fuzzy
 msgid "Character Conversion"
 msgstr "Σαρωτής συμπλήρωσης ετικέτας - μετατροπή χαρακτήρων"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:113
+#: ../data/preferences_dialog.ui.h:118
 #, fuzzy
 msgid "Fill Tag Scanner"
 msgstr "Συμπλήρωση ετικέτας"
 
-#: ../data/preferences_dialog.ui.h:115
+#: ../data/preferences_dialog.ui.h:120
 #, fuzzy, no-c-format
 msgid "Convert underscores and ‘%20’ to spaces"
 msgstr "Μετατροπή του '_' και του '%20' σε κενά"
 
-#: ../data/preferences_dialog.ui.h:117
+#: ../data/preferences_dialog.ui.h:122
 #, fuzzy, no-c-format
 msgid "Convert spaces and ‘%20’ to underscores"
 msgstr "Μετατροπή του κενού ' ' σε υπογράμμιση '_'"
 
-#: ../data/preferences_dialog.ui.h:118
+#: ../data/preferences_dialog.ui.h:123
 msgid "No conversion"
 msgstr ""
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:120
+#: ../data/preferences_dialog.ui.h:125
 #, fuzzy
 msgid "Rename File and Directory Scanner"
 msgstr "Μετονομασία αρχείου και καταλόγου"
 
-#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:96
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:784
+#: ../data/preferences_dialog.ui.h:126 ../data/scan_dialog.ui.h:96
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.cc:786
 msgid "Remove spaces"
 msgstr "Αφαίρεση κενών"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:123
+#: ../data/preferences_dialog.ui.h:128
 #, fuzzy
 msgid "Process Fields Scanner"
 msgstr "Επεξεργασία πεδίων"
 
-#: ../data/preferences_dialog.ui.h:124
+#: ../data/preferences_dialog.ui.h:129
 #, fuzzy
 msgid "Upper-case the first letters of all words"
 msgstr "Κεφαλαίο το πρώτο γράμμα κάθε λέξης"
 
-#: ../data/preferences_dialog.ui.h:125
+#: ../data/preferences_dialog.ui.h:130
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:130
 msgid ""
 "Whether to upper-case the first letter of all words, including prepositions "
 "and other short words such as “feat.”, when processing tag fields"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:126
+#: ../data/preferences_dialog.ui.h:131
 msgid "Fields"
 msgstr "Πεδία"
 
-#: ../data/preferences_dialog.ui.h:127
+#: ../data/preferences_dialog.ui.h:132
 msgid "Overwrite fields when scanning tags"
 msgstr "Αντικατάσταση πεδίων κατά τη σάρωση ετικετών"
 
-#: ../data/preferences_dialog.ui.h:128
+#: ../data/preferences_dialog.ui.h:133
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:99
 msgid ""
 "Whether to overwrite the tag field values when filling tags. Otherwise, only "
 "blank tag fields will be filled"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:129
+#: ../data/preferences_dialog.ui.h:134
 msgid "Set this text as default comment:"
 msgstr "Ορισμός αυτού του κειμένου ως προεπιλεγμένου:"
 
-#: ../data/preferences_dialog.ui.h:130
+#: ../data/preferences_dialog.ui.h:135
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:101
 msgid ""
 "Whether to set the comment tag field to the provided default value when "
 "filling tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:131
+#: ../data/preferences_dialog.ui.h:136
 #, fuzzy
 msgid "Use CRC-32 as the default comment (for files with ID3 tags only)"
 msgstr ""
 "Χρήση του CRC32 ως του προεπιλεγμένου σχολίου (για αρχεία με ετικέτες ID3 "
 "μόνο)."
 
-#: ../data/preferences_dialog.ui.h:132
+#: ../data/preferences_dialog.ui.h:137
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:105
 #, fuzzy
 msgid ""
@@ -1739,38 +1763,38 @@ msgstr ""
 "Χρήση του CRC32 ως του προεπιλεγμένου σχολίου (για αρχεία με ετικέτες ID3 "
 "μόνο)."
 
-#: ../data/preferences_dialog.ui.h:133
+#: ../data/preferences_dialog.ui.h:138
 msgid "Scanner"
 msgstr "Σαρωτής"
 
-#: ../data/preferences_dialog.ui.h:134
+#: ../data/preferences_dialog.ui.h:139
 msgid "Automatic Search Servers"
 msgstr "Αυτόματη αναζήτηση διακομιστών"
 
-#: ../data/preferences_dialog.ui.h:135
+#: ../data/preferences_dialog.ui.h:140
 #, fuzzy
 msgid "Host:"
 msgstr "Όνομα κεντρικού υπολογιστή:"
 
-#: ../data/preferences_dialog.ui.h:136
+#: ../data/preferences_dialog.ui.h:141
 msgid "Port:"
 msgstr "Θύρα:"
 
-#: ../data/preferences_dialog.ui.h:137
+#: ../data/preferences_dialog.ui.h:142
 msgid "CGI Path:"
 msgstr "Διαδρομή CGI:"
 
-#: ../data/preferences_dialog.ui.h:138
+#: ../data/preferences_dialog.ui.h:143
 #, fuzzy
 msgid "Manual Search Server"
 msgstr "Χειροκίνητη αναζήτηση"
 
-#: ../data/preferences_dialog.ui.h:139
+#: ../data/preferences_dialog.ui.h:144
 #, fuzzy
 msgid "Results List"
 msgstr "Αποτελέσματα:"
 
-#: ../data/preferences_dialog.ui.h:140
+#: ../data/preferences_dialog.ui.h:145
 #, fuzzy
 msgid ""
 "Select corresponding file (according to position or DLM if activated below)"
@@ -1778,14 +1802,14 @@ msgstr ""
 "Επιλογή του αντίστοιχου αρχείου ήχου (ανάλογα με τη θέση ή το DLM, αν αυτό "
 "είναι ενεργοποιημένο)"
 
-#: ../data/preferences_dialog.ui.h:141
+#: ../data/preferences_dialog.ui.h:146
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:26
 msgid ""
 "Whether to select the file in the file list which matches the position in "
 "the CDDB results list"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:142
+#: ../data/preferences_dialog.ui.h:147
 #, fuzzy
 msgid ""
 "Use the Levenshtein algorithm (DLM) to match results (using title) with "
@@ -1794,90 +1818,90 @@ msgstr ""
 "Χρήση του αλγόριθμου Levenstein (DLM) για το ταίριασμα των γραμμών (με βάση "
 "τον τίτλο) με τα αρχεία ήχου (με βάση το όνομα αρχείου)"
 
-#: ../data/preferences_dialog.ui.h:144
+#: ../data/preferences_dialog.ui.h:149
 msgid "CDDB"
 msgstr "CDDB"
 
-#: ../data/preferences_dialog.ui.h:145
+#: ../data/preferences_dialog.ui.h:150
 msgid "Confirmation"
 msgstr "Επιβεβαίωση"
 
-#: ../data/preferences_dialog.ui.h:146
+#: ../data/preferences_dialog.ui.h:151
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:106
 #, fuzzy
 msgid "Confirm before writing tags"
 msgstr "Επιβεβαίωση εγγραφής της ετικέτας του αρχείου"
 
-#: ../data/preferences_dialog.ui.h:147
+#: ../data/preferences_dialog.ui.h:152
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:107
 msgid ""
 "Whether to ask for confirmation from the user before writing tags to audio "
 "files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:148
+#: ../data/preferences_dialog.ui.h:153
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:108
 #, fuzzy
 msgid "Confirm before renaming a file"
 msgstr "Επιβεβαίωση μετονομασίας του αρχείου"
 
-#: ../data/preferences_dialog.ui.h:149
+#: ../data/preferences_dialog.ui.h:154
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:109
 msgid "Whether to ask for confirmation from the user before renaming a file"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:150
+#: ../data/preferences_dialog.ui.h:155
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:112
 #, fuzzy
 msgid "Confirm before deleting a file"
 msgstr "Επιβεβαίωση διαγραφής του αρχείου"
 
-#: ../data/preferences_dialog.ui.h:151
+#: ../data/preferences_dialog.ui.h:156
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:113
 msgid "Whether to ask for confirmation from the user before deleting a file"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:152
+#: ../data/preferences_dialog.ui.h:157
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:110
 #, fuzzy
 msgid "Confirm before writing a playlist"
 msgstr "Επιβεβαίωση εγγραφής της λίστας αναπαραγωγής"
 
-#: ../data/preferences_dialog.ui.h:153
+#: ../data/preferences_dialog.ui.h:158
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:111
 msgid "Whether to ask for confirmation from the user before writing a playlist"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:154
+#: ../data/preferences_dialog.ui.h:159
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:114
 #, fuzzy
 msgid "Confirm before losing unsaved changes to files"
 msgstr "Επιβεβαίωση μετονομασίας του αρχείου"
 
-#: ../data/preferences_dialog.ui.h:155
+#: ../data/preferences_dialog.ui.h:160
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:115
 msgid ""
 "Whether to ask for confirmation from the user before performing an operation "
 "that would lose unsaved changes on files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:156
+#: ../data/preferences_dialog.ui.h:161
 #, fuzzy
 msgid "Scanner Dialog"
 msgstr "Παράθυρο σαρωτή"
 
-#: ../data/preferences_dialog.ui.h:157
+#: ../data/preferences_dialog.ui.h:162
 #, fuzzy
 msgid "Show the scanner dialog on startup"
 msgstr "Άνοιγμα του παραθύρου σαρωτή κατά την εκκίνηση"
 
-#: ../data/preferences_dialog.ui.h:158
+#: ../data/preferences_dialog.ui.h:163
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:182
 #, fuzzy
 msgid "Whether to show the scanner window on application startup"
 msgstr "Άνοιγμα του παραθύρου σαρωτή κατά την εκκίνηση"
 
-#: ../data/preferences_dialog.ui.h:159
+#: ../data/preferences_dialog.ui.h:164
 msgid "Application"
 msgstr "Εφαρμογή"
 
@@ -2070,7 +2094,7 @@ msgid "Rename file preview"
 msgstr "Προεπισκόπηση μετονομασίας αρχείου"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:571
+#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:574
 msgid "Rename File"
 msgstr "Μετονομασία αρχείου"
 
@@ -2229,7 +2253,7 @@ msgstr "Να μην αλλαχτούν τα διαχωριστικά λέξεω�
 msgid "Character Conversions"
 msgstr "Σαρωτής συμπλήρωσης ετικέτας - μετατροπή χαρακτήρων"
 
-#: ../data/scan_dialog.ui.h:105 ../src/tag_area.c:740
+#: ../data/scan_dialog.ui.h:105 ../src/tag_area.cc:742
 #, fuzzy, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "Μετατροπή του '_' και του '%20' σε κενά"
@@ -2244,7 +2268,7 @@ msgstr ""
 "κενό. Π.χ., το 'Κείμενο%20σε%20μια_καταχώριση' γίνεται 'Κείμενο σε μία "
 "καταχώριση'."
 
-#: ../data/scan_dialog.ui.h:108 ../src/tag_area.c:746
+#: ../data/scan_dialog.ui.h:108 ../src/tag_area.cc:748
 #, fuzzy
 msgid "Convert spaces to underscores"
 msgstr "Μετατροπή του κενού ' ' σε υπογράμμιση '_'"
@@ -2340,7 +2364,7 @@ msgstr "Ταίριασμα πεζών/κεφαλαίων"
 msgid "CD"
 msgstr "CD"
 
-#: ../data/tag_area.ui.h:1 ../src/tag_area.c:2755
+#: ../data/tag_area.ui.h:1 ../src/tag_area.cc:2756
 msgid "Tag"
 msgstr "Ετικέτα"
 
@@ -2516,7 +2540,7 @@ msgstr "Επεξεργασία ιδιοτήτων εικόνας"
 msgid "Tag selected files with these images"
 msgstr "Συμπλήρωση των επιλεγμένων αρχείων με αυτές τις εικόνες"
 
-#: ../data/tag_area.ui.h:42 ../src/tag_area.c:3033 ../src/tag_area.c:3036
+#: ../data/tag_area.ui.h:42 ../src/tag_area.cc:3034 ../src/tag_area.cc:3037
 msgid "Images"
 msgstr "Εικόνες"
 
@@ -3134,6 +3158,13 @@ msgid ""
 "with transliteration or discard the offending characters"
 msgstr ""
 
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
+#, fuzzy
+msgid "Replace illegal characters when renaming"
+msgstr ""
+"Αντικατάσταση απαράδεκτων χαρακτήρων στο όνομα του αρχείου (για Windows και "
+"σε CD-ROM)"
+
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:176
 #, fuzzy
 msgid ""
@@ -3274,7 +3305,7 @@ msgstr "Ιστότοπος: %s"
 msgid "- Tag and rename audio files"
 msgstr "- Προσθήκη ετικετών και μετονομασία αρχείων ήχου"
 
-#: ../src/application.c:429 ../src/file_list.c:443
+#: ../src/application.c:429 ../src/file_list.cc:443
 #, fuzzy, c-format
 msgid "Error while querying information for file ‘%s’: %s"
 msgstr "Σφάλμα κατά το ερώτημα πληροφοριών για το αρχείο: '%s' (%s)"
@@ -3289,7 +3320,7 @@ msgstr "Αδύνατο το άνοιγμα διαδρομής '%s'"
 msgid "Do you really want to delete the file ‘%s’?"
 msgstr "Θέλετε πράγματι να διαγράψετε το αρχείο '%s';"
 
-#: ../src/application_window.c:364 ../src/easytag.c:459 ../src/easytag.c:592
+#: ../src/application_window.c:364 ../src/easytag.c:459 ../src/easytag.c:595
 msgid "Repeat action for the remaining files"
 msgstr "Επανάληψη της ίδιας ενέργειας για τα υπόλοιπα αρχεία"
 
@@ -3328,29 +3359,29 @@ msgstr "Διαγράφηκαν όλα τα αρχεία"
 msgid "All tags have been removed"
 msgstr "Αφαιρέθηκαν όλες οι ετικέτες"
 
-#: ../src/application_window.c:1474 ../src/browser.cc:346 ../src/browser.cc:389
-#: ../src/browser.cc:423 ../src/browser.cc:4383 ../src/browser.cc:4458
+#: ../src/application_window.c:1474 ../src/browser.cc:348 ../src/browser.cc:391
+#: ../src/browser.cc:425 ../src/browser.cc:4299 ../src/browser.cc:4374
 #, fuzzy, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Αποτυχία εκκίνησης προγράμματος: %s"
 
-#: ../src/application_window.c:1988
+#: ../src/application_window.c:2003
 #, fuzzy, c-format
 msgid "Could not convert filename ‘%s’ to system filename encoding"
 msgstr ""
 "Αδύνατη η μετατροπή του ονόματος αρχείου '%s' στην κωδικοποίηση ονόματος "
 "αρχείου του συστήματος"
 
-#: ../src/application_window.c:1991
+#: ../src/application_window.c:2006
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Προσπάθεια ορισμού της μεταβλητής περιβάλλοντος G_FILENAME_ENCODING."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:796
+#: ../src/application_window.c:2008 ../src/scan_dialog.cc:800
 msgid "Filename translation"
 msgstr "Μετάφραση ονόματος αρχείου"
 
 #. And refresh the number of files in this directory
-#: ../src/application_window.c:2154
+#: ../src/application_window.c:2168
 #, c-format
 msgid "One file"
 msgid_plural "%u files"
@@ -3358,7 +3389,7 @@ msgstr[0] "Ένα αρχείο"
 msgstr[1] "%u αρχεία"
 
 #. Bitrate
-#: ../src/application_window.c:2187 ../src/tags/flac_header.c:189
+#: ../src/application_window.c:2201 ../src/tags/flac_header.c:189
 #: ../src/tags/monkeyaudio_header.c:76 ../src/tags/mp4_header.cc:144
 #: ../src/tags/mpeg_header.c:274 ../src/tags/musepack_header.c:78
 #: ../src/tags/ogg_header.c:411 ../src/tags/opus_header.c:231
@@ -3368,7 +3399,7 @@ msgid "%d kb/s"
 msgstr "%d kb/s"
 
 #. Samplerate
-#: ../src/application_window.c:2190 ../src/tags/flac_header.c:192
+#: ../src/application_window.c:2204 ../src/tags/flac_header.c:192
 #: ../src/tags/monkeyaudio_header.c:79 ../src/tags/mp4_header.cc:148
 #: ../src/tags/mpeg_header.c:279 ../src/tags/musepack_header.c:81
 #: ../src/tags/ogg_header.c:414 ../src/tags/opus_header.c:234
@@ -3377,106 +3408,106 @@ msgstr "%d kb/s"
 msgid "%d Hz"
 msgstr "%d Hz"
 
-#: ../src/application_window.c:2345 ../src/easytag.c:911
+#: ../src/application_window.c:2359 ../src/easytag.c:915
 #, c-format
 msgid "File: ‘%s’"
 msgstr "Αρχείο: «%s»"
 
 #. Quit EasyTAG.
-#: ../src/application_window.c:2978
+#: ../src/application_window.c:2992
 #, fuzzy
 msgid "Normal exit"
 msgstr "EasyTAG: Κανονική έξοδος."
 
-#: ../src/application_window.c:3012 ../src/browser.cc:913
+#: ../src/application_window.c:3026 ../src/browser.cc:915
 msgid "Some files have been modified but not saved"
 msgstr "Μερικά αρχεία έχουν τροποποιηθεί αλλά δεν αποθηκεύτηκαν"
 
-#: ../src/application_window.c:3013 ../src/browser.cc:917 ../src/easytag.c:233
-#: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
+#: ../src/application_window.c:3027 ../src/browser.cc:919 ../src/easytag.c:233
+#: ../src/easytag.c:463 ../src/easytag.c:598 ../src/easytag.c:606
 #, fuzzy
 msgid "_Discard"
 msgstr "Δίσκος"
 
-#: ../src/application_window.c:3019 ../src/easytag.c:239
+#: ../src/application_window.c:3033 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Έξοδος"
 
-#: ../src/application_window.c:3022
+#: ../src/application_window.c:3036
 msgid "Do you want to save them before quitting?"
 msgstr "Θέλετε να τα αποθηκεύσετε πριν την έξοδο;"
 
-#: ../src/browser.cc:615
+#: ../src/browser.cc:617
 #, fuzzy
 msgid "New default directory selected for browser"
 msgstr "Επιλέξτε έναν κατάλογο για περιήγηση"
 
-#: ../src/browser.cc:916
+#: ../src/browser.cc:918
 #, fuzzy
 msgid "Do you want to save them before changing directory?"
 msgstr "Θέλετε να τα αποθηκεύσετε πριν την αλλαγή καταλόγου;"
 
-#: ../src/browser.cc:923
+#: ../src/browser.cc:925
 msgid "Confirm Directory Change"
 msgstr "Επιβεβαίωση αλλαγής καταλόγου"
 
-#: ../src/browser.cc:2257
+#: ../src/browser.cc:2259
 msgid "All albums"
 msgstr "Όλοι οι δίσκοι"
 
-#: ../src/browser.cc:3492
+#: ../src/browser.cc:3505
 msgid "Select File"
 msgstr "Επιλογή αρχείου"
 
-#: ../src/browser.cc:3499
+#: ../src/browser.cc:3512
 msgid "Select Directory"
 msgstr "Επιλογή καταλόγου"
 
-#: ../src/browser.cc:3888
+#: ../src/browser.cc:3804
 #, fuzzy, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Μετονομασία του καταλόγου '%s' σε:"
 
-#: ../src/browser.cc:4024
+#: ../src/browser.cc:3940
 msgid "You must type a directory name"
 msgstr "Πρέπει να πληκτρολογήσετε ένα όνομα καταλόγου"
 
-#: ../src/browser.cc:4025 ../src/browser.cc:4047
+#: ../src/browser.cc:3941 ../src/browser.cc:3963
 msgid "Directory Name Error"
 msgstr "Σφάλμα ονόματος καταλόγου"
 
-#: ../src/browser.cc:4043
+#: ../src/browser.cc:3959
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Αδύνατη η μετατροπή του '%s' στην κωδικοποίηση του ονόματος αρχείου."
 
-#: ../src/browser.cc:4046
+#: ../src/browser.cc:3962
 msgid "Please use another name."
 msgstr "Παρακαλούμε χρησιμοποιήστε ένα άλλο όνομα."
 
-#: ../src/browser.cc:4118
+#: ../src/browser.cc:4034
 #, fuzzy, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Το όνομα καταλόγου '%s' υπάρχει ήδη"
 
-#: ../src/browser.cc:4119 ../src/easytag.c:650
+#: ../src/browser.cc:4035 ../src/easytag.c:653
 msgid "Rename File Error"
 msgstr "Σφάλμα κατά τη μετονομασία αρχείου"
 
-#: ../src/browser.cc:4158 ../src/browser.cc:4187
+#: ../src/browser.cc:4074 ../src/browser.cc:4103
 msgid "Rename Directory Error"
 msgstr "Σφάλμα κατά τη μετονομασία καταλόγου"
 
-#: ../src/browser.cc:4228
+#: ../src/browser.cc:4144
 msgid "Directory renamed"
 msgstr "Ο κατάλογος μετονομάστηκε"
 
-#: ../src/browser.cc:4375 ../src/browser.cc:4450
+#: ../src/browser.cc:4291 ../src/browser.cc:4366
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "Εκτελέστηκε η εντολή: %s"
 
-#: ../src/cddb_dialog.c:280
+#: ../src/cddb_dialog.cc:286
 #, fuzzy, c-format
 msgid ""
 "Album: ‘%s’, artist: ‘%s’, length: ‘%s’, year: ‘%s’, genre: ‘%s’, disc ID: "
@@ -3485,109 +3516,110 @@ msgstr ""
 "Δίσκος: '%s', καλλιτέχνης: '%s', διάρκεια: '%s', χρονιά: '%s', είδος: '%s', "
 "ID: '%s'"
 
-#: ../src/cddb_dialog.c:718
+#: ../src/cddb_dialog.cc:710
 #, fuzzy, c-format
 msgid "Cannot resolve host: ‘%s’: %s"
 msgstr "Αδύνατη η επίλυση του κεντρικού υπολογιστή '%s' (%s)"
 
-#: ../src/cddb_dialog.c:725
+#: ../src/cddb_dialog.cc:717
 #, fuzzy, c-format
 msgid "Cannot connect to host: ‘%s’: %s"
 msgstr "Αδύνατη η σύνδεση με τον κεντρικό υπολογιστή '%s' (%s)"
 
 #. Send the request.
-#: ../src/cddb_dialog.c:798 ../src/cddb_dialog.c:1353 ../src/cddb_dialog.c:1641
+#: ../src/cddb_dialog.cc:790 ../src/cddb_dialog.cc:1345
+#: ../src/cddb_dialog.cc:1633
 msgid "Sending request…"
 msgstr "Αποστολή αιτήματος…"
 
-#: ../src/cddb_dialog.c:842
+#: ../src/cddb_dialog.cc:834
 #, fuzzy, c-format
 msgid "The server returned a bad response ‘%s’"
 msgstr "Ο διακομιστής επέστρεψε μια λανθασμένη απάντηση: %s"
 
 #. Load the track list of the album
-#: ../src/cddb_dialog.c:1036
+#: ../src/cddb_dialog.cc:1028
 msgid "Loading album track list…"
 msgstr "Φόρτωση λίστας κομματιών δίσκου…"
 
 #.
 #. * Read the answer
 #.
-#: ../src/cddb_dialog.c:1383
+#: ../src/cddb_dialog.cc:1375
 msgid "Receiving data…"
 msgstr "Λήψη δεδομένων…"
 
-#: ../src/cddb_dialog.c:1520
+#: ../src/cddb_dialog.cc:1512
 #, c-format
 msgid "Sorry, the web-based search is currently not available"
 msgstr ""
 "Συγγνώμη, η αναζήτηση με βάση τον ιστό είναι προς το παρόν μη διαθέσιμη"
 
-#: ../src/cddb_dialog.c:1523 ../src/cddb_dialog.c:1856
+#: ../src/cddb_dialog.cc:1515 ../src/cddb_dialog.cc:1848
 #, fuzzy, c-format
 msgid "Found one matching album"
 msgid_plural "Found %u matching albums"
 msgstr[0] "Βρέθηκε ένας δίσκος που ταιριάζει"
 msgstr[1] "Βρέθηκαν %d δίσκοι που ταιριάζουν"
 
-#: ../src/cddb_dialog.c:1671
+#: ../src/cddb_dialog.cc:1663
 #, c-format
 msgid "Receiving data of page %d (album %d/%d)…"
 msgstr "Λήψη δεδομένων της σελίδας %d (δίσκος %d/%d)…"
 
-#: ../src/cddb_dialog.c:1673
+#: ../src/cddb_dialog.cc:1665
 #, c-format
 msgid "Receiving data of page %d…"
 msgstr "Λήψη δεδομένων της σελίδας %d…"
 
-#: ../src/cddb_dialog.c:1689
+#: ../src/cddb_dialog.cc:1681
 msgid "The server returned a bad response"
 msgstr "Ο διακομιστής επέστρεψε μια λανθασμένη απάντηση"
 
-#: ../src/cddb_dialog.c:1828
+#: ../src/cddb_dialog.cc:1820
 #, c-format
 msgid "More results to load…"
 msgstr "Περισσότερα αποτελέσματα για φόρτωση…"
 
-#: ../src/cddb_dialog.c:2138
+#: ../src/cddb_dialog.cc:2123
 msgid "The number of CDDB results does not match the number of selected files"
 msgstr ""
 "Ο αριθμός των αποτελεσμάτων CDDB δεν ταιριάζει με τον αριθμό των επιλεγμένων "
 "αρχείων"
 
-#: ../src/cddb_dialog.c:2144
+#: ../src/cddb_dialog.cc:2129
 msgid "Write Tag from CDDB"
 msgstr "Εγγραφή ετικέτας από τη CDDB"
 
-#: ../src/cddb_dialog.c:2459
+#: ../src/cddb_dialog.cc:2444
 msgid "Ready to search"
 msgstr "Έτοιμο για αναζήτηση"
 
-#: ../src/cddb_dialog.c:2614
+#: ../src/cddb_dialog.cc:2599
 #, c-format
 msgid "No file selected"
 msgstr "Δεν έχει επιλεγεί κανένα αρχείο"
 
 #. The CD redbook standard defines the maximum number of tracks as 99, any
 #. queries with more than 99 tracks will never return a result.
-#: ../src/cddb_dialog.c:2623
+#: ../src/cddb_dialog.cc:2608
 #, c-format
 msgid "More than 99 files selected. Cannot send request"
 msgstr "Επιλέχτηκαν περισσότερα από 99 αρχεία. Αδύνατη η αποστολή αιτήματος"
 
-#: ../src/cddb_dialog.c:2629
+#: ../src/cddb_dialog.cc:2614
 #, c-format
 msgid "One file selected"
 msgid_plural "%u files selected"
 msgstr[0] "Έχει επιλεγεί ένα αρχείο"
 msgstr[1] "Έχουν επιλεγεί %u αρχεία"
 
-#: ../src/cddb_dialog.c:2756
+#: ../src/cddb_dialog.cc:2741
 #, fuzzy, c-format
 msgid "Sending request (disc ID: %s, #tracks: %u, Disc length: %u)…"
 msgstr "Αποστολή αιτήματος (CddbId: %s, #κομμάτια: %d, διάρκεια δίσκου: %d)…"
 
-#: ../src/cddb_dialog.c:2877
+#: ../src/cddb_dialog.cc:2862
 #, fuzzy, c-format
 msgid "DiscID ‘%s’ gave one matching album"
 msgid_plural "DiscID ‘%s’ gave %u matching albums"
@@ -3820,62 +3852,62 @@ msgid "Confirm Tag Writing"
 msgstr "Επιβεβαίωση εγγραφής ετικέτας"
 
 #. Directories and filename changed
-#: ../src/easytag.c:555
+#: ../src/easytag.c:558
 msgid "Rename File and Directory"
 msgstr "Μετονομασία αρχείου και καταλόγου"
 
-#: ../src/easytag.c:556
+#: ../src/easytag.c:559
 msgid "File and directory rename confirmation required"
 msgstr "Απαιτείται επιβεβαίωση μετονομασίας αρχείου και καταλόγου"
 
-#: ../src/easytag.c:557
+#: ../src/easytag.c:560
 #, fuzzy, c-format
 msgid "Do you want to rename the file and directory ‘%s’ to ‘%s’?"
 msgstr "Θέλετε να μετονομάσετε το αρχείο και τον κατάλογο '%s' σε '%s';"
 
-#: ../src/easytag.c:563
+#: ../src/easytag.c:566
 msgid "Directory rename confirmation required"
 msgstr "Απαιτείται επιβεβαίωση μετονομασίας καταλόγου"
 
-#: ../src/easytag.c:564
+#: ../src/easytag.c:567
 #, fuzzy, c-format
 msgid "Do you want to rename the directory ‘%s’ to ‘%s’?"
 msgstr "Θέλετε να μετονομάσετε τον κατάλογο '%s' σε '%s';"
 
-#: ../src/easytag.c:572
+#: ../src/easytag.c:575
 msgid "File rename confirmation required"
 msgstr "Απαιτείται επιβεβαίωση μετονομασίας αρχείου"
 
-#: ../src/easytag.c:573
+#: ../src/easytag.c:576
 #, fuzzy, c-format
 msgid "Do you want to rename the file ‘%s’ to ‘%s’?"
 msgstr "Θέλετε να μετονομάσετε το αρχείο '%s' σε '%s';"
 
-#: ../src/easytag.c:643
+#: ../src/easytag.c:646
 #, c-format
 msgid "Cannot rename file ‘%s’ to ‘%s’"
 msgstr "Αδυναμία μετονομασίας του αρχείου «%s» σε «%s»"
 
-#: ../src/easytag.c:657
+#: ../src/easytag.c:660
 #, fuzzy, c-format
 msgid "Cannot rename file ‘%s’ to ‘%s’: %s"
 msgstr "Αδύνατη η μετονομασία του αρχείου '%s' σε '%s': %s"
 
-#: ../src/easytag.c:662
+#: ../src/easytag.c:665
 msgid "File(s) not renamed"
 msgstr "Τα αρχεία δεν μετονομάστηκαν"
 
-#: ../src/easytag.c:724
+#: ../src/easytag.c:727
 #, c-format
 msgid "Writing tag of ‘%s’"
 msgstr "Εγγραφή της ετικέτας του «%s»"
 
-#: ../src/easytag.c:732
+#: ../src/easytag.c:735
 #, fuzzy, c-format
 msgid "Wrote tag of ‘%s’"
 msgstr "Γράφτηκε η ετικέτα του '%s'"
 
-#: ../src/easytag.c:752
+#: ../src/easytag.c:755
 msgid ""
 "You have tried to save this tag to Unicode but it was detected that your "
 "version of id3lib is buggy"
@@ -3883,7 +3915,7 @@ msgstr ""
 "Προσπαθήσατε να αποθηκεύσετε αυτήν την ετικέτα σε Unicode, αλλά ανιχνεύτηκε "
 "ότι η έκδοση id3lib είναι με σφάλμα"
 
-#: ../src/easytag.c:757
+#: ../src/easytag.c:760
 #, c-format
 msgid ""
 "If you reload this file, some characters in the tag may not be displayed "
@@ -3902,30 +3934,30 @@ msgstr ""
 "\n"
 "Αρχείο: %s"
 
-#: ../src/easytag.c:780
+#: ../src/easytag.c:783
 #, fuzzy, c-format
 msgid "Cannot write tag in file ‘%s’"
 msgstr "Αδύνατη η εγγραφή ετικέτας στο αρχείο '%s'"
 
-#: ../src/easytag.c:785
+#: ../src/easytag.c:788
 msgid "Tag Write Error"
 msgstr "Σφάλμα εγγραφής ετικέτας"
 
-#: ../src/easytag.c:861 ../src/easytag.c:1096
+#: ../src/easytag.c:865 ../src/easytag.c:1100
 #, fuzzy, c-format
 msgid "Cannot read directory ‘%s’"
 msgstr "Αδύνατη η ανάγνωση του καταλόγου '%s'"
 
-#: ../src/easytag.c:865
+#: ../src/easytag.c:869
 msgid "Directory Read Error"
 msgstr "Σφάλμα ανάγνωσης καταλόγου"
 
 #. Read the directory recursively
-#: ../src/easytag.c:886
+#: ../src/easytag.c:890
 msgid "Search in progress…"
 msgstr "Αναζήτηση σε εξέλιξη…"
 
-#: ../src/easytag.c:959
+#: ../src/easytag.c:963
 #, fuzzy, c-format
 msgid "Found one file in this directory and subdirectories"
 msgid_plural "Found %u files in this directory and subdirectories"
@@ -3934,35 +3966,35 @@ msgstr[0] ""
 msgstr[1] ""
 "Βρέθηκαν %d αρχεία σε αυτόν τον κατάλογο και τους υποκαταλόγους του."
 
-#: ../src/easytag.c:966
+#: ../src/easytag.c:970
 #, fuzzy, c-format
 msgid "Found one file in this directory"
 msgid_plural "Found %u files in this directory"
 msgstr[0] "Βρέθηκε ένα αρχείο σε αυτόν τον κατάλογο."
 msgstr[1] "Βρέθηκαν %d αρχεία σε αυτόν τον κατάλογο."
 
-#: ../src/easytag.c:983
+#: ../src/easytag.c:987
 msgid "No file found in this directory and subdirectories"
 msgstr "Δε βρέθηκε κανένα αρχείο σε αυτόν τον κατάλογο και τους υποκαταλόγους"
 
-#: ../src/easytag.c:985
+#: ../src/easytag.c:989
 msgid "No file found in this directory"
 msgstr "Δε βρέθηκε κανένα αρχείο σε αυτόν τον κατάλογο"
 
-#: ../src/easytag.c:1061
+#: ../src/easytag.c:1065
 #, fuzzy, c-format
 msgid "Error opening directory ‘%s’: %s"
 msgstr "Σφάλμα ανοίγματος καταλόγου '%s' (%s)"
 
-#: ../src/easytag.c:1116
+#: ../src/easytag.c:1120
 msgid "Searching for audio files…"
 msgstr "Αναζήτηση για αρχεία ήχου…"
 
-#: ../src/easytag.c:1117
+#: ../src/easytag.c:1121
 msgid "Searching"
 msgstr "Αναζήτηση"
 
-#: ../src/easytag.c:1118
+#: ../src/easytag.c:1122
 msgid "_Stop"
 msgstr "_Διακοπή"
 
@@ -3970,7 +4002,7 @@ msgstr "_Διακοπή"
 msgid "File not found"
 msgstr "Δεν βρέθηκε αρχείο"
 
-#: ../src/file_area.c:249 ../src/load_files_dialog.c:232
+#: ../src/file_area.c:249 ../src/load_files_dialog.cc:235
 #, fuzzy, c-format
 msgid "Cannot query file information ‘%s’"
 msgstr "Αδύνατο το ερώτημα πληροφοριών του αρχείου (%s)"
@@ -3979,42 +4011,42 @@ msgstr "Αδύνατο το ερώτημα πληροφοριών του αρχ�
 msgid "Read-only file"
 msgstr "Αρχείο μόνο για ανάγνωση"
 
-#: ../src/file_list.c:246
+#: ../src/file_list.cc:246
 #, fuzzy, c-format
 msgid "Error reading ID3 tag from file ‘%s’: %s"
 msgstr "Σφάλμα κατά την ανάγνωση ετικετών από το αρχείο: '%s'"
 
-#: ../src/file_list.c:257
+#: ../src/file_list.cc:257
 #, fuzzy, c-format
 msgid "Error reading tag from Ogg file ‘%s’: %s"
 msgstr "Σφάλμα κατά την ανάγνωση ετικετών από το αρχείο ogg (%s)"
 
-#: ../src/file_list.c:268
+#: ../src/file_list.cc:268
 #, fuzzy, c-format
 msgid "Error reading tag from FLAC file ‘%s’: %s"
 msgstr "Σφάλμα κατά την ανάγνωση ετικετών από το αρχείο: '%s'"
 
-#: ../src/file_list.c:278
+#: ../src/file_list.cc:278
 #, fuzzy, c-format
 msgid "Error reading APE tag from file ‘%s’: %s"
 msgstr "Σφάλμα κατά την ανάγνωση ετικετών από το αρχείο: '%s'"
 
-#: ../src/file_list.c:288
+#: ../src/file_list.cc:288
 #, fuzzy, c-format
 msgid "Error reading tag from MP4 file ‘%s’: %s"
 msgstr "Σφάλμα κατά την ανάγνωση ετικετών από το αρχείο: '%s'"
 
-#: ../src/file_list.c:299
+#: ../src/file_list.cc:299
 #, fuzzy, c-format
 msgid "Error reading tag from WavPack file ‘%s’: %s"
 msgstr "Σφάλμα κατά την ανάγνωση ετικετών από το αρχείο: '%s'"
 
-#: ../src/file_list.c:310
+#: ../src/file_list.cc:310
 #, fuzzy, c-format
 msgid "Error reading tag from Opus file ‘%s’: %s"
 msgstr "Σφάλμα κατά την ανάγνωση ετικετών από το αρχείο Opus (%s)"
 
-#: ../src/file_list.c:346
+#: ../src/file_list.cc:346
 #, fuzzy, c-format
 msgid ""
 "The year value ‘%s’ seems to be invalid in file ‘%s’. The information will "
@@ -4023,7 +4055,7 @@ msgstr ""
 "Η τιμή έτους '%s' φαίνεται να είναι άκυρη στο αρχείο '%s'. Οι πληροφορίες θα "
 "χαθούν κατά την αποθήκευση της ετικέτας."
 
-#: ../src/file_list.c:353
+#: ../src/file_list.cc:353
 #, fuzzy, c-format
 msgid ""
 "The original year value ‘%s’ seems to be invalid in file ‘%s’. The "
@@ -4032,35 +4064,35 @@ msgstr ""
 "Η τιμή έτους '%s' φαίνεται να είναι άκυρη στο αρχείο '%s'. Οι πληροφορίες θα "
 "χαθούν κατά την αποθήκευση της ετικέτας."
 
-#: ../src/file_list.c:509
+#: ../src/file_list.cc:510
 #, fuzzy, c-format
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "Αυτόματες διορθώσεις εφαρμόστηκαν για το αρχείο '%s'."
 
-#: ../src/load_files_dialog.c:272 ../src/setting.c:329
+#: ../src/load_files_dialog.cc:275 ../src/setting.c:329
 #, fuzzy, c-format
 msgid "Cannot open file ‘%s’: %s"
 msgstr "Αδύνατο το άνοιγμα του αρχείου '%s' (%s)"
 
-#: ../src/load_files_dialog.c:302
+#: ../src/load_files_dialog.cc:305
 #, fuzzy, c-format
 msgid "Error reading file ‘%s’"
 msgstr "Σφάλμα κατά την ανάγνωση του αρχείου (%s)"
 
-#: ../src/load_files_dialog.c:742 ../src/load_files_dialog.c:845
+#: ../src/load_files_dialog.cc:745 ../src/load_files_dialog.cc:848
 msgid "Insert a blank line"
 msgstr "Εισαγωγή μίας κενής γραμμής"
 
-#: ../src/load_files_dialog.c:746 ../src/load_files_dialog.c:849
+#: ../src/load_files_dialog.cc:749 ../src/load_files_dialog.cc:852
 msgid "Delete this line"
 msgstr "Διαγραφή αυτής της γραμμής"
 
-#: ../src/load_files_dialog.c:757 ../src/load_files_dialog.c:860
+#: ../src/load_files_dialog.cc:760 ../src/load_files_dialog.cc:863
 #, fuzzy
 msgid "Move this line up"
 msgstr "Μετακίνηση προς τα πάνω αυτής της γραμμής"
 
-#: ../src/load_files_dialog.c:761 ../src/load_files_dialog.c:864
+#: ../src/load_files_dialog.cc:764 ../src/load_files_dialog.cc:867
 #, fuzzy
 msgid "Move this line down"
 msgstr "Μετακίνηση προς τα πάνω αυτής της γραμμής"
@@ -4219,13 +4251,13 @@ msgstr "Γράφτηκε το αρχείο λίστας αναπαραγωγής
 msgid "Invalid scanner mask"
 msgstr "Ακατάλληλη μάσκα σάρωσης"
 
-#: ../src/preferences_dialog.c:864
+#: ../src/preferences_dialog.c:881
 #, fuzzy
 msgid "The selected default path is invalid"
 msgstr ""
 "Η επιλεγμένη διαδρομή για 'προεπιλεγμένη διαδρομή στα αρχεία' είναι άκυρη"
 
-#: ../src/preferences_dialog.c:866
+#: ../src/preferences_dialog.c:883
 #, fuzzy, c-format
 msgid ""
 "Path: ‘%s’\n"
@@ -4234,77 +4266,77 @@ msgstr ""
 "Διαδρομή: '%s'\n"
 "Σφάλμα: %s"
 
-#: ../src/preferences_dialog.c:870
+#: ../src/preferences_dialog.c:887
 msgid "Invalid Path Error"
 msgstr "Σφάλμα άκυρης διαδρομής"
 
-#: ../src/scan_dialog.c:382
+#: ../src/scan_dialog.cc:386
 #, fuzzy, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Αδύνατος ο υπολογισμός της τιμής CRC του αρχείου (%s)"
 
-#: ../src/scan_dialog.c:397
+#: ../src/scan_dialog.cc:401
 msgid "Tag successfully scanned"
 msgstr "Η ετικέτα σαρώθηκε επιτυχώς"
 
-#: ../src/scan_dialog.c:400
+#: ../src/scan_dialog.cc:404
 #, fuzzy, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Η ετικέτα σαρώθηκε επιτυχώς: %s"
 
-#: ../src/scan_dialog.c:443
+#: ../src/scan_dialog.cc:447
 #, fuzzy, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr ""
 "Σαρωτής ετικέτας: περίεργο… η επέκταση '%s' δε βρέθηκε στο όνομα αρχείου '%s'"
 
-#: ../src/scan_dialog.c:535 ../src/scan_dialog.c:566
+#: ../src/scan_dialog.cc:539 ../src/scan_dialog.cc:570
 #, fuzzy, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "Σφάλμα σάρωσης: αδύνατη η εύρεση του διαχωριστικού '%s' στο '%s'"
 
-#: ../src/scan_dialog.c:794
+#: ../src/scan_dialog.cc:798
 #, fuzzy, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "Αδύνατη η μετατροπή του ονόματος αρχείου '%s' στην κωδικοποίηση ονόματος "
 "αρχείου του συστήματος"
 
-#: ../src/scan_dialog.c:820
+#: ../src/scan_dialog.cc:824
 msgid "New filename successfully scanned"
 msgstr "Το νέο όνομα αρχείου σαρώθηκε με επιτυχία"
 
-#: ../src/scan_dialog.c:824
+#: ../src/scan_dialog.cc:828
 #, fuzzy, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Το νέο όνομα αρχείου σαρώθηκε με επιτυχία: %s"
 
-#: ../src/scan_dialog.c:1205
+#: ../src/scan_dialog.cc:993
 #, fuzzy, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Σφάλμα κατά την επεξεργασία πεδίων: %s"
 
-#: ../src/scan_dialog.c:2081
+#: ../src/scan_dialog.cc:1866
 msgid "New_mask"
 msgstr "Νέα_μάσκα"
 
-#: ../src/scan_dialog.c:2552
+#: ../src/scan_dialog.cc:2334
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "Ακατάλληλη μάσκα σάρωσης"
 
-#: ../src/scan_dialog.c:2625
+#: ../src/scan_dialog.cc:2407
 msgid "All tags have been scanned"
 msgstr "Σαρώθηκαν όλες οι ετικέτες"
 
-#: ../src/search_dialog.c:576
+#: ../src/search_dialog.cc:201
 #, c-format
 msgid "Found one file"
 msgid_plural "Found %d files"
 msgstr[0] "Βρέθηκε ένα αρχείο"
 msgstr[1] "Βρέθηκαν %d αρχεία"
 
-#: ../src/search_dialog.c:658
+#: ../src/search_dialog.cc:273
 msgid "Ready to search…"
 msgstr "Έτοιμο για αναζήτηση…"
 
@@ -4329,250 +4361,250 @@ msgstr "Φόρτωση των προεπιλεγμένων μασκών 'μετ�
 msgid "Ready to start"
 msgstr "Έτοιμο για εκκίνηση"
 
-#: ../src/tag_area.c:180
+#: ../src/tag_area.cc:184
 #, fuzzy, c-format
 msgid "Selected files tagged with title ‘%s’"
 msgstr "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με τον τίτλο '%s'."
 
-#: ../src/tag_area.c:182
+#: ../src/tag_area.cc:186
 #, fuzzy
 msgid "Removed title from selected files"
 msgstr "Αφαιρέθηκε ο τίτλος από τα επιλεγμένα αρχεία."
 
-#: ../src/tag_area.c:191
+#: ../src/tag_area.cc:195
 #, fuzzy, c-format
 msgid "Selected files tagged with artist ‘%s’"
 msgstr "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με τον καλλιτέχνη '%s'."
 
-#: ../src/tag_area.c:193
+#: ../src/tag_area.cc:197
 #, fuzzy
 msgid "Removed artist from selected files"
 msgstr ""
 "Αφαιρέθηκε το όνομα καλλιτέχνη από τις ετικέτες των επιλεγμένων αρχείων."
 
-#: ../src/tag_area.c:202
+#: ../src/tag_area.cc:206
 #, fuzzy, c-format
 msgid "Selected files tagged with album artist ‘%s’"
 msgstr "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με τον καλλιτέχνη '%s'."
 
-#: ../src/tag_area.c:204
+#: ../src/tag_area.cc:208
 #, fuzzy
 msgid "Removed album artist from selected files"
 msgstr ""
 "Αφαιρέθηκε ο καλλιτέχνης του δίσκου από τις ετικέτες των επιλεγμένων αρχείων."
 
-#: ../src/tag_area.c:213
+#: ../src/tag_area.cc:217
 #, fuzzy, c-format
 msgid "Selected files tagged with album ‘%s’"
 msgstr ""
 "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με τον τίτλο του δίσκου '%s'."
 
-#: ../src/tag_area.c:215
+#: ../src/tag_area.cc:219
 #, fuzzy
 msgid "Removed album name from selected files"
 msgstr "Αφαιρέθηκε ο τίτλος δίσκου από τα επιλεγμένα αρχεία."
 
-#: ../src/tag_area.c:252
+#: ../src/tag_area.cc:256
 #, fuzzy, c-format
 msgid "Selected files tagged with disc number ‘%s/%s’"
 msgstr ""
 "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με τον αριθμό δίσκου '%s/%s'."
 
-#: ../src/tag_area.c:259
+#: ../src/tag_area.cc:263
 #, fuzzy, c-format
 msgid "Selected files tagged with disc number like ‘xx’"
 msgstr ""
 "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με α/α δίσκου της μορφής 'xx'."
 
-#: ../src/tag_area.c:264
+#: ../src/tag_area.cc:268
 #, fuzzy
 msgid "Removed disc number from selected files"
 msgstr "Αφαιρέθηκε ο αριθμός δίσκου από τα επιλεγμένα αρχεία."
 
-#: ../src/tag_area.c:276
+#: ../src/tag_area.cc:280
 #, fuzzy, c-format
 msgid "Selected files tagged with year ‘%s’"
 msgstr "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με χρονιά '%s'."
 
-#: ../src/tag_area.c:278
+#: ../src/tag_area.cc:282
 #, fuzzy
 msgid "Removed year from selected files"
 msgstr "Αφαιρέθηκε η χρονιά από τις ετικέτες των επιλεγμένων αρχείων."
 
-#: ../src/tag_area.c:287
+#: ../src/tag_area.cc:291
 #, fuzzy, c-format
 msgid "Selected files tagged with release year ‘%s’"
 msgstr "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με χρονιά '%s'."
 
-#: ../src/tag_area.c:289
+#: ../src/tag_area.cc:293
 #, fuzzy
 msgid "Removed release year from selected files"
 msgstr "Αφαιρέθηκε η χρονιά από τις ετικέτες των επιλεγμένων αρχείων."
 
-#: ../src/tag_area.c:318 ../src/tag_area.c:423
+#: ../src/tag_area.cc:322 ../src/tag_area.cc:427
 #, fuzzy, c-format
 msgid "Selected files tagged with track like ‘xx/%s’"
 msgstr ""
 "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με α/α κομματιού της μορφής "
 "'xx/%s'."
 
-#: ../src/tag_area.c:322
+#: ../src/tag_area.cc:326
 #, fuzzy, c-format
 msgid "Selected files tagged with track like ‘xx’"
 msgstr ""
 "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με α/α κομματιού της μορφής "
 "'xx'."
 
-#: ../src/tag_area.c:327 ../src/tag_area.c:428
+#: ../src/tag_area.cc:331 ../src/tag_area.cc:432
 #, fuzzy
 msgid "Removed track number from selected files"
 msgstr "Αφαιρέθηκε ο α/α κομματιού από τις ετικέτες των επιλεγμένων αρχείων."
 
 #. msg = g_strdup_printf(_("All %d tracks numbered sequentially."), ETCore->ETFileSelectionList_Length);
-#: ../src/tag_area.c:386
+#: ../src/tag_area.cc:390
 #, fuzzy, c-format
 msgid "Selected tracks numbered sequentially"
 msgstr "Τα επιλεγμένα κομμάτια αριθμήθηκαν διαδοχικά."
 
-#: ../src/tag_area.c:440
+#: ../src/tag_area.cc:444
 #, fuzzy, c-format
 msgid "Selected files tagged with genre ‘%s’"
 msgstr "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με είδος '%s'."
 
-#: ../src/tag_area.c:442
+#: ../src/tag_area.cc:446
 #, fuzzy
 msgid "Removed genre from selected files"
 msgstr "Αφαιρέθηκε το είδος από τις ετικέτες των επιλεγμένων αρχείων."
 
-#: ../src/tag_area.c:451
+#: ../src/tag_area.cc:455
 #, fuzzy, c-format
 msgid "Selected files tagged with comment ‘%s’"
 msgstr "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με σχόλιο '%s'."
 
-#: ../src/tag_area.c:453
+#: ../src/tag_area.cc:457
 #, fuzzy
 msgid "Removed comment from selected files"
 msgstr "Αφαιρέθηκε το σχόλιο από τις ετικέτες των επιλεγμένων αρχείων."
 
-#: ../src/tag_area.c:462
+#: ../src/tag_area.cc:466
 #, fuzzy, c-format
 msgid "Selected files tagged with composer ‘%s’"
 msgstr "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με όνομα συνθέτη '%s'."
 
-#: ../src/tag_area.c:464
+#: ../src/tag_area.cc:468
 #, fuzzy
 msgid "Removed composer from selected files"
 msgstr "Αφαιρέθηκε το όνομα συνθέτη από τις ετικέτες των επιλεγμένων αρχείων."
 
-#: ../src/tag_area.c:473
+#: ../src/tag_area.cc:477
 #, fuzzy, c-format
 msgid "Selected files tagged with original artist ‘%s’"
 msgstr ""
 "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με όνομα αρχικού καλλιτέχνη "
 "'%s'."
 
-#: ../src/tag_area.c:475
+#: ../src/tag_area.cc:479
 #, fuzzy
 msgid "Removed original artist from selected files"
 msgstr ""
 "Αφαιρέθηκε το όνομα του αρχικού καλλιτέχνη από τις ετικέτες των επιλεγμένων "
 "αρχείων."
 
-#: ../src/tag_area.c:484
+#: ../src/tag_area.cc:488
 #, fuzzy, c-format
 msgid "Selected files tagged with original year ‘%s’"
 msgstr ""
 "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με όνομα αρχικού καλλιτέχνη "
 "'%s'."
 
-#: ../src/tag_area.c:486
+#: ../src/tag_area.cc:490
 #, fuzzy
 msgid "Removed original year from selected files"
 msgstr ""
 "Αφαιρέθηκε το όνομα του αρχικού καλλιτέχνη από τις ετικέτες των επιλεγμένων "
 "αρχείων."
 
-#: ../src/tag_area.c:495
+#: ../src/tag_area.cc:499
 #, fuzzy, c-format
 msgid "Selected files tagged with copyright ‘%s’"
 msgstr ""
 "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με πνευματικά δικαιώματα '%s'."
 
-#: ../src/tag_area.c:497
+#: ../src/tag_area.cc:501
 #, fuzzy
 msgid "Removed copyright from selected files"
 msgstr "Αφαιρέθηκαν τα πνευματικά δικαιώματα από τα επιλεγμένα αρχεία."
 
-#: ../src/tag_area.c:506
+#: ../src/tag_area.cc:510
 #, fuzzy, c-format
 msgid "Selected files tagged with URL ‘%s’"
 msgstr "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με τη διεύθυνση '%s'."
 
-#: ../src/tag_area.c:508
+#: ../src/tag_area.cc:512
 #, fuzzy
 msgid "Removed URL from selected files"
 msgstr "Αφαιρέθηκε η διεύθυνση από τα επιλεγμένα αρχεία."
 
-#: ../src/tag_area.c:517
+#: ../src/tag_area.cc:521
 #, fuzzy, c-format
 msgid "Selected files tagged with encoder name ‘%s’"
 msgstr ""
 "Η ετικέτα των επιλεγμένων αρχείων συμπληρώθηκε με όνομα κωδικοποιητή '%s'."
 
-#: ../src/tag_area.c:519
+#: ../src/tag_area.cc:523
 #, fuzzy
 msgid "Removed encoder name from selected files"
 msgstr "Αφαιρέθηκε το όνομα του κωδικοποιητή από τα επιλεγμένα αρχεία."
 
-#: ../src/tag_area.c:554
+#: ../src/tag_area.cc:558
 #, fuzzy
 msgid "Selected files tagged with images"
 msgstr "Προστέθηκαν εικόνες στην ετικέτα των επιλεγμένων αρχείων."
 
-#: ../src/tag_area.c:558
+#: ../src/tag_area.cc:562
 #, fuzzy
 msgid "Removed images from selected files"
 msgstr "Αφαιρέθηκαν εικόνες από τα επιλεγμένα αρχεία."
 
 #. Menu items
-#: ../src/tag_area.c:726
+#: ../src/tag_area.cc:728
 msgid "Tag selected files with this field"
 msgstr "Συμπλήρωση αυτού του πεδίου των ετικετών των επιλεγμένων αρχείων"
 
-#: ../src/tag_area.c:756
+#: ../src/tag_area.cc:758
 msgid "All uppercase"
 msgstr "Όλα κεφαλαία"
 
-#: ../src/tag_area.c:762
+#: ../src/tag_area.cc:764
 msgid "All lowercase"
 msgstr "Όλα πεζά"
 
-#: ../src/tag_area.c:768
+#: ../src/tag_area.cc:770
 msgid "First letter uppercase"
 msgstr "Πρώτο γράμμα κεφαλαίο"
 
-#: ../src/tag_area.c:774
+#: ../src/tag_area.cc:776
 msgid "First letter uppercase of each word"
 msgstr "Πρώτο γράμμα κάθε λέξης κεφαλαίο"
 
-#: ../src/tag_area.c:790
+#: ../src/tag_area.cc:792
 msgid "Insert space before uppercase letter"
 msgstr "Εισαγωγή κενού πριν από κάθε κεφαλαίο γράμμα"
 
-#: ../src/tag_area.c:796
+#: ../src/tag_area.cc:798
 msgid "Remove duplicate spaces or underscores"
 msgstr "Αφαίρεση διπλών κενών ή '_'"
 
-#: ../src/tag_area.c:802
+#: ../src/tag_area.cc:804
 msgid "Remove all text"
 msgstr "Αφαίρεση όλου του κειμένου"
 
-#: ../src/tag_area.c:1160 ../src/tag_area.c:1253
+#: ../src/tag_area.cc:1162 ../src/tag_area.cc:1255
 #, c-format
 msgid "Error parsing image data ‘%s’"
 msgstr ""
 
-#: ../src/tag_area.c:1235
+#: ../src/tag_area.cc:1237
 #, fuzzy
 msgid ""
 "Cannot display the image because not enough data has been read to determine "
@@ -4581,99 +4613,99 @@ msgstr ""
 "Αδύνατη η εμφάνιση της εικόνας επειδή δεν έχουν διαβαστεί αρκετά δεδομένα "
 "για τον προσδιορισμό της δημιουργίας της ενδιάμεσης μνήμης της εικόνας."
 
-#: ../src/tag_area.c:1242
+#: ../src/tag_area.cc:1244
 msgid "Cannot display the image"
 msgstr "Αδύνατη η εμφάνιση της εικόνας"
 
-#: ../src/tag_area.c:1244
+#: ../src/tag_area.cc:1246
 msgid ""
 "Not enough data has been read to determine how to create the image buffer."
 msgstr ""
 "Δεν διαβάστηκαν αρκετά δεδομένα για τη δημιουργία της ενδιάμεσης μνήμης της "
 "εικόνας."
 
-#: ../src/tag_area.c:1246
+#: ../src/tag_area.cc:1248
 msgid "Load Image File"
 msgstr "Φόρτωση αρχείου εικόνας"
 
-#: ../src/tag_area.c:1291 ../src/tag_area.c:1316
+#: ../src/tag_area.cc:1293 ../src/tag_area.cc:1318
 #, fuzzy, c-format
 msgid "Image file not loaded ‘%s’"
 msgstr "Το αρχείο εικόνας δε φορτώθηκε: %s"
 
-#: ../src/tag_area.c:1308
+#: ../src/tag_area.cc:1310
 #, fuzzy, c-format
 msgid "Cannot open file ‘%s’"
 msgstr "Αδύνατο το άνοιγμα του αρχείου: '%s'"
 
-#: ../src/tag_area.c:1312
+#: ../src/tag_area.cc:1314
 msgid "Image File Error"
 msgstr "Σφάλμα αρχείου εικόνας"
 
-#: ../src/tag_area.c:1323
+#: ../src/tag_area.cc:1325
 msgid "Image file loaded"
 msgstr "Το αρχείο εικόνας φορτώθηκε"
 
-#: ../src/tag_area.c:1406
+#: ../src/tag_area.cc:1408
 msgid "Add Images"
 msgstr "Προσθήκη εικόνων"
 
-#: ../src/tag_area.c:1416 ../src/tag_area.c:1744
+#: ../src/tag_area.cc:1418 ../src/tag_area.cc:1745
 msgid "All Files"
 msgstr "Όλα τα αρχεία"
 
-#: ../src/tag_area.c:1423 ../src/tag_area.c:1751
+#: ../src/tag_area.cc:1425 ../src/tag_area.cc:1752
 msgid "PNG and JPEG"
 msgstr "Αρχεία PNG και JPEG"
 
-#: ../src/tag_area.c:1541
+#: ../src/tag_area.cc:1542
 #, c-format
 msgid "Image Properties %d/%d"
 msgstr "Ιδιότητες εικόνας %d/%d"
 
-#: ../src/tag_area.c:1730
+#: ../src/tag_area.cc:1731
 #, c-format
 msgid "Save Image %d/%d"
 msgstr "Αποθήκευση εικόνας %d/%d"
 
-#: ../src/tag_area.c:1810
+#: ../src/tag_area.cc:1811
 #, fuzzy, c-format
 msgid "Image file not saved ‘%s’"
 msgstr "Το αρχείο εικόνας δεν αποθηκεύτηκε: %s"
 
-#: ../src/tag_area.c:2055
+#: ../src/tag_area.cc:2056
 msgid "Tag selected files with this genre"
 msgstr "Ονομασία των επιλεγμένων αρχείων με αυτό το είδος"
 
-#: ../src/tag_area.c:2704
+#: ../src/tag_area.cc:2705
 msgid "ID3 Tag"
 msgstr "Ετικέτα ID3"
 
-#: ../src/tag_area.c:2709
+#: ../src/tag_area.cc:2710
 msgid "Ogg Vorbis Tag"
 msgstr "Ετικέτα Ogg Vorbis"
 
-#: ../src/tag_area.c:2714
+#: ../src/tag_area.cc:2715
 msgid "FLAC Vorbis Tag"
 msgstr "Ετικέτα FLAC Vorbis"
 
-#: ../src/tag_area.c:2718
+#: ../src/tag_area.cc:2719
 msgid "APE Tag"
 msgstr "Ετικέτα APE"
 
-#: ../src/tag_area.c:2722
+#: ../src/tag_area.cc:2723
 msgid "MP4/M4A/AAC Tag"
 msgstr "Ετικέτα MP4/M4A/AAC"
 
-#: ../src/tag_area.c:2727
+#: ../src/tag_area.cc:2728
 msgid "Wavpack Tag"
 msgstr "Ετικέτα Wavpack"
 
-#: ../src/tag_area.c:2732
+#: ../src/tag_area.cc:2733
 msgid "Opus Tag"
 msgstr "Ετικέτα Opus"
 
-#: ../src/tag_area.c:3014
+#: ../src/tag_area.cc:3015
 #, c-format
 msgid "Images (%u)"
 msgstr "Εικόνες (%u)"

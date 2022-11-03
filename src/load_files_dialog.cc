@@ -33,6 +33,8 @@
 #include "scan_dialog.h"
 #include "setting.h"
 
+using namespace std;
+
 typedef struct
 {
     GtkWidget *file_chooser;
@@ -50,8 +52,11 @@ typedef struct
     GtkWidget *file_entry;
 } EtLoadFilesDialogPrivate;
 
-
+// learn correct return type
+#define et_load_files_dialog_get_instance_private et_load_files_dialog_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtLoadFilesDialog, et_load_files_dialog, GTK_TYPE_DIALOG)
+#undef et_load_files_dialog_get_instance_private
+#define et_load_files_dialog_get_instance_private(x) (EtLoadFilesDialogPrivate*)et_load_files_dialog_get_instance_private_(x)
 
 enum
 {
@@ -92,6 +97,8 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
 
     et_application_window_update_et_file_from_ui (ET_APPLICATION_WINDOW (MainWindow));
 
+    auto prepare_func = File_Name::prepare_func((EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"), ET_CONVERT_SPACES_NO_CHANGE);
+
     rowcount = MIN(gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_name_model), NULL),
                    gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_content_model), NULL));
 
@@ -114,23 +121,19 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
 
         if (ETFile && !et_str_empty (list_text))
         {
-            gchar *list_text_tmp;
             gchar *filename_new_utf8;
 
-            list_text_tmp = g_strdup(list_text);
-            et_filename_prepare (list_text_tmp,
-                                 g_settings_get_boolean (MainSettings,
-                                                         "rename-replace-illegal-chars"));
+            string list_text_tmp = list_text;
+            prepare_func(list_text_tmp, 0);
 
             /* Build the filename with the path */
-            filename_new_utf8 = et_file_generate_name (ETFile, list_text_tmp);
-            g_free(list_text_tmp);
+            filename_new_utf8 = et_file_generate_name (ETFile, list_text_tmp.c_str());
 
             /* Set the new filename */
             // Create a new 'File_Name' item
             FileName = et_file_name_new ();
             // Save changes of the 'File_Name' item
-            ET_Set_Filename_File_Name_Item(FileName, ETFile->FileNameCur->data, filename_new_utf8,NULL);
+            ET_Set_Filename_File_Name_Item(FileName, ETFile->CurFileName(), filename_new_utf8,NULL);
             ET_Manage_Changes_Of_File_Data(ETFile,FileName,NULL);
 
             g_free(filename_new_utf8);
@@ -713,7 +716,7 @@ Load_Filename_Select_Row_In_Other_List (GtkWidget* treeview_target,
     }
 
     // Must block the select signal of the target to avoid looping
-    g_signal_handlers_block_by_func(G_OBJECT(selection_target), G_CALLBACK(Load_Filename_Select_Row_In_Other_List), G_OBJECT(treeview_orig));
+    g_signal_handlers_block_by_func(G_OBJECT(selection_target), (gpointer)Load_Filename_Select_Row_In_Other_List, G_OBJECT(treeview_orig));
 
     stringiter = gtk_tree_model_get_string_from_iter(treemodel_orig, &iter_orig);
     if (gtk_tree_model_get_iter_from_string(treemodel_target, &iter_target, stringiter))
@@ -722,7 +725,7 @@ Load_Filename_Select_Row_In_Other_List (GtkWidget* treeview_target,
     }
 
     g_free(stringiter);
-    g_signal_handlers_unblock_by_func(G_OBJECT(selection_target), G_CALLBACK(Load_Filename_Select_Row_In_Other_List), G_OBJECT(treeview_orig));
+    g_signal_handlers_unblock_by_func(G_OBJECT(selection_target), (gpointer)Load_Filename_Select_Row_In_Other_List, G_OBJECT(treeview_orig));
 }
 
 static void
@@ -980,7 +983,7 @@ Load_Filename_Edit_Text_Line (EtLoadFilesDialog *self,
 
     gtk_tree_model_get(GTK_TREE_MODEL(priv->file_content_model), &selectedIter, LOAD_FILE_NAME_TEXT, &text, -1);
 
-    handler = g_signal_handler_find(entry, G_SIGNAL_MATCH_FUNC, 0, 0, NULL, Load_Filename_Update_Text_Line, NULL);
+    handler = g_signal_handler_find(entry, G_SIGNAL_MATCH_FUNC, 0, 0, NULL, (gpointer)Load_Filename_Update_Text_Line, NULL);
     g_signal_handler_block(entry, handler);
     if (text)
     {
@@ -1143,6 +1146,6 @@ et_load_files_dialog_new (GtkWindow *parent)
                       NULL);
     }
 
-    return g_object_new (ET_TYPE_LOAD_FILES_DIALOG, "transient-for", parent,
+    return (EtLoadFilesDialog*)g_object_new (ET_TYPE_LOAD_FILES_DIALOG, "transient-for", parent,
                          "use-header-bar", use_header_bar, NULL);
 }

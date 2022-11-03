@@ -42,8 +42,7 @@ easytag_SOURCES = \
 	src/application.c \
 	src/application_window.c \
 	src/browser.cc \
-	src/browser.h \
-	src/cddb_dialog.c \
+	src/cddb_dialog.cc \
 	src/charset.c \
 	src/crc32.c \
 	src/dlm.c \
@@ -58,7 +57,7 @@ easytag_SOURCES = \
 	src/file_name.cc \
 	src/file_renderer.cc \
 	src/file_tag.c \
-	src/load_files_dialog.c \
+	src/load_files_dialog.cc \
 	src/log.c \
 	src/main.c \
 	src/mask.cc \
@@ -68,7 +67,7 @@ easytag_SOURCES = \
 	src/preferences_dialog.c \
 	src/progress_bar.c \
 	src/scan.c \
-	src/scan_dialog.c \
+	src/scan_dialog.cc \
 	src/search_dialog.cc \
 	src/setting.c \
 	src/status_bar.c \
@@ -106,6 +105,7 @@ easytag_headers = \
 	src/about.h \
 	src/application.h \
 	src/application_window.h \
+	src/browser.h \
 	src/cddb_dialog.h \
 	src/charset.h \
 	src/crc32.h \

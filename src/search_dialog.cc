@@ -1,4 +1,5 @@
 /* EasyTAG - tag editor for audio files
+ * Copyright (C) 2022  Marcel Müller <github@maazl.de>
  * Copyright (C) 2013-2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -170,7 +171,7 @@ Search_File (GtkWidget *search_button,
 
         // check for match
         gint match = 0;
-        for (gsize i = mincol; i < maxcol; i++)
+        for (gint i = mincol; i < maxcol; i++)
         {
             GtkTreeViewColumn *column = gtk_tree_view_get_column(priv->search_results_view, i);
             const gchar* id = gtk_buildable_get_name(GTK_BUILDABLE(column));

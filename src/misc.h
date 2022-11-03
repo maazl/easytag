@@ -58,7 +58,6 @@ gboolean et_run_program (const gchar *program_name, GList *args_list, GError **e
 gchar * et_disc_number_to_string (const guint disc_number);
 gchar * et_track_number_to_string (const guint track_number);
 
-void et_filename_prepare (gchar *filename_utf8, gboolean replace_illegal);
 gboolean et_rename_file (const gchar *old_filename, const gchar *new_filename, GError **error);
 
 guint et_undo_key_new (void);

@@ -1,4 +1,5 @@
 /* EasyTAG - Tag editor for audio files
+ * Copyright (C) 2022  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014-2015  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -98,30 +99,34 @@ typedef struct
     GtkWidget *rename_preview_label;
 } EtScanDialogPrivate;
 
+// learn correct return type for et_browser_get_instance_private
+#define et_scan_dialog_get_instance_private et_scan_dialog_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtScanDialog, et_scan_dialog, GTK_TYPE_DIALOG)
+#undef et_scan_dialog_get_instance_private
+#define et_scan_dialog_get_instance_private(x) (EtScanDialogPrivate*)et_scan_dialog_get_instance_private_(x)
 
 /* Some predefined masks -- IMPORTANT: Null-terminate me! */
 static const gchar *Scan_Masks [] =
 {
-    "%a - %T"G_DIR_SEPARATOR_S"%n - %t",
-    "%a_-_%T"G_DIR_SEPARATOR_S"%n_-_%t",
-    "%a - %T (%y)"G_DIR_SEPARATOR_S"%n - %a - %t",
-    "%a_-_%T_(%y)"G_DIR_SEPARATOR_S"%n_-_%a_-_%t",
-    "%a - %T (%y) - %g"G_DIR_SEPARATOR_S"%n - %a - %t",
-    "%a_-_%T_(%y)_-_%g"G_DIR_SEPARATOR_S"%n_-_%a_-_%t",
-    "%a - %T"G_DIR_SEPARATOR_S"%n. %t",
-    "%a_-_%T"G_DIR_SEPARATOR_S"%n._%t",
-    "%a-%T"G_DIR_SEPARATOR_S"%n-%t",
-    "%T"G_DIR_SEPARATOR_S"%n. %a - %t",
-    "%T"G_DIR_SEPARATOR_S"%n._%a_-_%t",
-    "%T"G_DIR_SEPARATOR_S"%n - %a - %t",
-    "%T"G_DIR_SEPARATOR_S"%n_-_%a_-_%t",
-    "%T"G_DIR_SEPARATOR_S"%n-%a-%t",
-    "%a-%T"G_DIR_SEPARATOR_S"%n-%t",
-    "%a"G_DIR_SEPARATOR_S"%T"G_DIR_SEPARATOR_S"%n. %t",
-    "%g"G_DIR_SEPARATOR_S"%a"G_DIR_SEPARATOR_S"%T"G_DIR_SEPARATOR_S"%t",
+    "%a - %T" G_DIR_SEPARATOR_S "%n - %t",
+    "%a_-_%T" G_DIR_SEPARATOR_S "%n_-_%t",
+    "%a - %T (%y)" G_DIR_SEPARATOR_S "%n - %a - %t",
+    "%a_-_%T_(%y)" G_DIR_SEPARATOR_S "%n_-_%a_-_%t",
+    "%a - %T (%y) - %g" G_DIR_SEPARATOR_S "%n - %a - %t",
+    "%a_-_%T_(%y)_-_%g" G_DIR_SEPARATOR_S "%n_-_%a_-_%t",
+    "%a - %T" G_DIR_SEPARATOR_S "%n. %t",
+    "%a_-_%T" G_DIR_SEPARATOR_S "%n._%t",
+    "%a-%T" G_DIR_SEPARATOR_S "%n-%t",
+    "%T" G_DIR_SEPARATOR_S "%n. %a - %t",
+    "%T" G_DIR_SEPARATOR_S "%n._%a_-_%t",
+    "%T" G_DIR_SEPARATOR_S "%n - %a - %t",
+    "%T" G_DIR_SEPARATOR_S "%n_-_%a_-_%t",
+    "%T" G_DIR_SEPARATOR_S "%n-%a-%t",
+    "%a-%T" G_DIR_SEPARATOR_S "%n-%t",
+    "%a" G_DIR_SEPARATOR_S "%T" G_DIR_SEPARATOR_S "%n. %t",
+    "%g" G_DIR_SEPARATOR_S "%a" G_DIR_SEPARATOR_S "%T" G_DIR_SEPARATOR_S "%t",
     "%a_-_%T-%n-%t-%y",
-    "%a - %T"G_DIR_SEPARATOR_S"%n. %t(%c)",
+    "%a - %T" G_DIR_SEPARATOR_S "%n. %t(%c)",
     "%t",
     "Track%n",
     "Track%i %n",
@@ -132,12 +137,12 @@ static const gchar *Rename_File_Masks [] =
 {
     "{%n - |}%a - %t",
     "{%n_-_|}%a_-_%t",
-    "%{n. |}%a - %t",
-    "%{n._|}%a_-_%t",
-    "{%A|%a} - %T"G_DIR_SEPARATOR_S"%n - %t",
-    "{%A|%a} - %T ({%Y|%y}){ - %g|}"G_DIR_SEPARATOR_S"{%d.|}%n - %t",
-    "{%A|%a} - %T ({%Y|%y}){ - %g|}"G_DIR_SEPARATOR_S"%n - %t",
-    "{%A|%a}"G_DIR_SEPARATOR_S"%T ({%Y|%y})"G_DIR_SEPARATOR_S"{%n - %t|Track %n}",
+    "{%n. |}%a - %t",
+    "{%n._|}%a_-_%t",
+    "{%A|%a} - %T" G_DIR_SEPARATOR_S "%n - %t",
+    "{%A|%a} - %T ({%Y|%y}){ - %g|}" G_DIR_SEPARATOR_S "{%d.|}%n - %t",
+    "{%A|%a} - %T ({%Y|%y}){ - %g|}" G_DIR_SEPARATOR_S "%n - %t",
+    "{%A|%a}" G_DIR_SEPARATOR_S "%T ({%Y|%y})" G_DIR_SEPARATOR_S "{%n - %t|Track %n}",
     "%n - %t",
     "%n_-_%t",
     "%n. %t",
@@ -199,7 +204,6 @@ struct _Scan_Mask_Item
 static void Scan_Option_Button (void);
 
 static GList *Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, gchar *mask);
-static void Scan_Free_File_Rename_List (GList *list);
 static void Scan_Free_File_Fill_Tag_List (GList *list);
 
 static void et_scan_on_response (GtkDialog *dialog, gint response_id,
@@ -326,14 +330,14 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
 
     // Create a new File_Tag item
     FileTag = et_file_tag_new ();
-    et_file_tag_copy_into (FileTag, ETFile->FileTag->data);
+    et_file_tag_copy_into (FileTag, ETFile->Tag());
 
     // Process this mask with file
     fill_tag_list = Scan_Generate_New_Tag_From_Mask(ETFile,mask);
 
     for (l = fill_tag_list; l != NULL; l = g_list_next (l))
     {
-        const Scan_Mask_Item *mask_item = l->data;
+        const Scan_Mask_Item *mask_item = (const Scan_Mask_Item*)l->data;
 
         /* We display the text affected to the code. */
         et_scan_dialog_set_file_tag_for_mask_item (FileTag, mask_item,
@@ -365,7 +369,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
         guint32 crc32_value;
         gchar *buffer;
 
-        if (ETFile->ETFileDescription == ID3_TAG)
+        if (ETFile->ETFileDescription->TagType == ID3_TAG)
         {
             file = g_file_new_for_path (((File_Name *)((GList *)ETFile->FileNameNew)->data)->value);
 
@@ -446,7 +450,7 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, gchar *mask)
     }
 
     /* Replace characters into mask and filename before parsing. */
-    convert_mode = g_settings_get_enum (MainSettings, "fill-convert-spaces");
+    convert_mode = (EtConvertSpaces)g_settings_get_enum (MainSettings, "fill-convert-spaces");
 
     switch (convert_mode)
     {
@@ -627,7 +631,7 @@ Scan_Fill_Tag_Generate_Preview (EtScanDialog *self)
     fill_tag_list = Scan_Generate_New_Tag_From_Mask(ETCore->ETFileDisplayed,mask);
     for (l = fill_tag_list; l != NULL; l = g_list_next (l))
     {
-        Scan_Mask_Item *mask_item = l->data;
+        Scan_Mask_Item *mask_item = (Scan_Mask_Item*)l->data;
         gchar *tmp_code   = g_strdup_printf("%c",mask_item->code);
         gchar *tmp_string = g_markup_printf_escaped("%s",mask_item->string); // To avoid problem with strings containing characters like '&'
         gchar *tmp_preview_text = preview_text;
@@ -811,7 +815,7 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
     /* Create a new 'File_Name' item. */
     FileName = et_file_name_new ();
     // Save changes of the 'File_Name' item
-    ET_Set_Filename_File_Name_Item(FileName,ETFile->FileNameCur->data,filename_new_utf8,NULL);
+    ET_Set_Filename_File_Name_Item(FileName,ETFile->CurFileName(),filename_new_utf8,NULL);
 
     ET_Manage_Changes_Of_File_Data(ETFile,FileName,NULL);
     g_free(filename_new_utf8);
@@ -858,7 +862,7 @@ et_scan_generate_new_filename_from_mask (const ET_File *ETFile,
         } else if (strchr(mask,G_DIR_SEPARATOR)!=NULL) // This is '/' on UNIX machines and '\' under Windows
         {
             // Relative path => set beginning of the path
-            File_Name* file = ETFile->FileNameCur->data;
+            const File_Name* file = ETFile->CurFileName();
             if (file->rel_value_utf8 != file->value_utf8)
                 path_utf8_cur = g_utf8_substring(file->value_utf8, 0, file->rel_value_utf8 - file->value_utf8);
             else
@@ -866,206 +870,7 @@ et_scan_generate_new_filename_from_mask (const ET_File *ETFile,
         }
     }
 
-
-    if (strchr(mask, '|') != NULL)
-    {
-        /* new parser */
-        filename_new_utf8 = et_evaluate_mask(ETFile, mask, no_dir_check_or_conversion);
-    }
-    else
-    {
-        /* old parser */
-        gchar *tmp;
-        const gchar *source = NULL;
-        gchar *path_utf8_cur = NULL;
-        GList *rename_file_list = NULL;
-        GList *l;
-        File_Mask_Item *mask_item;
-        File_Mask_Item *mask_item_prev;
-        File_Mask_Item *mask_item_next;
-        gint counter = 0;
-
-        /*
-         * Parse the codes to generate a list (1rst item = 1rst code)
-         */
-        while ( mask!=NULL && (tmp=strrchr(mask,'%'))!=NULL && strlen(tmp)>1 )
-        {
-            // Mask contains some characters after the code ('%T__')
-            if (strlen(tmp)>2)
-            {
-                mask_item = g_slice_new0 (File_Mask_Item);
-                if (counter)
-                {
-                    if (strchr(tmp+2,G_DIR_SEPARATOR))
-                        mask_item->type = DIRECTORY_SEPARATOR;
-                    else
-                        mask_item->type = SEPARATOR;
-                } else
-                {
-                    mask_item->type = TRAILING_SEPARATOR;
-                }
-                mask_item->string = g_strdup(tmp+2);
-                rename_file_list = g_list_prepend(rename_file_list,mask_item);
-            }
-
-            // Now, parses the code to get the corresponding string (from tag)
-            source = et_tag_field_from_mask_code((File_Tag *)ETFile->FileTag->data,tmp[1]);
-            mask_item = g_slice_new0 (File_Mask_Item);
-
-            if (source && !et_str_empty (source))
-            {
-                mask_item->type = FIELD;
-                mask_item->string = g_strdup(source);
-
-                // Replace invalid characters for this field
-                /* Do not replace characters in a playlist information field. */
-                if (!no_dir_check_or_conversion)
-                {
-                    EtConvertSpaces convert_mode;
-
-                    convert_mode = g_settings_get_enum (MainSettings,
-                                                        "rename-convert-spaces");
-
-                    switch (convert_mode)
-                    {
-                        case ET_CONVERT_SPACES_SPACES:
-                            Scan_Convert_Underscore_Into_Space (mask_item->string);
-                            Scan_Convert_P20_Into_Space (mask_item->string);
-                            break;
-                        case ET_CONVERT_SPACES_UNDERSCORES:
-                            Scan_Convert_Space_Into_Underscore (mask_item->string);
-                            break;
-                        case ET_CONVERT_SPACES_REMOVE:
-                            Scan_Remove_Spaces (mask_item->string);
-                            break;
-                        /* FIXME: Check that this is intended. */
-                        case ET_CONVERT_SPACES_NO_CHANGE:
-                        default:
-                            g_assert_not_reached ();
-                    }
-
-                    /* This must occur after the space processing, to ensure that a
-                     * trailing space cannot be present (if illegal characters are to be
-                     * replaced). */
-                    et_filename_prepare (mask_item->string,
-                                         g_settings_get_boolean (MainSettings,
-                                                                 "rename-replace-illegal-chars"));
-                }
-            }else
-            {
-                mask_item->type = EMPTY_FIELD;
-                mask_item->string = NULL;
-            }
-            rename_file_list = g_list_prepend(rename_file_list,mask_item);
-            *tmp = '\0'; // Cut parsed data of mask
-            counter++; // To indicate that we made at least one loop to identifiate 'separator' or 'trailing_separator'
-        }
-
-        // It may have some characters before the last remaining code ('__%a')
-        if (!et_str_empty (mask))
-        {
-            mask_item = g_slice_new0 (File_Mask_Item);
-            mask_item->type = LEADING_SEPARATOR;
-            mask_item->string = g_strdup(mask);
-            rename_file_list = g_list_prepend(rename_file_list,mask_item);
-        }
-
-        if (!rename_file_list) return NULL;
-
-        /*
-         * For Debugging : display the "rename_file_list" list
-         */
-        /***{
-            GList *list = g_list_first(rename_file_list);
-            gint i = 0;
-            g_print("## rename_file_list - start\n");
-            while (list)
-            {
-                File_Mask_Item *mask_item = (File_Mask_Item *)list->data;
-                Mask_Item_Type  type      = mask_item->type;
-                gchar          *string    = mask_item->string;
-
-                //g_print("item %d : \n",i++);
-                //g_print("  - type   : '%s'\n",type==UNKNOWN?"UNKNOWN":type==LEADING_SEPARATOR?"LEADING_SEPARATOR":type==TRAILING_SEPARATOR?"TRAILING_SEPARATOR":type==SEPARATOR?"SEPARATOR":type==DIRECTORY_SEPARATOR?"DIRECTORY_SEPARATOR":type==FIELD?"FIELD":type==EMPTY_FIELD?"EMPTY_FIELD":"???");
-                //g_print("  - string : '%s'\n",string);
-                g_print("%d -> %s (%s) | ",i++,type==UNKNOWN?"UNKNOWN":type==LEADING_SEPARATOR?"LEADING_SEPARATOR":type==TRAILING_SEPARATOR?"TRAILING_SEPARATOR":type==SEPARATOR?"SEPARATOR":type==DIRECTORY_SEPARATOR?"DIRECTORY_SEPARATOR":type==FIELD?"FIELD":type==EMPTY_FIELD?"EMPTY_FIELD":"???",string);
-
-                list = list->next;
-            }
-            g_print("\n## rename_file_list - end\n\n");
-        }***/
-
-        /*
-         * Build the new filename with items placed into the list
-         * (read the list from the end to the beginning)
-         */
-        filename_new_utf8 = g_strdup("");
-
-        for (l = g_list_last (rename_file_list); l != NULL;
-             l = g_list_previous (l))
-        {
-            File_Mask_Item *mask_item2 = l->data;
-
-            /* Trailing mask characters. */
-            if (mask_item2->type == TRAILING_SEPARATOR)
-            {
-                // Doesn't write it if previous field is empty
-                if (l->prev
-                    && ((File_Mask_Item *)l->prev->data)->type != EMPTY_FIELD)
-                {
-                    gchar *filename_tmp = filename_new_utf8;
-                    filename_new_utf8 = g_strconcat (mask_item2->string,
-                                                     filename_new_utf8, NULL);
-                    g_free(filename_tmp);
-                }
-            }
-            else if (mask_item2->type == EMPTY_FIELD)
-            // We don't concatenate the field value (empty) and the previous
-            // separator (except leading separator) to the filename.
-            // If the empty field is the 'first', we don't concatenate it, and the
-            // next separator too.
-            {
-                if (l->prev)
-                {
-                    // The empty field isn't the first.
-                    // If previous string is a separator, we don't use it, except if the next
-                    // string is a FIELD (not empty)
-                    mask_item_prev = l->prev->data;
-                    if ( mask_item_prev->type==SEPARATOR )
-                    {
-                        if (!(l->next
-                            && (mask_item_next = rename_file_list->next->data)
-                            && mask_item_next->type == FIELD))
-                        {
-                            l = l->prev;
-                        }
-                    }
-                }else
-                if (l->next && (mask_item_next = l->next->data)
-                    && mask_item_next->type == SEPARATOR)
-                // We are at the 'beginning' of the mask (so empty field is the first)
-                // and next field is a separator. As the separator may have been already added, we remove it
-                {
-                    if ( filename_new_utf8 && mask_item_next->string && (strncmp(filename_new_utf8,mask_item_next->string,strlen(mask_item_next->string))==0) ) // To avoid crash if filename_new_utf8 is 'empty'
-                    {
-                        gchar *filename_tmp = filename_new_utf8;
-                        filename_new_utf8 = g_strdup(filename_new_utf8+strlen(mask_item_next->string));
-                        g_free(filename_tmp);
-                     }
-                }
-
-            }else // SEPARATOR, FIELD, LEADING_SEPARATOR, DIRECTORY_SEPARATOR
-            {
-                gchar *filename_tmp = filename_new_utf8;
-                filename_new_utf8 = g_strconcat (mask_item2->string,
-                                                 filename_new_utf8, NULL);
-                g_free(filename_tmp);
-            }
-        }
-
-        // Free the list
-        Scan_Free_File_Rename_List(rename_file_list);
-    }
+    filename_new_utf8 = et_evaluate_mask(ETFile, mask, no_dir_check_or_conversion);
 
     // Add current path if relative path entered
     if (path_utf8_cur)
@@ -1078,23 +883,6 @@ et_scan_generate_new_filename_from_mask (const ET_File *ETFile,
     }
 
     return filename_new_utf8; // in UTF-8!
-}
-
-static void
-Scan_Free_File_Rename_List (GList *list)
-{
-    GList *l;
-
-    for (l = list; l != NULL; l = g_list_next (l))
-    {
-        if (l->data)
-        {
-            g_free (((File_Mask_Item *)l->data)->string);
-            g_slice_free (File_Mask_Item, l->data);
-        }
-    }
-
-    g_list_free (list);
 }
 
 /*
@@ -1177,13 +965,13 @@ Scan_Convert_Character (EtScanDialog *self, gchar **string)
                                  -1);
     to = gtk_editable_get_chars (GTK_EDITABLE (priv->convert_to_entry), 0, -1);
 
-    regex = g_regex_new (from, 0, 0, &regex_error);
+    regex = g_regex_new (from, (GRegexCompileFlags)0, (GRegexMatchFlags)0, &regex_error);
     if (regex_error != NULL)
     {
         goto handle_error;
     }
 
-    new_string = g_regex_replace (regex, *string, -1, 0, to, 0, &regex_error);
+    new_string = g_regex_replace (regex, *string, -1, 0, to, (GRegexMatchFlags)0, &regex_error);
     if (regex_error != NULL)
     {
         g_free (new_string);
@@ -1214,10 +1002,7 @@ static void
 Scan_Process_Fields_Functions (EtScanDialog *self,
                                gchar **string)
 {
-    const EtProcessFieldsConvert process = g_settings_get_enum (MainSettings,
-                                                                "process-convert");
-
-    switch (process)
+    switch (g_settings_get_enum (MainSettings, "process-convert"))
     {
         case ET_PROCESS_FIELDS_CONVERT_SPACES:
             Scan_Convert_Underscore_Into_Space (*string);
@@ -1339,7 +1124,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             Scan_Process_Fields_Functions (self, &string);
 
             string_utf8 = et_file_generate_name (ETFile, string);
-            ET_Set_Filename_File_Name_Item(FileName,ETFile->FileNameCur->data,string_utf8,NULL);
+            ET_Set_Filename_File_Name_Item(FileName,ETFile->CurFileName(),string_utf8,NULL);
             g_free(string_utf8);
             g_free(string);
         }
@@ -1355,7 +1140,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             if (!FileTag)
             {
                 FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->FileTag->data);
+                et_file_tag_copy_into (FileTag, ETFile->Tag());
             }
 
             string = g_strdup(st_filetag->title);
@@ -1374,7 +1159,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             if (!FileTag)
             {
                 FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->FileTag->data);
+                et_file_tag_copy_into (FileTag, ETFile->Tag());
             }
 
             string = g_strdup(st_filetag->artist);
@@ -1393,7 +1178,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             if (!FileTag)
             {
                 FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->FileTag->data);
+                et_file_tag_copy_into (FileTag, ETFile->Tag());
             }
 
             string = g_strdup(st_filetag->album_artist);
@@ -1412,7 +1197,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             if (!FileTag)
             {
                 FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->FileTag->data);
+                et_file_tag_copy_into (FileTag, ETFile->Tag());
             }
 
             string = g_strdup(st_filetag->album);
@@ -1431,7 +1216,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             if (!FileTag)
             {
                 FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->FileTag->data);
+                et_file_tag_copy_into (FileTag, ETFile->Tag());
             }
 
             string = g_strdup(st_filetag->genre);
@@ -1450,7 +1235,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             if (!FileTag)
             {
                 FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->FileTag->data);
+                et_file_tag_copy_into (FileTag, ETFile->Tag());
             }
 
             string = g_strdup(st_filetag->comment);
@@ -1469,7 +1254,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             if (!FileTag)
             {
                 FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->FileTag->data);
+                et_file_tag_copy_into (FileTag, ETFile->Tag());
             }
 
             string = g_strdup(st_filetag->composer);
@@ -1488,7 +1273,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             if (!FileTag)
             {
                 FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->FileTag->data);
+                et_file_tag_copy_into (FileTag, ETFile->Tag());
             }
 
             string = g_strdup(st_filetag->orig_artist);
@@ -1507,7 +1292,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             if (!FileTag)
             {
                 FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->FileTag->data);
+                et_file_tag_copy_into (FileTag, ETFile->Tag());
             }
 
             string = g_strdup(st_filetag->copyright);
@@ -1526,7 +1311,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             if (!FileTag)
             {
                 FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->FileTag->data);
+                et_file_tag_copy_into (FileTag, ETFile->Tag());
             }
 
             string = g_strdup(st_filetag->url);
@@ -1545,7 +1330,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             if (!FileTag)
             {
                 FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->FileTag->data);
+                et_file_tag_copy_into (FileTag, ETFile->Tag());
             }
 
             string = g_strdup(st_filetag->encoded_by);
@@ -1584,7 +1369,7 @@ on_scan_mode_changed (EtScanDialog *self,
 
     priv = et_scan_dialog_get_instance_private (self);
 
-    mode = g_settings_get_enum (settings, key);
+    mode = (EtScanMode)g_settings_get_enum (settings, key);
 
     switch (mode)
     {
@@ -1957,7 +1742,7 @@ Mask_Editor_List_Row_Selected (GtkTreeSelection* selection, EtScanDialog *self)
 
     /* We must block the function, else the previous selected row will be modified */
     g_signal_handlers_block_by_func (G_OBJECT (priv->mask_entry),
-                                     G_CALLBACK (Mask_Editor_Entry_Changed),
+                                     (gpointer)Mask_Editor_Entry_Changed,
                                      NULL);
 
     selectedRows = gtk_tree_selection_get_selected_rows(selection, NULL);
@@ -1968,7 +1753,7 @@ Mask_Editor_List_Row_Selected (GtkTreeSelection* selection, EtScanDialog *self)
     if (!selectedRows)
     {
         g_signal_handlers_unblock_by_func (G_OBJECT (priv->mask_entry),
-                                           G_CALLBACK (Mask_Editor_Entry_Changed),
+                                           (gpointer)Mask_Editor_Entry_Changed,
                                            NULL);
         return;
     }
@@ -1989,7 +1774,7 @@ Mask_Editor_List_Row_Selected (GtkTreeSelection* selection, EtScanDialog *self)
     }
 
     g_signal_handlers_unblock_by_func (G_OBJECT (priv->mask_entry),
-                                       G_CALLBACK (Mask_Editor_Entry_Changed),
+                                       (gpointer)Mask_Editor_Entry_Changed,
                                        NULL);
 
     g_list_free_full (selectedRows, (GDestroyNotify)gtk_tree_path_free);
@@ -2478,15 +2263,12 @@ void
 Scan_Select_Mode_And_Run_Scanner (EtScanDialog *self, ET_File *ETFile)
 {
     EtScanDialogPrivate *priv;
-    EtScanMode mode;
 
     g_return_if_fail (ET_SCAN_DIALOG (self));
     g_return_if_fail (ETFile != NULL);
 
     priv = et_scan_dialog_get_instance_private (self);
-    mode = gtk_notebook_get_current_page (GTK_NOTEBOOK (priv->notebook));
-
-    switch (mode)
+    switch (gtk_notebook_get_current_page (GTK_NOTEBOOK (priv->notebook)))
     {
         case ET_SCAN_MODE_FILL_TAG:
             Scan_Tag_With_Mask (self, ETFile);
@@ -2593,7 +2375,7 @@ et_scan_dialog_scan_selected_files (EtScanDialog *self)
 
     for (l = selfilelist; l != NULL; l = g_list_next (l))
     {
-        ET_File *etfile = l->data;
+        ET_File *etfile = (ET_File*)l->data;
 
         /* Run the current scanner. */
         Scan_Select_Mode_And_Run_Scanner (self, etfile);
@@ -2807,5 +2589,5 @@ et_scan_dialog_new (GtkWindow *parent)
 {
     g_return_val_if_fail (GTK_WINDOW (parent), NULL);
 
-    return g_object_new (ET_TYPE_SCAN_DIALOG, "transient-for", parent, NULL);
+    return (EtScanDialog*)g_object_new (ET_TYPE_SCAN_DIALOG, "transient-for", parent, NULL);
 }

@@ -554,10 +554,10 @@
       <default>'try-alternative'</default>
     </key>
 
-    <key name="rename-replace-illegal-chars" type="b">
+    <key name="rename-replace-illegal-chars" enum="org.gnome.EasyTAG.EtFilenameReplaceMode">
       <summary>Replace illegal characters when renaming</summary>
       <description>Whether to replace illegal characters in a filename when using the rename function</description>
-      <default>true</default>
+      <default>'ascii'</default>
     </key>
 
     <key name="scan-mask-editor-show" type="b">

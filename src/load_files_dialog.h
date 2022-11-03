@@ -21,12 +21,12 @@
 
 #include <gtk/gtk.h>
 
-G_BEGIN_DECLS
-
 #include "et_core.h"
 
 #define ET_TYPE_LOAD_FILES_DIALOG (et_load_files_dialog_get_type ())
 #define ET_LOAD_FILES_DIALOG(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_LOAD_FILES_DIALOG, EtLoadFilesDialog))
+
+G_BEGIN_DECLS
 
 typedef struct _EtLoadFilesDialog EtLoadFilesDialog;
 typedef struct _EtLoadFilesDialogClass EtLoadFilesDialogClass;

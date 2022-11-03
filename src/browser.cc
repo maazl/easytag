@@ -1,4 +1,5 @@
 /* EasyTAG - tag editor for audio files
+ * Copyright (C) 2022  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -3534,7 +3535,7 @@ static void set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkT
 	bool saved = et_file_check_saved(file);
 	bool changed = !saved && text != renderer->RenderText(file, true);
 	if (changed && text.length() == 0)
-		text = "\xe2\x90\x80"; // "␀" Unicode 0x2400 as UTF-8
+		text = "\xe2\x90\xa0"; // ␠ Symbol for Space
 	FileColumnRenderer::SetText(GTK_CELL_RENDERER_TEXT(cell),
 		text.c_str(), file->activate_bg_color, saved ? FileColumnRenderer::NORMAL : changed ? FileColumnRenderer::STRONGHIGHLIGHT : FileColumnRenderer::HIGHLIGHT);
 }

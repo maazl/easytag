@@ -21,12 +21,12 @@
 
 #include <gtk/gtk.h>
 
-G_BEGIN_DECLS
-
 #include "et_core.h"
 
 #define ET_TYPE_APPLICATION_WINDOW (et_application_window_get_type ())
 #define ET_APPLICATION_WINDOW(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_APPLICATION_WINDOW, EtApplicationWindow))
+
+G_BEGIN_DECLS
 
 typedef struct _EtApplicationWindow EtApplicationWindow;
 typedef struct _EtApplicationWindowClass EtApplicationWindowClass;

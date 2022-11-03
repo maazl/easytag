@@ -543,10 +543,8 @@ ET_Save_File_Name_Internal (const ET_File *ETFile,
     g_free(extension);
     g_free(filename);
 
-    success = et_file_name_set_from_components (FileName, ETFile->CurFileName(), filename_new,
-                                                dirname,
-                                                g_settings_get_boolean (MainSettings,
-                                                                        "rename-replace-illegal-chars"));
+    success = et_file_name_set_from_components (FileName, ETFile->CurFileName(), filename_new, dirname,
+        (EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"));
 
     g_free (filename_new);
     g_free (dirname);

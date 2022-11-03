@@ -21,11 +21,11 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
-
 #include "file.h"
 #include "file_tag.h"
 #include "setting.h"
+
+G_BEGIN_DECLS
 
 GList * et_file_list_add (GList *file_list, GFile *file, const File_Name *root);
 void ET_Remove_File_From_File_List (ET_File *ETFile);

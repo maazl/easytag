@@ -1930,7 +1930,8 @@ et_application_window_search_dialog_clear (EtApplicationWindow *self)
 
     g_return_if_fail (priv->browser != NULL);
 
-    et_search_dialog_clear (ET_SEARCH_DIALOG(priv->search_dialog));
+    if (priv->search_dialog)
+        et_search_dialog_clear (ET_SEARCH_DIALOG(priv->search_dialog));
 }
 
 void
@@ -2037,9 +2038,8 @@ et_application_window_update_file_name_from_ui (EtApplicationWindow *self,
     g_free (filename);
     g_free (extension);
 
-    et_file_name_set_from_components (FileName, et_application_window_get_current_path_name(self), filename_new, dirname,
-                                      g_settings_get_boolean (MainSettings,
-                                                              "rename-replace-illegal-chars"));
+    et_file_name_set_from_components(FileName, et_application_window_get_current_path_name(self), filename_new, dirname,
+        (EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"));
 
     g_free (filename_new);
     g_free (dirname);

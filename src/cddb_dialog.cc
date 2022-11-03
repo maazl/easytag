@@ -45,6 +45,8 @@
 #include "setting.h"
 #include "charset.h"
 
+using namespace std;
+
 typedef struct
 {
     GtkWidget *album_list_view;
@@ -98,7 +100,11 @@ typedef struct
     SoupSession *session;
 } EtCDDBDialogPrivate;
 
+// learn correct return type for et_browser_get_instance_private
+#define et_cddb_dialog_get_instance_private et_cddb_dialog_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtCDDBDialog, et_cddb_dialog, GTK_TYPE_DIALOG)
+#undef et_cddb_dialog_get_instance_private
+#define et_cddb_dialog_get_instance_private(x) (EtCDDBDialogPrivate*)et_cddb_dialog_get_instance_private_(x)
 
 /*
  * Structure used for each item of the album list. Aslo attached to each row of
@@ -376,9 +382,7 @@ Cddb_Track_List_Invert_Selection (EtCDDBDialog *self)
     if (selection)
     {
         /* Must block the select signal to avoid selecting all files (one by one) in the main list */
-        g_signal_handlers_block_by_func (selection,
-                                         G_CALLBACK (Cddb_Track_List_Row_Selected),
-                                         NULL);
+        g_signal_handlers_block_by_func (selection, (gpointer)Cddb_Track_List_Row_Selected, NULL);
 
         valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->track_list_model), &iter);
         while (valid)
@@ -392,9 +396,7 @@ Cddb_Track_List_Invert_Selection (EtCDDBDialog *self)
             }
             valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->track_list_model), &iter);
         }
-        g_signal_handlers_unblock_by_func (selection,
-                                           G_CALLBACK (Cddb_Track_List_Row_Selected),
-                                           NULL);
+        g_signal_handlers_unblock_by_func (selection, (gpointer)Cddb_Track_List_Row_Selected, NULL);
         g_signal_emit_by_name(G_OBJECT(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->track_list_view))), "changed");
     }
 }
@@ -483,19 +485,13 @@ cddb_album_model_clear (EtCDDBDialog *self)
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->album_list_view));
 
-    g_signal_handlers_block_by_func (selection,
-                                     G_CALLBACK (Cddb_Get_Album_Tracks_List_CB),
-                                     self);
-    g_signal_handlers_block_by_func (selection, G_CALLBACK (show_album_info),
-                                     self);
+    g_signal_handlers_block_by_func (selection, (gpointer)Cddb_Get_Album_Tracks_List_CB, self);
+    g_signal_handlers_block_by_func (selection, (gpointer)show_album_info, self);
 
     gtk_list_store_clear (priv->album_list_model);
 
-    g_signal_handlers_unblock_by_func (selection, G_CALLBACK (show_album_info),
-                                       self);
-    g_signal_handlers_unblock_by_func (selection,
-                                       G_CALLBACK (Cddb_Get_Album_Tracks_List_CB),
-                                       self);
+    g_signal_handlers_unblock_by_func (selection, (gpointer)show_album_info, self);
+    g_signal_handlers_unblock_by_func (selection, (gpointer)Cddb_Get_Album_Tracks_List_CB, self);
 }
 
 /*
@@ -512,15 +508,11 @@ cddb_track_model_clear (EtCDDBDialog *self)
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->track_list_view));
 
-    g_signal_handlers_block_by_func (selection,
-                                     G_CALLBACK (Cddb_Track_List_Row_Selected),
-                                     self);
+    g_signal_handlers_block_by_func (selection, (gpointer)Cddb_Track_List_Row_Selected, self);
 
     gtk_list_store_clear (priv->track_list_model);
 
-    g_signal_handlers_unblock_by_func (selection,
-                                       G_CALLBACK (Cddb_Track_List_Row_Selected),
-                                       self);
+    g_signal_handlers_unblock_by_func (selection, (gpointer)Cddb_Track_List_Row_Selected, self);
 }
 
 /*
@@ -543,7 +535,7 @@ Cddb_Load_Track_Album_List (EtCDDBDialog *self, GList *track_list)
         for (l = g_list_first (track_list); l != NULL; l = g_list_next (l))
         {
             gchar *row_text;
-            CddbTrackAlbum *cddbtrackalbum = l->data;
+            CddbTrackAlbum *cddbtrackalbum = (CddbTrackAlbum*)l->data;
 
             row_text = Convert_Duration ((gulong)cddbtrackalbum->duration);
 
@@ -977,7 +969,7 @@ Cddb_Get_Album_Tracks_List (EtCDDBDialog *self, GtkTreeSelection* selection)
             // TTITLE15=xe Edit)
             // So to check it, we compare current track number with the previous one...
             if (cddbalbum->track_list)
-                cddbtrackalbum_last = g_list_last(cddbalbum->track_list)->data;
+                cddbtrackalbum_last = (CddbTrackAlbum*)g_list_last(cddbalbum->track_list)->data;
             if (cddbtrackalbum_last && cddbtrackalbum_last->track_number == cddbtrackalbum->track_number)
             {
                 gchar *track_name = g_strconcat(cddbtrackalbum_last->track_name,cddbtrackalbum->track_name,NULL);
@@ -1098,7 +1090,7 @@ Cddb_Load_Album_List (EtCDDBDialog *self, gboolean only_red_lines)
     // Reload list following parameter 'only_red_lines'
     for (l = g_list_first (priv->album_list); l != NULL; l = g_list_next (l))
     {
-        CddbAlbum *cddbalbum = l->data;
+        CddbAlbum *cddbalbum = (CddbAlbum*)l->data;
 
         if ( (only_red_lines && cddbalbum->track_list) || !only_red_lines)
         {
@@ -1140,7 +1132,7 @@ Cddb_Free_Album_List (EtCDDBDialog *self)
 
     for (l = priv->album_list; l != NULL; l = g_list_next (l))
     {
-        CddbAlbum *cddbalbum = l->data;
+        CddbAlbum *cddbalbum = (CddbAlbum*)l->data;
 
         if (cddbalbum)
         {
@@ -1914,7 +1906,7 @@ set_et_file_from_cddb_album (ET_File * etfile,
     {
         /* Allocation of a new FileTag. */
         FileTag = et_file_tag_new ();
-        et_file_tag_copy_into (FileTag, etfile->FileTag->data);
+        et_file_tag_copy_into (FileTag, etfile->Tag());
 
         if (set_fields & ET_CDDB_SET_FIELD_TITLE)
         {
@@ -1986,7 +1978,6 @@ set_et_file_from_cddb_album (ET_File * etfile,
     if (set_fields & ET_CDDB_SET_FIELD_FILENAME)
     {
         gchar *track_number;
-        gchar *filename_generated_utf8;
         gchar *filename_new_utf8;
 
         /* Allocation of a new FileName. */
@@ -1995,19 +1986,13 @@ set_et_file_from_cddb_album (ET_File * etfile,
         /* Build the filename with the path. */
         track_number = et_track_number_to_string (cddbtrackalbum->track_number);
 
-        filename_generated_utf8 = g_strconcat (track_number, " - ",
-                                               cddbtrackalbum->track_name,
-                                               NULL);
-        et_filename_prepare (filename_generated_utf8,
-                             g_settings_get_boolean (MainSettings,
-                                                     "rename-replace-illegal-chars"));
-        filename_new_utf8 = et_file_generate_name (etfile,
-                                                   filename_generated_utf8);
+        string filename_generated_utf8 = string(track_number) + " - " + cddbtrackalbum->track_name;
+        File_Name::prepare_func((EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"), ET_CONVERT_SPACES_NO_CHANGE)(filename_generated_utf8, 0);
+        filename_new_utf8 = et_file_generate_name(etfile, filename_generated_utf8.c_str());
 
-        ET_Set_Filename_File_Name_Item(FileName,etfile->FileNameCur->data,filename_new_utf8,NULL);
+        ET_Set_Filename_File_Name_Item(FileName,etfile->CurFileName(),filename_new_utf8,NULL);
 
         g_free (track_number);
-        g_free(filename_generated_utf8);
         g_free(filename_new_utf8);
     }
 
@@ -2531,7 +2516,7 @@ Cddb_Free_Track_Album_List (GList *track_list)
 
     for (l = track_list; l != NULL; l = g_list_next (l))
     {
-        CddbTrackAlbum *cddbtrackalbum = l->data;
+        CddbTrackAlbum *cddbtrackalbum = (CddbTrackAlbum*)l->data;
 
         if (cddbtrackalbum)
         {
@@ -2803,7 +2788,7 @@ et_cddb_dialog_search_from_selection (EtCDDBDialog *self)
             while (!priv->stop_searching
                    && read_cddb_result_line (dstream, cancellable, &cddb_out))
             {
-                const gchar *cddb_out_tmp = cddb_out;
+                gchar *cddb_out_tmp = cddb_out;
 
                 if (!cddb_out_tmp)
                 {
@@ -3087,6 +3072,5 @@ et_cddb_dialog_new (void)
                       NULL);
     }
 
-    return g_object_new (ET_TYPE_CDDB_DIALOG, "use-header-bar", use_header_bar,
-                         NULL);
+    return (EtCDDBDialog*)g_object_new (ET_TYPE_CDDB_DIALOG, "use-header-bar", use_header_bar, NULL);
 }

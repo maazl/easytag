@@ -169,7 +169,7 @@
                                                 <property name="margin-top">6</property>
                                                 <property name="visible">True</property>
                                                 <signal name="changed" handler="Mask_Editor_Entry_Changed" swapped="yes"/>
-                                                <signal name="changed" handler="entry_check_scan_tag_mask"/>
+                                                <signal name="changed" handler="entry_check_mask"/>
                                             </object>
                                         </child>
                                     </object>

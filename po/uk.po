@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-23 14:31+0200\n"
+"POT-Creation-Date: 2022-11-03 20:54+0100\n"
 "PO-Revision-Date: 2020-04-05 08:41+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -76,8 +76,8 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Виберіть каталог для показу у браузері"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3456
-#: ../src/tag_area.c:1411
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3469
+#: ../src/tag_area.cc:1413
 msgid "_Open"
 msgstr "_Відкрити"
 
@@ -86,12 +86,12 @@ msgid "Select a directory to browse"
 msgstr "Виберіть каталог для навігації"
 
 #. Translators: No files, as in "0 files".
-#: ../data/browser.ui.h:4 ../src/easytag.c:979
+#: ../data/browser.ui.h:4 ../src/easytag.c:983
 msgid "No files"
 msgstr "Немає файлів"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:63
+#: ../data/preferences_dialog.ui.h:68 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Виконавець"
@@ -105,12 +105,12 @@ msgid "# Files"
 msgstr "К-ть файлів"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:67
+#: ../data/preferences_dialog.ui.h:70 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Альбом"
 
-#: ../data/browser.ui.h:9
+#: ../data/browser.ui.h:9 ../data/search_dialog.ui.h:11
 msgid "Path"
 msgstr "Шлях"
 
@@ -121,7 +121,7 @@ msgid "Filename"
 msgstr "Назва файла"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:66 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Заголовок"
@@ -150,17 +150,17 @@ msgid "Track"
 msgstr "Доріжка"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:69
+#: ../data/preferences_dialog.ui.h:72 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Жанр"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:74
 #: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Коментар"
 
-#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
+#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:76
 #: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
@@ -208,10 +208,10 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.cc:918
-#: ../src/browser.cc:3455 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
-#: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
-#: ../src/tag_area.c:1735
+#: ../src/application_window.c:3028 ../src/browser.cc:920
+#: ../src/browser.cc:3468 ../src/cddb_dialog.cc:2124 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:599 ../src/tag_area.cc:1411
+#: ../src/tag_area.cc:1736
 msgid "_Cancel"
 msgstr "_Скасувати"
 
@@ -231,7 +231,7 @@ msgstr ""
 "поточні файли."
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:562
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:565
 msgid "Rename Directory"
 msgstr "Перейменувати каталог"
 
@@ -312,7 +312,7 @@ msgstr "Поля для пошуку"
 msgid "Track Name"
 msgstr "Назва доріжки"
 
-#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:91
+#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:96
 #: ../src/picture.c:191
 msgid "Other"
 msgstr "Інше"
@@ -433,7 +433,7 @@ msgstr ""
 msgid "Match lines with the Levenshtein algorithm"
 msgstr "Встановити відповідність рядків за допомогою алгоритму Левенштайна"
 
-#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:143
+#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:148
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:24
 msgid "Whether to use the DLM algorithm to match CDDB results to files"
 msgstr ""
@@ -441,13 +441,13 @@ msgstr ""
 "відповідності результатів CDDB файлам"
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
-#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:160
-#: ../data/scan_dialog.ui.h:118 ../data/search_dialog.ui.h:11
+#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:165
+#: ../data/scan_dialog.ui.h:118
 msgid "_Close"
 msgstr "_Закрити"
 
 #: ../data/cddb_dialog.ui.h:49 ../data/load_files_dialog.ui.h:17
-#: ../src/cddb_dialog.c:2140
+#: ../src/cddb_dialog.cc:2125
 msgid "_Apply"
 msgstr "_Застосувати"
 
@@ -457,7 +457,7 @@ msgstr ""
 "Завантажити позначені рядки або усі рядки (якщо жодного рядка не позначено)"
 
 #. Default values are MPEG data.
-#: ../data/file_area.ui.h:1 ../src/application_window.c:2180
+#: ../data/file_area.ui.h:1 ../src/application_window.c:2194
 #: ../src/file_area.c:155
 msgid "File"
 msgstr "Файл"
@@ -542,8 +542,8 @@ msgstr "Вставити порожній рядок перед позначен
 msgid "Delete the selected line"
 msgstr "Вилучити позначений рядок"
 
-#: ../data/load_files_dialog.ui.h:8 ../src/load_files_dialog.c:750
-#: ../src/load_files_dialog.c:853
+#: ../data/load_files_dialog.ui.h:8 ../src/load_files_dialog.cc:753
+#: ../src/load_files_dialog.cc:856
 msgid "Delete all blank lines"
 msgstr "Вилучити усі порожні рядки"
 
@@ -555,8 +555,8 @@ msgstr "Пересунути позначений рядок вище"
 msgid "Move the selected line down"
 msgstr "Пересунути позначений рядок нижче"
 
-#: ../data/load_files_dialog.ui.h:11 ../src/load_files_dialog.c:768
-#: ../src/load_files_dialog.c:871
+#: ../data/load_files_dialog.ui.h:11 ../src/load_files_dialog.cc:771
+#: ../src/load_files_dialog.cc:874
 msgid "Reload"
 msgstr "Перезавантажити"
 
@@ -1082,10 +1082,10 @@ msgstr "Записати відомості на основі назви фай�
 msgid "Write information using:"
 msgstr "Записувати відомості за допомогою:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.cc:919 ../src/easytag.c:234 ../src/easytag.c:465
-#: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
-#: ../src/tag_area.c:1737
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3029
+#: ../src/browser.cc:921 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/easytag.c:472 ../src/easytag.c:600 ../src/easytag.c:607
+#: ../src/tag_area.cc:1738
 msgid "_Save"
 msgstr "З_берегти"
 
@@ -1245,55 +1245,81 @@ msgid "Filenames"
 msgstr "Назви файлів"
 
 #: ../data/preferences_dialog.ui.h:32
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
-msgid "Replace illegal characters when renaming"
+#, fuzzy
+msgid "Replace illegal characters when renaming:"
 msgstr "Замінювати некоректні символи при перейменуванні"
 
 #: ../data/preferences_dialog.ui.h:33
+#, fuzzy
 msgid ""
-"Convert characters which cannot be represented in filenames on the FAT32/16 "
-"and Joliet filesystems (‘\\’, ‘:’, ‘;’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’)"
+"Convert characters which cannot be represented in filenames on some "
+"filesystems (‘\\’, ‘/’, ‘:’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’)"
 msgstr ""
 "Перетворювати символи, які не може бути відтворено у назвах файлів файлових "
 "систем FAT32/16 та Joliet («\\», «:», «;», «*», «?», «\"», «<», «>», «|»)"
 
 #: ../data/preferences_dialog.ui.h:34
+msgid "by ASCII characters"
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:35
+msgid "Use the ASCII characters (‘-’, ‘+’, ‘_’, ‘'’, ‘(’, ‘)’) as replacement."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:36
+msgid "by Unicode characters"
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:37
+msgid ""
+"Use similar Unicode characters (‘&#8726;’, ‘&#8725;’, ‘&#8758;’, ‘&#8727;’, "
+"‘&#8253;’, ‘&#8221;’, ‘&#8826;’, ‘&#8827;’, ‘&#8739;’) as replacement."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:38
+#, fuzzy
+msgid "No change"
+msgstr "Без змін"
+
+#: ../data/preferences_dialog.ui.h:39
+msgid "You must manually ensure valid file characters."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:40
 msgid "Convert filename extension to:"
 msgstr "Перетворити суфікс назви файла до:"
 
-#: ../data/preferences_dialog.ui.h:35
-msgid "Lower Case"
+#: ../data/preferences_dialog.ui.h:41
+#, fuzzy
+msgid "Lower case"
 msgstr "Нижнього регістру"
 
-#: ../data/preferences_dialog.ui.h:36
+#: ../data/preferences_dialog.ui.h:42
 msgid "For example, the extension will be converted to ‘.mp3’"
 msgstr "Наприклад, суфікс назви буде перетворено до «.mp3»"
 
-#: ../data/preferences_dialog.ui.h:37
-msgid "Upper Case"
+#: ../data/preferences_dialog.ui.h:43
+#, fuzzy
+msgid "Upper case"
 msgstr "Верхнього регістру"
 
-#: ../data/preferences_dialog.ui.h:38
+#: ../data/preferences_dialog.ui.h:44
 msgid "For example, the extension will be converted to ‘.MP3’"
 msgstr "Наприклад, суфікс назви буде перетворено до «.MP3»"
 
-#: ../data/preferences_dialog.ui.h:39
-msgid "No Change"
-msgstr "Без змін"
-
-#: ../data/preferences_dialog.ui.h:40
+#: ../data/preferences_dialog.ui.h:45
 msgid "The extension will not be modified"
 msgstr "Суфікс назви не буде змінено"
 
-#: ../data/preferences_dialog.ui.h:41
+#: ../data/preferences_dialog.ui.h:46
 msgid "Filename Encoding"
 msgstr "Кодування назви файла"
 
-#: ../data/preferences_dialog.ui.h:42
+#: ../data/preferences_dialog.ui.h:47
 msgid "Try another character encoding"
 msgstr "Спробувати інше кодування символів"
 
-#: ../data/preferences_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:48
 msgid ""
 "Try to use the encoding associated with your locale and if this fails, try "
 "the ISO-8859-1 character encoding"
@@ -1301,11 +1327,11 @@ msgstr ""
 "Спробувати скористатися кодуванням символів, пов'язаним із вашою локаллю і, "
 "якщо не вдасться, спробувати кодування символів ISO-8859-1"
 
-#: ../data/preferences_dialog.ui.h:44
+#: ../data/preferences_dialog.ui.h:49
 msgid "Transliterate characters into the system character encoding"
 msgstr "Транслітерація символів у кодування символів системи"
 
-#: ../data/preferences_dialog.ui.h:45
+#: ../data/preferences_dialog.ui.h:50
 msgid ""
 "Replace unsupported characters with a similar character from the target "
 "character encoding"
@@ -1313,14 +1339,14 @@ msgstr ""
 "Замінити непідтримувані символи подібними символами із кодування символів "
 "призначення"
 
-#: ../data/preferences_dialog.ui.h:46
+#: ../data/preferences_dialog.ui.h:51
 msgid ""
 "Use the system character encoding and silently discard unsupported characters"
 msgstr ""
 "Використатися кодування символів системи і без запитів відкинути "
 "непідтримувані символи"
 
-#: ../data/preferences_dialog.ui.h:47
+#: ../data/preferences_dialog.ui.h:52
 msgid ""
 "Discard characters which cannot be represented in the target character "
 "encoding"
@@ -1328,25 +1354,25 @@ msgstr ""
 "Відкинути символи, які не може бути представлено у кодуванні символів "
 "призначення"
 
-#: ../data/preferences_dialog.ui.h:48
+#: ../data/preferences_dialog.ui.h:53
 msgid "Files"
 msgstr "Файли"
 
-#: ../data/preferences_dialog.ui.h:49
+#: ../data/preferences_dialog.ui.h:54
 msgid "Automatically complete date field"
 msgstr "Автоматично доповнювати мітку дати"
 
-#: ../data/preferences_dialog.ui.h:50
+#: ../data/preferences_dialog.ui.h:55
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:82
 msgid "Whether to automatically complete the date tag"
 msgstr "Ви слід автоматично доповнювати мітку дати"
 
-#: ../data/preferences_dialog.ui.h:51
+#: ../data/preferences_dialog.ui.h:56
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:87
 msgid "Automatically select the type of the image based on its filename"
 msgstr "Автоматично вибрати тип зображення на основі назви файла"
 
-#: ../data/preferences_dialog.ui.h:52
+#: ../data/preferences_dialog.ui.h:57
 msgid ""
 "Whether to, when adding cover art, automatically select a type for an image "
 "based on its filename"
@@ -1354,45 +1380,45 @@ msgstr ""
 "Визначає, чи слід при додаванні зображень обкладинок автоматично вибирати "
 "тип зображення на основі його назви файла"
 
-#: ../data/preferences_dialog.ui.h:53
+#: ../data/preferences_dialog.ui.h:58
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:93
 msgid "Preserve the tag field focus"
 msgstr "Зберігати фокусування поля мітки"
 
-#: ../data/preferences_dialog.ui.h:54
+#: ../data/preferences_dialog.ui.h:59
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:94
 msgid "Whether to preserve focus on the current tag field when switching file"
 msgstr ""
 "Визначає, чи слід зберігати фокусування на поточному полі мітки при "
 "перемиканні файла"
 
-#: ../data/preferences_dialog.ui.h:55
+#: ../data/preferences_dialog.ui.h:60
 msgid "Pad the number of digits in the disc field to:"
 msgstr "Доповнювати кількість цифр у полі диска до:"
 
-#: ../data/preferences_dialog.ui.h:56
+#: ../data/preferences_dialog.ui.h:61
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:84
 msgid "Whether the disc number tag field should be padded with leading zeroes"
 msgstr ""
 "Визначає, чи має бути доповнене значення у полі номера диска початковими "
 "нулями"
 
-#: ../data/preferences_dialog.ui.h:57
+#: ../data/preferences_dialog.ui.h:62
 msgid "Pad the number of digits in the track field to:"
 msgstr "Доповнювати кількість цифр у полі доріжки до:"
 
-#: ../data/preferences_dialog.ui.h:58
+#: ../data/preferences_dialog.ui.h:63
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:90
 msgid "Whether the track number tag field should be padded with leading zeroes"
 msgstr ""
 "Визначає, чи має бути доповнене значення у полі номера доріжки початковими "
 "нулями"
 
-#: ../data/preferences_dialog.ui.h:59
+#: ../data/preferences_dialog.ui.h:64
 msgid "Splitting"
 msgstr "Поділ"
 
-#: ../data/preferences_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:65
 msgid ""
 "For Vorbis tags, selected fields will be split at dashes and saved as "
 "separate tags"
@@ -1400,48 +1426,48 @@ msgstr ""
 "Для міток Vorbis виберіть поля, які буде поділено на дефісах і збережено як "
 "окремі мітки"
 
-#: ../data/preferences_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:67
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:186
 msgid "Whether to split title fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Визначає, чи слід ділити поля заголовка на роздільнику « - » у коментарях Ogg"
 
-#: ../data/preferences_dialog.ui.h:64
+#: ../data/preferences_dialog.ui.h:69
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:188
 msgid "Whether to split artist fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Визначає, чи слід ділити поля виконавця на роздільнику « - » у коментарях Ogg"
 
-#: ../data/preferences_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:71
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:190
 msgid "Whether to split album fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Визначає, чи слід ділити поля альбому на роздільнику « - » у коментарях Ogg"
 
-#: ../data/preferences_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:73
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:192
 msgid "Whether to split genre fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Визначає, чи слід ділити поля жанру на роздільнику « - » у коментарях Ogg"
 
-#: ../data/preferences_dialog.ui.h:70
+#: ../data/preferences_dialog.ui.h:75
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:194
 msgid "Whether to split comment fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Визначає, чи слід ділити поля коментаря на роздільнику « - » у коментарях Ogg"
 
-#: ../data/preferences_dialog.ui.h:72
+#: ../data/preferences_dialog.ui.h:77
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:196
 msgid "Whether to split composer fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Визначає, чи слід ділити поля композитора на роздільнику « - » у коментарях "
 "Ogg"
 
-#: ../data/preferences_dialog.ui.h:73
+#: ../data/preferences_dialog.ui.h:78
 msgid "Original artist"
 msgstr "Початковий виконавець"
 
-#: ../data/preferences_dialog.ui.h:74
+#: ../data/preferences_dialog.ui.h:79
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:198
 msgid ""
 "Whether to split original artist fields at a “ - ” separator in Ogg comments"
@@ -1449,16 +1475,16 @@ msgstr ""
 "Визначає, чи слід ділити поля початкового виконавця на роздільнику « - » у "
 "коментарях Ogg"
 
-#: ../data/preferences_dialog.ui.h:75
+#: ../data/preferences_dialog.ui.h:80
 msgid "Tags"
 msgstr "Мітки"
 
-#: ../data/preferences_dialog.ui.h:76
+#: ../data/preferences_dialog.ui.h:81
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:51
 msgid "Strip ID3 tags if all ID3 tags are empty"
 msgstr "Вилучати мітки ID3, якщо усі мітки ID3 є порожніми"
 
-#: ../data/preferences_dialog.ui.h:77
+#: ../data/preferences_dialog.ui.h:82
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:52
 msgid ""
 "Whether to remove the ID3 tag from the audio file if all the individual tag "
@@ -1467,44 +1493,44 @@ msgstr ""
 "Визначає, чи слід вилучати мітку ID3 з файла звукових даних, якщо усі поля "
 "міток є порожніми"
 
-#: ../data/preferences_dialog.ui.h:78
+#: ../data/preferences_dialog.ui.h:83
 msgid "Non-standard encoding for reading ID3 tags:"
 msgstr "Нестандартне кодування для читання міток ID3:"
 
-#: ../data/preferences_dialog.ui.h:79
+#: ../data/preferences_dialog.ui.h:84
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:50
 msgid "Whether to use a non-standard character encoding when reading ID3 tags"
 msgstr ""
 "Визначає, чи слід використовувати нестандартне кодування символів при "
 "читанні міток ID3"
 
-#: ../data/preferences_dialog.ui.h:80
+#: ../data/preferences_dialog.ui.h:85
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:60
 msgid "Choose the character set to be used when reading ID3v1 and ID3v2 tags"
 msgstr ""
 "Виберіть кодування символів, яке буде використано при читанні міток ID3v1 і "
 "ID3v2"
 
-#: ../data/preferences_dialog.ui.h:81
+#: ../data/preferences_dialog.ui.h:86
 msgid "ID3v2"
 msgstr "ID3v2"
 
-#: ../data/preferences_dialog.ui.h:82
+#: ../data/preferences_dialog.ui.h:87
 msgid "Write ID3v2 tag"
 msgstr "Записати мітку ID3v2"
 
-#: ../data/preferences_dialog.ui.h:83
+#: ../data/preferences_dialog.ui.h:88
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:62
 msgid "Whether to write ID3v2 tags when writing ID3 tags into audio files"
 msgstr ""
 "Визначає, чи буде записано мітки ID3v2 при записуванні міток ID3 до файлів "
 "звукових даних"
 
-#: ../data/preferences_dialog.ui.h:84
+#: ../data/preferences_dialog.ui.h:89
 msgid "Version:"
 msgstr "Версія:"
 
-#: ../data/preferences_dialog.ui.h:85
+#: ../data/preferences_dialog.ui.h:90
 msgid ""
 "Select the ID3v2 tag version to write:\n"
 "• ID3v2.3 is written using id3lib,\n"
@@ -1514,22 +1540,22 @@ msgstr ""
 "• ID3v2.3 буде записано за допомогою id3lib,\n"
 "• ID3v2.4 буде записано за допомогою libid3tag (рекомендовано)"
 
-#: ../data/preferences_dialog.ui.h:88
+#: ../data/preferences_dialog.ui.h:93
 msgid "Character encoding:"
 msgstr "Кодування символів:"
 
-#: ../data/preferences_dialog.ui.h:89
+#: ../data/preferences_dialog.ui.h:94
 msgid "Unicode"
 msgstr "Юнікод"
 
-#: ../data/preferences_dialog.ui.h:90
+#: ../data/preferences_dialog.ui.h:95
 msgid ""
 "Choose the Unicode character encoding to be used when writing ID3v2 tags"
 msgstr ""
 "Виберіть кодування символів Юнікод, яке буде використано при читанні "
 "записуванні міток ID3v2"
 
-#: ../data/preferences_dialog.ui.h:92
+#: ../data/preferences_dialog.ui.h:97
 msgid ""
 "Override the standard Unicode character encoding to be used when writing "
 "ID3v2 tags"
@@ -1537,15 +1563,15 @@ msgstr ""
 "Перевизначити стандартне кодування символів Юнікод, яке буде використано при "
 "записуванні міток ID3v2"
 
-#: ../data/preferences_dialog.ui.h:93
+#: ../data/preferences_dialog.ui.h:98
 msgid "When encoding conversion fails:"
 msgstr "Якщо перетворення кодувань виконати не вдасться:"
 
-#: ../data/preferences_dialog.ui.h:94
+#: ../data/preferences_dialog.ui.h:99
 msgid "Report error"
 msgstr "Помилка про звіт"
 
-#: ../data/preferences_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:100
 msgid ""
 "Display an error message when a character cannot be represented in the "
 "target character encoding and keep the original character"
@@ -1553,19 +1579,19 @@ msgstr ""
 "Показати повідомлення про помилку, якщо символ не може бути представлено у "
 "кодуванні символів призначення і зберегти початковий символ"
 
-#: ../data/preferences_dialog.ui.h:96
+#: ../data/preferences_dialog.ui.h:101
 msgid "Transliterate"
 msgstr "Транслітерація"
 
-#: ../data/preferences_dialog.ui.h:97
+#: ../data/preferences_dialog.ui.h:102
 msgid "Discard"
 msgstr "Відкинути"
 
-#: ../data/preferences_dialog.ui.h:98
+#: ../data/preferences_dialog.ui.h:103
 msgid "Automatically convert old ID3v2 tag versions"
 msgstr "Автоматично перетворювати дані застарілих версій мітки ID3v2"
 
-#: ../data/preferences_dialog.ui.h:99
+#: ../data/preferences_dialog.ui.h:104
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:66
 msgid ""
 "Whether to convert ID3 tags written against old version of the "
@@ -1574,33 +1600,33 @@ msgstr ""
 "Визначає, чи слід перетворювати мітки ID3, записані за застарілою версією "
 "специфікації, зокрема ID3v2.2, до новіших версій, зокрема ID3v2.3 або ID3v2.4"
 
-#: ../data/preferences_dialog.ui.h:100
+#: ../data/preferences_dialog.ui.h:105
 msgid "Use CRC-32"
 msgstr "Використовувати CRC-32"
 
-#: ../data/preferences_dialog.ui.h:101
+#: ../data/preferences_dialog.ui.h:106
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:70
 msgid "Whether to embed a CRC-32 checksum of the audio file data in ID3v2 tags"
 msgstr ""
 "Визначає, чи слід вбудовувати контрольну суму CRC-32 файла звукових даних до "
 "міток ID3v2"
 
-#: ../data/preferences_dialog.ui.h:102
+#: ../data/preferences_dialog.ui.h:107
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:67
 msgid "Compress data in ID3v2 tags"
 msgstr "Стискати дані у мітках ID3v2"
 
-#: ../data/preferences_dialog.ui.h:103
+#: ../data/preferences_dialog.ui.h:108
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:68
 msgid "Whether to compress data in ID3v2 tags"
 msgstr "Визначає, чи слід стискати дані у мітках ID3v2"
 
-#: ../data/preferences_dialog.ui.h:104
+#: ../data/preferences_dialog.ui.h:109
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:71
 msgid "Use text-only genre in ID3v2 tags"
 msgstr "Використовувати лише текстові версії жанрів у мітках ID3v2"
 
-#: ../data/preferences_dialog.ui.h:105
+#: ../data/preferences_dialog.ui.h:110
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:72
 msgid ""
 "Whether to use only a string, and not the integer-base ID3v1 genre field, "
@@ -1609,73 +1635,73 @@ msgstr ""
 "Визначає, чи слід використовувати лише рядок, а не цілочисельне "
 "представлення поля жанру ID3v1, при записування поля жанру до міток ID3v2"
 
-#: ../data/preferences_dialog.ui.h:106
+#: ../data/preferences_dialog.ui.h:111
 msgid "ID3v1"
 msgstr "ID3v1"
 
-#: ../data/preferences_dialog.ui.h:107
+#: ../data/preferences_dialog.ui.h:112
 msgid "Write ID3v1 tag"
 msgstr "Записати мітку ID3v1"
 
-#: ../data/preferences_dialog.ui.h:108
+#: ../data/preferences_dialog.ui.h:113
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:54
 msgid "Whether to write ID3v1 tags when writing ID3 tags into audio files"
 msgstr ""
 "Визначає, чи буде записано мітки ID3v1 при записуванні міток ID3 до файлів "
 "звукових даних"
 
-#: ../data/preferences_dialog.ui.h:109
+#: ../data/preferences_dialog.ui.h:114
 msgid "Choose the character set to be used when writing ID3v1 tag"
 msgstr ""
 "Виберіть кодування символів, яке буде використано при записуванні мітки ID3v1"
 
-#: ../data/preferences_dialog.ui.h:110
+#: ../data/preferences_dialog.ui.h:115
 msgid "ID3 Tags"
 msgstr "Мітки ID3"
 
-#: ../data/preferences_dialog.ui.h:111
+#: ../data/preferences_dialog.ui.h:116
 msgid "Character Conversion"
 msgstr "Перетворення символів"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:113
+#: ../data/preferences_dialog.ui.h:118
 msgid "Fill Tag Scanner"
 msgstr "Сканер заповнення міток"
 
-#: ../data/preferences_dialog.ui.h:115
+#: ../data/preferences_dialog.ui.h:120
 #, no-c-format
 msgid "Convert underscores and ‘%20’ to spaces"
 msgstr "Перетворити підкреслювання і «%20» на пробіли"
 
-#: ../data/preferences_dialog.ui.h:117
+#: ../data/preferences_dialog.ui.h:122
 #, no-c-format
 msgid "Convert spaces and ‘%20’ to underscores"
 msgstr "Перетворити пробіли і «%20» на підкреслювання"
 
-#: ../data/preferences_dialog.ui.h:118
+#: ../data/preferences_dialog.ui.h:123
 msgid "No conversion"
 msgstr "Без перетворення"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:120
+#: ../data/preferences_dialog.ui.h:125
 msgid "Rename File and Directory Scanner"
 msgstr "Сканер перейменовування файлів і каталогів"
 
-#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:96
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:784
+#: ../data/preferences_dialog.ui.h:126 ../data/scan_dialog.ui.h:96
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.cc:786
 msgid "Remove spaces"
 msgstr "Вилучити пробіли"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:123
+#: ../data/preferences_dialog.ui.h:128
 msgid "Process Fields Scanner"
 msgstr "Сканер обробки полів"
 
-#: ../data/preferences_dialog.ui.h:124
+#: ../data/preferences_dialog.ui.h:129
 msgid "Upper-case the first letters of all words"
 msgstr "Робити великими перші літери усіх слів"
 
-#: ../data/preferences_dialog.ui.h:125
+#: ../data/preferences_dialog.ui.h:130
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:130
 msgid ""
 "Whether to upper-case the first letter of all words, including prepositions "
@@ -1684,15 +1710,15 @@ msgstr ""
 "Визначає, чи слід робити великими перші літери усіх слів, зокрема літери "
 "артиклів та інших коротких слів, наприклад «feat.», при обробці полів міток"
 
-#: ../data/preferences_dialog.ui.h:126
+#: ../data/preferences_dialog.ui.h:131
 msgid "Fields"
 msgstr "Поля"
 
-#: ../data/preferences_dialog.ui.h:127
+#: ../data/preferences_dialog.ui.h:132
 msgid "Overwrite fields when scanning tags"
 msgstr "Перезаписувати поля при скануванні міток"
 
-#: ../data/preferences_dialog.ui.h:128
+#: ../data/preferences_dialog.ui.h:133
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:99
 msgid ""
 "Whether to overwrite the tag field values when filling tags. Otherwise, only "
@@ -1701,11 +1727,11 @@ msgstr ""
 "Визначає, чи слід перезаписувати значення полів міток при заповненні міток. "
 "Якщо не визначено, буде заповнено лише порожні поля міток"
 
-#: ../data/preferences_dialog.ui.h:129
+#: ../data/preferences_dialog.ui.h:134
 msgid "Set this text as default comment:"
 msgstr "Зробити цей текст типовим коментарем:"
 
-#: ../data/preferences_dialog.ui.h:130
+#: ../data/preferences_dialog.ui.h:135
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:101
 msgid ""
 "Whether to set the comment tag field to the provided default value when "
@@ -1714,11 +1740,11 @@ msgstr ""
 "Визначає, чи слід використовувати вказане значення як типовий вміст поля "
 "мітки коментаря при заповненні міток"
 
-#: ../data/preferences_dialog.ui.h:131
+#: ../data/preferences_dialog.ui.h:136
 msgid "Use CRC-32 as the default comment (for files with ID3 tags only)"
 msgstr "CRC-32 як типовий коментар (лише для файлів із мітками ID3)"
 
-#: ../data/preferences_dialog.ui.h:132
+#: ../data/preferences_dialog.ui.h:137
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:105
 msgid ""
 "Whether to use the CRC-32 of the audio file data as the default comment, for "
@@ -1727,40 +1753,40 @@ msgstr ""
 "Визначає, чи слід використовувати контрольну суму CRC-32 файла звукових "
 "даних як типовий коментар. Лише для файлів із мітками ID3."
 
-#: ../data/preferences_dialog.ui.h:133
+#: ../data/preferences_dialog.ui.h:138
 msgid "Scanner"
 msgstr "Сканер"
 
-#: ../data/preferences_dialog.ui.h:134
+#: ../data/preferences_dialog.ui.h:139
 msgid "Automatic Search Servers"
 msgstr "Автоматичний пошук на серверах"
 
-#: ../data/preferences_dialog.ui.h:135
+#: ../data/preferences_dialog.ui.h:140
 msgid "Host:"
 msgstr "Вузол:"
 
-#: ../data/preferences_dialog.ui.h:136
+#: ../data/preferences_dialog.ui.h:141
 msgid "Port:"
 msgstr "Порт:"
 
-#: ../data/preferences_dialog.ui.h:137
+#: ../data/preferences_dialog.ui.h:142
 msgid "CGI Path:"
 msgstr "Шлях CGI:"
 
-#: ../data/preferences_dialog.ui.h:138
+#: ../data/preferences_dialog.ui.h:143
 msgid "Manual Search Server"
 msgstr "Пошук на серверах вручну"
 
-#: ../data/preferences_dialog.ui.h:139
+#: ../data/preferences_dialog.ui.h:144
 msgid "Results List"
 msgstr "Список результатів"
 
-#: ../data/preferences_dialog.ui.h:140
+#: ../data/preferences_dialog.ui.h:145
 msgid ""
 "Select corresponding file (according to position or DLM if activated below)"
 msgstr "Позначати відповідний файл (за позицією або DLM, якщо увімкнено нижче)"
 
-#: ../data/preferences_dialog.ui.h:141
+#: ../data/preferences_dialog.ui.h:146
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:26
 msgid ""
 "Whether to select the file in the file list which matches the position in "
@@ -1769,7 +1795,7 @@ msgstr ""
 "Визначає, чи слід позначати у списку файлів файл, який відповідає позиції у "
 "списку результатів CDDB"
 
-#: ../data/preferences_dialog.ui.h:142
+#: ../data/preferences_dialog.ui.h:147
 msgid ""
 "Use the Levenshtein algorithm (DLM) to match results (using title) with "
 "audio files (using filename)"
@@ -1778,20 +1804,20 @@ msgstr ""
 "результатів (на основі заголовка) файлами звукових даних (на основі назви "
 "файла)"
 
-#: ../data/preferences_dialog.ui.h:144
+#: ../data/preferences_dialog.ui.h:149
 msgid "CDDB"
 msgstr "CDDB"
 
-#: ../data/preferences_dialog.ui.h:145
+#: ../data/preferences_dialog.ui.h:150
 msgid "Confirmation"
 msgstr "Підтвердження"
 
-#: ../data/preferences_dialog.ui.h:146
+#: ../data/preferences_dialog.ui.h:151
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:106
 msgid "Confirm before writing tags"
 msgstr "Підтвердження перед записуванням міток"
 
-#: ../data/preferences_dialog.ui.h:147
+#: ../data/preferences_dialog.ui.h:152
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:107
 msgid ""
 "Whether to ask for confirmation from the user before writing tags to audio "
@@ -1800,47 +1826,47 @@ msgstr ""
 "Визначає, чи слід програмі просити користувача підтвердити дію записування "
 "міток до файлів звукових даних"
 
-#: ../data/preferences_dialog.ui.h:148
+#: ../data/preferences_dialog.ui.h:153
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:108
 msgid "Confirm before renaming a file"
 msgstr "Підтвердження перейменуванням файла"
 
-#: ../data/preferences_dialog.ui.h:149
+#: ../data/preferences_dialog.ui.h:154
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:109
 msgid "Whether to ask for confirmation from the user before renaming a file"
 msgstr ""
 "Визначає, чи слід програмі просити користувача підтвердити перейменування "
 "файла"
 
-#: ../data/preferences_dialog.ui.h:150
+#: ../data/preferences_dialog.ui.h:155
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:112
 msgid "Confirm before deleting a file"
 msgstr "Підтвердження вилучення файла"
 
-#: ../data/preferences_dialog.ui.h:151
+#: ../data/preferences_dialog.ui.h:156
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:113
 msgid "Whether to ask for confirmation from the user before deleting a file"
 msgstr ""
 "Визначає, чи слід програмі просити користувача підтвердити вилучення файла"
 
-#: ../data/preferences_dialog.ui.h:152
+#: ../data/preferences_dialog.ui.h:157
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:110
 msgid "Confirm before writing a playlist"
 msgstr "Підтвердження запису списку відтворення"
 
-#: ../data/preferences_dialog.ui.h:153
+#: ../data/preferences_dialog.ui.h:158
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:111
 msgid "Whether to ask for confirmation from the user before writing a playlist"
 msgstr ""
 "Визначає, чи слід програмі просити користувача підтвердити дію записування "
 "списку відтворення"
 
-#: ../data/preferences_dialog.ui.h:154
+#: ../data/preferences_dialog.ui.h:159
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:114
 msgid "Confirm before losing unsaved changes to files"
 msgstr "Підтвердження втрати незбережених до файлів даних"
 
-#: ../data/preferences_dialog.ui.h:155
+#: ../data/preferences_dialog.ui.h:160
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:115
 msgid ""
 "Whether to ask for confirmation from the user before performing an operation "
@@ -1849,20 +1875,20 @@ msgstr ""
 "Визначає, чи слід програмі просити користувача підтвердити дію, яка призведе "
 "до втрати незбережених до файлів змін"
 
-#: ../data/preferences_dialog.ui.h:156
+#: ../data/preferences_dialog.ui.h:161
 msgid "Scanner Dialog"
 msgstr "Вікно засобу сканування"
 
-#: ../data/preferences_dialog.ui.h:157
+#: ../data/preferences_dialog.ui.h:162
 msgid "Show the scanner dialog on startup"
 msgstr "Показувати вікно сканера після запуску"
 
-#: ../data/preferences_dialog.ui.h:158
+#: ../data/preferences_dialog.ui.h:163
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:182
 msgid "Whether to show the scanner window on application startup"
 msgstr "Визначає, чи слід показувати вікно сканера після запуску програми"
 
-#: ../data/preferences_dialog.ui.h:159
+#: ../data/preferences_dialog.ui.h:164
 msgid "Application"
 msgstr "Програма"
 
@@ -2045,7 +2071,7 @@ msgid "Rename file preview"
 msgstr "Попередній перегляд перейменування файлів"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:571
+#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:574
 msgid "Rename File"
 msgstr "Перейменувати файл"
 
@@ -2208,7 +2234,7 @@ msgstr "Не змінювати роздільники слів"
 msgid "Character Conversions"
 msgstr "Перетворення символів"
 
-#: ../data/scan_dialog.ui.h:105 ../src/tag_area.c:740
+#: ../data/scan_dialog.ui.h:105 ../src/tag_area.cc:742
 #, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "Перетворювати «_» і «%20» на пробіли"
@@ -2223,7 +2249,7 @@ msgstr ""
 "до перетворення «Текст%20у%20Якомусь_Записі», після перетворення «Текст у "
 "Якомусь Записі»"
 
-#: ../data/scan_dialog.ui.h:108 ../src/tag_area.c:746
+#: ../data/scan_dialog.ui.h:108 ../src/tag_area.cc:748
 msgid "Convert spaces to underscores"
 msgstr "Перетворити пробіли на «_»"
 
@@ -2316,7 +2342,7 @@ msgstr "З врахуванням регістру"
 msgid "CD"
 msgstr "CD"
 
-#: ../data/tag_area.ui.h:1 ../src/tag_area.c:2755
+#: ../data/tag_area.ui.h:1 ../src/tag_area.cc:2756
 msgid "Tag"
 msgstr "Мітка"
 
@@ -2490,7 +2516,7 @@ msgstr "Редагувати властивості зображення"
 msgid "Tag selected files with these images"
 msgstr "Позначити вибрані файли цими зображеннями"
 
-#: ../data/tag_area.ui.h:42 ../src/tag_area.c:3033 ../src/tag_area.c:3036
+#: ../data/tag_area.ui.h:42 ../src/tag_area.cc:3034 ../src/tag_area.cc:3037
 msgid "Images"
 msgstr "Зображення"
 
@@ -3107,6 +3133,10 @@ msgstr ""
 "під кодування файлової системи за допомогою транслітерації або просто "
 "відкидати непридатні символи"
 
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
+msgid "Replace illegal characters when renaming"
+msgstr "Замінювати некоректні символи при перейменуванні"
+
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:176
 msgid ""
 "Whether to replace illegal characters in a filename when using the rename "
@@ -3238,7 +3268,7 @@ msgstr "Сайт: %s"
 msgid "- Tag and rename audio files"
 msgstr "– встановлення міток та перейменовування файлів звукових даних"
 
-#: ../src/application.c:429 ../src/file_list.c:443
+#: ../src/application.c:429 ../src/file_list.cc:443
 #, c-format
 msgid "Error while querying information for file ‘%s’: %s"
 msgstr "Помилка під час намагання отримати відомості щодо файла «%s»: %s"
@@ -3253,7 +3283,7 @@ msgstr "Не вдалося відкрити шлях «%s»"
 msgid "Do you really want to delete the file ‘%s’?"
 msgstr "Ви справді хочете вилучити файл «%s»?"
 
-#: ../src/application_window.c:364 ../src/easytag.c:459 ../src/easytag.c:592
+#: ../src/application_window.c:364 ../src/easytag.c:459 ../src/easytag.c:595
 msgid "Repeat action for the remaining files"
 msgstr "Повторити дію для решти файлів"
 
@@ -3291,28 +3321,28 @@ msgstr "Усі файли було вилучено"
 msgid "All tags have been removed"
 msgstr "Усі мітки було вилучено"
 
-#: ../src/application_window.c:1474 ../src/browser.cc:346 ../src/browser.cc:389
-#: ../src/browser.cc:423 ../src/browser.cc:4383 ../src/browser.cc:4458
+#: ../src/application_window.c:1474 ../src/browser.cc:348 ../src/browser.cc:391
+#: ../src/browser.cc:425 ../src/browser.cc:4299 ../src/browser.cc:4374
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Не вдалося запустити програму «%s»"
 
-#: ../src/application_window.c:1988
+#: ../src/application_window.c:2003
 #, c-format
 msgid "Could not convert filename ‘%s’ to system filename encoding"
 msgstr ""
 "Не вдалося перетворити назву файла «%s» до кодування назв файлів системи"
 
-#: ../src/application_window.c:1991
+#: ../src/application_window.c:2006
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Спробуйте встановити значення змінної середовища G_FILENAME_ENCODING."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:796
+#: ../src/application_window.c:2008 ../src/scan_dialog.cc:800
 msgid "Filename translation"
 msgstr "Трансляція назв файлів"
 
 #. And refresh the number of files in this directory
-#: ../src/application_window.c:2154
+#: ../src/application_window.c:2168
 #, c-format
 msgid "One file"
 msgid_plural "%u files"
@@ -3322,7 +3352,7 @@ msgstr[2] "%u файлів"
 msgstr[3] "Один файл"
 
 #. Bitrate
-#: ../src/application_window.c:2187 ../src/tags/flac_header.c:189
+#: ../src/application_window.c:2201 ../src/tags/flac_header.c:189
 #: ../src/tags/monkeyaudio_header.c:76 ../src/tags/mp4_header.cc:144
 #: ../src/tags/mpeg_header.c:274 ../src/tags/musepack_header.c:78
 #: ../src/tags/ogg_header.c:411 ../src/tags/opus_header.c:231
@@ -3332,7 +3362,7 @@ msgid "%d kb/s"
 msgstr "%d кбіт/с"
 
 #. Samplerate
-#: ../src/application_window.c:2190 ../src/tags/flac_header.c:192
+#: ../src/application_window.c:2204 ../src/tags/flac_header.c:192
 #: ../src/tags/monkeyaudio_header.c:79 ../src/tags/mp4_header.cc:148
 #: ../src/tags/mpeg_header.c:279 ../src/tags/musepack_header.c:81
 #: ../src/tags/ogg_header.c:414 ../src/tags/opus_header.c:234
@@ -3341,102 +3371,102 @@ msgstr "%d кбіт/с"
 msgid "%d Hz"
 msgstr "%d Гц"
 
-#: ../src/application_window.c:2345 ../src/easytag.c:911
+#: ../src/application_window.c:2359 ../src/easytag.c:915
 #, c-format
 msgid "File: ‘%s’"
 msgstr "Файл: «%s»"
 
 #. Quit EasyTAG.
-#: ../src/application_window.c:2978
+#: ../src/application_window.c:2992
 msgid "Normal exit"
 msgstr "Нормальне завершення"
 
-#: ../src/application_window.c:3012 ../src/browser.cc:913
+#: ../src/application_window.c:3026 ../src/browser.cc:915
 msgid "Some files have been modified but not saved"
 msgstr "До деяких файлів було внесено зміни, але ці зміни не було збережено"
 
-#: ../src/application_window.c:3013 ../src/browser.cc:917 ../src/easytag.c:233
-#: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
+#: ../src/application_window.c:3027 ../src/browser.cc:919 ../src/easytag.c:233
+#: ../src/easytag.c:463 ../src/easytag.c:598 ../src/easytag.c:606
 msgid "_Discard"
 msgstr "_Відкинути"
 
-#: ../src/application_window.c:3019 ../src/easytag.c:239
+#: ../src/application_window.c:3033 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Вийти"
 
-#: ../src/application_window.c:3022
+#: ../src/application_window.c:3036
 msgid "Do you want to save them before quitting?"
 msgstr "Хочете зберегти зміни, перш ніж вийти з програм?"
 
-#: ../src/browser.cc:615
+#: ../src/browser.cc:617
 msgid "New default directory selected for browser"
 msgstr "Вибрано новий типовий каталог для навігатора"
 
-#: ../src/browser.cc:916
+#: ../src/browser.cc:918
 msgid "Do you want to save them before changing directory?"
 msgstr "Хочете зберегти їх, перш ніж змінити каталог?"
 
-#: ../src/browser.cc:923
+#: ../src/browser.cc:925
 msgid "Confirm Directory Change"
 msgstr "Підтвердження зміни каталогу"
 
-#: ../src/browser.cc:2257
+#: ../src/browser.cc:2259
 msgid "All albums"
 msgstr "Всі альбоми"
 
-#: ../src/browser.cc:3492
+#: ../src/browser.cc:3505
 msgid "Select File"
 msgstr "Вибір файла"
 
-#: ../src/browser.cc:3499
+#: ../src/browser.cc:3512
 msgid "Select Directory"
 msgstr "Виберіть каталог"
 
-#: ../src/browser.cc:3888
+#: ../src/browser.cc:3804
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Перейменувати каталог «%s» на:"
 
-#: ../src/browser.cc:4024
+#: ../src/browser.cc:3940
 msgid "You must type a directory name"
 msgstr "Вам слід ввести назву каталогу"
 
-#: ../src/browser.cc:4025 ../src/browser.cc:4047
+#: ../src/browser.cc:3941 ../src/browser.cc:3963
 msgid "Directory Name Error"
 msgstr "Помилка у назві каталогу"
 
-#: ../src/browser.cc:4043
+#: ../src/browser.cc:3959
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Не вдалося перетворити «%s» до кодування назв файлів"
 
-#: ../src/browser.cc:4046
+#: ../src/browser.cc:3962
 msgid "Please use another name."
 msgstr "Будь ласка, виберіть іншу назву."
 
-#: ../src/browser.cc:4118
+#: ../src/browser.cc:4034
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Каталог з назвою «%s» вже існує."
 
-#: ../src/browser.cc:4119 ../src/easytag.c:650
+#: ../src/browser.cc:4035 ../src/easytag.c:653
 msgid "Rename File Error"
 msgstr "Помилка під час спроби перейменувати файл"
 
-#: ../src/browser.cc:4158 ../src/browser.cc:4187
+#: ../src/browser.cc:4074 ../src/browser.cc:4103
 msgid "Rename Directory Error"
 msgstr "Помилка під час спроби перейменувати каталог"
 
-#: ../src/browser.cc:4228
+#: ../src/browser.cc:4144
 msgid "Directory renamed"
 msgstr "Каталог перейменовано"
 
-#: ../src/browser.cc:4375 ../src/browser.cc:4450
+#: ../src/browser.cc:4291 ../src/browser.cc:4366
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "Виконано команду «%s»"
 
-#: ../src/cddb_dialog.c:280
+#: ../src/cddb_dialog.cc:286
 #, c-format
 msgid ""
 "Album: ‘%s’, artist: ‘%s’, length: ‘%s’, year: ‘%s’, genre: ‘%s’, disc ID: "
@@ -3445,44 +3475,45 @@ msgstr ""
 "Альбом: «%s», виконавець: «%s», тривалість: «%s», рік: «%s», жанр: «%s», "
 "ідентифікатор диска: «%s»"
 
-#: ../src/cddb_dialog.c:718
+#: ../src/cddb_dialog.cc:710
 #, c-format
 msgid "Cannot resolve host: ‘%s’: %s"
 msgstr "Не вдалося виконати визначення вузла: «%s»: %s"
 
-#: ../src/cddb_dialog.c:725
+#: ../src/cddb_dialog.cc:717
 #, c-format
 msgid "Cannot connect to host: ‘%s’: %s"
 msgstr "Не вдалося з'єднатися із вузлом: «%s»: %s"
 
 #. Send the request.
-#: ../src/cddb_dialog.c:798 ../src/cddb_dialog.c:1353 ../src/cddb_dialog.c:1641
+#: ../src/cddb_dialog.cc:790 ../src/cddb_dialog.cc:1345
+#: ../src/cddb_dialog.cc:1633
 msgid "Sending request…"
 msgstr "Надсилаємо запит…"
 
-#: ../src/cddb_dialog.c:842
+#: ../src/cddb_dialog.cc:834
 #, c-format
 msgid "The server returned a bad response ‘%s’"
 msgstr "Сервером повернуто помилкову відповідь «%s»"
 
 #. Load the track list of the album
-#: ../src/cddb_dialog.c:1036
+#: ../src/cddb_dialog.cc:1028
 msgid "Loading album track list…"
 msgstr "Завантажуємо список доріжок альбому…"
 
 #.
 #. * Read the answer
 #.
-#: ../src/cddb_dialog.c:1383
+#: ../src/cddb_dialog.cc:1375
 msgid "Receiving data…"
 msgstr "Отримання даних…"
 
-#: ../src/cddb_dialog.c:1520
+#: ../src/cddb_dialog.cc:1512
 #, c-format
 msgid "Sorry, the web-based search is currently not available"
 msgstr "Вибачте, пошук у даних інтернету зараз недоступний"
 
-#: ../src/cddb_dialog.c:1523 ../src/cddb_dialog.c:1856
+#: ../src/cddb_dialog.cc:1515 ../src/cddb_dialog.cc:1848
 #, c-format
 msgid "Found one matching album"
 msgid_plural "Found %u matching albums"
@@ -3491,50 +3522,50 @@ msgstr[1] "Знайдено %u відповідних альбоми"
 msgstr[2] "Знайдено %u відповідних альбомів"
 msgstr[3] "Знайдено один відповідний альбом"
 
-#: ../src/cddb_dialog.c:1671
+#: ../src/cddb_dialog.cc:1663
 #, c-format
 msgid "Receiving data of page %d (album %d/%d)…"
 msgstr "Отримуємо дані сторінки %d (альбом %d з %d)…"
 
-#: ../src/cddb_dialog.c:1673
+#: ../src/cddb_dialog.cc:1665
 #, c-format
 msgid "Receiving data of page %d…"
 msgstr "Отримуємо дані сторінки %d…"
 
-#: ../src/cddb_dialog.c:1689
+#: ../src/cddb_dialog.cc:1681
 msgid "The server returned a bad response"
 msgstr "Сервером повернуто помилкову відповідь"
 
-#: ../src/cddb_dialog.c:1828
+#: ../src/cddb_dialog.cc:1820
 #, c-format
 msgid "More results to load…"
 msgstr "Отримати більше результатів…"
 
-#: ../src/cddb_dialog.c:2138
+#: ../src/cddb_dialog.cc:2123
 msgid "The number of CDDB results does not match the number of selected files"
 msgstr "Кількість результатів CDDB не збігається з кількістю вибраних файлів"
 
-#: ../src/cddb_dialog.c:2144
+#: ../src/cddb_dialog.cc:2129
 msgid "Write Tag from CDDB"
 msgstr "Записати мітку з CDDB"
 
-#: ../src/cddb_dialog.c:2459
+#: ../src/cddb_dialog.cc:2444
 msgid "Ready to search"
 msgstr "Готовність до пошуку"
 
-#: ../src/cddb_dialog.c:2614
+#: ../src/cddb_dialog.cc:2599
 #, c-format
 msgid "No file selected"
 msgstr "Не вибрано жодного файла"
 
 #. The CD redbook standard defines the maximum number of tracks as 99, any
 #. queries with more than 99 tracks will never return a result.
-#: ../src/cddb_dialog.c:2623
+#: ../src/cddb_dialog.cc:2608
 #, c-format
 msgid "More than 99 files selected. Cannot send request"
 msgstr "Вибрано понад 99 файлів. Неможливо надіслати запит."
 
-#: ../src/cddb_dialog.c:2629
+#: ../src/cddb_dialog.cc:2614
 #, c-format
 msgid "One file selected"
 msgid_plural "%u files selected"
@@ -3543,14 +3574,14 @@ msgstr[1] "Вибрано %u файли"
 msgstr[2] "Вибрано %u файлів"
 msgstr[3] "Вибрано один файл"
 
-#: ../src/cddb_dialog.c:2756
+#: ../src/cddb_dialog.cc:2741
 #, c-format
 msgid "Sending request (disc ID: %s, #tracks: %u, Disc length: %u)…"
 msgstr ""
 "Надсилаємо запит (ідентифікатор диска: %s, кількість доріжок: %u, тривалість "
 "відтворення диска: %u)…"
 
-#: ../src/cddb_dialog.c:2877
+#: ../src/cddb_dialog.cc:2862
 #, c-format
 msgid "DiscID ‘%s’ gave one matching album"
 msgid_plural "DiscID ‘%s’ gave %u matching albums"
@@ -3785,62 +3816,62 @@ msgid "Confirm Tag Writing"
 msgstr "Підтвердження запису мітки"
 
 #. Directories and filename changed
-#: ../src/easytag.c:555
+#: ../src/easytag.c:558
 msgid "Rename File and Directory"
 msgstr "Перейменування файла і каталогу"
 
-#: ../src/easytag.c:556
+#: ../src/easytag.c:559
 msgid "File and directory rename confirmation required"
 msgstr "Потрібне підтвердження перейменування файла і каталогу"
 
-#: ../src/easytag.c:557
+#: ../src/easytag.c:560
 #, c-format
 msgid "Do you want to rename the file and directory ‘%s’ to ‘%s’?"
 msgstr "Хочете перейменувати файл і каталог «%s» на «%s»?"
 
-#: ../src/easytag.c:563
+#: ../src/easytag.c:566
 msgid "Directory rename confirmation required"
 msgstr "Потрібне підтвердження перейменування каталогу"
 
-#: ../src/easytag.c:564
+#: ../src/easytag.c:567
 #, c-format
 msgid "Do you want to rename the directory ‘%s’ to ‘%s’?"
 msgstr "Хочете перейменувати каталог «%s» на «%s»?"
 
-#: ../src/easytag.c:572
+#: ../src/easytag.c:575
 msgid "File rename confirmation required"
 msgstr "Потрібне підтвердження перейменування файла"
 
-#: ../src/easytag.c:573
+#: ../src/easytag.c:576
 #, c-format
 msgid "Do you want to rename the file ‘%s’ to ‘%s’?"
 msgstr "Хочете перейменувати файл «%s» на «%s»?"
 
-#: ../src/easytag.c:643
+#: ../src/easytag.c:646
 #, c-format
 msgid "Cannot rename file ‘%s’ to ‘%s’"
 msgstr "Не вдалося перейменувати файл «%s» на «%s»"
 
-#: ../src/easytag.c:657
+#: ../src/easytag.c:660
 #, c-format
 msgid "Cannot rename file ‘%s’ to ‘%s’: %s"
 msgstr "Не вдалося перейменувати файл «%s» на «%s»: %s"
 
-#: ../src/easytag.c:662
+#: ../src/easytag.c:665
 msgid "File(s) not renamed"
 msgstr "Файли, які слід перейменувати"
 
-#: ../src/easytag.c:724
+#: ../src/easytag.c:727
 #, c-format
 msgid "Writing tag of ‘%s’"
 msgstr "Записуємо мітку «%s»"
 
-#: ../src/easytag.c:732
+#: ../src/easytag.c:735
 #, c-format
 msgid "Wrote tag of ‘%s’"
 msgstr "Записано мітку «%s»"
 
-#: ../src/easytag.c:752
+#: ../src/easytag.c:755
 msgid ""
 "You have tried to save this tag to Unicode but it was detected that your "
 "version of id3lib is buggy"
@@ -3848,7 +3879,7 @@ msgstr ""
 "Ви намагалися зберегти цю мітку у форматі Юнікод, але виявлено, що ваша "
 "версія id3lib є проблемною у цьому питанні"
 
-#: ../src/easytag.c:757
+#: ../src/easytag.c:760
 #, c-format
 msgid ""
 "If you reload this file, some characters in the tag may not be displayed "
@@ -3867,30 +3898,30 @@ msgstr ""
 "\n"
 "Файл: %s"
 
-#: ../src/easytag.c:780
+#: ../src/easytag.c:783
 #, c-format
 msgid "Cannot write tag in file ‘%s’"
 msgstr "Не вдалося записати мітку до файла «%s»"
 
-#: ../src/easytag.c:785
+#: ../src/easytag.c:788
 msgid "Tag Write Error"
 msgstr "Помилка під час запису мітки"
 
-#: ../src/easytag.c:861 ../src/easytag.c:1096
+#: ../src/easytag.c:865 ../src/easytag.c:1100
 #, c-format
 msgid "Cannot read directory ‘%s’"
 msgstr "Не вдалося прочитати каталог «%s»"
 
-#: ../src/easytag.c:865
+#: ../src/easytag.c:869
 msgid "Directory Read Error"
 msgstr "Помилка читання каталогу"
 
 #. Read the directory recursively
-#: ../src/easytag.c:886
+#: ../src/easytag.c:890
 msgid "Search in progress…"
 msgstr "Виконуємо пошук…"
 
-#: ../src/easytag.c:959
+#: ../src/easytag.c:963
 #, c-format
 msgid "Found one file in this directory and subdirectories"
 msgid_plural "Found %u files in this directory and subdirectories"
@@ -3899,7 +3930,7 @@ msgstr[1] "Знайдено %u файли у цьому каталозі і пі
 msgstr[2] "Знайдено %u файлів у цьому каталозі і підкаталогах"
 msgstr[3] "Знайдено один файл у цьому каталозі і підкаталогах"
 
-#: ../src/easytag.c:966
+#: ../src/easytag.c:970
 #, c-format
 msgid "Found one file in this directory"
 msgid_plural "Found %u files in this directory"
@@ -3908,28 +3939,28 @@ msgstr[1] "Знайдено %u файли у цьому каталозі"
 msgstr[2] "Знайдено %u файлів у цьому каталозі"
 msgstr[3] "Знайдено один файл у цьому каталозі"
 
-#: ../src/easytag.c:983
+#: ../src/easytag.c:987
 msgid "No file found in this directory and subdirectories"
 msgstr "У цьому каталозі і підкаталогах не знайдено жодного файла"
 
-#: ../src/easytag.c:985
+#: ../src/easytag.c:989
 msgid "No file found in this directory"
 msgstr "У цьому каталозі немає файлів"
 
-#: ../src/easytag.c:1061
+#: ../src/easytag.c:1065
 #, c-format
 msgid "Error opening directory ‘%s’: %s"
 msgstr "Помилка під час відкривання каталогу «%s»: %s"
 
-#: ../src/easytag.c:1116
+#: ../src/easytag.c:1120
 msgid "Searching for audio files…"
 msgstr "Пошук файлів звукових даних…"
 
-#: ../src/easytag.c:1117
+#: ../src/easytag.c:1121
 msgid "Searching"
 msgstr "Пошук"
 
-#: ../src/easytag.c:1118
+#: ../src/easytag.c:1122
 msgid "_Stop"
 msgstr "З_упинити"
 
@@ -3937,7 +3968,7 @@ msgstr "З_упинити"
 msgid "File not found"
 msgstr "Файл не знайдено"
 
-#: ../src/file_area.c:249 ../src/load_files_dialog.c:232
+#: ../src/file_area.c:249 ../src/load_files_dialog.cc:235
 #, c-format
 msgid "Cannot query file information ‘%s’"
 msgstr "Не вдалося опитати файл щодо відомостей «%s»"
@@ -3946,42 +3977,42 @@ msgstr "Не вдалося опитати файл щодо відомосте�
 msgid "Read-only file"
 msgstr "Файл лише для читання"
 
-#: ../src/file_list.c:246
+#: ../src/file_list.cc:246
 #, c-format
 msgid "Error reading ID3 tag from file ‘%s’: %s"
 msgstr "Помилка під час читання мітки ID3 з файла «%s»: %s"
 
-#: ../src/file_list.c:257
+#: ../src/file_list.cc:257
 #, c-format
 msgid "Error reading tag from Ogg file ‘%s’: %s"
 msgstr "Помилка під час читання мітки з файла Ogg «%s»: %s"
 
-#: ../src/file_list.c:268
+#: ../src/file_list.cc:268
 #, c-format
 msgid "Error reading tag from FLAC file ‘%s’: %s"
 msgstr "Помилка під час читання мітки з файла FLAC «%s»: %s"
 
-#: ../src/file_list.c:278
+#: ../src/file_list.cc:278
 #, c-format
 msgid "Error reading APE tag from file ‘%s’: %s"
 msgstr "Помилка під час читання мітки APE з файла «%s»: %s"
 
-#: ../src/file_list.c:288
+#: ../src/file_list.cc:288
 #, c-format
 msgid "Error reading tag from MP4 file ‘%s’: %s"
 msgstr "Помилка під час читання мітки з файла MP4 «%s»: %s"
 
-#: ../src/file_list.c:299
+#: ../src/file_list.cc:299
 #, c-format
 msgid "Error reading tag from WavPack file ‘%s’: %s"
 msgstr "Помилка під час читання мітки з файла WavPack «%s»: %s"
 
-#: ../src/file_list.c:310
+#: ../src/file_list.cc:310
 #, c-format
 msgid "Error reading tag from Opus file ‘%s’: %s"
 msgstr "Помилка під час читання мітки з файла Opus «%s»: %s"
 
-#: ../src/file_list.c:346
+#: ../src/file_list.cc:346
 #, c-format
 msgid ""
 "The year value ‘%s’ seems to be invalid in file ‘%s’. The information will "
@@ -3990,7 +4021,7 @@ msgstr ""
 "Значення року «%s» у файлі «%s», здається, є некоректним. Дані буде втрачено "
 "при зберіганні."
 
-#: ../src/file_list.c:353
+#: ../src/file_list.cc:353
 #, fuzzy, c-format
 msgid ""
 "The original year value ‘%s’ seems to be invalid in file ‘%s’. The "
@@ -3999,34 +4030,34 @@ msgstr ""
 "Значення року «%s» у файлі «%s», здається, є некоректним. Дані буде втрачено "
 "при зберіганні."
 
-#: ../src/file_list.c:509
+#: ../src/file_list.cc:510
 #, c-format
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "До файла «%s» застосовано автоматичні виправлення"
 
-#: ../src/load_files_dialog.c:272 ../src/setting.c:329
+#: ../src/load_files_dialog.cc:275 ../src/setting.c:329
 #, c-format
 msgid "Cannot open file ‘%s’: %s"
 msgstr "Не вдалося відкрити файл «%s»: %s"
 
-#: ../src/load_files_dialog.c:302
+#: ../src/load_files_dialog.cc:305
 #, c-format
 msgid "Error reading file ‘%s’"
 msgstr "Помилка під час читання файла «%s»"
 
-#: ../src/load_files_dialog.c:742 ../src/load_files_dialog.c:845
+#: ../src/load_files_dialog.cc:745 ../src/load_files_dialog.cc:848
 msgid "Insert a blank line"
 msgstr "Вставити порожній рядок"
 
-#: ../src/load_files_dialog.c:746 ../src/load_files_dialog.c:849
+#: ../src/load_files_dialog.cc:749 ../src/load_files_dialog.cc:852
 msgid "Delete this line"
 msgstr "Вилучити цей рядок"
 
-#: ../src/load_files_dialog.c:757 ../src/load_files_dialog.c:860
+#: ../src/load_files_dialog.cc:760 ../src/load_files_dialog.cc:863
 msgid "Move this line up"
 msgstr "Пересунути цей рядок вище"
 
-#: ../src/load_files_dialog.c:761 ../src/load_files_dialog.c:864
+#: ../src/load_files_dialog.cc:764 ../src/load_files_dialog.cc:867
 msgid "Move this line down"
 msgstr "Пересунути цей рядок нижче"
 
@@ -4182,11 +4213,11 @@ msgstr "Записано файл списку відтворення «%s»"
 msgid "Invalid scanner mask"
 msgstr "Некоректна маска сканування"
 
-#: ../src/preferences_dialog.c:864
+#: ../src/preferences_dialog.c:881
 msgid "The selected default path is invalid"
 msgstr "Вибраний типовий шлях є некоректним"
 
-#: ../src/preferences_dialog.c:866
+#: ../src/preferences_dialog.c:883
 #, c-format
 msgid ""
 "Path: ‘%s’\n"
@@ -4195,68 +4226,68 @@ msgstr ""
 "Шлях: «%s»\n"
 "Помилка: %s"
 
-#: ../src/preferences_dialog.c:870
+#: ../src/preferences_dialog.c:887
 msgid "Invalid Path Error"
 msgstr "Помилка — некоректний шлях"
 
-#: ../src/scan_dialog.c:382
+#: ../src/scan_dialog.cc:386
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Не вдалося обчислити значення CRC файла «%s»"
 
-#: ../src/scan_dialog.c:397
+#: ../src/scan_dialog.cc:401
 msgid "Tag successfully scanned"
 msgstr "Мітку успішно скановано"
 
-#: ../src/scan_dialog.c:400
+#: ../src/scan_dialog.cc:404
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Мітку успішно скановано, «%s»"
 
-#: ../src/scan_dialog.c:443
+#: ../src/scan_dialog.cc:447
 #, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "Не знайдено суфікс назви «%s» у назві файла «%s»"
 
-#: ../src/scan_dialog.c:535 ../src/scan_dialog.c:566
+#: ../src/scan_dialog.cc:539 ../src/scan_dialog.cc:570
 #, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "Не вдалося знайти роздільник «%s» у «%s»"
 
-#: ../src/scan_dialog.c:794
+#: ../src/scan_dialog.cc:798
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "Не вдалося перетворити назву файла «%s» до кодування назв файлів системи"
 
-#: ../src/scan_dialog.c:820
+#: ../src/scan_dialog.cc:824
 msgid "New filename successfully scanned"
 msgstr "Нову назву файли успішно скановано"
 
-#: ../src/scan_dialog.c:824
+#: ../src/scan_dialog.cc:828
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Нову назву файли успішно скановано, «%s»"
 
-#: ../src/scan_dialog.c:1205
+#: ../src/scan_dialog.cc:993
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Помилка під час обробки полів «%s»"
 
-#: ../src/scan_dialog.c:2081
+#: ../src/scan_dialog.cc:1866
 msgid "New_mask"
 msgstr "Нова_маска"
 
-#: ../src/scan_dialog.c:2552
+#: ../src/scan_dialog.cc:2334
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "Некоректна маска сканування"
 
-#: ../src/scan_dialog.c:2625
+#: ../src/scan_dialog.cc:2407
 msgid "All tags have been scanned"
 msgstr "Усі мітки було скановано"
 
-#: ../src/search_dialog.c:576
+#: ../src/search_dialog.cc:201
 #, c-format
 msgid "Found one file"
 msgid_plural "Found %d files"
@@ -4265,7 +4296,7 @@ msgstr[1] "Знайдено %d файли"
 msgstr[2] "Знайдено %d файлів"
 msgstr[3] "Знайдено один файл"
 
-#: ../src/search_dialog.c:658
+#: ../src/search_dialog.cc:273
 msgid "Ready to search…"
 msgstr "Готові до пошуку…"
 
@@ -4288,215 +4319,215 @@ msgstr "Завантажуємо типові маски перейменову�
 msgid "Ready to start"
 msgstr "Готові до запуску"
 
-#: ../src/tag_area.c:180
+#: ../src/tag_area.cc:184
 #, c-format
 msgid "Selected files tagged with title ‘%s’"
 msgstr "Вибрані файли позначено заголовком «%s»"
 
-#: ../src/tag_area.c:182
+#: ../src/tag_area.cc:186
 msgid "Removed title from selected files"
 msgstr "Вилучено заголовок з вибраних файлів"
 
-#: ../src/tag_area.c:191
+#: ../src/tag_area.cc:195
 #, c-format
 msgid "Selected files tagged with artist ‘%s’"
 msgstr "Вибрані файли позначено виконавцем «%s»"
 
-#: ../src/tag_area.c:193
+#: ../src/tag_area.cc:197
 msgid "Removed artist from selected files"
 msgstr "Вилучено виконавця з вибраних файлів"
 
-#: ../src/tag_area.c:202
+#: ../src/tag_area.cc:206
 #, c-format
 msgid "Selected files tagged with album artist ‘%s’"
 msgstr "Вибрані файли позначено виконавцем альбому «%s»"
 
-#: ../src/tag_area.c:204
+#: ../src/tag_area.cc:208
 msgid "Removed album artist from selected files"
 msgstr "Вилучено виконавця альбому з вибраних файлів"
 
-#: ../src/tag_area.c:213
+#: ../src/tag_area.cc:217
 #, c-format
 msgid "Selected files tagged with album ‘%s’"
 msgstr "Вибрані файли позначено альбомом «%s»"
 
-#: ../src/tag_area.c:215
+#: ../src/tag_area.cc:219
 msgid "Removed album name from selected files"
 msgstr "Вилучено назву альбому з вибраних файлів"
 
-#: ../src/tag_area.c:252
+#: ../src/tag_area.cc:256
 #, c-format
 msgid "Selected files tagged with disc number ‘%s/%s’"
 msgstr "Вибрані файли позначено номером диска у форматі «%s/%s»"
 
-#: ../src/tag_area.c:259
+#: ../src/tag_area.cc:263
 #, c-format
 msgid "Selected files tagged with disc number like ‘xx’"
 msgstr "Вибрані файли позначено номером диска у форматі «xx»"
 
-#: ../src/tag_area.c:264
+#: ../src/tag_area.cc:268
 msgid "Removed disc number from selected files"
 msgstr "Вилучено номер диска з вибраних файлів"
 
-#: ../src/tag_area.c:276
+#: ../src/tag_area.cc:280
 #, c-format
 msgid "Selected files tagged with year ‘%s’"
 msgstr "Вибрані файли позначено роком «%s»"
 
-#: ../src/tag_area.c:278
+#: ../src/tag_area.cc:282
 msgid "Removed year from selected files"
 msgstr "Вилучено рік з вибраних файлів"
 
-#: ../src/tag_area.c:287
+#: ../src/tag_area.cc:291
 #, fuzzy, c-format
 msgid "Selected files tagged with release year ‘%s’"
 msgstr "Вибрані файли позначено роком «%s»"
 
-#: ../src/tag_area.c:289
+#: ../src/tag_area.cc:293
 #, fuzzy
 msgid "Removed release year from selected files"
 msgstr "Вилучено рік з вибраних файлів"
 
-#: ../src/tag_area.c:318 ../src/tag_area.c:423
+#: ../src/tag_area.cc:322 ../src/tag_area.cc:427
 #, c-format
 msgid "Selected files tagged with track like ‘xx/%s’"
 msgstr "Вибрані файли позначено номером доріжки у форматі «xx/%s»"
 
-#: ../src/tag_area.c:322
+#: ../src/tag_area.cc:326
 #, c-format
 msgid "Selected files tagged with track like ‘xx’"
 msgstr "Вибрані файли позначено номером доріжки у форматі «xx»"
 
-#: ../src/tag_area.c:327 ../src/tag_area.c:428
+#: ../src/tag_area.cc:331 ../src/tag_area.cc:432
 msgid "Removed track number from selected files"
 msgstr "Вилучено номер доріжки з вибраних файлів"
 
 #. msg = g_strdup_printf(_("All %d tracks numbered sequentially."), ETCore->ETFileSelectionList_Length);
-#: ../src/tag_area.c:386
+#: ../src/tag_area.cc:390
 #, c-format
 msgid "Selected tracks numbered sequentially"
 msgstr "Вибрані файли послідовно пронумеровано"
 
-#: ../src/tag_area.c:440
+#: ../src/tag_area.cc:444
 #, c-format
 msgid "Selected files tagged with genre ‘%s’"
 msgstr "Вибрані файли позначено жанром «%s»"
 
-#: ../src/tag_area.c:442
+#: ../src/tag_area.cc:446
 msgid "Removed genre from selected files"
 msgstr "Вилучено жанр з вибраних файлів"
 
-#: ../src/tag_area.c:451
+#: ../src/tag_area.cc:455
 #, c-format
 msgid "Selected files tagged with comment ‘%s’"
 msgstr "Вибрані файли позначено коментарем «%s»"
 
-#: ../src/tag_area.c:453
+#: ../src/tag_area.cc:457
 msgid "Removed comment from selected files"
 msgstr "Вилучено коментар з вибраних файлів"
 
-#: ../src/tag_area.c:462
+#: ../src/tag_area.cc:466
 #, c-format
 msgid "Selected files tagged with composer ‘%s’"
 msgstr "Вибрані файли позначено композитором «%s»"
 
-#: ../src/tag_area.c:464
+#: ../src/tag_area.cc:468
 msgid "Removed composer from selected files"
 msgstr "Вилучено композитора з вибраних файлів"
 
-#: ../src/tag_area.c:473
+#: ../src/tag_area.cc:477
 #, c-format
 msgid "Selected files tagged with original artist ‘%s’"
 msgstr "Вибрані файли позначено початковим виконавцем «%s»"
 
-#: ../src/tag_area.c:475
+#: ../src/tag_area.cc:479
 msgid "Removed original artist from selected files"
 msgstr "Вилучено початкового виконавця з вибраних файлів"
 
-#: ../src/tag_area.c:484
+#: ../src/tag_area.cc:488
 #, fuzzy, c-format
 msgid "Selected files tagged with original year ‘%s’"
 msgstr "Вибрані файли позначено початковим виконавцем «%s»"
 
-#: ../src/tag_area.c:486
+#: ../src/tag_area.cc:490
 #, fuzzy
 msgid "Removed original year from selected files"
 msgstr "Вилучено початкового виконавця з вибраних файлів"
 
-#: ../src/tag_area.c:495
+#: ../src/tag_area.cc:499
 #, c-format
 msgid "Selected files tagged with copyright ‘%s’"
 msgstr "Вибрані файли позначено авторськими правами «%s»"
 
-#: ../src/tag_area.c:497
+#: ../src/tag_area.cc:501
 msgid "Removed copyright from selected files"
 msgstr "Вилучено авторські права з вибраних файлів"
 
-#: ../src/tag_area.c:506
+#: ../src/tag_area.cc:510
 #, c-format
 msgid "Selected files tagged with URL ‘%s’"
 msgstr "Вибрані файли позначено адресою «%s»"
 
-#: ../src/tag_area.c:508
+#: ../src/tag_area.cc:512
 msgid "Removed URL from selected files"
 msgstr "Вилучено адресу з вибраних файлів"
 
-#: ../src/tag_area.c:517
+#: ../src/tag_area.cc:521
 #, c-format
 msgid "Selected files tagged with encoder name ‘%s’"
 msgstr "Вибрані файли позначено назвою кодувальника «%s»"
 
-#: ../src/tag_area.c:519
+#: ../src/tag_area.cc:523
 msgid "Removed encoder name from selected files"
 msgstr "Вилучено назву кодувальника з вибраних файлів"
 
-#: ../src/tag_area.c:554
+#: ../src/tag_area.cc:558
 msgid "Selected files tagged with images"
 msgstr "Вибрані файли позначено зображеннями"
 
-#: ../src/tag_area.c:558
+#: ../src/tag_area.cc:562
 msgid "Removed images from selected files"
 msgstr "Вилучено зображення з вибраних файлів"
 
 #. Menu items
-#: ../src/tag_area.c:726
+#: ../src/tag_area.cc:728
 msgid "Tag selected files with this field"
 msgstr "Позначити вибрані файли цим полем"
 
-#: ../src/tag_area.c:756
+#: ../src/tag_area.cc:758
 msgid "All uppercase"
 msgstr "Усі великі"
 
-#: ../src/tag_area.c:762
+#: ../src/tag_area.cc:764
 msgid "All lowercase"
 msgstr "Усі малі"
 
-#: ../src/tag_area.c:768
+#: ../src/tag_area.cc:770
 msgid "First letter uppercase"
 msgstr "Верхній регістр для першої літери"
 
-#: ../src/tag_area.c:774
+#: ../src/tag_area.cc:776
 msgid "First letter uppercase of each word"
 msgstr "Велика перша літера у кожному слові"
 
-#: ../src/tag_area.c:790
+#: ../src/tag_area.cc:792
 msgid "Insert space before uppercase letter"
 msgstr "Вставляти пробіл перед великою літерою"
 
-#: ../src/tag_area.c:796
+#: ../src/tag_area.cc:798
 msgid "Remove duplicate spaces or underscores"
 msgstr "Вилучати дублікати пробілів або підкреслювань"
 
-#: ../src/tag_area.c:802
+#: ../src/tag_area.cc:804
 msgid "Remove all text"
 msgstr "Вилучити увесь текст"
 
-#: ../src/tag_area.c:1160 ../src/tag_area.c:1253
+#: ../src/tag_area.cc:1162 ../src/tag_area.cc:1255
 #, c-format
 msgid "Error parsing image data ‘%s’"
 msgstr "Помилка під час оброби даних зображення «%s»"
 
-#: ../src/tag_area.c:1235
+#: ../src/tag_area.cc:1237
 msgid ""
 "Cannot display the image because not enough data has been read to determine "
 "how to create the image buffer"
@@ -4504,99 +4535,99 @@ msgstr ""
 "Не вдалося показати зображення, оскільки було прочитано недостатньо даних, "
 "щоб визначити, як слід створювати буфер зображення"
 
-#: ../src/tag_area.c:1242
+#: ../src/tag_area.cc:1244
 msgid "Cannot display the image"
 msgstr "Не вдалося показати зображення"
 
-#: ../src/tag_area.c:1244
+#: ../src/tag_area.cc:1246
 msgid ""
 "Not enough data has been read to determine how to create the image buffer."
 msgstr ""
 "Було прочитано недостатньо даних, щоб визначити, як слід створювати буфер "
 "зображення."
 
-#: ../src/tag_area.c:1246
+#: ../src/tag_area.cc:1248
 msgid "Load Image File"
 msgstr "Завантаження файла зображення"
 
-#: ../src/tag_area.c:1291 ../src/tag_area.c:1316
+#: ../src/tag_area.cc:1293 ../src/tag_area.cc:1318
 #, c-format
 msgid "Image file not loaded ‘%s’"
 msgstr "Файл зображення не завантажено, «%s»"
 
-#: ../src/tag_area.c:1308
+#: ../src/tag_area.cc:1310
 #, c-format
 msgid "Cannot open file ‘%s’"
 msgstr "Не вдалося відкрити файл «%s»"
 
-#: ../src/tag_area.c:1312
+#: ../src/tag_area.cc:1314
 msgid "Image File Error"
 msgstr "Помилка з файлом зображення"
 
-#: ../src/tag_area.c:1323
+#: ../src/tag_area.cc:1325
 msgid "Image file loaded"
 msgstr "Файл зображення завантажено"
 
-#: ../src/tag_area.c:1406
+#: ../src/tag_area.cc:1408
 msgid "Add Images"
 msgstr "Додати зображення"
 
-#: ../src/tag_area.c:1416 ../src/tag_area.c:1744
+#: ../src/tag_area.cc:1418 ../src/tag_area.cc:1745
 msgid "All Files"
 msgstr "усі файли"
 
-#: ../src/tag_area.c:1423 ../src/tag_area.c:1751
+#: ../src/tag_area.cc:1425 ../src/tag_area.cc:1752
 msgid "PNG and JPEG"
 msgstr "PNG і JPEG"
 
-#: ../src/tag_area.c:1541
+#: ../src/tag_area.cc:1542
 #, c-format
 msgid "Image Properties %d/%d"
 msgstr "Властивості зображення %d з %d"
 
-#: ../src/tag_area.c:1730
+#: ../src/tag_area.cc:1731
 #, c-format
 msgid "Save Image %d/%d"
 msgstr "Збереження зображення %d з %d"
 
-#: ../src/tag_area.c:1810
+#: ../src/tag_area.cc:1811
 #, c-format
 msgid "Image file not saved ‘%s’"
 msgstr "Файл зображення не збережено, «%s»"
 
-#: ../src/tag_area.c:2055
+#: ../src/tag_area.cc:2056
 msgid "Tag selected files with this genre"
 msgstr "Позначити вибрані файли цим жанром"
 
-#: ../src/tag_area.c:2704
+#: ../src/tag_area.cc:2705
 msgid "ID3 Tag"
 msgstr "Мітка ID3"
 
-#: ../src/tag_area.c:2709
+#: ../src/tag_area.cc:2710
 msgid "Ogg Vorbis Tag"
 msgstr "Мітка Ogg Vorbis"
 
-#: ../src/tag_area.c:2714
+#: ../src/tag_area.cc:2715
 msgid "FLAC Vorbis Tag"
 msgstr "Мітка FLAC Vorbis"
 
-#: ../src/tag_area.c:2718
+#: ../src/tag_area.cc:2719
 msgid "APE Tag"
 msgstr "Мітка APE"
 
-#: ../src/tag_area.c:2722
+#: ../src/tag_area.cc:2723
 msgid "MP4/M4A/AAC Tag"
 msgstr "Мітка MP4/M4A/AAC"
 
-#: ../src/tag_area.c:2727
+#: ../src/tag_area.cc:2728
 msgid "Wavpack Tag"
 msgstr "Мітка Wavpack"
 
-#: ../src/tag_area.c:2732
+#: ../src/tag_area.cc:2733
 msgid "Opus Tag"
 msgstr "Мітка Opus"
 
-#: ../src/tag_area.c:3014
+#: ../src/tag_area.cc:3015
 #, c-format
 msgid "Images (%u)"
 msgstr "Зображення (%u)"

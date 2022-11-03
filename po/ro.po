@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 1.99.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-23 14:31+0200\n"
+"POT-Creation-Date: 2022-11-03 20:54+0100\n"
 "PO-Revision-Date: 2020-05-31 18:33+0300\n"
 "Last-Translator: Florentina Mușat <emryslokadottir [at] gmail [dot] com>\n"
 "Language-Team: Romanian <pauliuc@gmx.net>\n"
@@ -77,8 +77,8 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Alegeți un director de arătat în navigator"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3456
-#: ../src/tag_area.c:1411
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3469
+#: ../src/tag_area.cc:1413
 msgid "_Open"
 msgstr "_Deschide"
 
@@ -87,12 +87,12 @@ msgid "Select a directory to browse"
 msgstr "Alegeți un director de navigat"
 
 #. Translators: No files, as in "0 files".
-#: ../data/browser.ui.h:4 ../src/easytag.c:979
+#: ../data/browser.ui.h:4 ../src/easytag.c:983
 msgid "No files"
 msgstr "Fără fișiere"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:63
+#: ../data/preferences_dialog.ui.h:68 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Artist"
@@ -106,12 +106,12 @@ msgid "# Files"
 msgstr "# Fișiere"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:67
+#: ../data/preferences_dialog.ui.h:70 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Album"
 
-#: ../data/browser.ui.h:9
+#: ../data/browser.ui.h:9 ../data/search_dialog.ui.h:11
 msgid "Path"
 msgstr "Calea"
 
@@ -122,7 +122,7 @@ msgid "Filename"
 msgstr "Nume fișier"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:66 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Titlu"
@@ -151,17 +151,17 @@ msgid "Track"
 msgstr "Pistă"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:69
+#: ../data/preferences_dialog.ui.h:72 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Gen"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:74
 #: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Comentariu"
 
-#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
+#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:76
 #: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
@@ -209,10 +209,10 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.cc:918
-#: ../src/browser.cc:3455 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
-#: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
-#: ../src/tag_area.c:1735
+#: ../src/application_window.c:3028 ../src/browser.cc:920
+#: ../src/browser.cc:3468 ../src/cddb_dialog.cc:2124 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:599 ../src/tag_area.cc:1411
+#: ../src/tag_area.cc:1736
 msgid "_Cancel"
 msgstr "_Anulează"
 
@@ -231,7 +231,7 @@ msgstr ""
 "Introduceți programul de executat; el va primi fișierul curent ca parametru"
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:562
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:565
 msgid "Rename Directory"
 msgstr "Redenumește directorul"
 
@@ -312,7 +312,7 @@ msgstr "Caută câmpurile"
 msgid "Track Name"
 msgstr "Numărul pistei"
 
-#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:91
+#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:96
 #: ../src/picture.c:191
 msgid "Other"
 msgstr "Altele"
@@ -433,7 +433,7 @@ msgstr ""
 msgid "Match lines with the Levenshtein algorithm"
 msgstr "Potrivește linii cu algoritmul Levenshtein"
 
-#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:143
+#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:148
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:24
 msgid "Whether to use the DLM algorithm to match CDDB results to files"
 msgstr ""
@@ -441,13 +441,13 @@ msgstr ""
 "fișiere"
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
-#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:160
-#: ../data/scan_dialog.ui.h:118 ../data/search_dialog.ui.h:11
+#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:165
+#: ../data/scan_dialog.ui.h:118
 msgid "_Close"
 msgstr "În_chide"
 
 #: ../data/cddb_dialog.ui.h:49 ../data/load_files_dialog.ui.h:17
-#: ../src/cddb_dialog.c:2140
+#: ../src/cddb_dialog.cc:2125
 msgid "_Apply"
 msgstr "_Aplică"
 
@@ -458,7 +458,7 @@ msgstr ""
 "selectată)"
 
 #. Default values are MPEG data.
-#: ../data/file_area.ui.h:1 ../src/application_window.c:2180
+#: ../data/file_area.ui.h:1 ../src/application_window.c:2194
 #: ../src/file_area.c:155
 msgid "File"
 msgstr "Fișier"
@@ -543,8 +543,8 @@ msgstr "Inserează o linie goală înaintea liniei selectate"
 msgid "Delete the selected line"
 msgstr "Șterge linia selectată"
 
-#: ../data/load_files_dialog.ui.h:8 ../src/load_files_dialog.c:750
-#: ../src/load_files_dialog.c:853
+#: ../data/load_files_dialog.ui.h:8 ../src/load_files_dialog.cc:753
+#: ../src/load_files_dialog.cc:856
 msgid "Delete all blank lines"
 msgstr "Șterge toate liniile goale"
 
@@ -556,8 +556,8 @@ msgstr "Mută linia selectată mai sus"
 msgid "Move the selected line down"
 msgstr "Mută linia selectată mai jos"
 
-#: ../data/load_files_dialog.ui.h:11 ../src/load_files_dialog.c:768
-#: ../src/load_files_dialog.c:871
+#: ../data/load_files_dialog.ui.h:11 ../src/load_files_dialog.cc:771
+#: ../src/load_files_dialog.cc:874
 msgid "Reload"
 msgstr "Reîncarcă"
 
@@ -1082,10 +1082,10 @@ msgstr "Scrie informațiile utilizând numele de fișier"
 msgid "Write information using:"
 msgstr "Scrie informațiile utilizând:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.cc:919 ../src/easytag.c:234 ../src/easytag.c:465
-#: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
-#: ../src/tag_area.c:1737
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3029
+#: ../src/browser.cc:921 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/easytag.c:472 ../src/easytag.c:600 ../src/easytag.c:607
+#: ../src/tag_area.cc:1738
 msgid "_Save"
 msgstr "_Salvează"
 
@@ -1247,56 +1247,82 @@ msgid "Filenames"
 msgstr "Numele fișierului"
 
 #: ../data/preferences_dialog.ui.h:32
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
-msgid "Replace illegal characters when renaming"
+#, fuzzy
+msgid "Replace illegal characters when renaming:"
 msgstr "Înlocuiește caracterele ilegale când se redenumește"
 
 #: ../data/preferences_dialog.ui.h:33
+#, fuzzy
 msgid ""
-"Convert characters which cannot be represented in filenames on the FAT32/16 "
-"and Joliet filesystems (‘\\’, ‘:’, ‘;’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’)"
+"Convert characters which cannot be represented in filenames on some "
+"filesystems (‘\\’, ‘/’, ‘:’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’)"
 msgstr ""
 "Convertiți caractere care nu pot fi reprezentate în nume de fișiere în "
 "sistemele de fișiere FAT32/16 și Joliet („\\”, „:”, „;”, „*”, „?”, „\"”, "
 "„<”, „>”, „|”)"
 
 #: ../data/preferences_dialog.ui.h:34
+msgid "by ASCII characters"
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:35
+msgid "Use the ASCII characters (‘-’, ‘+’, ‘_’, ‘'’, ‘(’, ‘)’) as replacement."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:36
+msgid "by Unicode characters"
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:37
+msgid ""
+"Use similar Unicode characters (‘&#8726;’, ‘&#8725;’, ‘&#8758;’, ‘&#8727;’, "
+"‘&#8253;’, ‘&#8221;’, ‘&#8826;’, ‘&#8827;’, ‘&#8739;’) as replacement."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:38
+#, fuzzy
+msgid "No change"
+msgstr "Nicio schimbare"
+
+#: ../data/preferences_dialog.ui.h:39
+msgid "You must manually ensure valid file characters."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:40
 msgid "Convert filename extension to:"
 msgstr "Convertește extensia numelui de fișier la:"
 
-#: ../data/preferences_dialog.ui.h:35
-msgid "Lower Case"
+#: ../data/preferences_dialog.ui.h:41
+#, fuzzy
+msgid "Lower case"
 msgstr "Minuscule"
 
-#: ../data/preferences_dialog.ui.h:36
+#: ../data/preferences_dialog.ui.h:42
 msgid "For example, the extension will be converted to ‘.mp3’"
 msgstr "De exemplu, extensia va fi convertită la „.mp3”"
 
-#: ../data/preferences_dialog.ui.h:37
-msgid "Upper Case"
+#: ../data/preferences_dialog.ui.h:43
+#, fuzzy
+msgid "Upper case"
 msgstr "Majuscule"
 
-#: ../data/preferences_dialog.ui.h:38
+#: ../data/preferences_dialog.ui.h:44
 msgid "For example, the extension will be converted to ‘.MP3’"
 msgstr "De exemplu, extensia va fi convertită la „.MP3”"
 
-#: ../data/preferences_dialog.ui.h:39
-msgid "No Change"
-msgstr "Nicio schimbare"
-
-#: ../data/preferences_dialog.ui.h:40
+#: ../data/preferences_dialog.ui.h:45
 msgid "The extension will not be modified"
 msgstr "Extensia nu va fi modificată"
 
-#: ../data/preferences_dialog.ui.h:41
+#: ../data/preferences_dialog.ui.h:46
 msgid "Filename Encoding"
 msgstr "Codarea numelui de fișier"
 
-#: ../data/preferences_dialog.ui.h:42
+#: ../data/preferences_dialog.ui.h:47
 msgid "Try another character encoding"
 msgstr "Încercați altă codare de caractere"
 
-#: ../data/preferences_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:48
 msgid ""
 "Try to use the encoding associated with your locale and if this fails, try "
 "the ISO-8859-1 character encoding"
@@ -1304,11 +1330,11 @@ msgstr ""
 "Încercați să utilizați codarea asociată cu localizarea proprie și dacă "
 "această eșuează, încercați codarea de caractere ISO-8859-1"
 
-#: ../data/preferences_dialog.ui.h:44
+#: ../data/preferences_dialog.ui.h:49
 msgid "Transliterate characters into the system character encoding"
 msgstr "Transliterați caracterele în codarea de caractere a sistemului"
 
-#: ../data/preferences_dialog.ui.h:45
+#: ../data/preferences_dialog.ui.h:50
 msgid ""
 "Replace unsupported characters with a similar character from the target "
 "character encoding"
@@ -1316,14 +1342,14 @@ msgstr ""
 "Înlocuiți caracterele nesuportate cu un caracter similar din codarea de "
 "caracter țintă"
 
-#: ../data/preferences_dialog.ui.h:46
+#: ../data/preferences_dialog.ui.h:51
 msgid ""
 "Use the system character encoding and silently discard unsupported characters"
 msgstr ""
 "Utilizați codarea de caracter a sistemului și eliminați silențios "
 "caracterele nesuportate"
 
-#: ../data/preferences_dialog.ui.h:47
+#: ../data/preferences_dialog.ui.h:52
 msgid ""
 "Discard characters which cannot be represented in the target character "
 "encoding"
@@ -1331,25 +1357,25 @@ msgstr ""
 "Eliminați caracterele care nu pot fi reprezentate în codarea de caracter "
 "țintă"
 
-#: ../data/preferences_dialog.ui.h:48
+#: ../data/preferences_dialog.ui.h:53
 msgid "Files"
 msgstr "Fișiere"
 
-#: ../data/preferences_dialog.ui.h:49
+#: ../data/preferences_dialog.ui.h:54
 msgid "Automatically complete date field"
 msgstr "Completează automat câmpul de dată"
 
-#: ../data/preferences_dialog.ui.h:50
+#: ../data/preferences_dialog.ui.h:55
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:82
 msgid "Whether to automatically complete the date tag"
 msgstr "Dacă să se completeze automat eticheta dată"
 
-#: ../data/preferences_dialog.ui.h:51
+#: ../data/preferences_dialog.ui.h:56
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:87
 msgid "Automatically select the type of the image based on its filename"
 msgstr "Selectează automat tipul de imagine bazat pe numele fișierului"
 
-#: ../data/preferences_dialog.ui.h:52
+#: ../data/preferences_dialog.ui.h:57
 msgid ""
 "Whether to, when adding cover art, automatically select a type for an image "
 "based on its filename"
@@ -1357,45 +1383,45 @@ msgstr ""
 "Dacă să se selecteze automat, atunci când se adaugă artă de copertă, un tip "
 "pentru o imagine bazat pe numele fișierului"
 
-#: ../data/preferences_dialog.ui.h:53
+#: ../data/preferences_dialog.ui.h:58
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:93
 msgid "Preserve the tag field focus"
 msgstr "Păstrează focalizarea câmpului etichetei"
 
-#: ../data/preferences_dialog.ui.h:54
+#: ../data/preferences_dialog.ui.h:59
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:94
 msgid "Whether to preserve focus on the current tag field when switching file"
 msgstr ""
 "Dacă să se păstreze focalizarea pe câmpul de etichetă curent atunci când se "
 "interschimbă fișierul"
 
-#: ../data/preferences_dialog.ui.h:55
+#: ../data/preferences_dialog.ui.h:60
 msgid "Pad the number of digits in the disc field to:"
 msgstr "Completează numărul de cifre din câmpul discului la:"
 
-#: ../data/preferences_dialog.ui.h:56
+#: ../data/preferences_dialog.ui.h:61
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:84
 msgid "Whether the disc number tag field should be padded with leading zeroes"
 msgstr ""
 "Dacă să fie completat câmpul etichetei numărului de disc cu zerouri "
 "conducătoare"
 
-#: ../data/preferences_dialog.ui.h:57
+#: ../data/preferences_dialog.ui.h:62
 msgid "Pad the number of digits in the track field to:"
 msgstr "Completează numărul de cifre din câmpul pistă la:"
 
-#: ../data/preferences_dialog.ui.h:58
+#: ../data/preferences_dialog.ui.h:63
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:90
 msgid "Whether the track number tag field should be padded with leading zeroes"
 msgstr ""
 "Dacă să fie completat câmpul etichetei numărului de pistă cu zerouri "
 "conducătoare"
 
-#: ../data/preferences_dialog.ui.h:59
+#: ../data/preferences_dialog.ui.h:64
 msgid "Splitting"
 msgstr "Separare"
 
-#: ../data/preferences_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:65
 msgid ""
 "For Vorbis tags, selected fields will be split at dashes and saved as "
 "separate tags"
@@ -1403,49 +1429,49 @@ msgstr ""
 "Pentru etichete Vorbis, câmpurile selectate vor fi separate la liniuțe și "
 "salvate ca etichete separate"
 
-#: ../data/preferences_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:67
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:186
 msgid "Whether to split title fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Dacă să se separe câmpurile de titlu la separatorul „-” în comentariile Ogg"
 
-#: ../data/preferences_dialog.ui.h:64
+#: ../data/preferences_dialog.ui.h:69
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:188
 msgid "Whether to split artist fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Dacă să se separe câmpurile de artist la separatorul „-” în comentariile Ogg"
 
-#: ../data/preferences_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:71
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:190
 msgid "Whether to split album fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Dacă să se separe câmpurile de album la separatorul „-” în comentariile Ogg"
 
-#: ../data/preferences_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:73
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:192
 msgid "Whether to split genre fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Dacă să se separe câmpurile de gen la separatorul „-” în comentariile Ogg"
 
-#: ../data/preferences_dialog.ui.h:70
+#: ../data/preferences_dialog.ui.h:75
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:194
 msgid "Whether to split comment fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Dacă să se separe câmpurile de comentariu la separatorul „-” în comentariile "
 "Ogg"
 
-#: ../data/preferences_dialog.ui.h:72
+#: ../data/preferences_dialog.ui.h:77
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:196
 msgid "Whether to split composer fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Dacă să se separe câmpurile de compozitor la separatorul „-” în comentariile "
 "Ogg"
 
-#: ../data/preferences_dialog.ui.h:73
+#: ../data/preferences_dialog.ui.h:78
 msgid "Original artist"
 msgstr "Artist original"
 
-#: ../data/preferences_dialog.ui.h:74
+#: ../data/preferences_dialog.ui.h:79
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:198
 msgid ""
 "Whether to split original artist fields at a “ - ” separator in Ogg comments"
@@ -1453,16 +1479,16 @@ msgstr ""
 "Dacă să se separe câmpurile de artist original la separatorul „-” în "
 "comentariile Ogg"
 
-#: ../data/preferences_dialog.ui.h:75
+#: ../data/preferences_dialog.ui.h:80
 msgid "Tags"
 msgstr "Etichete"
 
-#: ../data/preferences_dialog.ui.h:76
+#: ../data/preferences_dialog.ui.h:81
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:51
 msgid "Strip ID3 tags if all ID3 tags are empty"
 msgstr "Elimină etichetele ID3 dacă toate etichetele ID3 sunt goale"
 
-#: ../data/preferences_dialog.ui.h:77
+#: ../data/preferences_dialog.ui.h:82
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:52
 msgid ""
 "Whether to remove the ID3 tag from the audio file if all the individual tag "
@@ -1471,44 +1497,44 @@ msgstr ""
 "Dacă să se elimine eticheta ID3 de la fișierul audio dacă toate câmpurile de "
 "etichetă individuale sunt goale"
 
-#: ../data/preferences_dialog.ui.h:78
+#: ../data/preferences_dialog.ui.h:83
 msgid "Non-standard encoding for reading ID3 tags:"
 msgstr "Codare non-standard pentru citirea etichetelor ID3:"
 
-#: ../data/preferences_dialog.ui.h:79
+#: ../data/preferences_dialog.ui.h:84
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:50
 msgid "Whether to use a non-standard character encoding when reading ID3 tags"
 msgstr ""
 "Dacă să se utilizeze o codare de caracter non-standard când se citesc "
 "etichetele ID3"
 
-#: ../data/preferences_dialog.ui.h:80
+#: ../data/preferences_dialog.ui.h:85
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:60
 msgid "Choose the character set to be used when reading ID3v1 and ID3v2 tags"
 msgstr ""
 "Alegeți un set de caractere de utilizat când se citesc etichetele ID3v1 și "
 "ID3v2"
 
-#: ../data/preferences_dialog.ui.h:81
+#: ../data/preferences_dialog.ui.h:86
 msgid "ID3v2"
 msgstr "ID3v2"
 
-#: ../data/preferences_dialog.ui.h:82
+#: ../data/preferences_dialog.ui.h:87
 msgid "Write ID3v2 tag"
 msgstr "Scrie etichetă ID3v2"
 
-#: ../data/preferences_dialog.ui.h:83
+#: ../data/preferences_dialog.ui.h:88
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:62
 msgid "Whether to write ID3v2 tags when writing ID3 tags into audio files"
 msgstr ""
 "Dacă să se scrie etichete ID3v2 atunci când se scriu etichete ID3 în fișiere "
 "audio"
 
-#: ../data/preferences_dialog.ui.h:84
+#: ../data/preferences_dialog.ui.h:89
 msgid "Version:"
 msgstr "Versiune:"
 
-#: ../data/preferences_dialog.ui.h:85
+#: ../data/preferences_dialog.ui.h:90
 msgid ""
 "Select the ID3v2 tag version to write:\n"
 "• ID3v2.3 is written using id3lib,\n"
@@ -1518,22 +1544,22 @@ msgstr ""
 "• ID3v2.3 este scris utilizând id3lib,\n"
 "• ID3v2.4 este scris utilizând libid3tag (recomandat)"
 
-#: ../data/preferences_dialog.ui.h:88
+#: ../data/preferences_dialog.ui.h:93
 msgid "Character encoding:"
 msgstr "Codare de caracter:"
 
-#: ../data/preferences_dialog.ui.h:89
+#: ../data/preferences_dialog.ui.h:94
 msgid "Unicode"
 msgstr "Unicode"
 
-#: ../data/preferences_dialog.ui.h:90
+#: ../data/preferences_dialog.ui.h:95
 msgid ""
 "Choose the Unicode character encoding to be used when writing ID3v2 tags"
 msgstr ""
 "Alege codarea de caracter Unicode de utilizat atunci când se scriu etichete "
 "ID3v2"
 
-#: ../data/preferences_dialog.ui.h:92
+#: ../data/preferences_dialog.ui.h:97
 msgid ""
 "Override the standard Unicode character encoding to be used when writing "
 "ID3v2 tags"
@@ -1541,15 +1567,15 @@ msgstr ""
 "Suprascrie codarea de caracter Unicode standard de utilizat când se scriu "
 "etichetele ID3v2"
 
-#: ../data/preferences_dialog.ui.h:93
+#: ../data/preferences_dialog.ui.h:98
 msgid "When encoding conversion fails:"
 msgstr "Când conversia de codare eșuează:"
 
-#: ../data/preferences_dialog.ui.h:94
+#: ../data/preferences_dialog.ui.h:99
 msgid "Report error"
 msgstr "Raportează o eroare"
 
-#: ../data/preferences_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:100
 msgid ""
 "Display an error message when a character cannot be represented in the "
 "target character encoding and keep the original character"
@@ -1557,19 +1583,19 @@ msgstr ""
 "Afișează un mesaj de eroare când un caracter nu poate fi reprezentat în "
 "codarea de caracter țintă și păstrează caracterul original"
 
-#: ../data/preferences_dialog.ui.h:96
+#: ../data/preferences_dialog.ui.h:101
 msgid "Transliterate"
 msgstr "Transliterează"
 
-#: ../data/preferences_dialog.ui.h:97
+#: ../data/preferences_dialog.ui.h:102
 msgid "Discard"
 msgstr "Elimină"
 
-#: ../data/preferences_dialog.ui.h:98
+#: ../data/preferences_dialog.ui.h:103
 msgid "Automatically convert old ID3v2 tag versions"
 msgstr "Schimbă automat versiunile vechi de etichete ID3v2"
 
-#: ../data/preferences_dialog.ui.h:99
+#: ../data/preferences_dialog.ui.h:104
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:66
 msgid ""
 "Whether to convert ID3 tags written against old version of the "
@@ -1578,33 +1604,33 @@ msgstr ""
 "Dacă să se convertească etichetele ID3 scrise față de versiunea veche a "
 "aplicației, precum ID3v2.2, la versiuni mai noi, precum ID3v2.3 sau ID3v2.4"
 
-#: ../data/preferences_dialog.ui.h:100
+#: ../data/preferences_dialog.ui.h:105
 msgid "Use CRC-32"
 msgstr "Utilizează CRC-32"
 
-#: ../data/preferences_dialog.ui.h:101
+#: ../data/preferences_dialog.ui.h:106
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:70
 msgid "Whether to embed a CRC-32 checksum of the audio file data in ID3v2 tags"
 msgstr ""
 "Dacă să se încapsuleze o sumă de control CRC-32 a datelor fișierului audio "
 "în etichetele ID3v2"
 
-#: ../data/preferences_dialog.ui.h:102
+#: ../data/preferences_dialog.ui.h:107
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:67
 msgid "Compress data in ID3v2 tags"
 msgstr "Comprimă datele în etichete ID3v2"
 
-#: ../data/preferences_dialog.ui.h:103
+#: ../data/preferences_dialog.ui.h:108
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:68
 msgid "Whether to compress data in ID3v2 tags"
 msgstr "Dacă să se comprime datele în etichetele ID3v2"
 
-#: ../data/preferences_dialog.ui.h:104
+#: ../data/preferences_dialog.ui.h:109
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:71
 msgid "Use text-only genre in ID3v2 tags"
 msgstr "Utilizează genul doar text în etichetele ID3v2"
 
-#: ../data/preferences_dialog.ui.h:105
+#: ../data/preferences_dialog.ui.h:110
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:72
 msgid ""
 "Whether to use only a string, and not the integer-base ID3v1 genre field, "
@@ -1613,72 +1639,72 @@ msgstr ""
 "Dacă să se utilizeze doar un șir, și nu câmpul de gen ID3v1 bazat pe "
 "întregi, atunci când se scrie un câmp de gen la etichetele ID3v2"
 
-#: ../data/preferences_dialog.ui.h:106
+#: ../data/preferences_dialog.ui.h:111
 msgid "ID3v1"
 msgstr "ID3v1"
 
-#: ../data/preferences_dialog.ui.h:107
+#: ../data/preferences_dialog.ui.h:112
 msgid "Write ID3v1 tag"
 msgstr "Scrie eticheta ID3v1"
 
-#: ../data/preferences_dialog.ui.h:108
+#: ../data/preferences_dialog.ui.h:113
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:54
 msgid "Whether to write ID3v1 tags when writing ID3 tags into audio files"
 msgstr ""
 "Dacă să se scrie etichetele ID3v1 atunci când se scriu etichetele ID3 în "
 "fișiere audio"
 
-#: ../data/preferences_dialog.ui.h:109
+#: ../data/preferences_dialog.ui.h:114
 msgid "Choose the character set to be used when writing ID3v1 tag"
 msgstr "Alege un set de caractere de utilizat când se scrie eticheta ID3v1"
 
-#: ../data/preferences_dialog.ui.h:110
+#: ../data/preferences_dialog.ui.h:115
 msgid "ID3 Tags"
 msgstr "Etichete ID3"
 
-#: ../data/preferences_dialog.ui.h:111
+#: ../data/preferences_dialog.ui.h:116
 msgid "Character Conversion"
 msgstr "Conversie caractere"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:113
+#: ../data/preferences_dialog.ui.h:118
 msgid "Fill Tag Scanner"
 msgstr "Completează scanerul de etichetă"
 
-#: ../data/preferences_dialog.ui.h:115
+#: ../data/preferences_dialog.ui.h:120
 #, no-c-format
 msgid "Convert underscores and ‘%20’ to spaces"
 msgstr "Convertește liniuțele de subliniere și „%20” la spații"
 
-#: ../data/preferences_dialog.ui.h:117
+#: ../data/preferences_dialog.ui.h:122
 #, no-c-format
 msgid "Convert spaces and ‘%20’ to underscores"
 msgstr "Convertește spațiile la „%20” și liniuțe de subliniere"
 
-#: ../data/preferences_dialog.ui.h:118
+#: ../data/preferences_dialog.ui.h:123
 msgid "No conversion"
 msgstr "Fără conversie"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:120
+#: ../data/preferences_dialog.ui.h:125
 msgid "Rename File and Directory Scanner"
 msgstr "Redenumește scanerul de fișier și director"
 
-#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:96
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:784
+#: ../data/preferences_dialog.ui.h:126 ../data/scan_dialog.ui.h:96
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.cc:786
 msgid "Remove spaces"
 msgstr "Șterge spațiile"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:123
+#: ../data/preferences_dialog.ui.h:128
 msgid "Process Fields Scanner"
 msgstr "Procesează scanerul câmpurilor"
 
-#: ../data/preferences_dialog.ui.h:124
+#: ../data/preferences_dialog.ui.h:129
 msgid "Upper-case the first letters of all words"
 msgstr "Transformă în litere mari primele litere ale tuturor cuvintelor"
 
-#: ../data/preferences_dialog.ui.h:125
+#: ../data/preferences_dialog.ui.h:130
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:130
 msgid ""
 "Whether to upper-case the first letter of all words, including prepositions "
@@ -1688,15 +1714,15 @@ msgstr ""
 "inclusiv prepoziții și alte cuvinte scurte precum „feat.”, atunci când se "
 "procesează câmpurile de etichete"
 
-#: ../data/preferences_dialog.ui.h:126
+#: ../data/preferences_dialog.ui.h:131
 msgid "Fields"
 msgstr "Câmpuri"
 
-#: ../data/preferences_dialog.ui.h:127
+#: ../data/preferences_dialog.ui.h:132
 msgid "Overwrite fields when scanning tags"
 msgstr "Suprascrie câmpurile când se scanează etichetele"
 
-#: ../data/preferences_dialog.ui.h:128
+#: ../data/preferences_dialog.ui.h:133
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:99
 msgid ""
 "Whether to overwrite the tag field values when filling tags. Otherwise, only "
@@ -1706,11 +1732,11 @@ msgstr ""
 "completează etichetele. În caz contrar, doar câmpurile de etichetă goale vor "
 "fi completate"
 
-#: ../data/preferences_dialog.ui.h:129
+#: ../data/preferences_dialog.ui.h:134
 msgid "Set this text as default comment:"
 msgstr "Stabilește acest text ca și comentariu implicit:"
 
-#: ../data/preferences_dialog.ui.h:130
+#: ../data/preferences_dialog.ui.h:135
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:101
 msgid ""
 "Whether to set the comment tag field to the provided default value when "
@@ -1719,13 +1745,13 @@ msgstr ""
 "Dacă să se stabilească câmpul de etichetă de comentariu la valoarea "
 "furnizată implicit atunci când se completează etichetele"
 
-#: ../data/preferences_dialog.ui.h:131
+#: ../data/preferences_dialog.ui.h:136
 msgid "Use CRC-32 as the default comment (for files with ID3 tags only)"
 msgstr ""
 "Utilizează CRC-32 ca și comentariu implicit (doar pentru fișiere cu etichete "
 "ID3)"
 
-#: ../data/preferences_dialog.ui.h:132
+#: ../data/preferences_dialog.ui.h:137
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:105
 msgid ""
 "Whether to use the CRC-32 of the audio file data as the default comment, for "
@@ -1734,42 +1760,42 @@ msgstr ""
 "Dacă să se utilizeze CRC-32 al datelor fișierului audio ca și comentariu "
 "implicit, doar pentru fișiere cu etichete ID3"
 
-#: ../data/preferences_dialog.ui.h:133
+#: ../data/preferences_dialog.ui.h:138
 msgid "Scanner"
 msgstr "Examinator"
 
-#: ../data/preferences_dialog.ui.h:134
+#: ../data/preferences_dialog.ui.h:139
 msgid "Automatic Search Servers"
 msgstr "Servere de căutare automată"
 
-#: ../data/preferences_dialog.ui.h:135
+#: ../data/preferences_dialog.ui.h:140
 msgid "Host:"
 msgstr "Gazdă:"
 
-#: ../data/preferences_dialog.ui.h:136
+#: ../data/preferences_dialog.ui.h:141
 msgid "Port:"
 msgstr "Port:"
 
-#: ../data/preferences_dialog.ui.h:137
+#: ../data/preferences_dialog.ui.h:142
 msgid "CGI Path:"
 msgstr "Cale CGI:"
 
-#: ../data/preferences_dialog.ui.h:138
+#: ../data/preferences_dialog.ui.h:143
 msgid "Manual Search Server"
 msgstr "Server de căutare manuală"
 
-#: ../data/preferences_dialog.ui.h:139
+#: ../data/preferences_dialog.ui.h:144
 msgid "Results List"
 msgstr "Lista de rezultate"
 
-#: ../data/preferences_dialog.ui.h:140
+#: ../data/preferences_dialog.ui.h:145
 msgid ""
 "Select corresponding file (according to position or DLM if activated below)"
 msgstr ""
 "Selectați fișierul corespunzător (în funcție de poziție sau DLM dacă este "
 "activat mai jos)"
 
-#: ../data/preferences_dialog.ui.h:141
+#: ../data/preferences_dialog.ui.h:146
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:26
 msgid ""
 "Whether to select the file in the file list which matches the position in "
@@ -1778,7 +1804,7 @@ msgstr ""
 "Dacă să se selecteze fișierul în lista de fișiere care se potrivește cu "
 "poziția în lista de rezultate CDDB"
 
-#: ../data/preferences_dialog.ui.h:142
+#: ../data/preferences_dialog.ui.h:147
 msgid ""
 "Use the Levenshtein algorithm (DLM) to match results (using title) with "
 "audio files (using filename)"
@@ -1786,20 +1812,20 @@ msgstr ""
 "Utilizează algoritmul Levenshtein (DLM) pentru a potrivi rezultatele "
 "(utilizând titlul) cu fișierele audio (utilizând numele de fișier)"
 
-#: ../data/preferences_dialog.ui.h:144
+#: ../data/preferences_dialog.ui.h:149
 msgid "CDDB"
 msgstr "CDDB"
 
-#: ../data/preferences_dialog.ui.h:145
+#: ../data/preferences_dialog.ui.h:150
 msgid "Confirmation"
 msgstr "Confirmări"
 
-#: ../data/preferences_dialog.ui.h:146
+#: ../data/preferences_dialog.ui.h:151
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:106
 msgid "Confirm before writing tags"
 msgstr "Confirmă înainte de a scrie etichetele"
 
-#: ../data/preferences_dialog.ui.h:147
+#: ../data/preferences_dialog.ui.h:152
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:107
 msgid ""
 "Whether to ask for confirmation from the user before writing tags to audio "
@@ -1808,48 +1834,48 @@ msgstr ""
 "Dacă să se întrebe pentru confirmare de la utilizator înainte de a scrie "
 "etichetele la fișierele audio"
 
-#: ../data/preferences_dialog.ui.h:148
+#: ../data/preferences_dialog.ui.h:153
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:108
 msgid "Confirm before renaming a file"
 msgstr "Confirmă înainte de a redenumi un fișier"
 
-#: ../data/preferences_dialog.ui.h:149
+#: ../data/preferences_dialog.ui.h:154
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:109
 msgid "Whether to ask for confirmation from the user before renaming a file"
 msgstr ""
 "Dacă să se întrebe pentru confirmare de la utilizator înainte de a redenumi "
 "un fișier"
 
-#: ../data/preferences_dialog.ui.h:150
+#: ../data/preferences_dialog.ui.h:155
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:112
 msgid "Confirm before deleting a file"
 msgstr "Confirmă înainte de a șterge un fișier"
 
-#: ../data/preferences_dialog.ui.h:151
+#: ../data/preferences_dialog.ui.h:156
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:113
 msgid "Whether to ask for confirmation from the user before deleting a file"
 msgstr ""
 "Dacă să se întrebe pentru confirmare de la utilizator înainte de a șterge un "
 "fișier"
 
-#: ../data/preferences_dialog.ui.h:152
+#: ../data/preferences_dialog.ui.h:157
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:110
 msgid "Confirm before writing a playlist"
 msgstr "Confirmă înainte de a scrie o listă de redare"
 
-#: ../data/preferences_dialog.ui.h:153
+#: ../data/preferences_dialog.ui.h:158
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:111
 msgid "Whether to ask for confirmation from the user before writing a playlist"
 msgstr ""
 "Dacă să se întrebe pentru confirmare de la utilizator înainte de a scrie o "
 "listă de redare"
 
-#: ../data/preferences_dialog.ui.h:154
+#: ../data/preferences_dialog.ui.h:159
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:114
 msgid "Confirm before losing unsaved changes to files"
 msgstr "Confirmă înainte de a pierde modificări nesalvate ale fișierelor"
 
-#: ../data/preferences_dialog.ui.h:155
+#: ../data/preferences_dialog.ui.h:160
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:115
 msgid ""
 "Whether to ask for confirmation from the user before performing an operation "
@@ -1858,20 +1884,20 @@ msgstr ""
 "Dacă să se întrebe pentru confirmare de la utilizator înainte de a efectua o "
 "operație care ar pierde modificări nesalvate pe fișiere"
 
-#: ../data/preferences_dialog.ui.h:156
+#: ../data/preferences_dialog.ui.h:161
 msgid "Scanner Dialog"
 msgstr "Dialogul scanerului"
 
-#: ../data/preferences_dialog.ui.h:157
+#: ../data/preferences_dialog.ui.h:162
 msgid "Show the scanner dialog on startup"
 msgstr "Arată dialogul scanerului la pornire"
 
-#: ../data/preferences_dialog.ui.h:158
+#: ../data/preferences_dialog.ui.h:163
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:182
 msgid "Whether to show the scanner window on application startup"
 msgstr "Dacă să se arate fereastra scanerului la pornirea aplicației"
 
-#: ../data/preferences_dialog.ui.h:159
+#: ../data/preferences_dialog.ui.h:164
 msgid "Application"
 msgstr "Aplicație"
 
@@ -2052,7 +2078,7 @@ msgid "Rename file preview"
 msgstr "Redenumește previzualizarea fișierului"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:571
+#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:574
 msgid "Rename File"
 msgstr "Redenumește fișierul"
 
@@ -2217,7 +2243,7 @@ msgstr "Nu modifica separatorii cuvintelor"
 msgid "Character Conversions"
 msgstr "Conversiile caracterelor"
 
-#: ../data/scan_dialog.ui.h:105 ../src/tag_area.c:740
+#: ../data/scan_dialog.ui.h:105 ../src/tag_area.cc:742
 #, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "Convertește „_” și „%20” la spații"
@@ -2232,7 +2258,7 @@ msgstr ""
 "spațiu. De exemplu, înainte: „Text%20In%20o_intrare”, după: „Text într-o "
 "intrare”"
 
-#: ../data/scan_dialog.ui.h:108 ../src/tag_area.c:746
+#: ../data/scan_dialog.ui.h:108 ../src/tag_area.cc:748
 msgid "Convert spaces to underscores"
 msgstr "Convertește spațiile la liniuțe de subliniere"
 
@@ -2324,7 +2350,7 @@ msgstr "Cu majuscule semnificative"
 msgid "CD"
 msgstr "CD"
 
-#: ../data/tag_area.ui.h:1 ../src/tag_area.c:2755
+#: ../data/tag_area.ui.h:1 ../src/tag_area.cc:2756
 msgid "Tag"
 msgstr "Etichetă"
 
@@ -2496,7 +2522,7 @@ msgstr "Editează proprietățile imaginii"
 msgid "Tag selected files with these images"
 msgstr "Etichetează fișierele selectate cu aceste imagini"
 
-#: ../data/tag_area.ui.h:42 ../src/tag_area.c:3033 ../src/tag_area.c:3036
+#: ../data/tag_area.ui.h:42 ../src/tag_area.cc:3034 ../src/tag_area.cc:3037
 msgid "Images"
 msgstr "Imagini"
 
@@ -3122,6 +3148,10 @@ msgstr ""
 "sistemului de fișiere cu transliterare sau să se elimine caracterele "
 "ofensatoare"
 
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
+msgid "Replace illegal characters when renaming"
+msgstr "Înlocuiește caracterele ilegale când se redenumește"
+
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:176
 msgid ""
 "Whether to replace illegal characters in a filename when using the rename "
@@ -3248,7 +3278,7 @@ msgstr "Pagină web: %s"
 msgid "- Tag and rename audio files"
 msgstr "- Etichetează și redenumește fișiere audio"
 
-#: ../src/application.c:429 ../src/file_list.c:443
+#: ../src/application.c:429 ../src/file_list.cc:443
 #, c-format
 msgid "Error while querying information for file ‘%s’: %s"
 msgstr "Eroare în timpul interogării de informații pentru fișierul „%s”: %s"
@@ -3263,7 +3293,7 @@ msgstr "Nu se poate deschide calea „%s”"
 msgid "Do you really want to delete the file ‘%s’?"
 msgstr "Sigur doriți să ștergeți fișierul „%s”?"
 
-#: ../src/application_window.c:364 ../src/easytag.c:459 ../src/easytag.c:592
+#: ../src/application_window.c:364 ../src/easytag.c:459 ../src/easytag.c:595
 msgid "Repeat action for the remaining files"
 msgstr "Repetă acțiunea pentru fișierele rămase"
 
@@ -3301,29 +3331,29 @@ msgstr "Toate fișierele au fost șterse"
 msgid "All tags have been removed"
 msgstr "Toate etichetele au fost șterse"
 
-#: ../src/application_window.c:1474 ../src/browser.cc:346 ../src/browser.cc:389
-#: ../src/browser.cc:423 ../src/browser.cc:4383 ../src/browser.cc:4458
+#: ../src/application_window.c:1474 ../src/browser.cc:348 ../src/browser.cc:391
+#: ../src/browser.cc:425 ../src/browser.cc:4299 ../src/browser.cc:4374
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Nu s-a putut lansa programul „%s”"
 
-#: ../src/application_window.c:1988
+#: ../src/application_window.c:2003
 #, c-format
 msgid "Could not convert filename ‘%s’ to system filename encoding"
 msgstr ""
 "Nu s-a putut converti numele de fișier „%s” la codarea de nume de fișier a "
 "sistemului"
 
-#: ../src/application_window.c:1991
+#: ../src/application_window.c:2006
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Încercați stabilirea variabilei de mediu G_FILENAME_ENCODING."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:796
+#: ../src/application_window.c:2008 ../src/scan_dialog.cc:800
 msgid "Filename translation"
 msgstr "Optiuni ale conversiei numelui de fisier"
 
 #. And refresh the number of files in this directory
-#: ../src/application_window.c:2154
+#: ../src/application_window.c:2168
 #, c-format
 msgid "One file"
 msgid_plural "%u files"
@@ -3332,7 +3362,7 @@ msgstr[1] "%u fișiere"
 msgstr[2] "%u de fișiere"
 
 #. Bitrate
-#: ../src/application_window.c:2187 ../src/tags/flac_header.c:189
+#: ../src/application_window.c:2201 ../src/tags/flac_header.c:189
 #: ../src/tags/monkeyaudio_header.c:76 ../src/tags/mp4_header.cc:144
 #: ../src/tags/mpeg_header.c:274 ../src/tags/musepack_header.c:78
 #: ../src/tags/ogg_header.c:411 ../src/tags/opus_header.c:231
@@ -3342,7 +3372,7 @@ msgid "%d kb/s"
 msgstr "%d kb/s"
 
 #. Samplerate
-#: ../src/application_window.c:2190 ../src/tags/flac_header.c:192
+#: ../src/application_window.c:2204 ../src/tags/flac_header.c:192
 #: ../src/tags/monkeyaudio_header.c:79 ../src/tags/mp4_header.cc:148
 #: ../src/tags/mpeg_header.c:279 ../src/tags/musepack_header.c:81
 #: ../src/tags/ogg_header.c:414 ../src/tags/opus_header.c:234
@@ -3351,102 +3381,102 @@ msgstr "%d kb/s"
 msgid "%d Hz"
 msgstr "%d Hz"
 
-#: ../src/application_window.c:2345 ../src/easytag.c:911
+#: ../src/application_window.c:2359 ../src/easytag.c:915
 #, c-format
 msgid "File: ‘%s’"
 msgstr "Fișier: „%s”"
 
 #. Quit EasyTAG.
-#: ../src/application_window.c:2978
+#: ../src/application_window.c:2992
 msgid "Normal exit"
 msgstr "Ieșire normală"
 
-#: ../src/application_window.c:3012 ../src/browser.cc:913
+#: ../src/application_window.c:3026 ../src/browser.cc:915
 msgid "Some files have been modified but not saved"
 msgstr "Unele fișiere au fost modificate dar nu salvate"
 
-#: ../src/application_window.c:3013 ../src/browser.cc:917 ../src/easytag.c:233
-#: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
+#: ../src/application_window.c:3027 ../src/browser.cc:919 ../src/easytag.c:233
+#: ../src/easytag.c:463 ../src/easytag.c:598 ../src/easytag.c:606
 msgid "_Discard"
 msgstr "_Elimină"
 
-#: ../src/application_window.c:3019 ../src/easytag.c:239
+#: ../src/application_window.c:3033 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Ieșire"
 
-#: ../src/application_window.c:3022
+#: ../src/application_window.c:3036
 msgid "Do you want to save them before quitting?"
 msgstr "Doriți să le salvați înainte de a ieși?"
 
-#: ../src/browser.cc:615
+#: ../src/browser.cc:617
 msgid "New default directory selected for browser"
 msgstr "Director implicit nou selectat pentru navigator"
 
-#: ../src/browser.cc:916
+#: ../src/browser.cc:918
 msgid "Do you want to save them before changing directory?"
 msgstr "Doriți să le salvați înainte modificării directorului?"
 
-#: ../src/browser.cc:923
+#: ../src/browser.cc:925
 msgid "Confirm Directory Change"
 msgstr "Confirmă schimbarea de director"
 
-#: ../src/browser.cc:2257
+#: ../src/browser.cc:2259
 msgid "All albums"
 msgstr "Toate albumele"
 
-#: ../src/browser.cc:3492
+#: ../src/browser.cc:3505
 msgid "Select File"
 msgstr "Selectează fișierul"
 
-#: ../src/browser.cc:3499
+#: ../src/browser.cc:3512
 msgid "Select Directory"
 msgstr "Selectează directorul"
 
-#: ../src/browser.cc:3888
+#: ../src/browser.cc:3804
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Redenumește directorul „%s” la:"
 
-#: ../src/browser.cc:4024
+#: ../src/browser.cc:3940
 msgid "You must type a directory name"
 msgstr "Trebuie să tastați un nume de director"
 
-#: ../src/browser.cc:4025 ../src/browser.cc:4047
+#: ../src/browser.cc:3941 ../src/browser.cc:3963
 msgid "Directory Name Error"
 msgstr "Eroare a numelui de director"
 
-#: ../src/browser.cc:4043
+#: ../src/browser.cc:3959
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Nu s-a putut converti „%s” în codarea numelui de fișier"
 
-#: ../src/browser.cc:4046
+#: ../src/browser.cc:3962
 msgid "Please use another name."
 msgstr "Utilizați un alt nume."
 
-#: ../src/browser.cc:4118
+#: ../src/browser.cc:4034
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Numele de director „%s” există deja."
 
-#: ../src/browser.cc:4119 ../src/easytag.c:650
+#: ../src/browser.cc:4035 ../src/easytag.c:653
 msgid "Rename File Error"
 msgstr "Eroare la redenumirea fișierului"
 
-#: ../src/browser.cc:4158 ../src/browser.cc:4187
+#: ../src/browser.cc:4074 ../src/browser.cc:4103
 msgid "Rename Directory Error"
 msgstr "Eroare la redenumirea directorului"
 
-#: ../src/browser.cc:4228
+#: ../src/browser.cc:4144
 msgid "Directory renamed"
 msgstr "Director redenumit"
 
-#: ../src/browser.cc:4375 ../src/browser.cc:4450
+#: ../src/browser.cc:4291 ../src/browser.cc:4366
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "Comanda executată „%s”"
 
-#: ../src/cddb_dialog.c:280
+#: ../src/cddb_dialog.cc:286
 #, c-format
 msgid ""
 "Album: ‘%s’, artist: ‘%s’, length: ‘%s’, year: ‘%s’, genre: ‘%s’, disc ID: "
@@ -3454,44 +3484,45 @@ msgid ""
 msgstr ""
 "Album: ‘%s’, artist: ‘%s’, lungime: ‘%s’, an: ‘%s’, gen: ‘%s’, ID disc: ‘%s’"
 
-#: ../src/cddb_dialog.c:718
+#: ../src/cddb_dialog.cc:710
 #, c-format
 msgid "Cannot resolve host: ‘%s’: %s"
 msgstr "Nu se poate rezolva gazda „%s”: %s"
 
-#: ../src/cddb_dialog.c:725
+#: ../src/cddb_dialog.cc:717
 #, c-format
 msgid "Cannot connect to host: ‘%s’: %s"
 msgstr "Nu se poate conecta la gazda „%s”: %s"
 
 #. Send the request.
-#: ../src/cddb_dialog.c:798 ../src/cddb_dialog.c:1353 ../src/cddb_dialog.c:1641
+#: ../src/cddb_dialog.cc:790 ../src/cddb_dialog.cc:1345
+#: ../src/cddb_dialog.cc:1633
 msgid "Sending request…"
 msgstr "Se trimite cererea…"
 
-#: ../src/cddb_dialog.c:842
+#: ../src/cddb_dialog.cc:834
 #, c-format
 msgid "The server returned a bad response ‘%s’"
 msgstr "Serverul a întors un răspuns greșit „%s”"
 
 #. Load the track list of the album
-#: ../src/cddb_dialog.c:1036
+#: ../src/cddb_dialog.cc:1028
 msgid "Loading album track list…"
 msgstr "Se încarcă lista de piste a albumului…"
 
 #.
 #. * Read the answer
 #.
-#: ../src/cddb_dialog.c:1383
+#: ../src/cddb_dialog.cc:1375
 msgid "Receiving data…"
 msgstr "Se primesc datele…"
 
-#: ../src/cddb_dialog.c:1520
+#: ../src/cddb_dialog.cc:1512
 #, c-format
 msgid "Sorry, the web-based search is currently not available"
 msgstr "Căutarea bazată pe web nu este momentan disponibilă"
 
-#: ../src/cddb_dialog.c:1523 ../src/cddb_dialog.c:1856
+#: ../src/cddb_dialog.cc:1515 ../src/cddb_dialog.cc:1848
 #, c-format
 msgid "Found one matching album"
 msgid_plural "Found %u matching albums"
@@ -3499,51 +3530,51 @@ msgstr[0] "S-a găsit un album care se potrivește"
 msgstr[1] "S-au găsit %u albume care se potrivesc"
 msgstr[2] "S-au găsit %u de albume care se potrivesc"
 
-#: ../src/cddb_dialog.c:1671
+#: ../src/cddb_dialog.cc:1663
 #, c-format
 msgid "Receiving data of page %d (album %d/%d)…"
 msgstr "Se primesc datele paginii %d (albumul %d/%d)…"
 
-#: ../src/cddb_dialog.c:1673
+#: ../src/cddb_dialog.cc:1665
 #, c-format
 msgid "Receiving data of page %d…"
 msgstr "Se primesc datele paginii %d…"
 
-#: ../src/cddb_dialog.c:1689
+#: ../src/cddb_dialog.cc:1681
 msgid "The server returned a bad response"
 msgstr "Serverul a întors un răspuns greșit"
 
-#: ../src/cddb_dialog.c:1828
+#: ../src/cddb_dialog.cc:1820
 #, c-format
 msgid "More results to load…"
 msgstr "Mai multe rezultate de încărcat…"
 
-#: ../src/cddb_dialog.c:2138
+#: ../src/cddb_dialog.cc:2123
 msgid "The number of CDDB results does not match the number of selected files"
 msgstr ""
 "Numărul de rezultate CDDB nu se potrivește cu numărul de fișiere selectate"
 
-#: ../src/cddb_dialog.c:2144
+#: ../src/cddb_dialog.cc:2129
 msgid "Write Tag from CDDB"
 msgstr "Scrie eticheta de la CDDB"
 
-#: ../src/cddb_dialog.c:2459
+#: ../src/cddb_dialog.cc:2444
 msgid "Ready to search"
 msgstr "Gata de căutare"
 
-#: ../src/cddb_dialog.c:2614
+#: ../src/cddb_dialog.cc:2599
 #, c-format
 msgid "No file selected"
 msgstr "Niciun fișier selectat"
 
 #. The CD redbook standard defines the maximum number of tracks as 99, any
 #. queries with more than 99 tracks will never return a result.
-#: ../src/cddb_dialog.c:2623
+#: ../src/cddb_dialog.cc:2608
 #, c-format
 msgid "More than 99 files selected. Cannot send request"
 msgstr "Mai mult de 99 de fișiere selectate. Nu se poate trimite cererea"
 
-#: ../src/cddb_dialog.c:2629
+#: ../src/cddb_dialog.cc:2614
 #, c-format
 msgid "One file selected"
 msgid_plural "%u files selected"
@@ -3551,12 +3582,12 @@ msgstr[0] "Un fișier selectat"
 msgstr[1] "%u fișiere selectate"
 msgstr[2] "%u de fișiere selectate"
 
-#: ../src/cddb_dialog.c:2756
+#: ../src/cddb_dialog.cc:2741
 #, c-format
 msgid "Sending request (disc ID: %s, #tracks: %u, Disc length: %u)…"
 msgstr "Se trimite cerea (ID disc: %s, #piste: %u, Lungime disc: %u)…"
 
-#: ../src/cddb_dialog.c:2877
+#: ../src/cddb_dialog.cc:2862
 #, c-format
 msgid "DiscID ‘%s’ gave one matching album"
 msgid_plural "DiscID ‘%s’ gave %u matching albums"
@@ -3790,62 +3821,62 @@ msgid "Confirm Tag Writing"
 msgstr "Confirmă scrierea etichetei"
 
 #. Directories and filename changed
-#: ../src/easytag.c:555
+#: ../src/easytag.c:558
 msgid "Rename File and Directory"
 msgstr "Redenumește fișierul și directorul"
 
-#: ../src/easytag.c:556
+#: ../src/easytag.c:559
 msgid "File and directory rename confirmation required"
 msgstr "Este necesară confirmarea redenumirii fișierului și directorului"
 
-#: ../src/easytag.c:557
+#: ../src/easytag.c:560
 #, c-format
 msgid "Do you want to rename the file and directory ‘%s’ to ‘%s’?"
 msgstr "Doriți să redenumiți fișierul și directorul „%s” la „%s”?"
 
-#: ../src/easytag.c:563
+#: ../src/easytag.c:566
 msgid "Directory rename confirmation required"
 msgstr "Este necesară confirmarea redenumirii directorului"
 
-#: ../src/easytag.c:564
+#: ../src/easytag.c:567
 #, c-format
 msgid "Do you want to rename the directory ‘%s’ to ‘%s’?"
 msgstr "Doriți să redenumiți directorul „%s” la „%s”?"
 
-#: ../src/easytag.c:572
+#: ../src/easytag.c:575
 msgid "File rename confirmation required"
 msgstr "Este necesară confirmarea redenumirii fișierului"
 
-#: ../src/easytag.c:573
+#: ../src/easytag.c:576
 #, c-format
 msgid "Do you want to rename the file ‘%s’ to ‘%s’?"
 msgstr "Doriți să redenumiți fișierul „%s” la „%s”?"
 
-#: ../src/easytag.c:643
+#: ../src/easytag.c:646
 #, c-format
 msgid "Cannot rename file ‘%s’ to ‘%s’"
 msgstr "Nu se poate redenumi fișierul „%s” la „%s”"
 
-#: ../src/easytag.c:657
+#: ../src/easytag.c:660
 #, c-format
 msgid "Cannot rename file ‘%s’ to ‘%s’: %s"
 msgstr "Nu se poate redenumi fișierul „%s” la „%s”: %s"
 
-#: ../src/easytag.c:662
+#: ../src/easytag.c:665
 msgid "File(s) not renamed"
 msgstr "Fișierul(ele) nu sunt redenumite"
 
-#: ../src/easytag.c:724
+#: ../src/easytag.c:727
 #, c-format
 msgid "Writing tag of ‘%s’"
 msgstr "Se scrie eticheta a „%s”"
 
-#: ../src/easytag.c:732
+#: ../src/easytag.c:735
 #, c-format
 msgid "Wrote tag of ‘%s’"
 msgstr "S-a scris eticheta a „%s”"
 
-#: ../src/easytag.c:752
+#: ../src/easytag.c:755
 msgid ""
 "You have tried to save this tag to Unicode but it was detected that your "
 "version of id3lib is buggy"
@@ -3853,7 +3884,7 @@ msgstr ""
 "Ați încercat să salvați această etichetă la Unicode dar a fost detectat că "
 "versiunea id3lib este defectă"
 
-#: ../src/easytag.c:757
+#: ../src/easytag.c:760
 #, c-format
 msgid ""
 "If you reload this file, some characters in the tag may not be displayed "
@@ -3872,30 +3903,30 @@ msgstr ""
 "\n"
 "Fișier: %s"
 
-#: ../src/easytag.c:780
+#: ../src/easytag.c:783
 #, c-format
 msgid "Cannot write tag in file ‘%s’"
 msgstr "Nu se poate scrie eticheta în fișierul „%s”"
 
-#: ../src/easytag.c:785
+#: ../src/easytag.c:788
 msgid "Tag Write Error"
 msgstr "Eroare la scrierea etichetei"
 
-#: ../src/easytag.c:861 ../src/easytag.c:1096
+#: ../src/easytag.c:865 ../src/easytag.c:1100
 #, c-format
 msgid "Cannot read directory ‘%s’"
 msgstr "Nu se poate citi directorul „%s”"
 
-#: ../src/easytag.c:865
+#: ../src/easytag.c:869
 msgid "Directory Read Error"
 msgstr "Eroare la citirea directorului"
 
 #. Read the directory recursively
-#: ../src/easytag.c:886
+#: ../src/easytag.c:890
 msgid "Search in progress…"
 msgstr "Căutare în progres…"
 
-#: ../src/easytag.c:959
+#: ../src/easytag.c:963
 #, c-format
 msgid "Found one file in this directory and subdirectories"
 msgid_plural "Found %u files in this directory and subdirectories"
@@ -3903,7 +3934,7 @@ msgstr[0] "S-a găsit un fișier în acest director și subdirectoare"
 msgstr[1] "S-au găsit %u fișiere în acest director și subdirectoare"
 msgstr[2] "S-au găsit %u de fișiere în acest director și subdirectoare"
 
-#: ../src/easytag.c:966
+#: ../src/easytag.c:970
 #, c-format
 msgid "Found one file in this directory"
 msgid_plural "Found %u files in this directory"
@@ -3911,28 +3942,28 @@ msgstr[0] "S-a găsit un fișier în acest director"
 msgstr[1] "S-au găsit %u fișiere în acest director"
 msgstr[2] "S-au găsit %u de fișiere în acest director"
 
-#: ../src/easytag.c:983
+#: ../src/easytag.c:987
 msgid "No file found in this directory and subdirectories"
 msgstr "Niciun fișier găsit în acest director și subdirectoare"
 
-#: ../src/easytag.c:985
+#: ../src/easytag.c:989
 msgid "No file found in this directory"
 msgstr "Niciun fișier găsit în acest director"
 
-#: ../src/easytag.c:1061
+#: ../src/easytag.c:1065
 #, c-format
 msgid "Error opening directory ‘%s’: %s"
 msgstr "Eroare la deschiderea directorului „%s”: %s"
 
-#: ../src/easytag.c:1116
+#: ../src/easytag.c:1120
 msgid "Searching for audio files…"
 msgstr "Se caută după fișiere audio…"
 
-#: ../src/easytag.c:1117
+#: ../src/easytag.c:1121
 msgid "Searching"
 msgstr "Se caută"
 
-#: ../src/easytag.c:1118
+#: ../src/easytag.c:1122
 msgid "_Stop"
 msgstr "_Stop"
 
@@ -3940,7 +3971,7 @@ msgstr "_Stop"
 msgid "File not found"
 msgstr "Fișierul nu a fost găsit"
 
-#: ../src/file_area.c:249 ../src/load_files_dialog.c:232
+#: ../src/file_area.c:249 ../src/load_files_dialog.cc:235
 #, c-format
 msgid "Cannot query file information ‘%s’"
 msgstr "Nu se pot interoga informațiile de fișier „%s”"
@@ -3949,42 +3980,42 @@ msgstr "Nu se pot interoga informațiile de fișier „%s”"
 msgid "Read-only file"
 msgstr "Fișier doar citire"
 
-#: ../src/file_list.c:246
+#: ../src/file_list.cc:246
 #, c-format
 msgid "Error reading ID3 tag from file ‘%s’: %s"
 msgstr "Eroare la citirea etichetei ID3 de la fișierul „%s”: %s"
 
-#: ../src/file_list.c:257
+#: ../src/file_list.cc:257
 #, c-format
 msgid "Error reading tag from Ogg file ‘%s’: %s"
 msgstr "Eroare la citirea etichetei de la fișierul Ogg „%s”: %s"
 
-#: ../src/file_list.c:268
+#: ../src/file_list.cc:268
 #, c-format
 msgid "Error reading tag from FLAC file ‘%s’: %s"
 msgstr "Eroare la citirea etichetei de la fișierul FLAC „%s”: %s"
 
-#: ../src/file_list.c:278
+#: ../src/file_list.cc:278
 #, c-format
 msgid "Error reading APE tag from file ‘%s’: %s"
 msgstr "Eroare la citirea etichetei APE de la fișierul „%s”: %s"
 
-#: ../src/file_list.c:288
+#: ../src/file_list.cc:288
 #, c-format
 msgid "Error reading tag from MP4 file ‘%s’: %s"
 msgstr "Eroare la citirea etichetei de la fișierul MP4 „%s”: %s"
 
-#: ../src/file_list.c:299
+#: ../src/file_list.cc:299
 #, c-format
 msgid "Error reading tag from WavPack file ‘%s’: %s"
 msgstr "Eroare la citirea etichetei de la fișierul WavPack „%s”: %s"
 
-#: ../src/file_list.c:310
+#: ../src/file_list.cc:310
 #, c-format
 msgid "Error reading tag from Opus file ‘%s’: %s"
 msgstr "Eroare la citirea etichetei de la fișierul Opus „%s”: %s"
 
-#: ../src/file_list.c:346
+#: ../src/file_list.cc:346
 #, c-format
 msgid ""
 "The year value ‘%s’ seems to be invalid in file ‘%s’. The information will "
@@ -3993,7 +4024,7 @@ msgstr ""
 "Valoarea anului „%s” pare a nu fi validă în fișierul „%s”. Informațiile vor "
 "fi pierdute în timpul salvării"
 
-#: ../src/file_list.c:353
+#: ../src/file_list.cc:353
 #, fuzzy, c-format
 msgid ""
 "The original year value ‘%s’ seems to be invalid in file ‘%s’. The "
@@ -4002,34 +4033,34 @@ msgstr ""
 "Valoarea anului „%s” pare a nu fi validă în fișierul „%s”. Informațiile vor "
 "fi pierdute în timpul salvării"
 
-#: ../src/file_list.c:509
+#: ../src/file_list.cc:510
 #, c-format
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "Corectările automate aplicate pentru fișierul „%s”"
 
-#: ../src/load_files_dialog.c:272 ../src/setting.c:329
+#: ../src/load_files_dialog.cc:275 ../src/setting.c:329
 #, c-format
 msgid "Cannot open file ‘%s’: %s"
 msgstr "Nu se poate deschide fișierul „%s”: %s"
 
-#: ../src/load_files_dialog.c:302
+#: ../src/load_files_dialog.cc:305
 #, c-format
 msgid "Error reading file ‘%s’"
 msgstr "Eroare la citirea fișierului „%s”"
 
-#: ../src/load_files_dialog.c:742 ../src/load_files_dialog.c:845
+#: ../src/load_files_dialog.cc:745 ../src/load_files_dialog.cc:848
 msgid "Insert a blank line"
 msgstr "Introdu o linie goală"
 
-#: ../src/load_files_dialog.c:746 ../src/load_files_dialog.c:849
+#: ../src/load_files_dialog.cc:749 ../src/load_files_dialog.cc:852
 msgid "Delete this line"
 msgstr "Șterge această linie"
 
-#: ../src/load_files_dialog.c:757 ../src/load_files_dialog.c:860
+#: ../src/load_files_dialog.cc:760 ../src/load_files_dialog.cc:863
 msgid "Move this line up"
 msgstr "Mută această linie mai sus"
 
-#: ../src/load_files_dialog.c:761 ../src/load_files_dialog.c:864
+#: ../src/load_files_dialog.cc:764 ../src/load_files_dialog.cc:867
 msgid "Move this line down"
 msgstr "Mută această linie mai jos"
 
@@ -4185,11 +4216,11 @@ msgstr "S-a scris fișierul listei de redare „%s”"
 msgid "Invalid scanner mask"
 msgstr "Mască de scaner nevalidă"
 
-#: ../src/preferences_dialog.c:864
+#: ../src/preferences_dialog.c:881
 msgid "The selected default path is invalid"
 msgstr "Calea implicită selectată nu este validă"
 
-#: ../src/preferences_dialog.c:866
+#: ../src/preferences_dialog.c:883
 #, c-format
 msgid ""
 "Path: ‘%s’\n"
@@ -4198,69 +4229,69 @@ msgstr ""
 "Cale: „%s”\n"
 "Eroare: %s"
 
-#: ../src/preferences_dialog.c:870
+#: ../src/preferences_dialog.c:887
 msgid "Invalid Path Error"
 msgstr "Eroare de cale nevalidă"
 
-#: ../src/scan_dialog.c:382
+#: ../src/scan_dialog.cc:386
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Nu se poate calcula valoarea CRC a fișierului „%s”"
 
-#: ../src/scan_dialog.c:397
+#: ../src/scan_dialog.cc:401
 msgid "Tag successfully scanned"
 msgstr "Eticheta a scanat cu succes"
 
-#: ../src/scan_dialog.c:400
+#: ../src/scan_dialog.cc:404
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Eticheta a scanat cu succes „%s”"
 
-#: ../src/scan_dialog.c:443
+#: ../src/scan_dialog.cc:447
 #, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "Extensia „%s” nu a fost găsită în numele de fișier „%s”"
 
-#: ../src/scan_dialog.c:535 ../src/scan_dialog.c:566
+#: ../src/scan_dialog.cc:539 ../src/scan_dialog.cc:570
 #, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "Nu se poate găsi separatorul „%s” în „%s”"
 
-#: ../src/scan_dialog.c:794
+#: ../src/scan_dialog.cc:798
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "Nu se poate converti numele de fișier „%s” într-o codare de nume de fișier a "
 "sistemului"
 
-#: ../src/scan_dialog.c:820
+#: ../src/scan_dialog.cc:824
 msgid "New filename successfully scanned"
 msgstr "Numele de fișier nou a scanat cu succes"
 
-#: ../src/scan_dialog.c:824
+#: ../src/scan_dialog.cc:828
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Numele de fișier nou a scanat cu succes „%s”"
 
-#: ../src/scan_dialog.c:1205
+#: ../src/scan_dialog.cc:993
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Eroare în timpul procesării câmpurilor „%s”"
 
-#: ../src/scan_dialog.c:2081
+#: ../src/scan_dialog.cc:1866
 msgid "New_mask"
 msgstr "Mască nouă"
 
-#: ../src/scan_dialog.c:2552
+#: ../src/scan_dialog.cc:2334
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "Mască de scaner nevalidă"
 
-#: ../src/scan_dialog.c:2625
+#: ../src/scan_dialog.cc:2407
 msgid "All tags have been scanned"
 msgstr "Toate etichetele au fost examinate"
 
-#: ../src/search_dialog.c:576
+#: ../src/search_dialog.cc:201
 #, c-format
 msgid "Found one file"
 msgid_plural "Found %d files"
@@ -4268,7 +4299,7 @@ msgstr[0] "Găsit un fișier"
 msgstr[1] "Găsit %d fișiere"
 msgstr[2] "Găsit %d de fișiere"
 
-#: ../src/search_dialog.c:658
+#: ../src/search_dialog.cc:273
 msgid "Ready to search…"
 msgstr "Gata de căutare…"
 
@@ -4291,215 +4322,215 @@ msgstr "Se încarcă măștile implicite „Redenumește fișierul”…"
 msgid "Ready to start"
 msgstr "Gata de pornire"
 
-#: ../src/tag_area.c:180
+#: ../src/tag_area.cc:184
 #, c-format
 msgid "Selected files tagged with title ‘%s’"
 msgstr "Fișierele selectate etichetate cu titlul „%s”"
 
-#: ../src/tag_area.c:182
+#: ../src/tag_area.cc:186
 msgid "Removed title from selected files"
 msgstr "S-a eliminat titlul de la fișierele selectate"
 
-#: ../src/tag_area.c:191
+#: ../src/tag_area.cc:195
 #, c-format
 msgid "Selected files tagged with artist ‘%s’"
 msgstr "Fișierele selectate etichetate cu artistul „%s”"
 
-#: ../src/tag_area.c:193
+#: ../src/tag_area.cc:197
 msgid "Removed artist from selected files"
 msgstr "S-a eliminat artistul de la fișierele selectate"
 
-#: ../src/tag_area.c:202
+#: ../src/tag_area.cc:206
 #, c-format
 msgid "Selected files tagged with album artist ‘%s’"
 msgstr "Fișierele selectate etichetate cu artistul albumului „%s”"
 
-#: ../src/tag_area.c:204
+#: ../src/tag_area.cc:208
 msgid "Removed album artist from selected files"
 msgstr "S-a eliminat artistul albumului de la fișierele selectate"
 
-#: ../src/tag_area.c:213
+#: ../src/tag_area.cc:217
 #, c-format
 msgid "Selected files tagged with album ‘%s’"
 msgstr "Fișierele selectate etichetate cu albumul „%s”"
 
-#: ../src/tag_area.c:215
+#: ../src/tag_area.cc:219
 msgid "Removed album name from selected files"
 msgstr "S-a eliminat numele albumului de la fișierele selectate"
 
-#: ../src/tag_area.c:252
+#: ../src/tag_area.cc:256
 #, c-format
 msgid "Selected files tagged with disc number ‘%s/%s’"
 msgstr "Fișierele selectate etichetate cu numărul discului „%s/%s”"
 
-#: ../src/tag_area.c:259
+#: ../src/tag_area.cc:263
 #, c-format
 msgid "Selected files tagged with disc number like ‘xx’"
 msgstr "Fișierele selectate etichetate cu numărul discului ca „xx”"
 
-#: ../src/tag_area.c:264
+#: ../src/tag_area.cc:268
 msgid "Removed disc number from selected files"
 msgstr "S-a eliminat numărul discului de la fișierele selectate"
 
-#: ../src/tag_area.c:276
+#: ../src/tag_area.cc:280
 #, c-format
 msgid "Selected files tagged with year ‘%s’"
 msgstr "Fișierele selectate etichetate cu anul „%s”"
 
-#: ../src/tag_area.c:278
+#: ../src/tag_area.cc:282
 msgid "Removed year from selected files"
 msgstr "S-a eliminat anul de la fișierele selectate"
 
-#: ../src/tag_area.c:287
+#: ../src/tag_area.cc:291
 #, fuzzy, c-format
 msgid "Selected files tagged with release year ‘%s’"
 msgstr "Fișierele selectate etichetate cu anul „%s”"
 
-#: ../src/tag_area.c:289
+#: ../src/tag_area.cc:293
 #, fuzzy
 msgid "Removed release year from selected files"
 msgstr "S-a eliminat anul de la fișierele selectate"
 
-#: ../src/tag_area.c:318 ../src/tag_area.c:423
+#: ../src/tag_area.cc:322 ../src/tag_area.cc:427
 #, c-format
 msgid "Selected files tagged with track like ‘xx/%s’"
 msgstr "Fișierele selectate etichetate cu o pistă ca „xx/%s”"
 
-#: ../src/tag_area.c:322
+#: ../src/tag_area.cc:326
 #, c-format
 msgid "Selected files tagged with track like ‘xx’"
 msgstr "Fișierele selectate etichetate cu o pistă ca „xx”"
 
-#: ../src/tag_area.c:327 ../src/tag_area.c:428
+#: ../src/tag_area.cc:331 ../src/tag_area.cc:432
 msgid "Removed track number from selected files"
 msgstr "S-a eliminat numărul pistei de la fișierele selectate"
 
 #. msg = g_strdup_printf(_("All %d tracks numbered sequentially."), ETCore->ETFileSelectionList_Length);
-#: ../src/tag_area.c:386
+#: ../src/tag_area.cc:390
 #, c-format
 msgid "Selected tracks numbered sequentially"
 msgstr "Pistele selectate numerotate secvențial"
 
-#: ../src/tag_area.c:440
+#: ../src/tag_area.cc:444
 #, c-format
 msgid "Selected files tagged with genre ‘%s’"
 msgstr "Fișierele selectate etichetate cu genul „%s”"
 
-#: ../src/tag_area.c:442
+#: ../src/tag_area.cc:446
 msgid "Removed genre from selected files"
 msgstr "S-a eliminat genul de la fișierele selectate"
 
-#: ../src/tag_area.c:451
+#: ../src/tag_area.cc:455
 #, c-format
 msgid "Selected files tagged with comment ‘%s’"
 msgstr "Fișierele selectate etichetate cu comentariul „%s”"
 
-#: ../src/tag_area.c:453
+#: ../src/tag_area.cc:457
 msgid "Removed comment from selected files"
 msgstr "S-a eliminat comentariul de la fișierele selectate"
 
-#: ../src/tag_area.c:462
+#: ../src/tag_area.cc:466
 #, c-format
 msgid "Selected files tagged with composer ‘%s’"
 msgstr "Fișierele selectate etichetate cu compozitorul „%s”"
 
-#: ../src/tag_area.c:464
+#: ../src/tag_area.cc:468
 msgid "Removed composer from selected files"
 msgstr "S-a eliminat compozitorul de la fișierele selectate"
 
-#: ../src/tag_area.c:473
+#: ../src/tag_area.cc:477
 #, c-format
 msgid "Selected files tagged with original artist ‘%s’"
 msgstr "Fișierele selectate etichetate cu artistul original „%s”"
 
-#: ../src/tag_area.c:475
+#: ../src/tag_area.cc:479
 msgid "Removed original artist from selected files"
 msgstr "S-a eliminat artistul original de la fișierele selectate"
 
-#: ../src/tag_area.c:484
+#: ../src/tag_area.cc:488
 #, fuzzy, c-format
 msgid "Selected files tagged with original year ‘%s’"
 msgstr "Fișierele selectate etichetate cu artistul original „%s”"
 
-#: ../src/tag_area.c:486
+#: ../src/tag_area.cc:490
 #, fuzzy
 msgid "Removed original year from selected files"
 msgstr "S-a eliminat artistul original de la fișierele selectate"
 
-#: ../src/tag_area.c:495
+#: ../src/tag_area.cc:499
 #, c-format
 msgid "Selected files tagged with copyright ‘%s’"
 msgstr "Fișierele selectate etichetate cu drepturile de autor „%s”"
 
-#: ../src/tag_area.c:497
+#: ../src/tag_area.cc:501
 msgid "Removed copyright from selected files"
 msgstr "S-au eliminat drepturile de autor de la fișierele selectate"
 
-#: ../src/tag_area.c:506
+#: ../src/tag_area.cc:510
 #, c-format
 msgid "Selected files tagged with URL ‘%s’"
 msgstr "Fișierele selectate etichetate cu URL-ul „%s”"
 
-#: ../src/tag_area.c:508
+#: ../src/tag_area.cc:512
 msgid "Removed URL from selected files"
 msgstr "S-a eliminat URL-ul de la fișierele selectate"
 
-#: ../src/tag_area.c:517
+#: ../src/tag_area.cc:521
 #, c-format
 msgid "Selected files tagged with encoder name ‘%s’"
 msgstr "Fișierele selectate etichetate cu numele de codor „%s”"
 
-#: ../src/tag_area.c:519
+#: ../src/tag_area.cc:523
 msgid "Removed encoder name from selected files"
 msgstr "S-a eliminat numele de codor de la fișierele selectate"
 
-#: ../src/tag_area.c:554
+#: ../src/tag_area.cc:558
 msgid "Selected files tagged with images"
 msgstr "Fișierele selectate etichetate cu imagini"
 
-#: ../src/tag_area.c:558
+#: ../src/tag_area.cc:562
 msgid "Removed images from selected files"
 msgstr "S-au eliminat imaginile de la fișierele selectate"
 
 #. Menu items
-#: ../src/tag_area.c:726
+#: ../src/tag_area.cc:728
 msgid "Tag selected files with this field"
 msgstr "Etichetează fișierele selectate cu acest câmp"
 
-#: ../src/tag_area.c:756
+#: ../src/tag_area.cc:758
 msgid "All uppercase"
 msgstr "Toate majuscule"
 
-#: ../src/tag_area.c:762
+#: ../src/tag_area.cc:764
 msgid "All lowercase"
 msgstr "Toate minuscule"
 
-#: ../src/tag_area.c:768
+#: ../src/tag_area.cc:770
 msgid "First letter uppercase"
 msgstr "Prima literă majusculă"
 
-#: ../src/tag_area.c:774
+#: ../src/tag_area.cc:776
 msgid "First letter uppercase of each word"
 msgstr "Prima literă a fiecărui cuvânt majusculă"
 
-#: ../src/tag_area.c:790
+#: ../src/tag_area.cc:792
 msgid "Insert space before uppercase letter"
 msgstr "Introdu spațiu înainte de majusculă"
 
-#: ../src/tag_area.c:796
+#: ../src/tag_area.cc:798
 msgid "Remove duplicate spaces or underscores"
 msgstr "Șterge spațiile si liniuțele de subliniere multiple"
 
-#: ../src/tag_area.c:802
+#: ../src/tag_area.cc:804
 msgid "Remove all text"
 msgstr "Elimină tot textul"
 
-#: ../src/tag_area.c:1160 ../src/tag_area.c:1253
+#: ../src/tag_area.cc:1162 ../src/tag_area.cc:1255
 #, c-format
 msgid "Error parsing image data ‘%s’"
 msgstr "Eroare la parsarea datelor imaginii „%s”"
 
-#: ../src/tag_area.c:1235
+#: ../src/tag_area.cc:1237
 msgid ""
 "Cannot display the image because not enough data has been read to determine "
 "how to create the image buffer"
@@ -4507,99 +4538,99 @@ msgstr ""
 "Nu se poate afișa imaginea pentru că nu s-au citit suficiente date pentru a "
 "determina cum să se creeze preîncărcarea imaginii"
 
-#: ../src/tag_area.c:1242
+#: ../src/tag_area.cc:1244
 msgid "Cannot display the image"
 msgstr "Nu se poate afișa imaginea"
 
-#: ../src/tag_area.c:1244
+#: ../src/tag_area.cc:1246
 msgid ""
 "Not enough data has been read to determine how to create the image buffer."
 msgstr ""
 "Nu s-au citit suficiente date pentru a determina cum să se creeze "
 "preîncărcarea imaginii."
 
-#: ../src/tag_area.c:1246
+#: ../src/tag_area.cc:1248
 msgid "Load Image File"
 msgstr "Încarcă fișierul imagine"
 
-#: ../src/tag_area.c:1291 ../src/tag_area.c:1316
+#: ../src/tag_area.cc:1293 ../src/tag_area.cc:1318
 #, c-format
 msgid "Image file not loaded ‘%s’"
 msgstr "Fișierul imagine nu a încărcat „%s”"
 
-#: ../src/tag_area.c:1308
+#: ../src/tag_area.cc:1310
 #, c-format
 msgid "Cannot open file ‘%s’"
 msgstr "Nu se poate deschide fișierul „%s”"
 
-#: ../src/tag_area.c:1312
+#: ../src/tag_area.cc:1314
 msgid "Image File Error"
 msgstr "Eroare a fișierului imagine"
 
-#: ../src/tag_area.c:1323
+#: ../src/tag_area.cc:1325
 msgid "Image file loaded"
 msgstr "Fișierul imagine a fost încărcat"
 
-#: ../src/tag_area.c:1406
+#: ../src/tag_area.cc:1408
 msgid "Add Images"
 msgstr "Adaugă imagini"
 
-#: ../src/tag_area.c:1416 ../src/tag_area.c:1744
+#: ../src/tag_area.cc:1418 ../src/tag_area.cc:1745
 msgid "All Files"
 msgstr "Toate fisierele"
 
-#: ../src/tag_area.c:1423 ../src/tag_area.c:1751
+#: ../src/tag_area.cc:1425 ../src/tag_area.cc:1752
 msgid "PNG and JPEG"
 msgstr "PNG si JPEG"
 
-#: ../src/tag_area.c:1541
+#: ../src/tag_area.cc:1542
 #, c-format
 msgid "Image Properties %d/%d"
 msgstr "Proprietăți imagine %d/%d"
 
-#: ../src/tag_area.c:1730
+#: ../src/tag_area.cc:1731
 #, c-format
 msgid "Save Image %d/%d"
 msgstr "Salvează imaginea %d/%d"
 
-#: ../src/tag_area.c:1810
+#: ../src/tag_area.cc:1811
 #, c-format
 msgid "Image file not saved ‘%s’"
 msgstr "Fișierul imagine nu este salvat „%s”"
 
-#: ../src/tag_area.c:2055
+#: ../src/tag_area.cc:2056
 msgid "Tag selected files with this genre"
 msgstr "Etichetează fișierele selectate cu acest gen"
 
-#: ../src/tag_area.c:2704
+#: ../src/tag_area.cc:2705
 msgid "ID3 Tag"
 msgstr "Etichetă ID3"
 
-#: ../src/tag_area.c:2709
+#: ../src/tag_area.cc:2710
 msgid "Ogg Vorbis Tag"
 msgstr "Eticheta Ogg Vorbis"
 
-#: ../src/tag_area.c:2714
+#: ../src/tag_area.cc:2715
 msgid "FLAC Vorbis Tag"
 msgstr "Eticheta FLAC Vorbis"
 
-#: ../src/tag_area.c:2718
+#: ../src/tag_area.cc:2719
 msgid "APE Tag"
 msgstr "Eticheta APE"
 
-#: ../src/tag_area.c:2722
+#: ../src/tag_area.cc:2723
 msgid "MP4/M4A/AAC Tag"
 msgstr "Etichetă MP4/M4A/AAC"
 
-#: ../src/tag_area.c:2727
+#: ../src/tag_area.cc:2728
 msgid "Wavpack Tag"
 msgstr "Etichetă Wavpack"
 
-#: ../src/tag_area.c:2732
+#: ../src/tag_area.cc:2733
 msgid "Opus Tag"
 msgstr "Etichetă Opus"
 
-#: ../src/tag_area.c:3014
+#: ../src/tag_area.cc:3015
 #, c-format
 msgid "Images (%u)"
 msgstr "Imagini (%u)"

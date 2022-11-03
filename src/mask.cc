@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2022 Marcel Müller <gitlab@maazl.de>
+ * Copyright (C) 2022  Marcel Müller <github@maazl.de>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -107,13 +107,13 @@ const gchar *et_tag_field_from_mask_code(const File_Tag *tag, gchar code)
 
 class MaskEvaluator
 {	const ET_File& File;
-	void (*Postprocess)(string& val, size_t start);
+	void (*Postprocess)(string& val, unsigned start);
 	string Result;
 	string Error;
 	const File_Tag& Tag() const { return *(File_Tag*)File.FileTag->data; }
 	bool EvaluateRecursive(const gchar*& mask, bool enabled);
 public:
-	MaskEvaluator(const ET_File &file, void (*postprocess)(string& val, size_t start) = nullptr)
+	MaskEvaluator(const ET_File &file, void (*postprocess)(string& val, unsigned start) = nullptr)
 	: File(file), Postprocess(postprocess) {}
 	static gchar* Validate(const gchar* mask);
 	const string& Evaluate(const gchar* mask) { EvaluateRecursive(mask, true); return Result; }
@@ -202,66 +202,6 @@ gchar* MaskEvaluator::Validate(const gchar* mask)
 	}
 }
 
-static void replace_chars(string& val, size_t start)
-{
-	gint convert_mode = g_settings_get_enum(MainSettings, "rename-convert-spaces");
-
-	string::size_type p = 0;
-	while ((p = val.find(' ', p)) != string::npos)
-	{	switch (convert_mode)
-		{case ET_CONVERT_SPACES_REMOVE:
-			val.erase(p, 1);
-			continue;
-		case ET_CONVERT_SPACES_UNDERSCORES:
-			val[p++] = '_';
-		}
-	}
-}
-
-static void replace_chars2(string& val, size_t start)
-{
-	gint convert_mode = g_settings_get_enum(MainSettings, "rename-convert-spaces");
-
-	for (string::iterator p = val.begin() + start; p != val.end(); )
-	{	switch (*p)
-		{
-		case ' ':
-			switch (convert_mode)
-			{case ET_CONVERT_SPACES_REMOVE:
-				p = val.erase(p);
-				continue;
-			case ET_CONVERT_SPACES_UNDERSCORES:
-				*p = '_';
-			}
-			break;
-		case G_DIR_SEPARATOR:
-		#ifdef G_OS_WIN32
-		case '/': /* Convert character '/' on WIN32 to '-' too. */
-		#endif
-		case ':':
-		case '|':
-			*p = '-';
-			break;
-		case '*':
-			*p = '+';
-			break;
-		case '?':
-			*p = '_';
-			break;
-		case '"':
-			*p = '\'';
-			break;
-		case '<':
-			*p = '(';
-			break;
-		case '>':
-			*p = ')';
-			break;
-		}
-		++p;
-	}
-}
-
 gchar* et_check_mask(const gchar* mask)
 {
 	return MaskEvaluator::Validate(mask);
@@ -269,8 +209,11 @@ gchar* et_check_mask(const gchar* mask)
 
 gchar* et_evaluate_mask(const ET_File *file, const gchar *mask, gboolean no_dir_check_or_conversion)
 {
-	void (*postprocess)(string& val, size_t start) = no_dir_check_or_conversion ? nullptr
-		: g_settings_get_boolean(MainSettings, "rename-replace-illegal-chars") ? replace_chars2 : replace_chars;
+	void (*postprocess)(string& val, unsigned start) = nullptr;
+	if (!no_dir_check_or_conversion)
+		postprocess = File_Name::prepare_func(
+			(EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"),
+			(EtConvertSpaces)g_settings_get_enum(MainSettings, "rename-convert-spaces"));
 
 	return g_strdup(MaskEvaluator(*file, postprocess).Evaluate(mask).c_str());
 }

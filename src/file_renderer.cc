@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2022  Marcel Müller <gitlab@maazl.de>
+ * Copyright (C) 2022  Marcel Müller <github@maazl.de>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free

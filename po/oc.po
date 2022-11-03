@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 2.1.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-23 14:31+0200\n"
+"POT-Creation-Date: 2022-11-03 20:54+0100\n"
 "PO-Revision-Date: 2016-03-13 10:20+0200\n"
 "Last-Translator: Cédric Valmary (totenoc.eu) <cvalmary@yahoo.fr>\n"
 "Language-Team: Tot En Òc\n"
@@ -77,8 +77,8 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Causir un repertòri per afichar dins lo navigador."
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3456
-#: ../src/tag_area.c:1411
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3469
+#: ../src/tag_area.cc:1413
 msgid "_Open"
 msgstr "_Dobrir"
 
@@ -87,12 +87,12 @@ msgid "Select a directory to browse"
 msgstr "Seleccionar un repertòri a percórrer"
 
 #. Translators: No files, as in "0 files".
-#: ../data/browser.ui.h:4 ../src/easytag.c:979
+#: ../data/browser.ui.h:4 ../src/easytag.c:983
 msgid "No files"
 msgstr "Pas cap de fichièr"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:63
+#: ../data/preferences_dialog.ui.h:68 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Artista"
@@ -106,12 +106,12 @@ msgid "# Files"
 msgstr "Nombre de fichièrs"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:67
+#: ../data/preferences_dialog.ui.h:70 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Album"
 
-#: ../data/browser.ui.h:9
+#: ../data/browser.ui.h:9 ../data/search_dialog.ui.h:11
 msgid "Path"
 msgstr "Camin"
 
@@ -122,7 +122,7 @@ msgid "Filename"
 msgstr "Nom del fichièr"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:66 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Títol"
@@ -151,17 +151,17 @@ msgid "Track"
 msgstr "Pista"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:69
+#: ../data/preferences_dialog.ui.h:72 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Genre"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:69
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:74
 #: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Comentari"
 
-#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:71
+#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:76
 #: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
@@ -208,10 +208,10 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3014 ../src/browser.cc:918
-#: ../src/browser.cc:3455 ../src/cddb_dialog.c:2139 ../src/easytag.c:464
-#: ../src/easytag.c:471 ../src/easytag.c:596 ../src/tag_area.c:1409
-#: ../src/tag_area.c:1735
+#: ../src/application_window.c:3028 ../src/browser.cc:920
+#: ../src/browser.cc:3468 ../src/cddb_dialog.cc:2124 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:599 ../src/tag_area.cc:1411
+#: ../src/tag_area.cc:1736
 msgid "_Cancel"
 msgstr ""
 
@@ -231,7 +231,7 @@ msgstr ""
 "Sasissètz lo programa d'aviar. Il aura coma paramètre lo fichièr actual."
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:562
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:565
 msgid "Rename Directory"
 msgstr "Renomenar lo repertòri"
 
@@ -325,7 +325,7 @@ msgstr "Recercar de fichièrs dins la CDDB…"
 msgid "Track Name"
 msgstr "Nom de la pista"
 
-#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:91
+#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:96
 #: ../src/picture.c:191
 msgid "Other"
 msgstr "Autres"
@@ -450,19 +450,19 @@ msgstr ""
 msgid "Match lines with the Levenshtein algorithm"
 msgstr "Correspondance de las linhas amb l'algoritme Levenshtein"
 
-#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:143
+#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:148
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:24
 msgid "Whether to use the DLM algorithm to match CDDB results to files"
 msgstr ""
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
-#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:160
-#: ../data/scan_dialog.ui.h:118 ../data/search_dialog.ui.h:11
+#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:165
+#: ../data/scan_dialog.ui.h:118
 msgid "_Close"
 msgstr "_Tampar"
 
 #: ../data/cddb_dialog.ui.h:49 ../data/load_files_dialog.ui.h:17
-#: ../src/cddb_dialog.c:2140
+#: ../src/cddb_dialog.cc:2125
 msgid "_Apply"
 msgstr "A_plicar"
 
@@ -474,7 +474,7 @@ msgstr ""
 "seleccionada)"
 
 #. Default values are MPEG data.
-#: ../data/file_area.ui.h:1 ../src/application_window.c:2180
+#: ../data/file_area.ui.h:1 ../src/application_window.c:2194
 #: ../src/file_area.c:155
 msgid "File"
 msgstr "Fichièr"
@@ -559,8 +559,8 @@ msgstr "Inserir una linha voida avant la linha seleccionada"
 msgid "Delete the selected line"
 msgstr "Suprimir la linha seleccionada"
 
-#: ../data/load_files_dialog.ui.h:8 ../src/load_files_dialog.c:750
-#: ../src/load_files_dialog.c:853
+#: ../data/load_files_dialog.ui.h:8 ../src/load_files_dialog.cc:753
+#: ../src/load_files_dialog.cc:856
 msgid "Delete all blank lines"
 msgstr "Suprimir totas las linhas voidas"
 
@@ -572,8 +572,8 @@ msgstr "Remontar la linha seleccionada"
 msgid "Move the selected line down"
 msgstr "Davalar la linha seleccionada"
 
-#: ../data/load_files_dialog.ui.h:11 ../src/load_files_dialog.c:768
-#: ../src/load_files_dialog.c:871
+#: ../data/load_files_dialog.ui.h:11 ../src/load_files_dialog.cc:771
+#: ../src/load_files_dialog.cc:874
 msgid "Reload"
 msgstr "Recargar"
 
@@ -1092,10 +1092,10 @@ msgstr "Escriure las informacions en utilizant lo nom del fichièr"
 msgid "Write information using:"
 msgstr "Escriure las informacions en utilizant :"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3015
-#: ../src/browser.cc:919 ../src/easytag.c:234 ../src/easytag.c:465
-#: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
-#: ../src/tag_area.c:1737
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3029
+#: ../src/browser.cc:921 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/easytag.c:472 ../src/easytag.c:600 ../src/easytag.c:607
+#: ../src/tag_area.cc:1738
 #, fuzzy
 msgid "_Save"
 msgstr "_Enregistrar los fichièrs"
@@ -1250,75 +1250,100 @@ msgid "Filenames"
 msgstr "Noms dels fichièrs"
 
 #: ../data/preferences_dialog.ui.h:32
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
-msgid "Replace illegal characters when renaming"
+#, fuzzy
+msgid "Replace illegal characters when renaming:"
 msgstr "Remplaçar los caractèrs illegals quand cambiatz de noms"
 
 #: ../data/preferences_dialog.ui.h:33
 msgid ""
-"Convert characters which cannot be represented in filenames on the FAT32/16 "
-"and Joliet filesystems (‘\\’, ‘:’, ‘;’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’)"
+"Convert characters which cannot be represented in filenames on some "
+"filesystems (‘\\’, ‘/’, ‘:’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’)"
 msgstr ""
 
 #: ../data/preferences_dialog.ui.h:34
+msgid "by ASCII characters"
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:35
+msgid "Use the ASCII characters (‘-’, ‘+’, ‘_’, ‘'’, ‘(’, ‘)’) as replacement."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:36
+msgid "by Unicode characters"
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:37
+msgid ""
+"Use similar Unicode characters (‘&#8726;’, ‘&#8725;’, ‘&#8758;’, ‘&#8727;’, "
+"‘&#8253;’, ‘&#8221;’, ‘&#8826;’, ‘&#8827;’, ‘&#8739;’) as replacement."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:38
+#, fuzzy
+msgid "No change"
+msgstr "Pas de Cambiament"
+
+#: ../data/preferences_dialog.ui.h:39
+msgid "You must manually ensure valid file characters."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:40
 msgid "Convert filename extension to:"
 msgstr "Convertir l'extension del nom de fichièr en :"
 
-#: ../data/preferences_dialog.ui.h:35
-msgid "Lower Case"
+#: ../data/preferences_dialog.ui.h:41
+#, fuzzy
+msgid "Lower case"
 msgstr "Minusculas"
 
-#: ../data/preferences_dialog.ui.h:36
+#: ../data/preferences_dialog.ui.h:42
 msgid "For example, the extension will be converted to ‘.mp3’"
 msgstr "Per exemple, l'extension serà convertida en « .mp3 »"
 
-#: ../data/preferences_dialog.ui.h:37
-msgid "Upper Case"
+#: ../data/preferences_dialog.ui.h:43
+#, fuzzy
+msgid "Upper case"
 msgstr "Majusculas"
 
-#: ../data/preferences_dialog.ui.h:38
+#: ../data/preferences_dialog.ui.h:44
 msgid "For example, the extension will be converted to ‘.MP3’"
 msgstr "Per exemple, l'extension serà convertida en « .MP3 »"
 
-#: ../data/preferences_dialog.ui.h:39
-msgid "No Change"
-msgstr "Pas de Cambiament"
-
-#: ../data/preferences_dialog.ui.h:40
+#: ../data/preferences_dialog.ui.h:45
 msgid "The extension will not be modified"
 msgstr "L'extension serà pas modificada"
 
-#: ../data/preferences_dialog.ui.h:41
+#: ../data/preferences_dialog.ui.h:46
 msgid "Filename Encoding"
 msgstr "Chifratge del nom de fichièr"
 
-#: ../data/preferences_dialog.ui.h:42
+#: ../data/preferences_dialog.ui.h:47
 msgid "Try another character encoding"
 msgstr "Ensajar un autre encodatge de caractèrs"
 
-#: ../data/preferences_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:48
 msgid ""
 "Try to use the encoding associated with your locale and if this fails, try "
 "the ISO-8859-1 character encoding"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:44
+#: ../data/preferences_dialog.ui.h:49
 msgid "Transliterate characters into the system character encoding"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:45
+#: ../data/preferences_dialog.ui.h:50
 msgid ""
 "Replace unsupported characters with a similar character from the target "
 "character encoding"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:46
+#: ../data/preferences_dialog.ui.h:51
 msgid ""
 "Use the system character encoding and silently discard unsupported characters"
 msgstr ""
 "Forçar l'utilizacion de l'encodatge del sistèma e ignorar certans caractèrs"
 
-#: ../data/preferences_dialog.ui.h:47
+#: ../data/preferences_dialog.ui.h:52
 msgid ""
 "Discard characters which cannot be represented in the target character "
 "encoding"
@@ -1326,65 +1351,65 @@ msgstr ""
 "Amb aquesta opcion, quand un caractèr pòt pas èsser representat dins "
 "l'encodatge cibla"
 
-#: ../data/preferences_dialog.ui.h:48
+#: ../data/preferences_dialog.ui.h:53
 msgid "Files"
 msgstr "Fichièrs"
 
-#: ../data/preferences_dialog.ui.h:49
+#: ../data/preferences_dialog.ui.h:54
 msgid "Automatically complete date field"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:50
+#: ../data/preferences_dialog.ui.h:55
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:82
 msgid "Whether to automatically complete the date tag"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:51
+#: ../data/preferences_dialog.ui.h:56
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:87
 msgid "Automatically select the type of the image based on its filename"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:52
+#: ../data/preferences_dialog.ui.h:57
 msgid ""
 "Whether to, when adding cover art, automatically select a type for an image "
 "based on its filename"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:53
+#: ../data/preferences_dialog.ui.h:58
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:93
 msgid "Preserve the tag field focus"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:54
+#: ../data/preferences_dialog.ui.h:59
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:94
 msgid "Whether to preserve focus on the current tag field when switching file"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:55
+#: ../data/preferences_dialog.ui.h:60
 msgid "Pad the number of digits in the disc field to:"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:56
+#: ../data/preferences_dialog.ui.h:61
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:84
 msgid "Whether the disc number tag field should be padded with leading zeroes"
 msgstr ""
 "Indica se cal decalar lo contengut del camp disc amb de zèros al començament"
 
-#: ../data/preferences_dialog.ui.h:57
+#: ../data/preferences_dialog.ui.h:62
 msgid "Pad the number of digits in the track field to:"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:58
+#: ../data/preferences_dialog.ui.h:63
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:90
 msgid "Whether the track number tag field should be padded with leading zeroes"
 msgstr ""
 "Indica se cal decalar lo contengut del camp disc amb de zèros al començament"
 
-#: ../data/preferences_dialog.ui.h:59
+#: ../data/preferences_dialog.ui.h:64
 msgid "Splitting"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:65
 msgid ""
 "For Vorbis tags, selected fields will be split at dashes and saved as "
 "separate tags"
@@ -1392,98 +1417,98 @@ msgstr ""
 "Per las etiquetas Vorbis, los camps seleccionats son coupés als tirets e "
 "enregistrats coma etiquetas separadas"
 
-#: ../data/preferences_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:67
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:186
 msgid "Whether to split title fields at a “ - ” separator in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:64
+#: ../data/preferences_dialog.ui.h:69
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:188
 msgid "Whether to split artist fields at a “ - ” separator in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:71
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:190
 msgid "Whether to split album fields at a “ - ” separator in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:73
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:192
 msgid "Whether to split genre fields at a “ - ” separator in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:70
+#: ../data/preferences_dialog.ui.h:75
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:194
 msgid "Whether to split comment fields at a “ - ” separator in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:72
+#: ../data/preferences_dialog.ui.h:77
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:196
 msgid "Whether to split composer fields at a “ - ” separator in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:73
+#: ../data/preferences_dialog.ui.h:78
 msgid "Original artist"
 msgstr "Artista original"
 
-#: ../data/preferences_dialog.ui.h:74
+#: ../data/preferences_dialog.ui.h:79
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:198
 msgid ""
 "Whether to split original artist fields at a “ - ” separator in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:75
+#: ../data/preferences_dialog.ui.h:80
 msgid "Tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:76
+#: ../data/preferences_dialog.ui.h:81
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:51
 #, fuzzy
 msgid "Strip ID3 tags if all ID3 tags are empty"
 msgstr "Suprimir las etiquetas se totes los camps son daissats voids"
 
-#: ../data/preferences_dialog.ui.h:77
+#: ../data/preferences_dialog.ui.h:82
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:52
 msgid ""
 "Whether to remove the ID3 tag from the audio file if all the individual tag "
 "fields are empty"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:78
+#: ../data/preferences_dialog.ui.h:83
 #, fuzzy
 msgid "Non-standard encoding for reading ID3 tags:"
 msgstr "Jòc de caractèrs per legir las etiquetas ID3"
 
-#: ../data/preferences_dialog.ui.h:79
+#: ../data/preferences_dialog.ui.h:84
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:50
 msgid "Whether to use a non-standard character encoding when reading ID3 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:80
+#: ../data/preferences_dialog.ui.h:85
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:60
 #, fuzzy
 msgid "Choose the character set to be used when reading ID3v1 and ID3v2 tags"
 msgstr "Jòc de caractèrs per legir las etiquetas ID3"
 
-#: ../data/preferences_dialog.ui.h:81
+#: ../data/preferences_dialog.ui.h:86
 #, fuzzy
 msgid "ID3v2"
 msgstr "Etiquetas ID3v2"
 
-#: ../data/preferences_dialog.ui.h:82
+#: ../data/preferences_dialog.ui.h:87
 msgid "Write ID3v2 tag"
 msgstr "Escriure l'etiqueta ID3v2"
 
-#: ../data/preferences_dialog.ui.h:83
+#: ../data/preferences_dialog.ui.h:88
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:62
 msgid "Whether to write ID3v2 tags when writing ID3 tags into audio files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:84
+#: ../data/preferences_dialog.ui.h:89
 msgid "Version:"
 msgstr "Version :"
 
-#: ../data/preferences_dialog.ui.h:85
+#: ../data/preferences_dialog.ui.h:90
 #, fuzzy
 msgid ""
 "Select the ID3v2 tag version to write:\n"
@@ -1494,36 +1519,36 @@ msgstr ""
 " - ID3v2.3 es escrich en utilizant id3lib,\n"
 " - ID3v2.4 es escrich en utilizant libid3tag (recomandat)."
 
-#: ../data/preferences_dialog.ui.h:88
+#: ../data/preferences_dialog.ui.h:93
 #, fuzzy
 msgid "Character encoding:"
 msgstr "Ensajar un autre encodatge de caractèrs"
 
-#: ../data/preferences_dialog.ui.h:89
+#: ../data/preferences_dialog.ui.h:94
 #, fuzzy
 msgid "Unicode"
 msgstr "Unicode"
 
-#: ../data/preferences_dialog.ui.h:90
+#: ../data/preferences_dialog.ui.h:95
 msgid ""
 "Choose the Unicode character encoding to be used when writing ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:92
+#: ../data/preferences_dialog.ui.h:97
 msgid ""
 "Override the standard Unicode character encoding to be used when writing "
 "ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:93
+#: ../data/preferences_dialog.ui.h:98
 msgid "When encoding conversion fails:"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:94
+#: ../data/preferences_dialog.ui.h:99
 msgid "Report error"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:100
 #, fuzzy
 msgid ""
 "Display an error message when a character cannot be represented in the "
@@ -1532,173 +1557,173 @@ msgstr ""
 "Amb aquesta opcion, quand un caractèr pòt pas èsser representat dins "
 "l'encodatge cibla, es ignorat."
 
-#: ../data/preferences_dialog.ui.h:96
+#: ../data/preferences_dialog.ui.h:101
 msgid "Transliterate"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:97
+#: ../data/preferences_dialog.ui.h:102
 #, fuzzy
 msgid "Discard"
 msgstr "Disc"
 
-#: ../data/preferences_dialog.ui.h:98
+#: ../data/preferences_dialog.ui.h:103
 msgid "Automatically convert old ID3v2 tag versions"
 msgstr "Convertir automaticament las ancianas versions de las etiquetas ID3v2"
 
-#: ../data/preferences_dialog.ui.h:99
+#: ../data/preferences_dialog.ui.h:104
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:66
 msgid ""
 "Whether to convert ID3 tags written against old version of the "
 "specification, such as ID3v2.2, to newer ones, such as ID3v2.3 or ID3v2.4"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:100
+#: ../data/preferences_dialog.ui.h:105
 #, fuzzy
 msgid "Use CRC-32"
 msgstr "Utilizar CRC32"
 
-#: ../data/preferences_dialog.ui.h:101
+#: ../data/preferences_dialog.ui.h:106
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:70
 msgid "Whether to embed a CRC-32 checksum of the audio file data in ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:102
+#: ../data/preferences_dialog.ui.h:107
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:67
 #, fuzzy
 msgid "Compress data in ID3v2 tags"
 msgstr "Utilizar la compression dins las etiquetas ID3v2"
 
-#: ../data/preferences_dialog.ui.h:103
+#: ../data/preferences_dialog.ui.h:108
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:68
 #, fuzzy
 msgid "Whether to compress data in ID3v2 tags"
 msgstr "Utilizar la compression dins las etiquetas ID3v2"
 
-#: ../data/preferences_dialog.ui.h:104
+#: ../data/preferences_dialog.ui.h:109
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:71
 msgid "Use text-only genre in ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:105
+#: ../data/preferences_dialog.ui.h:110
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:72
 msgid ""
 "Whether to use only a string, and not the integer-base ID3v1 genre field, "
 "when writing a genre field to ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:106
+#: ../data/preferences_dialog.ui.h:111
 #, fuzzy
 msgid "ID3v1"
 msgstr "Etiquetas ID3v1"
 
-#: ../data/preferences_dialog.ui.h:107
+#: ../data/preferences_dialog.ui.h:112
 #, fuzzy
 msgid "Write ID3v1 tag"
 msgstr "Escriure l'etiqueta ID3v1.x"
 
-#: ../data/preferences_dialog.ui.h:108
+#: ../data/preferences_dialog.ui.h:113
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:54
 msgid "Whether to write ID3v1 tags when writing ID3 tags into audio files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:109
+#: ../data/preferences_dialog.ui.h:114
 #, fuzzy
 msgid "Choose the character set to be used when writing ID3v1 tag"
 msgstr "Jòc de caractèrs per escriure las etiquetas ID3"
 
-#: ../data/preferences_dialog.ui.h:110
+#: ../data/preferences_dialog.ui.h:115
 #, fuzzy
 msgid "ID3 Tags"
 msgstr "Etiqueta ID3"
 
-#: ../data/preferences_dialog.ui.h:111
+#: ../data/preferences_dialog.ui.h:116
 #, fuzzy
 msgid "Character Conversion"
 msgstr "Numerizar Completar l'etiqueta - Conversion de caractèrs"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:113
+#: ../data/preferences_dialog.ui.h:118
 #, fuzzy
 msgid "Fill Tag Scanner"
 msgstr "Completar l'etiqueta"
 
-#: ../data/preferences_dialog.ui.h:115
+#: ../data/preferences_dialog.ui.h:120
 #, fuzzy, no-c-format
 msgid "Convert underscores and ‘%20’ to spaces"
 msgstr "Remplaçar « _ » e « %20 » per d'espacis"
 
-#: ../data/preferences_dialog.ui.h:117
+#: ../data/preferences_dialog.ui.h:122
 #, fuzzy, no-c-format
 msgid "Convert spaces and ‘%20’ to underscores"
 msgstr "Convertir los espacis «   » per de soslinhaments « _ »"
 
-#: ../data/preferences_dialog.ui.h:118
+#: ../data/preferences_dialog.ui.h:123
 msgid "No conversion"
 msgstr ""
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:120
+#: ../data/preferences_dialog.ui.h:125
 #, fuzzy
 msgid "Rename File and Directory Scanner"
 msgstr "Renomenar lo fichièr e lo repertòri"
 
-#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:96
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:784
+#: ../data/preferences_dialog.ui.h:126 ../data/scan_dialog.ui.h:96
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.cc:786
 msgid "Remove spaces"
 msgstr "Suprimir los espacis"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:123
+#: ../data/preferences_dialog.ui.h:128
 #, fuzzy
 msgid "Process Fields Scanner"
 msgstr "Tractar los camps"
 
-#: ../data/preferences_dialog.ui.h:124
+#: ../data/preferences_dialog.ui.h:129
 #, fuzzy
 msgid "Upper-case the first letters of all words"
 msgstr "Primièra letra de cada mot en majusculas"
 
-#: ../data/preferences_dialog.ui.h:125
+#: ../data/preferences_dialog.ui.h:130
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:130
 msgid ""
 "Whether to upper-case the first letter of all words, including prepositions "
 "and other short words such as “feat.”, when processing tag fields"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:126
+#: ../data/preferences_dialog.ui.h:131
 msgid "Fields"
 msgstr "Camps"
 
-#: ../data/preferences_dialog.ui.h:127
+#: ../data/preferences_dialog.ui.h:132
 msgid "Overwrite fields when scanning tags"
 msgstr "Espotir los camps al moment d'un scan d'etiquetas"
 
-#: ../data/preferences_dialog.ui.h:128
+#: ../data/preferences_dialog.ui.h:133
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:99
 msgid ""
 "Whether to overwrite the tag field values when filling tags. Otherwise, only "
 "blank tag fields will be filled"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:129
+#: ../data/preferences_dialog.ui.h:134
 msgid "Set this text as default comment:"
 msgstr "Metre aqueste tèxte en comentari per defaut :"
 
-#: ../data/preferences_dialog.ui.h:130
+#: ../data/preferences_dialog.ui.h:135
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:101
 msgid ""
 "Whether to set the comment tag field to the provided default value when "
 "filling tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:131
+#: ../data/preferences_dialog.ui.h:136
 #, fuzzy
 msgid "Use CRC-32 as the default comment (for files with ID3 tags only)"
 msgstr ""
 "Metre CRC32 coma comentari per defaut (seulement per fichièrs amb etiquetas "
 "ID3)."
 
-#: ../data/preferences_dialog.ui.h:132
+#: ../data/preferences_dialog.ui.h:137
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:105
 #, fuzzy
 msgid ""
@@ -1708,39 +1733,39 @@ msgstr ""
 "Metre CRC32 coma comentari per defaut (seulement per fichièrs amb etiquetas "
 "ID3)."
 
-#: ../data/preferences_dialog.ui.h:133
+#: ../data/preferences_dialog.ui.h:138
 msgid "Scanner"
 msgstr "Numerizar"
 
-#: ../data/preferences_dialog.ui.h:134
+#: ../data/preferences_dialog.ui.h:139
 #, fuzzy
 msgid "Automatic Search Servers"
 msgstr "Recèrca automatica"
 
-#: ../data/preferences_dialog.ui.h:135
+#: ../data/preferences_dialog.ui.h:140
 #, fuzzy
 msgid "Host:"
 msgstr "Nom d'òste :"
 
-#: ../data/preferences_dialog.ui.h:136
+#: ../data/preferences_dialog.ui.h:141
 msgid "Port:"
 msgstr "Pòrt :"
 
-#: ../data/preferences_dialog.ui.h:137
+#: ../data/preferences_dialog.ui.h:142
 msgid "CGI Path:"
 msgstr "Camin CGI :"
 
-#: ../data/preferences_dialog.ui.h:138
+#: ../data/preferences_dialog.ui.h:143
 #, fuzzy
 msgid "Manual Search Server"
 msgstr " Recèrca manuala"
 
-#: ../data/preferences_dialog.ui.h:139
+#: ../data/preferences_dialog.ui.h:144
 #, fuzzy
 msgid "Results List"
 msgstr "Resultats :"
 
-#: ../data/preferences_dialog.ui.h:140
+#: ../data/preferences_dialog.ui.h:145
 #, fuzzy
 msgid ""
 "Select corresponding file (according to position or DLM if activated below)"
@@ -1748,14 +1773,14 @@ msgstr ""
 "Seleccionar lo fichièr àudio correspondent (d'aprèp sa posicion o "
 "l'algoritme DLM se activat çaijós)"
 
-#: ../data/preferences_dialog.ui.h:141
+#: ../data/preferences_dialog.ui.h:146
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:26
 msgid ""
 "Whether to select the file in the file list which matches the position in "
 "the CDDB results list"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:142
+#: ../data/preferences_dialog.ui.h:147
 #, fuzzy
 msgid ""
 "Use the Levenshtein algorithm (DLM) to match results (using title) with "
@@ -1764,90 +1789,90 @@ msgstr ""
 "Utilizar l'algoritme Levenshtein (DLM) per faire correspondre las linhas "
 "(d'aprèp lo títol) amb los fichièrs àudio (d'aprèp lo nom de fichièr)"
 
-#: ../data/preferences_dialog.ui.h:144
+#: ../data/preferences_dialog.ui.h:149
 msgid "CDDB"
 msgstr "CDDB"
 
-#: ../data/preferences_dialog.ui.h:145
+#: ../data/preferences_dialog.ui.h:150
 msgid "Confirmation"
 msgstr "Confirmacion"
 
-#: ../data/preferences_dialog.ui.h:146
+#: ../data/preferences_dialog.ui.h:151
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:106
 #, fuzzy
 msgid "Confirm before writing tags"
 msgstr "Confirmar l'escritura de l'etiqueta del fichièr"
 
-#: ../data/preferences_dialog.ui.h:147
+#: ../data/preferences_dialog.ui.h:152
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:107
 msgid ""
 "Whether to ask for confirmation from the user before writing tags to audio "
 "files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:148
+#: ../data/preferences_dialog.ui.h:153
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:108
 #, fuzzy
 msgid "Confirm before renaming a file"
 msgstr "Confirmar lo cambiament de nom del fichièr"
 
-#: ../data/preferences_dialog.ui.h:149
+#: ../data/preferences_dialog.ui.h:154
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:109
 msgid "Whether to ask for confirmation from the user before renaming a file"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:150
+#: ../data/preferences_dialog.ui.h:155
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:112
 #, fuzzy
 msgid "Confirm before deleting a file"
 msgstr "Confirmar la supression del fichièr"
 
-#: ../data/preferences_dialog.ui.h:151
+#: ../data/preferences_dialog.ui.h:156
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:113
 msgid "Whether to ask for confirmation from the user before deleting a file"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:152
+#: ../data/preferences_dialog.ui.h:157
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:110
 #, fuzzy
 msgid "Confirm before writing a playlist"
 msgstr "Confirmar l'escritura de la lista de lectura"
 
-#: ../data/preferences_dialog.ui.h:153
+#: ../data/preferences_dialog.ui.h:158
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:111
 msgid "Whether to ask for confirmation from the user before writing a playlist"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:154
+#: ../data/preferences_dialog.ui.h:159
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:114
 #, fuzzy
 msgid "Confirm before losing unsaved changes to files"
 msgstr "Confirmar lo cambiament de nom del fichièr"
 
-#: ../data/preferences_dialog.ui.h:155
+#: ../data/preferences_dialog.ui.h:160
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:115
 msgid ""
 "Whether to ask for confirmation from the user before performing an operation "
 "that would lose unsaved changes on files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:156
+#: ../data/preferences_dialog.ui.h:161
 #, fuzzy
 msgid "Scanner Dialog"
 msgstr "Bóstia de dialòg del scanner"
 
-#: ../data/preferences_dialog.ui.h:157
+#: ../data/preferences_dialog.ui.h:162
 #, fuzzy
 msgid "Show the scanner dialog on startup"
 msgstr "Dobrir la bóstia de dialòg del scanner al démarrage"
 
-#: ../data/preferences_dialog.ui.h:158
+#: ../data/preferences_dialog.ui.h:163
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:182
 #, fuzzy
 msgid "Whether to show the scanner window on application startup"
 msgstr "Dobrir la bóstia de dialòg del scanner al démarrage"
 
-#: ../data/preferences_dialog.ui.h:159
+#: ../data/preferences_dialog.ui.h:164
 msgid "Application"
 msgstr ""
 
@@ -2030,7 +2055,7 @@ msgid "Rename file preview"
 msgstr "Apercebut del cambiament de nom del fichièr"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:571
+#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:574
 msgid "Rename File"
 msgstr "Renomenar lo fichièr"
 
@@ -2184,7 +2209,7 @@ msgstr "Cambiar pas los separadors de mots"
 msgid "Character Conversions"
 msgstr "Numerizar Completar l'etiqueta - Conversion de caractèrs"
 
-#: ../data/scan_dialog.ui.h:105 ../src/tag_area.c:740
+#: ../data/scan_dialog.ui.h:105 ../src/tag_area.cc:742
 #, fuzzy, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "Remplaçar « _ » e « %20 » per d'espacis"
@@ -2198,7 +2223,7 @@ msgstr ""
 "Lo caractèr soslinhament o la cadena « %20 » son remplacés per un espaci. "
 "Exemple abans : « Tèxte%20Dins%20Un_Camp », aprèp : « Tèxte Dins Un Camp »."
 
-#: ../data/scan_dialog.ui.h:108 ../src/tag_area.c:746
+#: ../data/scan_dialog.ui.h:108 ../src/tag_area.cc:748
 #, fuzzy
 msgid "Convert spaces to underscores"
 msgstr "Convertir los espacis «   » per de soslinhaments « _ »"
@@ -2294,7 +2319,7 @@ msgstr "Sensible a la cassa"
 msgid "CD"
 msgstr "CD"
 
-#: ../data/tag_area.ui.h:1 ../src/tag_area.c:2755
+#: ../data/tag_area.ui.h:1 ../src/tag_area.cc:2756
 msgid "Tag"
 msgstr "Etiquetar"
 
@@ -2469,7 +2494,7 @@ msgstr "Modificar las proprietats de l'imatge"
 msgid "Tag selected files with these images"
 msgstr "Etiqueta los fichièrs seleccionats amb aquestes imatges"
 
-#: ../data/tag_area.ui.h:42 ../src/tag_area.c:3033 ../src/tag_area.c:3036
+#: ../data/tag_area.ui.h:42 ../src/tag_area.cc:3034 ../src/tag_area.cc:3037
 msgid "Images"
 msgstr "Imatges"
 
@@ -3094,6 +3119,10 @@ msgid ""
 "with transliteration or discard the offending characters"
 msgstr ""
 
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
+msgid "Replace illegal characters when renaming"
+msgstr "Remplaçar los caractèrs illegals quand cambiatz de noms"
+
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:176
 #, fuzzy
 msgid ""
@@ -3232,7 +3261,7 @@ msgstr "Site Web : %s"
 msgid "- Tag and rename audio files"
 msgstr "- Etiquetar e renomenar de fichièrs àudio"
 
-#: ../src/application.c:429 ../src/file_list.c:443
+#: ../src/application.c:429 ../src/file_list.cc:443
 #, fuzzy, c-format
 msgid "Error while querying information for file ‘%s’: %s"
 msgstr ""
@@ -3249,7 +3278,7 @@ msgstr "Impossible de dobrir lo camin « %s »"
 msgid "Do you really want to delete the file ‘%s’?"
 msgstr "Sètz segur que volètz suprimir lo fichièr « %s » ?"
 
-#: ../src/application_window.c:364 ../src/easytag.c:459 ../src/easytag.c:592
+#: ../src/application_window.c:364 ../src/easytag.c:459 ../src/easytag.c:595
 msgid "Repeat action for the remaining files"
 msgstr "Repetir la meteissa accion pels fichièrs restants"
 
@@ -3289,30 +3318,30 @@ msgstr "Totes los fichièrs son estats suprimits"
 msgid "All tags have been removed"
 msgstr "Totas las etiquetas son etadas suprimidas"
 
-#: ../src/application_window.c:1474 ../src/browser.cc:346 ../src/browser.cc:389
-#: ../src/browser.cc:423 ../src/browser.cc:4383 ../src/browser.cc:4458
+#: ../src/application_window.c:1474 ../src/browser.cc:348 ../src/browser.cc:391
+#: ../src/browser.cc:425 ../src/browser.cc:4299 ../src/browser.cc:4374
 #, fuzzy, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Fracàs de l'aviada del programa : %s"
 
-#: ../src/application_window.c:1988
+#: ../src/application_window.c:2003
 #, fuzzy, c-format
 msgid "Could not convert filename ‘%s’ to system filename encoding"
 msgstr ""
 "Impossible de convertir lo nom del fichièr « %s » cap a l'encodatge del nom "
 "de fichièrs sistèma"
 
-#: ../src/application_window.c:1991
+#: ../src/application_window.c:2006
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr ""
 "Ensag de parametratge de la variabla d'environament G_FILENAME_ENCODING."
 
-#: ../src/application_window.c:1993 ../src/scan_dialog.c:796
+#: ../src/application_window.c:2008 ../src/scan_dialog.cc:800
 msgid "Filename translation"
 msgstr "Conversion del nom de fichièr"
 
 #. And refresh the number of files in this directory
-#: ../src/application_window.c:2154
+#: ../src/application_window.c:2168
 #, c-format
 msgid "One file"
 msgid_plural "%u files"
@@ -3321,7 +3350,7 @@ msgstr[1] "%u fichièrs"
 
 # Ce sont des kbits/s, pas des koctets/s
 #. Bitrate
-#: ../src/application_window.c:2187 ../src/tags/flac_header.c:189
+#: ../src/application_window.c:2201 ../src/tags/flac_header.c:189
 #: ../src/tags/monkeyaudio_header.c:76 ../src/tags/mp4_header.cc:144
 #: ../src/tags/mpeg_header.c:274 ../src/tags/musepack_header.c:78
 #: ../src/tags/ogg_header.c:411 ../src/tags/opus_header.c:231
@@ -3331,7 +3360,7 @@ msgid "%d kb/s"
 msgstr "%d kb/s"
 
 #. Samplerate
-#: ../src/application_window.c:2190 ../src/tags/flac_header.c:192
+#: ../src/application_window.c:2204 ../src/tags/flac_header.c:192
 #: ../src/tags/monkeyaudio_header.c:79 ../src/tags/mp4_header.cc:148
 #: ../src/tags/mpeg_header.c:279 ../src/tags/musepack_header.c:81
 #: ../src/tags/ogg_header.c:414 ../src/tags/opus_header.c:234
@@ -3340,107 +3369,107 @@ msgstr "%d kb/s"
 msgid "%d Hz"
 msgstr "%d Hz"
 
-#: ../src/application_window.c:2345 ../src/easytag.c:911
+#: ../src/application_window.c:2359 ../src/easytag.c:915
 #, c-format
 msgid "File: ‘%s’"
 msgstr "Fichièr : « %s »"
 
 #. Quit EasyTAG.
-#: ../src/application_window.c:2978
+#: ../src/application_window.c:2992
 #, fuzzy
 msgid "Normal exit"
 msgstr "EasyTAG : tampadura normala."
 
-#: ../src/application_window.c:3012 ../src/browser.cc:913
+#: ../src/application_window.c:3026 ../src/browser.cc:915
 msgid "Some files have been modified but not saved"
 msgstr "Certains fichièrs son estats modificats mas pas enregistrats"
 
-#: ../src/application_window.c:3013 ../src/browser.cc:917 ../src/easytag.c:233
-#: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
+#: ../src/application_window.c:3027 ../src/browser.cc:919 ../src/easytag.c:233
+#: ../src/easytag.c:463 ../src/easytag.c:598 ../src/easytag.c:606
 #, fuzzy
 msgid "_Discard"
 msgstr "Disc"
 
-#: ../src/application_window.c:3019 ../src/easytag.c:239
+#: ../src/application_window.c:3033 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Quitar"
 
-#: ../src/application_window.c:3022
+#: ../src/application_window.c:3036
 msgid "Do you want to save them before quitting?"
 msgstr "Los volètz enregistrar abans de quitar ?"
 
-#: ../src/browser.cc:615
+#: ../src/browser.cc:617
 #, fuzzy
 msgid "New default directory selected for browser"
 msgstr "Seleccionar un repertòri a percórrer"
 
-#: ../src/browser.cc:916
+#: ../src/browser.cc:918
 #, fuzzy
 msgid "Do you want to save them before changing directory?"
 msgstr "Los volètz enregistrar abans de cambiar de repertòri ?"
 
-#: ../src/browser.cc:923
+#: ../src/browser.cc:925
 msgid "Confirm Directory Change"
 msgstr "Confirmar lo cambiament de repertòri"
 
-#: ../src/browser.cc:2257
+#: ../src/browser.cc:2259
 msgid "All albums"
 msgstr "Totes los albums"
 
-#: ../src/browser.cc:3492
+#: ../src/browser.cc:3505
 msgid "Select File"
 msgstr "Seleccionar un fichièr"
 
-#: ../src/browser.cc:3499
+#: ../src/browser.cc:3512
 msgid "Select Directory"
 msgstr "Seleccionar un repertòri"
 
-#: ../src/browser.cc:3888
+#: ../src/browser.cc:3804
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Renomenar lo repertòri « %s » en :"
 
-#: ../src/browser.cc:4024
+#: ../src/browser.cc:3940
 msgid "You must type a directory name"
 msgstr "Vos cal sasir un nom de repertòri"
 
-#: ../src/browser.cc:4025 ../src/browser.cc:4047
+#: ../src/browser.cc:3941 ../src/browser.cc:3963
 msgid "Directory Name Error"
 msgstr "Error de nom de repertòri"
 
-#: ../src/browser.cc:4043
+#: ../src/browser.cc:3959
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Impossible de convertir « %s » dins l'encodatge del nom de fichièr."
 
-#: ../src/browser.cc:4046
+#: ../src/browser.cc:3962
 #, fuzzy
 msgid "Please use another name."
 msgstr "Causissètz un autre nom"
 
-#: ../src/browser.cc:4118
+#: ../src/browser.cc:4034
 #, fuzzy, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Lo nom del repertòri « %s » existe déjà"
 
-#: ../src/browser.cc:4119 ../src/easytag.c:650
+#: ../src/browser.cc:4035 ../src/easytag.c:653
 msgid "Rename File Error"
 msgstr "Error de cambiament de nom del fichièr"
 
-#: ../src/browser.cc:4158 ../src/browser.cc:4187
+#: ../src/browser.cc:4074 ../src/browser.cc:4103
 msgid "Rename Directory Error"
 msgstr "Error de cambiament de nom del repertòri"
 
-#: ../src/browser.cc:4228
+#: ../src/browser.cc:4144
 msgid "Directory renamed"
 msgstr "Repertòri renomenat"
 
-#: ../src/browser.cc:4375 ../src/browser.cc:4450
+#: ../src/browser.cc:4291 ../src/browser.cc:4366
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "Comanda executada : %s"
 
-#: ../src/cddb_dialog.c:280
+#: ../src/cddb_dialog.cc:286
 #, fuzzy, c-format
 msgid ""
 "Album: ‘%s’, artist: ‘%s’, length: ‘%s’, year: ‘%s’, genre: ‘%s’, disc ID: "
@@ -3449,110 +3478,111 @@ msgstr ""
 "Album : « %s », artista : « %s », durada : « %s », annada : « %s », genre : "
 "« %s », identificant : « %s »"
 
-#: ../src/cddb_dialog.c:718
+#: ../src/cddb_dialog.cc:710
 #, fuzzy, c-format
 msgid "Cannot resolve host: ‘%s’: %s"
 msgstr "Impossible de trobar l'òste « %s » (%s)"
 
-#: ../src/cddb_dialog.c:725
+#: ../src/cddb_dialog.cc:717
 #, fuzzy, c-format
 msgid "Cannot connect to host: ‘%s’: %s"
 msgstr "Impossible de se connectar a l'òste « %s » (%s)"
 
 #. Send the request.
-#: ../src/cddb_dialog.c:798 ../src/cddb_dialog.c:1353 ../src/cddb_dialog.c:1641
+#: ../src/cddb_dialog.cc:790 ../src/cddb_dialog.cc:1345
+#: ../src/cddb_dialog.cc:1633
 msgid "Sending request…"
 msgstr "Mandadís de la requèsta…"
 
-#: ../src/cddb_dialog.c:842
+#: ../src/cddb_dialog.cc:834
 #, fuzzy, c-format
 msgid "The server returned a bad response ‘%s’"
 msgstr "Lo servidor a renviat una marrida responsa : %s"
 
 #. Load the track list of the album
-#: ../src/cddb_dialog.c:1036
+#: ../src/cddb_dialog.cc:1028
 msgid "Loading album track list…"
 msgstr "Cargament de la lista de las pistas de l'album…"
 
 #.
 #. * Read the answer
 #.
-#: ../src/cddb_dialog.c:1383
+#: ../src/cddb_dialog.cc:1375
 msgid "Receiving data…"
 msgstr "Recepcion de las donadas…"
 
-#: ../src/cddb_dialog.c:1520
+#: ../src/cddb_dialog.cc:1512
 #, c-format
 msgid "Sorry, the web-based search is currently not available"
 msgstr "O planhèm, mas la recèrca Web es indisponibla pel moment"
 
-#: ../src/cddb_dialog.c:1523 ../src/cddb_dialog.c:1856
+#: ../src/cddb_dialog.cc:1515 ../src/cddb_dialog.cc:1848
 #, fuzzy, c-format
 msgid "Found one matching album"
 msgid_plural "Found %u matching albums"
 msgstr[0] "Trobat %d album correspondent"
 msgstr[1] "Trobat %d albums correspondents"
 
-#: ../src/cddb_dialog.c:1671
+#: ../src/cddb_dialog.cc:1663
 #, c-format
 msgid "Receiving data of page %d (album %d/%d)…"
 msgstr "Recepcion de las donadas de la pagina %d (album %d/%d)…"
 
-#: ../src/cddb_dialog.c:1673
+#: ../src/cddb_dialog.cc:1665
 #, c-format
 msgid "Receiving data of page %d…"
 msgstr "Recepcion de las donadas de la pagina %d…"
 
-#: ../src/cddb_dialog.c:1689
+#: ../src/cddb_dialog.cc:1681
 msgid "The server returned a bad response"
 msgstr "Lo servidor a renviat una marrida responsa"
 
-#: ../src/cddb_dialog.c:1828
+#: ../src/cddb_dialog.cc:1820
 #, c-format
 msgid "More results to load…"
 msgstr "D'autres resultats a cargar…"
 
-#: ../src/cddb_dialog.c:2138
+#: ../src/cddb_dialog.cc:2123
 msgid "The number of CDDB results does not match the number of selected files"
 msgstr ""
 "Lo nombre de resultats CDDB ne correspond pas al nombre de fichièrs "
 "seleccionats"
 
-#: ../src/cddb_dialog.c:2144
+#: ../src/cddb_dialog.cc:2129
 msgid "Write Tag from CDDB"
 msgstr "Escritura de l'etiqueta a partir de la CDDB"
 
-#: ../src/cddb_dialog.c:2459
+#: ../src/cddb_dialog.cc:2444
 msgid "Ready to search"
 msgstr "Prêt a recercar"
 
-#: ../src/cddb_dialog.c:2614
+#: ../src/cddb_dialog.cc:2599
 #, c-format
 msgid "No file selected"
 msgstr "Cap de fichièr pas seleccionat"
 
 #. The CD redbook standard defines the maximum number of tracks as 99, any
 #. queries with more than 99 tracks will never return a result.
-#: ../src/cddb_dialog.c:2623
+#: ../src/cddb_dialog.cc:2608
 #, c-format
 msgid "More than 99 files selected. Cannot send request"
 msgstr "Mai de 99 fichièrs seleccionats. Impossible de mandar la requèsta"
 
-#: ../src/cddb_dialog.c:2629
+#: ../src/cddb_dialog.cc:2614
 #, fuzzy, c-format
 msgid "One file selected"
 msgid_plural "%u files selected"
 msgstr[0] "Un fichièr seleccionat"
 msgstr[1] "%d fichièrs seleccionats"
 
-#: ../src/cddb_dialog.c:2756
+#: ../src/cddb_dialog.cc:2741
 #, fuzzy, c-format
 msgid "Sending request (disc ID: %s, #tracks: %u, Disc length: %u)…"
 msgstr ""
 "Mandadís de la requèsta (CddbId : %s, nb de pistas : %d, durada del disc : "
 "%d)…"
 
-#: ../src/cddb_dialog.c:2877
+#: ../src/cddb_dialog.cc:2862
 #, fuzzy, c-format
 msgid "DiscID ‘%s’ gave one matching album"
 msgid_plural "DiscID ‘%s’ gave %u matching albums"
@@ -3785,64 +3815,64 @@ msgid "Confirm Tag Writing"
 msgstr "Confirmar l'escritura de l'etiqueta"
 
 #. Directories and filename changed
-#: ../src/easytag.c:555
+#: ../src/easytag.c:558
 msgid "Rename File and Directory"
 msgstr "Renomenar lo fichièr e lo repertòri"
 
-#: ../src/easytag.c:556
+#: ../src/easytag.c:559
 msgid "File and directory rename confirmation required"
 msgstr ""
 "Confirmacion del cambiament de nom del fichièr e del repertòri necessària"
 
-#: ../src/easytag.c:557
+#: ../src/easytag.c:560
 #, fuzzy, c-format
 msgid "Do you want to rename the file and directory ‘%s’ to ‘%s’?"
 msgstr "Volètz renomenar lo fichièr e lo repertòri « %s » en « %s » ?"
 
-#: ../src/easytag.c:563
+#: ../src/easytag.c:566
 msgid "Directory rename confirmation required"
 msgstr "Confirmacion del cambiament de nom del repertòri necessària"
 
-#: ../src/easytag.c:564
+#: ../src/easytag.c:567
 #, fuzzy, c-format
 msgid "Do you want to rename the directory ‘%s’ to ‘%s’?"
 msgstr "Volètz renomenar lo repertòri « %s » en « %s » ?"
 
-#: ../src/easytag.c:572
+#: ../src/easytag.c:575
 msgid "File rename confirmation required"
 msgstr "Confirmacion del cambiament de nom del fichièr necessària"
 
-#: ../src/easytag.c:573
+#: ../src/easytag.c:576
 #, fuzzy, c-format
 msgid "Do you want to rename the file ‘%s’ to ‘%s’?"
 msgstr "Volètz renomenar lo fichièr « %s » en « %s » ?"
 
-#: ../src/easytag.c:643
+#: ../src/easytag.c:646
 #, fuzzy, c-format
 msgid "Cannot rename file ‘%s’ to ‘%s’"
 msgstr "Impossible de renomenar lo fichièr « %s » en « %s »"
 
-#: ../src/easytag.c:657
+#: ../src/easytag.c:660
 #, fuzzy, c-format
 msgid "Cannot rename file ‘%s’ to ‘%s’: %s"
 msgstr "Impossible de renomenar lo fichièr « %s » en « %s » : %s"
 
 # FIXME ngettext
-#: ../src/easytag.c:662
+#: ../src/easytag.c:665
 msgid "File(s) not renamed"
 msgstr "Fichièr(s) pas renomenat(s)"
 
-#: ../src/easytag.c:724
+#: ../src/easytag.c:727
 #, fuzzy, c-format
 msgid "Writing tag of ‘%s’"
 msgstr "Escritura de l'etiqueta de « %s »"
 
-#: ../src/easytag.c:732
+#: ../src/easytag.c:735
 #, fuzzy, c-format
 msgid "Wrote tag of ‘%s’"
 msgstr "L'etiqueta de « %s » es estada escricha"
 
-#: ../src/easytag.c:752
+#: ../src/easytag.c:755
 msgid ""
 "You have tried to save this tag to Unicode but it was detected that your "
 "version of id3lib is buggy"
@@ -3850,7 +3880,7 @@ msgstr ""
 "Avètz ensajat d'enregistrar aquesta etiqueta en Unicode, mas es estat "
 "detectat que vòstra version d'id3lib es buggée."
 
-#: ../src/easytag.c:757
+#: ../src/easytag.c:760
 #, c-format
 msgid ""
 "If you reload this file, some characters in the tag may not be displayed "
@@ -3869,65 +3899,65 @@ msgstr ""
 "\n"
 "Fichièr : %s"
 
-#: ../src/easytag.c:780
+#: ../src/easytag.c:783
 #, fuzzy, c-format
 msgid "Cannot write tag in file ‘%s’"
 msgstr "Impossible d'escriure l'etiqueta dins lo fichièr « %s »"
 
-#: ../src/easytag.c:785
+#: ../src/easytag.c:788
 msgid "Tag Write Error"
 msgstr "Error d'escritura de l'etiqueta"
 
-#: ../src/easytag.c:861 ../src/easytag.c:1096
+#: ../src/easytag.c:865 ../src/easytag.c:1100
 #, fuzzy, c-format
 msgid "Cannot read directory ‘%s’"
 msgstr "Impossible de legir lo repertòri « %s »"
 
-#: ../src/easytag.c:865
+#: ../src/easytag.c:869
 msgid "Directory Read Error"
 msgstr "Error de lectura del repertòri"
 
 #. Read the directory recursively
-#: ../src/easytag.c:886
+#: ../src/easytag.c:890
 msgid "Search in progress…"
 msgstr "Recèrca en cors…"
 
-#: ../src/easytag.c:959
+#: ../src/easytag.c:963
 #, fuzzy, c-format
 msgid "Found one file in this directory and subdirectories"
 msgid_plural "Found %u files in this directory and subdirectories"
 msgstr[0] "Un fichièr trobat dins aqueste repertòri e sos sosrepertòris."
 msgstr[1] "%d fichièrs trobats dins aqueste repertòri e sos sosrepertòris."
 
-#: ../src/easytag.c:966
+#: ../src/easytag.c:970
 #, fuzzy, c-format
 msgid "Found one file in this directory"
 msgid_plural "Found %u files in this directory"
 msgstr[0] "Un fichièr trobat dins aqueste repertòri."
 msgstr[1] "%d fichièrs trobats dins aqueste repertòri."
 
-#: ../src/easytag.c:983
+#: ../src/easytag.c:987
 msgid "No file found in this directory and subdirectories"
 msgstr "Cap de fichièr pas trobat dins aqueste repertòri e sos sosrepertòris"
 
-#: ../src/easytag.c:985
+#: ../src/easytag.c:989
 msgid "No file found in this directory"
 msgstr "Cap de fichièr pas trobat dins aqueste repertòri"
 
-#: ../src/easytag.c:1061
+#: ../src/easytag.c:1065
 #, fuzzy, c-format
 msgid "Error opening directory ‘%s’: %s"
 msgstr "Error al moment de la dobertura del repertòri « %s » (%s)"
 
-#: ../src/easytag.c:1116
+#: ../src/easytag.c:1120
 msgid "Searching for audio files…"
 msgstr "Recèrca de fichièrs àudio en cors…"
 
-#: ../src/easytag.c:1117
+#: ../src/easytag.c:1121
 msgid "Searching"
 msgstr "Recèrca en cors"
 
-#: ../src/easytag.c:1118
+#: ../src/easytag.c:1122
 msgid "_Stop"
 msgstr ""
 
@@ -3935,7 +3965,7 @@ msgstr ""
 msgid "File not found"
 msgstr "Fichièr introbable"
 
-#: ../src/file_area.c:249 ../src/load_files_dialog.c:232
+#: ../src/file_area.c:249 ../src/load_files_dialog.cc:235
 #, fuzzy, c-format
 msgid "Cannot query file information ‘%s’"
 msgstr "Impossible d'obtenir las informacions del fichièr (%s)"
@@ -3944,42 +3974,42 @@ msgstr "Impossible d'obtenir las informacions del fichièr (%s)"
 msgid "Read-only file"
 msgstr "Fichièr en lectura sola"
 
-#: ../src/file_list.c:246
+#: ../src/file_list.cc:246
 #, fuzzy, c-format
 msgid "Error reading ID3 tag from file ‘%s’: %s"
 msgstr "Error al moment de la lectura de l'etiqueta del fichièr : « %s »"
 
-#: ../src/file_list.c:257
+#: ../src/file_list.cc:257
 #, fuzzy, c-format
 msgid "Error reading tag from Ogg file ‘%s’: %s"
 msgstr "Error al moment de la lectura de l'etiqueta d'un fichièr ogg (%s)"
 
-#: ../src/file_list.c:268
+#: ../src/file_list.cc:268
 #, fuzzy, c-format
 msgid "Error reading tag from FLAC file ‘%s’: %s"
 msgstr "Error al moment de la lectura de l'etiqueta del fichièr : « %s »"
 
-#: ../src/file_list.c:278
+#: ../src/file_list.cc:278
 #, fuzzy, c-format
 msgid "Error reading APE tag from file ‘%s’: %s"
 msgstr "Error al moment de la lectura de l'etiqueta del fichièr : « %s »"
 
-#: ../src/file_list.c:288
+#: ../src/file_list.cc:288
 #, fuzzy, c-format
 msgid "Error reading tag from MP4 file ‘%s’: %s"
 msgstr "Error al moment de la lectura de l'etiqueta del fichièr : « %s »"
 
-#: ../src/file_list.c:299
+#: ../src/file_list.cc:299
 #, fuzzy, c-format
 msgid "Error reading tag from WavPack file ‘%s’: %s"
 msgstr "Error al moment de la lectura de l'etiqueta del fichièr : « %s »"
 
-#: ../src/file_list.c:310
+#: ../src/file_list.cc:310
 #, fuzzy, c-format
 msgid "Error reading tag from Opus file ‘%s’: %s"
 msgstr "Error al moment de la lectura de l'etiqueta d'un fichièr Opus (%s)"
 
-#: ../src/file_list.c:346
+#: ../src/file_list.cc:346
 #, fuzzy, c-format
 msgid ""
 "The year value ‘%s’ seems to be invalid in file ‘%s’. The information will "
@@ -3988,7 +4018,7 @@ msgstr ""
 "La valor de l'annada « %s » semble invalida dins lo fichièr « %s ». Aquesta "
 "informacion serà perduda al moment de l'enregistrament de l'etiqueta."
 
-#: ../src/file_list.c:353
+#: ../src/file_list.cc:353
 #, fuzzy, c-format
 msgid ""
 "The original year value ‘%s’ seems to be invalid in file ‘%s’. The "
@@ -3997,35 +4027,35 @@ msgstr ""
 "La valor de l'annada « %s » semble invalida dins lo fichièr « %s ». Aquesta "
 "informacion serà perduda al moment de l'enregistrament de l'etiqueta."
 
-#: ../src/file_list.c:509
+#: ../src/file_list.cc:510
 #, fuzzy, c-format
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "Correccion automatica aplicada sul fichièr « %s »."
 
-#: ../src/load_files_dialog.c:272 ../src/setting.c:329
+#: ../src/load_files_dialog.cc:275 ../src/setting.c:329
 #, fuzzy, c-format
 msgid "Cannot open file ‘%s’: %s"
 msgstr "Impossible de dobrir lo fichièr « %s » (%s)"
 
-#: ../src/load_files_dialog.c:302
+#: ../src/load_files_dialog.cc:305
 #, fuzzy, c-format
 msgid "Error reading file ‘%s’"
 msgstr "Error al moment de la lectura del fichièr (%s)"
 
-#: ../src/load_files_dialog.c:742 ../src/load_files_dialog.c:845
+#: ../src/load_files_dialog.cc:745 ../src/load_files_dialog.cc:848
 msgid "Insert a blank line"
 msgstr "Inserir una linha voida"
 
-#: ../src/load_files_dialog.c:746 ../src/load_files_dialog.c:849
+#: ../src/load_files_dialog.cc:749 ../src/load_files_dialog.cc:852
 msgid "Delete this line"
 msgstr "Suprimir aquesta linha"
 
-#: ../src/load_files_dialog.c:757 ../src/load_files_dialog.c:860
+#: ../src/load_files_dialog.cc:760 ../src/load_files_dialog.cc:863
 #, fuzzy
 msgid "Move this line up"
 msgstr "Remonter aquesta linha"
 
-#: ../src/load_files_dialog.c:761 ../src/load_files_dialog.c:864
+#: ../src/load_files_dialog.cc:764 ../src/load_files_dialog.cc:867
 #, fuzzy
 msgid "Move this line down"
 msgstr "Remonter aquesta linha"
@@ -4184,13 +4214,13 @@ msgstr "La lista de lectura « %s » es estada escricha"
 msgid "Invalid scanner mask"
 msgstr "Masqueta de numerizar invalida"
 
-#: ../src/preferences_dialog.c:864
+#: ../src/preferences_dialog.c:881
 #, fuzzy
 msgid "The selected default path is invalid"
 msgstr ""
 "Lo camin seleccionat coma « Camin per defaut dels fichièrs » es pas valid"
 
-#: ../src/preferences_dialog.c:866
+#: ../src/preferences_dialog.c:883
 #, fuzzy, c-format
 msgid ""
 "Path: ‘%s’\n"
@@ -4199,79 +4229,79 @@ msgstr ""
 "Camin : « %s »\n"
 "Error : %s"
 
-#: ../src/preferences_dialog.c:870
+#: ../src/preferences_dialog.c:887
 msgid "Invalid Path Error"
 msgstr "Error de camin invalid"
 
-#: ../src/scan_dialog.c:382
+#: ../src/scan_dialog.cc:386
 #, fuzzy, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Impossible de calculer la valor CRC del fichièr (%s)"
 
-#: ../src/scan_dialog.c:397
+#: ../src/scan_dialog.cc:401
 msgid "Tag successfully scanned"
 msgstr "Etiqueta numerizada amb succès"
 
-#: ../src/scan_dialog.c:400
+#: ../src/scan_dialog.cc:404
 #, fuzzy, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Etiqueta numerizada amb succès : %s"
 
-#: ../src/scan_dialog.c:443
+#: ../src/scan_dialog.cc:447
 #, fuzzy, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr ""
 "Numerizar d'etiquetas : estranh… l'extension « %s » es pas estada trobada "
 "dins lo nom de fichièr « %s »"
 
-#: ../src/scan_dialog.c:535 ../src/scan_dialog.c:566
+#: ../src/scan_dialog.cc:539 ../src/scan_dialog.cc:570
 #, fuzzy, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr ""
 "Error de numerizar : impossible de trobar lo separador « %s » dins « %s »"
 
-#: ../src/scan_dialog.c:794
+#: ../src/scan_dialog.cc:798
 #, fuzzy, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "Impossible de convertir lo nom del fichièr « %s » cap a l'encodatge del nom "
 "de fichièrs sistèma"
 
-#: ../src/scan_dialog.c:820
+#: ../src/scan_dialog.cc:824
 msgid "New filename successfully scanned"
 msgstr "Novèl nom de fichièr numerizat amb succès"
 
-#: ../src/scan_dialog.c:824
+#: ../src/scan_dialog.cc:828
 #, fuzzy, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Novèl nom de fichièr numerizat amb succès : %s"
 
-#: ../src/scan_dialog.c:1205
+#: ../src/scan_dialog.cc:993
 #, fuzzy, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Error al moment del tractament dels camps : %s"
 
-#: ../src/scan_dialog.c:2081
+#: ../src/scan_dialog.cc:1866
 msgid "New_mask"
 msgstr "_Maquesta novèla"
 
-#: ../src/scan_dialog.c:2552
+#: ../src/scan_dialog.cc:2334
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "Masqueta de numerizar invalida"
 
-#: ../src/scan_dialog.c:2625
+#: ../src/scan_dialog.cc:2407
 msgid "All tags have been scanned"
 msgstr "Totas las etiquetas son etadas numerizadas"
 
-#: ../src/search_dialog.c:576
+#: ../src/search_dialog.cc:201
 #, c-format
 msgid "Found one file"
 msgid_plural "Found %d files"
 msgstr[0] "%d fichièr trobat"
 msgstr[1] "%d fichièrs trobats"
 
-#: ../src/search_dialog.c:658
+#: ../src/search_dialog.cc:273
 msgid "Ready to search…"
 msgstr "Prêt a recercar…"
 
@@ -4296,242 +4326,242 @@ msgstr "Cargament de las masquetas per defaut per « Renomenar lo fichièr »…
 msgid "Ready to start"
 msgstr "Prêt a démarrer"
 
-#: ../src/tag_area.c:180
+#: ../src/tag_area.cc:184
 #, fuzzy, c-format
 msgid "Selected files tagged with title ‘%s’"
 msgstr "Los fichièrs seleccionats son etiquetats amb lo títol « %s »."
 
-#: ../src/tag_area.c:182
+#: ../src/tag_area.cc:186
 #, fuzzy
 msgid "Removed title from selected files"
 msgstr "Lo títol es estat suprimit dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:191
+#: ../src/tag_area.cc:195
 #, fuzzy, c-format
 msgid "Selected files tagged with artist ‘%s’"
 msgstr "Los fichièrs seleccionats son etiquetats amb l'artista « %s »."
 
-#: ../src/tag_area.c:193
+#: ../src/tag_area.cc:197
 #, fuzzy
 msgid "Removed artist from selected files"
 msgstr "L'artista es estat suprimit dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:202
+#: ../src/tag_area.cc:206
 #, fuzzy, c-format
 msgid "Selected files tagged with album artist ‘%s’"
 msgstr ""
 "Los fichièrs seleccionats son etiquetats amb l'artista de l'album « %s »."
 
-#: ../src/tag_area.c:204
+#: ../src/tag_area.cc:208
 #, fuzzy
 msgid "Removed album artist from selected files"
 msgstr "L'artista de l'album es estat suprimit dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:213
+#: ../src/tag_area.cc:217
 #, fuzzy, c-format
 msgid "Selected files tagged with album ‘%s’"
 msgstr "Los fichièrs seleccionats son etiquetats amb l'album « %s »."
 
-#: ../src/tag_area.c:215
+#: ../src/tag_area.cc:219
 #, fuzzy
 msgid "Removed album name from selected files"
 msgstr "Lo nom d'album es estat suprimit dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:252
+#: ../src/tag_area.cc:256
 #, fuzzy, c-format
 msgid "Selected files tagged with disc number ‘%s/%s’"
 msgstr ""
 "Los fichièrs seleccionats son etiquetats amb lo numèro de disc « %s/%s »."
 
-#: ../src/tag_area.c:259
+#: ../src/tag_area.cc:263
 #, fuzzy, c-format
 msgid "Selected files tagged with disc number like ‘xx’"
 msgstr ""
 "Los fichièrs seleccionats son etiquetats amb lo numèro de disc del tipe « xx "
 "»."
 
-#: ../src/tag_area.c:264
+#: ../src/tag_area.cc:268
 #, fuzzy
 msgid "Removed disc number from selected files"
 msgstr "Lo numèro de disc es estat suprimit dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:276
+#: ../src/tag_area.cc:280
 #, fuzzy, c-format
 msgid "Selected files tagged with year ‘%s’"
 msgstr "Los fichièrs seleccionats son etiquetats amb l'annada « %s »."
 
-#: ../src/tag_area.c:278
+#: ../src/tag_area.cc:282
 #, fuzzy
 msgid "Removed year from selected files"
 msgstr "L'annada es estat suprimida dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:287
+#: ../src/tag_area.cc:291
 #, fuzzy, c-format
 msgid "Selected files tagged with release year ‘%s’"
 msgstr "Los fichièrs seleccionats son etiquetats amb l'annada « %s »."
 
-#: ../src/tag_area.c:289
+#: ../src/tag_area.cc:293
 #, fuzzy
 msgid "Removed release year from selected files"
 msgstr "L'annada es estat suprimida dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:318 ../src/tag_area.c:423
+#: ../src/tag_area.cc:322 ../src/tag_area.cc:427
 #, fuzzy, c-format
 msgid "Selected files tagged with track like ‘xx/%s’"
 msgstr ""
 "Los fichièrs seleccionats son etiquetats amb un numèro de pista del tipe « "
 "xx/%s »."
 
-#: ../src/tag_area.c:322
+#: ../src/tag_area.cc:326
 #, fuzzy, c-format
 msgid "Selected files tagged with track like ‘xx’"
 msgstr ""
 "Los fichièrs seleccionats son etiquetats amb un numèro de pista del tipe « "
 "xx »."
 
-#: ../src/tag_area.c:327 ../src/tag_area.c:428
+#: ../src/tag_area.cc:331 ../src/tag_area.cc:432
 #, fuzzy
 msgid "Removed track number from selected files"
 msgstr "La pista es estat suprimida dels fichièrs seleccionats."
 
 #. msg = g_strdup_printf(_("All %d tracks numbered sequentially."), ETCore->ETFileSelectionList_Length);
-#: ../src/tag_area.c:386
+#: ../src/tag_area.cc:390
 #, fuzzy, c-format
 msgid "Selected tracks numbered sequentially"
 msgstr "Las pistas seleccionadas son estadas renumerotadas séquentiellement."
 
-#: ../src/tag_area.c:440
+#: ../src/tag_area.cc:444
 #, fuzzy, c-format
 msgid "Selected files tagged with genre ‘%s’"
 msgstr "Los fichièrs seleccionats son etiquetats amb lo genre « %s »."
 
-#: ../src/tag_area.c:442
+#: ../src/tag_area.cc:446
 #, fuzzy
 msgid "Removed genre from selected files"
 msgstr "Lo genre es estat suprimit dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:451
+#: ../src/tag_area.cc:455
 #, fuzzy, c-format
 msgid "Selected files tagged with comment ‘%s’"
 msgstr "Los fichièrs seleccionats son etiquetats amb lo comentari « %s »."
 
-#: ../src/tag_area.c:453
+#: ../src/tag_area.cc:457
 #, fuzzy
 msgid "Removed comment from selected files"
 msgstr "Lo comentari es estat suprimit dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:462
+#: ../src/tag_area.cc:466
 #, fuzzy, c-format
 msgid "Selected files tagged with composer ‘%s’"
 msgstr "Los fichièrs seleccionats son etiquetats amb lo compositor « %s »."
 
-#: ../src/tag_area.c:464
+#: ../src/tag_area.cc:468
 #, fuzzy
 msgid "Removed composer from selected files"
 msgstr "Lo compositor es estat suprimit dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:473
+#: ../src/tag_area.cc:477
 #, fuzzy, c-format
 msgid "Selected files tagged with original artist ‘%s’"
 msgstr ""
 "Los fichièrs seleccionats son etiquetats amb l'artista original « %s »."
 
-#: ../src/tag_area.c:475
+#: ../src/tag_area.cc:479
 #, fuzzy
 msgid "Removed original artist from selected files"
 msgstr "L'artista original es estat suprimit dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:484
+#: ../src/tag_area.cc:488
 #, fuzzy, c-format
 msgid "Selected files tagged with original year ‘%s’"
 msgstr ""
 "Los fichièrs seleccionats son etiquetats amb l'artista original « %s »."
 
-#: ../src/tag_area.c:486
+#: ../src/tag_area.cc:490
 #, fuzzy
 msgid "Removed original year from selected files"
 msgstr "L'artista original es estat suprimit dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:495
+#: ../src/tag_area.cc:499
 #, fuzzy, c-format
 msgid "Selected files tagged with copyright ‘%s’"
 msgstr "Los fichièrs seleccionats son etiquetats amb lo copyright « %s »."
 
-#: ../src/tag_area.c:497
+#: ../src/tag_area.cc:501
 #, fuzzy
 msgid "Removed copyright from selected files"
 msgstr "Lo copyright es estat suprimit dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:506
+#: ../src/tag_area.cc:510
 #, fuzzy, c-format
 msgid "Selected files tagged with URL ‘%s’"
 msgstr "Los fichièrs seleccionats son etiquetats amb l'URL « %s »."
 
-#: ../src/tag_area.c:508
+#: ../src/tag_area.cc:512
 #, fuzzy
 msgid "Removed URL from selected files"
 msgstr "L'URL es estat suprimit dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:517
+#: ../src/tag_area.cc:521
 #, fuzzy, c-format
 msgid "Selected files tagged with encoder name ‘%s’"
 msgstr ""
 "Los fichièrs seleccionats son etiquetats amb lo nom d'encodador « %s »."
 
-#: ../src/tag_area.c:519
+#: ../src/tag_area.cc:523
 #, fuzzy
 msgid "Removed encoder name from selected files"
 msgstr "Lo nom de l'encodador es estat suprimit dels fichièrs seleccionats."
 
-#: ../src/tag_area.c:554
+#: ../src/tag_area.cc:558
 #, fuzzy
 msgid "Selected files tagged with images"
 msgstr "Los fichièrs seleccionats son etiquetats amb aquestes imatges."
 
-#: ../src/tag_area.c:558
+#: ../src/tag_area.cc:562
 #, fuzzy
 msgid "Removed images from selected files"
 msgstr "Los imatges son etadas suprimidas dels fichièrs seleccionats."
 
 #. Menu items
-#: ../src/tag_area.c:726
+#: ../src/tag_area.cc:728
 msgid "Tag selected files with this field"
 msgstr "Etiquetar los fichièrs seleccionats amb aqueste camp"
 
-#: ../src/tag_area.c:756
+#: ../src/tag_area.cc:758
 msgid "All uppercase"
 msgstr "Tot en majusculas"
 
-#: ../src/tag_area.c:762
+#: ../src/tag_area.cc:764
 msgid "All lowercase"
 msgstr "Tot en minusculas"
 
-#: ../src/tag_area.c:768
+#: ../src/tag_area.cc:770
 msgid "First letter uppercase"
 msgstr "Primièra letra en majuscula"
 
-#: ../src/tag_area.c:774
+#: ../src/tag_area.cc:776
 msgid "First letter uppercase of each word"
 msgstr "Primièra letra de cada mot en majuscula"
 
-#: ../src/tag_area.c:790
+#: ../src/tag_area.cc:792
 msgid "Insert space before uppercase letter"
 msgstr "Inserir un espaci avant una majuscula"
 
-#: ../src/tag_area.c:796
+#: ../src/tag_area.cc:798
 msgid "Remove duplicate spaces or underscores"
 msgstr "Suprimir los espacis o soslinhaments en doble"
 
-#: ../src/tag_area.c:802
+#: ../src/tag_area.cc:804
 msgid "Remove all text"
 msgstr "Suprimir totes los tèxtes"
 
-#: ../src/tag_area.c:1160 ../src/tag_area.c:1253
+#: ../src/tag_area.cc:1162 ../src/tag_area.cc:1255
 #, c-format
 msgid "Error parsing image data ‘%s’"
 msgstr ""
 
-#: ../src/tag_area.c:1235
+#: ../src/tag_area.cc:1237
 #, fuzzy
 msgid ""
 "Cannot display the image because not enough data has been read to determine "
@@ -4540,98 +4570,98 @@ msgstr ""
 "Impossible d'afichar l'imatge, perque i a pas pro de donadas legidas per "
 "determinar comment crear lo tampon de l'imatge."
 
-#: ../src/tag_area.c:1242
+#: ../src/tag_area.cc:1244
 msgid "Cannot display the image"
 msgstr "Impossible d'afichar l'imatge"
 
-#: ../src/tag_area.c:1244
+#: ../src/tag_area.cc:1246
 msgid ""
 "Not enough data has been read to determine how to create the image buffer."
 msgstr ""
 "Pas pro de donadas legidas per determinar cossí crear lo tampon de l'imatge."
 
-#: ../src/tag_area.c:1246
+#: ../src/tag_area.cc:1248
 msgid "Load Image File"
 msgstr "Cargar lo fichièr imatge"
 
-#: ../src/tag_area.c:1291 ../src/tag_area.c:1316
+#: ../src/tag_area.cc:1293 ../src/tag_area.cc:1318
 #, fuzzy, c-format
 msgid "Image file not loaded ‘%s’"
 msgstr "Fichièr imatge pas cargat : %s"
 
-#: ../src/tag_area.c:1308
+#: ../src/tag_area.cc:1310
 #, fuzzy, c-format
 msgid "Cannot open file ‘%s’"
 msgstr "Impossible de dobrir lo fichièr : « %s »"
 
-#: ../src/tag_area.c:1312
+#: ../src/tag_area.cc:1314
 msgid "Image File Error"
 msgstr "Error del fichièr imatge"
 
-#: ../src/tag_area.c:1323
+#: ../src/tag_area.cc:1325
 msgid "Image file loaded"
 msgstr "Fichièr imatge cargat"
 
-#: ../src/tag_area.c:1406
+#: ../src/tag_area.cc:1408
 msgid "Add Images"
 msgstr "Apondre los imatges"
 
-#: ../src/tag_area.c:1416 ../src/tag_area.c:1744
+#: ../src/tag_area.cc:1418 ../src/tag_area.cc:1745
 msgid "All Files"
 msgstr "Totes los fichièrs"
 
-#: ../src/tag_area.c:1423 ../src/tag_area.c:1751
+#: ../src/tag_area.cc:1425 ../src/tag_area.cc:1752
 msgid "PNG and JPEG"
 msgstr "PNG e JPEG"
 
-#: ../src/tag_area.c:1541
+#: ../src/tag_area.cc:1542
 #, c-format
 msgid "Image Properties %d/%d"
 msgstr "Proprietats de l'imatge %d/%d"
 
-#: ../src/tag_area.c:1730
+#: ../src/tag_area.cc:1731
 #, c-format
 msgid "Save Image %d/%d"
 msgstr "Enregistrar l'imatge %d/%d"
 
-#: ../src/tag_area.c:1810
+#: ../src/tag_area.cc:1811
 #, fuzzy, c-format
 msgid "Image file not saved ‘%s’"
 msgstr "Fichièr imatge pas enregistrat : %s"
 
-#: ../src/tag_area.c:2055
+#: ../src/tag_area.cc:2056
 msgid "Tag selected files with this genre"
 msgstr "Etiqueta los fichièrs seleccionats amb aqueste genre"
 
-#: ../src/tag_area.c:2704
+#: ../src/tag_area.cc:2705
 msgid "ID3 Tag"
 msgstr "Etiqueta ID3"
 
-#: ../src/tag_area.c:2709
+#: ../src/tag_area.cc:2710
 msgid "Ogg Vorbis Tag"
 msgstr "Etiqueta Ogg Vorbis"
 
-#: ../src/tag_area.c:2714
+#: ../src/tag_area.cc:2715
 msgid "FLAC Vorbis Tag"
 msgstr "Etiqueta FLAC Vorbis"
 
-#: ../src/tag_area.c:2718
+#: ../src/tag_area.cc:2719
 msgid "APE Tag"
 msgstr "Etiqueta APE"
 
-#: ../src/tag_area.c:2722
+#: ../src/tag_area.cc:2723
 msgid "MP4/M4A/AAC Tag"
 msgstr "Etiqueta MP4/M4A/AAC"
 
-#: ../src/tag_area.c:2727
+#: ../src/tag_area.cc:2728
 msgid "Wavpack Tag"
 msgstr "Etiqueta Wavpack"
 
-#: ../src/tag_area.c:2732
+#: ../src/tag_area.cc:2733
 msgid "Opus Tag"
 msgstr "Etiqueta Opus"
 
-#: ../src/tag_area.c:3014
+#: ../src/tag_area.cc:3015
 #, fuzzy, c-format
 msgid "Images (%u)"
 msgstr "Imatges (%d)"

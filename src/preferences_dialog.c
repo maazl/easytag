@@ -48,7 +48,9 @@ typedef struct
     GtkWidget *log_show_check;
     GtkWidget *header_show_check;
     GtkWidget *list_bold_radio;
-    GtkWidget *file_name_replace_check;
+    GtkWidget *file_name_replace_ascii;
+    GtkWidget *file_name_replace_unicode;
+    GtkWidget *file_name_replace_none;
     GtkWidget *name_lower_radio;
     GtkWidget *name_upper_radio;
     GtkWidget *name_no_change_radio;
@@ -321,9 +323,24 @@ create_preferences_dialog (EtPreferencesDialog *self)
      * File Settings
      */
     /* File (name) Options */
-    g_settings_bind (MainSettings, "rename-replace-illegal-chars",
-                     priv->file_name_replace_check, "active",
-                     G_SETTINGS_BIND_DEFAULT);
+    g_settings_bind_with_mapping (MainSettings, "rename-replace-illegal-chars",
+                                  priv->file_name_replace_ascii, "active",
+                                  G_SETTINGS_BIND_DEFAULT,
+                                  et_settings_enum_radio_get,
+                                  et_settings_enum_radio_set,
+                                  priv->file_name_replace_ascii, NULL);
+    g_settings_bind_with_mapping (MainSettings, "rename-replace-illegal-chars",
+                                  priv->file_name_replace_unicode, "active",
+                                  G_SETTINGS_BIND_DEFAULT,
+                                  et_settings_enum_radio_get,
+                                  et_settings_enum_radio_set,
+                                  priv->file_name_replace_unicode, NULL);
+    g_settings_bind_with_mapping (MainSettings, "rename-replace-illegal-chars",
+                                  priv->file_name_replace_none, "active",
+                                  G_SETTINGS_BIND_DEFAULT,
+                                  et_settings_enum_radio_get,
+                                  et_settings_enum_radio_set,
+                                  priv->file_name_replace_none, NULL);
 
     /* Extension case (lower/upper?) */
     g_settings_bind_with_mapping (MainSettings, "rename-extension-mode",
@@ -979,7 +996,13 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
                                                   list_bold_radio);
     gtk_widget_class_bind_template_child_private (widget_class,
                                                   EtPreferencesDialog,
-                                                  file_name_replace_check);
+                                                  file_name_replace_ascii);
+    gtk_widget_class_bind_template_child_private (widget_class,
+                                                  EtPreferencesDialog,
+                                                  file_name_replace_unicode);
+    gtk_widget_class_bind_template_child_private (widget_class,
+                                                  EtPreferencesDialog,
+                                                  file_name_replace_none);
     gtk_widget_class_bind_template_child_private (widget_class,
                                                   EtPreferencesDialog,
                                                   name_lower_radio);

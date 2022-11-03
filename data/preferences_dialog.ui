@@ -230,11 +230,43 @@
                                     </object>
                                 </child>
                                 <child>
-                                    <object class="GtkCheckButton" id="file_name_replace_check">
-                                        <property name="label" translatable="yes">Replace illegal characters when renaming</property>
+                                    <object class="GtkBox" id="file_name_replace_box">
                                         <property name="margin-left">12</property>
-                                        <property name="tooltip-text" translatable="yes">Convert characters which cannot be represented in filenames on the FAT32/16 and Joliet filesystems (‘\’, ‘:’, ‘;’, ‘*’, ‘?’, ‘"’, ‘&lt;’, ‘&gt;’, ‘|’)</property>
+                                        <property name="spacing">12</property>
                                         <property name="visible">True</property>
+                                        <child>
+                                            <object class="GtkLabel" id="file_name_replace_label">
+                                                <property name="label" translatable="yes">Replace illegal characters when renaming:</property>
+                                                <property name="tooltip-text" translatable="yes">Convert characters which cannot be represented in filenames on some filesystems (‘\’, ‘/’, ‘:’, ‘*’, ‘?’, ‘"’, ‘&lt;’, ‘&gt;’, ‘|’)</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkRadioButton" id="file_name_replace_ascii">
+                                                <property name="label" translatable="yes">by ASCII characters</property>
+                                                <property name="name">ascii</property>
+                                                <property name="tooltip-text" translatable="yes">Use the ASCII characters (‘-’, ‘+’, ‘_’, ‘'’, ‘(’, ‘)’) as replacement.</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkRadioButton" id="file_name_replace_unicode">
+                                                <property name="group">file_name_replace_ascii</property>
+                                                <property name="label" translatable="yes">by Unicode characters</property>
+                                                <property name="name">unicode</property>
+                                                <property name="tooltip-text" translatable="yes">Use similar Unicode characters (‘&#8726;’, ‘&#8725;’, ‘&#8758;’, ‘&#8727;’, ‘&#8253;’, ‘&#8221;’, ‘&#8826;’, ‘&#8827;’, ‘&#8739;’) as replacement.</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkRadioButton" id="file_name_replace_none">
+                                                <property name="group">file_name_replace_ascii</property>
+                                                <property name="label" translatable="yes">No change</property>
+                                                <property name="name">none</property>
+                                                <property name="tooltip-text" translatable="yes">You must manually ensure valid file characters.</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                        </child>
                                     </object>
                                 </child>
                                 <child>
@@ -250,7 +282,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkRadioButton" id="name_lower_radio">
-                                                <property name="label" translatable="yes">Lower Case</property>
+                                                <property name="label" translatable="yes">Lower case</property>
                                                 <property name="name">lower-case</property>
                                                 <property name="tooltip-text" translatable="yes">For example, the extension will be converted to ‘.mp3’</property>
                                                 <property name="visible">True</property>
@@ -259,7 +291,7 @@
                                         <child>
                                             <object class="GtkRadioButton" id="name_upper_radio">
                                                 <property name="group">name_lower_radio</property>
-                                                <property name="label" translatable="yes">Upper Case</property>
+                                                <property name="label" translatable="yes">Upper case</property>
                                                 <property name="name">upper-case</property>
                                                 <property name="tooltip-text" translatable="yes">For example, the extension will be converted to ‘.MP3’</property>
                                                 <property name="visible">True</property>
@@ -268,7 +300,7 @@
                                         <child>
                                             <object class="GtkRadioButton" id="name_no_change_radio">
                                                 <property name="group">name_lower_radio</property>
-                                                <property name="label" translatable="yes">No Change</property>
+                                                <property name="label" translatable="yes">No change</property>
                                                 <property name="name">no-change</property>
                                                 <property name="tooltip-text" translatable="yes">The extension will not be modified</property>
                                                 <property name="visible">True</property>
