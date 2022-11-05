@@ -57,6 +57,7 @@ typedef struct
 {
     GtkWidget *files_label;
     GtkWidget *open_button;
+    GtkPaned *browser_paned;
 
     GtkWidget *entry_combo;
     GtkListStore *entry_model;
@@ -519,6 +520,22 @@ et_browser_get_current_path_name (EtBrowser *self)
     priv = et_browser_get_instance_private (self);
 
     return priv->current_path_name;
+}
+
+void et_browser_save_state(EtBrowser *self, GKeyFile* keyfile)
+{
+	EtBrowserPrivate *priv = et_browser_get_instance_private(self);
+	// paned position
+	g_key_file_set_integer(keyfile, "EtBrowser", "paned_position", gtk_paned_get_position(priv->browser_paned));
+}
+
+void et_browser_restore_state(EtBrowser *self, GKeyFile* keyfile)
+{
+	EtBrowserPrivate *priv = et_browser_get_instance_private(self);
+	// paned position
+	gint value = g_key_file_get_integer(keyfile, "EtBrowser", "paned_position", NULL);
+	if (value)
+		gtk_paned_set_position(priv->browser_paned, value);
 }
 
 /*
@@ -3628,7 +3645,6 @@ create_browser (EtBrowser *self)
         GEnumValue* enum_value = g_enum_get_value_by_nick(enum_class, nick);
         if (enum_value == NULL)
         	g_warning("No sort mode with name %s found.", nick);
-    found:
         g_free(nick);
 
         g_signal_connect (column, "clicked", G_CALLBACK (et_browser_on_column_clicked), enum_value);
@@ -4646,60 +4662,35 @@ void et_browser_class_init (EtBrowserClass *klass)
     G_OBJECT_CLASS (klass)->finalize = et_browser_finalize;
     widget_class->destroy = et_browser_destroy;
 
-    gtk_widget_class_set_template_from_resource (widget_class,
-                                                 "/org/gnome/EasyTAG/browser.ui");
-    gtk_widget_class_bind_template_child_private (widget_class, EtBrowser,
-                                                  files_label);
-    gtk_widget_class_bind_template_child_private (widget_class, EtBrowser,
-                                                  open_button);
-    gtk_widget_class_bind_template_child_private (widget_class, EtBrowser,
-                                                  entry_model);
-    gtk_widget_class_bind_template_child_private (widget_class, EtBrowser,
-                                                  entry_combo);
-    gtk_widget_class_bind_template_child_private (widget_class, EtBrowser,
-                                                  directory_album_artist_notebook);
-    gtk_widget_class_bind_template_child_private (widget_class, EtBrowser,
-                                                  file_model);
-    gtk_widget_class_bind_template_child_private (widget_class, EtBrowser,
-                                                  file_view);
-    gtk_widget_class_bind_template_child_private (widget_class, EtBrowser,
-                                                  album_model);
-    gtk_widget_class_bind_template_child_private (widget_class, EtBrowser,
-                                                  album_view);
-    gtk_widget_class_bind_template_child_private (widget_class, EtBrowser,
-                                                  artist_model);
-    gtk_widget_class_bind_template_child_private (widget_class, EtBrowser,
-                                                  artist_view);
-    gtk_widget_class_bind_template_child_private (widget_class, EtBrowser,
-                                                  directory_model);
-    gtk_widget_class_bind_template_child_private (widget_class, EtBrowser,
-                                                  directory_view);
-    gtk_widget_class_bind_template_callback (widget_class, collapse_cb);
-    gtk_widget_class_bind_template_callback (widget_class, expand_cb);
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             on_album_tree_button_press_event);
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             on_artist_tree_button_press_event);
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             on_directory_tree_button_press_event);
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             on_file_tree_button_press_event);
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             on_album_tree_popup_menu);
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             on_artist_tree_popup_menu);
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             on_directory_tree_popup_menu);
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             on_file_tree_popup_menu);
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             Browser_Entry_Activated);
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             Browser_List_Key_Press);
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             Browser_Tree_Key_Press);
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             Browser_Tree_Node_Selected);
+    gtk_widget_class_set_template_from_resource(widget_class, "/org/gnome/EasyTAG/browser.ui");
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, files_label);
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, open_button);
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, browser_paned);
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, entry_model);
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, entry_combo);
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, directory_album_artist_notebook);
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, file_model);
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, file_view);
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, album_model);
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, album_view);
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, artist_model);
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, artist_view);
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, directory_model);
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, directory_view);
+    gtk_widget_class_bind_template_callback(widget_class, collapse_cb);
+    gtk_widget_class_bind_template_callback(widget_class, expand_cb);
+    gtk_widget_class_bind_template_callback(widget_class, on_album_tree_button_press_event);
+    gtk_widget_class_bind_template_callback(widget_class, on_artist_tree_button_press_event);
+    gtk_widget_class_bind_template_callback(widget_class, on_directory_tree_button_press_event);
+    gtk_widget_class_bind_template_callback(widget_class, on_file_tree_button_press_event);
+    gtk_widget_class_bind_template_callback(widget_class, on_album_tree_popup_menu);
+    gtk_widget_class_bind_template_callback(widget_class, on_artist_tree_popup_menu);
+    gtk_widget_class_bind_template_callback(widget_class, on_directory_tree_popup_menu);
+    gtk_widget_class_bind_template_callback(widget_class, on_file_tree_popup_menu);
+    gtk_widget_class_bind_template_callback(widget_class, Browser_Entry_Activated);
+    gtk_widget_class_bind_template_callback(widget_class, Browser_List_Key_Press);
+    gtk_widget_class_bind_template_callback(widget_class, Browser_Tree_Key_Press);
+    gtk_widget_class_bind_template_callback(widget_class, Browser_Tree_Node_Selected);
 }
 
 /*

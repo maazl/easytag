@@ -62,7 +62,7 @@
 
 typedef struct
 {
-    GtkWidget *browser;
+    EtBrowser *browser;
 
     GtkWidget *file_area;
     GtkWidget *log_area;
@@ -77,8 +77,8 @@ typedef struct
     GtkWidget *scan_dialog;
     GtkWidget *search_dialog;
 
-    GtkWidget *hpaned;
-    GtkWidget *vpaned;
+    GtkPaned *hpaned;
+    GtkPaned *vpaned;
 
     GdkCursor *cursor;
 
@@ -88,7 +88,11 @@ typedef struct
     gint paned_position;
 } EtApplicationWindowPrivate;
 
+// learn correct return type for et_browser_get_instance_private
+#define et_application_window_get_instance_private et_application_window_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtApplicationWindow, et_application_window, GTK_TYPE_APPLICATION_WINDOW)
+#undef et_application_window_get_instance_private
+#define et_application_window_get_instance_private(x) (EtApplicationWindowPrivate*)et_application_window_get_instance_private_(x)
 
 /* Used to force to hide the msgbox when deleting file */
 static gboolean SF_HideMsgbox_Delete_File;
@@ -148,6 +152,8 @@ save_state (EtApplicationWindow *self)
     g_key_file_set_integer (keyfile, "EtApplicationWindow", "paned_position",
                             priv->paned_position);
 
+    et_browser_save_state(priv->browser, keyfile);
+
     if (!g_key_file_save_to_file (keyfile, path, &error))
     {
         g_warning ("Error saving window state: %s", error->message);
@@ -202,12 +208,14 @@ restore_state (EtApplicationWindow *self)
 
     /* Only set the unmaximized position, as the maximized position should only
      * be set after the window manager has maximized the window. */
-    gtk_paned_set_position (GTK_PANED (priv->hpaned), priv->paned_position);
+    gtk_paned_set_position (priv->hpaned, priv->paned_position);
 
     if (priv->is_maximized)
     {
         gtk_window_maximize (window);
     }
+
+    et_browser_restore_state(priv->browser, keyfile);
 
     g_key_file_free (keyfile);
 }
@@ -264,7 +272,7 @@ on_paned_notify_position (EtApplicationWindow *self,
 
     priv = et_application_window_get_instance_private (self);
 
-    priv->paned_position = gtk_paned_get_position (GTK_PANED (priv->hpaned));
+    priv->paned_position = gtk_paned_get_position (priv->hpaned);
 }
 
 File_Tag *
@@ -446,7 +454,7 @@ on_open_with (GSimpleAction *action,
 
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_show_open_files_with_dialog (ET_BROWSER (priv->browser));
+    et_browser_show_open_files_with_dialog (priv->browser);
 }
 
 static void
@@ -459,7 +467,7 @@ on_run_player (GSimpleAction *action,
 
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_run_player_for_selection (ET_BROWSER (priv->browser));
+    et_browser_run_player_for_selection (priv->browser);
 }
 
 static void
@@ -474,7 +482,7 @@ on_invert_selection (GSimpleAction *action,
 
     et_application_window_update_et_file_from_ui (self);
 
-    et_browser_invert_selection (ET_BROWSER (priv->browser));
+    et_browser_invert_selection (priv->browser);
     et_application_window_update_actions (self);
 }
 
@@ -530,7 +538,7 @@ on_delete (GSimpleAction *action,
 
     for (l = selfilelist; l != NULL; l = g_list_next (l))
     {
-        rowref = gtk_tree_row_reference_new (treemodel, l->data);
+        rowref = gtk_tree_row_reference_new (treemodel, (GtkTreePath*)l->data);
         rowreflist = g_list_prepend (rowreflist, rowref);
     }
 
@@ -539,12 +547,8 @@ on_delete (GSimpleAction *action,
 
     for (l = rowreflist; l != NULL; l = g_list_next (l))
     {
-        GtkTreePath *path;
-        ET_File *ETFile;
-
-        path = gtk_tree_row_reference_get_path (l->data);
-        ETFile = et_browser_get_et_file_from_path (ET_BROWSER (priv->browser),
-                                                   path);
+        GtkTreePath *path = gtk_tree_row_reference_get_path ((GtkTreeRowReference*)l->data);
+        ET_File *ETFile = et_browser_get_et_file_from_path (priv->browser, path);
         gtk_tree_path_free (path);
 
         et_application_window_display_et_file (self, ETFile);
@@ -571,7 +575,7 @@ on_delete (GSimpleAction *action,
                 nb_files_deleted += saving_answer;
                 /* Remove file in the browser (corresponding line in the
                  * clist). */
-                et_browser_remove_file (ET_BROWSER (priv->browser), ETFile);
+                et_browser_remove_file (priv->browser, ETFile);
                 /* Remove file from file list. */
                 ET_Remove_File_From_File_List (ETFile);
                 break;
@@ -617,8 +621,7 @@ on_delete (GSimpleAction *action,
         ET_Display_File_Data_To_UI((ET_File *)ET_Displayed_File_List_Current()->data);*/
 
     /* Load list... */
-    et_browser_load_file_list (ET_BROWSER (priv->browser),
-                               ETCore->ETFileDisplayedList, NULL);
+    et_browser_load_file_list (priv->browser, ETCore->ETFileDisplayedList, NULL);
     /* Rebuild the list... */
     /*et_browser_toggle_display_mode (ET_BROWSER (priv->browser));*/
 
@@ -766,7 +769,7 @@ on_select_all (GSimpleAction *action,
     {
         et_application_window_update_et_file_from_ui (self);
 
-        et_browser_select_all (ET_BROWSER (priv->browser));
+        et_browser_select_all (priv->browser);
         et_application_window_update_actions (self);
     }
 }
@@ -801,7 +804,7 @@ on_unselect_all (GSimpleAction *action,
     {
         et_application_window_update_et_file_from_ui (self);
 
-        et_browser_unselect_all (ET_BROWSER (priv->browser));
+        et_browser_unselect_all (priv->browser);
 
         ETCore->ETFileDisplayed = NULL;
     }
@@ -1020,13 +1023,11 @@ on_file_artist_view_change (GSimpleAction *action,
 
     if (strcmp (state, "file") == 0)
     {
-        et_browser_set_display_mode (ET_BROWSER (priv->browser),
-                                     ET_BROWSER_MODE_FILE);
+        et_browser_set_display_mode (priv->browser, ET_BROWSER_MODE_FILE);
     }
     else if (strcmp (state, "artist") == 0)
     {
-        et_browser_set_display_mode (ET_BROWSER (priv->browser),
-                                     ET_BROWSER_MODE_ARTIST);
+        et_browser_set_display_mode (priv->browser, ET_BROWSER_MODE_ARTIST);
     }
     else
     {
@@ -1048,7 +1049,7 @@ on_collapse_tree (GSimpleAction *action,
 
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_collapse (ET_BROWSER (priv->browser));
+    et_browser_collapse (priv->browser);
 }
 
 static void
@@ -1061,7 +1062,7 @@ on_reload_tree (GSimpleAction *action,
 
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_reload (ET_BROWSER (priv->browser));
+    et_browser_reload (priv->browser);
 }
 
 static void
@@ -1074,7 +1075,7 @@ on_reload_directory (GSimpleAction *action,
 
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_reload_directory (ET_BROWSER (priv->browser));
+    et_browser_reload_directory (priv->browser);
 }
 
 static void
@@ -1088,7 +1089,7 @@ on_set_default_path (GSimpleAction *action,
     self = ET_APPLICATION_WINDOW (user_data);
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_set_current_path_default (ET_BROWSER (priv->browser));
+    et_browser_set_current_path_default (priv->browser);
 }
 
 static void
@@ -1102,7 +1103,7 @@ on_rename_directory (GSimpleAction *action,
     self = ET_APPLICATION_WINDOW (user_data);
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_show_rename_directory_dialog (ET_BROWSER (priv->browser));
+    et_browser_show_rename_directory_dialog (priv->browser);
 }
 
 static void
@@ -1116,7 +1117,7 @@ on_browse_directory (GSimpleAction *action,
     self = ET_APPLICATION_WINDOW (user_data);
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_show_open_directory_with_dialog (ET_BROWSER (priv->browser));
+    et_browser_show_open_directory_with_dialog (priv->browser);
 }
 
 static void
@@ -1186,7 +1187,7 @@ on_go_home (GSimpleAction *action,
     self = ET_APPLICATION_WINDOW (user_data);
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_go_home (ET_BROWSER (priv->browser));
+    et_browser_go_home (priv->browser);
 }
 
 static void
@@ -1200,7 +1201,7 @@ on_go_desktop (GSimpleAction *action,
     self = ET_APPLICATION_WINDOW (user_data);
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_go_desktop (ET_BROWSER (priv->browser));
+    et_browser_go_desktop (priv->browser);
 }
 
 static void
@@ -1214,7 +1215,7 @@ on_go_documents (GSimpleAction *action,
     self = ET_APPLICATION_WINDOW (user_data);
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_go_documents (ET_BROWSER (priv->browser));
+    et_browser_go_documents (priv->browser);
 }
 
 static void
@@ -1228,7 +1229,7 @@ on_go_downloads (GSimpleAction *action,
     self = ET_APPLICATION_WINDOW (user_data);
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_go_downloads (ET_BROWSER (priv->browser));
+    et_browser_go_downloads (priv->browser);
 }
 
 static void
@@ -1242,7 +1243,7 @@ on_go_music (GSimpleAction *action,
     self = ET_APPLICATION_WINDOW (user_data);
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_go_music (ET_BROWSER (priv->browser));
+    et_browser_go_music (priv->browser);
 }
 
 static void
@@ -1256,7 +1257,7 @@ on_go_parent (GSimpleAction *action,
     self = ET_APPLICATION_WINDOW (user_data);
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_go_parent (ET_BROWSER (priv->browser));
+    et_browser_go_parent (priv->browser);
 }
 
 static void
@@ -1270,7 +1271,7 @@ on_go_default (GSimpleAction *action,
     self = ET_APPLICATION_WINDOW (user_data);
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_load_default_dir (ET_BROWSER (priv->browser));
+    et_browser_load_default_dir (priv->browser);
 }
 
 static void
@@ -1284,7 +1285,7 @@ update_ui_for_et_file (EtApplicationWindow *self,
     if (et_file)
     {
         /* To avoid the last line still selected. */
-        et_browser_unselect_all (ET_BROWSER (priv->browser));
+        et_browser_unselect_all (priv->browser);
         et_application_window_browser_select_file_by_et_file (self, et_file,
                                                               TRUE);
         et_application_window_display_et_file (self, et_file);
@@ -1423,7 +1424,7 @@ on_run_player_album (GSimpleAction *action,
 
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_run_player_for_album_list (ET_BROWSER (priv->browser));
+    et_browser_run_player_for_album_list (priv->browser);
 }
 
 static void
@@ -1436,7 +1437,7 @@ on_run_player_artist (GSimpleAction *action,
 
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_run_player_for_artist_list (ET_BROWSER (priv->browser));
+    et_browser_run_player_for_artist_list (priv->browser);
 }
 
 static gboolean
@@ -1549,7 +1550,7 @@ static const GActionEntry actions[] =
 };
 
 static void
-et_application_window_dispose (GObject *object)
+et_application_window_destroy(GtkWidget *object)
 {
     EtApplicationWindow *self;
     EtApplicationWindowPrivate *priv;
@@ -1557,10 +1558,9 @@ et_application_window_dispose (GObject *object)
     self = ET_APPLICATION_WINDOW (object);
     priv = et_application_window_get_instance_private (self);
 
-    save_state (self);
-
     if (ETCore)
     {
+        save_state (self);
         ET_Core_Free ();
     }
 
@@ -1606,7 +1606,7 @@ et_application_window_dispose (GObject *object)
         priv->cursor = NULL;
     }
 
-    G_OBJECT_CLASS (et_application_window_parent_class)->dispose (object);
+    GTK_WIDGET_CLASS (et_application_window_parent_class)->destroy (object);
 }
 
 static void
@@ -1667,17 +1667,17 @@ et_application_window_init (EtApplicationWindow *self)
     }
 
     /* The two panes: BrowserArea on the left, FileArea+TagArea on the right */
-    priv->hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
+    priv->hpaned = GTK_PANED(gtk_paned_new (GTK_ORIENTATION_HORIZONTAL));
 
     /* Browser (Tree + File list + Entry) */
-    priv->browser = GTK_WIDGET (et_browser_new ());
-    gtk_paned_pack1 (GTK_PANED (priv->hpaned), priv->browser, TRUE, TRUE);
+    priv->browser = et_browser_new ();
+    gtk_paned_pack1 (priv->hpaned, GTK_WIDGET(priv->browser), TRUE, TRUE);
 
     /* Vertical box for FileArea + TagArea */
     grid = gtk_grid_new ();
     gtk_orientable_set_orientation (GTK_ORIENTABLE (grid),
                                     GTK_ORIENTATION_VERTICAL);
-    gtk_paned_pack2 (GTK_PANED (priv->hpaned), grid, FALSE, FALSE);
+    gtk_paned_pack2 (priv->hpaned, grid, FALSE, FALSE);
 
     /* File */
     priv->file_area = et_file_area_new ();
@@ -1687,22 +1687,20 @@ et_application_window_init (EtApplicationWindow *self)
     priv->tag_area = et_tag_area_new ();
     gtk_container_add (GTK_CONTAINER (grid), priv->tag_area);
 
+    restore_state (self);
     /* Update the stored paned position whenever it is changed (after configure
      * and windows state events have been processed). */
     g_signal_connect_swapped (priv->hpaned, "notify::position",
                               G_CALLBACK (on_paned_notify_position), self);
-    restore_state (self);
 
     /* Vertical pane for Browser Area + FileArea + TagArea */
-    priv->vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
-    gtk_box_pack_start (GTK_BOX (main_vbox), priv->vpaned, TRUE, TRUE, 0);
-    gtk_paned_pack1 (GTK_PANED (priv->vpaned), priv->hpaned, TRUE,
-                     FALSE);
-
+    priv->vpaned = GTK_PANED (gtk_paned_new (GTK_ORIENTATION_VERTICAL));
+    gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET(priv->vpaned), TRUE, TRUE, 0);
+    gtk_paned_pack1 (priv->vpaned, GTK_WIDGET(priv->hpaned), TRUE, FALSE);
 
     /* Log */
     priv->log_area = et_log_area_new ();
-    gtk_paned_pack2 (GTK_PANED (priv->vpaned), priv->log_area, FALSE, FALSE);
+    gtk_paned_pack2 (priv->vpaned, priv->log_area, FALSE, FALSE);
 
     /* Horizontal box for Status bar + Progress bar */
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -1728,7 +1726,7 @@ et_application_window_init (EtApplicationWindow *self)
 static void
 et_application_window_class_init (EtApplicationWindowClass *klass)
 {
-    G_OBJECT_CLASS (klass)->dispose = et_application_window_dispose;
+	GTK_WIDGET_CLASS (klass)->destroy = et_application_window_destroy;
 }
 
 /*
@@ -1743,8 +1741,7 @@ et_application_window_new (GtkApplication *application)
 {
     g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
 
-    return g_object_new (ET_TYPE_APPLICATION_WINDOW, "application",
-                         application, NULL);
+    return (EtApplicationWindow*)g_object_new (ET_TYPE_APPLICATION_WINDOW, "application", application, NULL);
 }
 
 void
@@ -1846,13 +1843,11 @@ et_application_window_browser_toggle_display_mode (EtApplicationWindow *self)
 
     if (strcmp (g_variant_get_string (variant, NULL), "file") == 0)
     {
-        et_browser_set_display_mode (ET_BROWSER (priv->browser),
-                                     ET_BROWSER_MODE_FILE);
+        et_browser_set_display_mode (priv->browser, ET_BROWSER_MODE_FILE);
     }
     else if (strcmp (g_variant_get_string (variant, NULL), "artist") == 0)
     {
-        et_browser_set_display_mode (ET_BROWSER (priv->browser),
-                                     ET_BROWSER_MODE_ARTIST);
+        et_browser_set_display_mode (priv->browser, ET_BROWSER_MODE_ARTIST);
     }
     else
     {
@@ -1874,7 +1869,7 @@ et_application_window_browser_set_sensitive (EtApplicationWindow *self,
 
     g_return_if_fail (priv->browser != NULL);
 
-    et_browser_set_sensitive (ET_BROWSER (priv->browser), sensitive);
+    et_browser_set_sensitive (priv->browser, sensitive);
 }
 
 void
@@ -1888,7 +1883,7 @@ et_application_window_browser_clear (EtApplicationWindow *self)
 
     g_return_if_fail (priv->browser != NULL);
 
-    et_browser_clear (ET_BROWSER (priv->browser));
+    et_browser_clear (priv->browser);
 }
 
 void
@@ -1902,7 +1897,7 @@ et_application_window_browser_clear_album_model (EtApplicationWindow *self)
 
     g_return_if_fail (priv->browser != NULL);
 
-    et_browser_clear_album_model (ET_BROWSER (priv->browser));
+    et_browser_clear_album_model (priv->browser);
 }
 
 void
@@ -1916,7 +1911,7 @@ et_application_window_browser_clear_artist_model (EtApplicationWindow *self)
 
     g_return_if_fail (priv->browser != NULL);
 
-    et_browser_clear_artist_model (ET_BROWSER (priv->browser));
+    et_browser_clear_artist_model (priv->browser);
 }
 
 void
@@ -1942,7 +1937,7 @@ et_application_window_select_dir (EtApplicationWindow *self,
 
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_select_dir (ET_BROWSER (priv->browser), file);
+    et_browser_select_dir (priv->browser, file);
 }
 
 /*
@@ -2095,7 +2090,7 @@ et_application_window_update_et_file_from_ui (EtApplicationWindow *self)
 #endif
         case APE_TAG:
             FileTag = et_application_window_tag_area_create_file_tag (self);
-            et_file_tag_copy_other_into (FileTag, et_file->FileTag->data);
+            et_file_tag_copy_other_into (FileTag, et_file->Tag());
             break;
 #ifndef ENABLE_MP3
         case ID3_TAG:
@@ -2370,7 +2365,7 @@ et_application_window_get_current_path (EtApplicationWindow *self)
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_browser_get_current_path (ET_BROWSER (priv->browser));
+    return et_browser_get_current_path (priv->browser);
 }
 
 const File_Name *
@@ -2382,7 +2377,7 @@ et_application_window_get_current_path_name (EtApplicationWindow *self)
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_browser_get_current_path_name (ET_BROWSER (priv->browser));
+    return et_browser_get_current_path_name (priv->browser);
 }
 
 GtkWidget *
@@ -2824,7 +2819,7 @@ et_application_window_browser_entry_set_text (EtApplicationWindow *self,
 
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_entry_set_text (ET_BROWSER (priv->browser), text);
+    et_browser_entry_set_text (priv->browser, text);
 }
 
 void
@@ -2835,7 +2830,7 @@ et_application_window_browser_label_set_text (EtApplicationWindow *self,
 
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_label_set_text (ET_BROWSER (priv->browser), text);
+    et_browser_label_set_text (priv->browser, text);
 }
 
 ET_File *
@@ -2846,7 +2841,7 @@ et_application_window_browser_get_et_file_from_path (EtApplicationWindow *self,
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_browser_get_et_file_from_path (ET_BROWSER (priv->browser), path);
+    return et_browser_get_et_file_from_path (priv->browser, path);
 }
 
 ET_File *
@@ -2857,7 +2852,7 @@ et_application_window_browser_get_et_file_from_iter (EtApplicationWindow *self,
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_browser_get_et_file_from_iter (ET_BROWSER (priv->browser), iter);
+    return et_browser_get_et_file_from_iter (priv->browser, iter);
 }
 
 GList *
@@ -2867,7 +2862,7 @@ et_application_window_browser_get_selected_files (EtApplicationWindow *self)
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_browser_get_selected_files (ET_BROWSER (priv->browser));
+    return et_browser_get_selected_files (priv->browser);
 }
 
 GtkTreeSelection *
@@ -2877,7 +2872,7 @@ et_application_window_browser_get_selection (EtApplicationWindow *self)
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_browser_get_selection (ET_BROWSER (priv->browser));
+    return et_browser_get_selection (priv->browser);
 }
 
 GtkTreeViewColumn *
@@ -2888,7 +2883,7 @@ et_application_window_browser_get_column_for_sort_mode (EtApplicationWindow *sel
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_browser_get_column_for_sort_mode (ET_BROWSER (priv->browser), sort_mode);
+    return et_browser_get_column_for_sort_mode (priv->browser, sort_mode);
 }
 
 void
@@ -2900,8 +2895,7 @@ et_application_window_browser_select_file_by_iter_string (EtApplicationWindow *s
 
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_select_file_by_iter_string (ET_BROWSER (priv->browser),
-                                           iter_string, select);
+    et_browser_select_file_by_iter_string (priv->browser, iter_string, select);
 }
 
 void
@@ -2913,8 +2907,7 @@ et_application_window_browser_select_file_by_et_file (EtApplicationWindow *self,
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_browser_select_file_by_et_file (ET_BROWSER (priv->browser), file,
-                                              select);
+    return et_browser_select_file_by_et_file (priv->browser, file, select);
 }
 
 GtkTreePath *
@@ -2927,8 +2920,7 @@ et_application_window_browser_select_file_by_et_file2 (EtApplicationWindow *self
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_browser_select_file_by_et_file2 (ET_BROWSER (priv->browser),
-                                               file, select, start_path);
+    return et_browser_select_file_by_et_file2 (priv->browser, file, select, start_path);
 }
 
 ET_File *
@@ -2940,8 +2932,7 @@ et_application_window_browser_select_file_by_dlm (EtApplicationWindow *self,
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_browser_select_file_by_dlm (ET_BROWSER (priv->browser), string,
-                                          select);
+    return et_browser_select_file_by_dlm (priv->browser, string, select);
 }
 
 void
@@ -2953,7 +2944,7 @@ et_application_window_browser_unselect_all (EtApplicationWindow *self)
 
     et_application_window_update_et_file_from_ui (self);
 
-    et_browser_unselect_all (ET_BROWSER (priv->browser));
+    et_browser_unselect_all (priv->browser);
     ETCore->ETFileDisplayed = NULL;
 }
 
@@ -2966,7 +2957,7 @@ et_application_window_browser_refresh_list (EtApplicationWindow *self)
 
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_refresh_list (ET_BROWSER (priv->browser));
+    et_browser_refresh_list (priv->browser);
 }
 
 void
@@ -2979,7 +2970,7 @@ et_application_window_browser_refresh_file_in_list (EtApplicationWindow *self,
 
     priv = et_application_window_get_instance_private (self);
 
-    et_browser_refresh_file_in_list (ET_BROWSER (priv->browser), file);
+    et_browser_refresh_file_in_list (priv->browser, file);
 }
 
 static void

@@ -40,7 +40,7 @@ easytag_CXXFLAGS = \
 easytag_SOURCES = \
 	src/about.c \
 	src/application.c \
-	src/application_window.c \
+	src/application_window.cc \
 	src/browser.cc \
 	src/cddb_dialog.cc \
 	src/charset.c \
