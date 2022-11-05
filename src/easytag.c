@@ -826,11 +826,6 @@ Read_Directory (const gchar *path_real)
 
     ReadingDirectory = TRUE;    /* A flag to avoid to start another reading */
 
-    /* Initialize file list */
-    ET_Core_Free ();
-    ET_Core_Create ();
-    et_application_window_update_actions (ET_APPLICATION_WINDOW (MainWindow));
-
     window = ET_APPLICATION_WINDOW (MainWindow);
 
     /* Initialize browser list */
@@ -840,6 +835,11 @@ Read_Directory (const gchar *path_real)
     /* Clear entry boxes  */
     et_application_window_file_area_clear (window);
     et_application_window_tag_area_clear (window);
+
+    /* Initialize file list */
+    ET_Core_Free ();
+    ET_Core_Create ();
+    et_application_window_update_actions (ET_APPLICATION_WINDOW (MainWindow));
 
     // Set to unsensitive the Browser Area, to avoid to select another file while loading the first one
     et_application_window_browser_set_sensitive (window, FALSE);
