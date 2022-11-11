@@ -118,6 +118,135 @@
                                     </object>
                                 </child>
                                 <child>
+                                    <object class="GtkLabel" id="browser_columns_label">
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Visible columns</property>
+                                        <attributes>
+                                            <attribute name="weight" value="bold"/>
+                                        </attributes>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkBox" id="browser_columns_box1">
+                                        <property name="margin-left">12</property>
+                                        <property name="spacing">12</property>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_filepath_check">
+                                                <property name="label" translatable="yes">Path</property>
+                                                <property name="name">filepath</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_filename_check">
+                                                <property name="label" translatable="yes">Filename</property>
+                                                <property name="name">filename</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_title_check">
+                                                <property name="label" translatable="yes">Title</property>
+                                                <property name="name">title</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_artist_check">
+                                                <property name="label" translatable="yes">Artist</property>
+                                                <property name="name">artist</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_album_artist_check">
+                                                <property name="label" translatable="yes">Album Artist</property>
+                                                <property name="name">album-artist</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_album_check">
+                                                <property name="label" translatable="yes">Album</property>
+                                                <property name="name">album</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_year_check">
+                                                <property name="label" translatable="yes">Year</property>
+                                                <property name="name">year</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_release_year_check">
+                                                <property name="label" translatable="yes">Rel. year</property>
+                                                <property name="name">release-year</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_track_number_check">
+                                                <property name="label" translatable="yes">Track</property>
+                                                <property name="name">track-number</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_disc_number_check">
+                                                <property name="label" translatable="yes">Disc</property>
+                                                <property name="name">disc-number</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkBox" id="browser_columns_box2">
+                                        <property name="margin-left">12</property>
+                                        <property name="spacing">12</property>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_genre_check">
+                                                <property name="label" translatable="yes">Genre</property>
+                                                <property name="name">genre</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_comment_check">
+                                                <property name="label" translatable="yes">Comment</property>
+                                                <property name="name">comment</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_composer_check">
+                                                <property name="label" translatable="yes">Composer</property>
+                                                <property name="name">composer</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_orig_artist_check">
+                                                <property name="label" translatable="yes">Original Artist</property>
+                                                <property name="name">orig-artist</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_orig_year_check">
+                                                <property name="label" translatable="yes">Orig. year</property>
+                                                <property name="name">orig-year</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_copyright_check">
+                                                <property name="label" translatable="yes">Copyright</property>
+                                                <property name="name">copyright</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_url_check">
+                                                <property name="label" translatable="yes">URL</property>
+                                                <property name="name">url</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_encoded_by_check">
+                                                <property name="label" translatable="yes">Encoded By</property>
+                                                <property name="name">encoded-by</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
                                     <object class="GtkLabel" id="log_label">
                                         <property name="halign">start</property>
                                         <property name="label" translatable="yes">Log</property>

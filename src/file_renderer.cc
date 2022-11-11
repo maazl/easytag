@@ -144,12 +144,6 @@ const FileColumnRenderer* FileColumnRenderer::Get_Renderer(const gchar* column_i
 			[](const itemtype& l, const itemtype& r) { return strcmp(l.first, r.first) < 0; });
 	}
 
-	// strip "-column"
-	int len = strlen(column_id) - 7;
-	string tmp;
-	if (len > 0 && memcmp(column_id + len, "-column", 7) == 0)
-		column_id = tmp.assign(column_id, len).c_str();
-
 	// binary search renderer
 	auto i = lower_bound(Renderers.begin(), Renderers.end(), column_id,
 		[](const itemtype& e, const gchar* v) { return strcmp(e.first, v) < 0; });
@@ -158,4 +152,33 @@ const FileColumnRenderer* FileColumnRenderer::Get_Renderer(const gchar* column_i
 
 	g_type_class_unref(ec);
 	return r;
+}
+
+void FileColumnRenderer::ShowHideColumns(GtkTreeView* view, EtColumn columns)
+{	GFlagsClass *enum_class = (GFlagsClass*)g_type_class_ref(ET_TYPE_COLUMN);
+	for (guint i = 0; i < gtk_tree_view_get_n_columns(view); i++)
+	{
+		GtkTreeViewColumn *column = gtk_tree_view_get_column(view, i);
+		string id = ColumnName2Nick(GTK_BUILDABLE(column));
+		GFlagsValue* enum_value = g_flags_get_value_by_nick(enum_class, id.c_str());
+		if (enum_value == NULL)
+			g_warning("No column with name %s found.", id.c_str());
+		else
+			gtk_tree_view_column_set_visible(column, (columns & enum_value->value) != 0);
+	}
+	g_type_class_unref(enum_class);
+}
+
+string FileColumnRenderer::ColumnName2Nick(GtkBuildable* buildable)
+{	const char* name = gtk_buildable_get_name(buildable);
+	// strip "_column"
+	int len = strlen(name) - 7;
+	if (len <= 0 || memcmp(name + len, "_column", 7) != 0)
+		len += 7;
+	string tmp(name, len);
+	// Replace '_' by '-'
+	for (char& c : tmp)
+		if (c == '_')
+			c = '-';
+	return tmp;
 }

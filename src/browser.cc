@@ -107,7 +107,7 @@ typedef struct
 #define et_browser_get_instance_private et_browser_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtBrowser, et_browser, GTK_TYPE_BIN)
 #undef et_browser_get_instance_private
-#define et_browser_get_instance_private(x) (EtBrowserPrivate*)et_browser_get_instance_private_(x)
+#define et_browser_get_instance_private(x) ((EtBrowserPrivate*)et_browser_get_instance_private_(x))
 
 /*
  * EtPathState:
@@ -3426,6 +3426,11 @@ collapse_cb (EtBrowser *self, GtkTreeIter *iter, GtkTreePath *treePath, GtkTreeV
     g_object_unref (icon);
 }
 
+static void on_visible_columns_changed(EtBrowser *self, const gchar *key, GSettings *settings)
+{
+	FileColumnRenderer::ShowHideColumns(et_browser_get_instance_private(self)->file_view, (EtColumn)g_settings_get_flags(settings, key));
+}
+
 static void
 on_sort_mode_changed (EtBrowser *self, const gchar *key, GSettings *settings)
 {
@@ -3628,28 +3633,29 @@ create_browser (EtBrowser *self)
     for (i = 0; i < gtk_tree_view_get_n_columns(priv->file_view); i++)
     {
         GtkTreeViewColumn *column = gtk_tree_view_get_column (priv->file_view, i);
-        const gchar* id = gtk_buildable_get_name(GTK_BUILDABLE(column));
+        string id = FileColumnRenderer::ColumnName2Nick(GTK_BUILDABLE(column));
 
         g_object_set_data (G_OBJECT (column), "browser", self);
 
         // rendering method
         GtkCellRenderer* renderer = GTK_CELL_RENDERER(GTK_CELL_LAYOUT_GET_IFACE(column)->get_cells(GTK_CELL_LAYOUT(column))->data);
-        auto rdr = FileColumnRenderer::Get_Renderer(id);
-        g_assert(rdr);
+        auto rdr = FileColumnRenderer::Get_Renderer(id.c_str());
+        if (!rdr)
+        	g_error("No renderer with name %s found.", id.c_str());
         gtk_tree_view_column_set_cell_data_func(column, renderer, &set_cell_data, (gpointer)rdr, NULL);
 
         // sort action
-        gchar* nick = g_strconcat("ascending-", id, NULL);
-        nick[strlen(nick) - 7] = 0; // strip "-column"
-
-        GEnumValue* enum_value = g_enum_get_value_by_nick(enum_class, nick);
+        id.insert(0, "ascending-");
+        GEnumValue* enum_value = g_enum_get_value_by_nick(enum_class, id.c_str());
         if (enum_value == NULL)
-        	g_warning("No sort mode with name %s found.", nick);
-        g_free(nick);
+        	g_error("No sort mode with name %s found.", id.c_str());
 
         g_signal_connect (column, "clicked", G_CALLBACK (et_browser_on_column_clicked), enum_value);
     }
     g_type_class_unref(enum_class);
+
+    g_signal_connect_swapped(MainSettings, "changed::visible-columns", G_CALLBACK(on_visible_columns_changed), self);
+    on_visible_columns_changed(self, "visible-columns", MainSettings);
 
     g_signal_connect_swapped (MainSettings, "changed::sort-mode",
                               G_CALLBACK (on_sort_mode_changed), self);

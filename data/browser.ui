@@ -281,7 +281,7 @@
                                         <signal name="key-press-event" handler="Browser_List_Key_Press"/>
                                         <signal name="popup-menu" handler="on_file_tree_popup_menu"/>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="filepath-column">
+                                            <object class="GtkTreeViewColumn" id="filepath_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Path</property>
@@ -291,7 +291,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="filename-column">
+                                            <object class="GtkTreeViewColumn" id="filename_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Filename</property>
@@ -301,7 +301,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="title-column">
+                                            <object class="GtkTreeViewColumn" id="title_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Title</property>
@@ -311,7 +311,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="artist-column">
+                                            <object class="GtkTreeViewColumn" id="artist_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Artist</property>
@@ -321,7 +321,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="album-artist-column">
+                                            <object class="GtkTreeViewColumn" id="album_artist_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Album Artist</property>
@@ -331,7 +331,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="album-column">
+                                            <object class="GtkTreeViewColumn" id="album_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Album</property>
@@ -341,7 +341,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="year-column">
+                                            <object class="GtkTreeViewColumn" id="year_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Year</property>
@@ -351,7 +351,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="release-year-column">
+                                            <object class="GtkTreeViewColumn" id="release_year_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Rel. year</property>
@@ -361,7 +361,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="disc-number-column">
+                                            <object class="GtkTreeViewColumn" id="disc_number_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Disc</property>
@@ -371,7 +371,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="track-number-column">
+                                            <object class="GtkTreeViewColumn" id="track_number_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Track</property>
@@ -381,7 +381,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="genre-column">
+                                            <object class="GtkTreeViewColumn" id="genre_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Genre</property>
@@ -391,7 +391,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="comment-column">
+                                            <object class="GtkTreeViewColumn" id="comment_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Comment</property>
@@ -401,7 +401,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="composer-column">
+                                            <object class="GtkTreeViewColumn" id="composer_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Composer</property>
@@ -411,7 +411,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="orig-artist-column">
+                                            <object class="GtkTreeViewColumn" id="orig_artist_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Original Artist</property>
@@ -421,7 +421,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="orig-year-column">
+                                            <object class="GtkTreeViewColumn" id="orig_year_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Orig. year</property>
@@ -431,7 +431,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="copyright-column">
+                                            <object class="GtkTreeViewColumn" id="copyright_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Copyright</property>
@@ -441,7 +441,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="url-column">
+                                            <object class="GtkTreeViewColumn" id="url_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">URL</property>
@@ -451,7 +451,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="encoded-by-column">
+                                            <object class="GtkTreeViewColumn" id="encoded_by_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Encoded By</property>

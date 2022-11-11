@@ -23,6 +23,7 @@
 #include <gtk/gtk.h>
 
 #ifdef __cplusplus
+#include <string>
 
 template <typename T>
 constexpr inline int sign(T value) { return (value > 0) - (value < 0); }
@@ -33,6 +34,7 @@ constexpr inline t operator&(t l, t r) { return (t)((int)l & (int)r); }
 
 MAKE_FLAGS_ENUM(GtkDialogFlags)
 MAKE_FLAGS_ENUM(GtkDestDefaults)
+MAKE_FLAGS_ENUM(GSettingsBindFlags)
 
 // Reference helper to allow array of references
 template <typename T>

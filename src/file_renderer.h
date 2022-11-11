@@ -20,6 +20,7 @@
 #define ET_FILERENDERER_H_
 
 #include "file.h"
+#include "setting.h"
 
 #include <gtk/gtk.h>
 
@@ -62,6 +63,16 @@ public:
 	 * @return Matching renderer (thread-safe singleton) or null if \a column_id is not valid.
 	 */
 	static const FileColumnRenderer* Get_Renderer(const gchar* column_id);
+	/**
+	 * Show or hide columns
+	 * @param view
+	 * @param columns Columns to show, hide all others.
+	 */
+	static void ShowHideColumns(GtkTreeView* view, EtColumn columns);
+	/**
+	 * Convert column id to nick name of EtColumn
+	 */
+	static std::string ColumnName2Nick(GtkBuildable* buildable);
 };
 
 #endif // ET_FILERENDERER_H_

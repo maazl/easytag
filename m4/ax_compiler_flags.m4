@@ -131,8 +131,8 @@ AC_DEFUN([AX_COMPILER_FLAGS],[
                   AS_HELP_STRING([--enable-compile-warnings=@<:@no/yes/error@:>@],
                                  [Enable compiler warnings and errors]),,
                   [AS_IF([test "$ax_compiler_flags_is_release" = "yes"],
-                         [enable_compile_warnings="yes"],
-                         [enable_compile_warnings="error"])])
+                         [enable_compile_warnings="no"],
+                         [enable_compile_warnings="yes"])])
     AC_ARG_ENABLE([Werror],
                   AS_HELP_STRING([--disable-Werror],
                                  [Unconditionally make all compiler warnings non-fatal]),,

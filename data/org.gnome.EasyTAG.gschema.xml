@@ -162,6 +162,12 @@
       <default>'ascending-track-number'</default>
     </key>
 
+    <key name="visible-columns" flags="org.gnome.EasyTAG.EtColumn">
+      <summary>Columns in file browser</summary>
+      <description>List of visible columns in the file browser.</description>
+      <default>['filepath','filename','title','artist','album-artist','album','year','release-year','disc-number','track-number','genre','comment','composer','orig-artist','orig-year','copyright','url','encoded-by']</default>
+    </key>
+
     <key name="log-show" type="b">
       <summary>Show the log</summary>
       <description>Whether to show the log in the main window</description>

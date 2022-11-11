@@ -36,7 +36,6 @@
 #include <windows.h>
 #endif /* G_OS_WIN32 */
 
-
 /*
  * Add the 'string' passed in parameter to the list store
  * If this string already exists in the list store, it doesn't add it.
@@ -274,7 +273,7 @@ et_run_audio_player (GList *files,
     	return TRUE; // no files, no error
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    info = g_file_query_info (files->data,
+    info = g_file_query_info ((GFile*)files->data,
                               G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
                               G_FILE_QUERY_INFO_NONE, NULL, error);
 

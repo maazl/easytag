@@ -156,7 +156,7 @@ msgstr "Medium"
 
 #: ../data/browser.ui.h:16 ../data/search_dialog.ui.h:19
 msgid "Track"
-msgstr "Titel"
+msgstr "Titelnr."
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
 #: ../data/preferences_dialog.ui.h:72 ../data/scan_dialog.ui.h:69

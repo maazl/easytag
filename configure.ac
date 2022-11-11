@@ -11,6 +11,9 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([src/easytag.h])
 AC_CONFIG_MACRO_DIR([m4])
 
+AX_IS_RELEASE([git-directory])
+AX_CHECK_ENABLE_DEBUG()
+
 dnl -------------------------------
 dnl Init automake
 dnl -------------------------------
@@ -364,24 +367,7 @@ AC_SUBST([SOUP_DEPRECATION_FLAGS],
 PKG_CHECK_MODULES([EASYTAG], [$CDDB_DEPS $GIO_DEPS $GTK_DEPS $OPUS_DEPS $OGG_DEPS $SPEEX_DEPS $FLAC_DEPS $ID3TAG_DEPS $TAGLIB_DEPS $WAVPACK_DEPS])
 
 dnl Set warning flags
-AX_IS_RELEASE([git-directory])
-dnl AX_COMPILER_FLAGS()  always creates unreasonable -Werror and does not support C99
-
-dnl fix broken CFLAGS/CXXFLAGS
-test -z "$SED" && SED=sed
-dnl Remove all optimization flags from CFLAGS
-changequote({,})
-CFLAGS=`echo "$CFLAGS" | $SED -e 's/-O[0-9s]*//g' | $SED -e 's/-g[0-9]*//g'`
-CXXFLAGS=`echo "$CXXFLAGS" | $SED -e 's/-O[0-9s]*//g' | $SED -e 's/-g[0-9]*//g'`
-changequote([,])
-dnl and replace them by reasonable values
-if test "x$ax_is_release" = "xyes"; then
-  CFLAGS="$CFLAGS -O2"
-  CXXFLAGS="$CXXFLAGS -O2"
-else
-  CFLAGS="$CFLAGS -g -Wall"
-  CXXFLAGS="$CXXFLAGS -g -Wall"
-fi
+AX_COMPILER_FLAGS()
 
 GLIB_GSETTINGS
 
@@ -402,8 +388,8 @@ echo Host System Type ........: $host
 echo Preprocessor ............: $CC $CPPFLAGS
 echo Compiler ................: $CC $CFLAGS
 echo C++ Compiler ............: $CC $CXXFLAGS
-dnl echo Compiler warnings .......: $WARN_CFLAGS
-dnl echo C++ Compiler warnings ...: $WARN_CXXFLAGS
+echo Compiler warnings .......: $WARN_CFLAGS
+echo C++ Compiler warnings ...: $WARN_CXXFLAGS
 echo Linker ..................: $CC $LDFLAGS $LIBS
 echo CDDB support ............: $have_cddb
 echo MP3 file support ........: $have_mp3

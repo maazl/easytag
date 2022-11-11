@@ -55,7 +55,7 @@ typedef struct
 #define et_search_dialog_get_instance_private et_search_dialog_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtSearchDialog, et_search_dialog, GTK_TYPE_DIALOG)
 #undef et_search_dialog_get_instance_private
-#define et_search_dialog_get_instance_private(x) (EtSearchDialogPrivate*)et_search_dialog_get_instance_private_(x)
+#define et_search_dialog_get_instance_private(x) ((EtSearchDialogPrivate*)et_search_dialog_get_instance_private_(x))
 
 enum
 {   SEARCH_RESULT_POINTER,
@@ -174,8 +174,8 @@ Search_File (GtkWidget *search_button,
         for (gint i = mincol; i < maxcol; i++)
         {
             GtkTreeViewColumn *column = gtk_tree_view_get_column(priv->search_results_view, i);
-            const gchar* id = gtk_buildable_get_name(GTK_BUILDABLE(column));
-            auto rdr = FileColumnRenderer::Get_Renderer(id);
+            string id = FileColumnRenderer::ColumnName2Nick(GTK_BUILDABLE(column));
+            auto rdr = FileColumnRenderer::Get_Renderer(id.c_str());
 
             string text = rdr->RenderText(ETFile);
             if (!text.length())
@@ -213,6 +213,11 @@ on_delete_event (GtkWidget *widget)
     gtk_widget_hide (widget);
 
     return TRUE;
+}
+
+static void on_visible_columns_changed(EtSearchDialog *self, const gchar *key, GSettings *settings)
+{
+	FileColumnRenderer::ShowHideColumns(et_search_dialog_get_instance_private(self)->search_results_view, (EtColumn)g_settings_get_flags(settings, key));
 }
 
 static void set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkTreeModel* model, GtkTreeIter* iter, gpointer data)
@@ -277,15 +282,18 @@ create_search_dialog (EtSearchDialog *self)
     for (gsize i = 0; i < gtk_tree_view_get_n_columns(priv->search_results_view); i++)
     {
         GtkTreeViewColumn *column = gtk_tree_view_get_column(priv->search_results_view, i);
-        const gchar* id = gtk_buildable_get_name(GTK_BUILDABLE(column));
+        string id = FileColumnRenderer::ColumnName2Nick(GTK_BUILDABLE(column));
 
         // rendering method
         GtkCellRenderer* renderer = GTK_CELL_RENDERER(GTK_CELL_LAYOUT_GET_IFACE(column)->get_cells(GTK_CELL_LAYOUT(column))->data);
-        auto rdr = FileColumnRenderer::Get_Renderer(id);
+        auto rdr = FileColumnRenderer::Get_Renderer(id.c_str());
         g_assert(rdr);
         gtk_tree_view_column_set_cell_data_func(column, renderer, &set_cell_data, (gpointer)rdr, NULL);
     }
     g_type_class_unref(enum_class);
+
+    g_signal_connect_swapped(MainSettings, "changed::visible-columns", G_CALLBACK(on_visible_columns_changed), self);
+    on_visible_columns_changed(self, "visible-columns", MainSettings);
 }
 
 /*

@@ -50,7 +50,7 @@ AC_DEFUN([AX_CHECK_ENABLE_DEBUG],[
 
     AC_ARG_ENABLE(debug,
 	[AS_HELP_STRING([--enable-debug]@<:@=ax_enable_debug_default@:>@,[compile with debugging; one of yes/info/profile/no])],
-	[],enable_debug=ax_enable_debug_default)
+	[],AS_CASE([$ax_is_release], [yes],enable_debug=[no], [no],enable_debug=[yes], enable_debug=ax_enable_debug_default))
 
     # empty mean debug yes
     AS_IF([test "x$enable_debug" = "x"],
@@ -85,18 +85,11 @@ AC_DEFUN([AX_CHECK_ENABLE_DEBUG],[
       ],
       [
 	AC_MSG_RESULT(no)
-	dnl Ensure AC_PROG_CC/CXX/F77/FC/OBJC will not enable debug flags
-	dnl by setting any unset environment flag variables
-	AS_IF([test "x${CFLAGS+set}" != "xset"],
-	  [CFLAGS=""])
-	AS_IF([test "x${CXXFLAGS+set}" != "xset"],
-	  [CXXFLAGS=""])
-	AS_IF([test "x${FFLAGS+set}" != "xset"],
-	  [FFLAGS=""])
-	AS_IF([test "x${FCFLAGS+set}" != "xset"],
-	  [FCFLAGS=""])
-	AS_IF([test "x${OBJCFLAGS+set}" != "xset"],
-	  [OBJCFLAGS=""])
+	CFLAGS="${CFLAGS} -O2"
+	CXXFLAGS="${CXXFLAGS} -O2"
+	FFLAGS="${FFLAGS} -O2"
+	FCFLAGS="${FCFLAGS} -O2"
+	OBJCFLAGS="${OBJCFLAGS} -O2"
       ])
 
     dnl Define various variables if debugging is disabled.

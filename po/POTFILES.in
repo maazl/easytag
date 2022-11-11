@@ -31,10 +31,10 @@ src/file.cc
 src/load_files_dialog.cc
 src/log.c
 src/mask.cc
-src/misc.c
+src/misc.cc
 src/picture.c
 src/playlist_dialog.c
-src/preferences_dialog.c
+src/preferences_dialog.cc
 src/scan_dialog.cc
 src/search_dialog.cc
 src/setting.c

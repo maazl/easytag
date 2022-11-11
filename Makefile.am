@@ -61,10 +61,10 @@ easytag_SOURCES = \
 	src/log.c \
 	src/main.c \
 	src/mask.cc \
-	src/misc.c \
+	src/misc.cc \
 	src/picture.c \
 	src/playlist_dialog.c \
-	src/preferences_dialog.c \
+	src/preferences_dialog.cc \
 	src/progress_bar.c \
 	src/scan.c \
 	src/scan_dialog.cc \
