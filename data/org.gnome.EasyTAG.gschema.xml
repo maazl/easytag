@@ -590,45 +590,51 @@
       <default>'rename-file'</default>
     </key>
 
+    <key name="split-delimiter" type="s">
+      <summary>Split fields at this separator</summary>
+      <description>Seperator used when splitting e.g. Ogg fields or joining multiple field values</description>
+      <default>' - '</default>
+    </key>
+
     <key name="ogg-split-title" type="b">
       <summary>Split Ogg title fields</summary>
-      <description>Whether to split title fields at a “ - ” separator in Ogg comments</description>
+      <description>Whether to split title fields in Ogg comments</description>
       <default>false</default>
     </key>
 
     <key name="ogg-split-artist" type="b">
       <summary>Split Ogg artist fields</summary>
-      <description>Whether to split artist fields at a “ - ” separator in Ogg comments</description>
+      <description>Whether to split artist fields in Ogg comments</description>
       <default>false</default>
     </key>
 
     <key name="ogg-split-album" type="b">
       <summary>Split Ogg album fields</summary>
-      <description>Whether to split album fields at a “ - ” separator in Ogg comments</description>
+      <description>Whether to split album fields in Ogg comments</description>
       <default>false</default>
     </key>
 
     <key name="ogg-split-genre" type="b">
       <summary>Split Ogg genre fields</summary>
-      <description>Whether to split genre fields at a “ - ” separator in Ogg comments</description>
+      <description>Whether to split genre fields in Ogg comments</description>
       <default>false</default>
     </key>
 
     <key name="ogg-split-comment" type="b">
       <summary>Split Ogg comment fields</summary>
-      <description>Whether to split comment fields at a “ - ” separator in Ogg comments</description>
+      <description>Whether to split comment fields in Ogg comments</description>
       <default>false</default>
     </key>
 
     <key name="ogg-split-composer" type="b">
       <summary>Split Ogg composer fields</summary>
-      <description>Whether to split composer fields at a “ - ” separator in Ogg comments</description>
+      <description>Whether to split composer fields in Ogg comments</description>
       <default>false</default>
     </key>
 
     <key name="ogg-split-original-artist" type="b">
       <summary>Split Ogg original artist fields</summary>
-      <description>Whether to split original artist fields at a “ - ” separator in Ogg comments</description>
+      <description>Whether to split original artist fields in Ogg comments</description>
       <default>false</default>
     </key>
 

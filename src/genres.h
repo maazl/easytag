@@ -118,7 +118,7 @@ static const char *id3_genres[] =
     "Rock & Roll", 
     "Hard Rock", 
     "Folk", /* 80: Winamp extensions */
-    "Folk/Rock",
+    "Folk-Rock",
     "National Folk", 
     "Swing",
     "Fast Fusion",

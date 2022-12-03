@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: easytag-master-po-hu-475935.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-03 20:54+0100\n"
+"POT-Creation-Date: 2022-12-03 17:16+0100\n"
 "PO-Revision-Date: 2017-03-15 17:23+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -80,7 +80,7 @@ msgstr "Könyvtárak és hangfájlok megnyitása az EasyTag-gel a helyi menübő
 msgid "Choose a directory to show in the browser"
 msgstr "Válasszon egy könyvtárat a böngészőben való megjelenítéshez"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3469
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3491
 #: ../src/tag_area.cc:1413
 msgid "_Open"
 msgstr "Meg_nyitás"
@@ -95,7 +95,7 @@ msgid "No files"
 msgstr "Nincsenek fájlok"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:68 ../data/scan_dialog.ui.h:63
+#: ../data/preferences_dialog.ui.h:19 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Előadó"
@@ -109,88 +109,92 @@ msgid "# Files"
 msgstr "# Fájlok"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:70 ../data/scan_dialog.ui.h:67
+#: ../data/preferences_dialog.ui.h:21 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Album"
 
-#: ../data/browser.ui.h:9 ../data/search_dialog.ui.h:11
+#: ../data/browser.ui.h:9 ../data/preferences_dialog.ui.h:16
+#: ../data/search_dialog.ui.h:11
 msgid "Path"
 msgstr "Útvonal"
 
 #: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
-#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:59
-#: ../data/search_dialog.ui.h:12
+#: ../data/playlist_dialog.ui.h:2 ../data/preferences_dialog.ui.h:17
+#: ../data/scan_dialog.ui.h:59 ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "Fájlnév"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:66 ../data/scan_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:18 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Cím"
 
-#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:65
-#: ../data/search_dialog.ui.h:15
+#: ../data/browser.ui.h:12 ../data/preferences_dialog.ui.h:20
+#: ../data/scan_dialog.ui.h:65 ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Album előadója"
 
 #: ../data/browser.ui.h:13 ../data/cddb_dialog.ui.h:40
-#: ../data/search_dialog.ui.h:18
+#: ../data/preferences_dialog.ui.h:22 ../data/search_dialog.ui.h:18
 msgid "Year"
 msgstr "Év"
 
-#: ../data/browser.ui.h:14
+#: ../data/browser.ui.h:14 ../data/preferences_dialog.ui.h:23
 #, fuzzy
 msgid "Rel. year"
 msgstr "Eredeti előadó"
 
-#: ../data/browser.ui.h:15
+#: ../data/browser.ui.h:15 ../data/preferences_dialog.ui.h:25
 msgid "Disc"
 msgstr "Lemez"
 
-#: ../data/browser.ui.h:16 ../data/search_dialog.ui.h:19
+#: ../data/browser.ui.h:16 ../data/preferences_dialog.ui.h:24
+#: ../data/search_dialog.ui.h:19
 msgid "Track"
 msgstr "Szám"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:72 ../data/scan_dialog.ui.h:69
+#: ../data/preferences_dialog.ui.h:26 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Műfaj"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:74
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:27
 #: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Megjegyzés"
 
-#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:76
+#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:28
 #: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Zeneszerző"
 
-#: ../data/browser.ui.h:20 ../data/search_dialog.ui.h:23
+#: ../data/browser.ui.h:20 ../data/preferences_dialog.ui.h:29
+#: ../data/search_dialog.ui.h:23
 msgid "Original Artist"
 msgstr "Eredeti előadó"
 
-#: ../data/browser.ui.h:21 ../data/search_dialog.ui.h:24
+#: ../data/browser.ui.h:21 ../data/preferences_dialog.ui.h:30
+#: ../data/search_dialog.ui.h:24
 #, fuzzy
 msgid "Orig. year"
 msgstr "Eredeti előadó"
 
-#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:77
-#: ../data/search_dialog.ui.h:25
+#: ../data/browser.ui.h:22 ../data/preferences_dialog.ui.h:31
+#: ../data/scan_dialog.ui.h:77 ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "Szerzői jog"
 
-#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:79
-#: ../data/search_dialog.ui.h:26
+#: ../data/browser.ui.h:23 ../data/preferences_dialog.ui.h:32
+#: ../data/scan_dialog.ui.h:79 ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "URL"
 
-#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:81
-#: ../data/search_dialog.ui.h:27
+#: ../data/browser.ui.h:24 ../data/preferences_dialog.ui.h:33
+#: ../data/scan_dialog.ui.h:81 ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "Kódolta"
 
@@ -213,9 +217,9 @@ msgstr ""
 "paraméterként"
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
-#: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3028 ../src/browser.cc:920
-#: ../src/browser.cc:3468 ../src/cddb_dialog.cc:2124 ../src/easytag.c:464
+#: ../src/application_window.cc:376 ../src/application_window.cc:390
+#: ../src/application_window.cc:3019 ../src/browser.cc:937
+#: ../src/browser.cc:3490 ../src/cddb_dialog.cc:2124 ../src/easytag.c:464
 #: ../src/easytag.c:471 ../src/easytag.c:599 ../src/tag_area.cc:1411
 #: ../src/tag_area.cc:1736
 msgid "_Cancel"
@@ -250,7 +254,7 @@ msgstr "Literálnév:"
 msgid "Use mask:"
 msgstr "Használandó maszk:"
 
-#: ../data/browser_dialogs.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:168
+#: ../data/browser_dialogs.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:170
 msgid "Whether to use a mask when renaming directories"
 msgstr "Használjon-e maszkot könyvtárak átnevezésekor"
 
@@ -324,7 +328,7 @@ msgstr "Keresési mezők"
 msgid "Track Name"
 msgstr "Szám neve"
 
-#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:96
+#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:111
 #: ../src/picture.c:191
 msgid "Other"
 msgstr "Egyéb"
@@ -444,14 +448,14 @@ msgstr ""
 msgid "Match lines with the Levenshtein algorithm"
 msgstr "Sorok megfeleltetése a Levenshtein algoritmussal"
 
-#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:148
+#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:163
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:24
 msgid "Whether to use the DLM algorithm to match CDDB results to files"
 msgstr ""
 "Használandó-e a DLM algoritmus a CDDB találatok megfeleltetésére a fájloknak"
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
-#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:165
+#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:180
 #: ../data/scan_dialog.ui.h:118
 msgid "_Close"
 msgstr "_Bezárás"
@@ -466,7 +470,7 @@ msgid "Load the selected lines or all lines (if no lines are selected)"
 msgstr "A kijelölt sorok vagy minden sor (ha nincs kijelölés) betöltése"
 
 #. Default values are MPEG data.
-#: ../data/file_area.ui.h:1 ../src/application_window.c:2194
+#: ../data/file_area.ui.h:1 ../src/application_window.cc:2189
 #: ../src/file_area.c:155
 msgid "File"
 msgstr "Fájl"
@@ -519,7 +523,7 @@ msgstr "Leírás"
 msgid "_Accept"
 msgstr "_Elfogadás"
 
-#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:15
+#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:34
 msgid "Log"
 msgstr "Napló"
 
@@ -580,7 +584,7 @@ msgid "Selected line:"
 msgstr "Kijelölt sor:"
 
 #: ../data/load_files_dialog.ui.h:15
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:117
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:119
 msgid ""
 "Whether to run the currently selected scanner on filenames loaded from a "
 "text file"
@@ -1077,7 +1081,7 @@ msgstr "Beállítások"
 msgid "Include only the selected files"
 msgstr "Csak a kijelölt fájlok felvétele"
 
-#: ../data/playlist_dialog.ui.h:7 ../data/org.gnome.EasyTAG.gschema.xml.h:144
+#: ../data/playlist_dialog.ui.h:7 ../data/org.gnome.EasyTAG.gschema.xml.h:146
 msgid ""
 "Whether to use only the selected files or all files when creating playlists"
 msgstr ""
@@ -1096,7 +1100,7 @@ msgstr "Relatív elérési út használata a lejátszólistában"
 msgid "Create playlist in the parent directory"
 msgstr "Lejátszólista létrehozása a szülőkönyvtárban"
 
-#: ../data/playlist_dialog.ui.h:11 ../data/org.gnome.EasyTAG.gschema.xml.h:148
+#: ../data/playlist_dialog.ui.h:11 ../data/org.gnome.EasyTAG.gschema.xml.h:150
 msgid "Whether to create the playlist in the parent directory"
 msgstr "A lejátszólista a szülőkönyvtárban jöjjön-e létre"
 
@@ -1104,7 +1108,7 @@ msgstr "A lejátszólista a szülőkönyvtárban jöjjön-e létre"
 msgid "Use DOS directory separator"
 msgstr "DOS könyvtárelválasztó használata"
 
-#: ../data/playlist_dialog.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:150
+#: ../data/playlist_dialog.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:152
 msgid ""
 "Whether to use backslash as directory separator when generating playlists"
 msgstr ""
@@ -1127,8 +1131,8 @@ msgstr "Információk írása a fájlnév használatával"
 msgid "Write information using:"
 msgstr "Információk írása ezek használatával:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3029
-#: ../src/browser.cc:921 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.cc:3020
+#: ../src/browser.cc:938 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:600 ../src/easytag.c:607
 #: ../src/tag_area.cc:1738
 msgid "_Save"
@@ -1215,26 +1219,30 @@ msgstr "Fájlok rendezése kis- és nagybetűérzékenyen"
 msgid "Whether file sorting is case-sensitive"
 msgstr "A fájlrendezés megkülönbözteti-e a kis- és nagybetűket"
 
-#: ../data/preferences_dialog.ui.h:16
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:47
+#: ../data/preferences_dialog.ui.h:15
+msgid "Visible columns"
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:35
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:49
 msgid "Show the log"
 msgstr "A napló megjelenítése"
 
-#: ../data/preferences_dialog.ui.h:17
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:48
+#: ../data/preferences_dialog.ui.h:36
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:50
 msgid "Whether to show the log in the main window"
 msgstr "Megjelenjen-e a napló a főablakban"
 
-#: ../data/preferences_dialog.ui.h:18
+#: ../data/preferences_dialog.ui.h:37
 msgid "General"
 msgstr "Általános"
 
-#: ../data/preferences_dialog.ui.h:19
+#: ../data/preferences_dialog.ui.h:38
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:39
 msgid "Show audio file header summary"
 msgstr "Hangfájlok fejléc-összegzésének megjelenítése"
 
-#: ../data/preferences_dialog.ui.h:20
+#: ../data/preferences_dialog.ui.h:39
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:40
 msgid ""
 "Whether to show header information, such as bit rate and duration, for audio "
@@ -1242,44 +1250,44 @@ msgid ""
 msgstr ""
 "Hangfájlok fejléc-információinak, például bitsebesség és hossz megjelenítése"
 
-#: ../data/preferences_dialog.ui.h:21
+#: ../data/preferences_dialog.ui.h:40
 msgid "Display changed files in list using:"
 msgstr "Módosított fájlok megjelenítése a listában:"
 
-#: ../data/preferences_dialog.ui.h:22
+#: ../data/preferences_dialog.ui.h:41
 msgid "Red color"
 msgstr "Piros színnel"
 
-#: ../data/preferences_dialog.ui.h:23
+#: ../data/preferences_dialog.ui.h:42
 msgid "Bold style"
 msgstr "Félkövér stílussal"
 
-#: ../data/preferences_dialog.ui.h:24
+#: ../data/preferences_dialog.ui.h:43
 msgid "Interface"
 msgstr "Felület"
 
 # Menüsor
-#: ../data/preferences_dialog.ui.h:25
+#: ../data/preferences_dialog.ui.h:44
 msgid "File Settings"
 msgstr "Fájl beállítások"
 
-#: ../data/preferences_dialog.ui.h:26
+#: ../data/preferences_dialog.ui.h:45
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:35
 msgid "Preserve modification time when writing files"
 msgstr "Módosítási idő megőrzése fájlok írásakor"
 
-#: ../data/preferences_dialog.ui.h:27
+#: ../data/preferences_dialog.ui.h:46
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:36
 msgid "Whether to preserve the existing modification time when editing files"
 msgstr "A fájlok szerkesztésekor a meglévő módosítási idő megőrzése"
 
-#: ../data/preferences_dialog.ui.h:28
+#: ../data/preferences_dialog.ui.h:47
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:37
 msgid "Update parent directory modification time when writing files"
 msgstr "Szülőkönyvtár fájl módosítási idejének megőrzése fájlok írásakor"
 
 # bubble help
-#: ../data/preferences_dialog.ui.h:29
+#: ../data/preferences_dialog.ui.h:48
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:38
 msgid ""
 "Whether to update the modification time on the parent directory when editing "
@@ -1287,16 +1295,16 @@ msgid ""
 msgstr "A szülőkönyvtár módosítási ideje frissüljön-e a fájlok szerkesztésekor"
 
 #. Translators: a section header in the Files tab of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:31
+#: ../data/preferences_dialog.ui.h:50
 msgid "Filenames"
 msgstr "Fájlnevek"
 
-#: ../data/preferences_dialog.ui.h:32
+#: ../data/preferences_dialog.ui.h:51
 #, fuzzy
 msgid "Replace illegal characters when renaming:"
 msgstr "Érvénytelen karakterek cseréje átnevezéskor"
 
-#: ../data/preferences_dialog.ui.h:33
+#: ../data/preferences_dialog.ui.h:52
 #, fuzzy
 msgid ""
 "Convert characters which cannot be represented in filenames on some "
@@ -1305,71 +1313,71 @@ msgstr ""
 "A FAT32/16 és Joliet fájlrendszereken nem ábrázolható karakterek („\\”, „:”, "
 "„;”, „*”, „?”, „\"”, „<”, „>”, „|”) átalakítása"
 
-#: ../data/preferences_dialog.ui.h:34
+#: ../data/preferences_dialog.ui.h:53
 msgid "by ASCII characters"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:35
+#: ../data/preferences_dialog.ui.h:54
 msgid "Use the ASCII characters (‘-’, ‘+’, ‘_’, ‘'’, ‘(’, ‘)’) as replacement."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:36
+#: ../data/preferences_dialog.ui.h:55
 msgid "by Unicode characters"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:37
+#: ../data/preferences_dialog.ui.h:56
 msgid ""
 "Use similar Unicode characters (‘&#8726;’, ‘&#8725;’, ‘&#8758;’, ‘&#8727;’, "
 "‘&#8253;’, ‘&#8221;’, ‘&#8826;’, ‘&#8827;’, ‘&#8739;’) as replacement."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:38
+#: ../data/preferences_dialog.ui.h:57
 #, fuzzy
 msgid "No change"
 msgstr "Nincs változtatás"
 
-#: ../data/preferences_dialog.ui.h:39
+#: ../data/preferences_dialog.ui.h:58
 msgid "You must manually ensure valid file characters."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:40
+#: ../data/preferences_dialog.ui.h:59
 msgid "Convert filename extension to:"
 msgstr "Fájlnév kiterjesztés átalakítása:"
 
-#: ../data/preferences_dialog.ui.h:41
+#: ../data/preferences_dialog.ui.h:60
 #, fuzzy
 msgid "Lower case"
 msgstr "Kisbetűsre"
 
 # bubble help
-#: ../data/preferences_dialog.ui.h:42
+#: ../data/preferences_dialog.ui.h:61
 msgid "For example, the extension will be converted to ‘.mp3’"
 msgstr "Például a kiterjesztés „.mp3”-ra lesz átalakítva"
 
-#: ../data/preferences_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:62
 #, fuzzy
 msgid "Upper case"
 msgstr "Nagybetűsre"
 
 # bubble help
-#: ../data/preferences_dialog.ui.h:44
+#: ../data/preferences_dialog.ui.h:63
 msgid "For example, the extension will be converted to ‘.MP3’"
 msgstr "Például a kiterjesztés „.MP3”-ra lesz átalakítva"
 
 # bubble help
-#: ../data/preferences_dialog.ui.h:45
+#: ../data/preferences_dialog.ui.h:64
 msgid "The extension will not be modified"
 msgstr "A kiterjesztés nem változik"
 
-#: ../data/preferences_dialog.ui.h:46
+#: ../data/preferences_dialog.ui.h:65
 msgid "Filename Encoding"
 msgstr "Fájlnév kódolás"
 
-#: ../data/preferences_dialog.ui.h:47
+#: ../data/preferences_dialog.ui.h:66
 msgid "Try another character encoding"
 msgstr "Próbáljon másik karakter kódolást"
 
-#: ../data/preferences_dialog.ui.h:48
+#: ../data/preferences_dialog.ui.h:67
 msgid ""
 "Try to use the encoding associated with your locale and if this fails, try "
 "the ISO-8859-1 character encoding"
@@ -1377,48 +1385,48 @@ msgstr ""
 "Próbálja meg a területi beállításhoz tartozó kódolást használni, és ha "
 "sikertelen, az ISO-8859-1-et"
 
-#: ../data/preferences_dialog.ui.h:49
+#: ../data/preferences_dialog.ui.h:68
 msgid "Transliterate characters into the system character encoding"
 msgstr "Karakterek átírása a rendszer karakterkódolására"
 
-#: ../data/preferences_dialog.ui.h:50
+#: ../data/preferences_dialog.ui.h:69
 msgid ""
 "Replace unsupported characters with a similar character from the target "
 "character encoding"
 msgstr "Nem támogatott karakterek helyettesítése a cél karakterkódolásból"
 
-#: ../data/preferences_dialog.ui.h:51
+#: ../data/preferences_dialog.ui.h:70
 msgid ""
 "Use the system character encoding and silently discard unsupported characters"
 msgstr ""
 "A rendszer karakterkódolásának használata, és a nem támogatott karakterek "
 "elvetése"
 
-#: ../data/preferences_dialog.ui.h:52
+#: ../data/preferences_dialog.ui.h:71
 msgid ""
 "Discard characters which cannot be represented in the target character "
 "encoding"
 msgstr "A cél karakterkészletben nem ábrázolható karakterek eldobása"
 
-#: ../data/preferences_dialog.ui.h:53
+#: ../data/preferences_dialog.ui.h:72
 msgid "Files"
 msgstr "Fájlok"
 
-#: ../data/preferences_dialog.ui.h:54
+#: ../data/preferences_dialog.ui.h:73
 msgid "Automatically complete date field"
 msgstr "Dátum mező automatikus kiegészítése"
 
-#: ../data/preferences_dialog.ui.h:55
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:82
+#: ../data/preferences_dialog.ui.h:74
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:84
 msgid "Whether to automatically complete the date tag"
 msgstr "A dátum címke automatikusan kitöltésre kerüljön-e"
 
-#: ../data/preferences_dialog.ui.h:56
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:87
+#: ../data/preferences_dialog.ui.h:75
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:89
 msgid "Automatically select the type of the image based on its filename"
 msgstr "A kép típusának automatikus kiválasztása a fájlnév alapján"
 
-#: ../data/preferences_dialog.ui.h:57
+#: ../data/preferences_dialog.ui.h:76
 msgid ""
 "Whether to, when adding cover art, automatically select a type for an image "
 "based on its filename"
@@ -1426,146 +1434,162 @@ msgstr ""
 "Borítógrafika hozzáadásakor a kép típusának automatikus kiválasztása a "
 "fájlnév alapján"
 
-#: ../data/preferences_dialog.ui.h:58
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:93
+#: ../data/preferences_dialog.ui.h:77
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:95
 msgid "Preserve the tag field focus"
 msgstr "A címkemező fókuszának megőrzése"
 
-#: ../data/preferences_dialog.ui.h:59
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:94
+#: ../data/preferences_dialog.ui.h:78
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:96
 msgid "Whether to preserve focus on the current tag field when switching file"
 msgstr "Az aktuális címkemező fókusza megőrzendő-e fájlok közti váltáskor"
 
-#: ../data/preferences_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:79
 msgid "Pad the number of digits in the disc field to:"
 msgstr "A lemez mező számjegyeinek kitöltése:"
 
-#: ../data/preferences_dialog.ui.h:61
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:84
+#: ../data/preferences_dialog.ui.h:80
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:86
 msgid "Whether the disc number tag field should be padded with leading zeroes"
 msgstr "Ki legyen-e töltve a lemezszám címkemező vezető nullákkal"
 
-#: ../data/preferences_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:81
 msgid "Pad the number of digits in the track field to:"
 msgstr "A számmező számjegyeinek kitöltése:"
 
-#: ../data/preferences_dialog.ui.h:63
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:90
+#: ../data/preferences_dialog.ui.h:82
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:92
 msgid "Whether the track number tag field should be padded with leading zeroes"
 msgstr "Ki legyen-e töltve a sorszám címkemező vezető nullákkal"
 
-#: ../data/preferences_dialog.ui.h:64
+#: ../data/preferences_dialog.ui.h:83
 msgid "Splitting"
 msgstr "Felosztás"
 
-#: ../data/preferences_dialog.ui.h:65
+#: ../data/preferences_dialog.ui.h:84
+msgid "Delimiter for split"
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:85
 msgid ""
-"For Vorbis tags, selected fields will be split at dashes and saved as "
-"separate tags"
+"When writing the text is spilt at this delimiter. When reading it is joined "
+"with this delimier."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:86
+#, fuzzy
+msgid ""
+"For Vorbis tags, selected fields will be split and saved as separate tags"
 msgstr ""
 "A Vorbis címkéknél a kiválasztott mezők felosztásra kerülnek a kötőjeleknél, "
 "és különálló címkékként lesznek elmentve"
 
-#: ../data/preferences_dialog.ui.h:67
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:186
-msgid "Whether to split title fields at a “ - ” separator in Ogg comments"
+#: ../data/preferences_dialog.ui.h:87
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:190
+#, fuzzy
+msgid "Whether to split title fields in Ogg comments"
 msgstr ""
 "A cím mezők felosztandók-e a „ - ” elválasztónál az Ogg megjegyzésekben"
 
-#: ../data/preferences_dialog.ui.h:69
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:188
-msgid "Whether to split artist fields at a “ - ” separator in Ogg comments"
+#: ../data/preferences_dialog.ui.h:88
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:192
+#, fuzzy
+msgid "Whether to split artist fields in Ogg comments"
 msgstr ""
 "Az előadó mezők felosztandók-e a „ - ” elválasztónál az Ogg megjegyzésekben"
 
-#: ../data/preferences_dialog.ui.h:71
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:190
-msgid "Whether to split album fields at a “ - ” separator in Ogg comments"
+#: ../data/preferences_dialog.ui.h:89
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:194
+#, fuzzy
+msgid "Whether to split album fields in Ogg comments"
 msgstr ""
 "Az album mezők felosztandók-e a „ - ” elválasztónál az Ogg megjegyzésekben"
 
-#: ../data/preferences_dialog.ui.h:73
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:192
-msgid "Whether to split genre fields at a “ - ” separator in Ogg comments"
+#: ../data/preferences_dialog.ui.h:90
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:196
+#, fuzzy
+msgid "Whether to split genre fields in Ogg comments"
 msgstr ""
 "A műfaj mezők felosztandók-e a „ - ” elválasztónál az Ogg megjegyzésekben"
 
-#: ../data/preferences_dialog.ui.h:75
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:194
-msgid "Whether to split comment fields at a “ - ” separator in Ogg comments"
+#: ../data/preferences_dialog.ui.h:91
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:198
+#, fuzzy
+msgid "Whether to split comment fields in Ogg comments"
 msgstr ""
 "A megjegyzés mezők felosztandók-e a „ - ” elválasztónál az Ogg "
 "megjegyzésekben"
 
-#: ../data/preferences_dialog.ui.h:77
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:196
-msgid "Whether to split composer fields at a “ - ” separator in Ogg comments"
+#: ../data/preferences_dialog.ui.h:92
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:200
+#, fuzzy
+msgid "Whether to split composer fields in Ogg comments"
 msgstr ""
 "A zeneszerző mezők felosztandók-e a „ - ” elválasztónál az Ogg "
 "megjegyzésekben"
 
-#: ../data/preferences_dialog.ui.h:78
+#: ../data/preferences_dialog.ui.h:93
 msgid "Original artist"
 msgstr "Eredeti előadó"
 
-#: ../data/preferences_dialog.ui.h:79
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:198
-msgid ""
-"Whether to split original artist fields at a “ - ” separator in Ogg comments"
+#: ../data/preferences_dialog.ui.h:94
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:202
+#, fuzzy
+msgid "Whether to split original artist fields in Ogg comments"
 msgstr ""
 "Az eredeti előadó mezők felosztandók-e a „ - ” elválasztónál az Ogg "
 "megjegyzésekben"
 
-#: ../data/preferences_dialog.ui.h:80
+#: ../data/preferences_dialog.ui.h:95
 msgid "Tags"
 msgstr "Címkék"
 
-#: ../data/preferences_dialog.ui.h:81
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:51
+#: ../data/preferences_dialog.ui.h:96
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:53
 msgid "Strip ID3 tags if all ID3 tags are empty"
 msgstr "ID3 címkék törlése, ha minden ID3 címke üres"
 
-#: ../data/preferences_dialog.ui.h:82
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:52
+#: ../data/preferences_dialog.ui.h:97
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:54
 msgid ""
 "Whether to remove the ID3 tag from the audio file if all the individual tag "
 "fields are empty"
 msgstr ""
 "Az ID3 címke eltávolítandó-e a hangfájlból, ha minden egyes címkemező üres"
 
-#: ../data/preferences_dialog.ui.h:83
+#: ../data/preferences_dialog.ui.h:98
 msgid "Non-standard encoding for reading ID3 tags:"
 msgstr "Nem szabványos karakterkészlet az ID3 címkék olvasásához:"
 
-#: ../data/preferences_dialog.ui.h:84
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:50
+#: ../data/preferences_dialog.ui.h:99
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:52
 msgid "Whether to use a non-standard character encoding when reading ID3 tags"
 msgstr ""
 "Használjon-e nem szabványos karakterkészletet az ID3 címkék olvasásához"
 
-#: ../data/preferences_dialog.ui.h:85
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:60
+#: ../data/preferences_dialog.ui.h:100
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:62
 msgid "Choose the character set to be used when reading ID3v1 and ID3v2 tags"
 msgstr "Karakterkészlet kiválasztása az ID3v1 és ID3v2 címkék olvasásához"
 
-#: ../data/preferences_dialog.ui.h:86
+#: ../data/preferences_dialog.ui.h:101
 msgid "ID3v2"
 msgstr "ID3v2"
 
-#: ../data/preferences_dialog.ui.h:87
+#: ../data/preferences_dialog.ui.h:102
 msgid "Write ID3v2 tag"
 msgstr "ID3v2 címke írása"
 
-#: ../data/preferences_dialog.ui.h:88
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:62
+#: ../data/preferences_dialog.ui.h:103
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:64
 msgid "Whether to write ID3v2 tags when writing ID3 tags into audio files"
 msgstr "ID3 címkék hangfájlokba írásakor ID3v2 címkéket írjon-e"
 
-#: ../data/preferences_dialog.ui.h:89
+#: ../data/preferences_dialog.ui.h:104
 msgid "Version:"
 msgstr "Verzió:"
 
-#: ../data/preferences_dialog.ui.h:90
+#: ../data/preferences_dialog.ui.h:105
 msgid ""
 "Select the ID3v2 tag version to write:\n"
 "• ID3v2.3 is written using id3lib,\n"
@@ -1575,22 +1599,22 @@ msgstr ""
 "• ID3v2.3 címke id3lib használatával,\n"
 "• ID3v2.4 címke libid3tag használatával (ajánlott)"
 
-#: ../data/preferences_dialog.ui.h:93
+#: ../data/preferences_dialog.ui.h:108
 msgid "Character encoding:"
 msgstr "Karakterkódolás:"
 
 # src/trans.h:267
-#: ../data/preferences_dialog.ui.h:94
+#: ../data/preferences_dialog.ui.h:109
 msgid "Unicode"
 msgstr "Unicode"
 
-#: ../data/preferences_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:110
 msgid ""
 "Choose the Unicode character encoding to be used when writing ID3v2 tags"
 msgstr ""
 "Válassza ki az ID3v2 címkék írásakor használandó Unicode karakterkódolást"
 
-#: ../data/preferences_dialog.ui.h:97
+#: ../data/preferences_dialog.ui.h:112
 msgid ""
 "Override the standard Unicode character encoding to be used when writing "
 "ID3v2 tags"
@@ -1598,15 +1622,15 @@ msgstr ""
 "Az ID3v2 címkék írásakor használandó szabványos Unicode karakterkódolás "
 "felülbírálása"
 
-#: ../data/preferences_dialog.ui.h:98
+#: ../data/preferences_dialog.ui.h:113
 msgid "When encoding conversion fails:"
 msgstr "Ha a kódolás átalakítása sikertelen:"
 
-#: ../data/preferences_dialog.ui.h:99
+#: ../data/preferences_dialog.ui.h:114
 msgid "Report error"
 msgstr "Hiba jelentése"
 
-#: ../data/preferences_dialog.ui.h:100
+#: ../data/preferences_dialog.ui.h:115
 msgid ""
 "Display an error message when a character cannot be represented in the "
 "target character encoding and keep the original character"
@@ -1614,20 +1638,20 @@ msgstr ""
 "Hibaüzenet megjelenítése, ha egy karakter nem ábrázolható a cél "
 "karakterkészletben, és az eredeti karakter megtartása"
 
-#: ../data/preferences_dialog.ui.h:101
+#: ../data/preferences_dialog.ui.h:116
 msgid "Transliterate"
 msgstr "Átírás"
 
-#: ../data/preferences_dialog.ui.h:102
+#: ../data/preferences_dialog.ui.h:117
 msgid "Discard"
 msgstr "Eldobás"
 
-#: ../data/preferences_dialog.ui.h:103
+#: ../data/preferences_dialog.ui.h:118
 msgid "Automatically convert old ID3v2 tag versions"
 msgstr "A régi ID3v2 címkeverziók automatikus átalakítása"
 
-#: ../data/preferences_dialog.ui.h:104
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:66
+#: ../data/preferences_dialog.ui.h:119
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:68
 msgid ""
 "Whether to convert ID3 tags written against old version of the "
 "specification, such as ID3v2.2, to newer ones, such as ID3v2.3 or ID3v2.4"
@@ -1635,33 +1659,33 @@ msgstr ""
 "A specifikáció régebbi verziói, például ID3v2.2 szerint írt ID3 címkék "
 "konvertálásra kerüljenek-e az újabb ID3v2.3 vagy ID3v2.4 verziókra"
 
-#: ../data/preferences_dialog.ui.h:105
+#: ../data/preferences_dialog.ui.h:120
 msgid "Use CRC-32"
 msgstr "CRC-32 használata"
 
-#: ../data/preferences_dialog.ui.h:106
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:70
+#: ../data/preferences_dialog.ui.h:121
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:72
 msgid "Whether to embed a CRC-32 checksum of the audio file data in ID3v2 tags"
 msgstr ""
 "Beágyazzon-e CRC-32 ellenőrző-összeget az ID3v2 címkék hangfájladataiba"
 
-#: ../data/preferences_dialog.ui.h:107
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:67
+#: ../data/preferences_dialog.ui.h:122
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:69
 msgid "Compress data in ID3v2 tags"
 msgstr "Adatok tömörítése az ID3v2 címkékben"
 
-#: ../data/preferences_dialog.ui.h:108
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:68
+#: ../data/preferences_dialog.ui.h:123
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:70
 msgid "Whether to compress data in ID3v2 tags"
 msgstr "Tömörítse-e az adatokat az ID3v2 címkékben"
 
-#: ../data/preferences_dialog.ui.h:109
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:71
+#: ../data/preferences_dialog.ui.h:124
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:73
 msgid "Use text-only genre in ID3v2 tags"
 msgstr "Csak szöveges műfaj használata az ID3v2 címkékben"
 
-#: ../data/preferences_dialog.ui.h:110
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:72
+#: ../data/preferences_dialog.ui.h:125
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:74
 msgid ""
 "Whether to use only a string, and not the integer-base ID3v1 genre field, "
 "when writing a genre field to ID3v2 tags"
@@ -1669,71 +1693,71 @@ msgstr ""
 "Csak karakterlánc használandó-e a műfaj mező írásakor az ID3v2 címkékbe az "
 "egész típusú ID3v1 mező helyett"
 
-#: ../data/preferences_dialog.ui.h:111
+#: ../data/preferences_dialog.ui.h:126
 msgid "ID3v1"
 msgstr "ID3v1"
 
-#: ../data/preferences_dialog.ui.h:112
+#: ../data/preferences_dialog.ui.h:127
 msgid "Write ID3v1 tag"
 msgstr "ID3v1 címke írása"
 
-#: ../data/preferences_dialog.ui.h:113
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:54
+#: ../data/preferences_dialog.ui.h:128
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:56
 msgid "Whether to write ID3v1 tags when writing ID3 tags into audio files"
 msgstr "ID3v1 címkék írandók-e az ID3 címkék hangfájlokba írásakor"
 
-#: ../data/preferences_dialog.ui.h:114
+#: ../data/preferences_dialog.ui.h:129
 msgid "Choose the character set to be used when writing ID3v1 tag"
 msgstr "Válassza ki a karakterkészletet az ID3v1 címkék írásához"
 
-#: ../data/preferences_dialog.ui.h:115
+#: ../data/preferences_dialog.ui.h:130
 msgid "ID3 Tags"
 msgstr "ID3 címkék"
 
-#: ../data/preferences_dialog.ui.h:116
+#: ../data/preferences_dialog.ui.h:131
 msgid "Character Conversion"
 msgstr "Karakterátalakítás"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:118
+#: ../data/preferences_dialog.ui.h:133
 msgid "Fill Tag Scanner"
 msgstr "Címkekitöltés feldolgozó"
 
-#: ../data/preferences_dialog.ui.h:120
+#: ../data/preferences_dialog.ui.h:135
 #, no-c-format
 msgid "Convert underscores and ‘%20’ to spaces"
 msgstr "Aláhúzások és a „%20” átalakítása szóközökre"
 
-#: ../data/preferences_dialog.ui.h:122
+#: ../data/preferences_dialog.ui.h:137
 #, no-c-format
 msgid "Convert spaces and ‘%20’ to underscores"
 msgstr "Szóközök és a „%20” átalakítása aláhúzásra"
 
-#: ../data/preferences_dialog.ui.h:123
+#: ../data/preferences_dialog.ui.h:138
 msgid "No conversion"
 msgstr "Nincs átalakítás"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:125
+#: ../data/preferences_dialog.ui.h:140
 msgid "Rename File and Directory Scanner"
 msgstr "Fájl és könyvtár átnevezése feldolgozó"
 
-#: ../data/preferences_dialog.ui.h:126 ../data/scan_dialog.ui.h:96
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.cc:786
+#: ../data/preferences_dialog.ui.h:141 ../data/scan_dialog.ui.h:96
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:135 ../src/tag_area.cc:786
 msgid "Remove spaces"
 msgstr "Szóközök eltávolítása"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:128
+#: ../data/preferences_dialog.ui.h:143
 msgid "Process Fields Scanner"
 msgstr "Mezőfeldolgozás feldolgozó"
 
-#: ../data/preferences_dialog.ui.h:129
+#: ../data/preferences_dialog.ui.h:144
 msgid "Upper-case the first letters of all words"
 msgstr "Minden szó első betűje legyen nagybetű"
 
-#: ../data/preferences_dialog.ui.h:130
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:130
+#: ../data/preferences_dialog.ui.h:145
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to upper-case the first letter of all words, including prepositions "
 "and other short words such as “feat.”, when processing tag fields"
@@ -1741,16 +1765,16 @@ msgstr ""
 "Címkemezők feldolgozásakor minden szó első betűjének nagybetűsítése, "
 "beleértve a névelőket és egyéb rövid szavakat, mint a „feat.”"
 
-#: ../data/preferences_dialog.ui.h:131
+#: ../data/preferences_dialog.ui.h:146
 msgid "Fields"
 msgstr "Mezők"
 
-#: ../data/preferences_dialog.ui.h:132
+#: ../data/preferences_dialog.ui.h:147
 msgid "Overwrite fields when scanning tags"
 msgstr "Mezők felülírása a címkék feldolgozásakor"
 
-#: ../data/preferences_dialog.ui.h:133
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:99
+#: ../data/preferences_dialog.ui.h:148
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:101
 msgid ""
 "Whether to overwrite the tag field values when filling tags. Otherwise, only "
 "blank tag fields will be filled"
@@ -1758,12 +1782,12 @@ msgstr ""
 "A címkemezők értékei felülírandók-e címkék feltöltésekor. Egyébként csak az "
 "üres címkemezők kerülnek kitöltésre"
 
-#: ../data/preferences_dialog.ui.h:134
+#: ../data/preferences_dialog.ui.h:149
 msgid "Set this text as default comment:"
 msgstr "Ezen szöveg beállítása alapértelmezett megjegyzésként:"
 
-#: ../data/preferences_dialog.ui.h:135
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:101
+#: ../data/preferences_dialog.ui.h:150
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:103
 msgid ""
 "Whether to set the comment tag field to the provided default value when "
 "filling tags"
@@ -1771,14 +1795,14 @@ msgstr ""
 "A megjegyzés címkemező beállítandó-e a megadott alapértelmezett értékre a "
 "címkék feltöltésekor"
 
-#: ../data/preferences_dialog.ui.h:136
+#: ../data/preferences_dialog.ui.h:151
 msgid "Use CRC-32 as the default comment (for files with ID3 tags only)"
 msgstr ""
 "CRC-32 használata alapértelmezett megjegyzésként (csak ID3 címkékkel "
 "rendelkező fájloknál)."
 
-#: ../data/preferences_dialog.ui.h:137
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:105
+#: ../data/preferences_dialog.ui.h:152
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:107
 msgid ""
 "Whether to use the CRC-32 of the audio file data as the default comment, for "
 "files with ID3 tags only"
@@ -1786,42 +1810,42 @@ msgstr ""
 "A hangfájlok adatainak CRC-32-jének használata alapértelmezett "
 "megjegyzésként a csak ID3 címkékkel rendelkező fájloknál."
 
-#: ../data/preferences_dialog.ui.h:138
+#: ../data/preferences_dialog.ui.h:153
 msgid "Scanner"
 msgstr "Feldolgozó"
 
-#: ../data/preferences_dialog.ui.h:139
+#: ../data/preferences_dialog.ui.h:154
 msgid "Automatic Search Servers"
 msgstr "Automatikus keresés kiszolgálói"
 
-#: ../data/preferences_dialog.ui.h:140
+#: ../data/preferences_dialog.ui.h:155
 msgid "Host:"
 msgstr "Gépnév:"
 
-#: ../data/preferences_dialog.ui.h:141
+#: ../data/preferences_dialog.ui.h:156
 msgid "Port:"
 msgstr "Port:"
 
-#: ../data/preferences_dialog.ui.h:142
+#: ../data/preferences_dialog.ui.h:157
 msgid "CGI Path:"
 msgstr "CGI útvonal:"
 
-#: ../data/preferences_dialog.ui.h:143
+#: ../data/preferences_dialog.ui.h:158
 msgid "Manual Search Server"
 msgstr "Kézi keresés kiszolgálója"
 
-#: ../data/preferences_dialog.ui.h:144
+#: ../data/preferences_dialog.ui.h:159
 msgid "Results List"
 msgstr "Találatlista"
 
-#: ../data/preferences_dialog.ui.h:145
+#: ../data/preferences_dialog.ui.h:160
 msgid ""
 "Select corresponding file (according to position or DLM if activated below)"
 msgstr ""
 "A megfelelő hangfájl kiválasztása (pozíció vagy DLM szerint, ha lent "
 "aktiválva van)"
 
-#: ../data/preferences_dialog.ui.h:146
+#: ../data/preferences_dialog.ui.h:161
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:26
 msgid ""
 "Whether to select the file in the file list which matches the position in "
@@ -1830,7 +1854,7 @@ msgstr ""
 "Kiválasztásra kerüljön-e az a fájl a fájllistában, amely megfelel a CDDB "
 "találati listában lévő pozíciónak"
 
-#: ../data/preferences_dialog.ui.h:147
+#: ../data/preferences_dialog.ui.h:162
 msgid ""
 "Use the Levenshtein algorithm (DLM) to match results (using title) with "
 "audio files (using filename)"
@@ -1838,63 +1862,63 @@ msgstr ""
 "A Levenshtein algoritmus (DLM) használata találatok (cím használatával) "
 "párosításához a hangfájlokkal (fájlnév használatával)"
 
-#: ../data/preferences_dialog.ui.h:149
+#: ../data/preferences_dialog.ui.h:164
 msgid "CDDB"
 msgstr "CD-adatbázis"
 
-#: ../data/preferences_dialog.ui.h:150
+#: ../data/preferences_dialog.ui.h:165
 msgid "Confirmation"
 msgstr "Megerősítés"
 
-#: ../data/preferences_dialog.ui.h:151
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:106
+#: ../data/preferences_dialog.ui.h:166
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:108
 msgid "Confirm before writing tags"
 msgstr "Megerősítés címkék írása előtt"
 
-#: ../data/preferences_dialog.ui.h:152
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:107
+#: ../data/preferences_dialog.ui.h:167
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:109
 msgid ""
 "Whether to ask for confirmation from the user before writing tags to audio "
 "files"
 msgstr "Kérjen-e megerősítést a címkék hangfájlokba írása előtt"
 
-#: ../data/preferences_dialog.ui.h:153
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:108
+#: ../data/preferences_dialog.ui.h:168
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:110
 msgid "Confirm before renaming a file"
 msgstr "Megerősítés fájl átnevezése előtt"
 
-#: ../data/preferences_dialog.ui.h:154
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:109
+#: ../data/preferences_dialog.ui.h:169
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:111
 msgid "Whether to ask for confirmation from the user before renaming a file"
 msgstr "Kérjen-e megerősítést fájlok átnevezése előtt"
 
-#: ../data/preferences_dialog.ui.h:155
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:112
+#: ../data/preferences_dialog.ui.h:170
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:114
 msgid "Confirm before deleting a file"
 msgstr "Megerősítés fájl törlése előtt"
 
-#: ../data/preferences_dialog.ui.h:156
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:113
+#: ../data/preferences_dialog.ui.h:171
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:115
 msgid "Whether to ask for confirmation from the user before deleting a file"
 msgstr "Kérjen-e megerősítést fájlok törlése előtt"
 
-#: ../data/preferences_dialog.ui.h:157
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:110
+#: ../data/preferences_dialog.ui.h:172
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:112
 msgid "Confirm before writing a playlist"
 msgstr "Megerősítés lejátszólisták írása előtt"
 
-#: ../data/preferences_dialog.ui.h:158
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:111
+#: ../data/preferences_dialog.ui.h:173
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:113
 msgid "Whether to ask for confirmation from the user before writing a playlist"
 msgstr "Kérjen-e megerősítést a lejátszólisták írása előtt"
 
-#: ../data/preferences_dialog.ui.h:159
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:114
+#: ../data/preferences_dialog.ui.h:174
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:116
 msgid "Confirm before losing unsaved changes to files"
 msgstr "Megerősítés fájlok mentetlen változtatásainak eldobása előtt"
 
-#: ../data/preferences_dialog.ui.h:160
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:115
+#: ../data/preferences_dialog.ui.h:175
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:117
 msgid ""
 "Whether to ask for confirmation from the user before performing an operation "
 "that would lose unsaved changes on files"
@@ -1902,20 +1926,20 @@ msgstr ""
 "Kérjen-e megerősítést a mentetlen változtatások eldobását eredményező "
 "műveletek előtt"
 
-#: ../data/preferences_dialog.ui.h:161
+#: ../data/preferences_dialog.ui.h:176
 msgid "Scanner Dialog"
 msgstr "Feldolgozóablak"
 
-#: ../data/preferences_dialog.ui.h:162
+#: ../data/preferences_dialog.ui.h:177
 msgid "Show the scanner dialog on startup"
 msgstr "Feldolgozóablak megjelenítése indításkor"
 
-#: ../data/preferences_dialog.ui.h:163
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:182
+#: ../data/preferences_dialog.ui.h:178
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:184
 msgid "Whether to show the scanner window on application startup"
 msgstr "A feldolgozóablak megjelenjen-e indításkor"
 
-#: ../data/preferences_dialog.ui.h:164
+#: ../data/preferences_dialog.ui.h:179
 msgid "Application"
 msgstr "Alkalmazás"
 
@@ -2223,7 +2247,7 @@ msgstr ""
 msgid "Detect Roman numerals"
 msgstr "Római számok felismerése"
 
-#: ../data/scan_dialog.ui.h:93 ../data/org.gnome.EasyTAG.gschema.xml.h:132
+#: ../data/scan_dialog.ui.h:93 ../data/org.gnome.EasyTAG.gschema.xml.h:134
 msgid ""
 "Whether to detect Roman numerals when applying upper-case conversions while "
 "processing tag fields"
@@ -2239,7 +2263,7 @@ msgstr "Ne változtassa meg a kis- és nagybetűket"
 msgid "Spaces Conversions"
 msgstr "Szóközök átalakítása"
 
-#: ../data/scan_dialog.ui.h:97 ../data/org.gnome.EasyTAG.gschema.xml.h:134
+#: ../data/scan_dialog.ui.h:97 ../data/org.gnome.EasyTAG.gschema.xml.h:136
 msgid "Whether to remove all spaces when processing tag fields"
 msgstr "A címkemezők feldolgozásakor az összes szóköz eltávolításra kerüljön-e"
 
@@ -2247,7 +2271,7 @@ msgstr "A címkemezők feldolgozásakor az összes szóköz eltávolításra ker
 msgid "Insert a space before uppercase letters"
 msgstr "Szóköz beszúrása minden nagybetű elé"
 
-#: ../data/scan_dialog.ui.h:99 ../data/org.gnome.EasyTAG.gschema.xml.h:136
+#: ../data/scan_dialog.ui.h:99 ../data/org.gnome.EasyTAG.gschema.xml.h:138
 msgid ""
 "Whether to insert spaces before capital letters when processing tag fields"
 msgstr ""
@@ -2257,7 +2281,7 @@ msgstr ""
 msgid "Remove duplicate spaces and underscores"
 msgstr "Dupla szóközök és aláhúzások eltávolítása"
 
-#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:138
+#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:140
 msgid ""
 "Whether to remove duplicate spaces and underscores when processing tag fields"
 msgstr ""
@@ -2774,27 +2798,35 @@ msgid "Sort files in ascending or descending order for the selected type"
 msgstr ""
 "A kijelölt típusba tartozó fájlok rendezése növekvő vagy csökkenő sorrendben"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:49
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:47
+msgid "Columns in file browser"
+msgstr ""
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:48
+msgid "List of visible columns in the file browser."
+msgstr ""
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:51
 msgid "Use a non-standard character encoding when reading ID3 tags"
 msgstr "Nem szabványos karakterkészlet használata az ID3 címkék olvasásához"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:53
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:55
 msgid "Write ID3v1 tags"
 msgstr "ID3v1 címkék írása"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:55
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:57
 msgid "The character set for writing ID3v1 tags"
 msgstr "Karakterkészlet az ID3v1 címkék írásához"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:56
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:58
 msgid "Choose the character set to be used when writing ID3v1 tags"
 msgstr "Válassza ki a karakterkészletet az ID3v1 címkék írásához"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:57
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:59
 msgid "Encoding options when writing ID3v1 tags"
 msgstr "Karakterkódolási beállítások az ID3v1 címkék írásához"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:58
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:60
 msgid ""
 "Additional options to pass to iconv() when converting between encodings when "
 "writing ID3v1 tags"
@@ -2802,63 +2834,63 @@ msgstr ""
 "További beállítások, amelyek az iconv()-nek kerülnek átadásra a "
 "karakterkészletek konvertálása során az ID3v1 címkék írásakor"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:59
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:61
 msgid "The character set for reading ID3v1 and ID3v2 tags"
 msgstr "Karakterkészlet az ID3v1 és ID3v2 címkék olvasásához"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:61
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:63
 msgid "Write ID3v2 tags"
 msgstr "ID3v2 címkék írása"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:63
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:65
 msgid "Enable ID3v2.4 support"
 msgstr "ID3v2.4-támogatás engedélyezése"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:64
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:66
 msgid "Whether to write ID3v2.4 tags when ID3v2 support is enabled"
 msgstr "ID3v2.4 címkék írása, ha az ID3v2 támogatás be van kapcsolva"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:65
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:67
 msgid "Convert old ID3 tag versions to new ones"
 msgstr "A régi ID3 címkeverziók automatikus átalakítása az újakra"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:69
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:71
 msgid "Use CRC-32 in ID3v2 tags"
 msgstr "CRC-32 használata az ID3v2 címkékben"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:73
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:75
 msgid "Use Unicode character encoding in ID3v2 tags"
 msgstr "Unicode karakterkódolás használata az ID3v2 címkékben"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:74
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:76
 msgid "Whether to use a Unicode character set when writing ID3v2 tags"
 msgstr "Unicode karakterkódolás használata az ID3v2 címkék írása során"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:75
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:77
 msgid "The Unicode character set for writing ID3v2 tags"
 msgstr "A Unicode karakterkészlet az ID3v2 címkék írásához"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:76
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:78
 msgid "Choose the Unicode character set to be used when writing ID3v2 tags"
 msgstr ""
 "Válassza ki az ID3v2 címkék írásakor használandó Unicode karakterkészletet"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:77
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:79
 msgid "The character set for writing ID3v2 tags"
 msgstr "Karakterkészlet az ID3v2 címkék írásához"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:78
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:80
 msgid ""
 "Override the typical Unicode character set to be used when writing ID3v2 tags"
 msgstr ""
 "Az ID3v2 címkék írásakor használandó általános Unicode karakterkészlet "
 "felülbírálása"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:79
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:81
 msgid "Encoding options when writing ID3v2 tags"
 msgstr "Kódolási beállítások az ID3v2 címkék írásához"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:80
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:82
 msgid ""
 "Additional options to pass to iconv() when converting between encodings when "
 "writing ID3v2 tags"
@@ -2866,26 +2898,26 @@ msgstr ""
 "További beállítások, amelyek az iconv()-nek kerülnek átadásra a "
 "karakterkészletek konvertálása során az ID3v2 címkék írásakor"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:81
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:83
 msgid "Automatically complete the date"
 msgstr "A dátum automatikus kitöltése"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:83
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:85
 msgid "Pad the disc number tag field"
 msgstr "Vezető nullák a lemezszám mezőben"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:85
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:87
 msgid "The length of the disc number field"
 msgstr "A lemezszám mező hossza"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:86
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:88
 msgid ""
 "The length of the disc number field, which controls if the field is padded "
 "with leading zeroes"
 msgstr ""
 "A lemezszám mező hossza, amely a vezető nullákat állítja be, ha szükséges"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:88
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:90
 msgid ""
 "Whether to, when adding cover art, automatically select the type for an "
 "image based on its filename"
@@ -2893,26 +2925,26 @@ msgstr ""
 "Borítógrafika hozzáadásakor a kép típusának automatikus kiválasztása a "
 "fájlnév alapján"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:89
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:91
 msgid "Pad the track number tag field"
 msgstr "Vezető nullák a sorszám mezőben"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:91
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:93
 msgid "The length of the track number field"
 msgstr "A sorszám mező hossza"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:92
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:94
 msgid ""
 "The length of the track number field, which controls if the field is padded "
 "with leading zeroes"
 msgstr ""
 "A sorszám mező hossza, amely a vezető nullákat állítja be, ha szükséges"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:95
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:97
 msgid "Convert spaces and underscores when filling tag fields"
 msgstr "Szóközök és aláhúzások átalakítása címkemezők kitöltésekor"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:97
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:99
 #, no-c-format
 msgid ""
 "Whether to convert to spaces (and %20) or underscores when filling tag "
@@ -2921,44 +2953,44 @@ msgstr ""
 "Átalakításra kerüljenek-e a szóközök (a %20 is) és az aláhúzások a "
 "címkemezők kitöltésekor fájlnevekből"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:98
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:100
 msgid "Overwrite tag field"
 msgstr "Címkemező felülírása"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:100
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:102
 msgid "Set the default comment"
 msgstr "Alapértelmezett megjegyzés beállítása"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:102
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:104
 msgid "Default comment for filling tags"
 msgstr "Alapértelmezett megjegyzés címkék kitöltéséhez"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:103
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:105
 msgid "The default comment to use when filling tags"
 msgstr "Az alapértelmezésben használandó megjegyzés címkék kitöltéséhez"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:104
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:106
 msgid "Use the CRC-32 as the default comment"
 msgstr "CRC-32 használata alapértelmezett megjegyzésként"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:116
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:118
 msgid "Run the current scanner when loading filenames from a file"
 msgstr "A jelenlegi feldolgozó futtatása fájlnevek fájlból betöltésekor"
 
 # bubble help
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:118
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:120
 msgid "Process these tag fields"
 msgstr "Ezen címkemezők feldolgozása"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:119
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:121
 msgid "The tag fields to process when using the scanner"
 msgstr "A feldolgozó használata során feldolgozandó címkemezők"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:120
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:122
 msgid "Convert tag fields when processing"
 msgstr "A címkemezők átalakítása a feldolgozás során"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:122
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:124
 #, no-c-format
 msgid ""
 "Whether to convert to spaces (and %20), underscores or other characters when "
@@ -2967,22 +2999,22 @@ msgstr ""
 "Átalakításra kerüljenek-e a szóközök (a %20 is), aláhúzások és más "
 "karakterek a címkemezők feldolgozása során"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:123
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:125
 msgid "Convert characters in tags"
 msgstr "A címkékben szereplő karakterek átalakítása"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:124
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:126
 msgid ""
 "Whether to convert characters of the tag from one value to another when "
 "processing tag fields"
 msgstr ""
 "Átalakításra kerüljenek-e címkék karakterei a címkemezők feldolgozása során"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:125
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:127
 msgid "Convert the following characters when processing tag fields"
 msgstr "A következő karakterek átalakítása a címkemezők feldolgozása során"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:126
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:128
 msgid ""
 "Replace any matched sequence of characters with this string when processing "
 "tag fields"
@@ -2990,73 +3022,73 @@ msgstr ""
 "Az illeszkedő karaktersorozatok cseréje erre a karakterláncra a címkemezők "
 "feldolgozásakor"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:127
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:129
 msgid "Capitalize tag fields when processing"
 msgstr "Címkemezők nagy kezdőbetűvel írása feldolgozáskor"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:128
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:130
 msgid "Whether to change the capitalization when processing tag fields"
 msgstr "A címkemezők feldolgozásakor változtassa-e meg a nagybetűs írást"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:129
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:131
 msgid "Upper-case prepositions"
 msgstr "A viszonyszavak legyenek nagybetűsek"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:131
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:133
 msgid "Detect roman numerals"
 msgstr "Római számok felismerése"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:135
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:137
 msgid "Insert spaces before capital letters"
 msgstr "Szóköz beszúrása a nagybetűk elé"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:137
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:139
 msgid "Remove duplicate spaces"
 msgstr "Dupla szóközök eltávolítása"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:139
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:141
 msgid "Playlist filename mask"
 msgstr "Lejátszólista fájlnévmaszkja"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:140
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:142
 msgid "The default filename mask to use for a new playlist"
 msgstr "Az új lejátszólistákhoz használt alapértelmezett fájlnévmaszk"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:141
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:143
 msgid "Use a filename mask when generating a playlist"
 msgstr "Fájlnévmaszk használata lejátszólisták létrehozásánál"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:142
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:144
 msgid "Whether to use a filename mask when creating playlists"
 msgstr "Használjon-e fájlnévmaszkot az új lejátszólisták létrehozása során"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:143
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:145
 msgid "Create playlists with only the selected files"
 msgstr "Lejátszólisták létrehozása csak a kijelölt fájlokkal"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:145
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:147
 msgid "Use relative paths when creating playlists"
 msgstr "Relatív elérési út használata a lejátszólisták létrehozásakor"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:146
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:148
 msgid "Whether to use relative paths for files when creating playlists"
 msgstr ""
 "A fájlokhoz relatív elérési utakat használjon-e a lejátszólisták "
 "létrehozásakor"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:147
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:149
 msgid "Create the playlist in the parent directory"
 msgstr "Lejátszólista létrehozása a szülőkönyvtárban"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:149
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:151
 msgid "Use DOS separators for playlists"
 msgstr "DOS fájlnévelválasztók használata a lejátszólistákhoz"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:151
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:153
 msgid "Content of generated playlists"
 msgstr "A létrehozott lejátszólisták tartalma"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:152
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:154
 msgid ""
 "Write a plain list of files, include extended information from the filename "
 "or extended information using a supplied mask"
@@ -3064,43 +3096,43 @@ msgstr ""
 "Egyszerű fájllista írása, bővített információk a fájlnévből, vagy bővített "
 "információk egy megadott maszkból"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:153
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:155
 msgid "Playlist default mask"
 msgstr "Lejátszólista alapértelmezett maszkja"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:154
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:156
 msgid "The default mask to use for files in a playlist"
 msgstr "Az alapértelmezett maszk a lejátszólista fájljaihoz"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:155
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:157
 msgid "Search for files case-sensitively"
 msgstr "Fájlok keresése kis- és nagybetűérzékenyen"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:156
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:158
 msgid "Whether matches when searching for files are case-sensitive"
 msgstr "A keresési találatok kis- és nagybetűérzékenyek-e"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:157
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:159
 msgid "Search in filenames"
 msgstr "Keresés a fájlnevekben"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:158
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:160
 msgid "Perform the search on filenames"
 msgstr "Keresés végrehajtása a fájlnevekben"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:159
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:161
 msgid "Search in tags"
 msgstr "Keresés címkékben"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:160
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:162
 msgid "Perform the search on tags"
 msgstr "Keresés végrehajtása a címkékben"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:161
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:163
 msgid "Mask for filling tags from filenames"
 msgstr "Maszk a címkék fájlnevekből történő kitöltéséhez"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:162
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:164
 msgid ""
 "The default mask to use when automatically filling tags with information "
 "from filenames"
@@ -3108,51 +3140,51 @@ msgstr ""
 "A címkék fájlnevekből történő automatikus kitöltésénél használt, "
 "alapértelmezett maszk"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:163
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:165
 msgid "Mask for renaming files"
 msgstr "Fájlátnevezési maszk"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:164
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:166
 msgid "The default mask to use when renaming files"
 msgstr "A fájlok átnevezése során használt alapértelmezett maszk"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:165
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:167
 msgid "Mask for renaming directories"
 msgstr "Könyvtárátnevezési maszk"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:166
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:168
 msgid "The default mask to use when renaming directories"
 msgstr "A könyvtárak átnevezése során használt alapértelmezett maszk"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:167
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:169
 msgid "Use a mask when renaming directories"
 msgstr "Maszk használata könyvtárak átnevezésekor"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:169
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:171
 msgid "Convert spaces and underscores when renaming files"
 msgstr "Szóközök és aláhúzások átalakítása fájlok átnevezésekor"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:170
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:172
 msgid "Whether to convert to spaces or underscores when renaming files"
 msgstr ""
 "Átalakításra kerüljenek-e a szóközök és az aláhúzások a fájlok átnevezése "
 "során"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:171
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:173
 msgid "How to modify filename extensions when renaming"
 msgstr "Hogyan módosuljanak a fájlok kiterjesztései átnevezéskor"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:172
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:174
 msgid ""
 "Change the file extension to all lower-case, all upper-case or do not change "
 "it"
 msgstr "A kiterjesztés átalakítása kisbetűsre, nagybetűsre, vagy ne változzon"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:173
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
 msgid "Encoding options when renaming files"
 msgstr "Karakterkódolási beállítások fájlok átnevezésekor"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:174
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:176
 msgid ""
 "If the encoding of the filename does not match the filesystem encoding, "
 "choose whether to try another encoding, approximate the filesystem encoding "
@@ -3162,11 +3194,11 @@ msgstr ""
 "válasszon: megpróbál egy másik kódolást, átírja a fájlnevet a fájlrendszer "
 "kódolását közelítve vagy eldobja a nem megfelelő karaktereket"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:177
 msgid "Replace illegal characters when renaming"
 msgstr "Érvénytelen karakterek cseréje átnevezéskor"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:176
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:178
 msgid ""
 "Whether to replace illegal characters in a filename when using the rename "
 "function"
@@ -3174,70 +3206,80 @@ msgstr ""
 "Az érvénytelen karakterek cserélendők-e a fájlnevekben átnevezési funkció "
 "használatakor"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:177
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:179
 msgid "Show the scanner mask editor"
 msgstr "A feldolgozó maszkszerkesztőjének megjelenítése"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:178
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:180
 msgid "Whether to show the scanner mask editor in the tag scanner"
 msgstr "Megjelenítse-e a feldolgozó maszkszerkesztőjét a címkefeldolgozóban"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:179
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:181
 msgid "Show the scanner legend"
 msgstr "Feldolgozó jelmagyarázatának megjelenítése"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:180
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:182
 msgid "Whether to show the scanner legend in the tag scanner"
 msgstr "Megjelenjen-e a feldolgozó jelmagyarázata a címkefeldolgozóban"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:181
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:183
 msgid "Show the scanner window on startup"
 msgstr "Feldolgozóablak megjelenítése indításkor"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:183
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:185
 msgid "The scan mode"
 msgstr "Feldolgozási mód"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:184
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:186
 msgid "Which type of scan to show in the scanner"
 msgstr "Melyik típusú feldolgozás jelenjen meg a feldolgozóban"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:185
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:187
+msgid "Split fields at this separator"
+msgstr ""
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:188
+msgid ""
+"Seperator used when splitting e.g. Ogg fields or joining multiple field "
+"values"
+msgstr ""
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:189
 msgid "Split Ogg title fields"
 msgstr "Az Ogg „Cím” mezők felosztása"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:187
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:191
 msgid "Split Ogg artist fields"
 msgstr "Az Ogg „Előadó” mezők felosztása"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:189
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:193
 msgid "Split Ogg album fields"
 msgstr "Az Ogg „Album” mezők felosztása"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:191
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:195
 msgid "Split Ogg genre fields"
 msgstr "Az Ogg „Műfaj” mezők felosztása"
 
 # bubble help
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:193
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:197
 msgid "Split Ogg comment fields"
 msgstr "Az Ogg „Megjegyzés” mezők felosztása"
 
 # bubble help
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:195
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:199
 msgid "Split Ogg composer fields"
 msgstr "Az Ogg „Zeneszerző” mezők felosztása"
 
 # bubble help
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:197
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:201
 msgid "Split Ogg original artist fields"
 msgstr "Az Ogg „Eredeti előadó” mezők felosztása"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:199
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:203
 msgid "Page to show in the preferences dialog"
 msgstr "A beállítások ablakban megjelenő oldal"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:200
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:204
 msgid "The page in the notebook of the preferences dialog"
 msgstr "A beállítások ablakban látható oldal"
 
@@ -3312,72 +3354,73 @@ msgstr "Hiba a fájl („%s”) információinak lekérése közben: %s"
 msgid "Cannot open path ‘%s’"
 msgstr "Nem nyitható meg az útvonal: „%s”"
 
-#: ../src/application_window.c:361 ../src/application_window.c:379
+#: ../src/application_window.cc:369 ../src/application_window.cc:387
 #, c-format
 msgid "Do you really want to delete the file ‘%s’?"
 msgstr "Biztosan törölni szeretné a(z) „%s” fájlt?"
 
-#: ../src/application_window.c:364 ../src/easytag.c:459 ../src/easytag.c:595
+#: ../src/application_window.cc:372 ../src/easytag.c:459 ../src/easytag.c:595
 msgid "Repeat action for the remaining files"
 msgstr "Művelet ismétlése a hátralevő fájlokra"
 
-#: ../src/application_window.c:367
+#: ../src/application_window.cc:375
 msgid "_Skip"
 msgstr "_Kihagyás"
 
 # Fájl menü
-#: ../src/application_window.c:369 ../src/application_window.c:383
+#: ../src/application_window.cc:377 ../src/application_window.cc:391
 msgid "_Delete"
 msgstr "_Törlés"
 
 # Fájl menü
-#: ../src/application_window.c:371 ../src/application_window.c:381
+#: ../src/application_window.cc:379 ../src/application_window.cc:389
 msgid "Delete File"
 msgstr "Fájl törlése"
 
-#: ../src/application_window.c:408
+#: ../src/application_window.cc:416
 #, c-format
 msgid "File ‘%s’ deleted"
 msgstr "A(z) „%s” fájl törölve"
 
-#: ../src/application_window.c:583
+#: ../src/application_window.cc:587
 #, c-format
 msgid "Cannot delete file ‘%s’"
 msgstr "Nem törölhető a fájl („%s”)"
 
-#: ../src/application_window.c:607
+#: ../src/application_window.cc:611
 msgid "Some files were not deleted"
 msgstr "Néhány fájl nem lett törölve"
 
-#: ../src/application_window.c:609
+#: ../src/application_window.cc:613
 msgid "All files have been deleted"
 msgstr "Minden fájl törölve"
 
-#: ../src/application_window.c:915
+#: ../src/application_window.cc:918
 msgid "All tags have been removed"
 msgstr "Minden címke eltávolítva"
 
-#: ../src/application_window.c:1474 ../src/browser.cc:348 ../src/browser.cc:391
-#: ../src/browser.cc:425 ../src/browser.cc:4299 ../src/browser.cc:4374
+#: ../src/application_window.cc:1475 ../src/browser.cc:349
+#: ../src/browser.cc:392 ../src/browser.cc:426 ../src/browser.cc:4321
+#: ../src/browser.cc:4396
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Nem sikerült elindítani a programot: „%s”"
 
-#: ../src/application_window.c:2003
+#: ../src/application_window.cc:1998
 #, c-format
 msgid "Could not convert filename ‘%s’ to system filename encoding"
 msgstr "Nem alakítható át a(z) „%s” fájlnév a rendszer fájlnévkódolására"
 
-#: ../src/application_window.c:2006
+#: ../src/application_window.cc:2001
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Próbálja meg beállítani a G_FILENAME_ENCODING környezeti változót."
 
-#: ../src/application_window.c:2008 ../src/scan_dialog.cc:800
+#: ../src/application_window.cc:2003 ../src/scan_dialog.cc:800
 msgid "Filename translation"
 msgstr "Fájlnév fordítások"
 
 #. And refresh the number of files in this directory
-#: ../src/application_window.c:2168
+#: ../src/application_window.cc:2163
 #, c-format
 msgid "One file"
 msgid_plural "%u files"
@@ -3385,7 +3428,7 @@ msgstr[0] "Egy fájl"
 msgstr[1] "%u fájl"
 
 #. Bitrate
-#: ../src/application_window.c:2201 ../src/tags/flac_header.c:189
+#: ../src/application_window.cc:2196 ../src/tags/flac_header.c:189
 #: ../src/tags/monkeyaudio_header.c:76 ../src/tags/mp4_header.cc:144
 #: ../src/tags/mpeg_header.c:274 ../src/tags/musepack_header.c:78
 #: ../src/tags/ogg_header.c:411 ../src/tags/opus_header.c:231
@@ -3395,7 +3438,7 @@ msgid "%d kb/s"
 msgstr "%d kb/s"
 
 #. Samplerate
-#: ../src/application_window.c:2204 ../src/tags/flac_header.c:192
+#: ../src/application_window.cc:2199 ../src/tags/flac_header.c:192
 #: ../src/tags/monkeyaudio_header.c:79 ../src/tags/mp4_header.cc:148
 #: ../src/tags/mpeg_header.c:279 ../src/tags/musepack_header.c:81
 #: ../src/tags/ogg_header.c:414 ../src/tags/opus_header.c:234
@@ -3404,100 +3447,100 @@ msgstr "%d kb/s"
 msgid "%d Hz"
 msgstr "%d Hz"
 
-#: ../src/application_window.c:2359 ../src/easytag.c:915
+#: ../src/application_window.cc:2354 ../src/easytag.c:915
 #, c-format
 msgid "File: ‘%s’"
 msgstr "Fájl: „%s”"
 
 #. Quit EasyTAG.
-#: ../src/application_window.c:2992
+#: ../src/application_window.cc:2983
 msgid "Normal exit"
 msgstr "Normális kilépés"
 
-#: ../src/application_window.c:3026 ../src/browser.cc:915
+#: ../src/application_window.cc:3017 ../src/browser.cc:932
 msgid "Some files have been modified but not saved"
 msgstr "Néhány fájl módosult de nincs elmentve"
 
-#: ../src/application_window.c:3027 ../src/browser.cc:919 ../src/easytag.c:233
+#: ../src/application_window.cc:3018 ../src/browser.cc:936 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:598 ../src/easytag.c:606
 msgid "_Discard"
 msgstr "El_dobás"
 
 # ikon megjegyzés
-#: ../src/application_window.c:3033 ../src/easytag.c:239
+#: ../src/application_window.cc:3024 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Kilépés"
 
-#: ../src/application_window.c:3036
+#: ../src/application_window.cc:3027
 msgid "Do you want to save them before quitting?"
 msgstr "El szeretné menteni azokat kilépés előtt?"
 
-#: ../src/browser.cc:617
+#: ../src/browser.cc:634
 msgid "New default directory selected for browser"
 msgstr "Új alapértelmezett könyvtár kiválasztva a böngészőhöz"
 
-#: ../src/browser.cc:918
+#: ../src/browser.cc:935
 msgid "Do you want to save them before changing directory?"
 msgstr "El szeretné menteni ezeket, mielőtt könyvtárat vált?"
 
-#: ../src/browser.cc:925
+#: ../src/browser.cc:942
 msgid "Confirm Directory Change"
 msgstr "Könyvtárváltás megerősítése"
 
-#: ../src/browser.cc:2259
+#: ../src/browser.cc:2276
 msgid "All albums"
 msgstr "Minden album"
 
 # Fájl menü
-#: ../src/browser.cc:3505
+#: ../src/browser.cc:3527
 msgid "Select File"
 msgstr "Fájl kiválasztása"
 
-#: ../src/browser.cc:3512
+#: ../src/browser.cc:3534
 msgid "Select Directory"
 msgstr "Könyvtár kiválasztása"
 
-#: ../src/browser.cc:3804
+#: ../src/browser.cc:3826
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "A(z) „%s” könyvtár átnevezése erre:"
 
-#: ../src/browser.cc:3940
+#: ../src/browser.cc:3962
 msgid "You must type a directory name"
 msgstr "Meg kell adnia egy könyvtárnevet"
 
-#: ../src/browser.cc:3941 ../src/browser.cc:3963
+#: ../src/browser.cc:3963 ../src/browser.cc:3985
 msgid "Directory Name Error"
 msgstr "Könyvtárnév hiba"
 
-#: ../src/browser.cc:3959
+#: ../src/browser.cc:3981
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "„%s” nem alakítható át fájlnév kódolássá."
 
-#: ../src/browser.cc:3962
+#: ../src/browser.cc:3984
 msgid "Please use another name."
 msgstr "Használjon másik nevet."
 
-#: ../src/browser.cc:4034
+#: ../src/browser.cc:4056
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Már létezik „%s” nevű könyvtár."
 
-#: ../src/browser.cc:4035 ../src/easytag.c:653
+#: ../src/browser.cc:4057 ../src/easytag.c:653
 msgid "Rename File Error"
 msgstr "Fájl átnevezési hiba"
 
 # böngésző menü
-#: ../src/browser.cc:4074 ../src/browser.cc:4103
+#: ../src/browser.cc:4096 ../src/browser.cc:4125
 msgid "Rename Directory Error"
 msgstr "Könyvtár átnevezési hiba"
 
-#: ../src/browser.cc:4144
+#: ../src/browser.cc:4166
 msgid "Directory renamed"
 msgstr "Könyvtár átnevezve"
 
-#: ../src/browser.cc:4291 ../src/browser.cc:4366
+#: ../src/browser.cc:4313 ../src/browser.cc:4388
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "Végrehajtott parancs: „%s”"
@@ -4103,7 +4146,7 @@ msgstr ""
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "Automatikus javítások alkalmazva a(z) „%s” fájlra."
 
-#: ../src/load_files_dialog.cc:275 ../src/setting.c:329
+#: ../src/load_files_dialog.cc:275 ../src/setting.cc:329
 #, c-format
 msgid "Cannot open file ‘%s’: %s"
 msgstr "Nem nyitható meg a(z) „%s” fájl: %s"
@@ -4146,11 +4189,11 @@ msgstr ""
 msgid "Closing brace '}' without opening brace '{'."
 msgstr ""
 
-#: ../src/misc.c:176
+#: ../src/misc.cc:175
 msgid "You must type a program name"
 msgstr "Meg kell adnia egy programnevet"
 
-#: ../src/misc.c:177
+#: ../src/misc.cc:176
 msgid "Program Name Error"
 msgstr "Programnév hiba"
 
@@ -4258,7 +4301,7 @@ msgstr "képpont"
 msgid "Type"
 msgstr "Típus"
 
-#: ../src/picture.c:478 ../src/tags/id3_tag.c:1531 ../src/tags/vcedit.c:530
+#: ../src/picture.c:478 ../src/tags/id3_tag.c:1530 ../src/tags/vcedit.c:530
 #, c-format
 msgid "Input truncated or empty"
 msgstr "A bemenet csonka, vagy üres"
@@ -4281,11 +4324,11 @@ msgstr "A(z) „%s” lejátszólistafájl kiírva"
 msgid "Invalid scanner mask"
 msgstr "Érvénytelen feldolgozómaszk"
 
-#: ../src/preferences_dialog.c:881
+#: ../src/preferences_dialog.cc:788
 msgid "The selected default path is invalid"
 msgstr "A kiválasztott alapértelmezett útvonal érvénytelen"
 
-#: ../src/preferences_dialog.c:883
+#: ../src/preferences_dialog.cc:790
 #, c-format
 msgid ""
 "Path: ‘%s’\n"
@@ -4294,7 +4337,7 @@ msgstr ""
 "Útvonal: „%s”\n"
 "Hiba: %s"
 
-#: ../src/preferences_dialog.c:887
+#: ../src/preferences_dialog.cc:794
 msgid "Invalid Path Error"
 msgstr "Érvénytelen útvonal hiba"
 
@@ -4361,22 +4404,22 @@ msgid_plural "Found %d files"
 msgstr[0] "Egy fájl található"
 msgstr[1] "%d fájl található"
 
-#: ../src/search_dialog.cc:273
+#: ../src/search_dialog.cc:278
 msgid "Ready to search…"
 msgstr "Keresésre kész…"
 
-#: ../src/setting.c:246
+#: ../src/setting.cc:246
 #, c-format
 msgid "Cannot write list to file ‘%s’: %s"
 msgstr "A lista nem írható a fájlba („%s”): %s"
 
 #. Fall back to defaults.
-#: ../src/setting.c:352
+#: ../src/setting.cc:352
 msgid "Loading default ‘Fill Tag’ masks…"
 msgstr "Alapértelmezett „Címke kitöltése” maszkok betöltése…"
 
 #. Fall back to defaults.
-#: ../src/setting.c:382
+#: ../src/setting.cc:382
 msgid "Loading default ‘Rename File’ masks…"
 msgstr "Alapértelmezett „Fájl átnevezése” maszkok betöltése…"
 
@@ -4709,7 +4752,7 @@ msgstr "Hiba a fájl megnyitása közben: %s"
 msgid "Failed to write APE tag"
 msgstr "Nem sikerült az APE címke írása"
 
-#: ../src/tags/flac_header.c:85 ../src/tags/flac_tag.c:225
+#: ../src/tags/flac_header.c:85 ../src/tags/flac_tag.c:224
 msgid "Error opening FLAC file"
 msgstr "Hiba a FLAC fájl megnyitása közben"
 
@@ -4739,108 +4782,108 @@ msgstr "Hiba történt a(z) „%s” fájl megnyitásakor FLAC-ként: %s"
 msgid "Failed to write comments to file ‘%s’: %s"
 msgstr "Nem sikerült a megjegyzések írása a(z) „%s” fájlba: %s"
 
-#: ../src/tags/id3_tag.c:218
+#: ../src/tags/id3_tag.c:217
 msgid "Corrupted file"
 msgstr "Sérült fájl"
 
-#: ../src/tags/id3_tag.c:651
+#: ../src/tags/id3_tag.c:650
 #, c-format
 msgid "Removed tag of ‘%s’"
 msgstr "A(z) „%s” címkéje eltávolítva"
 
-#: ../src/tags/id3_tag.c:658 ../src/tags/id3_tag.c:742
+#: ../src/tags/id3_tag.c:657 ../src/tags/id3_tag.c:741
 #, c-format
 msgid "Error while removing ID3v1 tag of ‘%s’: %s"
 msgstr "Hiba történt a(z) „%s” ID3v1 címkéjének eltávolításakor: %s"
 
-#: ../src/tags/id3_tag.c:667 ../src/tags/id3_tag.c:705
+#: ../src/tags/id3_tag.c:666 ../src/tags/id3_tag.c:704
 #, c-format
 msgid "Error while removing ID3v2 tag of ‘%s’: %s"
 msgstr "Hiba történt a(z) „%s” ID3v2 címkéjének eltávolításakor: %s"
 
-#: ../src/tags/id3_tag.c:693
+#: ../src/tags/id3_tag.c:692
 #, c-format
 msgid "Error while updating ID3v2 tag of ‘%s’: %s"
 msgstr "Hiba történt a(z) „%s” ID3v2 címkéjének frissítésekor: %s"
 
-#: ../src/tags/id3_tag.c:730
+#: ../src/tags/id3_tag.c:729
 #, c-format
 msgid "Error while updating ID3v1 tag of ‘%s’: %s"
 msgstr "Hiba történt a(z) „%s” ID3v1 címkéjének frissítésekor: %s"
 
-#: ../src/tags/id3_tag.c:776
+#: ../src/tags/id3_tag.c:775
 msgid "Buggy id3lib"
 msgstr "Hibás id3lib"
 
-#: ../src/tags/id3_tag.c:797
+#: ../src/tags/id3_tag.c:796
 msgid "No error reported"
 msgstr "Nem történt hiba"
 
-#: ../src/tags/id3_tag.c:799
+#: ../src/tags/id3_tag.c:798
 msgid "No available memory"
 msgstr "Nincs elérhető memória"
 
-#: ../src/tags/id3_tag.c:801
+#: ../src/tags/id3_tag.c:800
 msgid "No data to parse"
 msgstr "Nincs feldolgozandó adat"
 
-#: ../src/tags/id3_tag.c:803
+#: ../src/tags/id3_tag.c:802
 msgid "Improperly formatted data"
 msgstr "Helytelenül formázott adatok"
 
-#: ../src/tags/id3_tag.c:805
+#: ../src/tags/id3_tag.c:804
 msgid "No buffer to write to"
 msgstr "Nincs írható puffer"
 
-#: ../src/tags/id3_tag.c:807
+#: ../src/tags/id3_tag.c:806
 msgid "Buffer is too small"
 msgstr "A puffer túl kicsi"
 
-#: ../src/tags/id3_tag.c:809
+#: ../src/tags/id3_tag.c:808
 msgid "Invalid frame ID"
 msgstr "Érvénytelen keret azonosító"
 
-#: ../src/tags/id3_tag.c:811
+#: ../src/tags/id3_tag.c:810
 msgid "Requested field not found"
 msgstr "A kért mező nem található"
 
-#: ../src/tags/id3_tag.c:813
+#: ../src/tags/id3_tag.c:812
 msgid "Unknown field type"
 msgstr "Ismeretlen mezőtípus"
 
-#: ../src/tags/id3_tag.c:815
+#: ../src/tags/id3_tag.c:814
 msgid "Tag is already attached to a file"
 msgstr "A címke már csatolva van egy fájlhoz"
 
-#: ../src/tags/id3_tag.c:817
+#: ../src/tags/id3_tag.c:816
 msgid "Invalid tag version"
 msgstr "Érvénytelen címke verzió"
 
-#: ../src/tags/id3_tag.c:819
+#: ../src/tags/id3_tag.c:818
 msgid "No file to parse"
 msgstr "Nincs feldolgozandó fájl"
 
-#: ../src/tags/id3_tag.c:821
+#: ../src/tags/id3_tag.c:820
 msgid "Attempting to write to a read-only file"
 msgstr "Írási kísérlet csak olvasható fájlba"
 
-#: ../src/tags/id3_tag.c:823
+#: ../src/tags/id3_tag.c:822
 msgid "Error in compression/uncompression"
 msgstr "Hiba a tömörítésben/kibontásban"
 
-#: ../src/tags/id3_tag.c:825
+#: ../src/tags/id3_tag.c:824
 msgid "Unknown error message"
 msgstr "Ismeretlen hibaüzenet"
 
-#: ../src/tags/id3_tag.c:1569
+#: ../src/tags/id3_tag.c:1568
 msgid "Error while creating temporary file"
 msgstr "Hiba az átmeneti fájl létrehozása közben"
 
-#: ../src/tags/id3v24_tag.c:135 ../src/tags/id3v24_tag.c:190
-#: ../src/tags/id3v24_tag.c:228 ../src/tags/id3v24_tag.c:238
-#: ../src/tags/id3v24_tag.c:247 ../src/tags/id3v24_tag.c:999
-#: ../src/tags/id3v24_tag.c:1007 ../src/tags/id3v24_tag.c:1014
-#: ../src/tags/id3v24_tag.c:1040 ../src/tags/id3v24_tag.c:1080
+#: ../src/tags/id3v24_tag.c:134 ../src/tags/id3v24_tag.c:189
+#: ../src/tags/id3v24_tag.c:227 ../src/tags/id3v24_tag.c:237
+#: ../src/tags/id3v24_tag.c:246 ../src/tags/id3v24_tag.c:1000
+#: ../src/tags/id3v24_tag.c:1008 ../src/tags/id3v24_tag.c:1015
+#: ../src/tags/id3v24_tag.c:1041 ../src/tags/id3v24_tag.c:1081
 #: ../src/tags/mp4_tag.cc:102 ../src/tags/ogg_header.c:277
 msgid "Error reading tags from file"
 msgstr "Hiba a címkék olvasásakor a fájlból"
@@ -4964,6 +5007,41 @@ msgstr "Opus fájl"
 #: ../src/tags/wavpack_header.c:137
 msgid "Wavpack File"
 msgstr "Wavpack fájl"
+
+#~ msgid "Whether to split title fields at a “ - ” separator in Ogg comments"
+#~ msgstr ""
+#~ "A cím mezők felosztandók-e a „ - ” elválasztónál az Ogg megjegyzésekben"
+
+#~ msgid "Whether to split artist fields at a “ - ” separator in Ogg comments"
+#~ msgstr ""
+#~ "Az előadó mezők felosztandók-e a „ - ” elválasztónál az Ogg "
+#~ "megjegyzésekben"
+
+#~ msgid "Whether to split album fields at a “ - ” separator in Ogg comments"
+#~ msgstr ""
+#~ "Az album mezők felosztandók-e a „ - ” elválasztónál az Ogg megjegyzésekben"
+
+#~ msgid "Whether to split genre fields at a “ - ” separator in Ogg comments"
+#~ msgstr ""
+#~ "A műfaj mezők felosztandók-e a „ - ” elválasztónál az Ogg megjegyzésekben"
+
+#~ msgid "Whether to split comment fields at a “ - ” separator in Ogg comments"
+#~ msgstr ""
+#~ "A megjegyzés mezők felosztandók-e a „ - ” elválasztónál az Ogg "
+#~ "megjegyzésekben"
+
+#~ msgid ""
+#~ "Whether to split composer fields at a “ - ” separator in Ogg comments"
+#~ msgstr ""
+#~ "A zeneszerző mezők felosztandók-e a „ - ” elválasztónál az Ogg "
+#~ "megjegyzésekben"
+
+#~ msgid ""
+#~ "Whether to split original artist fields at a “ - ” separator in Ogg "
+#~ "comments"
+#~ msgstr ""
+#~ "Az eredeti előadó mezők felosztandók-e a „ - ” elválasztónál az Ogg "
+#~ "megjegyzésekben"
 
 #, fuzzy
 #~ msgid "Original year:"

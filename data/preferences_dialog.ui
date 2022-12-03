@@ -587,9 +587,27 @@
                                     </object>
                                 </child>
                                 <child>
+                                    <object class="GtkBox" id="split_delimiter_box">
+                                        <property name="margin-left">12</property>
+                                        <property name="spacing">12</property>
+                                        <property name="visible">True</property>
+                                        <child>
+                                            <object class="GtkLabel" id="split_delimiter_label">
+                                                <property name="label" translatable="yes">Delimiter for split</property>
+                                                <property name="tooltip-text" translatable="yes">When writing the text is spilt at this delimiter. When reading it is joined with this delimier.</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkEntry" id="split_delimiter">
+                                                <property name="width-chars">5</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
                                     <object class="GtkLabel" id="tags_splitting_description_label">
                                         <property name="halign">start</property>
-                                        <property name="label" translatable="yes">For Vorbis tags, selected fields will be split at dashes and saved as separate tags</property>
+                                        <property name="label" translatable="yes">For Vorbis tags, selected fields will be split and saved as separate tags</property>
                                         <property name="margin-left">12</property>
                                         <property name="visible">True</property>
                                     </object>
@@ -603,7 +621,7 @@
                                         <child>
                                             <object class="GtkCheckButton" id="split_title_check">
                                                 <property name="label" translatable="yes">Title</property>
-                                                <property name="tooltip-text" translatable="yes">Whether to split title fields at a “ - ” separator in Ogg comments</property>
+                                                <property name="tooltip-text" translatable="yes">Whether to split title fields in Ogg comments</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
@@ -614,40 +632,7 @@
                                         <child>
                                             <object class="GtkCheckButton" id="split_artist_check">
                                                 <property name="label" translatable="yes">Artist</property>
-                                                <property name="tooltip-text" translatable="yes">Whether to split artist fields at a “ - ” separator in Ogg comments</property>
-                                                <property name="visible">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">1</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkCheckButton" id="split_album_check">
-                                                <property name="label" translatable="yes">Album</property>
-                                                <property name="tooltip-text" translatable="yes">Whether to split album fields at a “ - ” separator in Ogg comments</property>
-                                                <property name="visible">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">2</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkCheckButton" id="split_genre_check">
-                                                <property name="label" translatable="yes">Genre</property>
-                                                <property name="tooltip-text" translatable="yes">Whether to split genre fields at a “ - ” separator in Ogg comments</property>
-                                                <property name="visible">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">3</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkCheckButton" id="split_comment_check">
-                                                <property name="label" translatable="yes">Comment</property>
-                                                <property name="tooltip-text" translatable="yes">Whether to split comment fields at a “ - ” separator in Ogg comments</property>
+                                                <property name="tooltip-text" translatable="yes">Whether to split artist fields in Ogg comments</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
@@ -656,9 +641,42 @@
                                             </packing>
                                         </child>
                                         <child>
+                                            <object class="GtkCheckButton" id="split_album_check">
+                                                <property name="label" translatable="yes">Album</property>
+                                                <property name="tooltip-text" translatable="yes">Whether to split album fields in Ogg comments</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="top_attach">0</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="split_genre_check">
+                                                <property name="label" translatable="yes">Genre</property>
+                                                <property name="tooltip-text" translatable="yes">Whether to split genre fields in Ogg comments</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="top_attach">0</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="split_comment_check">
+                                                <property name="label" translatable="yes">Comment</property>
+                                                <property name="tooltip-text" translatable="yes">Whether to split comment fields in Ogg comments</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">1</property>
+                                            </packing>
+                                        </child>
+                                        <child>
                                             <object class="GtkCheckButton" id="split_composer_check">
                                                 <property name="label" translatable="yes">Composer</property>
-                                                <property name="tooltip-text" translatable="yes">Whether to split composer fields at a “ - ” separator in Ogg comments</property>
+                                                <property name="tooltip-text" translatable="yes">Whether to split composer fields in Ogg comments</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
@@ -669,12 +687,12 @@
                                         <child>
                                             <object class="GtkCheckButton" id="split_orig_artist_check">
                                                 <property name="label" translatable="yes">Original artist</property>
-                                                <property name="tooltip-text" translatable="yes">Whether to split original artist fields at a “ - ” separator in Ogg comments</property>
+                                                <property name="tooltip-text" translatable="yes">Whether to split original artist fields in Ogg comments</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="top_attach">2</property>
+                                                <property name="left_attach">2</property>
+                                                <property name="top_attach">1</property>
                                             </packing>
                                         </child>
                                     </object>

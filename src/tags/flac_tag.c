@@ -35,8 +35,6 @@
 #include "picture.h"
 #include "charset.h"
 
-#define MULTIFIELD_SEPARATOR " - "
-
 /*
  * validate_field_utf8:
  * @field_value: the string to validate
@@ -89,9 +87,10 @@ set_or_append_field (gchar **field,
     }
     else
     {
-        gchar *field_tmp = g_strconcat (*field, MULTIFIELD_SEPARATOR,
-                                        field_value, NULL);
+        gchar* delimiter = g_settings_get_string(MainSettings, "split-delimiter");
+        gchar *field_tmp = g_strconcat (*field, delimiter, field_value, NULL);
         g_free (*field);
+        g_free (delimiter);
         *field = field_tmp;
         g_free (field_value);
     }
@@ -690,14 +689,16 @@ vc_block_append_single_tag (FLAC__StreamMetadata *vc_block,
  * @values: the values of the tag
  *
  * Append multiple copies of the supplied @tag_name to @vc_block, splitting
- * @values at %MULTIFIELD_SEPARATOR.
+ * @values at "split-delimiter" setting.
  */
 static void
 vc_block_append_multiple_tags (FLAC__StreamMetadata *vc_block,
                                const gchar *tag_name,
                                const gchar *values)
 {
-    gchar **strings = g_strsplit (values, MULTIFIELD_SEPARATOR, 255);
+    gchar *delimiter = g_settings_get_string(MainSettings, "split-delimiter");
+    gchar **strings = g_strsplit (values, delimiter, 255);
+    g_free(delimiter);
     guint i;
     guint len;
     
@@ -719,7 +720,7 @@ vc_block_append_multiple_tags (FLAC__StreamMetadata *vc_block,
  *            string (if @value is to be taken as the combination of the tag
  *            name and value)
  * @value: the value of the tag
- * @split: %TRUE to split @value into multiple tags at %MULTIFIELD_SEPARATOR,
+ * @split: %TRUE to split @value into multiple tags at "split-delimiter" setting,
  *         %FALSE to keep the tag value unchanged
  *
  * Append the supplied @tag_name and @value to @vc_block, optionally splitting
@@ -731,13 +732,12 @@ vc_block_append_tag (FLAC__StreamMetadata *vc_block,
                      const gchar *value,
                      gboolean split)
 {
-    if (value && split)
+    if (value)
     {
-        vc_block_append_multiple_tags (vc_block, tag_name, value);
-    }
-    else if (value)
-    {
-        vc_block_append_single_tag (vc_block, tag_name, value);
+        if (split)
+            vc_block_append_multiple_tags (vc_block, tag_name, value);
+        else
+            vc_block_append_single_tag (vc_block, tag_name, value);
     }
 }
 

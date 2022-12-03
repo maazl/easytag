@@ -33,8 +33,6 @@
 #include "setting.h"
 #include "charset.h"
 
-#define MULTIFIELD_SEPARATOR " - "
-
 /*
  * et_opus_tag_read_file_tag:
  * @filename: file from which to read tags

@@ -44,7 +44,6 @@
  * Declarations *
  ****************/
 #define ID3V2_MAX_STRING_LEN 4096
-#define MULTIFIELD_SEPARATOR " - "
 
 
 #ifdef ENABLE_ID3LIB

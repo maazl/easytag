@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easytag 1.99.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-03 20:54+0100\n"
+"POT-Creation-Date: 2022-12-03 17:16+0100\n"
 "PO-Revision-Date: 2017-01-11 13:34+0300\n"
 "Last-Translator: Aleksey Kabanov <ak099@mail.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -80,7 +80,7 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Выберите папку для просмотра в обозревателе"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3469
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3491
 #: ../src/tag_area.cc:1413
 msgid "_Open"
 msgstr "_Открыть"
@@ -95,7 +95,7 @@ msgid "No files"
 msgstr "Нет файлов"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:68 ../data/scan_dialog.ui.h:63
+#: ../data/preferences_dialog.ui.h:19 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Исполнитель"
@@ -109,88 +109,92 @@ msgid "# Files"
 msgstr "# Файлы"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:70 ../data/scan_dialog.ui.h:67
+#: ../data/preferences_dialog.ui.h:21 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Альбом"
 
-#: ../data/browser.ui.h:9 ../data/search_dialog.ui.h:11
+#: ../data/browser.ui.h:9 ../data/preferences_dialog.ui.h:16
+#: ../data/search_dialog.ui.h:11
 msgid "Path"
 msgstr "Путь"
 
 #: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
-#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:59
-#: ../data/search_dialog.ui.h:12
+#: ../data/playlist_dialog.ui.h:2 ../data/preferences_dialog.ui.h:17
+#: ../data/scan_dialog.ui.h:59 ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "Имя файла"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:66 ../data/scan_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:18 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Название"
 
-#: ../data/browser.ui.h:12 ../data/scan_dialog.ui.h:65
-#: ../data/search_dialog.ui.h:15
+#: ../data/browser.ui.h:12 ../data/preferences_dialog.ui.h:20
+#: ../data/scan_dialog.ui.h:65 ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Исполнитель альбома"
 
 #: ../data/browser.ui.h:13 ../data/cddb_dialog.ui.h:40
-#: ../data/search_dialog.ui.h:18
+#: ../data/preferences_dialog.ui.h:22 ../data/search_dialog.ui.h:18
 msgid "Year"
 msgstr "Год"
 
-#: ../data/browser.ui.h:14
+#: ../data/browser.ui.h:14 ../data/preferences_dialog.ui.h:23
 #, fuzzy
 msgid "Rel. year"
 msgstr "Первый исполнитель"
 
-#: ../data/browser.ui.h:15
+#: ../data/browser.ui.h:15 ../data/preferences_dialog.ui.h:25
 msgid "Disc"
 msgstr "Диск"
 
-#: ../data/browser.ui.h:16 ../data/search_dialog.ui.h:19
+#: ../data/browser.ui.h:16 ../data/preferences_dialog.ui.h:24
+#: ../data/search_dialog.ui.h:19
 msgid "Track"
 msgstr "Дорожка"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:72 ../data/scan_dialog.ui.h:69
+#: ../data/preferences_dialog.ui.h:26 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Жанр"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:74
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:27
 #: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Комментарий"
 
-#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:76
+#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:28
 #: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Композитор"
 
-#: ../data/browser.ui.h:20 ../data/search_dialog.ui.h:23
+#: ../data/browser.ui.h:20 ../data/preferences_dialog.ui.h:29
+#: ../data/search_dialog.ui.h:23
 msgid "Original Artist"
 msgstr "Первый исполнитель"
 
-#: ../data/browser.ui.h:21 ../data/search_dialog.ui.h:24
+#: ../data/browser.ui.h:21 ../data/preferences_dialog.ui.h:30
+#: ../data/search_dialog.ui.h:24
 #, fuzzy
 msgid "Orig. year"
 msgstr "Первый исполнитель"
 
-#: ../data/browser.ui.h:22 ../data/scan_dialog.ui.h:77
-#: ../data/search_dialog.ui.h:25
+#: ../data/browser.ui.h:22 ../data/preferences_dialog.ui.h:31
+#: ../data/scan_dialog.ui.h:77 ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "Авторство"
 
-#: ../data/browser.ui.h:23 ../data/scan_dialog.ui.h:79
-#: ../data/search_dialog.ui.h:26
+#: ../data/browser.ui.h:23 ../data/preferences_dialog.ui.h:32
+#: ../data/scan_dialog.ui.h:79 ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "Ссылка (URL)"
 
-#: ../data/browser.ui.h:24 ../data/scan_dialog.ui.h:81
-#: ../data/search_dialog.ui.h:27
+#: ../data/browser.ui.h:24 ../data/preferences_dialog.ui.h:33
+#: ../data/scan_dialog.ui.h:81 ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "Кодировщик"
 
@@ -210,9 +214,9 @@ msgstr ""
 "Введите имя программы. В качестве параметра ей будет передана текущая папка."
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
-#: ../src/application_window.c:368 ../src/application_window.c:382
-#: ../src/application_window.c:3028 ../src/browser.cc:920
-#: ../src/browser.cc:3468 ../src/cddb_dialog.cc:2124 ../src/easytag.c:464
+#: ../src/application_window.cc:376 ../src/application_window.cc:390
+#: ../src/application_window.cc:3019 ../src/browser.cc:937
+#: ../src/browser.cc:3490 ../src/cddb_dialog.cc:2124 ../src/easytag.c:464
 #: ../src/easytag.c:471 ../src/easytag.c:599 ../src/tag_area.cc:1411
 #: ../src/tag_area.cc:1736
 msgid "_Cancel"
@@ -246,7 +250,7 @@ msgstr "Новое имя папки:"
 msgid "Use mask:"
 msgstr "Использовать маску:"
 
-#: ../data/browser_dialogs.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:168
+#: ../data/browser_dialogs.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:170
 msgid "Whether to use a mask when renaming directories"
 msgstr "Использовать ли маску при переименовании папок"
 
@@ -314,7 +318,7 @@ msgstr "Поля поиска"
 msgid "Track Name"
 msgstr "Название дорожки"
 
-#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:96
+#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:111
 #: ../src/picture.c:191
 msgid "Other"
 msgstr "Прочее"
@@ -435,7 +439,7 @@ msgstr ""
 msgid "Match lines with the Levenshtein algorithm"
 msgstr "Совпадение строк по алгоритму Левенштайна"
 
-#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:148
+#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:163
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:24
 msgid "Whether to use the DLM algorithm to match CDDB results to files"
 msgstr ""
@@ -443,7 +447,7 @@ msgstr ""
 "с файлами"
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
-#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:165
+#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:180
 #: ../data/scan_dialog.ui.h:118
 msgid "_Close"
 msgstr "_Закрыть"
@@ -458,7 +462,7 @@ msgid "Load the selected lines or all lines (if no lines are selected)"
 msgstr "Загрузить выделенные строки или все строки (если нет выделенных)."
 
 #. Default values are MPEG data.
-#: ../data/file_area.ui.h:1 ../src/application_window.c:2194
+#: ../data/file_area.ui.h:1 ../src/application_window.cc:2189
 #: ../src/file_area.c:155
 msgid "File"
 msgstr "Файл"
@@ -511,7 +515,7 @@ msgstr "Описание"
 msgid "_Accept"
 msgstr ""
 
-#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:15
+#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:34
 msgid "Log"
 msgstr "Журнал"
 
@@ -570,7 +574,7 @@ msgid "Selected line:"
 msgstr "Выбранная строка:"
 
 #: ../data/load_files_dialog.ui.h:15
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:117
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:119
 msgid ""
 "Whether to run the currently selected scanner on filenames loaded from a "
 "text file"
@@ -1032,7 +1036,7 @@ msgstr "Параметры"
 msgid "Include only the selected files"
 msgstr "Включать только выделенные файлы"
 
-#: ../data/playlist_dialog.ui.h:7 ../data/org.gnome.EasyTAG.gschema.xml.h:144
+#: ../data/playlist_dialog.ui.h:7 ../data/org.gnome.EasyTAG.gschema.xml.h:146
 msgid ""
 "Whether to use only the selected files or all files when creating playlists"
 msgstr ""
@@ -1051,7 +1055,7 @@ msgstr "Использовать относительный путь для фа
 msgid "Create playlist in the parent directory"
 msgstr "Создавать список воспроизведения в родительском каталоге"
 
-#: ../data/playlist_dialog.ui.h:11 ../data/org.gnome.EasyTAG.gschema.xml.h:148
+#: ../data/playlist_dialog.ui.h:11 ../data/org.gnome.EasyTAG.gschema.xml.h:150
 msgid "Whether to create the playlist in the parent directory"
 msgstr "Создавать список воспроизведения в родительском каталоге"
 
@@ -1059,7 +1063,7 @@ msgstr "Создавать список воспроизведения в род
 msgid "Use DOS directory separator"
 msgstr "Использовать разделитель пути DOS"
 
-#: ../data/playlist_dialog.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:150
+#: ../data/playlist_dialog.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:152
 msgid ""
 "Whether to use backslash as directory separator when generating playlists"
 msgstr ""
@@ -1082,8 +1086,8 @@ msgstr "Записать информацию, используя имя фай�
 msgid "Write information using:"
 msgstr "Записать информацию, используя:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3029
-#: ../src/browser.cc:921 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.cc:3020
+#: ../src/browser.cc:938 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:600 ../src/easytag.c:607
 #: ../src/tag_area.cc:1738
 msgid "_Save"
@@ -1161,26 +1165,30 @@ msgstr "Сортировка файлов с учётом регистра"
 msgid "Whether file sorting is case-sensitive"
 msgstr "Учитывать ли регистр при сортировке файлов"
 
-#: ../data/preferences_dialog.ui.h:16
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:47
+#: ../data/preferences_dialog.ui.h:15
+msgid "Visible columns"
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:35
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:49
 msgid "Show the log"
 msgstr "Показывать журнал"
 
-#: ../data/preferences_dialog.ui.h:17
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:48
+#: ../data/preferences_dialog.ui.h:36
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:50
 msgid "Whether to show the log in the main window"
 msgstr "Отображать ли журнал в главном окне"
 
-#: ../data/preferences_dialog.ui.h:18
+#: ../data/preferences_dialog.ui.h:37
 msgid "General"
 msgstr "Общие"
 
-#: ../data/preferences_dialog.ui.h:19
+#: ../data/preferences_dialog.ui.h:38
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:39
 msgid "Show audio file header summary"
 msgstr "Показывать сводку из заголовка аудиофайла"
 
-#: ../data/preferences_dialog.ui.h:20
+#: ../data/preferences_dialog.ui.h:39
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:40
 msgid ""
 "Whether to show header information, such as bit rate and duration, for audio "
@@ -1189,42 +1197,42 @@ msgstr ""
 "Показывать ли информацию из заголовка аудиофайла, такую как скорость потока "
 "и длительность "
 
-#: ../data/preferences_dialog.ui.h:21
+#: ../data/preferences_dialog.ui.h:40
 msgid "Display changed files in list using:"
 msgstr "Показать изменённые файлы в списке используя:"
 
-#: ../data/preferences_dialog.ui.h:22
+#: ../data/preferences_dialog.ui.h:41
 msgid "Red color"
 msgstr "Красный цвет"
 
-#: ../data/preferences_dialog.ui.h:23
+#: ../data/preferences_dialog.ui.h:42
 msgid "Bold style"
 msgstr "Полужирный стиль"
 
-#: ../data/preferences_dialog.ui.h:24
+#: ../data/preferences_dialog.ui.h:43
 msgid "Interface"
 msgstr "Интерфейс"
 
-#: ../data/preferences_dialog.ui.h:25
+#: ../data/preferences_dialog.ui.h:44
 msgid "File Settings"
 msgstr "Настройки файла"
 
-#: ../data/preferences_dialog.ui.h:26
+#: ../data/preferences_dialog.ui.h:45
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:35
 msgid "Preserve modification time when writing files"
 msgstr "Сохранить время изменения при записи файлов"
 
-#: ../data/preferences_dialog.ui.h:27
+#: ../data/preferences_dialog.ui.h:46
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:36
 msgid "Whether to preserve the existing modification time when editing files"
 msgstr "Оставлять ли существующее время изменения при редактировании файлов"
 
-#: ../data/preferences_dialog.ui.h:28
+#: ../data/preferences_dialog.ui.h:47
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:37
 msgid "Update parent directory modification time when writing files"
 msgstr "Обновлять время изменения родительской папки при записи файлов"
 
-#: ../data/preferences_dialog.ui.h:29
+#: ../data/preferences_dialog.ui.h:48
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:38
 msgid ""
 "Whether to update the modification time on the parent directory when editing "
@@ -1233,16 +1241,16 @@ msgstr ""
 "Обновлять ли время изменения родительской папки при редактировании файлов"
 
 #. Translators: a section header in the Files tab of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:31
+#: ../data/preferences_dialog.ui.h:50
 msgid "Filenames"
 msgstr "Имена файлов"
 
-#: ../data/preferences_dialog.ui.h:32
+#: ../data/preferences_dialog.ui.h:51
 #, fuzzy
 msgid "Replace illegal characters when renaming:"
 msgstr "Заменять недопустимые символы при переименовании"
 
-#: ../data/preferences_dialog.ui.h:33
+#: ../data/preferences_dialog.ui.h:52
 #, fuzzy
 msgid ""
 "Convert characters which cannot be represented in filenames on some "
@@ -1251,68 +1259,68 @@ msgstr ""
 "Заменять символы, недопустимые в именах файлов для файловых систем FAT32/16 "
 "и Joliet (‘\\’, ‘:’, ‘;’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’)"
 
-#: ../data/preferences_dialog.ui.h:34
+#: ../data/preferences_dialog.ui.h:53
 msgid "by ASCII characters"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:35
+#: ../data/preferences_dialog.ui.h:54
 msgid "Use the ASCII characters (‘-’, ‘+’, ‘_’, ‘'’, ‘(’, ‘)’) as replacement."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:36
+#: ../data/preferences_dialog.ui.h:55
 msgid "by Unicode characters"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:37
+#: ../data/preferences_dialog.ui.h:56
 msgid ""
 "Use similar Unicode characters (‘&#8726;’, ‘&#8725;’, ‘&#8758;’, ‘&#8727;’, "
 "‘&#8253;’, ‘&#8221;’, ‘&#8826;’, ‘&#8827;’, ‘&#8739;’) as replacement."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:38
+#: ../data/preferences_dialog.ui.h:57
 #, fuzzy
 msgid "No change"
 msgstr "Без изменений"
 
-#: ../data/preferences_dialog.ui.h:39
+#: ../data/preferences_dialog.ui.h:58
 msgid "You must manually ensure valid file characters."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:40
+#: ../data/preferences_dialog.ui.h:59
 msgid "Convert filename extension to:"
 msgstr "Преобразовать расширение в:"
 
-#: ../data/preferences_dialog.ui.h:41
+#: ../data/preferences_dialog.ui.h:60
 #, fuzzy
 msgid "Lower case"
 msgstr "Нижний регистр"
 
-#: ../data/preferences_dialog.ui.h:42
+#: ../data/preferences_dialog.ui.h:61
 msgid "For example, the extension will be converted to ‘.mp3’"
 msgstr "Например, расширение будет преобразовано в «.mp3»"
 
-#: ../data/preferences_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:62
 #, fuzzy
 msgid "Upper case"
 msgstr "Верхний регистр"
 
-#: ../data/preferences_dialog.ui.h:44
+#: ../data/preferences_dialog.ui.h:63
 msgid "For example, the extension will be converted to ‘.MP3’"
 msgstr "Например, расширение будет преобразовано в «.MP3»"
 
-#: ../data/preferences_dialog.ui.h:45
+#: ../data/preferences_dialog.ui.h:64
 msgid "The extension will not be modified"
 msgstr "Расширение не будет преобразовано"
 
-#: ../data/preferences_dialog.ui.h:46
+#: ../data/preferences_dialog.ui.h:65
 msgid "Filename Encoding"
 msgstr "Кодировка имени файла"
 
-#: ../data/preferences_dialog.ui.h:47
+#: ../data/preferences_dialog.ui.h:66
 msgid "Try another character encoding"
 msgstr "Попробовать использовать другую кодировку символов"
 
-#: ../data/preferences_dialog.ui.h:48
+#: ../data/preferences_dialog.ui.h:67
 msgid ""
 "Try to use the encoding associated with your locale and if this fails, try "
 "the ISO-8859-1 character encoding"
@@ -1320,50 +1328,50 @@ msgstr ""
 "Попытаться использовать кодировку, связанную с вашими языковыми настройками, "
 "а если это не удастся, попробовать кодировку ISO-8859-1"
 
-#: ../data/preferences_dialog.ui.h:49
+#: ../data/preferences_dialog.ui.h:68
 msgid "Transliterate characters into the system character encoding"
 msgstr "Транслитерировать символы в системную кодировку"
 
-#: ../data/preferences_dialog.ui.h:50
+#: ../data/preferences_dialog.ui.h:69
 msgid ""
 "Replace unsupported characters with a similar character from the target "
 "character encoding"
 msgstr ""
 "Заменять не поддерживаемые символы подобными из целевой кодировки символов"
 
-#: ../data/preferences_dialog.ui.h:51
+#: ../data/preferences_dialog.ui.h:70
 msgid ""
 "Use the system character encoding and silently discard unsupported characters"
 msgstr ""
 "Принудительно использовать системную кодировку и игнорировать некорректные "
 "символы"
 
-#: ../data/preferences_dialog.ui.h:52
+#: ../data/preferences_dialog.ui.h:71
 msgid ""
 "Discard characters which cannot be represented in the target character "
 "encoding"
 msgstr "Отбрасывать символы, которые нельзя преобразовать в целевую кодировку"
 
-#: ../data/preferences_dialog.ui.h:53
+#: ../data/preferences_dialog.ui.h:72
 msgid "Files"
 msgstr "Файлы"
 
-#: ../data/preferences_dialog.ui.h:54
+#: ../data/preferences_dialog.ui.h:73
 #, fuzzy
 msgid "Automatically complete date field"
 msgstr "Автозавершение для поля даты"
 
-#: ../data/preferences_dialog.ui.h:55
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:82
+#: ../data/preferences_dialog.ui.h:74
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:84
 msgid "Whether to automatically complete the date tag"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:56
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:87
+#: ../data/preferences_dialog.ui.h:75
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:89
 msgid "Automatically select the type of the image based on its filename"
 msgstr "Автоматически выбирать тип изображения по имени файла"
 
-#: ../data/preferences_dialog.ui.h:57
+#: ../data/preferences_dialog.ui.h:76
 msgid ""
 "Whether to, when adding cover art, automatically select a type for an image "
 "based on its filename"
@@ -1371,137 +1379,153 @@ msgstr ""
 "При добавлении обложки автоматически выбирать тип изображения, основываясь "
 "на имени файла"
 
-#: ../data/preferences_dialog.ui.h:58
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:93
+#: ../data/preferences_dialog.ui.h:77
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:95
 msgid "Preserve the tag field focus"
 msgstr "Сохранять фокус на поле тега"
 
-#: ../data/preferences_dialog.ui.h:59
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:94
+#: ../data/preferences_dialog.ui.h:78
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:96
 msgid "Whether to preserve focus on the current tag field when switching file"
 msgstr "Оставлять фокус ввода на поле текущего тега при переключении файла"
 
-#: ../data/preferences_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:79
 msgid "Pad the number of digits in the disc field to:"
 msgstr "Сделать количество цифр в поле диска равным:"
 
-#: ../data/preferences_dialog.ui.h:61
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:84
+#: ../data/preferences_dialog.ui.h:80
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:86
 msgid "Whether the disc number tag field should be padded with leading zeroes"
 msgstr ""
 "Изменить количество цифр в теге номера диска, дополняя его нулями спереди"
 
-#: ../data/preferences_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:81
 msgid "Pad the number of digits in the track field to:"
 msgstr "Сделать количество цифр в поле дорожки равным:"
 
-#: ../data/preferences_dialog.ui.h:63
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:90
+#: ../data/preferences_dialog.ui.h:82
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:92
 msgid "Whether the track number tag field should be padded with leading zeroes"
 msgstr ""
 "Изменить количество цифр в теге номера дорожки, дополняя его нулями спереди"
 
-#: ../data/preferences_dialog.ui.h:64
+#: ../data/preferences_dialog.ui.h:83
 msgid "Splitting"
 msgstr "Разделение тега"
 
-#: ../data/preferences_dialog.ui.h:65
+#: ../data/preferences_dialog.ui.h:84
+msgid "Delimiter for split"
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:85
 msgid ""
-"For Vorbis tags, selected fields will be split at dashes and saved as "
-"separate tags"
+"When writing the text is spilt at this delimiter. When reading it is joined "
+"with this delimier."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:86
+#, fuzzy
+msgid ""
+"For Vorbis tags, selected fields will be split and saved as separate tags"
 msgstr ""
 "Для тегов Vorbis выбранные поля будут разделены тире и сохранены как "
 "отдельные теги"
 
-#: ../data/preferences_dialog.ui.h:67
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:186
-msgid "Whether to split title fields at a “ - ” separator in Ogg comments"
+#: ../data/preferences_dialog.ui.h:87
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:190
+#, fuzzy
+msgid "Whether to split title fields in Ogg comments"
 msgstr "Отделять поля названия разделителем « - » в комментариях Ogg"
 
-#: ../data/preferences_dialog.ui.h:69
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:188
-msgid "Whether to split artist fields at a “ - ” separator in Ogg comments"
+#: ../data/preferences_dialog.ui.h:88
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:192
+#, fuzzy
+msgid "Whether to split artist fields in Ogg comments"
 msgstr "Отделять поля исполнителя разделителем « - » в комментариях Ogg"
 
-#: ../data/preferences_dialog.ui.h:71
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:190
-msgid "Whether to split album fields at a “ - ” separator in Ogg comments"
+#: ../data/preferences_dialog.ui.h:89
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:194
+#, fuzzy
+msgid "Whether to split album fields in Ogg comments"
 msgstr "Отделять поля названия альбома разделителем « - » в комментариях Ogg"
 
-#: ../data/preferences_dialog.ui.h:73
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:192
-msgid "Whether to split genre fields at a “ - ” separator in Ogg comments"
+#: ../data/preferences_dialog.ui.h:90
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:196
+#, fuzzy
+msgid "Whether to split genre fields in Ogg comments"
 msgstr "Отделять поля жанра разделителем « - » в комментариях Ogg"
 
-#: ../data/preferences_dialog.ui.h:75
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:194
-msgid "Whether to split comment fields at a “ - ” separator in Ogg comments"
+#: ../data/preferences_dialog.ui.h:91
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:198
+#, fuzzy
+msgid "Whether to split comment fields in Ogg comments"
 msgstr "Отделять поля комментария разделителем « - » в комментариях Ogg"
 
-#: ../data/preferences_dialog.ui.h:77
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:196
-msgid "Whether to split composer fields at a “ - ” separator in Ogg comments"
+#: ../data/preferences_dialog.ui.h:92
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:200
+#, fuzzy
+msgid "Whether to split composer fields in Ogg comments"
 msgstr "Отделять поля композитора разделителем « - » в комментариях Ogg"
 
-#: ../data/preferences_dialog.ui.h:78
+#: ../data/preferences_dialog.ui.h:93
 msgid "Original artist"
 msgstr "Первый исполнитель"
 
-#: ../data/preferences_dialog.ui.h:79
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:198
-msgid ""
-"Whether to split original artist fields at a “ - ” separator in Ogg comments"
+#: ../data/preferences_dialog.ui.h:94
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:202
+#, fuzzy
+msgid "Whether to split original artist fields in Ogg comments"
 msgstr ""
 "Отделять поля первого исполнителя разделителем « - » в комментариях Ogg"
 
-#: ../data/preferences_dialog.ui.h:80
+#: ../data/preferences_dialog.ui.h:95
 msgid "Tags"
 msgstr "Теги"
 
-#: ../data/preferences_dialog.ui.h:81
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:51
+#: ../data/preferences_dialog.ui.h:96
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:53
 msgid "Strip ID3 tags if all ID3 tags are empty"
 msgstr "Удалить теги ID3, если все поля пусты"
 
-#: ../data/preferences_dialog.ui.h:82
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:52
+#: ../data/preferences_dialog.ui.h:97
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:54
 msgid ""
 "Whether to remove the ID3 tag from the audio file if all the individual tag "
 "fields are empty"
 msgstr "Убирать тег ID3 из аудиофайла, если все поля отдельного тега пусты"
 
-#: ../data/preferences_dialog.ui.h:83
+#: ../data/preferences_dialog.ui.h:98
 msgid "Non-standard encoding for reading ID3 tags:"
 msgstr "Кодировка для чтения тегов ID3"
 
-#: ../data/preferences_dialog.ui.h:84
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:50
+#: ../data/preferences_dialog.ui.h:99
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:52
 msgid "Whether to use a non-standard character encoding when reading ID3 tags"
 msgstr "Использовать нестандартную кодировку символов при чтении тегов ID3"
 
-#: ../data/preferences_dialog.ui.h:85
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:60
+#: ../data/preferences_dialog.ui.h:100
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:62
 msgid "Choose the character set to be used when reading ID3v1 and ID3v2 tags"
 msgstr "Выберите кодировку для использования при чтении тегов ID3v1 и ID3v2"
 
-#: ../data/preferences_dialog.ui.h:86
+#: ../data/preferences_dialog.ui.h:101
 msgid "ID3v2"
 msgstr "Теги ID3v2"
 
-#: ../data/preferences_dialog.ui.h:87
+#: ../data/preferences_dialog.ui.h:102
 msgid "Write ID3v2 tag"
 msgstr "Записывать тег ID3v2"
 
-#: ../data/preferences_dialog.ui.h:88
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:62
+#: ../data/preferences_dialog.ui.h:103
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:64
 msgid "Whether to write ID3v2 tags when writing ID3 tags into audio files"
 msgstr "Записывать теги ID3v2 при записи тегов ID3 tags в аудиофайлы"
 
-#: ../data/preferences_dialog.ui.h:89
+#: ../data/preferences_dialog.ui.h:104
 msgid "Version:"
 msgstr "Версия:"
 
-#: ../data/preferences_dialog.ui.h:90
+#: ../data/preferences_dialog.ui.h:105
 msgid ""
 "Select the ID3v2 tag version to write:\n"
 "• ID3v2.3 is written using id3lib,\n"
@@ -1511,34 +1535,34 @@ msgstr ""
 " - ID3v2.3 при записи с использовании id3lib,\n"
 " - ID3v2.4 при записи с использованием libid3tag (рекомендуется)."
 
-#: ../data/preferences_dialog.ui.h:93
+#: ../data/preferences_dialog.ui.h:108
 msgid "Character encoding:"
 msgstr "Кодировка символов:"
 
-#: ../data/preferences_dialog.ui.h:94
+#: ../data/preferences_dialog.ui.h:109
 msgid "Unicode"
 msgstr "Юникод "
 
-#: ../data/preferences_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:110
 msgid ""
 "Choose the Unicode character encoding to be used when writing ID3v2 tags"
 msgstr "Использовать кодировку Юникод при записи тегов ID3v2"
 
-#: ../data/preferences_dialog.ui.h:97
+#: ../data/preferences_dialog.ui.h:112
 msgid ""
 "Override the standard Unicode character encoding to be used when writing "
 "ID3v2 tags"
 msgstr "Использовать вместо Юникод другую кодировку при записи тегов ID3v2"
 
-#: ../data/preferences_dialog.ui.h:98
+#: ../data/preferences_dialog.ui.h:113
 msgid "When encoding conversion fails:"
 msgstr "При ошибке преобразования:"
 
-#: ../data/preferences_dialog.ui.h:99
+#: ../data/preferences_dialog.ui.h:114
 msgid "Report error"
 msgstr "Сообщить"
 
-#: ../data/preferences_dialog.ui.h:100
+#: ../data/preferences_dialog.ui.h:115
 msgid ""
 "Display an error message when a character cannot be represented in the "
 "target character encoding and keep the original character"
@@ -1546,20 +1570,20 @@ msgstr ""
 "Показать сообщение об ошибке и оставить исходный символ, если если его "
 "нельзя преобразовать в целевую кодировку"
 
-#: ../data/preferences_dialog.ui.h:101
+#: ../data/preferences_dialog.ui.h:116
 msgid "Transliterate"
 msgstr "Транслитерировать"
 
-#: ../data/preferences_dialog.ui.h:102
+#: ../data/preferences_dialog.ui.h:117
 msgid "Discard"
 msgstr "Отбросить"
 
-#: ../data/preferences_dialog.ui.h:103
+#: ../data/preferences_dialog.ui.h:118
 msgid "Automatically convert old ID3v2 tag versions"
 msgstr "Автоматически преобразовывать старые версии тегов ID3v2"
 
-#: ../data/preferences_dialog.ui.h:104
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:66
+#: ../data/preferences_dialog.ui.h:119
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:68
 msgid ""
 "Whether to convert ID3 tags written against old version of the "
 "specification, such as ID3v2.2, to newer ones, such as ID3v2.3 or ID3v2.4"
@@ -1568,32 +1592,32 @@ msgstr ""
 "спецификации (такой как ID3v2.2), в более новую, например, ID3v2.3 или "
 "ID3v2.4"
 
-#: ../data/preferences_dialog.ui.h:105
+#: ../data/preferences_dialog.ui.h:120
 msgid "Use CRC-32"
 msgstr "Использовать CRC-32"
 
-#: ../data/preferences_dialog.ui.h:106
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:70
+#: ../data/preferences_dialog.ui.h:121
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:72
 msgid "Whether to embed a CRC-32 checksum of the audio file data in ID3v2 tags"
 msgstr "Встраивать контрольную сумму CRC-32 в данные аудиофайла в тегах ID3v2"
 
-#: ../data/preferences_dialog.ui.h:107
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:67
+#: ../data/preferences_dialog.ui.h:122
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:69
 msgid "Compress data in ID3v2 tags"
 msgstr "Использовать сжатие в тегах ID3v2"
 
-#: ../data/preferences_dialog.ui.h:108
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:68
+#: ../data/preferences_dialog.ui.h:123
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:70
 msgid "Whether to compress data in ID3v2 tags"
 msgstr "Использовать сжатие данных в тегах ID3v2"
 
-#: ../data/preferences_dialog.ui.h:109
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:71
+#: ../data/preferences_dialog.ui.h:124
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:73
 msgid "Use text-only genre in ID3v2 tags"
 msgstr "Использовать текстовый жанр в тегах ID3v2"
 
-#: ../data/preferences_dialog.ui.h:110
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:72
+#: ../data/preferences_dialog.ui.h:125
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:74
 msgid ""
 "Whether to use only a string, and not the integer-base ID3v1 genre field, "
 "when writing a genre field to ID3v2 tags"
@@ -1601,71 +1625,71 @@ msgstr ""
 "Использовать поле жанра в виде простого текста, а не целочисленное поле "
 "ID3v1 при записи поля жанра в тегах ID3v2"
 
-#: ../data/preferences_dialog.ui.h:111
+#: ../data/preferences_dialog.ui.h:126
 msgid "ID3v1"
 msgstr "Теги ID3v1"
 
-#: ../data/preferences_dialog.ui.h:112
+#: ../data/preferences_dialog.ui.h:127
 msgid "Write ID3v1 tag"
 msgstr "Записывать тег ID3v1"
 
-#: ../data/preferences_dialog.ui.h:113
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:54
+#: ../data/preferences_dialog.ui.h:128
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:56
 msgid "Whether to write ID3v1 tags when writing ID3 tags into audio files"
 msgstr "Записывать теги ID3v1 при записи тегов ID3 в аудиофайлы"
 
-#: ../data/preferences_dialog.ui.h:114
+#: ../data/preferences_dialog.ui.h:129
 msgid "Choose the character set to be used when writing ID3v1 tag"
 msgstr "Выберите кодировку символов для записи тега ID3v1"
 
-#: ../data/preferences_dialog.ui.h:115
+#: ../data/preferences_dialog.ui.h:130
 msgid "ID3 Tags"
 msgstr "Теги ID3"
 
-#: ../data/preferences_dialog.ui.h:116
+#: ../data/preferences_dialog.ui.h:131
 msgid "Character Conversion"
 msgstr "Преобразование символов"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:118
+#: ../data/preferences_dialog.ui.h:133
 msgid "Fill Tag Scanner"
 msgstr "Сканер заполнения тега"
 
-#: ../data/preferences_dialog.ui.h:120
+#: ../data/preferences_dialog.ui.h:135
 #, no-c-format
 msgid "Convert underscores and ‘%20’ to spaces"
 msgstr "Преобразовывать подчёркивание и «%20» в пробелы"
 
-#: ../data/preferences_dialog.ui.h:122
+#: ../data/preferences_dialog.ui.h:137
 #, no-c-format
 msgid "Convert spaces and ‘%20’ to underscores"
 msgstr "Преобразовывать пробелы и «%20» в подчёркивание"
 
-#: ../data/preferences_dialog.ui.h:123
+#: ../data/preferences_dialog.ui.h:138
 msgid "No conversion"
 msgstr "Без изменений"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:125
+#: ../data/preferences_dialog.ui.h:140
 msgid "Rename File and Directory Scanner"
 msgstr "Сканер переименования файлов и папок"
 
-#: ../data/preferences_dialog.ui.h:126 ../data/scan_dialog.ui.h:96
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.cc:786
+#: ../data/preferences_dialog.ui.h:141 ../data/scan_dialog.ui.h:96
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:135 ../src/tag_area.cc:786
 msgid "Remove spaces"
 msgstr "Удалить пробелы"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:128
+#: ../data/preferences_dialog.ui.h:143
 msgid "Process Fields Scanner"
 msgstr "Сканер обработки полей"
 
-#: ../data/preferences_dialog.ui.h:129
+#: ../data/preferences_dialog.ui.h:144
 msgid "Upper-case the first letters of all words"
 msgstr "Сделать первые буквы заглавными во всех словах"
 
-#: ../data/preferences_dialog.ui.h:130
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:130
+#: ../data/preferences_dialog.ui.h:145
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to upper-case the first letter of all words, including prepositions "
 "and other short words such as “feat.”, when processing tag fields"
@@ -1673,16 +1697,16 @@ msgstr ""
 "Сделать заглавными первые буквы всех слов, включая предлоги и другие "
 "короткие слова (например, «feat.»), при обработке полей тегов"
 
-#: ../data/preferences_dialog.ui.h:131
+#: ../data/preferences_dialog.ui.h:146
 msgid "Fields"
 msgstr "Поля"
 
-#: ../data/preferences_dialog.ui.h:132
+#: ../data/preferences_dialog.ui.h:147
 msgid "Overwrite fields when scanning tags"
 msgstr "Перезаписывать поля при сканировании тегов"
 
-#: ../data/preferences_dialog.ui.h:133
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:99
+#: ../data/preferences_dialog.ui.h:148
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:101
 msgid ""
 "Whether to overwrite the tag field values when filling tags. Otherwise, only "
 "blank tag fields will be filled"
@@ -1690,12 +1714,12 @@ msgstr ""
 "Заменять ли значения полей тегов при сканировании тегов или заполнять только "
 "пустые поля"
 
-#: ../data/preferences_dialog.ui.h:134
+#: ../data/preferences_dialog.ui.h:149
 msgid "Set this text as default comment:"
 msgstr "Комментарий по умолчанию:"
 
-#: ../data/preferences_dialog.ui.h:135
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:101
+#: ../data/preferences_dialog.ui.h:150
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:103
 msgid ""
 "Whether to set the comment tag field to the provided default value when "
 "filling tags"
@@ -1703,14 +1727,14 @@ msgstr ""
 "Записывать в поле тега комментария при сканировании указанное значение по "
 "умолчанию"
 
-#: ../data/preferences_dialog.ui.h:136
+#: ../data/preferences_dialog.ui.h:151
 msgid "Use CRC-32 as the default comment (for files with ID3 tags only)"
 msgstr ""
 "Использовать CRC-32 в качестве комментария по умолчанию (только для тегов "
 "ID3)"
 
-#: ../data/preferences_dialog.ui.h:137
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:105
+#: ../data/preferences_dialog.ui.h:152
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:107
 msgid ""
 "Whether to use the CRC-32 of the audio file data as the default comment, for "
 "files with ID3 tags only"
@@ -1718,42 +1742,42 @@ msgstr ""
 "Записывать контрольную сумму CRC32 аудиофайла в поле «Комментарий» (только "
 "для файлов с тегами ID3)."
 
-#: ../data/preferences_dialog.ui.h:138
+#: ../data/preferences_dialog.ui.h:153
 msgid "Scanner"
 msgstr "Сканер"
 
-#: ../data/preferences_dialog.ui.h:139
+#: ../data/preferences_dialog.ui.h:154
 msgid "Automatic Search Servers"
 msgstr "Сервера автоматического поиска"
 
-#: ../data/preferences_dialog.ui.h:140
+#: ../data/preferences_dialog.ui.h:155
 msgid "Host:"
 msgstr "Сервер:"
 
-#: ../data/preferences_dialog.ui.h:141
+#: ../data/preferences_dialog.ui.h:156
 msgid "Port:"
 msgstr "Порт сервера:"
 
-#: ../data/preferences_dialog.ui.h:142
+#: ../data/preferences_dialog.ui.h:157
 msgid "CGI Path:"
 msgstr "Путь к CGI:"
 
-#: ../data/preferences_dialog.ui.h:143
+#: ../data/preferences_dialog.ui.h:158
 msgid "Manual Search Server"
 msgstr "Сервер поиска вручную"
 
-#: ../data/preferences_dialog.ui.h:144
+#: ../data/preferences_dialog.ui.h:159
 msgid "Results List"
 msgstr "Список результатов"
 
-#: ../data/preferences_dialog.ui.h:145
+#: ../data/preferences_dialog.ui.h:160
 msgid ""
 "Select corresponding file (according to position or DLM if activated below)"
 msgstr ""
 "Выбрать соответствующий файл (в зависимости от позиции или DLM, если "
 "включено ниже)"
 
-#: ../data/preferences_dialog.ui.h:146
+#: ../data/preferences_dialog.ui.h:161
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:26
 msgid ""
 "Whether to select the file in the file list which matches the position in "
@@ -1762,7 +1786,7 @@ msgstr ""
 "Выделять ли в списке файлов файл, соответствующий позиции в списке "
 "результатов CDDB"
 
-#: ../data/preferences_dialog.ui.h:147
+#: ../data/preferences_dialog.ui.h:162
 msgid ""
 "Use the Levenshtein algorithm (DLM) to match results (using title) with "
 "audio files (using filename)"
@@ -1770,63 +1794,63 @@ msgstr ""
 "Использовать алгоритм Левенштайна (DLM) для сравнения названий в теге с "
 "именем файла"
 
-#: ../data/preferences_dialog.ui.h:149
+#: ../data/preferences_dialog.ui.h:164
 msgid "CDDB"
 msgstr "CDDB"
 
-#: ../data/preferences_dialog.ui.h:150
+#: ../data/preferences_dialog.ui.h:165
 msgid "Confirmation"
 msgstr "Подтверждения"
 
-#: ../data/preferences_dialog.ui.h:151
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:106
+#: ../data/preferences_dialog.ui.h:166
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:108
 msgid "Confirm before writing tags"
 msgstr "Подтверждать запись тега в файл"
 
-#: ../data/preferences_dialog.ui.h:152
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:107
+#: ../data/preferences_dialog.ui.h:167
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:109
 msgid ""
 "Whether to ask for confirmation from the user before writing tags to audio "
 "files"
 msgstr "Запрашивать подтверждение перед записью тегов в аудиофайлы"
 
-#: ../data/preferences_dialog.ui.h:153
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:108
+#: ../data/preferences_dialog.ui.h:168
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:110
 msgid "Confirm before renaming a file"
 msgstr "Подтверждать переименования файла"
 
-#: ../data/preferences_dialog.ui.h:154
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:109
+#: ../data/preferences_dialog.ui.h:169
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:111
 msgid "Whether to ask for confirmation from the user before renaming a file"
 msgstr "Запрашивать подтверждение перед переименованием файла"
 
-#: ../data/preferences_dialog.ui.h:155
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:112
+#: ../data/preferences_dialog.ui.h:170
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:114
 msgid "Confirm before deleting a file"
 msgstr "Подтверждать удаление файла"
 
-#: ../data/preferences_dialog.ui.h:156
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:113
+#: ../data/preferences_dialog.ui.h:171
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:115
 msgid "Whether to ask for confirmation from the user before deleting a file"
 msgstr "Запрашивать подтверждение перед удалением файла"
 
-#: ../data/preferences_dialog.ui.h:157
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:110
+#: ../data/preferences_dialog.ui.h:172
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:112
 msgid "Confirm before writing a playlist"
 msgstr "Подтверждать сохранение списка воспроизведения"
 
-#: ../data/preferences_dialog.ui.h:158
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:111
+#: ../data/preferences_dialog.ui.h:173
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:113
 msgid "Whether to ask for confirmation from the user before writing a playlist"
 msgstr "Запрашивать подтверждение перед записью списка воспроизведения"
 
-#: ../data/preferences_dialog.ui.h:159
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:114
+#: ../data/preferences_dialog.ui.h:174
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:116
 msgid "Confirm before losing unsaved changes to files"
 msgstr "Подтверждать при потере несохранённых изменений в файлах"
 
-#: ../data/preferences_dialog.ui.h:160
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:115
+#: ../data/preferences_dialog.ui.h:175
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:117
 msgid ""
 "Whether to ask for confirmation from the user before performing an operation "
 "that would lose unsaved changes on files"
@@ -1834,20 +1858,20 @@ msgstr ""
 "Запрашивать подтверждение перед действиями, которые приведут к потере "
 "несохранённых изменений в файлах"
 
-#: ../data/preferences_dialog.ui.h:161
+#: ../data/preferences_dialog.ui.h:176
 msgid "Scanner Dialog"
 msgstr "Окно сканера"
 
-#: ../data/preferences_dialog.ui.h:162
+#: ../data/preferences_dialog.ui.h:177
 msgid "Show the scanner dialog on startup"
 msgstr "Открывать окно сканера при запуске"
 
-#: ../data/preferences_dialog.ui.h:163
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:182
+#: ../data/preferences_dialog.ui.h:178
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:184
 msgid "Whether to show the scanner window on application startup"
 msgstr "Открывать окно сканера при запуске при запуске приложения"
 
-#: ../data/preferences_dialog.ui.h:164
+#: ../data/preferences_dialog.ui.h:179
 msgid "Application"
 msgstr "Приложение"
 
@@ -2133,7 +2157,7 @@ msgstr ""
 msgid "Detect Roman numerals"
 msgstr "Определять римские цифры"
 
-#: ../data/scan_dialog.ui.h:93 ../data/org.gnome.EasyTAG.gschema.xml.h:132
+#: ../data/scan_dialog.ui.h:93 ../data/org.gnome.EasyTAG.gschema.xml.h:134
 msgid ""
 "Whether to detect Roman numerals when applying upper-case conversions while "
 "processing tag fields"
@@ -2149,7 +2173,7 @@ msgstr "Не изменять регистр"
 msgid "Spaces Conversions"
 msgstr "Обработка пробелов"
 
-#: ../data/scan_dialog.ui.h:97 ../data/org.gnome.EasyTAG.gschema.xml.h:134
+#: ../data/scan_dialog.ui.h:97 ../data/org.gnome.EasyTAG.gschema.xml.h:136
 msgid "Whether to remove all spaces when processing tag fields"
 msgstr "Удалять все пробелы при обработке полей тегов"
 
@@ -2157,7 +2181,7 @@ msgstr "Удалять все пробелы при обработке поле�
 msgid "Insert a space before uppercase letters"
 msgstr "Вставить пробел перед заглавной буквой"
 
-#: ../data/scan_dialog.ui.h:99 ../data/org.gnome.EasyTAG.gschema.xml.h:136
+#: ../data/scan_dialog.ui.h:99 ../data/org.gnome.EasyTAG.gschema.xml.h:138
 msgid ""
 "Whether to insert spaces before capital letters when processing tag fields"
 msgstr "Вставлять пробелы перед заглавными буквами при обработке полей тегов"
@@ -2166,7 +2190,7 @@ msgstr "Вставлять пробелы перед заглавными бук
 msgid "Remove duplicate spaces and underscores"
 msgstr "Удалять повторяющиеся пробелы и подчёркивания"
 
-#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:138
+#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:140
 msgid ""
 "Whether to remove duplicate spaces and underscores when processing tag fields"
 msgstr ""
@@ -2665,471 +2689,489 @@ msgstr ""
 msgid "Sort files in ascending or descending order for the selected type"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:49
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:47
+msgid "Columns in file browser"
+msgstr ""
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:48
+msgid "List of visible columns in the file browser."
+msgstr ""
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:51
 msgid "Use a non-standard character encoding when reading ID3 tags"
 msgstr "Использовать нестандартную кодировку при чтении тегов ID3"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:53
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:55
 msgid "Write ID3v1 tags"
 msgstr "Записывать теги ID3v1"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:55
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:57
 msgid "The character set for writing ID3v1 tags"
 msgstr "Кодировка для записи тегов ID3v1"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:56
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:58
 #, fuzzy
 msgid "Choose the character set to be used when writing ID3v1 tags"
 msgstr "Кодировка записи тегов ID3"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:57
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:59
 msgid "Encoding options when writing ID3v1 tags"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:58
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:60
 msgid ""
 "Additional options to pass to iconv() when converting between encodings when "
 "writing ID3v1 tags"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:59
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:61
 msgid "The character set for reading ID3v1 and ID3v2 tags"
 msgstr "Кодировка для чтения тегов ID3v1 и ID3v2"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:61
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:63
 msgid "Write ID3v2 tags"
 msgstr "Записывать теги ID3v2"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:63
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:65
 msgid "Enable ID3v2.4 support"
 msgstr "Включить поддержку ID3v2.4"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:64
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:66
 msgid "Whether to write ID3v2.4 tags when ID3v2 support is enabled"
 msgstr "Записывать теги ID3v2.4 когда включена поддержка ID3v2"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:65
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:67
 msgid "Convert old ID3 tag versions to new ones"
 msgstr "Преобразовывать старые версии тегов ID3 в новые"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:69
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:71
 #, fuzzy
 msgid "Use CRC-32 in ID3v2 tags"
 msgstr "Записывать CRC32 в теги ID3v2"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:73
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:75
 msgid "Use Unicode character encoding in ID3v2 tags"
 msgstr "Использовать Юникод в тегах ID3v2"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:74
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:76
 msgid "Whether to use a Unicode character set when writing ID3v2 tags"
 msgstr "Использовать набор символов Юникод при записи тегов ID3v2"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:75
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:77
 #, fuzzy
 msgid "The Unicode character set for writing ID3v2 tags"
 msgstr "Кодировка записи тегов ID3"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:76
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:78
 #, fuzzy
 msgid "Choose the Unicode character set to be used when writing ID3v2 tags"
 msgstr "Кодировка записи тегов ID3"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:77
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:79
 #, fuzzy
 msgid "The character set for writing ID3v2 tags"
 msgstr "Кодировка записи тегов ID3"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:78
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:80
 msgid ""
 "Override the typical Unicode character set to be used when writing ID3v2 tags"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:79
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:81
 msgid "Encoding options when writing ID3v2 tags"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:80
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:82
 msgid ""
 "Additional options to pass to iconv() when converting between encodings when "
 "writing ID3v2 tags"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:81
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:83
 msgid "Automatically complete the date"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:83
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:85
 msgid "Pad the disc number tag field"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:85
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:87
 msgid "The length of the disc number field"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:86
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:88
 msgid ""
 "The length of the disc number field, which controls if the field is padded "
 "with leading zeroes"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:88
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:90
 msgid ""
 "Whether to, when adding cover art, automatically select the type for an "
 "image based on its filename"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:89
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:91
 msgid "Pad the track number tag field"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:91
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:93
 msgid "The length of the track number field"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:92
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:94
 msgid ""
 "The length of the track number field, which controls if the field is padded "
 "with leading zeroes"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:95
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:97
 msgid "Convert spaces and underscores when filling tag fields"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:97
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:99
 #, no-c-format
 msgid ""
 "Whether to convert to spaces (and %20) or underscores when filling tag "
 "fields from filenames"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:98
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:100
 msgid "Overwrite tag field"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:100
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:102
 #, fuzzy
 msgid "Set the default comment"
 msgstr "Комментарий по умолчанию:"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:102
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:104
 msgid "Default comment for filling tags"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:103
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:105
 msgid "The default comment to use when filling tags"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:104
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:106
 #, fuzzy
 msgid "Use the CRC-32 as the default comment"
 msgstr "Комментарий по умолчанию:"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:116
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:118
 #, fuzzy
 msgid "Run the current scanner when loading filenames from a file"
 msgstr "Выполнить сканирование для каждого файла"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:118
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:120
 #, fuzzy
 msgid "Process these tag fields"
 msgstr "Обработать поле «Название»"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:119
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:121
 msgid "The tag fields to process when using the scanner"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:120
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:122
 #, fuzzy
 msgid "Convert tag fields when processing"
 msgstr "Заменять поля при сканировании тегов"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:122
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:124
 #, no-c-format
 msgid ""
 "Whether to convert to spaces (and %20), underscores or other characters when "
 "processing tag fields"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:123
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:125
 #, fuzzy
 msgid "Convert characters in tags"
 msgstr "Попробовать использовать другую кодировку"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:124
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:126
 msgid ""
 "Whether to convert characters of the tag from one value to another when "
 "processing tag fields"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:125
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:127
 msgid "Convert the following characters when processing tag fields"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:126
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:128
 msgid ""
 "Replace any matched sequence of characters with this string when processing "
 "tag fields"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:127
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:129
 msgid "Capitalize tag fields when processing"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:128
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:130
 msgid "Whether to change the capitalization when processing tag fields"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:129
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:131
 msgid "Upper-case prepositions"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:131
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:133
 #, fuzzy
 msgid "Detect roman numerals"
 msgstr "Определять римские цифры"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:135
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:137
 #, fuzzy
 msgid "Insert spaces before capital letters"
 msgstr "Вставить пробел перед заглавной буквой"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:137
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:139
 #, fuzzy
 msgid "Remove duplicate spaces"
 msgstr "Удалять повторяющиеся пробелы и подчёркивания"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:139
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:141
 #, fuzzy
 msgid "Playlist filename mask"
 msgstr "Ошибка в списке воспроизведения"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:140
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:142
 msgid "The default filename mask to use for a new playlist"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:141
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:143
 msgid "Use a filename mask when generating a playlist"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:142
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:144
 msgid "Whether to use a filename mask when creating playlists"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:143
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:145
 #, fuzzy
 msgid "Create playlists with only the selected files"
 msgstr "Создавать список записей в родительском каталоге"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:145
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:147
 #, fuzzy
 msgid "Use relative paths when creating playlists"
 msgstr "Использовать относительный путь для файлов в списке записей"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:146
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:148
 #, fuzzy
 msgid "Whether to use relative paths for files when creating playlists"
 msgstr "Использовать относительный путь для файлов в списке записей"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:147
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:149
 #, fuzzy
 msgid "Create the playlist in the parent directory"
 msgstr "Создавать список записей в родительском каталоге"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:149
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:151
 #, fuzzy
 msgid "Use DOS separators for playlists"
 msgstr "Использовать абсолютный путь для файлов в списке записей"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:151
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:153
 #, fuzzy
 msgid "Content of generated playlists"
 msgstr "Создать список воспроизведения"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:152
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:154
 msgid ""
 "Write a plain list of files, include extended information from the filename "
 "or extended information using a supplied mask"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:153
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:155
 msgid "Playlist default mask"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:154
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:156
 #, fuzzy
 msgid "The default mask to use for files in a playlist"
 msgstr "Использовать абсолютный путь для файлов в списке записей"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:155
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:157
 msgid "Search for files case-sensitively"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:156
-msgid "Whether matches when searching for files are case-sensitive"
-msgstr ""
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:157
-#, fuzzy
-msgid "Search in filenames"
-msgstr "Искать файл"
-
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:158
-msgid "Perform the search on filenames"
+msgid "Whether matches when searching for files are case-sensitive"
 msgstr ""
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:159
 #, fuzzy
-msgid "Search in tags"
-msgstr "Поиск…"
+msgid "Search in filenames"
+msgstr "Искать файл"
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:160
-msgid "Perform the search on tags"
+msgid "Perform the search on filenames"
 msgstr ""
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:161
+#, fuzzy
+msgid "Search in tags"
+msgstr "Поиск…"
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:162
+msgid "Perform the search on tags"
+msgstr ""
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:163
 msgid "Mask for filling tags from filenames"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:162
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:164
 msgid ""
 "The default mask to use when automatically filling tags with information "
 "from filenames"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:163
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:165
 #, fuzzy
 msgid "Mask for renaming files"
 msgstr "Подтверждать переименования файла"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:164
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:166
 #, fuzzy
 msgid "The default mask to use when renaming files"
 msgstr "Повторить действие для оставшихся файлов"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:165
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:167
 #, fuzzy
 msgid "Mask for renaming directories"
 msgstr "Не удалось создать папку настроек"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:166
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:168
 msgid "The default mask to use when renaming directories"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:167
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:169
 #, fuzzy
 msgid "Use a mask when renaming directories"
 msgstr "Не удалось создать папку настроек"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:169
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:171
 #, fuzzy
 msgid "Convert spaces and underscores when renaming files"
 msgstr "Преобразовывать пробел « » в подчёркивание «_»"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:170
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:172
 msgid "Whether to convert to spaces or underscores when renaming files"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:171
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:173
 msgid "How to modify filename extensions when renaming"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:172
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:174
 msgid ""
 "Change the file extension to all lower-case, all upper-case or do not change "
 "it"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:173
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
 msgid "Encoding options when renaming files"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:174
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:176
 msgid ""
 "If the encoding of the filename does not match the filesystem encoding, "
 "choose whether to try another encoding, approximate the filesystem encoding "
 "with transliteration or discard the offending characters"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:177
 msgid "Replace illegal characters when renaming"
 msgstr "Заменять недопустимые символы при переименовании"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:176
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:178
 #, fuzzy
 msgid ""
 "Whether to replace illegal characters in a filename when using the rename "
 "function"
 msgstr "Заменять недопустимые символы в имени файла (для Windows и CD-ROM)"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:177
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:179
 #, fuzzy
 msgid "Show the scanner mask editor"
 msgstr "Показать/скрыть редактор масок"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:178
-msgid "Whether to show the scanner mask editor in the tag scanner"
-msgstr ""
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:179
-#, fuzzy
-msgid "Show the scanner legend"
-msgstr "Показать/скрыть подсказку"
-
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:180
-msgid "Whether to show the scanner legend in the tag scanner"
+msgid "Whether to show the scanner mask editor in the tag scanner"
 msgstr ""
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:181
 #, fuzzy
+msgid "Show the scanner legend"
+msgstr "Показать/скрыть подсказку"
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:182
+msgid "Whether to show the scanner legend in the tag scanner"
+msgstr ""
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:183
+#, fuzzy
 msgid "Show the scanner window on startup"
 msgstr "Открывать окно сканера при запуске"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:183
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:185
 msgid "The scan mode"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:184
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:186
 msgid "Which type of scan to show in the scanner"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:185
-msgid "Split Ogg title fields"
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:187
+msgid "Split fields at this separator"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:187
-msgid "Split Ogg artist fields"
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:188
+msgid ""
+"Seperator used when splitting e.g. Ogg fields or joining multiple field "
+"values"
 msgstr ""
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:189
-msgid "Split Ogg album fields"
+msgid "Split Ogg title fields"
 msgstr ""
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:191
-msgid "Split Ogg genre fields"
+msgid "Split Ogg artist fields"
 msgstr ""
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:193
+msgid "Split Ogg album fields"
+msgstr ""
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:195
+msgid "Split Ogg genre fields"
+msgstr ""
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:197
 #, fuzzy
 msgid "Split Ogg comment fields"
 msgstr "Обработать поле «Комментарий»"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:195
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:199
 #, fuzzy
 msgid "Split Ogg composer fields"
 msgstr "Обработать поле «Композитор»"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:197
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:201
 #, fuzzy
 msgid "Split Ogg original artist fields"
 msgstr "Обработать поле «Первый исполнитель»"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:199
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:203
 msgid "Page to show in the preferences dialog"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:200
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:204
 msgid "The page in the notebook of the preferences dialog"
 msgstr ""
 
@@ -3203,72 +3245,73 @@ msgstr "Ошибка при записи в файл «%s» (%s)"
 msgid "Cannot open path ‘%s’"
 msgstr "Не удалось открыть файл: «%s»"
 
-#: ../src/application_window.c:361 ../src/application_window.c:379
+#: ../src/application_window.cc:369 ../src/application_window.cc:387
 #, c-format
 msgid "Do you really want to delete the file ‘%s’?"
 msgstr "Действительно удалить файл «%s»?"
 
-#: ../src/application_window.c:364 ../src/easytag.c:459 ../src/easytag.c:595
+#: ../src/application_window.cc:372 ../src/easytag.c:459 ../src/easytag.c:595
 msgid "Repeat action for the remaining files"
 msgstr "Повторить действие для оставшихся файлов"
 
-#: ../src/application_window.c:367
+#: ../src/application_window.cc:375
 msgid "_Skip"
 msgstr "_Пропустить"
 
-#: ../src/application_window.c:369 ../src/application_window.c:383
+#: ../src/application_window.cc:377 ../src/application_window.cc:391
 msgid "_Delete"
 msgstr "_Удалить"
 
-#: ../src/application_window.c:371 ../src/application_window.c:381
+#: ../src/application_window.cc:379 ../src/application_window.cc:389
 msgid "Delete File"
 msgstr "Удалить файл"
 
-#: ../src/application_window.c:408
+#: ../src/application_window.cc:416
 #, c-format
 msgid "File ‘%s’ deleted"
 msgstr "Файл «%s» удалён"
 
-#: ../src/application_window.c:583
+#: ../src/application_window.cc:587
 #, c-format
 msgid "Cannot delete file ‘%s’"
 msgstr "Не удалось удалить файл «%s»"
 
-#: ../src/application_window.c:607
+#: ../src/application_window.cc:611
 msgid "Some files were not deleted"
 msgstr "Некоторые файлы были удалены"
 
-#: ../src/application_window.c:609
+#: ../src/application_window.cc:613
 msgid "All files have been deleted"
 msgstr "Все файлы были удалены"
 
-#: ../src/application_window.c:915
+#: ../src/application_window.cc:918
 msgid "All tags have been removed"
 msgstr "Все теги были удалены"
 
-#: ../src/application_window.c:1474 ../src/browser.cc:348 ../src/browser.cc:391
-#: ../src/browser.cc:425 ../src/browser.cc:4299 ../src/browser.cc:4374
+#: ../src/application_window.cc:1475 ../src/browser.cc:349
+#: ../src/browser.cc:392 ../src/browser.cc:426 ../src/browser.cc:4321
+#: ../src/browser.cc:4396
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Не удалось запустить программу «%s»"
 
-#: ../src/application_window.c:2003
+#: ../src/application_window.cc:1998
 #, fuzzy, c-format
 msgid "Could not convert filename ‘%s’ to system filename encoding"
 msgstr ""
 "Не удалось преобразовать имя файла «%s» в системную кодировку наименования "
 "файлов"
 
-#: ../src/application_window.c:2006
+#: ../src/application_window.cc:2001
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Попробуйте установить переменную окружения G_FILENAME_ENCODING."
 
-#: ../src/application_window.c:2008 ../src/scan_dialog.cc:800
+#: ../src/application_window.cc:2003 ../src/scan_dialog.cc:800
 msgid "Filename translation"
 msgstr "Перевод имени файла"
 
 #. And refresh the number of files in this directory
-#: ../src/application_window.c:2168
+#: ../src/application_window.cc:2163
 #, c-format
 msgid "One file"
 msgid_plural "%u files"
@@ -3277,7 +3320,7 @@ msgstr[1] "%u файла"
 msgstr[2] "%u файлов"
 
 #. Bitrate
-#: ../src/application_window.c:2201 ../src/tags/flac_header.c:189
+#: ../src/application_window.cc:2196 ../src/tags/flac_header.c:189
 #: ../src/tags/monkeyaudio_header.c:76 ../src/tags/mp4_header.cc:144
 #: ../src/tags/mpeg_header.c:274 ../src/tags/musepack_header.c:78
 #: ../src/tags/ogg_header.c:411 ../src/tags/opus_header.c:231
@@ -3287,7 +3330,7 @@ msgid "%d kb/s"
 msgstr "%d кб/с"
 
 #. Samplerate
-#: ../src/application_window.c:2204 ../src/tags/flac_header.c:192
+#: ../src/application_window.cc:2199 ../src/tags/flac_header.c:192
 #: ../src/tags/monkeyaudio_header.c:79 ../src/tags/mp4_header.cc:148
 #: ../src/tags/mpeg_header.c:279 ../src/tags/musepack_header.c:81
 #: ../src/tags/ogg_header.c:414 ../src/tags/opus_header.c:234
@@ -3296,105 +3339,105 @@ msgstr "%d кб/с"
 msgid "%d Hz"
 msgstr "%d Гц"
 
-#: ../src/application_window.c:2359 ../src/easytag.c:915
+#: ../src/application_window.cc:2354 ../src/easytag.c:915
 #, c-format
 msgid "File: ‘%s’"
 msgstr "Файл: «%s»"
 
 #. Quit EasyTAG.
-#: ../src/application_window.c:2992
+#: ../src/application_window.cc:2983
 #, fuzzy
 msgid "Normal exit"
 msgstr "EasyTAG: Выход."
 
-#: ../src/application_window.c:3026 ../src/browser.cc:915
+#: ../src/application_window.cc:3017 ../src/browser.cc:932
 msgid "Some files have been modified but not saved"
 msgstr "Некоторые файлы были изменены, но не сохранены"
 
-#: ../src/application_window.c:3027 ../src/browser.cc:919 ../src/easytag.c:233
+#: ../src/application_window.cc:3018 ../src/browser.cc:936 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:598 ../src/easytag.c:606
 #, fuzzy
 msgid "_Discard"
 msgstr "Диск"
 
-#: ../src/application_window.c:3033 ../src/easytag.c:239
+#: ../src/application_window.cc:3024 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Выйти"
 
-#: ../src/application_window.c:3036
+#: ../src/application_window.cc:3027
 msgid "Do you want to save them before quitting?"
 msgstr "Сохранить их перед выходом?"
 
-#: ../src/browser.cc:617
+#: ../src/browser.cc:634
 #, fuzzy
 msgid "New default directory selected for browser"
 msgstr "Выберите папку для просмотра"
 
-#: ../src/browser.cc:918
+#: ../src/browser.cc:935
 #, fuzzy
 msgid "Do you want to save them before changing directory?"
 msgstr "Сохранить их перед изменением папки?"
 
-#: ../src/browser.cc:925
+#: ../src/browser.cc:942
 msgid "Confirm Directory Change"
 msgstr "Подтвердить изменение папки"
 
-#: ../src/browser.cc:2259
+#: ../src/browser.cc:2276
 #, fuzzy
 msgid "All albums"
 msgstr "<Все альбомы>"
 
-#: ../src/browser.cc:3505
+#: ../src/browser.cc:3527
 #, fuzzy
 msgid "Select File"
 msgstr "Удалить файл"
 
-#: ../src/browser.cc:3512
+#: ../src/browser.cc:3534
 #, fuzzy
 msgid "Select Directory"
 msgstr "Выберите папку…"
 
-#: ../src/browser.cc:3804
+#: ../src/browser.cc:3826
 #, fuzzy, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Изменить имя папки «%s» на:"
 
-#: ../src/browser.cc:3940
+#: ../src/browser.cc:3962
 msgid "You must type a directory name"
 msgstr "Необходимо ввести имя папки"
 
-#: ../src/browser.cc:3941 ../src/browser.cc:3963
+#: ../src/browser.cc:3963 ../src/browser.cc:3985
 msgid "Directory Name Error"
 msgstr "Ошибка в имени папки"
 
-#: ../src/browser.cc:3959
+#: ../src/browser.cc:3981
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr ""
 "Не удалось преобразовать «%s» в системную кодировку наименования файлов."
 
-#: ../src/browser.cc:3962
+#: ../src/browser.cc:3984
 msgid "Please use another name."
 msgstr "Используйте другое имя."
 
-#: ../src/browser.cc:4034
+#: ../src/browser.cc:4056
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Папка «%s» уже существует."
 
-#: ../src/browser.cc:4035 ../src/easytag.c:653
+#: ../src/browser.cc:4057 ../src/easytag.c:653
 msgid "Rename File Error"
 msgstr "Ошибка переименования файла"
 
-#: ../src/browser.cc:4074 ../src/browser.cc:4103
+#: ../src/browser.cc:4096 ../src/browser.cc:4125
 msgid "Rename Directory Error"
 msgstr "Ошибка переименования папки"
 
-#: ../src/browser.cc:4144
+#: ../src/browser.cc:4166
 msgid "Directory renamed"
 msgstr "Папка переименована"
 
-#: ../src/browser.cc:4291 ../src/browser.cc:4366
+#: ../src/browser.cc:4313 ../src/browser.cc:4388
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "Выполненная команда: «%s %s»"
@@ -3962,7 +4005,7 @@ msgstr ""
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "Применена автокоррекция для файла «%s»."
 
-#: ../src/load_files_dialog.cc:275 ../src/setting.c:329
+#: ../src/load_files_dialog.cc:275 ../src/setting.cc:329
 #, c-format
 msgid "Cannot open file ‘%s’: %s"
 msgstr "Не удалось открыть файл «%s»: %s"
@@ -4005,11 +4048,11 @@ msgstr ""
 msgid "Closing brace '}' without opening brace '{'."
 msgstr ""
 
-#: ../src/misc.c:176
+#: ../src/misc.cc:175
 msgid "You must type a program name"
 msgstr "Необходимо ввести имя программы"
 
-#: ../src/misc.c:177
+#: ../src/misc.cc:176
 msgid "Program Name Error"
 msgstr "Ошибка в имени программы"
 
@@ -4118,7 +4161,7 @@ msgstr "пиксели"
 msgid "Type"
 msgstr "Тип"
 
-#: ../src/picture.c:478 ../src/tags/id3_tag.c:1531 ../src/tags/vcedit.c:530
+#: ../src/picture.c:478 ../src/tags/id3_tag.c:1530 ../src/tags/vcedit.c:530
 #, fuzzy, c-format
 msgid "Input truncated or empty"
 msgstr "Вход пуст или урезан."
@@ -4142,11 +4185,11 @@ msgstr "Записан файл списка воспроизведения «%s
 msgid "Invalid scanner mask"
 msgstr "Недопустимая маска для сканера"
 
-#: ../src/preferences_dialog.c:881
+#: ../src/preferences_dialog.cc:788
 msgid "The selected default path is invalid"
 msgstr "Выбранный путь по умолчанию некорректен"
 
-#: ../src/preferences_dialog.c:883
+#: ../src/preferences_dialog.cc:790
 #, c-format
 msgid ""
 "Path: ‘%s’\n"
@@ -4155,7 +4198,7 @@ msgstr ""
 "Путь: «%s»\n"
 "Ошибка: %s"
 
-#: ../src/preferences_dialog.c:887
+#: ../src/preferences_dialog.cc:794
 msgid "Invalid Path Error"
 msgstr "Ошибка неверного пути"
 
@@ -4227,23 +4270,23 @@ msgstr[0] "Найден: %d файл"
 msgstr[1] "Найдено: %d файла"
 msgstr[2] "Найдено: %d файлов"
 
-#: ../src/search_dialog.cc:273
+#: ../src/search_dialog.cc:278
 msgid "Ready to search…"
 msgstr "Готов к поиску…"
 
-#: ../src/setting.c:246
+#: ../src/setting.cc:246
 #, fuzzy, c-format
 msgid "Cannot write list to file ‘%s’: %s"
 msgstr "Ошибка: не удалось сохранить список в файл: %s (%s)"
 
 #. Fall back to defaults.
-#: ../src/setting.c:352
+#: ../src/setting.cc:352
 #, fuzzy
 msgid "Loading default ‘Fill Tag’ masks…"
 msgstr "Загрузка стандартных масок для заполнения тегов…"
 
 #. Fall back to defaults.
-#: ../src/setting.c:382
+#: ../src/setting.cc:382
 #, fuzzy
 msgid "Loading default ‘Rename File’ masks…"
 msgstr "Загрузка стандартных масок для переименования файлов…"
@@ -4598,7 +4641,7 @@ msgstr "Ошибка при открытии файла: «%s»"
 msgid "Failed to write APE tag"
 msgstr "Не удалось записать тег APE"
 
-#: ../src/tags/flac_header.c:85 ../src/tags/flac_tag.c:225
+#: ../src/tags/flac_header.c:85 ../src/tags/flac_tag.c:224
 msgid "Error opening FLAC file"
 msgstr "Ошибка при открытии файла FLAC"
 
@@ -4628,108 +4671,108 @@ msgstr "Ошибка при открытии файла «%s» как FLAC: %s"
 msgid "Failed to write comments to file ‘%s’: %s"
 msgstr "Не удалось записать комментарии в файл «%s»: %s"
 
-#: ../src/tags/id3_tag.c:218
+#: ../src/tags/id3_tag.c:217
 msgid "Corrupted file"
 msgstr "Повреждённый файл"
 
-#: ../src/tags/id3_tag.c:651
+#: ../src/tags/id3_tag.c:650
 #, c-format
 msgid "Removed tag of ‘%s’"
 msgstr "Удалён тег в «%s»"
 
-#: ../src/tags/id3_tag.c:658 ../src/tags/id3_tag.c:742
+#: ../src/tags/id3_tag.c:657 ../src/tags/id3_tag.c:741
 #, c-format
 msgid "Error while removing ID3v1 tag of ‘%s’: %s"
 msgstr "Ошибка при удалении тега ID3v1 в «%s»: %s"
 
-#: ../src/tags/id3_tag.c:667 ../src/tags/id3_tag.c:705
+#: ../src/tags/id3_tag.c:666 ../src/tags/id3_tag.c:704
 #, c-format
 msgid "Error while removing ID3v2 tag of ‘%s’: %s"
 msgstr "Ошибка при удалении тега ID3v2 в «%s»: %s"
 
-#: ../src/tags/id3_tag.c:693
+#: ../src/tags/id3_tag.c:692
 #, c-format
 msgid "Error while updating ID3v2 tag of ‘%s’: %s"
 msgstr "Ошибка при обновлении тега ID3v2 в «%s»: %s"
 
-#: ../src/tags/id3_tag.c:730
+#: ../src/tags/id3_tag.c:729
 #, c-format
 msgid "Error while updating ID3v1 tag of ‘%s’: %s"
 msgstr "Ошибка при обновлении тега ID3v1 в «%s»: %s"
 
-#: ../src/tags/id3_tag.c:776
+#: ../src/tags/id3_tag.c:775
 msgid "Buggy id3lib"
 msgstr "id3lib с ошибками"
 
-#: ../src/tags/id3_tag.c:797
+#: ../src/tags/id3_tag.c:796
 msgid "No error reported"
 msgstr "Сообщений об ошибках не было"
 
-#: ../src/tags/id3_tag.c:799
+#: ../src/tags/id3_tag.c:798
 msgid "No available memory"
 msgstr "Не хватает памяти"
 
-#: ../src/tags/id3_tag.c:801
+#: ../src/tags/id3_tag.c:800
 msgid "No data to parse"
 msgstr "Нет данных для анализа"
 
-#: ../src/tags/id3_tag.c:803
+#: ../src/tags/id3_tag.c:802
 msgid "Improperly formatted data"
 msgstr "Неправильно отформатированные данные"
 
-#: ../src/tags/id3_tag.c:805
+#: ../src/tags/id3_tag.c:804
 msgid "No buffer to write to"
 msgstr "Нет буфера для записи"
 
-#: ../src/tags/id3_tag.c:807
+#: ../src/tags/id3_tag.c:806
 msgid "Buffer is too small"
 msgstr "Буфер слишком мал"
 
-#: ../src/tags/id3_tag.c:809
+#: ../src/tags/id3_tag.c:808
 msgid "Invalid frame ID"
 msgstr "Недопустимый ID фрейма"
 
-#: ../src/tags/id3_tag.c:811
+#: ../src/tags/id3_tag.c:810
 msgid "Requested field not found"
 msgstr "Запрашиваемое поле не найдено"
 
-#: ../src/tags/id3_tag.c:813
+#: ../src/tags/id3_tag.c:812
 msgid "Unknown field type"
 msgstr "Неизвестный тип поля"
 
-#: ../src/tags/id3_tag.c:815
+#: ../src/tags/id3_tag.c:814
 msgid "Tag is already attached to a file"
 msgstr "Тег уже прикреплён к файлу"
 
-#: ../src/tags/id3_tag.c:817
+#: ../src/tags/id3_tag.c:816
 msgid "Invalid tag version"
 msgstr "Неправильная версия тега"
 
-#: ../src/tags/id3_tag.c:819
+#: ../src/tags/id3_tag.c:818
 msgid "No file to parse"
 msgstr "Нет файла для анализа"
 
-#: ../src/tags/id3_tag.c:821
+#: ../src/tags/id3_tag.c:820
 msgid "Attempting to write to a read-only file"
 msgstr "Попытка записи в файл в режиме только для чтения"
 
-#: ../src/tags/id3_tag.c:823
+#: ../src/tags/id3_tag.c:822
 msgid "Error in compression/uncompression"
 msgstr "Ошибка при компрессии/декомпрессии"
 
-#: ../src/tags/id3_tag.c:825
+#: ../src/tags/id3_tag.c:824
 msgid "Unknown error message"
 msgstr "Сообщение о неизвестной ошибке"
 
-#: ../src/tags/id3_tag.c:1569
+#: ../src/tags/id3_tag.c:1568
 msgid "Error while creating temporary file"
 msgstr "Ошибка при создании временного файла"
 
-#: ../src/tags/id3v24_tag.c:135 ../src/tags/id3v24_tag.c:190
-#: ../src/tags/id3v24_tag.c:228 ../src/tags/id3v24_tag.c:238
-#: ../src/tags/id3v24_tag.c:247 ../src/tags/id3v24_tag.c:999
-#: ../src/tags/id3v24_tag.c:1007 ../src/tags/id3v24_tag.c:1014
-#: ../src/tags/id3v24_tag.c:1040 ../src/tags/id3v24_tag.c:1080
+#: ../src/tags/id3v24_tag.c:134 ../src/tags/id3v24_tag.c:189
+#: ../src/tags/id3v24_tag.c:227 ../src/tags/id3v24_tag.c:237
+#: ../src/tags/id3v24_tag.c:246 ../src/tags/id3v24_tag.c:1000
+#: ../src/tags/id3v24_tag.c:1008 ../src/tags/id3v24_tag.c:1015
+#: ../src/tags/id3v24_tag.c:1041 ../src/tags/id3v24_tag.c:1081
 #: ../src/tags/mp4_tag.cc:102 ../src/tags/ogg_header.c:277
 msgid "Error reading tags from file"
 msgstr "Ошибка при чтении тегов из файла"
@@ -4851,6 +4894,32 @@ msgstr "Файл Opus"
 #: ../src/tags/wavpack_header.c:137
 msgid "Wavpack File"
 msgstr "Файл Wavpack"
+
+#~ msgid "Whether to split title fields at a “ - ” separator in Ogg comments"
+#~ msgstr "Отделять поля названия разделителем « - » в комментариях Ogg"
+
+#~ msgid "Whether to split artist fields at a “ - ” separator in Ogg comments"
+#~ msgstr "Отделять поля исполнителя разделителем « - » в комментариях Ogg"
+
+#~ msgid "Whether to split album fields at a “ - ” separator in Ogg comments"
+#~ msgstr ""
+#~ "Отделять поля названия альбома разделителем « - » в комментариях Ogg"
+
+#~ msgid "Whether to split genre fields at a “ - ” separator in Ogg comments"
+#~ msgstr "Отделять поля жанра разделителем « - » в комментариях Ogg"
+
+#~ msgid "Whether to split comment fields at a “ - ” separator in Ogg comments"
+#~ msgstr "Отделять поля комментария разделителем « - » в комментариях Ogg"
+
+#~ msgid ""
+#~ "Whether to split composer fields at a “ - ” separator in Ogg comments"
+#~ msgstr "Отделять поля композитора разделителем « - » в комментариях Ogg"
+
+#~ msgid ""
+#~ "Whether to split original artist fields at a “ - ” separator in Ogg "
+#~ "comments"
+#~ msgstr ""
+#~ "Отделять поля первого исполнителя разделителем « - » в комментариях Ogg"
 
 #, fuzzy
 #~ msgid "Original year:"

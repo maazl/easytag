@@ -42,8 +42,7 @@
  * Declaration *
  ***************/
 
-#define MULTIFIELD_SEPARATOR " - "
-#define VERSION_EXTRACTOR " \\[([^\\[\\]]+)\\]$"
+#define VERSION_EXTRACTOR " +\\[([^\\[\\]]+)\\]$"
 
 /*
  * convert_to_byte_array:
@@ -127,8 +126,9 @@ set_or_append_field (gchar **field,
     }
     else
     {
-        gchar *field_tmp = g_strconcat (*field, MULTIFIELD_SEPARATOR,
-                                        field_value, NULL);
+        gchar* delimiter = g_settings_get_string(MainSettings, "split-delimiter");
+        gchar *field_tmp = g_strconcat (*field, delimiter, field_value, NULL);
+        g_free(delimiter);
         g_free (*field);
         *field = field_tmp;
         g_free (field_value);
@@ -886,7 +886,9 @@ et_ogg_write_delimited_tag (vorbis_comment *vc,
     gchar **strings;
     gsize i;
 
-    strings = g_strsplit (values, MULTIFIELD_SEPARATOR, 255);
+    gchar* delimiter = g_settings_get_string(MainSettings, "split-delimiter");
+    strings = g_strsplit (values, delimiter, 255);
+    g_free(delimiter);
     
     for (i = 0; strings[i] != NULL; i++)
     {

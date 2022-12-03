@@ -49,8 +49,7 @@
 /****************
  * Declarations *
  ****************/
-#define MULTIFIELD_SEPARATOR " - "
-#define EASYTAG_STRING_ENCODEDBY "Encoded by"
+#define EASYTAG_STRING_ENCODEDBY "Encoded by - "
 
 enum {
     EASYTAG_ID3_FIELD_LATIN1        = 0x0001,
@@ -474,15 +473,12 @@ id3tag_read_file_tag (GFile *gfile,
         tmpupdate = libid3tag_Get_Frame_Str(frame, ~0, &string1);
         if (string1)
         {
-            if (strncmp (string1,
-                         EASYTAG_STRING_ENCODEDBY MULTIFIELD_SEPARATOR,
-                         strlen (EASYTAG_STRING_ENCODEDBY MULTIFIELD_SEPARATOR)) == 0)
+            if (strncmp (string1, EASYTAG_STRING_ENCODEDBY, sizeof(EASYTAG_STRING_ENCODEDBY) - 1) == 0)
             {
-                FileTag->encoded_by = g_strdup(&string1[sizeof(EASYTAG_STRING_ENCODEDBY) + sizeof(MULTIFIELD_SEPARATOR) - 2]);
-                g_free(string1);
+                FileTag->encoded_by = g_strdup(&string1[sizeof(EASYTAG_STRING_ENCODEDBY) - 1]);
                 update |= tmpupdate;
-            }else
-                g_free(string1);
+            }
+            g_free(string1);
         }
     }
 
@@ -803,6 +799,7 @@ libid3tag_Get_Frame_Str (const struct id3_frame *frame,
     gchar *ret;
     unsigned is_latin, is_utf16;
     unsigned retval;
+    gchar* split_delimiter = NULL;
 
     ret = NULL;
     retval = 0;
@@ -932,8 +929,10 @@ libid3tag_Get_Frame_Str (const struct id3_frame *frame,
         {
             if (ret)
             {
+                if (!split_delimiter)
+                    split_delimiter = g_settings_get_string(MainSettings, "split-delimiter");
                 gchar *to_free = ret;
-                ret = g_strconcat (ret, MULTIFIELD_SEPARATOR, tmpstr, NULL);
+                ret = g_strconcat (ret, split_delimiter, tmpstr, NULL);
                 g_free (to_free);
             }
             else
@@ -944,6 +943,8 @@ libid3tag_Get_Frame_Str (const struct id3_frame *frame,
 
         g_free (tmpstr);
     }
+
+    g_free(split_delimiter);
 
     if (retstr)
     {

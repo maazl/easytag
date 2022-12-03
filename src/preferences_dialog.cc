@@ -93,6 +93,7 @@ typedef struct
     GtkWidget *split_comment_check;
     GtkWidget *split_composer_check;
     GtkWidget *split_orig_artist_check;
+    GtkWidget *split_delimiter;
     GtkWidget *id3_strip_check;
     GtkWidget *id3_v2_convert_check;
     GtkWidget *id3_v2_crc32_check;
@@ -461,6 +462,8 @@ create_preferences_dialog (EtPreferencesDialog *self)
     bind_boolean("tag-preserve-focus", priv->tags_preserve_focus_check);
 
     /* Tag Splitting */
+    g_settings_bind (MainSettings, "split-delimiter",
+        priv->split_delimiter, "text", G_SETTINGS_BIND_DEFAULT);
     bind_boolean("ogg-split-title", priv->split_title_check);
     bind_boolean("ogg-split-artist", priv->split_artist_check);
     bind_boolean("ogg-split-album", priv->split_album_check);
@@ -922,6 +925,7 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_comment_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_composer_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_orig_artist_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_delimiter);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_strip_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v2_convert_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v2_crc32_check);
