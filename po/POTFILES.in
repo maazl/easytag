@@ -37,7 +37,7 @@ src/playlist_dialog.c
 src/preferences_dialog.cc
 src/scan_dialog.cc
 src/search_dialog.cc
-src/setting.c
+src/setting.cc
 src/status_bar.c
 src/tag_area.cc
 src/tags/ape_tag.c

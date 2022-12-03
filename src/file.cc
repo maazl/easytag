@@ -117,8 +117,8 @@ static gint CmpInt(const gchar* val1, const gchar* val2)
 		return -1;
 
 	int i1, i2, l;
-	if (sscanf(val1, "%d%n", &i1, &l) == 1 && l == strlen(val1)
-		&& sscanf(val2, "%d%n", &i2, &l) == 1 && l == strlen(val2))
+	if (sscanf(val1, "%d%n", &i1, &l) == 1 && l == (int)strlen(val1)
+		&& sscanf(val2, "%d%n", &i2, &l) == 1 && l == (int)strlen(val2))
 		return sign(i1 - i2);
 
 	// Fallback

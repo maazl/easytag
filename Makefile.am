@@ -69,7 +69,7 @@ easytag_SOURCES = \
 	src/scan.c \
 	src/scan_dialog.cc \
 	src/search_dialog.cc \
-	src/setting.c \
+	src/setting.cc \
 	src/status_bar.c \
 	src/tag_area.cc \
 	src/tags/id3lib/c_wrapper.cpp \

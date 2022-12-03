@@ -568,7 +568,7 @@ et_settings_enum_get (GValue *value, GVariant *variant, gpointer user_data)
     g_return_val_if_fail (user_data != NULL, FALSE);
 
     enum_type = (GType)GPOINTER_TO_SIZE (user_data);
-    enum_class = g_type_class_ref (enum_type);
+    enum_class = (GEnumClass*)g_type_class_ref (enum_type);
     nick = g_variant_get_string (variant, NULL);
     enum_value = g_enum_get_value_by_nick (enum_class, nick);
     g_type_class_unref (enum_class);
@@ -607,7 +607,7 @@ et_settings_enum_set (const GValue *value, const GVariantType *expected_type,
     g_return_val_if_fail (user_data != NULL, NULL);
 
     enum_type = (GType)GPOINTER_TO_SIZE (user_data);
-    enum_class = g_type_class_ref (enum_type);
+    enum_class = (GEnumClass*)g_type_class_ref (enum_type);
     enum_value = g_enum_get_value (enum_class, g_value_get_int (value));
     g_type_class_unref (enum_class);
 
@@ -710,7 +710,7 @@ et_settings_flags_toggle_get (GValue *value, GVariant *variant, gpointer user_da
     name = gtk_widget_get_name (GTK_WIDGET (user_data));
     flags_type = (GType)GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (user_data),
                                                                        "flags-type"));
-    flags_class = g_type_class_ref (flags_type);
+    flags_class = (GFlagsClass*)g_type_class_ref (flags_type);
 
     g_variant_iter_init (&iter, variant);
 
@@ -770,7 +770,7 @@ et_settings_flags_toggle_set (const GValue *value,
     name = gtk_widget_get_name (GTK_WIDGET (user_data));
     flags_type = (GType)GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (user_data),
                                                                        "flags-type"));
-    flags_class = g_type_class_ref (flags_type);
+    flags_class = (GFlagsClass*)g_type_class_ref (flags_type);
     flags_value = g_flags_get_value_by_nick (flags_class, name);
     mask = flags_class->mask;
 
@@ -782,7 +782,7 @@ et_settings_flags_toggle_set (const GValue *value,
         return NULL;
     }
 
-    flags_key = g_object_get_data (G_OBJECT (user_data), "flags-key");
+    flags_key = (const gchar*)g_object_get_data (G_OBJECT (user_data), "flags-key");
     flags = g_settings_get_flags (MainSettings, flags_key);
 
     if (g_value_get_boolean (value))
