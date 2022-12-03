@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 1.99.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-03 17:16+0100\n"
+"POT-Creation-Date: 2022-12-03 23:29+0100\n"
 "PO-Revision-Date: 2020-05-31 18:33+0300\n"
 "Last-Translator: Florentina Mușat <emryslokadottir [at] gmail [dot] com>\n"
 "Language-Team: Romanian <pauliuc@gmx.net>\n"
@@ -92,7 +92,7 @@ msgid "No files"
 msgstr "Fără fișiere"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:19 ../data/scan_dialog.ui.h:63
+#: ../data/preferences_dialog.ui.h:23 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Artist"
@@ -106,7 +106,7 @@ msgid "# Files"
 msgstr "# Fișiere"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:21 ../data/scan_dialog.ui.h:67
+#: ../data/preferences_dialog.ui.h:25 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Album"
@@ -123,77 +123,100 @@ msgid "Filename"
 msgstr "Nume fișier"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:18 ../data/scan_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:22 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Titlu"
 
-#: ../data/browser.ui.h:12 ../data/preferences_dialog.ui.h:20
+#: ../data/browser.ui.h:12 ../data/preferences_dialog.ui.h:24
 #: ../data/scan_dialog.ui.h:65 ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Artist album"
 
 #: ../data/browser.ui.h:13 ../data/cddb_dialog.ui.h:40
-#: ../data/preferences_dialog.ui.h:22 ../data/search_dialog.ui.h:18
+#: ../data/preferences_dialog.ui.h:26 ../data/search_dialog.ui.h:18
 msgid "Year"
 msgstr "An"
 
-#: ../data/browser.ui.h:14 ../data/preferences_dialog.ui.h:23
+#: ../data/browser.ui.h:14 ../data/preferences_dialog.ui.h:27
 #, fuzzy
 msgid "Rel. year"
 msgstr "Artist original"
 
-#: ../data/browser.ui.h:15 ../data/preferences_dialog.ui.h:25
+#: ../data/browser.ui.h:15 ../data/preferences_dialog.ui.h:29
 msgid "Disc"
 msgstr "Disc"
 
-#: ../data/browser.ui.h:16 ../data/preferences_dialog.ui.h:24
+#: ../data/browser.ui.h:16 ../data/preferences_dialog.ui.h:28
 #: ../data/search_dialog.ui.h:19
 msgid "Track"
 msgstr "Pistă"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:26 ../data/scan_dialog.ui.h:69
+#: ../data/preferences_dialog.ui.h:30 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Gen"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:27
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:31
 #: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Comentariu"
 
-#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:28
+#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:32
 #: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Compozitor"
 
-#: ../data/browser.ui.h:20 ../data/preferences_dialog.ui.h:29
+#: ../data/browser.ui.h:20 ../data/preferences_dialog.ui.h:33
 #: ../data/search_dialog.ui.h:23
 msgid "Original Artist"
 msgstr "Artist original"
 
-#: ../data/browser.ui.h:21 ../data/preferences_dialog.ui.h:30
+#: ../data/browser.ui.h:21 ../data/preferences_dialog.ui.h:34
 #: ../data/search_dialog.ui.h:24
 #, fuzzy
 msgid "Orig. year"
 msgstr "Artist original"
 
-#: ../data/browser.ui.h:22 ../data/preferences_dialog.ui.h:31
+#: ../data/browser.ui.h:22 ../data/preferences_dialog.ui.h:35
 #: ../data/scan_dialog.ui.h:77 ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "Drepturi de autor"
 
-#: ../data/browser.ui.h:23 ../data/preferences_dialog.ui.h:32
+#: ../data/browser.ui.h:23 ../data/preferences_dialog.ui.h:36
 #: ../data/scan_dialog.ui.h:79 ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "URL"
 
-#: ../data/browser.ui.h:24 ../data/preferences_dialog.ui.h:33
+#: ../data/browser.ui.h:24 ../data/preferences_dialog.ui.h:37
 #: ../data/scan_dialog.ui.h:81 ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "Codat de"
+
+#: ../data/browser.ui.h:25 ../data/preferences_dialog.ui.h:18
+#: ../data/search_dialog.ui.h:28
+#, fuzzy
+msgid "File size"
+msgstr "Fișiere"
+
+#: ../data/browser.ui.h:26 ../data/cddb_dialog.ui.h:33
+#: ../data/preferences_dialog.ui.h:19 ../data/search_dialog.ui.h:29
+msgid "Duration"
+msgstr "Durată"
+
+#: ../data/browser.ui.h:27 ../data/preferences_dialog.ui.h:20
+#: ../data/search_dialog.ui.h:30
+#, fuzzy
+msgid "Bit rate"
+msgstr "Bitrate:"
+
+#: ../data/browser.ui.h:28 ../data/preferences_dialog.ui.h:21
+#: ../data/search_dialog.ui.h:31
+#, fuzzy
+msgid "Samplerate"
+msgstr "Rată de eșantionare:"
 
 #: ../data/browser_dialogs.ui.h:1
 msgid "Browse Directory With"
@@ -316,7 +339,7 @@ msgstr "Caută câmpurile"
 msgid "Track Name"
 msgstr "Numărul pistei"
 
-#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:111
+#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:115
 #: ../src/picture.c:191
 msgid "Other"
 msgstr "Altele"
@@ -393,10 +416,6 @@ msgstr ""
 msgid "#"
 msgstr "#"
 
-#: ../data/cddb_dialog.ui.h:33
-msgid "Duration"
-msgstr "Durată"
-
 #: ../data/cddb_dialog.ui.h:34
 msgid "Select all lines"
 msgstr "Alege toate liniile"
@@ -437,7 +456,7 @@ msgstr ""
 msgid "Match lines with the Levenshtein algorithm"
 msgstr "Potrivește linii cu algoritmul Levenshtein"
 
-#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:163
+#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:167
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:24
 msgid "Whether to use the DLM algorithm to match CDDB results to files"
 msgstr ""
@@ -445,7 +464,7 @@ msgstr ""
 "fișiere"
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
-#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:180
+#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:184
 #: ../data/scan_dialog.ui.h:118
 msgid "_Close"
 msgstr "În_chide"
@@ -515,7 +534,7 @@ msgstr "Descriere"
 msgid "_Accept"
 msgstr "_Acceptă"
 
-#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:34
+#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:38
 msgid "Log"
 msgstr "Istoric"
 
@@ -1173,26 +1192,26 @@ msgstr "Dacă sortarea fișierelor este sensibilă la majuscule"
 msgid "Visible columns"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:35
+#: ../data/preferences_dialog.ui.h:39
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:49
 msgid "Show the log"
 msgstr "Arată istoricul"
 
-#: ../data/preferences_dialog.ui.h:36
+#: ../data/preferences_dialog.ui.h:40
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:50
 msgid "Whether to show the log in the main window"
 msgstr "Dacă să se arate istoricul în fereastra principală"
 
-#: ../data/preferences_dialog.ui.h:37
+#: ../data/preferences_dialog.ui.h:41
 msgid "General"
 msgstr "Generale"
 
-#: ../data/preferences_dialog.ui.h:38
+#: ../data/preferences_dialog.ui.h:42
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:39
 msgid "Show audio file header summary"
 msgstr "Arată rezumatul antetului fișierului audio"
 
-#: ../data/preferences_dialog.ui.h:39
+#: ../data/preferences_dialog.ui.h:43
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:40
 msgid ""
 "Whether to show header information, such as bit rate and duration, for audio "
@@ -1201,46 +1220,46 @@ msgstr ""
 "Dacă să se arate informațiile antetului, precum rata de biți și durata, "
 "pentru fișiere audio"
 
-#: ../data/preferences_dialog.ui.h:40
+#: ../data/preferences_dialog.ui.h:44
 msgid "Display changed files in list using:"
 msgstr "Afișează fișierele modificate în listă utilizând:"
 
-#: ../data/preferences_dialog.ui.h:41
+#: ../data/preferences_dialog.ui.h:45
 msgid "Red color"
 msgstr "Culoarea roșu"
 
-#: ../data/preferences_dialog.ui.h:42
+#: ../data/preferences_dialog.ui.h:46
 msgid "Bold style"
 msgstr "Stilul aldin"
 
-#: ../data/preferences_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:47
 msgid "Interface"
 msgstr "Interfață"
 
-#: ../data/preferences_dialog.ui.h:44
+#: ../data/preferences_dialog.ui.h:48
 msgid "File Settings"
 msgstr "Configurări fișier"
 
-#: ../data/preferences_dialog.ui.h:45
+#: ../data/preferences_dialog.ui.h:49
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:35
 msgid "Preserve modification time when writing files"
 msgstr "Păstrează timpul de modificare atunci când se scriu fișiere"
 
-#: ../data/preferences_dialog.ui.h:46
+#: ../data/preferences_dialog.ui.h:50
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:36
 msgid "Whether to preserve the existing modification time when editing files"
 msgstr ""
 "Dacă să se păstreze timpul de modificare existent atunci când se editează "
 "fișiere"
 
-#: ../data/preferences_dialog.ui.h:47
+#: ../data/preferences_dialog.ui.h:51
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:37
 msgid "Update parent directory modification time when writing files"
 msgstr ""
 "Actualizează timpul de modificare a directorului superior atunci când se "
 "scriu fișiere"
 
-#: ../data/preferences_dialog.ui.h:48
+#: ../data/preferences_dialog.ui.h:52
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:38
 msgid ""
 "Whether to update the modification time on the parent directory when editing "
@@ -1250,16 +1269,16 @@ msgstr ""
 "când se editează fișiere"
 
 #. Translators: a section header in the Files tab of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:50
+#: ../data/preferences_dialog.ui.h:54
 msgid "Filenames"
 msgstr "Numele fișierului"
 
-#: ../data/preferences_dialog.ui.h:51
+#: ../data/preferences_dialog.ui.h:55
 #, fuzzy
 msgid "Replace illegal characters when renaming:"
 msgstr "Înlocuiește caracterele ilegale când se redenumește"
 
-#: ../data/preferences_dialog.ui.h:52
+#: ../data/preferences_dialog.ui.h:56
 #, fuzzy
 msgid ""
 "Convert characters which cannot be represented in filenames on some "
@@ -1269,68 +1288,68 @@ msgstr ""
 "sistemele de fișiere FAT32/16 și Joliet („\\”, „:”, „;”, „*”, „?”, „\"”, "
 "„<”, „>”, „|”)"
 
-#: ../data/preferences_dialog.ui.h:53
+#: ../data/preferences_dialog.ui.h:57
 msgid "by ASCII characters"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:54
+#: ../data/preferences_dialog.ui.h:58
 msgid "Use the ASCII characters (‘-’, ‘+’, ‘_’, ‘'’, ‘(’, ‘)’) as replacement."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:55
+#: ../data/preferences_dialog.ui.h:59
 msgid "by Unicode characters"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:56
+#: ../data/preferences_dialog.ui.h:60
 msgid ""
 "Use similar Unicode characters (‘&#8726;’, ‘&#8725;’, ‘&#8758;’, ‘&#8727;’, "
 "‘&#8253;’, ‘&#8221;’, ‘&#8826;’, ‘&#8827;’, ‘&#8739;’) as replacement."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:57
+#: ../data/preferences_dialog.ui.h:61
 #, fuzzy
 msgid "No change"
 msgstr "Nicio schimbare"
 
-#: ../data/preferences_dialog.ui.h:58
+#: ../data/preferences_dialog.ui.h:62
 msgid "You must manually ensure valid file characters."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:59
+#: ../data/preferences_dialog.ui.h:63
 msgid "Convert filename extension to:"
 msgstr "Convertește extensia numelui de fișier la:"
 
-#: ../data/preferences_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:64
 #, fuzzy
 msgid "Lower case"
 msgstr "Minuscule"
 
-#: ../data/preferences_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:65
 msgid "For example, the extension will be converted to ‘.mp3’"
 msgstr "De exemplu, extensia va fi convertită la „.mp3”"
 
-#: ../data/preferences_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:66
 #, fuzzy
 msgid "Upper case"
 msgstr "Majuscule"
 
-#: ../data/preferences_dialog.ui.h:63
+#: ../data/preferences_dialog.ui.h:67
 msgid "For example, the extension will be converted to ‘.MP3’"
 msgstr "De exemplu, extensia va fi convertită la „.MP3”"
 
-#: ../data/preferences_dialog.ui.h:64
+#: ../data/preferences_dialog.ui.h:68
 msgid "The extension will not be modified"
 msgstr "Extensia nu va fi modificată"
 
-#: ../data/preferences_dialog.ui.h:65
+#: ../data/preferences_dialog.ui.h:69
 msgid "Filename Encoding"
 msgstr "Codarea numelui de fișier"
 
-#: ../data/preferences_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:70
 msgid "Try another character encoding"
 msgstr "Încercați altă codare de caractere"
 
-#: ../data/preferences_dialog.ui.h:67
+#: ../data/preferences_dialog.ui.h:71
 msgid ""
 "Try to use the encoding associated with your locale and if this fails, try "
 "the ISO-8859-1 character encoding"
@@ -1338,11 +1357,11 @@ msgstr ""
 "Încercați să utilizați codarea asociată cu localizarea proprie și dacă "
 "această eșuează, încercați codarea de caractere ISO-8859-1"
 
-#: ../data/preferences_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:72
 msgid "Transliterate characters into the system character encoding"
 msgstr "Transliterați caracterele în codarea de caractere a sistemului"
 
-#: ../data/preferences_dialog.ui.h:69
+#: ../data/preferences_dialog.ui.h:73
 msgid ""
 "Replace unsupported characters with a similar character from the target "
 "character encoding"
@@ -1350,14 +1369,14 @@ msgstr ""
 "Înlocuiți caracterele nesuportate cu un caracter similar din codarea de "
 "caracter țintă"
 
-#: ../data/preferences_dialog.ui.h:70
+#: ../data/preferences_dialog.ui.h:74
 msgid ""
 "Use the system character encoding and silently discard unsupported characters"
 msgstr ""
 "Utilizați codarea de caracter a sistemului și eliminați silențios "
 "caracterele nesuportate"
 
-#: ../data/preferences_dialog.ui.h:71
+#: ../data/preferences_dialog.ui.h:75
 msgid ""
 "Discard characters which cannot be represented in the target character "
 "encoding"
@@ -1365,25 +1384,25 @@ msgstr ""
 "Eliminați caracterele care nu pot fi reprezentate în codarea de caracter "
 "țintă"
 
-#: ../data/preferences_dialog.ui.h:72
+#: ../data/preferences_dialog.ui.h:76
 msgid "Files"
 msgstr "Fișiere"
 
-#: ../data/preferences_dialog.ui.h:73
+#: ../data/preferences_dialog.ui.h:77
 msgid "Automatically complete date field"
 msgstr "Completează automat câmpul de dată"
 
-#: ../data/preferences_dialog.ui.h:74
+#: ../data/preferences_dialog.ui.h:78
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:84
 msgid "Whether to automatically complete the date tag"
 msgstr "Dacă să se completeze automat eticheta dată"
 
-#: ../data/preferences_dialog.ui.h:75
+#: ../data/preferences_dialog.ui.h:79
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:89
 msgid "Automatically select the type of the image based on its filename"
 msgstr "Selectează automat tipul de imagine bazat pe numele fișierului"
 
-#: ../data/preferences_dialog.ui.h:76
+#: ../data/preferences_dialog.ui.h:80
 msgid ""
 "Whether to, when adding cover art, automatically select a type for an image "
 "based on its filename"
@@ -1391,55 +1410,55 @@ msgstr ""
 "Dacă să se selecteze automat, atunci când se adaugă artă de copertă, un tip "
 "pentru o imagine bazat pe numele fișierului"
 
-#: ../data/preferences_dialog.ui.h:77
+#: ../data/preferences_dialog.ui.h:81
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:95
 msgid "Preserve the tag field focus"
 msgstr "Păstrează focalizarea câmpului etichetei"
 
-#: ../data/preferences_dialog.ui.h:78
+#: ../data/preferences_dialog.ui.h:82
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:96
 msgid "Whether to preserve focus on the current tag field when switching file"
 msgstr ""
 "Dacă să se păstreze focalizarea pe câmpul de etichetă curent atunci când se "
 "interschimbă fișierul"
 
-#: ../data/preferences_dialog.ui.h:79
+#: ../data/preferences_dialog.ui.h:83
 msgid "Pad the number of digits in the disc field to:"
 msgstr "Completează numărul de cifre din câmpul discului la:"
 
-#: ../data/preferences_dialog.ui.h:80
+#: ../data/preferences_dialog.ui.h:84
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:86
 msgid "Whether the disc number tag field should be padded with leading zeroes"
 msgstr ""
 "Dacă să fie completat câmpul etichetei numărului de disc cu zerouri "
 "conducătoare"
 
-#: ../data/preferences_dialog.ui.h:81
+#: ../data/preferences_dialog.ui.h:85
 msgid "Pad the number of digits in the track field to:"
 msgstr "Completează numărul de cifre din câmpul pistă la:"
 
-#: ../data/preferences_dialog.ui.h:82
+#: ../data/preferences_dialog.ui.h:86
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:92
 msgid "Whether the track number tag field should be padded with leading zeroes"
 msgstr ""
 "Dacă să fie completat câmpul etichetei numărului de pistă cu zerouri "
 "conducătoare"
 
-#: ../data/preferences_dialog.ui.h:83
+#: ../data/preferences_dialog.ui.h:87
 msgid "Splitting"
 msgstr "Separare"
 
-#: ../data/preferences_dialog.ui.h:84
+#: ../data/preferences_dialog.ui.h:88
 msgid "Delimiter for split"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:85
+#: ../data/preferences_dialog.ui.h:89
 msgid ""
 "When writing the text is spilt at this delimiter. When reading it is joined "
 "with this delimier."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:86
+#: ../data/preferences_dialog.ui.h:90
 #, fuzzy
 msgid ""
 "For Vorbis tags, selected fields will be split and saved as separate tags"
@@ -1447,35 +1466,35 @@ msgstr ""
 "Pentru etichete Vorbis, câmpurile selectate vor fi separate la liniuțe și "
 "salvate ca etichete separate"
 
-#: ../data/preferences_dialog.ui.h:87
+#: ../data/preferences_dialog.ui.h:91
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:190
 #, fuzzy
 msgid "Whether to split title fields in Ogg comments"
 msgstr ""
 "Dacă să se separe câmpurile de titlu la separatorul „-” în comentariile Ogg"
 
-#: ../data/preferences_dialog.ui.h:88
+#: ../data/preferences_dialog.ui.h:92
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:192
 #, fuzzy
 msgid "Whether to split artist fields in Ogg comments"
 msgstr ""
 "Dacă să se separe câmpurile de artist la separatorul „-” în comentariile Ogg"
 
-#: ../data/preferences_dialog.ui.h:89
+#: ../data/preferences_dialog.ui.h:93
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:194
 #, fuzzy
 msgid "Whether to split album fields in Ogg comments"
 msgstr ""
 "Dacă să se separe câmpurile de album la separatorul „-” în comentariile Ogg"
 
-#: ../data/preferences_dialog.ui.h:90
+#: ../data/preferences_dialog.ui.h:94
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:196
 #, fuzzy
 msgid "Whether to split genre fields in Ogg comments"
 msgstr ""
 "Dacă să se separe câmpurile de gen la separatorul „-” în comentariile Ogg"
 
-#: ../data/preferences_dialog.ui.h:91
+#: ../data/preferences_dialog.ui.h:95
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:198
 #, fuzzy
 msgid "Whether to split comment fields in Ogg comments"
@@ -1483,7 +1502,7 @@ msgstr ""
 "Dacă să se separe câmpurile de comentariu la separatorul „-” în comentariile "
 "Ogg"
 
-#: ../data/preferences_dialog.ui.h:92
+#: ../data/preferences_dialog.ui.h:96
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:200
 #, fuzzy
 msgid "Whether to split composer fields in Ogg comments"
@@ -1491,11 +1510,11 @@ msgstr ""
 "Dacă să se separe câmpurile de compozitor la separatorul „-” în comentariile "
 "Ogg"
 
-#: ../data/preferences_dialog.ui.h:93
+#: ../data/preferences_dialog.ui.h:97
 msgid "Original artist"
 msgstr "Artist original"
 
-#: ../data/preferences_dialog.ui.h:94
+#: ../data/preferences_dialog.ui.h:98
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:202
 #, fuzzy
 msgid "Whether to split original artist fields in Ogg comments"
@@ -1503,16 +1522,16 @@ msgstr ""
 "Dacă să se separe câmpurile de artist original la separatorul „-” în "
 "comentariile Ogg"
 
-#: ../data/preferences_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:99
 msgid "Tags"
 msgstr "Etichete"
 
-#: ../data/preferences_dialog.ui.h:96
+#: ../data/preferences_dialog.ui.h:100
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:53
 msgid "Strip ID3 tags if all ID3 tags are empty"
 msgstr "Elimină etichetele ID3 dacă toate etichetele ID3 sunt goale"
 
-#: ../data/preferences_dialog.ui.h:97
+#: ../data/preferences_dialog.ui.h:101
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:54
 msgid ""
 "Whether to remove the ID3 tag from the audio file if all the individual tag "
@@ -1521,44 +1540,44 @@ msgstr ""
 "Dacă să se elimine eticheta ID3 de la fișierul audio dacă toate câmpurile de "
 "etichetă individuale sunt goale"
 
-#: ../data/preferences_dialog.ui.h:98
+#: ../data/preferences_dialog.ui.h:102
 msgid "Non-standard encoding for reading ID3 tags:"
 msgstr "Codare non-standard pentru citirea etichetelor ID3:"
 
-#: ../data/preferences_dialog.ui.h:99
+#: ../data/preferences_dialog.ui.h:103
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:52
 msgid "Whether to use a non-standard character encoding when reading ID3 tags"
 msgstr ""
 "Dacă să se utilizeze o codare de caracter non-standard când se citesc "
 "etichetele ID3"
 
-#: ../data/preferences_dialog.ui.h:100
+#: ../data/preferences_dialog.ui.h:104
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:62
 msgid "Choose the character set to be used when reading ID3v1 and ID3v2 tags"
 msgstr ""
 "Alegeți un set de caractere de utilizat când se citesc etichetele ID3v1 și "
 "ID3v2"
 
-#: ../data/preferences_dialog.ui.h:101
+#: ../data/preferences_dialog.ui.h:105
 msgid "ID3v2"
 msgstr "ID3v2"
 
-#: ../data/preferences_dialog.ui.h:102
+#: ../data/preferences_dialog.ui.h:106
 msgid "Write ID3v2 tag"
 msgstr "Scrie etichetă ID3v2"
 
-#: ../data/preferences_dialog.ui.h:103
+#: ../data/preferences_dialog.ui.h:107
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:64
 msgid "Whether to write ID3v2 tags when writing ID3 tags into audio files"
 msgstr ""
 "Dacă să se scrie etichete ID3v2 atunci când se scriu etichete ID3 în fișiere "
 "audio"
 
-#: ../data/preferences_dialog.ui.h:104
+#: ../data/preferences_dialog.ui.h:108
 msgid "Version:"
 msgstr "Versiune:"
 
-#: ../data/preferences_dialog.ui.h:105
+#: ../data/preferences_dialog.ui.h:109
 msgid ""
 "Select the ID3v2 tag version to write:\n"
 "• ID3v2.3 is written using id3lib,\n"
@@ -1568,22 +1587,22 @@ msgstr ""
 "• ID3v2.3 este scris utilizând id3lib,\n"
 "• ID3v2.4 este scris utilizând libid3tag (recomandat)"
 
-#: ../data/preferences_dialog.ui.h:108
+#: ../data/preferences_dialog.ui.h:112
 msgid "Character encoding:"
 msgstr "Codare de caracter:"
 
-#: ../data/preferences_dialog.ui.h:109
+#: ../data/preferences_dialog.ui.h:113
 msgid "Unicode"
 msgstr "Unicode"
 
-#: ../data/preferences_dialog.ui.h:110
+#: ../data/preferences_dialog.ui.h:114
 msgid ""
 "Choose the Unicode character encoding to be used when writing ID3v2 tags"
 msgstr ""
 "Alege codarea de caracter Unicode de utilizat atunci când se scriu etichete "
 "ID3v2"
 
-#: ../data/preferences_dialog.ui.h:112
+#: ../data/preferences_dialog.ui.h:116
 msgid ""
 "Override the standard Unicode character encoding to be used when writing "
 "ID3v2 tags"
@@ -1591,15 +1610,15 @@ msgstr ""
 "Suprascrie codarea de caracter Unicode standard de utilizat când se scriu "
 "etichetele ID3v2"
 
-#: ../data/preferences_dialog.ui.h:113
+#: ../data/preferences_dialog.ui.h:117
 msgid "When encoding conversion fails:"
 msgstr "Când conversia de codare eșuează:"
 
-#: ../data/preferences_dialog.ui.h:114
+#: ../data/preferences_dialog.ui.h:118
 msgid "Report error"
 msgstr "Raportează o eroare"
 
-#: ../data/preferences_dialog.ui.h:115
+#: ../data/preferences_dialog.ui.h:119
 msgid ""
 "Display an error message when a character cannot be represented in the "
 "target character encoding and keep the original character"
@@ -1607,19 +1626,19 @@ msgstr ""
 "Afișează un mesaj de eroare când un caracter nu poate fi reprezentat în "
 "codarea de caracter țintă și păstrează caracterul original"
 
-#: ../data/preferences_dialog.ui.h:116
+#: ../data/preferences_dialog.ui.h:120
 msgid "Transliterate"
 msgstr "Transliterează"
 
-#: ../data/preferences_dialog.ui.h:117
+#: ../data/preferences_dialog.ui.h:121
 msgid "Discard"
 msgstr "Elimină"
 
-#: ../data/preferences_dialog.ui.h:118
+#: ../data/preferences_dialog.ui.h:122
 msgid "Automatically convert old ID3v2 tag versions"
 msgstr "Schimbă automat versiunile vechi de etichete ID3v2"
 
-#: ../data/preferences_dialog.ui.h:119
+#: ../data/preferences_dialog.ui.h:123
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:68
 msgid ""
 "Whether to convert ID3 tags written against old version of the "
@@ -1628,33 +1647,33 @@ msgstr ""
 "Dacă să se convertească etichetele ID3 scrise față de versiunea veche a "
 "aplicației, precum ID3v2.2, la versiuni mai noi, precum ID3v2.3 sau ID3v2.4"
 
-#: ../data/preferences_dialog.ui.h:120
+#: ../data/preferences_dialog.ui.h:124
 msgid "Use CRC-32"
 msgstr "Utilizează CRC-32"
 
-#: ../data/preferences_dialog.ui.h:121
+#: ../data/preferences_dialog.ui.h:125
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:72
 msgid "Whether to embed a CRC-32 checksum of the audio file data in ID3v2 tags"
 msgstr ""
 "Dacă să se încapsuleze o sumă de control CRC-32 a datelor fișierului audio "
 "în etichetele ID3v2"
 
-#: ../data/preferences_dialog.ui.h:122
+#: ../data/preferences_dialog.ui.h:126
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:69
 msgid "Compress data in ID3v2 tags"
 msgstr "Comprimă datele în etichete ID3v2"
 
-#: ../data/preferences_dialog.ui.h:123
+#: ../data/preferences_dialog.ui.h:127
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:70
 msgid "Whether to compress data in ID3v2 tags"
 msgstr "Dacă să se comprime datele în etichetele ID3v2"
 
-#: ../data/preferences_dialog.ui.h:124
+#: ../data/preferences_dialog.ui.h:128
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:73
 msgid "Use text-only genre in ID3v2 tags"
 msgstr "Utilizează genul doar text în etichetele ID3v2"
 
-#: ../data/preferences_dialog.ui.h:125
+#: ../data/preferences_dialog.ui.h:129
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:74
 msgid ""
 "Whether to use only a string, and not the integer-base ID3v1 genre field, "
@@ -1663,72 +1682,72 @@ msgstr ""
 "Dacă să se utilizeze doar un șir, și nu câmpul de gen ID3v1 bazat pe "
 "întregi, atunci când se scrie un câmp de gen la etichetele ID3v2"
 
-#: ../data/preferences_dialog.ui.h:126
+#: ../data/preferences_dialog.ui.h:130
 msgid "ID3v1"
 msgstr "ID3v1"
 
-#: ../data/preferences_dialog.ui.h:127
+#: ../data/preferences_dialog.ui.h:131
 msgid "Write ID3v1 tag"
 msgstr "Scrie eticheta ID3v1"
 
-#: ../data/preferences_dialog.ui.h:128
+#: ../data/preferences_dialog.ui.h:132
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:56
 msgid "Whether to write ID3v1 tags when writing ID3 tags into audio files"
 msgstr ""
 "Dacă să se scrie etichetele ID3v1 atunci când se scriu etichetele ID3 în "
 "fișiere audio"
 
-#: ../data/preferences_dialog.ui.h:129
+#: ../data/preferences_dialog.ui.h:133
 msgid "Choose the character set to be used when writing ID3v1 tag"
 msgstr "Alege un set de caractere de utilizat când se scrie eticheta ID3v1"
 
-#: ../data/preferences_dialog.ui.h:130
+#: ../data/preferences_dialog.ui.h:134
 msgid "ID3 Tags"
 msgstr "Etichete ID3"
 
-#: ../data/preferences_dialog.ui.h:131
+#: ../data/preferences_dialog.ui.h:135
 msgid "Character Conversion"
 msgstr "Conversie caractere"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:133
+#: ../data/preferences_dialog.ui.h:137
 msgid "Fill Tag Scanner"
 msgstr "Completează scanerul de etichetă"
 
-#: ../data/preferences_dialog.ui.h:135
+#: ../data/preferences_dialog.ui.h:139
 #, no-c-format
 msgid "Convert underscores and ‘%20’ to spaces"
 msgstr "Convertește liniuțele de subliniere și „%20” la spații"
 
-#: ../data/preferences_dialog.ui.h:137
+#: ../data/preferences_dialog.ui.h:141
 #, no-c-format
 msgid "Convert spaces and ‘%20’ to underscores"
 msgstr "Convertește spațiile la „%20” și liniuțe de subliniere"
 
-#: ../data/preferences_dialog.ui.h:138
+#: ../data/preferences_dialog.ui.h:142
 msgid "No conversion"
 msgstr "Fără conversie"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:140
+#: ../data/preferences_dialog.ui.h:144
 msgid "Rename File and Directory Scanner"
 msgstr "Redenumește scanerul de fișier și director"
 
-#: ../data/preferences_dialog.ui.h:141 ../data/scan_dialog.ui.h:96
+#: ../data/preferences_dialog.ui.h:145 ../data/scan_dialog.ui.h:96
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:135 ../src/tag_area.cc:786
 msgid "Remove spaces"
 msgstr "Șterge spațiile"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:143
+#: ../data/preferences_dialog.ui.h:147
 msgid "Process Fields Scanner"
 msgstr "Procesează scanerul câmpurilor"
 
-#: ../data/preferences_dialog.ui.h:144
+#: ../data/preferences_dialog.ui.h:148
 msgid "Upper-case the first letters of all words"
 msgstr "Transformă în litere mari primele litere ale tuturor cuvintelor"
 
-#: ../data/preferences_dialog.ui.h:145
+#: ../data/preferences_dialog.ui.h:149
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to upper-case the first letter of all words, including prepositions "
@@ -1738,15 +1757,15 @@ msgstr ""
 "inclusiv prepoziții și alte cuvinte scurte precum „feat.”, atunci când se "
 "procesează câmpurile de etichete"
 
-#: ../data/preferences_dialog.ui.h:146
+#: ../data/preferences_dialog.ui.h:150
 msgid "Fields"
 msgstr "Câmpuri"
 
-#: ../data/preferences_dialog.ui.h:147
+#: ../data/preferences_dialog.ui.h:151
 msgid "Overwrite fields when scanning tags"
 msgstr "Suprascrie câmpurile când se scanează etichetele"
 
-#: ../data/preferences_dialog.ui.h:148
+#: ../data/preferences_dialog.ui.h:152
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:101
 msgid ""
 "Whether to overwrite the tag field values when filling tags. Otherwise, only "
@@ -1756,11 +1775,11 @@ msgstr ""
 "completează etichetele. În caz contrar, doar câmpurile de etichetă goale vor "
 "fi completate"
 
-#: ../data/preferences_dialog.ui.h:149
+#: ../data/preferences_dialog.ui.h:153
 msgid "Set this text as default comment:"
 msgstr "Stabilește acest text ca și comentariu implicit:"
 
-#: ../data/preferences_dialog.ui.h:150
+#: ../data/preferences_dialog.ui.h:154
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:103
 msgid ""
 "Whether to set the comment tag field to the provided default value when "
@@ -1769,13 +1788,13 @@ msgstr ""
 "Dacă să se stabilească câmpul de etichetă de comentariu la valoarea "
 "furnizată implicit atunci când se completează etichetele"
 
-#: ../data/preferences_dialog.ui.h:151
+#: ../data/preferences_dialog.ui.h:155
 msgid "Use CRC-32 as the default comment (for files with ID3 tags only)"
 msgstr ""
 "Utilizează CRC-32 ca și comentariu implicit (doar pentru fișiere cu etichete "
 "ID3)"
 
-#: ../data/preferences_dialog.ui.h:152
+#: ../data/preferences_dialog.ui.h:156
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:107
 msgid ""
 "Whether to use the CRC-32 of the audio file data as the default comment, for "
@@ -1784,42 +1803,42 @@ msgstr ""
 "Dacă să se utilizeze CRC-32 al datelor fișierului audio ca și comentariu "
 "implicit, doar pentru fișiere cu etichete ID3"
 
-#: ../data/preferences_dialog.ui.h:153
+#: ../data/preferences_dialog.ui.h:157
 msgid "Scanner"
 msgstr "Examinator"
 
-#: ../data/preferences_dialog.ui.h:154
+#: ../data/preferences_dialog.ui.h:158
 msgid "Automatic Search Servers"
 msgstr "Servere de căutare automată"
 
-#: ../data/preferences_dialog.ui.h:155
+#: ../data/preferences_dialog.ui.h:159
 msgid "Host:"
 msgstr "Gazdă:"
 
-#: ../data/preferences_dialog.ui.h:156
+#: ../data/preferences_dialog.ui.h:160
 msgid "Port:"
 msgstr "Port:"
 
-#: ../data/preferences_dialog.ui.h:157
+#: ../data/preferences_dialog.ui.h:161
 msgid "CGI Path:"
 msgstr "Cale CGI:"
 
-#: ../data/preferences_dialog.ui.h:158
+#: ../data/preferences_dialog.ui.h:162
 msgid "Manual Search Server"
 msgstr "Server de căutare manuală"
 
-#: ../data/preferences_dialog.ui.h:159
+#: ../data/preferences_dialog.ui.h:163
 msgid "Results List"
 msgstr "Lista de rezultate"
 
-#: ../data/preferences_dialog.ui.h:160
+#: ../data/preferences_dialog.ui.h:164
 msgid ""
 "Select corresponding file (according to position or DLM if activated below)"
 msgstr ""
 "Selectați fișierul corespunzător (în funcție de poziție sau DLM dacă este "
 "activat mai jos)"
 
-#: ../data/preferences_dialog.ui.h:161
+#: ../data/preferences_dialog.ui.h:165
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:26
 msgid ""
 "Whether to select the file in the file list which matches the position in "
@@ -1828,7 +1847,7 @@ msgstr ""
 "Dacă să se selecteze fișierul în lista de fișiere care se potrivește cu "
 "poziția în lista de rezultate CDDB"
 
-#: ../data/preferences_dialog.ui.h:162
+#: ../data/preferences_dialog.ui.h:166
 msgid ""
 "Use the Levenshtein algorithm (DLM) to match results (using title) with "
 "audio files (using filename)"
@@ -1836,20 +1855,20 @@ msgstr ""
 "Utilizează algoritmul Levenshtein (DLM) pentru a potrivi rezultatele "
 "(utilizând titlul) cu fișierele audio (utilizând numele de fișier)"
 
-#: ../data/preferences_dialog.ui.h:164
+#: ../data/preferences_dialog.ui.h:168
 msgid "CDDB"
 msgstr "CDDB"
 
-#: ../data/preferences_dialog.ui.h:165
+#: ../data/preferences_dialog.ui.h:169
 msgid "Confirmation"
 msgstr "Confirmări"
 
-#: ../data/preferences_dialog.ui.h:166
+#: ../data/preferences_dialog.ui.h:170
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:108
 msgid "Confirm before writing tags"
 msgstr "Confirmă înainte de a scrie etichetele"
 
-#: ../data/preferences_dialog.ui.h:167
+#: ../data/preferences_dialog.ui.h:171
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:109
 msgid ""
 "Whether to ask for confirmation from the user before writing tags to audio "
@@ -1858,48 +1877,48 @@ msgstr ""
 "Dacă să se întrebe pentru confirmare de la utilizator înainte de a scrie "
 "etichetele la fișierele audio"
 
-#: ../data/preferences_dialog.ui.h:168
+#: ../data/preferences_dialog.ui.h:172
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:110
 msgid "Confirm before renaming a file"
 msgstr "Confirmă înainte de a redenumi un fișier"
 
-#: ../data/preferences_dialog.ui.h:169
+#: ../data/preferences_dialog.ui.h:173
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:111
 msgid "Whether to ask for confirmation from the user before renaming a file"
 msgstr ""
 "Dacă să se întrebe pentru confirmare de la utilizator înainte de a redenumi "
 "un fișier"
 
-#: ../data/preferences_dialog.ui.h:170
+#: ../data/preferences_dialog.ui.h:174
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:114
 msgid "Confirm before deleting a file"
 msgstr "Confirmă înainte de a șterge un fișier"
 
-#: ../data/preferences_dialog.ui.h:171
+#: ../data/preferences_dialog.ui.h:175
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:115
 msgid "Whether to ask for confirmation from the user before deleting a file"
 msgstr ""
 "Dacă să se întrebe pentru confirmare de la utilizator înainte de a șterge un "
 "fișier"
 
-#: ../data/preferences_dialog.ui.h:172
+#: ../data/preferences_dialog.ui.h:176
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:112
 msgid "Confirm before writing a playlist"
 msgstr "Confirmă înainte de a scrie o listă de redare"
 
-#: ../data/preferences_dialog.ui.h:173
+#: ../data/preferences_dialog.ui.h:177
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:113
 msgid "Whether to ask for confirmation from the user before writing a playlist"
 msgstr ""
 "Dacă să se întrebe pentru confirmare de la utilizator înainte de a scrie o "
 "listă de redare"
 
-#: ../data/preferences_dialog.ui.h:174
+#: ../data/preferences_dialog.ui.h:178
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:116
 msgid "Confirm before losing unsaved changes to files"
 msgstr "Confirmă înainte de a pierde modificări nesalvate ale fișierelor"
 
-#: ../data/preferences_dialog.ui.h:175
+#: ../data/preferences_dialog.ui.h:179
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:117
 msgid ""
 "Whether to ask for confirmation from the user before performing an operation "
@@ -1908,20 +1927,20 @@ msgstr ""
 "Dacă să se întrebe pentru confirmare de la utilizator înainte de a efectua o "
 "operație care ar pierde modificări nesalvate pe fișiere"
 
-#: ../data/preferences_dialog.ui.h:176
+#: ../data/preferences_dialog.ui.h:180
 msgid "Scanner Dialog"
 msgstr "Dialogul scanerului"
 
-#: ../data/preferences_dialog.ui.h:177
+#: ../data/preferences_dialog.ui.h:181
 msgid "Show the scanner dialog on startup"
 msgstr "Arată dialogul scanerului la pornire"
 
-#: ../data/preferences_dialog.ui.h:178
+#: ../data/preferences_dialog.ui.h:182
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:184
 msgid "Whether to show the scanner window on application startup"
 msgstr "Dacă să se arate fereastra scanerului la pornirea aplicației"
 
-#: ../data/preferences_dialog.ui.h:179
+#: ../data/preferences_dialog.ui.h:183
 msgid "Application"
 msgstr "Aplicație"
 
@@ -4259,11 +4278,11 @@ msgstr "S-a scris fișierul listei de redare „%s”"
 msgid "Invalid scanner mask"
 msgstr "Mască de scaner nevalidă"
 
-#: ../src/preferences_dialog.cc:788
+#: ../src/preferences_dialog.cc:796
 msgid "The selected default path is invalid"
 msgstr "Calea implicită selectată nu este validă"
 
-#: ../src/preferences_dialog.cc:790
+#: ../src/preferences_dialog.cc:798
 #, c-format
 msgid ""
 "Path: ‘%s’\n"
@@ -4272,7 +4291,7 @@ msgstr ""
 "Cale: „%s”\n"
 "Eroare: %s"
 
-#: ../src/preferences_dialog.cc:794
+#: ../src/preferences_dialog.cc:802
 msgid "Invalid Path Error"
 msgstr "Eroare de cale nevalidă"
 

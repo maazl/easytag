@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: easytag\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-03 17:16+0100\n"
+"POT-Creation-Date: 2022-12-03 23:29+0100\n"
 "PO-Revision-Date: 2016-12-27 06:04-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
@@ -94,7 +94,7 @@ msgid "No files"
 msgstr "Nenhum arquivo"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:19 ../data/scan_dialog.ui.h:63
+#: ../data/preferences_dialog.ui.h:23 ../data/scan_dialog.ui.h:63
 #: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Artista"
@@ -108,7 +108,7 @@ msgid "# Files"
 msgstr "# arquivos"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:21 ../data/scan_dialog.ui.h:67
+#: ../data/preferences_dialog.ui.h:25 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Álbum"
@@ -125,77 +125,100 @@ msgid "Filename"
 msgstr "Nome do arquivo"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:18 ../data/scan_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:22 ../data/scan_dialog.ui.h:61
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Título"
 
-#: ../data/browser.ui.h:12 ../data/preferences_dialog.ui.h:20
+#: ../data/browser.ui.h:12 ../data/preferences_dialog.ui.h:24
 #: ../data/scan_dialog.ui.h:65 ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Artista do álbum"
 
 #: ../data/browser.ui.h:13 ../data/cddb_dialog.ui.h:40
-#: ../data/preferences_dialog.ui.h:22 ../data/search_dialog.ui.h:18
+#: ../data/preferences_dialog.ui.h:26 ../data/search_dialog.ui.h:18
 msgid "Year"
 msgstr "Ano"
 
-#: ../data/browser.ui.h:14 ../data/preferences_dialog.ui.h:23
+#: ../data/browser.ui.h:14 ../data/preferences_dialog.ui.h:27
 #, fuzzy
 msgid "Rel. year"
 msgstr "Artista original"
 
-#: ../data/browser.ui.h:15 ../data/preferences_dialog.ui.h:25
+#: ../data/browser.ui.h:15 ../data/preferences_dialog.ui.h:29
 msgid "Disc"
 msgstr "Disco"
 
-#: ../data/browser.ui.h:16 ../data/preferences_dialog.ui.h:24
+#: ../data/browser.ui.h:16 ../data/preferences_dialog.ui.h:28
 #: ../data/search_dialog.ui.h:19
 msgid "Track"
 msgstr "Faixa"
 
 #: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:26 ../data/scan_dialog.ui.h:69
+#: ../data/preferences_dialog.ui.h:30 ../data/scan_dialog.ui.h:69
 #: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Gênero"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:27
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:31
 #: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Comentário"
 
-#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:28
+#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:32
 #: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Compositor"
 
-#: ../data/browser.ui.h:20 ../data/preferences_dialog.ui.h:29
+#: ../data/browser.ui.h:20 ../data/preferences_dialog.ui.h:33
 #: ../data/search_dialog.ui.h:23
 msgid "Original Artist"
 msgstr "Artista original"
 
-#: ../data/browser.ui.h:21 ../data/preferences_dialog.ui.h:30
+#: ../data/browser.ui.h:21 ../data/preferences_dialog.ui.h:34
 #: ../data/search_dialog.ui.h:24
 #, fuzzy
 msgid "Orig. year"
 msgstr "Artista original"
 
-#: ../data/browser.ui.h:22 ../data/preferences_dialog.ui.h:31
+#: ../data/browser.ui.h:22 ../data/preferences_dialog.ui.h:35
 #: ../data/scan_dialog.ui.h:77 ../data/search_dialog.ui.h:25
 msgid "Copyright"
 msgstr "Copyright"
 
-#: ../data/browser.ui.h:23 ../data/preferences_dialog.ui.h:32
+#: ../data/browser.ui.h:23 ../data/preferences_dialog.ui.h:36
 #: ../data/scan_dialog.ui.h:79 ../data/search_dialog.ui.h:26
 msgid "URL"
 msgstr "URL"
 
-#: ../data/browser.ui.h:24 ../data/preferences_dialog.ui.h:33
+#: ../data/browser.ui.h:24 ../data/preferences_dialog.ui.h:37
 #: ../data/scan_dialog.ui.h:81 ../data/search_dialog.ui.h:27
 msgid "Encoded By"
 msgstr "Codificado por"
+
+#: ../data/browser.ui.h:25 ../data/preferences_dialog.ui.h:18
+#: ../data/search_dialog.ui.h:28
+#, fuzzy
+msgid "File size"
+msgstr "Arquivos"
+
+#: ../data/browser.ui.h:26 ../data/cddb_dialog.ui.h:33
+#: ../data/preferences_dialog.ui.h:19 ../data/search_dialog.ui.h:29
+msgid "Duration"
+msgstr "Duração"
+
+#: ../data/browser.ui.h:27 ../data/preferences_dialog.ui.h:20
+#: ../data/search_dialog.ui.h:30
+#, fuzzy
+msgid "Bit rate"
+msgstr "Taxa de bits:"
+
+#: ../data/browser.ui.h:28 ../data/preferences_dialog.ui.h:21
+#: ../data/search_dialog.ui.h:31
+#, fuzzy
+msgid "Samplerate"
+msgstr "Taxa de amostragem:"
 
 #: ../data/browser_dialogs.ui.h:1
 msgid "Browse Directory With"
@@ -319,7 +342,7 @@ msgstr "Pesquisar campos"
 msgid "Track Name"
 msgstr "Nome da faixa"
 
-#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:111
+#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:115
 #: ../src/picture.c:191
 msgid "Other"
 msgstr "Outro"
@@ -397,10 +420,6 @@ msgstr ""
 msgid "#"
 msgstr "#"
 
-#: ../data/cddb_dialog.ui.h:33
-msgid "Duration"
-msgstr "Duração"
-
 #: ../data/cddb_dialog.ui.h:34
 msgid "Select all lines"
 msgstr "Selecionar todas as linhas"
@@ -441,7 +460,7 @@ msgstr ""
 msgid "Match lines with the Levenshtein algorithm"
 msgstr "Coincidir linhas com o algoritmo Levenshtein"
 
-#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:163
+#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:167
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:24
 msgid "Whether to use the DLM algorithm to match CDDB results to files"
 msgstr ""
@@ -449,7 +468,7 @@ msgstr ""
 "arquivos"
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
-#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:180
+#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:184
 #: ../data/scan_dialog.ui.h:118
 msgid "_Close"
 msgstr "_Fechar"
@@ -519,7 +538,7 @@ msgstr "Descrição"
 msgid "_Accept"
 msgstr "_Aceitar"
 
-#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:34
+#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:38
 msgid "Log"
 msgstr "Log"
 
@@ -1178,26 +1197,26 @@ msgstr "Se a ordem de arquivos diferencia-se entre maiúsculo e minúsculo"
 msgid "Visible columns"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:35
+#: ../data/preferences_dialog.ui.h:39
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:49
 msgid "Show the log"
 msgstr "Mostrar o log"
 
-#: ../data/preferences_dialog.ui.h:36
+#: ../data/preferences_dialog.ui.h:40
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:50
 msgid "Whether to show the log in the main window"
 msgstr "Se deve ser mostrado o log na janela principal"
 
-#: ../data/preferences_dialog.ui.h:37
+#: ../data/preferences_dialog.ui.h:41
 msgid "General"
 msgstr "Geral"
 
-#: ../data/preferences_dialog.ui.h:38
+#: ../data/preferences_dialog.ui.h:42
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:39
 msgid "Show audio file header summary"
 msgstr "Mostrar resumo de cabeçalho de arquivo de áudio"
 
-#: ../data/preferences_dialog.ui.h:39
+#: ../data/preferences_dialog.ui.h:43
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:40
 msgid ""
 "Whether to show header information, such as bit rate and duration, for audio "
@@ -1206,44 +1225,44 @@ msgstr ""
 "Se deve ser mostrada informação de cabeçalho, tal como taxa de bits e "
 "duração, para arquivos de áudio"
 
-#: ../data/preferences_dialog.ui.h:40
+#: ../data/preferences_dialog.ui.h:44
 msgid "Display changed files in list using:"
 msgstr "Exibir os arquivos modificados na lista usando:"
 
-#: ../data/preferences_dialog.ui.h:41
+#: ../data/preferences_dialog.ui.h:45
 msgid "Red color"
 msgstr "Vermelho"
 
-#: ../data/preferences_dialog.ui.h:42
+#: ../data/preferences_dialog.ui.h:46
 msgid "Bold style"
 msgstr "Negrito"
 
-#: ../data/preferences_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:47
 msgid "Interface"
 msgstr "Interface"
 
-#: ../data/preferences_dialog.ui.h:44
+#: ../data/preferences_dialog.ui.h:48
 msgid "File Settings"
 msgstr "Configurações do arquivo"
 
-#: ../data/preferences_dialog.ui.h:45
+#: ../data/preferences_dialog.ui.h:49
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:35
 msgid "Preserve modification time when writing files"
 msgstr "Preservar a data de modificação ao gravar arquivos"
 
-#: ../data/preferences_dialog.ui.h:46
+#: ../data/preferences_dialog.ui.h:50
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:36
 msgid "Whether to preserve the existing modification time when editing files"
 msgstr ""
 "Se deve ser preservada a data de modificação existente ao editar arquivos"
 
-#: ../data/preferences_dialog.ui.h:47
+#: ../data/preferences_dialog.ui.h:51
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:37
 msgid "Update parent directory modification time when writing files"
 msgstr ""
 "Atualizar a data de modificação do diretório superior ao escrever arquivos"
 
-#: ../data/preferences_dialog.ui.h:48
+#: ../data/preferences_dialog.ui.h:52
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:38
 msgid ""
 "Whether to update the modification time on the parent directory when editing "
@@ -1253,16 +1272,16 @@ msgstr ""
 "editar arquivos"
 
 #. Translators: a section header in the Files tab of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:50
+#: ../data/preferences_dialog.ui.h:54
 msgid "Filenames"
 msgstr "Nomes do arquivo"
 
-#: ../data/preferences_dialog.ui.h:51
+#: ../data/preferences_dialog.ui.h:55
 #, fuzzy
 msgid "Replace illegal characters when renaming:"
 msgstr "Substituir caracteres ilegais ao renomear"
 
-#: ../data/preferences_dialog.ui.h:52
+#: ../data/preferences_dialog.ui.h:56
 #, fuzzy
 msgid ""
 "Convert characters which cannot be represented in filenames on some "
@@ -1272,69 +1291,69 @@ msgstr ""
 "nos sistemas de arquivos Joliet e FAT32/16 (‘\\’, ‘:’, ‘;’, ‘*’, ‘?’, ‘\"’, "
 "‘<’, ‘>’, ‘|’)"
 
-#: ../data/preferences_dialog.ui.h:53
+#: ../data/preferences_dialog.ui.h:57
 msgid "by ASCII characters"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:54
+#: ../data/preferences_dialog.ui.h:58
 msgid "Use the ASCII characters (‘-’, ‘+’, ‘_’, ‘'’, ‘(’, ‘)’) as replacement."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:55
+#: ../data/preferences_dialog.ui.h:59
 #, fuzzy
 msgid "by Unicode characters"
 msgstr "Todos os caracteres em maiúsculo"
 
-#: ../data/preferences_dialog.ui.h:56
+#: ../data/preferences_dialog.ui.h:60
 msgid ""
 "Use similar Unicode characters (‘&#8726;’, ‘&#8725;’, ‘&#8758;’, ‘&#8727;’, "
 "‘&#8253;’, ‘&#8221;’, ‘&#8826;’, ‘&#8827;’, ‘&#8739;’) as replacement."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:57
+#: ../data/preferences_dialog.ui.h:61
 #, fuzzy
 msgid "No change"
 msgstr "Sem alteração"
 
-#: ../data/preferences_dialog.ui.h:58
+#: ../data/preferences_dialog.ui.h:62
 msgid "You must manually ensure valid file characters."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:59
+#: ../data/preferences_dialog.ui.h:63
 msgid "Convert filename extension to:"
 msgstr "Converter a extensão do arquivo para:"
 
-#: ../data/preferences_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:64
 #, fuzzy
 msgid "Lower case"
 msgstr "Minúscula"
 
-#: ../data/preferences_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:65
 msgid "For example, the extension will be converted to ‘.mp3’"
 msgstr "Por exemplo, a extensão será convertida para “.mp3”"
 
-#: ../data/preferences_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:66
 #, fuzzy
 msgid "Upper case"
 msgstr "Maiúscula"
 
-#: ../data/preferences_dialog.ui.h:63
+#: ../data/preferences_dialog.ui.h:67
 msgid "For example, the extension will be converted to ‘.MP3’"
 msgstr "Por exemplo, a extensão será convertida para “.MP3”"
 
-#: ../data/preferences_dialog.ui.h:64
+#: ../data/preferences_dialog.ui.h:68
 msgid "The extension will not be modified"
 msgstr "A extensão não será modificada"
 
-#: ../data/preferences_dialog.ui.h:65
+#: ../data/preferences_dialog.ui.h:69
 msgid "Filename Encoding"
 msgstr "Codificação do nome do arquivo"
 
-#: ../data/preferences_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:70
 msgid "Try another character encoding"
 msgstr "Tentar outra codificação de caracteres"
 
-#: ../data/preferences_dialog.ui.h:67
+#: ../data/preferences_dialog.ui.h:71
 msgid ""
 "Try to use the encoding associated with your locale and if this fails, try "
 "the ISO-8859-1 character encoding"
@@ -1342,11 +1361,11 @@ msgstr ""
 "Tenta usar a codificação associada com sua localização e se isso falhar, "
 "tenta a codificação de caracteres ISO-8859-1"
 
-#: ../data/preferences_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:72
 msgid "Transliterate characters into the system character encoding"
 msgstr "Transliterar caracteres na codificação de caracteres do sistema"
 
-#: ../data/preferences_dialog.ui.h:69
+#: ../data/preferences_dialog.ui.h:73
 msgid ""
 "Replace unsupported characters with a similar character from the target "
 "character encoding"
@@ -1354,14 +1373,14 @@ msgstr ""
 "Substitui caracteres sem suporte com um caractere similar da codificação de "
 "caracteres alvo"
 
-#: ../data/preferences_dialog.ui.h:70
+#: ../data/preferences_dialog.ui.h:74
 msgid ""
 "Use the system character encoding and silently discard unsupported characters"
 msgstr ""
 "Usar a codificação de caracteres do sistema e descartar silenciosamente "
 "alguns caracteres sem suporte"
 
-#: ../data/preferences_dialog.ui.h:71
+#: ../data/preferences_dialog.ui.h:75
 msgid ""
 "Discard characters which cannot be represented in the target character "
 "encoding"
@@ -1369,26 +1388,26 @@ msgstr ""
 "Descarta caracteres que não podem ser representados na codificação de "
 "caracteres alvo, ele será descartado silenciosamente"
 
-#: ../data/preferences_dialog.ui.h:72
+#: ../data/preferences_dialog.ui.h:76
 msgid "Files"
 msgstr "Arquivos"
 
-#: ../data/preferences_dialog.ui.h:73
+#: ../data/preferences_dialog.ui.h:77
 msgid "Automatically complete date field"
 msgstr "Completar automaticamente o campo de data"
 
-#: ../data/preferences_dialog.ui.h:74
+#: ../data/preferences_dialog.ui.h:78
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:84
 msgid "Whether to automatically complete the date tag"
 msgstr "Se deve ser completado automaticamente a etiqueta de data"
 
-#: ../data/preferences_dialog.ui.h:75
+#: ../data/preferences_dialog.ui.h:79
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:89
 msgid "Automatically select the type of the image based on its filename"
 msgstr ""
 "Selecionar automaticamente o tipo de imagem baseada em seu nome de arquivo"
 
-#: ../data/preferences_dialog.ui.h:76
+#: ../data/preferences_dialog.ui.h:80
 msgid ""
 "Whether to, when adding cover art, automatically select a type for an image "
 "based on its filename"
@@ -1396,54 +1415,54 @@ msgstr ""
 "Se, ao adicionar arte da capa, deve ser selecionado automaticamente um tipo "
 "para uma imagem baseada no seu nome de arquivo"
 
-#: ../data/preferences_dialog.ui.h:77
+#: ../data/preferences_dialog.ui.h:81
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:95
 msgid "Preserve the tag field focus"
 msgstr "Preservar o foco do campo de etiqueta"
 
-#: ../data/preferences_dialog.ui.h:78
+#: ../data/preferences_dialog.ui.h:82
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:96
 msgid "Whether to preserve focus on the current tag field when switching file"
 msgstr ""
 "Se deve ser preservado foco no campo de etiqueta atual ao trocar de arquivo"
 
-#: ../data/preferences_dialog.ui.h:79
+#: ../data/preferences_dialog.ui.h:83
 msgid "Pad the number of digits in the disc field to:"
 msgstr "Preenche a quantidade de dígitos no campo de disco para:"
 
-#: ../data/preferences_dialog.ui.h:80
+#: ../data/preferences_dialog.ui.h:84
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:86
 msgid "Whether the disc number tag field should be padded with leading zeroes"
 msgstr ""
 "Se o campo de etiqueta de número do disco deve ser preenchido com zeros à "
 "esquerda"
 
-#: ../data/preferences_dialog.ui.h:81
+#: ../data/preferences_dialog.ui.h:85
 msgid "Pad the number of digits in the track field to:"
 msgstr "Preenche a quantidade de dígitos no campo de trilha para:"
 
-#: ../data/preferences_dialog.ui.h:82
+#: ../data/preferences_dialog.ui.h:86
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:92
 msgid "Whether the track number tag field should be padded with leading zeroes"
 msgstr ""
 "Se o campo de etiqueta de número da faixa deve ser preenchido com zeros à "
 "esquerda"
 
-#: ../data/preferences_dialog.ui.h:83
+#: ../data/preferences_dialog.ui.h:87
 msgid "Splitting"
 msgstr "Divisão"
 
-#: ../data/preferences_dialog.ui.h:84
+#: ../data/preferences_dialog.ui.h:88
 msgid "Delimiter for split"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:85
+#: ../data/preferences_dialog.ui.h:89
 msgid ""
 "When writing the text is spilt at this delimiter. When reading it is joined "
 "with this delimier."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:86
+#: ../data/preferences_dialog.ui.h:90
 #, fuzzy
 msgid ""
 "For Vorbis tags, selected fields will be split and saved as separate tags"
@@ -1451,7 +1470,7 @@ msgstr ""
 "Para etiquetas Vorbis, campos selecionados serão divididos em traços e "
 "salvos como etiquetas separadas"
 
-#: ../data/preferences_dialog.ui.h:87
+#: ../data/preferences_dialog.ui.h:91
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:190
 #, fuzzy
 msgid "Whether to split title fields in Ogg comments"
@@ -1459,7 +1478,7 @@ msgstr ""
 "Se devem ser divididos os campos de título em um separador “ - ” em "
 "comentários Ogg"
 
-#: ../data/preferences_dialog.ui.h:88
+#: ../data/preferences_dialog.ui.h:92
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:192
 #, fuzzy
 msgid "Whether to split artist fields in Ogg comments"
@@ -1467,7 +1486,7 @@ msgstr ""
 "Se devem ser divididos os campos de artista em um separador “ - ” em "
 "comentários Ogg"
 
-#: ../data/preferences_dialog.ui.h:89
+#: ../data/preferences_dialog.ui.h:93
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:194
 #, fuzzy
 msgid "Whether to split album fields in Ogg comments"
@@ -1475,7 +1494,7 @@ msgstr ""
 "Se devem ser divididos os campos de álbum em um separador “ - ” em "
 "comentários Ogg"
 
-#: ../data/preferences_dialog.ui.h:90
+#: ../data/preferences_dialog.ui.h:94
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:196
 #, fuzzy
 msgid "Whether to split genre fields in Ogg comments"
@@ -1483,7 +1502,7 @@ msgstr ""
 "Se devem ser divididos os campos de gênero em um separador “ - ” em "
 "comentários Ogg"
 
-#: ../data/preferences_dialog.ui.h:91
+#: ../data/preferences_dialog.ui.h:95
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:198
 #, fuzzy
 msgid "Whether to split comment fields in Ogg comments"
@@ -1491,7 +1510,7 @@ msgstr ""
 "Se devem ser divididos os campos de comentário em um separador “ - ” em "
 "comentários Ogg"
 
-#: ../data/preferences_dialog.ui.h:92
+#: ../data/preferences_dialog.ui.h:96
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:200
 #, fuzzy
 msgid "Whether to split composer fields in Ogg comments"
@@ -1499,11 +1518,11 @@ msgstr ""
 "Se devem ser divididos os campos de compositor em um separador “ - ” em "
 "comentários Ogg"
 
-#: ../data/preferences_dialog.ui.h:93
+#: ../data/preferences_dialog.ui.h:97
 msgid "Original artist"
 msgstr "Artista original"
 
-#: ../data/preferences_dialog.ui.h:94
+#: ../data/preferences_dialog.ui.h:98
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:202
 #, fuzzy
 msgid "Whether to split original artist fields in Ogg comments"
@@ -1511,16 +1530,16 @@ msgstr ""
 "Se devem ser divididos os campos de artista original em um separador “ - ” "
 "em comentários Ogg"
 
-#: ../data/preferences_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:99
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: ../data/preferences_dialog.ui.h:96
+#: ../data/preferences_dialog.ui.h:100
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:53
 msgid "Strip ID3 tags if all ID3 tags are empty"
 msgstr "Remover etiquetas ID3 se todos os campos ID3 estiverem vazios"
 
-#: ../data/preferences_dialog.ui.h:97
+#: ../data/preferences_dialog.ui.h:101
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:54
 msgid ""
 "Whether to remove the ID3 tag from the audio file if all the individual tag "
@@ -1529,44 +1548,44 @@ msgstr ""
 "Se deve ser removida a etiqueta ID3 do arquivo de áudio se todos os campos "
 "de etiqueta individual estiverem vazios"
 
-#: ../data/preferences_dialog.ui.h:98
+#: ../data/preferences_dialog.ui.h:102
 msgid "Non-standard encoding for reading ID3 tags:"
 msgstr "Codificação não-padrão para a leitura das etiquetas ID3:"
 
-#: ../data/preferences_dialog.ui.h:99
+#: ../data/preferences_dialog.ui.h:103
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:52
 msgid "Whether to use a non-standard character encoding when reading ID3 tags"
 msgstr ""
 "Se deve ser usado uma codificação de caracteres não-padrão ao ler etiquetas "
 "ID3"
 
-#: ../data/preferences_dialog.ui.h:100
+#: ../data/preferences_dialog.ui.h:104
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:62
 msgid "Choose the character set to be used when reading ID3v1 and ID3v2 tags"
 msgstr ""
 "Escolha a codificação de caracteres a ser usada para a leitura das etiquetas "
 "ID3v1 e ID3v2"
 
-#: ../data/preferences_dialog.ui.h:101
+#: ../data/preferences_dialog.ui.h:105
 msgid "ID3v2"
 msgstr "ID3v2"
 
-#: ../data/preferences_dialog.ui.h:102
+#: ../data/preferences_dialog.ui.h:106
 msgid "Write ID3v2 tag"
 msgstr "Gravar etiqueta ID3v2"
 
-#: ../data/preferences_dialog.ui.h:103
+#: ../data/preferences_dialog.ui.h:107
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:64
 msgid "Whether to write ID3v2 tags when writing ID3 tags into audio files"
 msgstr ""
 "Se devem ser gravadas etiquetas ID3v2 ao escrever etiquetas ID3 nos arquivos "
 "de áudio"
 
-#: ../data/preferences_dialog.ui.h:104
+#: ../data/preferences_dialog.ui.h:108
 msgid "Version:"
 msgstr "Versão:"
 
-#: ../data/preferences_dialog.ui.h:105
+#: ../data/preferences_dialog.ui.h:109
 msgid ""
 "Select the ID3v2 tag version to write:\n"
 "• ID3v2.3 is written using id3lib,\n"
@@ -1576,22 +1595,22 @@ msgstr ""
 "- ID3v2.3 será salva usando o id3lib,\n"
 "- ID3v2.4 será salva usando o libid3tag (recomendado)"
 
-#: ../data/preferences_dialog.ui.h:108
+#: ../data/preferences_dialog.ui.h:112
 msgid "Character encoding:"
 msgstr "Codificação de caracteres:"
 
-#: ../data/preferences_dialog.ui.h:109
+#: ../data/preferences_dialog.ui.h:113
 msgid "Unicode"
 msgstr "Unicode"
 
-#: ../data/preferences_dialog.ui.h:110
+#: ../data/preferences_dialog.ui.h:114
 msgid ""
 "Choose the Unicode character encoding to be used when writing ID3v2 tags"
 msgstr ""
 "Escolha a codificação de caracteres Unicode a ser usada ao escrever "
 "etiquetas ID3v2"
 
-#: ../data/preferences_dialog.ui.h:112
+#: ../data/preferences_dialog.ui.h:116
 msgid ""
 "Override the standard Unicode character encoding to be used when writing "
 "ID3v2 tags"
@@ -1599,15 +1618,15 @@ msgstr ""
 "Sobrescreve a codificação de caracteres Unicode padrão a ser usada ao gravar "
 "etiquetas ID3v2"
 
-#: ../data/preferences_dialog.ui.h:113
+#: ../data/preferences_dialog.ui.h:117
 msgid "When encoding conversion fails:"
 msgstr "Ao falhar a codificação de caracteres:"
 
-#: ../data/preferences_dialog.ui.h:114
+#: ../data/preferences_dialog.ui.h:118
 msgid "Report error"
 msgstr "Relatar erro"
 
-#: ../data/preferences_dialog.ui.h:115
+#: ../data/preferences_dialog.ui.h:119
 msgid ""
 "Display an error message when a character cannot be represented in the "
 "target character encoding and keep the original character"
@@ -1615,19 +1634,19 @@ msgstr ""
 "Exibe uma mensagem de erro quando um caractere não pode ser representado na "
 "codificação de caracteres alvo e mantém o caractere original"
 
-#: ../data/preferences_dialog.ui.h:116
+#: ../data/preferences_dialog.ui.h:120
 msgid "Transliterate"
 msgstr "Transliterar"
 
-#: ../data/preferences_dialog.ui.h:117
+#: ../data/preferences_dialog.ui.h:121
 msgid "Discard"
 msgstr "Descartar"
 
-#: ../data/preferences_dialog.ui.h:118
+#: ../data/preferences_dialog.ui.h:122
 msgid "Automatically convert old ID3v2 tag versions"
 msgstr "Converter automaticamente versões antigas de etiquetas ID3v2"
 
-#: ../data/preferences_dialog.ui.h:119
+#: ../data/preferences_dialog.ui.h:123
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:68
 msgid ""
 "Whether to convert ID3 tags written against old version of the "
@@ -1636,33 +1655,33 @@ msgstr ""
 "Se devem ser convertidas etiquetas ID3 escritas contra versão antigo da "
 "especificação, tal como ID3v2.2, para mais novas, tal como ID3v2.3 ou ID3v2.4"
 
-#: ../data/preferences_dialog.ui.h:120
+#: ../data/preferences_dialog.ui.h:124
 msgid "Use CRC-32"
 msgstr "Usar CRC-32"
 
-#: ../data/preferences_dialog.ui.h:121
+#: ../data/preferences_dialog.ui.h:125
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:72
 msgid "Whether to embed a CRC-32 checksum of the audio file data in ID3v2 tags"
 msgstr ""
 "Se deve ser embutida a verificação de integridade CRC-32 do arquivo de áudio "
 "nas etiquetas ID3v2"
 
-#: ../data/preferences_dialog.ui.h:122
+#: ../data/preferences_dialog.ui.h:126
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:69
 msgid "Compress data in ID3v2 tags"
 msgstr "Comprimir dados nas etiquetas ID3v2"
 
-#: ../data/preferences_dialog.ui.h:123
+#: ../data/preferences_dialog.ui.h:127
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:70
 msgid "Whether to compress data in ID3v2 tags"
 msgstr "Se devem ser comprimidos os dados nas etiquetas ID3v2"
 
-#: ../data/preferences_dialog.ui.h:124
+#: ../data/preferences_dialog.ui.h:128
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:73
 msgid "Use text-only genre in ID3v2 tags"
 msgstr "Usar gênero no formato de texto em etiquetas ID3v2"
 
-#: ../data/preferences_dialog.ui.h:125
+#: ../data/preferences_dialog.ui.h:129
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:74
 msgid ""
 "Whether to use only a string, and not the integer-base ID3v1 genre field, "
@@ -1671,73 +1690,73 @@ msgstr ""
 "Se deve ser usado apenas uma string, e não o campo de gênero ID3v1 baseado "
 "em inteiro, ao escrever um campo de gênero para etiquetas ID3v2"
 
-#: ../data/preferences_dialog.ui.h:126
+#: ../data/preferences_dialog.ui.h:130
 msgid "ID3v1"
 msgstr "ID3v1"
 
-#: ../data/preferences_dialog.ui.h:127
+#: ../data/preferences_dialog.ui.h:131
 msgid "Write ID3v1 tag"
 msgstr "Gravar etiqueta ID3v1"
 
-#: ../data/preferences_dialog.ui.h:128
+#: ../data/preferences_dialog.ui.h:132
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:56
 msgid "Whether to write ID3v1 tags when writing ID3 tags into audio files"
 msgstr ""
 "Se devem ser gravadas etiquetas ID3v1 ao escrever etiquetas ID3 em arquivos "
 "de áudio"
 
-#: ../data/preferences_dialog.ui.h:129
+#: ../data/preferences_dialog.ui.h:133
 msgid "Choose the character set to be used when writing ID3v1 tag"
 msgstr ""
 "Escolha a codificação de caracteres para a gravação das etiquetas ID3v1"
 
-#: ../data/preferences_dialog.ui.h:130
+#: ../data/preferences_dialog.ui.h:134
 msgid "ID3 Tags"
 msgstr "Etiqueta ID3"
 
-#: ../data/preferences_dialog.ui.h:131
+#: ../data/preferences_dialog.ui.h:135
 msgid "Character Conversion"
 msgstr "Conversão de caracteres"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:133
+#: ../data/preferences_dialog.ui.h:137
 msgid "Fill Tag Scanner"
 msgstr "Verificador de preenchimento de etiqueta"
 
-#: ../data/preferences_dialog.ui.h:135
+#: ../data/preferences_dialog.ui.h:139
 #, no-c-format
 msgid "Convert underscores and ‘%20’ to spaces"
 msgstr "Converter sublinhados e “%20” para espaços"
 
-#: ../data/preferences_dialog.ui.h:137
+#: ../data/preferences_dialog.ui.h:141
 #, no-c-format
 msgid "Convert spaces and ‘%20’ to underscores"
 msgstr "Converter espaços e “%20” para sublinhados"
 
-#: ../data/preferences_dialog.ui.h:138
+#: ../data/preferences_dialog.ui.h:142
 msgid "No conversion"
 msgstr "Nenhuma conversão"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:140
+#: ../data/preferences_dialog.ui.h:144
 msgid "Rename File and Directory Scanner"
 msgstr "Verificador de renomeação de arquivos e diretório"
 
-#: ../data/preferences_dialog.ui.h:141 ../data/scan_dialog.ui.h:96
+#: ../data/preferences_dialog.ui.h:145 ../data/scan_dialog.ui.h:96
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:135 ../src/tag_area.cc:786
 msgid "Remove spaces"
 msgstr "Remover espaços"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:143
+#: ../data/preferences_dialog.ui.h:147
 msgid "Process Fields Scanner"
 msgstr "Verificador de processamento de campos"
 
-#: ../data/preferences_dialog.ui.h:144
+#: ../data/preferences_dialog.ui.h:148
 msgid "Upper-case the first letters of all words"
 msgstr "Converte para maiúscula a primeira letra de todas as palavras"
 
-#: ../data/preferences_dialog.ui.h:145
+#: ../data/preferences_dialog.ui.h:149
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to upper-case the first letter of all words, including prepositions "
@@ -1747,15 +1766,15 @@ msgstr ""
 "incluindo preposições e outras palavras curtas, como “feat.”, ao processar "
 "campos de etiqueta"
 
-#: ../data/preferences_dialog.ui.h:146
+#: ../data/preferences_dialog.ui.h:150
 msgid "Fields"
 msgstr "Campos"
 
-#: ../data/preferences_dialog.ui.h:147
+#: ../data/preferences_dialog.ui.h:151
 msgid "Overwrite fields when scanning tags"
 msgstr "Sobrescrever campos ao verificar as etiquetas"
 
-#: ../data/preferences_dialog.ui.h:148
+#: ../data/preferences_dialog.ui.h:152
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:101
 msgid ""
 "Whether to overwrite the tag field values when filling tags. Otherwise, only "
@@ -1764,11 +1783,11 @@ msgstr ""
 "Se devem ser sobrescritos os valores de campo de etiqueta ao preencher "
 "etiquetas. Do contrário, apenas campos vazios serão preenchidos"
 
-#: ../data/preferences_dialog.ui.h:149
+#: ../data/preferences_dialog.ui.h:153
 msgid "Set this text as default comment:"
 msgstr "Definir esse texto como o comentário padrão:"
 
-#: ../data/preferences_dialog.ui.h:150
+#: ../data/preferences_dialog.ui.h:154
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:103
 msgid ""
 "Whether to set the comment tag field to the provided default value when "
@@ -1777,12 +1796,12 @@ msgstr ""
 "Se deve ser definido o campo de etiqueta de comentário para o valor padrão "
 "fornecido ao preencher etiquetas"
 
-#: ../data/preferences_dialog.ui.h:151
+#: ../data/preferences_dialog.ui.h:155
 msgid "Use CRC-32 as the default comment (for files with ID3 tags only)"
 msgstr ""
 "Usar CRC-32 como o comentário padrão (para arquivos com apenas etiquetas ID3)"
 
-#: ../data/preferences_dialog.ui.h:152
+#: ../data/preferences_dialog.ui.h:156
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:107
 msgid ""
 "Whether to use the CRC-32 of the audio file data as the default comment, for "
@@ -1791,42 +1810,42 @@ msgstr ""
 "Se deve ser usado o CRC-32 de dados de arquivo de áudio como o comentário "
 "padrão, para arquivos com apenas etiquetas ID3"
 
-#: ../data/preferences_dialog.ui.h:153
+#: ../data/preferences_dialog.ui.h:157
 msgid "Scanner"
 msgstr "Verificador"
 
-#: ../data/preferences_dialog.ui.h:154
+#: ../data/preferences_dialog.ui.h:158
 msgid "Automatic Search Servers"
 msgstr "Servidores de pesquisa automática"
 
-#: ../data/preferences_dialog.ui.h:155
+#: ../data/preferences_dialog.ui.h:159
 msgid "Host:"
 msgstr "Máquina:"
 
-#: ../data/preferences_dialog.ui.h:156
+#: ../data/preferences_dialog.ui.h:160
 msgid "Port:"
 msgstr "Porta:"
 
-#: ../data/preferences_dialog.ui.h:157
+#: ../data/preferences_dialog.ui.h:161
 msgid "CGI Path:"
 msgstr "Caminho CGI:"
 
-#: ../data/preferences_dialog.ui.h:158
+#: ../data/preferences_dialog.ui.h:162
 msgid "Manual Search Server"
 msgstr "Servidor de pesquisa manual"
 
-#: ../data/preferences_dialog.ui.h:159
+#: ../data/preferences_dialog.ui.h:163
 msgid "Results List"
 msgstr "Lista de resultados"
 
-#: ../data/preferences_dialog.ui.h:160
+#: ../data/preferences_dialog.ui.h:164
 msgid ""
 "Select corresponding file (according to position or DLM if activated below)"
 msgstr ""
 "Selecionar o arquivo correspondente (de acordo com a posição ou com o DLM, "
 "se ativado abaixo)"
 
-#: ../data/preferences_dialog.ui.h:161
+#: ../data/preferences_dialog.ui.h:165
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:26
 msgid ""
 "Whether to select the file in the file list which matches the position in "
@@ -1835,7 +1854,7 @@ msgstr ""
 "Se deve ser selecionado o arquivo na lista de arquivos que correspondem à "
 "posição na lista de resultado do CDDB"
 
-#: ../data/preferences_dialog.ui.h:162
+#: ../data/preferences_dialog.ui.h:166
 msgid ""
 "Use the Levenshtein algorithm (DLM) to match results (using title) with "
 "audio files (using filename)"
@@ -1843,20 +1862,20 @@ msgstr ""
 "Usar o algoritmo Levenshtein (DLM) para coincidir resultados (usando o "
 "título) com os arquivos de áudio (usando o nome do arquivo)"
 
-#: ../data/preferences_dialog.ui.h:164
+#: ../data/preferences_dialog.ui.h:168
 msgid "CDDB"
 msgstr "CDDB"
 
-#: ../data/preferences_dialog.ui.h:165
+#: ../data/preferences_dialog.ui.h:169
 msgid "Confirmation"
 msgstr "Confirmação"
 
-#: ../data/preferences_dialog.ui.h:166
+#: ../data/preferences_dialog.ui.h:170
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:108
 msgid "Confirm before writing tags"
 msgstr "Confirmar antes de gravar etiquetas"
 
-#: ../data/preferences_dialog.ui.h:167
+#: ../data/preferences_dialog.ui.h:171
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:109
 msgid ""
 "Whether to ask for confirmation from the user before writing tags to audio "
@@ -1865,47 +1884,47 @@ msgstr ""
 "Se deve ser solicitada confirmação para o usuário antes de escrever "
 "etiquetas em arquivos de áudio"
 
-#: ../data/preferences_dialog.ui.h:168
+#: ../data/preferences_dialog.ui.h:172
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:110
 msgid "Confirm before renaming a file"
 msgstr "Confirmar antes de renomear um arquivo"
 
-#: ../data/preferences_dialog.ui.h:169
+#: ../data/preferences_dialog.ui.h:173
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:111
 msgid "Whether to ask for confirmation from the user before renaming a file"
 msgstr ""
 "Se deve ser solicitada configuração para o usuário antes de renomear um "
 "arquivo"
 
-#: ../data/preferences_dialog.ui.h:170
+#: ../data/preferences_dialog.ui.h:174
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:114
 msgid "Confirm before deleting a file"
 msgstr "Confirmar antes de excluir um arquivo"
 
-#: ../data/preferences_dialog.ui.h:171
+#: ../data/preferences_dialog.ui.h:175
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:115
 msgid "Whether to ask for confirmation from the user before deleting a file"
 msgstr ""
 "Se deve ser solicitada confirmação para o usuário antes de excluir um arquivo"
 
-#: ../data/preferences_dialog.ui.h:172
+#: ../data/preferences_dialog.ui.h:176
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:112
 msgid "Confirm before writing a playlist"
 msgstr "Confirmar antes de gravar uma lista de reprodução"
 
-#: ../data/preferences_dialog.ui.h:173
+#: ../data/preferences_dialog.ui.h:177
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:113
 msgid "Whether to ask for confirmation from the user before writing a playlist"
 msgstr ""
 "Se deve ser solicitada confirmação para o usuário antes de escrever uma "
 "lista de reprodução"
 
-#: ../data/preferences_dialog.ui.h:174
+#: ../data/preferences_dialog.ui.h:178
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:116
 msgid "Confirm before losing unsaved changes to files"
 msgstr "Confirmar antes de perder alterações não salvas de arquivos"
 
-#: ../data/preferences_dialog.ui.h:175
+#: ../data/preferences_dialog.ui.h:179
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:117
 msgid ""
 "Whether to ask for confirmation from the user before performing an operation "
@@ -1914,21 +1933,21 @@ msgstr ""
 "Se deve ser solicitada confirmação para o usuário antes de realizar uma "
 "operação que resultaria na perda de alterações não salvas em arquivos"
 
-#: ../data/preferences_dialog.ui.h:176
+#: ../data/preferences_dialog.ui.h:180
 msgid "Scanner Dialog"
 msgstr "Diálogo do verificador"
 
-#: ../data/preferences_dialog.ui.h:177
+#: ../data/preferences_dialog.ui.h:181
 msgid "Show the scanner dialog on startup"
 msgstr "Abrir o diálogo do verificador na inicialização"
 
-#: ../data/preferences_dialog.ui.h:178
+#: ../data/preferences_dialog.ui.h:182
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:184
 msgid "Whether to show the scanner window on application startup"
 msgstr ""
 "Se deve ser exibida a janela do verificador na inicialização do aplicativo"
 
-#: ../data/preferences_dialog.ui.h:179
+#: ../data/preferences_dialog.ui.h:183
 msgid "Application"
 msgstr "Aplicativo"
 
@@ -4255,11 +4274,11 @@ msgstr "Gravado arquivo de lista de reprodução “%s”"
 msgid "Invalid scanner mask"
 msgstr "Máscara de verificação inválida"
 
-#: ../src/preferences_dialog.cc:788
+#: ../src/preferences_dialog.cc:796
 msgid "The selected default path is invalid"
 msgstr "O caminho padrão selecionado é inválido"
 
-#: ../src/preferences_dialog.cc:790
+#: ../src/preferences_dialog.cc:798
 #, c-format
 msgid ""
 "Path: ‘%s’\n"
@@ -4268,7 +4287,7 @@ msgstr ""
 "Caminho: “%s”\n"
 "Erro: %s"
 
-#: ../src/preferences_dialog.cc:794
+#: ../src/preferences_dialog.cc:802
 msgid "Invalid Path Error"
 msgstr "Erro de caminho inválido"
 

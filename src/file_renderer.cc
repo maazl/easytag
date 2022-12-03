@@ -81,6 +81,34 @@ public:
 	:	TagColumnRenderer(col, field1), Field2(field2) {}
 };
 
+class FileSizeColumnRenderer : public FileColumnRenderer
+{
+protected:
+	virtual string RenderText(const ET_File* file, bool original) const;
+public:
+	FileSizeColumnRenderer(EtSortMode col)
+	:	FileColumnRenderer(col) {}
+};
+
+class FileDurationColumnRenderer : public FileColumnRenderer
+{
+protected:
+	virtual string RenderText(const ET_File* file, bool original) const;
+public:
+	FileDurationColumnRenderer(EtSortMode col)
+	:	FileColumnRenderer(col) {}
+};
+
+class FileInfoIntColumnRenderer : public FileColumnRenderer
+{
+protected:
+	gint ET_File_Info::* const Field;
+	virtual string RenderText(const ET_File* file, bool original) const;
+public:
+	FileInfoIntColumnRenderer(EtSortMode col, gint ET_File_Info::* const field)
+	:	FileColumnRenderer(col), Field(field) {}
+};
+
 // Static renderer instances
 const FileNameColumnRenderer
 	R_Path(ET_SORT_MODE_ASCENDING_FILEPATH, &File_Name::path_value_utf8),
@@ -104,6 +132,11 @@ const TagColumnRenderer
 	R_Copyright(ET_SORT_MODE_ASCENDING_COPYRIGHT, &File_Tag::copyright),
 	R_Url(ET_SORT_MODE_ASCENDING_URL, &File_Tag::url),
 	R_EncodedBy(ET_SORT_MODE_ASCENDING_ENCODED_BY, &File_Tag::encoded_by);
+const FileSizeColumnRenderer R_FileSize(ET_SORT_MODE_ASCENDING_FILE_SIZE);
+const FileDurationColumnRenderer R_FileDuration(ET_SORT_MODE_ASCENDING_FILE_DURATION);
+const FileInfoIntColumnRenderer
+	R_Bitrate(ET_SORT_MODE_ASCENDING_FILE_BITRATE, &ET_File_Info::bitrate),
+	R_Samplerate(ET_SORT_MODE_ASCENDING_FILE_SAMPLERATE, &ET_File_Info::samplerate);
 
 string FileNameColumnRenderer::RenderText(const ET_File* file, bool original) const
 {	return EmptfIfNull((original ? file->CurFileName() : file->FileName())->*Field);
@@ -127,6 +160,51 @@ string TagPartColumnRenderer::RenderText(const ET_File* file, bool original) con
 		value = svalue.c_str();
 	}
 	return svalue;
+}
+
+string FileSizeColumnRenderer::RenderText(const ET_File* file, bool original) const
+{	if (!file->ETFileInfo)
+		return string();
+	goffset size = file->ETFileInfo->size;
+	if (!size)
+		return string();
+	char buf[20];
+	if (size >= 1024LL*1024*1024*1024)
+		sprintf(buf, "%.1f T", size / (1024.*1024.*1024.*1024.));
+	else if (size >= 1024*1024*1024)
+		sprintf(buf, "%.1f G", size / (1024.*1024.*1024.));
+	else if (size >= 1024*1024)
+		sprintf(buf, "%.1f M", size / (1024.*1024.));
+	else if (size >= 1024)
+		sprintf(buf, "%.1f k", size / 1024.);
+	else
+		return to_string((int)size);
+	return buf;
+}
+
+string FileDurationColumnRenderer::RenderText(const ET_File* file, bool original) const
+{	if (!file->ETFileInfo)
+		return string();
+	gint duration = file->ETFileInfo->duration;
+	if (!duration)
+		return string();
+	char buf[20];
+	if (duration > 86400)
+		sprintf(buf, "%i %02i:%02i:%02i", duration /86400, duration / 3600 % 24, duration / 60 % 60, duration % 60);
+	else if (duration > 3600)
+		sprintf(buf, "%i:%02i:%02i", duration / 3600, duration / 60 % 60, duration % 60);
+	else
+		sprintf(buf, "%i:%02i", duration / 60, duration % 60);
+	return buf;
+}
+
+string FileInfoIntColumnRenderer::RenderText(const ET_File* file, bool original) const
+{	if (!file->ETFileInfo)
+		return string();
+	gint value = file->ETFileInfo->*Field;
+	if (!value)
+		return string();
+	return to_string(value);
 }
 
 }

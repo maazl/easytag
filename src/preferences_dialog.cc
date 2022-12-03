@@ -64,6 +64,10 @@ typedef struct
     GtkWidget *browser_columns_copyright_check;
     GtkWidget *browser_columns_url_check;
     GtkWidget *browser_columns_encoded_by_check;
+    GtkWidget *browser_columns_file_size_check;
+    GtkWidget *browser_columns_file_duration_check;
+    GtkWidget *browser_columns_file_bitrate_check;
+    GtkWidget *browser_columns_file_samplerate_check;
     GtkWidget *log_show_check;
     GtkWidget *header_show_check;
     GtkWidget *list_bold_radio;
@@ -398,6 +402,10 @@ create_preferences_dialog (EtPreferencesDialog *self)
     bind_flags_value("visible-columns", priv->browser_columns_copyright_check);
     bind_flags_value("visible-columns", priv->browser_columns_url_check);
     bind_flags_value("visible-columns", priv->browser_columns_encoded_by_check);
+    bind_flags_value("visible-columns", priv->browser_columns_file_size_check);
+    bind_flags_value("visible-columns", priv->browser_columns_file_duration_check);
+    bind_flags_value("visible-columns", priv->browser_columns_file_bitrate_check);
+    bind_flags_value("visible-columns", priv->browser_columns_file_samplerate_check);
 
     /* Show / hide log view. */
     bind_boolean("log-show", priv->log_show_check);
@@ -897,6 +905,10 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_copyright_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_url_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_encoded_by_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_file_size_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_file_duration_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_file_bitrate_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_file_samplerate_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, log_show_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, header_show_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, list_bold_radio);

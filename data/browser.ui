@@ -460,6 +460,58 @@
                                                 </child>
                                             </object>
                                         </child>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="file_size_column">
+                                                <property name="clickable">True</property>
+                                                <property name="resizable">True</property>
+                                                <property name="alignment">1.0</property>
+                                                <property name="title" translatable="yes">File size</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="file_size_renderer">
+                                                        <property name="xalign">1.0</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="file_duration_column">
+                                                <property name="clickable">True</property>
+                                                <property name="resizable">True</property>
+                                                <property name="alignment">1.0</property>
+                                                <property name="title" translatable="yes">Duration</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="file_duration_renderer">
+                                                        <property name="xalign">1.0</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="file_bitrate_column">
+                                                <property name="clickable">True</property>
+                                                <property name="resizable">True</property>
+                                                <property name="alignment">1.0</property>
+                                                <property name="title" translatable="yes">Bit rate</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="file_bitrate_renderer">
+                                                        <property name="xalign">1.0</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="file_samplerate_column">
+                                                <property name="clickable">True</property>
+                                                <property name="resizable">True</property>
+                                                <property name="alignment">1.0</property>
+                                                <property name="title" translatable="yes">Samplerate</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="file_samplerate_renderer">
+                                                        <property name="xalign">1.0</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
                                         <child internal-child="selection">
                                             <object class="GtkTreeSelection" id="files_selection">
                                                 <property name="mode">multiple</property>

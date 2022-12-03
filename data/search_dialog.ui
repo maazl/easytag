@@ -118,6 +118,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="filepath_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Path</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="filepath_renderer"/>
@@ -126,6 +127,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="filename_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Filename</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="filename_renderer"/>
@@ -134,6 +136,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="title_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Title</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="title_renderer"/>
@@ -142,6 +145,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="artist_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Artist</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="artist_renderer"/>
@@ -150,6 +154,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="album_artist_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Album Artist</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="album_artist_renderer"/>
@@ -158,6 +163,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="album_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Album</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="album_renderer"/>
@@ -166,6 +172,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="disc_number_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">CD</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="disc_renderer"/>
@@ -174,6 +181,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="year_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Year</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="year_renderer"/>
@@ -182,6 +190,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="release_year_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Year</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="release_year_renderer"/>
@@ -190,6 +199,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="track_number_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Track</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="track_renderer"/>
@@ -198,6 +208,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="genre_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Genre</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="genre_renderer"/>
@@ -206,6 +217,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="comment_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Comment</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="comment_renderer"/>
@@ -214,6 +226,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="composer_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Composer</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="composer_renderer"/>
@@ -222,6 +235,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="orig_artist_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Original Artist</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="orig_artist_renderer"/>
@@ -230,6 +244,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="orig_year_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Orig. year</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="orig_year_renderer"/>
@@ -238,6 +253,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="copyright_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Copyright</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="copyright_renderer"/>
@@ -246,6 +262,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="url_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">URL</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="url_renderer"/>
@@ -254,9 +271,58 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="encoded_by_column">
+                                                <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Encoded By</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="encoced_by_renderer"/>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="file_size_column">
+                                                <property name="resizable">True</property>
+                                                <property name="alignment">1.0</property>
+                                                <property name="title" translatable="yes">File size</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="file_size_renderer">
+                                                        <property name="xalign">1.0</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="file_duration_column">
+                                                <property name="resizable">True</property>
+                                                <property name="alignment">1.0</property>
+                                                <property name="title" translatable="yes">Duration</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="file_duration_renderer">
+                                                        <property name="xalign">1.0</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="file_bitrate_column">
+                                                <property name="resizable">True</property>
+                                                <property name="alignment">1.0</property>
+                                                <property name="title" translatable="yes">Bit rate</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="file_bitrate_renderer">
+                                                        <property name="xalign">1.0</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="file_samplerate_column">
+                                                <property name="resizable">True</property>
+                                                <property name="alignment">1.0</property>
+                                                <property name="title" translatable="yes">Samplerate</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="file_samplerate_renderer">
+                                                        <property name="xalign">1.0</property>
+                                                    </object>
                                                 </child>
                                             </object>
                                         </child>

@@ -127,7 +127,7 @@
                                     </object>
                                 </child>
                                 <child>
-                                    <object class="GtkBox" id="browser_columns_box1">
+                                    <object class="GtkBox" id="browser_columns_box0">
                                         <property name="margin-left">12</property>
                                         <property name="spacing">12</property>
                                         <child>
@@ -142,6 +142,36 @@
                                                 <property name="name">filename</property>
                                             </object>
                                         </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_file_size_check">
+                                                <property name="label" translatable="yes">File size</property>
+                                                <property name="name">file-size</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_file_duration_check">
+                                                <property name="label" translatable="yes">Duration</property>
+                                                <property name="name">file-duration</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_file_bitrate_check">
+                                                <property name="label" translatable="yes">Bit rate</property>
+                                                <property name="name">file-bitrate</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_columns_file_samplerate_check">
+                                                <property name="label" translatable="yes">Samplerate</property>
+                                                <property name="name">file-samplerate</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkBox" id="browser_columns_box1">
+                                        <property name="margin-left">12</property>
+                                        <property name="spacing">12</property>
                                         <child>
                                             <object class="GtkCheckButton" id="browser_columns_title_check">
                                                 <property name="label" translatable="yes">Title</property>
