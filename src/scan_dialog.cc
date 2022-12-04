@@ -864,7 +864,7 @@ et_scan_generate_new_filename_from_mask (const ET_File *ETFile,
             // Relative path => set beginning of the path
             const File_Name* file = ETFile->CurFileName();
             if (file->rel_value_utf8 != file->value_utf8)
-                path_utf8_cur = g_utf8_substring(file->value_utf8, 0, file->rel_value_utf8 - file->value_utf8);
+                path_utf8_cur = g_strndup(file->value_utf8, file->rel_value_utf8 - file->value_utf8);
             else
                 path_utf8_cur = g_path_get_dirname(file->value_utf8);
         }
