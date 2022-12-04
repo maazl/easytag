@@ -444,24 +444,14 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
         comments = g_hash_table_lookup (tags,
                                         ET_VORBIS_COMMENT_FIELD_COMMENT);
 
-        if (descs && !comments)
-        {
-            g_slist_foreach (descs, values_list_foreach, &FileTag->comment);
-        }
-        else if (descs && comments)
+        if (comments)
+          g_slist_foreach (comments, values_list_foreach, &FileTag->comment);
+        else if (descs)
         {
             /* Mark the file as modified, so that comments are written to the
-             * DESCRIPTION field on saving. */
+             * COMMENT field on saving. */
             FileTag->saved = FALSE;
-
             g_slist_foreach (descs, values_list_foreach, &FileTag->comment);
-            g_slist_foreach (comments, values_list_foreach, &FileTag->comment);
-        }
-        else if (comments)
-        {
-            FileTag->saved = FALSE;
-
-            g_slist_foreach (comments, values_list_foreach, &FileTag->comment);
         }
 
         g_slist_free (descs);
@@ -1037,7 +1027,7 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
      * Comment *
      ***********/
     /* Format of new specification. */
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_DESCRIPTION, FileTag->comment,
+    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_COMMENT, FileTag->comment,
                     g_settings_get_boolean (MainSettings,
                                             "ogg-split-comment"));
 
