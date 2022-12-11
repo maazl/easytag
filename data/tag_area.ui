@@ -270,7 +270,7 @@
                         <child>
                             <object class="GtkEntry" id="year_entry">
                                 <property name="hexpand">True</property>
-                                <property name="max-length">4</property>
+                                <property name="max-length">10</property>
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this year</property>
                                 <property name="visible">True</property>
@@ -310,7 +310,7 @@
                         <child>
                             <object class="GtkEntry" id="release_year_entry">
                                 <property name="hexpand">True</property>
-                                <property name="max-length">4</property>
+                                <property name="max-length">10</property>
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this release year</property>
                                 <property name="visible">True</property>
@@ -433,7 +433,7 @@
                         <child>
                             <object class="GtkEntry" id="orig_year_entry">
                                 <property name="hexpand">True</property>
-                                <property name="max-length">4</property>
+                                <property name="max-length">10</property>
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this original year</property>
                                 <property name="visible">True</property>
