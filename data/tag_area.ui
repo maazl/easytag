@@ -277,7 +277,6 @@
                                 <property name="width-chars">6</property>
                                 <signal name="activate" handler="on_year_entry_activate"/>
                                 <signal name="focus-out-event" handler="on_year_entry_focus_out_event"/>
-                                <signal name="insert-text" handler="Insert_Only_Digit"/>
                             </object>
                             <packing>
                                 <property name="left-attach">1</property>
@@ -317,7 +316,6 @@
                                 <property name="width-chars">6</property>
                                 <signal name="activate" handler="on_year_entry_activate"/>
                                 <signal name="focus-out-event" handler="on_year_entry_focus_out_event"/>
-                                <signal name="insert-text" handler="Insert_Only_Digit"/>
                             </object>
                             <packing>
                                 <property name="left-attach">9</property>
@@ -440,7 +438,6 @@
                                 <property name="width-chars">6</property>
                                 <signal name="activate" handler="on_year_entry_activate"/>
                                 <signal name="focus-out-event" handler="on_year_entry_focus_out_event"/>
-                                <signal name="insert-text" handler="Insert_Only_Digit"/>
                             </object>
                             <packing>
                                 <property name="left-attach">9</property>
