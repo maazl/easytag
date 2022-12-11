@@ -26,14 +26,6 @@
 G_BEGIN_DECLS
 
 /**
- * Fetch the field of file tag for mask code.
- * @param tag
- * @param code
- * @return Field of \p tag or \c NULL if no valid code or '%i'.
- */
-const gchar* et_tag_field_from_mask_code(const File_Tag *tag, gchar code);
-
-/**
  * Check mask string for syntactical correctness.
  * @param mask
  * @return true: NULL: valid, error message otherwise.

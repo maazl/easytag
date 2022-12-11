@@ -27,9 +27,24 @@ using namespace std;
 /* Keep up to date with the format specifiers shown in the UI. */
 static const gchar allowed_specifiers[] = "abcdegilnoprtuxyzADNTY%{|}";
 
-const gchar *et_tag_field_from_mask_code(const File_Tag *tag, gchar code)
-{
+class MaskEvaluator
+{	const ET_File& File;
+	void (*Postprocess)(string& val, unsigned start);
+	string Result;
+	string Error;
+	string TagFieldFromMaskCode(gchar code);
+	bool EvaluateRecursive(const gchar*& mask, bool enabled);
+public:
+	MaskEvaluator(const ET_File &file, void (*postprocess)(string& val, unsigned start) = nullptr)
+	: File(file), Postprocess(postprocess) {}
+	static gchar* Validate(const gchar* mask);
+	const string& Evaluate(const gchar* mask) { EvaluateRecursive(mask, true); return Result; }
+};
+
+string MaskEvaluator::TagFieldFromMaskCode(gchar code)
+{	const File_Tag *tag = File.Tag();
 	gchar* r;
+	size_t maxlen = 0;
 	switch (code)
 	{
 	case 't': /* Title */
@@ -51,9 +66,11 @@ const gchar *et_tag_field_from_mask_code(const File_Tag *tag, gchar code)
 		break;
 	case 'y': /* Year */
 		r = tag->year;
+		maxlen = 4;
 		break;
 	case 'Y': /* Release year */
 		r = tag->release_year;
+		maxlen = 4;
 		break;
 	case 'n': /* Track */
 		r = tag->track;
@@ -76,6 +93,7 @@ const gchar *et_tag_field_from_mask_code(const File_Tag *tag, gchar code)
 		break;
 	case 'w': /* Original year */
 		r = tag->orig_year;
+		maxlen = 4;
 		break;
 	case 'r': /* Copyright */
 		r = tag->copyright;
@@ -91,33 +109,16 @@ const gchar *et_tag_field_from_mask_code(const File_Tag *tag, gchar code)
 		r = tag->album_artist;
 		break;
 	case '%': /* escape sequence */
-		return "%";
 	case '|':
-		return "|";
 	case '{':
-		return "{";
 	case '}':
-		return "}";
+		return string(1, code);
 	case 'i': /* Ignored */
 	default:
-		return "";
+		return string();
 	}
-	return et_str_empty(r) ? nullptr : r;
+	return !r ? string() : maxlen ? string(r, maxlen) : string(r);
 }
-
-class MaskEvaluator
-{	const ET_File& File;
-	void (*Postprocess)(string& val, unsigned start);
-	string Result;
-	string Error;
-	const File_Tag& Tag() const { return *(File_Tag*)File.FileTag->data; }
-	bool EvaluateRecursive(const gchar*& mask, bool enabled);
-public:
-	MaskEvaluator(const ET_File &file, void (*postprocess)(string& val, unsigned start) = nullptr)
-	: File(file), Postprocess(postprocess) {}
-	static gchar* Validate(const gchar* mask);
-	const string& Evaluate(const gchar* mask) { EvaluateRecursive(mask, true); return Result; }
-};
 
 bool MaskEvaluator::EvaluateRecursive(const gchar*& mask, bool enabled)
 {	size_t old_len = Result.length();
@@ -136,8 +137,8 @@ bool MaskEvaluator::EvaluateRecursive(const gchar*& mask, bool enabled)
 				return success;
 			if (!enabled)
 				break;
-			const gchar* field = et_tag_field_from_mask_code(&Tag(), *mask);
-			if (!field)	// placeholder empty => fail
+			string field = TagFieldFromMaskCode(*mask);
+			if (!field.length())	// placeholder empty => fail
 			{	enabled = success = false;
 				Result.erase(old_len);
 				break;
