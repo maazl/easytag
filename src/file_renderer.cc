@@ -148,16 +148,11 @@ string TagColumnRenderer::RenderText(const ET_File* file, bool original) const
 
 string TagPartColumnRenderer::RenderText(const ET_File* file, bool original) const
 {	const File_Tag* tag = original ? file->CurTag() : file->Tag();
-	const gchar* value = EmptfIfNull(tag->*Field);
+	string svalue = EmptfIfNull(tag->*Field);
 	const gchar* value2 = EmptfIfNull(tag->*Field2);
-	string svalue;
 	if (!et_str_empty(value2))
-	{
-		if (!et_str_empty(value))
-			svalue += value;
-		svalue += "/";
+	{	svalue += "/";
 		svalue += value2;
-		value = svalue.c_str();
 	}
 	return svalue;
 }
