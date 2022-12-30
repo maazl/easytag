@@ -126,24 +126,6 @@ static gint CmpInt(const gchar* val1, const gchar* val2)
 }
 
 /*
- * Comparison function for sorting by ascending disc number.
- */
-static gint CmpDiscNumber(const ET_File* ETFile1, const ET_File* ETFile2)
-{
-  const File_Tag *file1 = ETFile1->Tag();
-  const File_Tag *file2 = ETFile2->Tag();
-	gint r = CmpInt(file1->disc_number, file2->disc_number);
-	if (r)
-		return r;
-	// 2nd criterion
-	r = CmpInt(file1->disc_total, file2->disc_total);
-	if (r)
-		return 2 * r;
-	// 3rd criterion
-	return 3 * CmpFilepath(ETFile1, ETFile2);
-}
-
-/*
  * Comparison function for sorting by ascending track number.
  */
 static gint CmpTrackNumber(const ET_File* ETFile1, const ET_File* ETFile2)
@@ -159,6 +141,24 @@ static gint CmpTrackNumber(const ET_File* ETFile1, const ET_File* ETFile2)
 		return 2 * r;
 	// 3rd criterion
 	return 3 * CmpFilepath(ETFile1, ETFile2);
+}
+
+/*
+ * Comparison function for sorting by ascending disc number.
+ */
+static gint CmpDiscNumber(const ET_File* ETFile1, const ET_File* ETFile2)
+{
+  const File_Tag *file1 = ETFile1->Tag();
+  const File_Tag *file2 = ETFile2->Tag();
+	gint r = CmpInt(file1->disc_number, file2->disc_number);
+	if (r)
+		return r;
+	// 2nd criterion
+	r = CmpInt(file1->disc_total, file2->disc_total);
+	if (r)
+		return 2 * r;
+	// 3rd criterion
+	return 3 * CmpTrackNumber(ETFile1, ETFile2);
 }
 
 /*
@@ -212,12 +212,13 @@ static gint CmpCreationDate(const ET_File* ETFile1, const ET_File* ETFile2)
  *
  * @tparam V Field to compare
  * @tparam CS Whether the sorting should obey case
+ * @tparam ST Whether to sort by track as second criterion
  * @param file1 1st file
  * @param file2 2nd file
  * @return An integer less than, equal to, or greater than zero, if str1 is
  * less than, equal to or greater than str2
  */
-template <gchar* File_Tag::*V, bool CS>
+template <gchar* File_Tag::*V, bool CS, bool ST>
 static gint CmpTagString2(const ET_File* file1, const ET_File* file2)
 {
 	const gchar* str1 = file1->Tag()->*V;
@@ -235,7 +236,7 @@ static gint CmpTagString2(const ET_File* file1, const ET_File* file2)
 	}
 
 	/* Secondary criterion. */
-	return 2 * CmpFilepath(file1, file2);
+	return 2 * (ST ? CmpDiscNumber(file1, file2) : CmpFilepath(file1, file2));
 }
 
 /*
@@ -296,15 +297,15 @@ static gint CmpInfoInt(const ET_File* ETFile1, const ET_File* ETFile2)
 }
 
 template <gint (*F)(const ET_File *file1, const ET_File *file2)>
-gint CmpRev(const ET_File *file1, const ET_File *file2)
+static gint CmpRev(const ET_File *file1, const ET_File *file2)
 {	return F(file2, file1);
 }
 
-template <gchar* File_Tag::*V, bool R>
-gint (*CmpTagString())(const ET_File *file1, const ET_File *file2)
+template <gchar* File_Tag::*V, bool R = false, bool ST = false>
+static gint (*CmpTagString())(const ET_File *file1, const ET_File *file2)
 {	return g_settings_get_boolean(MainSettings, "sort-case-sensitive")
-		? (R ? CmpRev<CmpTagString2<V,true>> : CmpTagString2<V,true>)
-		: (R ? CmpRev<CmpTagString2<V,false>> : CmpTagString2<V,false>);
+		? (R ? CmpRev<CmpTagString2<V,true,ST>> : CmpTagString2<V,true,ST>)
+		: (R ? CmpRev<CmpTagString2<V,false,ST>> : CmpTagString2<V,false,ST>);
 }
 
 /*
@@ -331,13 +332,13 @@ gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1,
 	case ET_SORT_MODE_DESCENDING_ARTIST:
 		return CmpTagString<&File_Tag::artist, true>();
 	case ET_SORT_MODE_ASCENDING_ALBUM_ARTIST:
-		return CmpTagString<&File_Tag::album_artist, false>();
+		return CmpTagString<&File_Tag::album_artist, false, true>();
 	case ET_SORT_MODE_DESCENDING_ALBUM_ARTIST:
-		return CmpTagString<&File_Tag::album_artist, true>();
+		return CmpTagString<&File_Tag::album_artist, true, true>();
 	case ET_SORT_MODE_ASCENDING_ALBUM:
-		return CmpTagString<&File_Tag::album, false>();
+		return CmpTagString<&File_Tag::album, false, true>();
 	case ET_SORT_MODE_DESCENDING_ALBUM:
-		return CmpTagString<&File_Tag::album, true>();
+		return CmpTagString<&File_Tag::album, true, true>();
 	case ET_SORT_MODE_ASCENDING_YEAR:
 		return CmpTagInt<&File_Tag::year>;
 	case ET_SORT_MODE_DESCENDING_YEAR:
