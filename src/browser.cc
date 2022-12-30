@@ -2741,6 +2741,10 @@ on_file_tree_button_press_event (GtkWidget *widget,
         const gchar* id = gtk_buildable_get_name(GTK_BUILDABLE(column));
         gchar* nick = g_strconcat("ascending-", id, NULL);
         nick[strlen(nick) - 7] = 0; // strip "-column"
+        // Replace '_' by '-'
+        for (char* cp = nick; *cp; ++cp)
+        	if (*cp == '_')
+        		*cp = '-';
         GEnumClass *enum_class = (GEnumClass*)g_type_class_ref(ET_TYPE_SORT_MODE);
         GEnumValue* enum_value = g_enum_get_value_by_nick(enum_class, nick);
         g_type_class_unref(enum_class);
@@ -4607,8 +4611,11 @@ et_browser_get_column_for_sort_mode(EtBrowser *self, EtSortMode sort_mode)
     EtBrowserPrivate *priv = et_browser_get_instance_private(self);
 
     GEnumValue* ev = g_enum_get_value((GEnumClass*)g_type_class_ref(ET_TYPE_SORT_MODE), sort_mode);
-    /* remove ascending/descending, append "-column" */
-    gchar* column_id = g_strconcat(strchr(ev->value_nick, '-') + 1, "-column", NULL);
+    /* remove ascending/descending, append "_column", replace '-' by '_' */
+    gchar* column_id = g_strconcat(strchr(ev->value_nick, '-') + 1, "_column", NULL);
+    for (char* cp = column_id; *cp != '_'; ++cp)
+    	if (*cp == '-')
+    		*cp = '_';
 
     GtkTreeViewColumn *column;
     gint i = 0;
