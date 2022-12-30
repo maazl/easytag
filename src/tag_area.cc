@@ -48,15 +48,15 @@ typedef struct
     GtkWidget *album_artist_entry;
     GtkWidget *album_label;
     GtkWidget *album_entry;
+    GtkWidget *track_label;
+    GtkWidget *track_combo_entry;
+    GtkWidget *track_total_entry;
     GtkWidget *disc_number_label;
     GtkWidget *disc_number_entry;
     GtkWidget *year_label;
     GtkWidget *year_entry;
     GtkWidget *release_year_label;
     GtkWidget *release_year_entry;
-    GtkWidget *track_label;
-    GtkWidget *track_combo_entry;
-    GtkWidget *track_total_entry;
     GtkWidget *genre_label;
     GtkWidget *genre_combo_entry;
     GtkWidget *comment_label;
@@ -2071,11 +2071,11 @@ create_tag_area (EtTagArea *self)
     focus_chain = g_list_prepend (focus_chain, priv->artist_entry);
     focus_chain = g_list_prepend (focus_chain, priv->album_artist_entry);
     focus_chain = g_list_prepend (focus_chain, priv->album_entry);
+    focus_chain = g_list_prepend (focus_chain, priv->track_combo_entry);
+    focus_chain = g_list_prepend (focus_chain, priv->track_total_entry);
     focus_chain = g_list_prepend (focus_chain, priv->disc_number_entry);
     focus_chain = g_list_prepend (focus_chain, priv->year_entry);
     focus_chain = g_list_prepend (focus_chain, priv->release_year_entry);
-    focus_chain = g_list_prepend (focus_chain, priv->track_combo_entry);
-    focus_chain = g_list_prepend (focus_chain, priv->track_total_entry);
     focus_chain = g_list_prepend (focus_chain, priv->genre_combo_entry);
     focus_chain = g_list_prepend (focus_chain, priv->comment_entry);
     focus_chain = g_list_prepend (focus_chain, priv->composer_entry);
@@ -2145,6 +2145,12 @@ et_tag_area_class_init (EtTagAreaClass *klass)
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
                                                   album_entry);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
+                                                  track_label);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
+                                                  track_combo_entry);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
+                                                  track_total_entry);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
                                                   disc_number_label);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
                                                   disc_number_entry);
@@ -2156,12 +2162,6 @@ et_tag_area_class_init (EtTagAreaClass *klass)
                                                   release_year_label);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
                                                   release_year_entry);
-    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
-                                                  track_label);
-    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
-                                                  track_combo_entry);
-    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
-                                                  track_total_entry);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
                                                   genre_label);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea,
