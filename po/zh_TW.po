@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 2.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-03 23:29+0100\n"
+"POT-Creation-Date: 2023-01-01 12:31+0100\n"
 "PO-Revision-Date: 2016-09-13 20:57+0800\n"
 "Last-Translator: Walter Cheuk <wwycheuk@gmail.com>\n"
 "Language-Team: \n"
@@ -74,8 +74,8 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "選擇要在瀏覽器顯示的目錄。"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3491
-#: ../src/tag_area.cc:1413
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3495
+#: ../src/tag_area.cc:1349
 msgid "_Open"
 msgstr "開啟(_O)"
 
@@ -89,8 +89,8 @@ msgid "No files"
 msgstr "無檔案"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:23 ../data/scan_dialog.ui.h:63
-#: ../data/search_dialog.ui.h:14
+#: ../data/preferences_dialog.ui.h:24 ../data/scan_dialog.ui.h:69
+#: ../data/search_dialog.ui.h:15
 msgid "Artist"
 msgstr "演唱者"
 
@@ -103,8 +103,8 @@ msgid "# Files"
 msgstr "# 檔案"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:25 ../data/scan_dialog.ui.h:67
-#: ../data/search_dialog.ui.h:16
+#: ../data/preferences_dialog.ui.h:26 ../data/scan_dialog.ui.h:73
+#: ../data/search_dialog.ui.h:17
 msgid "Album"
 msgstr "專輯"
 
@@ -115,102 +115,114 @@ msgstr "路徑"
 
 #: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
 #: ../data/playlist_dialog.ui.h:2 ../data/preferences_dialog.ui.h:17
-#: ../data/scan_dialog.ui.h:59 ../data/search_dialog.ui.h:12
+#: ../data/scan_dialog.ui.h:63 ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "檔名"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:22 ../data/scan_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:22 ../data/scan_dialog.ui.h:65
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "曲名"
 
-#: ../data/browser.ui.h:12 ../data/preferences_dialog.ui.h:24
-#: ../data/scan_dialog.ui.h:65 ../data/search_dialog.ui.h:15
+#: ../data/browser.ui.h:12 ../data/preferences_dialog.ui.h:23
+#: ../data/scan_dialog.ui.h:67 ../data/search_dialog.ui.h:14
+#, fuzzy
+msgid "Subtitle"
+msgstr "曲名"
+
+#: ../data/browser.ui.h:13 ../data/preferences_dialog.ui.h:25
+#: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:16
 msgid "Album Artist"
 msgstr "專輯演唱者"
 
-#: ../data/browser.ui.h:13 ../data/cddb_dialog.ui.h:40
-#: ../data/preferences_dialog.ui.h:26 ../data/search_dialog.ui.h:18
+#: ../data/browser.ui.h:14 ../data/preferences_dialog.ui.h:27
+#: ../data/scan_dialog.ui.h:75 ../data/search_dialog.ui.h:18
+#, fuzzy
+msgid "Disc subtitle"
+msgstr "依曲名遞減排序"
+
+#: ../data/browser.ui.h:15 ../data/cddb_dialog.ui.h:40
+#: ../data/preferences_dialog.ui.h:28 ../data/search_dialog.ui.h:20
 msgid "Year"
 msgstr "年份"
 
-#: ../data/browser.ui.h:14 ../data/preferences_dialog.ui.h:27
+#: ../data/browser.ui.h:16 ../data/preferences_dialog.ui.h:29
 #, fuzzy
 msgid "Rel. year"
 msgstr "原唱者"
 
-#: ../data/browser.ui.h:15 ../data/preferences_dialog.ui.h:29
+#: ../data/browser.ui.h:17 ../data/preferences_dialog.ui.h:31
 msgid "Disc"
 msgstr "碟片"
 
-#: ../data/browser.ui.h:16 ../data/preferences_dialog.ui.h:28
-#: ../data/search_dialog.ui.h:19
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:30
+#: ../data/search_dialog.ui.h:21
 msgid "Track"
 msgstr "曲目"
 
-#: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:30 ../data/scan_dialog.ui.h:69
-#: ../data/search_dialog.ui.h:20
+#: ../data/browser.ui.h:19 ../data/cddb_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:32 ../data/scan_dialog.ui.h:77
+#: ../data/search_dialog.ui.h:22
 msgid "Genre"
 msgstr "曲風"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:31
-#: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
+#: ../data/browser.ui.h:20 ../data/preferences_dialog.ui.h:33
+#: ../data/scan_dialog.ui.h:79 ../data/search_dialog.ui.h:23
 msgid "Comment"
 msgstr "備註"
 
-#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:32
-#: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
+#: ../data/browser.ui.h:21 ../data/preferences_dialog.ui.h:34
+#: ../data/scan_dialog.ui.h:81 ../data/search_dialog.ui.h:24
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "作曲者"
 
-#: ../data/browser.ui.h:20 ../data/preferences_dialog.ui.h:33
-#: ../data/search_dialog.ui.h:23
+#: ../data/browser.ui.h:22 ../data/preferences_dialog.ui.h:35
+#: ../data/search_dialog.ui.h:25
 msgid "Original Artist"
 msgstr "原唱者"
 
-#: ../data/browser.ui.h:21 ../data/preferences_dialog.ui.h:34
-#: ../data/search_dialog.ui.h:24
+#: ../data/browser.ui.h:23 ../data/preferences_dialog.ui.h:36
+#: ../data/search_dialog.ui.h:26
 #, fuzzy
 msgid "Orig. year"
 msgstr "原唱者"
 
-#: ../data/browser.ui.h:22 ../data/preferences_dialog.ui.h:35
-#: ../data/scan_dialog.ui.h:77 ../data/search_dialog.ui.h:25
+#: ../data/browser.ui.h:24 ../data/preferences_dialog.ui.h:37
+#: ../data/scan_dialog.ui.h:85 ../data/search_dialog.ui.h:27
 msgid "Copyright"
 msgstr "版權所有者"
 
-#: ../data/browser.ui.h:23 ../data/preferences_dialog.ui.h:36
-#: ../data/scan_dialog.ui.h:79 ../data/search_dialog.ui.h:26
+#: ../data/browser.ui.h:25 ../data/preferences_dialog.ui.h:38
+#: ../data/scan_dialog.ui.h:87 ../data/search_dialog.ui.h:28
 msgid "URL"
 msgstr "網址"
 
-#: ../data/browser.ui.h:24 ../data/preferences_dialog.ui.h:37
-#: ../data/scan_dialog.ui.h:81 ../data/search_dialog.ui.h:27
+#: ../data/browser.ui.h:26 ../data/preferences_dialog.ui.h:39
+#: ../data/scan_dialog.ui.h:89 ../data/search_dialog.ui.h:29
 msgid "Encoded By"
 msgstr "編碼程式"
 
-#: ../data/browser.ui.h:25 ../data/preferences_dialog.ui.h:18
-#: ../data/search_dialog.ui.h:28
+#: ../data/browser.ui.h:27 ../data/preferences_dialog.ui.h:18
+#: ../data/search_dialog.ui.h:30
 #, fuzzy
 msgid "File size"
 msgstr "檔案"
 
-#: ../data/browser.ui.h:26 ../data/cddb_dialog.ui.h:33
-#: ../data/preferences_dialog.ui.h:19 ../data/search_dialog.ui.h:29
+#: ../data/browser.ui.h:28 ../data/cddb_dialog.ui.h:33
+#: ../data/preferences_dialog.ui.h:19 ../data/search_dialog.ui.h:31
 msgid "Duration"
 msgstr "時間"
 
-#: ../data/browser.ui.h:27 ../data/preferences_dialog.ui.h:20
-#: ../data/search_dialog.ui.h:30
+#: ../data/browser.ui.h:29 ../data/preferences_dialog.ui.h:20
+#: ../data/search_dialog.ui.h:32
 #, fuzzy
 msgid "Bit rate"
 msgstr "位元率："
 
-#: ../data/browser.ui.h:28 ../data/preferences_dialog.ui.h:21
-#: ../data/search_dialog.ui.h:31
+#: ../data/browser.ui.h:30 ../data/preferences_dialog.ui.h:21
+#: ../data/search_dialog.ui.h:33
 #, fuzzy
 msgid "Samplerate"
 msgstr "取樣率："
@@ -232,9 +244,9 @@ msgstr "輸入要執行的程式；當前目錄會自動引入為參數"
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.cc:376 ../src/application_window.cc:390
 #: ../src/application_window.cc:3019 ../src/browser.cc:937
-#: ../src/browser.cc:3490 ../src/cddb_dialog.cc:2124 ../src/easytag.c:464
-#: ../src/easytag.c:471 ../src/easytag.c:599 ../src/tag_area.cc:1411
-#: ../src/tag_area.cc:1736
+#: ../src/browser.cc:3494 ../src/cddb_dialog.cc:2124 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:599 ../src/tag_area.cc:1347
+#: ../src/tag_area.cc:1672
 msgid "_Cancel"
 msgstr "取消(_C)"
 
@@ -252,7 +264,7 @@ msgid ""
 msgstr "輸入要執行的程式；當前檔案會自動引入為參數"
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:565
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:109 ../src/easytag.c:565
 msgid "Rename Directory"
 msgstr "目錄更名"
 
@@ -331,7 +343,7 @@ msgstr "搜尋欄位"
 msgid "Track Name"
 msgstr "曲名"
 
-#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:115
+#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:122
 #: ../src/picture.c:191
 msgid "Other"
 msgstr "其他"
@@ -444,14 +456,14 @@ msgstr ""
 msgid "Match lines with the Levenshtein algorithm"
 msgstr "以 Levenshtein 演算法配對近似項目"
 
-#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:167
+#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:174
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:24
 msgid "Whether to use the DLM algorithm to match CDDB results to files"
 msgstr ""
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
-#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:184
-#: ../data/scan_dialog.ui.h:118
+#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:191
+#: ../data/scan_dialog.ui.h:126
 msgid "_Close"
 msgstr "關閉(_C)"
 
@@ -518,7 +530,7 @@ msgstr "說明"
 msgid "_Accept"
 msgstr "接受(_A)"
 
-#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:38
+#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:40
 msgid "Log"
 msgstr "記錄"
 
@@ -679,7 +691,7 @@ msgstr "掃瞄模式"
 msgid "Rename Files and Directories"
 msgstr "檔案及目錄更名"
 
-#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:114
+#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:122
 msgid "Process Fields"
 msgstr "欄位處理"
 
@@ -712,312 +724,332 @@ msgid "Descending by title"
 msgstr "依曲名遞減排序"
 
 #: ../data/menus.ui.h:34
+#, fuzzy
+msgid "Ascending by subtitle"
+msgstr "依曲名遞增排序"
+
+#: ../data/menus.ui.h:35
+#, fuzzy
+msgid "Descending by subtitle"
+msgstr "依曲名遞減排序"
+
+#: ../data/menus.ui.h:36
 msgid "Ascending by artist"
 msgstr "依演唱者遞增排序"
 
-#: ../data/menus.ui.h:35
+#: ../data/menus.ui.h:37
 msgid "Descending by artist"
 msgstr "依演唱者遞減排序"
 
-#: ../data/menus.ui.h:36
+#: ../data/menus.ui.h:38
 msgid "Ascending by album artist"
 msgstr "依專輯演唱者遞增排序"
 
-#: ../data/menus.ui.h:37
+#: ../data/menus.ui.h:39
 msgid "Descending by album artist"
 msgstr "依專輯演唱者遞減排序"
 
-#: ../data/menus.ui.h:38
+#: ../data/menus.ui.h:40
 msgid "Ascending by album"
 msgstr "依專輯遞增排序"
 
-#: ../data/menus.ui.h:39
+#: ../data/menus.ui.h:41
 msgid "Descending by album"
 msgstr "依專輯遞減排序"
 
-#: ../data/menus.ui.h:40
+#: ../data/menus.ui.h:42
+#, fuzzy
+msgid "Ascending by disc subtitle"
+msgstr "依曲名遞增排序"
+
+#: ../data/menus.ui.h:43
+#, fuzzy
+msgid "Descending by disc subtitle"
+msgstr "依曲名遞減排序"
+
+#: ../data/menus.ui.h:44
 msgid "Ascending by year"
 msgstr "依年份遞增排序"
 
-#: ../data/menus.ui.h:41
+#: ../data/menus.ui.h:45
 msgid "Descending by year"
 msgstr "依年份遞減排序"
 
-#: ../data/menus.ui.h:42
+#: ../data/menus.ui.h:46
 #, fuzzy
 msgid "Ascending by release year"
 msgstr "依年份遞增排序"
 
-#: ../data/menus.ui.h:43
+#: ../data/menus.ui.h:47
 #, fuzzy
 msgid "Descending by release year"
 msgstr "依年份遞減排序"
 
-#: ../data/menus.ui.h:44
+#: ../data/menus.ui.h:48
 msgid "Ascending by genre"
 msgstr "依曲風遞增排序"
 
-#: ../data/menus.ui.h:45
+#: ../data/menus.ui.h:49
 msgid "Descending by genre"
 msgstr "依曲風遞減排序"
 
-#: ../data/menus.ui.h:46
+#: ../data/menus.ui.h:50
 msgid "Ascending by comment"
 msgstr "依備註遞增排序"
 
-#: ../data/menus.ui.h:47
+#: ../data/menus.ui.h:51
 msgid "Descending by comment"
 msgstr "依備註遞減排序"
 
-#: ../data/menus.ui.h:48
+#: ../data/menus.ui.h:52
 msgid "Ascending by composer"
 msgstr "依作曲者遞增排序"
 
-#: ../data/menus.ui.h:49
+#: ../data/menus.ui.h:53
 msgid "Descending by composer"
 msgstr "依作曲者遞減排序"
 
-#: ../data/menus.ui.h:50
+#: ../data/menus.ui.h:54
 msgid "Ascending by original artist"
 msgstr "依原唱者遞增排序"
 
-#: ../data/menus.ui.h:51
+#: ../data/menus.ui.h:55
 msgid "Descending by original artist"
 msgstr "依原唱者遞減排序"
 
-#: ../data/menus.ui.h:52
+#: ../data/menus.ui.h:56
 #, fuzzy
 msgid "Ascending by original year"
 msgstr "依原唱者遞增排序"
 
-#: ../data/menus.ui.h:53
+#: ../data/menus.ui.h:57
 #, fuzzy
 msgid "Descending by original year"
 msgstr "依原唱者遞減排序"
 
-#: ../data/menus.ui.h:54
+#: ../data/menus.ui.h:58
 msgid "Ascending by copyright"
 msgstr "依版權所有者遞增排序"
 
-#: ../data/menus.ui.h:55
+#: ../data/menus.ui.h:59
 msgid "Descending by copyright"
 msgstr "依版權所有者遞減排序"
 
-#: ../data/menus.ui.h:56
+#: ../data/menus.ui.h:60
 msgid "Ascending by URL"
 msgstr "依網址遞增排序"
 
-#: ../data/menus.ui.h:57
+#: ../data/menus.ui.h:61
 msgid "Descending by URL"
 msgstr "依網址遞減排序"
 
-#: ../data/menus.ui.h:58
+#: ../data/menus.ui.h:62
 msgid "Ascending by encoder name"
 msgstr "依編碼程式遞增排序"
 
-#: ../data/menus.ui.h:59
+#: ../data/menus.ui.h:63
 msgid "Descending by encoder name"
 msgstr "依編碼程式遞增排序"
 
-#: ../data/menus.ui.h:60
+#: ../data/menus.ui.h:64
 msgid "Sort List by Property"
 msgstr "依屬性排序"
 
-#: ../data/menus.ui.h:61
+#: ../data/menus.ui.h:65
 #, fuzzy
 msgid "Ascending by file path"
 msgstr "依檔案類型遞增排序"
 
-#: ../data/menus.ui.h:62
+#: ../data/menus.ui.h:66
 #, fuzzy
 msgid "Descending by file path"
 msgstr "依檔案類型遞減排序"
 
-#: ../data/menus.ui.h:63
+#: ../data/menus.ui.h:67
 msgid "Ascending by filename"
 msgstr "依檔名遞增排序"
 
-#: ../data/menus.ui.h:64
+#: ../data/menus.ui.h:68
 msgid "Descending by filename"
 msgstr "依檔名遞減排序"
 
-#: ../data/menus.ui.h:65
+#: ../data/menus.ui.h:69
 msgid "Ascending by creation date"
 msgstr "依建立日期遞增排序"
 
-#: ../data/menus.ui.h:66
+#: ../data/menus.ui.h:70
 msgid "Descending by creation date"
 msgstr "依建立日期遞減排序"
 
-#: ../data/menus.ui.h:67
+#: ../data/menus.ui.h:71
 msgid "Ascending by file type"
 msgstr "依檔案類型遞增排序"
 
-#: ../data/menus.ui.h:68
+#: ../data/menus.ui.h:72
 msgid "Descending by file type"
 msgstr "依檔案類型遞減排序"
 
-#: ../data/menus.ui.h:69
+#: ../data/menus.ui.h:73
 msgid "Ascending by file size"
 msgstr "依檔案大小遞增排序"
 
-#: ../data/menus.ui.h:70
+#: ../data/menus.ui.h:74
 msgid "Descending by file size"
 msgstr "依檔案大小遞減排序"
 
-#: ../data/menus.ui.h:71
+#: ../data/menus.ui.h:75
 msgid "Ascending by duration"
 msgstr "依曲目長度遞增排序"
 
-#: ../data/menus.ui.h:72
+#: ../data/menus.ui.h:76
 msgid "Descending by duration"
 msgstr "依曲目長度遞減排序"
 
-#: ../data/menus.ui.h:73
+#: ../data/menus.ui.h:77
 msgid "Ascending by bit rate"
 msgstr "依位元率遞增排序"
 
-#: ../data/menus.ui.h:74
+#: ../data/menus.ui.h:78
 msgid "Descending by bit rate"
 msgstr "依位元率遞減排序"
 
-#: ../data/menus.ui.h:75
+#: ../data/menus.ui.h:79
 msgid "Ascending by sample rate"
 msgstr "依取樣率遞增排序"
 
-#: ../data/menus.ui.h:76
+#: ../data/menus.ui.h:80
 msgid "Descending by sample rate"
 msgstr "依取樣率遞減排序"
 
-#: ../data/menus.ui.h:77
+#: ../data/menus.ui.h:81
 msgid "Collapse Tree"
 msgstr "摺疊目錄樹"
 
-#: ../data/menus.ui.h:78
+#: ../data/menus.ui.h:82
 msgid "Reload Tree"
 msgstr "重新載入目錄樹"
 
-#: ../data/menus.ui.h:79
+#: ../data/menus.ui.h:83
 msgid "Reload Directory"
 msgstr "重新載入目錄"
 
-#: ../data/menus.ui.h:80
+#: ../data/menus.ui.h:84
 msgid "Show Hidden Directories"
 msgstr "顯示隱藏目錄"
 
-#: ../data/menus.ui.h:81
+#: ../data/menus.ui.h:85
 msgid "_Browser"
 msgstr "瀏覽(_B)"
 
-#: ../data/menus.ui.h:82
+#: ../data/menus.ui.h:86
 msgid "Set _Current Path as Default"
 msgstr "將當前路徑設為預設目錄(_C)"
 
-#: ../data/menus.ui.h:83
+#: ../data/menus.ui.h:87
 msgid "Rename Directory…"
 msgstr "目錄更名..."
 
-#: ../data/menus.ui.h:84
+#: ../data/menus.ui.h:88
 msgid "Browse Directory With…"
 msgstr "以此瀏覽目錄..."
 
-#: ../data/menus.ui.h:85
+#: ../data/menus.ui.h:89
 msgid "Browse _Subdirectories"
 msgstr "瀏覽子目錄(_S)"
 
-#: ../data/menus.ui.h:86
+#: ../data/menus.ui.h:90
 msgid "_Miscellaneous"
 msgstr "雜項(_M)"
 
-#: ../data/menus.ui.h:87
+#: ../data/menus.ui.h:91
 msgid "CDD_B Search…"
 msgstr "CDD_B 搜尋..."
 
-#: ../data/menus.ui.h:88
+#: ../data/menus.ui.h:92
 msgid "Load Filenames From a Text File…"
 msgstr "從文字檔載入檔名..."
 
-#: ../data/menus.ui.h:89 ../data/toolbar.ui.h:29
+#: ../data/menus.ui.h:93 ../data/toolbar.ui.h:29
 msgid "Generate Playlist…"
 msgstr "產生播放清單..."
 
-#: ../data/menus.ui.h:90
+#: ../data/menus.ui.h:94
 msgid "_Go"
 msgstr "前往(_G)"
 
-#: ../data/menus.ui.h:91
+#: ../data/menus.ui.h:95
 msgid "_Home Directory"
 msgstr "家目錄(_H)"
 
-#: ../data/menus.ui.h:92
+#: ../data/menus.ui.h:96
 msgid "Desktop Directory"
 msgstr "桌面目錄"
 
-#: ../data/menus.ui.h:93
+#: ../data/menus.ui.h:97
 msgid "Documents Directory"
 msgstr "文件目錄"
 
-#: ../data/menus.ui.h:94
+#: ../data/menus.ui.h:98
 msgid "Downloads Directory"
 msgstr "下載目錄"
 
-#: ../data/menus.ui.h:95
+#: ../data/menus.ui.h:99
 msgid "Music Directory"
 msgstr "音樂目錄"
 
-#: ../data/menus.ui.h:96
+#: ../data/menus.ui.h:100
 msgid "_Parent Directory"
 msgstr "上層目錄(_P)"
 
-#: ../data/menus.ui.h:97
+#: ../data/menus.ui.h:101
 msgid "_Default Directory"
 msgstr "預設目錄(_D)"
 
-#: ../data/menus.ui.h:98 ../data/toolbar.ui.h:1
+#: ../data/menus.ui.h:102 ../data/toolbar.ui.h:1
 msgid "_First File"
 msgstr "第一個檔案(_F)"
 
-#: ../data/menus.ui.h:99
+#: ../data/menus.ui.h:103
 msgid "Previous File"
 msgstr "上一個檔案"
 
-#: ../data/menus.ui.h:100 ../data/toolbar.ui.h:5
+#: ../data/menus.ui.h:104 ../data/toolbar.ui.h:5
 msgid "_Next File"
 msgstr "下一個檔案(_N)"
 
-#: ../data/menus.ui.h:101 ../data/toolbar.ui.h:7
+#: ../data/menus.ui.h:105 ../data/toolbar.ui.h:7
 msgid "_Last File"
 msgstr "最後一個檔案(_L)"
 
-#: ../data/menus.ui.h:102
+#: ../data/menus.ui.h:106
 msgid "Home Directory"
 msgstr "家目錄"
 
-#: ../data/menus.ui.h:103
+#: ../data/menus.ui.h:107
 msgid "Default Directory"
 msgstr "預設目錄"
 
-#: ../data/menus.ui.h:104
+#: ../data/menus.ui.h:108
 msgid "Set Current Path as Default"
 msgstr "將當目前路徑設為預設目錄"
 
-#: ../data/menus.ui.h:106
+#: ../data/menus.ui.h:110
 msgid "Browse Subdirectories"
 msgstr "瀏覽子目錄"
 
-#: ../data/menus.ui.h:107
+#: ../data/menus.ui.h:111
 msgid "Invert Selection"
 msgstr "反向選取"
 
-#: ../data/menus.ui.h:108
+#: ../data/menus.ui.h:112
 msgid "CDDB Search Files…"
 msgstr "CDDB 搜尋檔案..."
 
-#: ../data/menus.ui.h:109
+#: ../data/menus.ui.h:113
 msgid "Find…"
 msgstr "尋找..."
 
-#: ../data/menus.ui.h:110
+#: ../data/menus.ui.h:114
 msgid "Clear Log"
 msgstr "清除記錄檔"
 
@@ -1086,7 +1118,7 @@ msgstr "以此寫入資訊："
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.cc:3020
 #: ../src/browser.cc:938 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:600 ../src/easytag.c:607
-#: ../src/tag_area.cc:1738
+#: ../src/tag_area.cc:1674
 msgid "_Save"
 msgstr "儲存(_S)"
 
@@ -1161,68 +1193,68 @@ msgstr ""
 msgid "Visible columns"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:39
+#: ../data/preferences_dialog.ui.h:41
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:49
 msgid "Show the log"
 msgstr "顯示記錄檔"
 
-#: ../data/preferences_dialog.ui.h:40
+#: ../data/preferences_dialog.ui.h:42
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:50
 msgid "Whether to show the log in the main window"
 msgstr "是否於主視窗顯示記錄檔"
 
-#: ../data/preferences_dialog.ui.h:41
+#: ../data/preferences_dialog.ui.h:43
 msgid "General"
 msgstr "一般"
 
-#: ../data/preferences_dialog.ui.h:42
+#: ../data/preferences_dialog.ui.h:44
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:39
 msgid "Show audio file header summary"
 msgstr "顯示音訊檔標頭摘要"
 
-#: ../data/preferences_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:45
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:40
 msgid ""
 "Whether to show header information, such as bit rate and duration, for audio "
 "files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:44
+#: ../data/preferences_dialog.ui.h:46
 msgid "Display changed files in list using:"
 msgstr "以特定樣式顯示清單的變更："
 
-#: ../data/preferences_dialog.ui.h:45
+#: ../data/preferences_dialog.ui.h:47
 msgid "Red color"
 msgstr "紅色"
 
-#: ../data/preferences_dialog.ui.h:46
+#: ../data/preferences_dialog.ui.h:48
 msgid "Bold style"
 msgstr "粗體"
 
-#: ../data/preferences_dialog.ui.h:47
+#: ../data/preferences_dialog.ui.h:49
 msgid "Interface"
 msgstr "介面"
 
-#: ../data/preferences_dialog.ui.h:48
+#: ../data/preferences_dialog.ui.h:50
 msgid "File Settings"
 msgstr "檔案設定"
 
-#: ../data/preferences_dialog.ui.h:49
+#: ../data/preferences_dialog.ui.h:51
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:35
 msgid "Preserve modification time when writing files"
 msgstr "寫入檔案時，避免更動修改時間"
 
-#: ../data/preferences_dialog.ui.h:50
+#: ../data/preferences_dialog.ui.h:52
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:36
 msgid "Whether to preserve the existing modification time when editing files"
 msgstr "編輯檔案時，避免更動修改時間"
 
-#: ../data/preferences_dialog.ui.h:51
+#: ../data/preferences_dialog.ui.h:53
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:37
 msgid "Update parent directory modification time when writing files"
 msgstr "寫入檔案時，避免更動上層目錄的修改時間"
 
-#: ../data/preferences_dialog.ui.h:52
+#: ../data/preferences_dialog.ui.h:54
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:38
 msgid ""
 "Whether to update the modification time on the parent directory when editing "
@@ -1230,270 +1262,287 @@ msgid ""
 msgstr "編輯檔案時，是否更動上層目錄的修改時間"
 
 #. Translators: a section header in the Files tab of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:54
+#: ../data/preferences_dialog.ui.h:56
 msgid "Filenames"
 msgstr "檔名"
 
-#: ../data/preferences_dialog.ui.h:55
+#: ../data/preferences_dialog.ui.h:57
 #, fuzzy
 msgid "Replace illegal characters when renaming:"
 msgstr "更名時，取代不合法的字元"
 
-#: ../data/preferences_dialog.ui.h:56
+#: ../data/preferences_dialog.ui.h:58
 msgid ""
 "Convert characters which cannot be represented in filenames on some "
 "filesystems (‘\\’, ‘/’, ‘:’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’)"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:57
+#: ../data/preferences_dialog.ui.h:59
 msgid "by ASCII characters"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:58
+#: ../data/preferences_dialog.ui.h:60
 msgid "Use the ASCII characters (‘-’, ‘+’, ‘_’, ‘'’, ‘(’, ‘)’) as replacement."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:59
+#: ../data/preferences_dialog.ui.h:61
 msgid "by Unicode characters"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:62
 msgid ""
 "Use similar Unicode characters (‘&#8726;’, ‘&#8725;’, ‘&#8758;’, ‘&#8727;’, "
 "‘&#8253;’, ‘&#8221;’, ‘&#8826;’, ‘&#8827;’, ‘&#8739;’) as replacement."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:63
 #, fuzzy
 msgid "No change"
 msgstr "不改變"
 
-#: ../data/preferences_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:64
 msgid "You must manually ensure valid file characters."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:63
+#: ../data/preferences_dialog.ui.h:65
 msgid "Convert filename extension to:"
 msgstr "將檔案副檔名轉換為："
 
-#: ../data/preferences_dialog.ui.h:64
+#: ../data/preferences_dialog.ui.h:66
 #, fuzzy
 msgid "Lower case"
 msgstr "小寫"
 
-#: ../data/preferences_dialog.ui.h:65
+#: ../data/preferences_dialog.ui.h:67
 msgid "For example, the extension will be converted to ‘.mp3’"
 msgstr "例: 副檔名會變成「.mp3」"
 
-#: ../data/preferences_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:68
 #, fuzzy
 msgid "Upper case"
 msgstr "大寫"
 
-#: ../data/preferences_dialog.ui.h:67
+#: ../data/preferences_dialog.ui.h:69
 msgid "For example, the extension will be converted to ‘.MP3’"
 msgstr "例: 副檔名會變成「.MP3」"
 
-#: ../data/preferences_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:70
 msgid "The extension will not be modified"
 msgstr "副檔名不會修改"
 
-#: ../data/preferences_dialog.ui.h:69
+#: ../data/preferences_dialog.ui.h:71
 msgid "Filename Encoding"
 msgstr "檔名編碼"
 
-#: ../data/preferences_dialog.ui.h:70
+#: ../data/preferences_dialog.ui.h:72
 msgid "Try another character encoding"
 msgstr "嘗試其他字元編碼"
 
-#: ../data/preferences_dialog.ui.h:71
+#: ../data/preferences_dialog.ui.h:73
 msgid ""
 "Try to use the encoding associated with your locale and if this fails, try "
 "the ISO-8859-1 character encoding"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:72
+#: ../data/preferences_dialog.ui.h:74
 msgid "Transliterate characters into the system character encoding"
 msgstr "將字元轉寫為系統字元編碼"
 
-#: ../data/preferences_dialog.ui.h:73
+#: ../data/preferences_dialog.ui.h:75
 msgid ""
 "Replace unsupported characters with a similar character from the target "
 "character encoding"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:74
+#: ../data/preferences_dialog.ui.h:76
 msgid ""
 "Use the system character encoding and silently discard unsupported characters"
 msgstr "使用系統編碼，並刪除不支援的字元"
 
-#: ../data/preferences_dialog.ui.h:75
+#: ../data/preferences_dialog.ui.h:77
 msgid ""
 "Discard characters which cannot be represented in the target character "
 "encoding"
 msgstr "當遇到無法以目的編碼表示的字元時，會自動刪除該字元"
 
-#: ../data/preferences_dialog.ui.h:76
+#: ../data/preferences_dialog.ui.h:78
 msgid "Files"
 msgstr "檔案"
 
-#: ../data/preferences_dialog.ui.h:77
+#: ../data/preferences_dialog.ui.h:79
 msgid "Automatically complete date field"
 msgstr "自動完成日期欄位"
 
-#: ../data/preferences_dialog.ui.h:78
+#: ../data/preferences_dialog.ui.h:80
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:84
 msgid "Whether to automatically complete the date tag"
 msgstr "是否自動完成日期標籤"
 
-#: ../data/preferences_dialog.ui.h:79
+#: ../data/preferences_dialog.ui.h:81
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:89
 msgid "Automatically select the type of the image based on its filename"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:80
+#: ../data/preferences_dialog.ui.h:82
 msgid ""
 "Whether to, when adding cover art, automatically select a type for an image "
 "based on its filename"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:81
+#: ../data/preferences_dialog.ui.h:83
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:95
 msgid "Preserve the tag field focus"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:82
+#: ../data/preferences_dialog.ui.h:84
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:96
 msgid "Whether to preserve focus on the current tag field when switching file"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:83
+#: ../data/preferences_dialog.ui.h:85
 msgid "Pad the number of digits in the disc field to:"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:84
+#: ../data/preferences_dialog.ui.h:86
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:86
 msgid "Whether the disc number tag field should be padded with leading zeroes"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:85
+#: ../data/preferences_dialog.ui.h:87
 msgid "Pad the number of digits in the track field to:"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:86
+#: ../data/preferences_dialog.ui.h:88
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:92
 msgid "Whether the track number tag field should be padded with leading zeroes"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:87
+#: ../data/preferences_dialog.ui.h:89
 msgid "Splitting"
 msgstr "分割設定"
 
-#: ../data/preferences_dialog.ui.h:88
+#: ../data/preferences_dialog.ui.h:90
 msgid "Delimiter for split"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:89
+#: ../data/preferences_dialog.ui.h:91
 msgid ""
 "When writing the text is spilt at this delimiter. When reading it is joined "
 "with this delimier."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:90
+#: ../data/preferences_dialog.ui.h:92
 #, fuzzy
 msgid ""
 "For Vorbis tags, selected fields will be split and saved as separate tags"
 msgstr ""
 "對於 Vorbis 檔案的標籤，所選欄位會在連字號(-)之處分割，然後作為不同的標籤儲存"
 
-#: ../data/preferences_dialog.ui.h:91
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:190
+#: ../data/preferences_dialog.ui.h:93
 msgid "Whether to split title fields in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:92
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:192
+#: ../data/preferences_dialog.ui.h:94
+#, fuzzy
+msgid "Whether to split subtitle fields in Ogg comments"
+msgstr "分開 Ogg 原唱者欄位"
+
+#: ../data/preferences_dialog.ui.h:95
 msgid "Whether to split artist fields in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:93
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:194
+#: ../data/preferences_dialog.ui.h:96
 msgid "Whether to split album fields in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:94
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:196
+#: ../data/preferences_dialog.ui.h:97
+#, fuzzy
+msgid "Whether to split disc subtitle fields in Ogg comments"
+msgstr "分開 Ogg 原唱者欄位"
+
+#: ../data/preferences_dialog.ui.h:98
 msgid "Whether to split genre fields in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:95
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:198
+#: ../data/preferences_dialog.ui.h:99
 msgid "Whether to split comment fields in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:96
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:200
+#: ../data/preferences_dialog.ui.h:100
 msgid "Whether to split composer fields in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:97
+#: ../data/preferences_dialog.ui.h:101
 msgid "Original artist"
 msgstr "原唱者"
 
-#: ../data/preferences_dialog.ui.h:98
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:202
+#: ../data/preferences_dialog.ui.h:102
 #, fuzzy
 msgid "Whether to split original artist fields in Ogg comments"
 msgstr "分開 Ogg 原唱者欄位"
 
-#: ../data/preferences_dialog.ui.h:99
+#: ../data/preferences_dialog.ui.h:103
+#, fuzzy
+msgid "Whether to split URL fields in Ogg comments"
+msgstr "分開 Ogg 原唱者欄位"
+
+#: ../data/preferences_dialog.ui.h:104
+msgid "Encoded by"
+msgstr "編碼程式"
+
+#: ../data/preferences_dialog.ui.h:105
+#, fuzzy
+msgid "Whether to split encoded by fields in Ogg comments"
+msgstr "分開 Ogg 原唱者欄位"
+
+#: ../data/preferences_dialog.ui.h:106
 msgid "Tags"
 msgstr "標籤"
 
-#: ../data/preferences_dialog.ui.h:100
+#: ../data/preferences_dialog.ui.h:107
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:53
 msgid "Strip ID3 tags if all ID3 tags are empty"
 msgstr "若所有 ID3 欄位均為空白，則刪除該標籤"
 
-#: ../data/preferences_dialog.ui.h:101
+#: ../data/preferences_dialog.ui.h:108
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:54
 msgid ""
 "Whether to remove the ID3 tag from the audio file if all the individual tag "
 "fields are empty"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:102
+#: ../data/preferences_dialog.ui.h:109
 msgid "Non-standard encoding for reading ID3 tags:"
 msgstr "讀取 ID3 標籤所用的非標準編碼："
 
-#: ../data/preferences_dialog.ui.h:103
+#: ../data/preferences_dialog.ui.h:110
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:52
 msgid "Whether to use a non-standard character encoding when reading ID3 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:104
+#: ../data/preferences_dialog.ui.h:111
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:62
 msgid "Choose the character set to be used when reading ID3v1 and ID3v2 tags"
 msgstr "選擇用來讀取 ID3v1 和 ID3v2 標籤的字元集"
 
-#: ../data/preferences_dialog.ui.h:105
+#: ../data/preferences_dialog.ui.h:112
 msgid "ID3v2"
 msgstr "ID3v2"
 
-#: ../data/preferences_dialog.ui.h:106
+#: ../data/preferences_dialog.ui.h:113
 msgid "Write ID3v2 tag"
 msgstr "寫入 ID3v2 標籤"
 
-#: ../data/preferences_dialog.ui.h:107
+#: ../data/preferences_dialog.ui.h:114
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:64
 msgid "Whether to write ID3v2 tags when writing ID3 tags into audio files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:108
+#: ../data/preferences_dialog.ui.h:115
 msgid "Version:"
 msgstr "版本："
 
-#: ../data/preferences_dialog.ui.h:109
+#: ../data/preferences_dialog.ui.h:116
 msgid ""
 "Select the ID3v2 tag version to write:\n"
 "• ID3v2.3 is written using id3lib,\n"
@@ -1503,318 +1552,318 @@ msgstr ""
 " - ID3v2.3 (以 id3lib 寫入)，\n"
 " - ID3v2.4 (以 libid3tag  寫入) (建議)"
 
-#: ../data/preferences_dialog.ui.h:112
+#: ../data/preferences_dialog.ui.h:119
 msgid "Character encoding:"
 msgstr "字元編碼："
 
-#: ../data/preferences_dialog.ui.h:113
+#: ../data/preferences_dialog.ui.h:120
 msgid "Unicode"
 msgstr "Unicode"
 
-#: ../data/preferences_dialog.ui.h:114
+#: ../data/preferences_dialog.ui.h:121
 msgid ""
 "Choose the Unicode character encoding to be used when writing ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:116
+#: ../data/preferences_dialog.ui.h:123
 msgid ""
 "Override the standard Unicode character encoding to be used when writing "
 "ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:117
+#: ../data/preferences_dialog.ui.h:124
 msgid "When encoding conversion fails:"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:118
+#: ../data/preferences_dialog.ui.h:125
 msgid "Report error"
 msgstr "報告出錯情況"
 
-#: ../data/preferences_dialog.ui.h:119
+#: ../data/preferences_dialog.ui.h:126
 msgid ""
 "Display an error message when a character cannot be represented in the "
 "target character encoding and keep the original character"
 msgstr "當字元無法以目的編碼表示時，會顯示出錯訊息，並保留原來的字元"
 
-#: ../data/preferences_dialog.ui.h:120
+#: ../data/preferences_dialog.ui.h:127
 msgid "Transliterate"
 msgstr "轉寫"
 
-#: ../data/preferences_dialog.ui.h:121
+#: ../data/preferences_dialog.ui.h:128
 msgid "Discard"
 msgstr "放棄"
 
-#: ../data/preferences_dialog.ui.h:122
+#: ../data/preferences_dialog.ui.h:129
 msgid "Automatically convert old ID3v2 tag versions"
 msgstr "自動轉換舊版本的 ID3v2 標籤"
 
-#: ../data/preferences_dialog.ui.h:123
+#: ../data/preferences_dialog.ui.h:130
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:68
 msgid ""
 "Whether to convert ID3 tags written against old version of the "
 "specification, such as ID3v2.2, to newer ones, such as ID3v2.3 or ID3v2.4"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:124
+#: ../data/preferences_dialog.ui.h:131
 msgid "Use CRC-32"
 msgstr "使用 CRC-32"
 
-#: ../data/preferences_dialog.ui.h:125
+#: ../data/preferences_dialog.ui.h:132
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:72
 msgid "Whether to embed a CRC-32 checksum of the audio file data in ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:126
+#: ../data/preferences_dialog.ui.h:133
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:69
 msgid "Compress data in ID3v2 tags"
 msgstr "壓縮 ID3v2 標籤的資料"
 
-#: ../data/preferences_dialog.ui.h:127
+#: ../data/preferences_dialog.ui.h:134
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:70
 msgid "Whether to compress data in ID3v2 tags"
 msgstr "是否壓縮 ID3v2 標籤的資料"
 
-#: ../data/preferences_dialog.ui.h:128
+#: ../data/preferences_dialog.ui.h:135
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:73
 msgid "Use text-only genre in ID3v2 tags"
 msgstr "在 ID3v2 標籤以文字方式寫入「曲風」欄位"
 
-#: ../data/preferences_dialog.ui.h:129
+#: ../data/preferences_dialog.ui.h:136
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:74
 msgid ""
 "Whether to use only a string, and not the integer-base ID3v1 genre field, "
 "when writing a genre field to ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:130
+#: ../data/preferences_dialog.ui.h:137
 msgid "ID3v1"
 msgstr "ID3v1"
 
-#: ../data/preferences_dialog.ui.h:131
+#: ../data/preferences_dialog.ui.h:138
 msgid "Write ID3v1 tag"
 msgstr "寫入 ID3v1 標籤"
 
-#: ../data/preferences_dialog.ui.h:132
+#: ../data/preferences_dialog.ui.h:139
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:56
 msgid "Whether to write ID3v1 tags when writing ID3 tags into audio files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:133
+#: ../data/preferences_dialog.ui.h:140
 msgid "Choose the character set to be used when writing ID3v1 tag"
 msgstr "選擇寫入 ID3v1 標籤的字元集"
 
-#: ../data/preferences_dialog.ui.h:134
+#: ../data/preferences_dialog.ui.h:141
 msgid "ID3 Tags"
 msgstr "ID3 標籤"
 
-#: ../data/preferences_dialog.ui.h:135
+#: ../data/preferences_dialog.ui.h:142
 msgid "Character Conversion"
 msgstr "字元轉換"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:137
+#: ../data/preferences_dialog.ui.h:144
 msgid "Fill Tag Scanner"
 msgstr "標籤填入掃瞄"
 
-#: ../data/preferences_dialog.ui.h:139
+#: ../data/preferences_dialog.ui.h:146
 #, no-c-format
 msgid "Convert underscores and ‘%20’ to spaces"
 msgstr "將「_」及「%20」轉換為空格"
 
-#: ../data/preferences_dialog.ui.h:141
+#: ../data/preferences_dialog.ui.h:148
 #, no-c-format
 msgid "Convert spaces and ‘%20’ to underscores"
 msgstr "將空格和「%20」轉換為底線「_」"
 
-#: ../data/preferences_dialog.ui.h:142
+#: ../data/preferences_dialog.ui.h:149
 msgid "No conversion"
 msgstr "不轉換"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:144
+#: ../data/preferences_dialog.ui.h:151
 msgid "Rename File and Directory Scanner"
 msgstr "檔案及目錄更名掃瞄"
 
-#: ../data/preferences_dialog.ui.h:145 ../data/scan_dialog.ui.h:96
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:135 ../src/tag_area.cc:786
+#: ../data/preferences_dialog.ui.h:152 ../data/scan_dialog.ui.h:104
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:135 ../src/tag_area.cc:722
 msgid "Remove spaces"
 msgstr "移除空格"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:147
+#: ../data/preferences_dialog.ui.h:154
 msgid "Process Fields Scanner"
 msgstr "欄位處理掃瞄"
 
-#: ../data/preferences_dialog.ui.h:148
+#: ../data/preferences_dialog.ui.h:155
 msgid "Upper-case the first letters of all words"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:149
+#: ../data/preferences_dialog.ui.h:156
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to upper-case the first letter of all words, including prepositions "
 "and other short words such as “feat.”, when processing tag fields"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:150
+#: ../data/preferences_dialog.ui.h:157
 msgid "Fields"
 msgstr "欄位"
 
-#: ../data/preferences_dialog.ui.h:151
+#: ../data/preferences_dialog.ui.h:158
 msgid "Overwrite fields when scanning tags"
 msgstr "標籤掃瞄時覆蓋現有欄位"
 
-#: ../data/preferences_dialog.ui.h:152
+#: ../data/preferences_dialog.ui.h:159
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:101
 msgid ""
 "Whether to overwrite the tag field values when filling tags. Otherwise, only "
 "blank tag fields will be filled"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:153
+#: ../data/preferences_dialog.ui.h:160
 msgid "Set this text as default comment:"
 msgstr "設定要寫入備註的預設文字："
 
-#: ../data/preferences_dialog.ui.h:154
+#: ../data/preferences_dialog.ui.h:161
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:103
 msgid ""
 "Whether to set the comment tag field to the provided default value when "
 "filling tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:155
+#: ../data/preferences_dialog.ui.h:162
 msgid "Use CRC-32 as the default comment (for files with ID3 tags only)"
 msgstr "以 CRC-32 作為預設備註 (只對 ID3 標籤有效)"
 
-#: ../data/preferences_dialog.ui.h:156
+#: ../data/preferences_dialog.ui.h:163
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:107
 msgid ""
 "Whether to use the CRC-32 of the audio file data as the default comment, for "
 "files with ID3 tags only"
 msgstr "是否以音訊檔資料的 CRC-32 作為預設備註 (只對 ID3 標籤的檔案有效)"
 
-#: ../data/preferences_dialog.ui.h:157
+#: ../data/preferences_dialog.ui.h:164
 msgid "Scanner"
 msgstr "掃瞄"
 
-#: ../data/preferences_dialog.ui.h:158
+#: ../data/preferences_dialog.ui.h:165
 msgid "Automatic Search Servers"
 msgstr "自動搜尋伺服器"
 
-#: ../data/preferences_dialog.ui.h:159
+#: ../data/preferences_dialog.ui.h:166
 msgid "Host:"
 msgstr "主機："
 
-#: ../data/preferences_dialog.ui.h:160
+#: ../data/preferences_dialog.ui.h:167
 msgid "Port:"
 msgstr "連接埠："
 
-#: ../data/preferences_dialog.ui.h:161
+#: ../data/preferences_dialog.ui.h:168
 msgid "CGI Path:"
 msgstr "CGI 路徑："
 
-#: ../data/preferences_dialog.ui.h:162
+#: ../data/preferences_dialog.ui.h:169
 msgid "Manual Search Server"
 msgstr "手動搜尋伺服器"
 
-#: ../data/preferences_dialog.ui.h:163
+#: ../data/preferences_dialog.ui.h:170
 msgid "Results List"
 msgstr "結果清單"
 
-#: ../data/preferences_dialog.ui.h:164
+#: ../data/preferences_dialog.ui.h:171
 msgid ""
 "Select corresponding file (according to position or DLM if activated below)"
 msgstr "根據順序或 DLM (如已在下方啟用)，選取對應的檔案"
 
-#: ../data/preferences_dialog.ui.h:165
+#: ../data/preferences_dialog.ui.h:172
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:26
 msgid ""
 "Whether to select the file in the file list which matches the position in "
 "the CDDB results list"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:166
+#: ../data/preferences_dialog.ui.h:173
 msgid ""
 "Use the Levenshtein algorithm (DLM) to match results (using title) with "
 "audio files (using filename)"
 msgstr "以 Levenshtein 演算法 (DLM) 依檔名比對符合的曲名結果"
 
-#: ../data/preferences_dialog.ui.h:168
+#: ../data/preferences_dialog.ui.h:175
 msgid "CDDB"
 msgstr "CDDB"
 
-#: ../data/preferences_dialog.ui.h:169
+#: ../data/preferences_dialog.ui.h:176
 msgid "Confirmation"
 msgstr "確認"
 
-#: ../data/preferences_dialog.ui.h:170
+#: ../data/preferences_dialog.ui.h:177
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:108
 msgid "Confirm before writing tags"
 msgstr "寫入標籤要先確認"
 
-#: ../data/preferences_dialog.ui.h:171
+#: ../data/preferences_dialog.ui.h:178
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:109
 msgid ""
 "Whether to ask for confirmation from the user before writing tags to audio "
 "files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:172
+#: ../data/preferences_dialog.ui.h:179
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:110
 msgid "Confirm before renaming a file"
 msgstr "檔案更名要先確認"
 
-#: ../data/preferences_dialog.ui.h:173
+#: ../data/preferences_dialog.ui.h:180
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:111
 msgid "Whether to ask for confirmation from the user before renaming a file"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:174
+#: ../data/preferences_dialog.ui.h:181
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:114
 msgid "Confirm before deleting a file"
 msgstr "檔案刪除要先確認"
 
-#: ../data/preferences_dialog.ui.h:175
+#: ../data/preferences_dialog.ui.h:182
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:115
 msgid "Whether to ask for confirmation from the user before deleting a file"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:176
+#: ../data/preferences_dialog.ui.h:183
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:112
 msgid "Confirm before writing a playlist"
 msgstr "寫入播放清單要先確認"
 
-#: ../data/preferences_dialog.ui.h:177
+#: ../data/preferences_dialog.ui.h:184
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:113
 msgid "Whether to ask for confirmation from the user before writing a playlist"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:178
+#: ../data/preferences_dialog.ui.h:185
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:116
 msgid "Confirm before losing unsaved changes to files"
 msgstr "放棄檔案變更要先確認"
 
-#: ../data/preferences_dialog.ui.h:179
+#: ../data/preferences_dialog.ui.h:186
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:117
 msgid ""
 "Whether to ask for confirmation from the user before performing an operation "
 "that would lose unsaved changes on files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:180
+#: ../data/preferences_dialog.ui.h:187
 msgid "Scanner Dialog"
 msgstr "掃瞄對話匣"
 
-#: ../data/preferences_dialog.ui.h:181
+#: ../data/preferences_dialog.ui.h:188
 msgid "Show the scanner dialog on startup"
 msgstr "啟動時顯示掃瞄對話匣"
 
-#: ../data/preferences_dialog.ui.h:182
+#: ../data/preferences_dialog.ui.h:189
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:184
 msgid "Whether to show the scanner window on application startup"
 msgstr "啟動時，是否顯示掃瞄視窗"
 
-#: ../data/preferences_dialog.ui.h:183
+#: ../data/preferences_dialog.ui.h:190
 msgid "Application"
 msgstr "應用程式"
 
@@ -1920,9 +1969,9 @@ msgid "%D: number of discs"
 msgstr "%D：碟片總數"
 
 #: ../data/scan_dialog.ui.h:34
-#, no-c-format
-msgid "%g: genre"
-msgstr "%g：曲風"
+#, fuzzy, no-c-format
+msgid "%s: subtitle"
+msgstr "%t：曲名"
 
 #: ../data/scan_dialog.ui.h:36
 #, no-c-format
@@ -1936,18 +1985,18 @@ msgstr "%o：原唱者"
 
 #: ../data/scan_dialog.ui.h:40
 #, no-c-format
-msgid "%c: comment"
-msgstr "%c：備註"
+msgid "%g: genre"
+msgstr "%g：曲風"
 
 #: ../data/scan_dialog.ui.h:42
 #, no-c-format
-msgid "%i: ignored"
-msgstr "%i：已忽略"
+msgid "%c: comment"
+msgstr "%c：備註"
 
 #: ../data/scan_dialog.ui.h:44
-#, no-c-format
-msgid "%u: URL"
-msgstr "%u：網址"
+#, fuzzy, no-c-format
+msgid "%S: disc subtitle"
+msgstr "依曲名遞減排序"
 
 #: ../data/scan_dialog.ui.h:46
 #, no-c-format
@@ -1961,22 +2010,32 @@ msgstr "%r：版權所有者"
 
 #: ../data/scan_dialog.ui.h:50
 #, no-c-format
+msgid "%u: URL"
+msgstr "%u：網址"
+
+#: ../data/scan_dialog.ui.h:52
+#, no-c-format
 msgid "%e: encoded by"
 msgstr "%e：編碼程式"
 
-#: ../data/scan_dialog.ui.h:51
+#: ../data/scan_dialog.ui.h:54
+#, no-c-format
+msgid "%i: ignored"
+msgstr "%i：已忽略"
+
+#: ../data/scan_dialog.ui.h:55
 msgid "{…|…}: alternatives group"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:52
+#: ../data/scan_dialog.ui.h:56
 msgid "Fill Tag"
 msgstr "標籤填入"
 
-#: ../data/scan_dialog.ui.h:53
+#: ../data/scan_dialog.ui.h:57
 msgid "Prefix mask with current directory"
 msgstr "當前目錄的前置遮罩"
 
-#: ../data/scan_dialog.ui.h:54
+#: ../data/scan_dialog.ui.h:58
 msgid ""
 "Select or type in a mask using codes (see Legend) to parse tag fields. Used "
 "to rename the file.\n"
@@ -1986,166 +2045,176 @@ msgstr ""
 "選取或以代碼 (請見說明) 輸入要解析標籤欄位的遮罩條件，用來重新命名檔案。\n"
 "以 / 代表目錄。如果第一個字元為 / 代表絕對路徑，否則為相對路徑。"
 
-#: ../data/scan_dialog.ui.h:56
+#: ../data/scan_dialog.ui.h:60
 msgid "Rename file preview"
 msgstr "檔案更名預覽"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:574
+#: ../data/scan_dialog.ui.h:61 ../src/easytag.c:574
 msgid "Rename File"
 msgstr "檔案更名"
 
-#: ../data/scan_dialog.ui.h:58
+#: ../data/scan_dialog.ui.h:62
 msgid "Tag Fields"
 msgstr "標籤欄位"
 
-#: ../data/scan_dialog.ui.h:60
+#: ../data/scan_dialog.ui.h:64
 msgid "Process filename"
 msgstr "處理檔名"
 
-#: ../data/scan_dialog.ui.h:62
+#: ../data/scan_dialog.ui.h:66
 msgid "Process title field"
 msgstr "處理曲名欄位"
 
-#: ../data/scan_dialog.ui.h:64
+#: ../data/scan_dialog.ui.h:68
+#, fuzzy
+msgid "Process subtitle field"
+msgstr "處理曲名欄位"
+
+#: ../data/scan_dialog.ui.h:70
 msgid "Process artist field"
 msgstr "處理演唱者欄位"
 
-#: ../data/scan_dialog.ui.h:66
+#: ../data/scan_dialog.ui.h:72
 msgid "Process album artist field"
 msgstr "處理專輯演唱者欄位"
 
-#: ../data/scan_dialog.ui.h:68
+#: ../data/scan_dialog.ui.h:74
 msgid "Process album field"
 msgstr "處理專輯欄位"
 
-#: ../data/scan_dialog.ui.h:70
+#: ../data/scan_dialog.ui.h:76
+#, fuzzy
+msgid "Process disc subtitle field"
+msgstr "處理曲名欄位"
+
+#: ../data/scan_dialog.ui.h:78
 msgid "Process genre field"
 msgstr "處理曲風欄位"
 
-#: ../data/scan_dialog.ui.h:72
+#: ../data/scan_dialog.ui.h:80
 msgid "Process comment field"
 msgstr "處理備註欄位"
 
-#: ../data/scan_dialog.ui.h:74
+#: ../data/scan_dialog.ui.h:82
 msgid "Process composer field"
 msgstr "處理作曲者欄位"
 
-#: ../data/scan_dialog.ui.h:75
+#: ../data/scan_dialog.ui.h:83
 msgid "Orig. Artist"
 msgstr "原唱者"
 
-#: ../data/scan_dialog.ui.h:76
+#: ../data/scan_dialog.ui.h:84
 msgid "Process original artist field"
 msgstr "處理原唱者欄位"
 
-#: ../data/scan_dialog.ui.h:78
+#: ../data/scan_dialog.ui.h:86
 msgid "Process copyright field"
 msgstr "處理版權所有者欄位"
 
-#: ../data/scan_dialog.ui.h:80
+#: ../data/scan_dialog.ui.h:88
 msgid "Process URL field"
 msgstr "處理網址欄位"
 
-#: ../data/scan_dialog.ui.h:82
+#: ../data/scan_dialog.ui.h:90
 msgid "Process encoded-by field"
 msgstr "處理編碼程式欄位"
 
-#: ../data/scan_dialog.ui.h:83
+#: ../data/scan_dialog.ui.h:91
 msgid "Capitalization"
 msgstr "大小寫"
 
-#: ../data/scan_dialog.ui.h:84
+#: ../data/scan_dialog.ui.h:92
 msgid "Capitalize all"
 msgstr "轉為大寫"
 
-#: ../data/scan_dialog.ui.h:85
+#: ../data/scan_dialog.ui.h:93
 msgid ""
 "Whether to upper-case all characters of the tag when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:86
+#: ../data/scan_dialog.ui.h:94
 msgid "Lowercase all"
 msgstr "轉為小寫"
 
-#: ../data/scan_dialog.ui.h:87
+#: ../data/scan_dialog.ui.h:95
 msgid ""
 "Whether to lower-case all characters of the tag when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:88
+#: ../data/scan_dialog.ui.h:96
 msgid "Capitalize first letter"
 msgstr "首字母轉為大寫"
 
-#: ../data/scan_dialog.ui.h:89
+#: ../data/scan_dialog.ui.h:97
 msgid ""
 "Whether to upper-case the first letter of the tag when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:90
+#: ../data/scan_dialog.ui.h:98
 msgid "Capitalize the first letter of each word"
 msgstr "每個字的首字母大寫"
 
-#: ../data/scan_dialog.ui.h:91
+#: ../data/scan_dialog.ui.h:99
 msgid ""
 "Whether to upper-case the first letter of each word when processing tag "
 "fields"
 msgstr "某些介系詞和冠詞的首字母不要轉為大寫"
 
-#: ../data/scan_dialog.ui.h:92
+#: ../data/scan_dialog.ui.h:100
 msgid "Detect Roman numerals"
 msgstr "偵測羅馬數字"
 
-#: ../data/scan_dialog.ui.h:93 ../data/org.gnome.EasyTAG.gschema.xml.h:134
+#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:134
 msgid ""
 "Whether to detect Roman numerals when applying upper-case conversions while "
 "processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:94
+#: ../data/scan_dialog.ui.h:102
 msgid "Do not change capitalization"
 msgstr "不變更大小寫"
 
-#: ../data/scan_dialog.ui.h:95
+#: ../data/scan_dialog.ui.h:103
 msgid "Spaces Conversions"
 msgstr "空格轉換"
 
-#: ../data/scan_dialog.ui.h:97 ../data/org.gnome.EasyTAG.gschema.xml.h:136
+#: ../data/scan_dialog.ui.h:105 ../data/org.gnome.EasyTAG.gschema.xml.h:136
 msgid "Whether to remove all spaces when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:98
+#: ../data/scan_dialog.ui.h:106
 msgid "Insert a space before uppercase letters"
 msgstr "在大寫字母前插入空格"
 
-#: ../data/scan_dialog.ui.h:99 ../data/org.gnome.EasyTAG.gschema.xml.h:138
+#: ../data/scan_dialog.ui.h:107 ../data/org.gnome.EasyTAG.gschema.xml.h:138
 msgid ""
 "Whether to insert spaces before capital letters when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:100
+#: ../data/scan_dialog.ui.h:108
 msgid "Remove duplicate spaces and underscores"
 msgstr "移除重複的空格及底線"
 
-#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:140
+#: ../data/scan_dialog.ui.h:109 ../data/org.gnome.EasyTAG.gschema.xml.h:140
 msgid ""
 "Whether to remove duplicate spaces and underscores when processing tag fields"
 msgstr "處理標籤欄位時，是否移除重複的空格及底線"
 
-#: ../data/scan_dialog.ui.h:102
+#: ../data/scan_dialog.ui.h:110
 msgid "Do not change word separators"
 msgstr "不變更文字分隔字元"
 
-#: ../data/scan_dialog.ui.h:103
+#: ../data/scan_dialog.ui.h:111
 msgid "Character Conversions"
 msgstr "字元轉換"
 
-#: ../data/scan_dialog.ui.h:105 ../src/tag_area.cc:742
+#: ../data/scan_dialog.ui.h:113 ../src/tag_area.cc:678
 #, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "將「_」及「%20」轉換為空格"
 
-#: ../data/scan_dialog.ui.h:107
+#: ../data/scan_dialog.ui.h:115
 #, no-c-format
 msgid ""
 "The underscore character or the string ‘%20’ is replaced by one space. "
@@ -2154,49 +2223,49 @@ msgstr ""
 "將底線或「%20」字串取代成空格，例如 Text%20In%20An_Entry　會變 Text In An "
 "Entry"
 
-#: ../data/scan_dialog.ui.h:108 ../src/tag_area.cc:748
+#: ../data/scan_dialog.ui.h:116 ../src/tag_area.cc:684
 msgid "Convert spaces to underscores"
 msgstr "將空格轉換為底線「_」"
 
-#: ../data/scan_dialog.ui.h:109
+#: ../data/scan_dialog.ui.h:117
 msgid ""
 "The space character is replaced by one underscore character. Example, "
 "before: ‘Text In An Entry’, after: ‘Text_In_An_Entry’"
 msgstr "將空格取代成底線，例如 Text In An Entry 會變 Text_In_An_Entry"
 
-#: ../data/scan_dialog.ui.h:110
+#: ../data/scan_dialog.ui.h:118
 msgid "Convert:"
 msgstr "轉換："
 
-#: ../data/scan_dialog.ui.h:111
+#: ../data/scan_dialog.ui.h:119
 msgid "Replace a string by another one. Note that the search is case sensitive"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:112
+#: ../data/scan_dialog.ui.h:120
 msgid "to: "
 msgstr "為："
 
-#: ../data/scan_dialog.ui.h:113
+#: ../data/scan_dialog.ui.h:121
 msgid "Do not convert"
 msgstr "不轉換"
 
-#: ../data/scan_dialog.ui.h:115
+#: ../data/scan_dialog.ui.h:123
 msgid "Show / Hide Masks Editor"
 msgstr "顯示╱隱藏遮罩條件編輯"
 
-#: ../data/scan_dialog.ui.h:116
+#: ../data/scan_dialog.ui.h:124
 msgid "Show / Hide Legend"
 msgstr "顯示╱隱藏說明"
 
-#: ../data/scan_dialog.ui.h:117
+#: ../data/scan_dialog.ui.h:125
 msgid "Scanner Preferences"
 msgstr "掃瞄偏好設定"
 
-#: ../data/scan_dialog.ui.h:119
+#: ../data/scan_dialog.ui.h:127
 msgid "Scan Files"
 msgstr "掃瞄檔案"
 
-#: ../data/scan_dialog.ui.h:120
+#: ../data/scan_dialog.ui.h:128
 msgid "Scan selected files"
 msgstr "掃瞄所選檔案"
 
@@ -2236,11 +2305,11 @@ msgstr "標籤"
 msgid "Case sensitive"
 msgstr "大小寫相異"
 
-#: ../data/search_dialog.ui.h:17
+#: ../data/search_dialog.ui.h:19
 msgid "CD"
 msgstr "CD"
 
-#: ../data/tag_area.ui.h:1 ../src/tag_area.cc:2756
+#: ../data/tag_area.ui.h:1 ../src/tag_area.cc:2555
 msgid "Tag"
 msgstr "標籤"
 
@@ -2253,163 +2322,183 @@ msgid "Tag selected files with this title"
 msgstr "以此曲名標記所選檔案"
 
 #: ../data/tag_area.ui.h:4
+#, fuzzy
+msgid "Subtitle:"
+msgstr "曲名："
+
+#: ../data/tag_area.ui.h:5
+#, fuzzy
+msgid "Tag selected files with this subtitle"
+msgstr "以此曲名標記所選檔案"
+
+#: ../data/tag_area.ui.h:6
 msgid "Artist:"
 msgstr "演唱者："
 
-#: ../data/tag_area.ui.h:5
+#: ../data/tag_area.ui.h:7
 msgid "Tag selected files with this artist"
 msgstr "以此演唱者標記所選檔案"
 
-#: ../data/tag_area.ui.h:6
+#: ../data/tag_area.ui.h:8
 msgid "Album artist:"
 msgstr "專輯演唱者："
 
-#: ../data/tag_area.ui.h:7
+#: ../data/tag_area.ui.h:9
 msgid "Tag selected files with this album artist"
 msgstr "以此專輯演唱者標記所選檔案"
 
-#: ../data/tag_area.ui.h:8
+#: ../data/tag_area.ui.h:10
 msgid "Album:"
 msgstr "專輯："
 
-#: ../data/tag_area.ui.h:9
+#: ../data/tag_area.ui.h:11
 msgid "Tag selected files with this album name"
 msgstr "以此專輯名稱標記所選檔案"
 
-#: ../data/tag_area.ui.h:10
+#: ../data/tag_area.ui.h:12
+#, fuzzy
+msgid "Disc subtitle:"
+msgstr "依曲名遞減排序"
+
+#: ../data/tag_area.ui.h:13
+#, fuzzy
+msgid "Tag selected files with this disc subtitle"
+msgstr "以此碟片編號標記所選檔案"
+
+#: ../data/tag_area.ui.h:14
 msgid "Track #:"
 msgstr "曲目 #："
 
-#: ../data/tag_area.ui.h:11
+#: ../data/tag_area.ui.h:15
 msgid "Number selected tracks sequentially. Starts at 01 in each subdirectory"
 msgstr "為所選曲目依序編號，每個子目錄從 01 開始"
 
-#: ../data/tag_area.ui.h:12
+#: ../data/tag_area.ui.h:16
 msgid ""
 "Set the number of files, in the same directory of the displayed file, to the "
 "selected tracks"
 msgstr "設定檔案總數，以相同目錄顯示的檔案計算"
 
-#: ../data/tag_area.ui.h:13
+#: ../data/tag_area.ui.h:17
 msgid "Tag selected files with this number of tracks"
 msgstr "以此曲目總數標記所選檔案"
 
-#: ../data/tag_area.ui.h:14
+#: ../data/tag_area.ui.h:18
 msgid "CD:"
 msgstr "CD："
 
-#: ../data/tag_area.ui.h:15
+#: ../data/tag_area.ui.h:19
 msgid "Tag selected files with this disc number"
 msgstr "以此碟片編號標記所選檔案"
 
-#: ../data/tag_area.ui.h:16
+#: ../data/tag_area.ui.h:20
 msgid "Year:"
 msgstr "發行年份："
 
-#: ../data/tag_area.ui.h:17
+#: ../data/tag_area.ui.h:21
 msgid "Tag selected files with this year"
 msgstr "以此發行年份標記所選檔案"
 
-#: ../data/tag_area.ui.h:18
+#: ../data/tag_area.ui.h:22
 msgid "Release year:"
 msgstr ""
 
-#: ../data/tag_area.ui.h:19
+#: ../data/tag_area.ui.h:23
 #, fuzzy
 msgid "Tag selected files with this release year"
 msgstr "以此發行年份標記所選檔案"
 
-#: ../data/tag_area.ui.h:20
+#: ../data/tag_area.ui.h:24
 msgid "Genre:"
 msgstr "曲風："
 
-#: ../data/tag_area.ui.h:21
+#: ../data/tag_area.ui.h:25
 msgid "Comment:"
 msgstr "備註："
 
-#: ../data/tag_area.ui.h:22
+#: ../data/tag_area.ui.h:26
 msgid "Tag selected files with this comment"
 msgstr "以此備註標記所選檔案"
 
-#: ../data/tag_area.ui.h:23
+#: ../data/tag_area.ui.h:27
 msgid "Composer:"
 msgstr "作曲者："
 
-#: ../data/tag_area.ui.h:24
+#: ../data/tag_area.ui.h:28
 msgid "Tag selected files with this composer"
 msgstr "以此作曲者標記所選檔案"
 
-#: ../data/tag_area.ui.h:25
+#: ../data/tag_area.ui.h:29
 msgid "Orig. artist:"
 msgstr "原唱者："
 
-#: ../data/tag_area.ui.h:26
+#: ../data/tag_area.ui.h:30
 msgid "Tag selected files with this original artist"
 msgstr "以此原唱者標記所選檔案"
 
-#: ../data/tag_area.ui.h:27
+#: ../data/tag_area.ui.h:31
 #, fuzzy
 msgid "year:"
 msgstr "發行年份："
 
-#: ../data/tag_area.ui.h:28
+#: ../data/tag_area.ui.h:32
 #, fuzzy
 msgid "Tag selected files with this original year"
 msgstr "以此原唱者標記所選檔案"
 
-#: ../data/tag_area.ui.h:29
+#: ../data/tag_area.ui.h:33
 msgid "Copyright:"
 msgstr "版權所有者："
 
-#: ../data/tag_area.ui.h:30
+#: ../data/tag_area.ui.h:34
 msgid "Tag selected files with this copyright"
 msgstr "以此版權所有者標記所選檔案"
 
-#: ../data/tag_area.ui.h:31
+#: ../data/tag_area.ui.h:35
 msgid "URL:"
 msgstr "網址："
 
-#: ../data/tag_area.ui.h:32
+#: ../data/tag_area.ui.h:36
 msgid "Tag selected files with this URL"
 msgstr "以此網址標記所選檔案"
 
-#: ../data/tag_area.ui.h:33
+#: ../data/tag_area.ui.h:37
 msgid "Encoded by:"
 msgstr "編碼程式："
 
-#: ../data/tag_area.ui.h:34
+#: ../data/tag_area.ui.h:38
 msgid "Tag selected files with this encoder name"
 msgstr "以此編碼程式標記所選檔案"
 
-#: ../data/tag_area.ui.h:35
+#: ../data/tag_area.ui.h:39
 msgid "Common"
 msgstr "一般"
 
-#: ../data/tag_area.ui.h:36
+#: ../data/tag_area.ui.h:40
 msgid "You can use drag and drop to add an image"
 msgstr "可以拖放圖像到這裡，以加入封面。"
 
-#: ../data/tag_area.ui.h:37
+#: ../data/tag_area.ui.h:41
 msgid "Add images to the tag"
 msgstr ""
 
-#: ../data/tag_area.ui.h:38
+#: ../data/tag_area.ui.h:42
 msgid "Remove selected images from the tag"
 msgstr ""
 
-#: ../data/tag_area.ui.h:39
+#: ../data/tag_area.ui.h:43
 msgid "Save the selected images to files"
 msgstr "將所選圖像儲存到硬碟"
 
-#: ../data/tag_area.ui.h:40
+#: ../data/tag_area.ui.h:44
 msgid "Edit image properties"
 msgstr ""
 
-#: ../data/tag_area.ui.h:41
+#: ../data/tag_area.ui.h:45
 msgid "Tag selected files with these images"
 msgstr "以此等圖像標記所選檔案"
 
-#: ../data/tag_area.ui.h:42 ../src/tag_area.cc:3034 ../src/tag_area.cc:3037
+#: ../data/tag_area.ui.h:46 ../src/tag_area.cc:2675 ../src/tag_area.cc:2678
 msgid "Images"
 msgstr "圖像"
 
@@ -3028,38 +3117,20 @@ msgid ""
 msgstr ""
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:189
-msgid "Split Ogg title fields"
-msgstr "分開 Ogg 曲名欄位"
+#, fuzzy
+msgid "Vorbis fields to split"
+msgstr "(已停用 Ogg Vorbis 格式支援)"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:191
-msgid "Split Ogg artist fields"
-msgstr "分開 Ogg 演唱者欄位"
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:193
-msgid "Split Ogg album fields"
-msgstr "分開 Ogg 專輯欄位"
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:195
-msgid "Split Ogg genre fields"
-msgstr "分開 Ogg 曲風欄位"
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:197
-msgid "Split Ogg comment fields"
-msgstr "分開 Ogg 備註欄位"
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:199
-msgid "Split Ogg composer fields"
-msgstr "分開 Ogg 作曲者欄位"
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:201
-msgid "Split Ogg original artist fields"
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:190
+#, fuzzy
+msgid "Whether to split the selected fields in Ogg comments"
 msgstr "分開 Ogg 原唱者欄位"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:203
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:191
 msgid "Page to show in the preferences dialog"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:204
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:192
 msgid "The page in the notebook of the preferences dialog"
 msgstr ""
 
@@ -3173,8 +3244,8 @@ msgid "All tags have been removed"
 msgstr "已移除所有標籤"
 
 #: ../src/application_window.cc:1475 ../src/browser.cc:349
-#: ../src/browser.cc:392 ../src/browser.cc:426 ../src/browser.cc:4321
-#: ../src/browser.cc:4396
+#: ../src/browser.cc:392 ../src/browser.cc:426 ../src/browser.cc:4325
+#: ../src/browser.cc:4400
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "未能啟動「%s」程式"
@@ -3188,7 +3259,7 @@ msgstr "無法將檔名「%s」轉換為系統檔名編碼"
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "請嘗試設置環境變量 G_FILENAME_ENCODING。"
 
-#: ../src/application_window.cc:2003 ../src/scan_dialog.cc:800
+#: ../src/application_window.cc:2003 ../src/scan_dialog.cc:808
 msgid "Filename translation"
 msgstr "檔名翻譯"
 
@@ -3263,54 +3334,54 @@ msgstr "確認變更目錄"
 msgid "All albums"
 msgstr "所有專輯"
 
-#: ../src/browser.cc:3527
+#: ../src/browser.cc:3531
 msgid "Select File"
 msgstr "選取檔案"
 
-#: ../src/browser.cc:3534
+#: ../src/browser.cc:3538
 msgid "Select Directory"
 msgstr "選取目錄"
 
-#: ../src/browser.cc:3826
+#: ../src/browser.cc:3830
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "「%s」目錄更名為："
 
-#: ../src/browser.cc:3962
+#: ../src/browser.cc:3966
 msgid "You must type a directory name"
 msgstr "必須輸入目錄名稱"
 
-#: ../src/browser.cc:3963 ../src/browser.cc:3985
+#: ../src/browser.cc:3967 ../src/browser.cc:3989
 msgid "Directory Name Error"
 msgstr "目錄名稱出錯"
 
-#: ../src/browser.cc:3981
+#: ../src/browser.cc:3985
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "無法將檔名「%s」轉換為檔名編碼"
 
-#: ../src/browser.cc:3984
+#: ../src/browser.cc:3988
 msgid "Please use another name."
 msgstr "請使用其他名稱。"
 
-#: ../src/browser.cc:4056
+#: ../src/browser.cc:4060
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "已有名為「%s」的目錄。"
 
-#: ../src/browser.cc:4057 ../src/easytag.c:653
+#: ../src/browser.cc:4061 ../src/easytag.c:653
 msgid "Rename File Error"
 msgstr "檔案更名出錯"
 
-#: ../src/browser.cc:4096 ../src/browser.cc:4125
+#: ../src/browser.cc:4100 ../src/browser.cc:4129
 msgid "Rename Directory Error"
 msgstr "目錄更名出錯"
 
-#: ../src/browser.cc:4166
+#: ../src/browser.cc:4170
 msgid "Directory renamed"
 msgstr "目錄已更名"
 
-#: ../src/browser.cc:4313 ../src/browser.cc:4388
+#: ../src/browser.cc:4317 ../src/browser.cc:4392
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "執行命令「%s」"
@@ -3889,20 +3960,20 @@ msgstr "將此項目向上移"
 msgid "Move this line down"
 msgstr "將此項目向下移"
 
-#: ../src/mask.cc:191
+#: ../src/mask.cc:198
 msgid "Incomplete placeholder at end of mask."
 msgstr ""
 
-#: ../src/mask.cc:193
+#: ../src/mask.cc:200
 #, c-format
 msgid "Invalid placeholder '%%%c'."
 msgstr ""
 
-#: ../src/mask.cc:197
+#: ../src/mask.cc:204
 msgid "Opening brace '{' without closing brace '}'."
 msgstr ""
 
-#: ../src/mask.cc:199
+#: ../src/mask.cc:206
 msgid "Closing brace '}' without opening brace '{'."
 msgstr ""
 
@@ -4018,7 +4089,7 @@ msgstr "像素"
 msgid "Type"
 msgstr "類型"
 
-#: ../src/picture.c:478 ../src/tags/id3_tag.c:1530 ../src/tags/vcedit.c:530
+#: ../src/picture.c:478 ../src/tags/id3_tag.cc:1326 ../src/tags/vcedit.c:530
 #, fuzzy, c-format
 msgid "Input truncated or empty"
 msgstr "輸入資料被截斷或空白。"
@@ -4041,11 +4112,11 @@ msgstr "播放清單檔案「%s」已寫入"
 msgid "Invalid scanner mask"
 msgstr "掃瞄遮罩條件無效"
 
-#: ../src/preferences_dialog.cc:796
+#: ../src/preferences_dialog.cc:809
 msgid "The selected default path is invalid"
 msgstr "所選的預設路徑無效"
 
-#: ../src/preferences_dialog.cc:798
+#: ../src/preferences_dialog.cc:811
 #, c-format
 msgid ""
 "Path: ‘%s’\n"
@@ -4054,63 +4125,63 @@ msgstr ""
 "路徑：「%s」\n"
 "錯誤：%s"
 
-#: ../src/preferences_dialog.cc:802
+#: ../src/preferences_dialog.cc:815
 msgid "Invalid Path Error"
 msgstr "無效路徑錯誤"
 
-#: ../src/scan_dialog.cc:386
+#: ../src/scan_dialog.cc:394
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr ""
 
-#: ../src/scan_dialog.cc:401
+#: ../src/scan_dialog.cc:409
 msgid "Tag successfully scanned"
 msgstr "標籤已成功掃描"
 
-#: ../src/scan_dialog.cc:404
+#: ../src/scan_dialog.cc:412
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "標籤已成功掃描「%s」"
 
-#: ../src/scan_dialog.cc:447
+#: ../src/scan_dialog.cc:455
 #, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "於檔名「%1$s」找不到副檔名「%2$s」"
 
-#: ../src/scan_dialog.cc:539 ../src/scan_dialog.cc:570
+#: ../src/scan_dialog.cc:547 ../src/scan_dialog.cc:578
 #, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "於「%2$s」找不到分隔字元「%1$s」"
 
-#: ../src/scan_dialog.cc:798
+#: ../src/scan_dialog.cc:806
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr "無法將檔名「%s」轉換為系統檔名編碼"
 
-#: ../src/scan_dialog.cc:824
+#: ../src/scan_dialog.cc:832
 msgid "New filename successfully scanned"
 msgstr "新檔名已成功掃瞄"
 
-#: ../src/scan_dialog.cc:828
+#: ../src/scan_dialog.cc:836
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "新檔名已成功掃瞄「%s」"
 
-#: ../src/scan_dialog.cc:993
+#: ../src/scan_dialog.cc:1001
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "處理欄位「%s」時出錯"
 
-#: ../src/scan_dialog.cc:1866
+#: ../src/scan_dialog.cc:1717
 msgid "New_mask"
 msgstr "新遮罩條件(_M)"
 
-#: ../src/scan_dialog.cc:2334
+#: ../src/scan_dialog.cc:2185
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "掃瞄遮罩條件無效"
 
-#: ../src/scan_dialog.cc:2407
+#: ../src/scan_dialog.cc:2258
 msgid "All tags have been scanned"
 msgstr "已掃瞄所有標籤"
 
@@ -4144,316 +4215,336 @@ msgstr "載入預設「檔案更名」遮罩..."
 msgid "Ready to start"
 msgstr "已準備開始"
 
-#: ../src/tag_area.cc:184
+#: ../src/tag_area.cc:190
 #, c-format
 msgid "Selected files tagged with title ‘%s’"
 msgstr "所選檔案已用曲名「%s」標記"
 
-#: ../src/tag_area.cc:186
+#: ../src/tag_area.cc:190
 msgid "Removed title from selected files"
 msgstr "所選檔案的曲名已移除"
 
 #: ../src/tag_area.cc:195
+#, fuzzy, c-format
+msgid "Selected files tagged with subtitle ‘%s’"
+msgstr "所選檔案已用曲名「%s」標記"
+
+#: ../src/tag_area.cc:195
+#, fuzzy
+msgid "Removed subtitle from selected files"
+msgstr "所選檔案的曲名已移除"
+
+#: ../src/tag_area.cc:200
 #, c-format
 msgid "Selected files tagged with artist ‘%s’"
 msgstr "所選檔案已用演唱者「%s」標記"
 
-#: ../src/tag_area.cc:197
+#: ../src/tag_area.cc:200
 msgid "Removed artist from selected files"
 msgstr "所選檔案的演唱者已移除"
 
-#: ../src/tag_area.cc:206
+#: ../src/tag_area.cc:205
 #, c-format
 msgid "Selected files tagged with album artist ‘%s’"
 msgstr "所選檔案已用專輯演唱者「%s」標記"
 
-#: ../src/tag_area.cc:208
+#: ../src/tag_area.cc:205
 msgid "Removed album artist from selected files"
 msgstr "所選檔案的專輯演唱者已移除"
 
-#: ../src/tag_area.cc:217
+#: ../src/tag_area.cc:210
 #, c-format
 msgid "Selected files tagged with album ‘%s’"
 msgstr "所選檔案已用專輯「%s」標記"
 
-#: ../src/tag_area.cc:219
+#: ../src/tag_area.cc:210
 msgid "Removed album name from selected files"
 msgstr "所選檔案的專輯名稱已移除"
 
-#: ../src/tag_area.cc:256
+#: ../src/tag_area.cc:215
+#, fuzzy, c-format
+msgid "Selected files tagged with disc subtitle ‘%s’"
+msgstr "所選檔案已用曲名「%s」標記"
+
+#: ../src/tag_area.cc:215
+#, fuzzy
+msgid "Removed disc subtitle from selected files"
+msgstr "所選檔案的碟片編號已移除"
+
+#: ../src/tag_area.cc:252
 #, c-format
 msgid "Selected files tagged with disc number ‘%s/%s’"
 msgstr "所選檔案已用碟片編號「%s/%s」標記"
 
-#: ../src/tag_area.cc:263
+#: ../src/tag_area.cc:259
 #, c-format
 msgid "Selected files tagged with disc number like ‘xx’"
 msgstr "所選檔案已用「xx」格式的碟片編號標記"
 
-#: ../src/tag_area.cc:268
+#: ../src/tag_area.cc:264
 msgid "Removed disc number from selected files"
 msgstr "所選檔案的碟片編號已移除"
 
-#: ../src/tag_area.cc:280
+#: ../src/tag_area.cc:272
 #, c-format
 msgid "Selected files tagged with year ‘%s’"
 msgstr "所選檔案已用發行年份「%s」標記"
 
-#: ../src/tag_area.cc:282
+#: ../src/tag_area.cc:272
 msgid "Removed year from selected files"
 msgstr "所選檔案的發行年份已移除"
 
-#: ../src/tag_area.cc:291
+#: ../src/tag_area.cc:277
 #, fuzzy, c-format
 msgid "Selected files tagged with release year ‘%s’"
 msgstr "所選檔案已用發行年份「%s」標記"
 
-#: ../src/tag_area.cc:293
+#: ../src/tag_area.cc:277
 #, fuzzy
 msgid "Removed release year from selected files"
 msgstr "所選檔案的發行年份已移除"
 
-#: ../src/tag_area.cc:322 ../src/tag_area.cc:427
+#: ../src/tag_area.cc:306 ../src/tag_area.cc:411
 #, c-format
 msgid "Selected files tagged with track like ‘xx/%s’"
 msgstr "所選檔案已用曲目編號「xx/%s」的方式標記。"
 
-#: ../src/tag_area.cc:326
+#: ../src/tag_area.cc:310
 #, c-format
 msgid "Selected files tagged with track like ‘xx’"
 msgstr "所選檔案已用曲目編號「xx」的方式標記"
 
-#: ../src/tag_area.cc:331 ../src/tag_area.cc:432
+#: ../src/tag_area.cc:315 ../src/tag_area.cc:416
 msgid "Removed track number from selected files"
 msgstr "所選檔案的曲目編號已移除"
 
 #. msg = g_strdup_printf(_("All %d tracks numbered sequentially."), ETCore->ETFileSelectionList_Length);
-#: ../src/tag_area.cc:390
+#: ../src/tag_area.cc:374
 #, c-format
 msgid "Selected tracks numbered sequentially"
 msgstr "所選檔案已依序標記曲目編號"
 
-#: ../src/tag_area.cc:444
+#: ../src/tag_area.cc:424
 #, c-format
 msgid "Selected files tagged with genre ‘%s’"
 msgstr "所選檔案已用曲風「%s」標記"
 
-#: ../src/tag_area.cc:446
+#: ../src/tag_area.cc:424
 msgid "Removed genre from selected files"
 msgstr "所選檔案的曲風已移除"
 
-#: ../src/tag_area.cc:455
+#: ../src/tag_area.cc:429
 #, c-format
 msgid "Selected files tagged with comment ‘%s’"
 msgstr "所選檔案已用備註「%s」標記"
 
-#: ../src/tag_area.cc:457
+#: ../src/tag_area.cc:429
 msgid "Removed comment from selected files"
 msgstr "所選檔案的備註已移除"
 
-#: ../src/tag_area.cc:466
+#: ../src/tag_area.cc:434
 #, c-format
 msgid "Selected files tagged with composer ‘%s’"
 msgstr "所選檔案已用作曲者「%s」標記"
 
-#: ../src/tag_area.cc:468
+#: ../src/tag_area.cc:434
 msgid "Removed composer from selected files"
 msgstr "所選檔案的作曲者已移除"
 
-#: ../src/tag_area.cc:477
+#: ../src/tag_area.cc:439
 #, c-format
 msgid "Selected files tagged with original artist ‘%s’"
 msgstr "所選檔案已用原唱者「%s」標記"
 
-#: ../src/tag_area.cc:479
+#: ../src/tag_area.cc:439
 msgid "Removed original artist from selected files"
 msgstr "所選檔案的原唱者已移除"
 
-#: ../src/tag_area.cc:488
+#: ../src/tag_area.cc:444
 #, fuzzy, c-format
 msgid "Selected files tagged with original year ‘%s’"
 msgstr "所選檔案已用原唱者「%s」標記"
 
-#: ../src/tag_area.cc:490
+#: ../src/tag_area.cc:444
 #, fuzzy
 msgid "Removed original year from selected files"
 msgstr "所選檔案的原唱者已移除"
 
-#: ../src/tag_area.cc:499
+#: ../src/tag_area.cc:449
 #, c-format
 msgid "Selected files tagged with copyright ‘%s’"
 msgstr "所選檔案已用版權所有者「%s」標記"
 
-#: ../src/tag_area.cc:501
+#: ../src/tag_area.cc:449
 msgid "Removed copyright from selected files"
 msgstr "所選檔案的版權所有者已移除"
 
-#: ../src/tag_area.cc:510
+#: ../src/tag_area.cc:454
 #, c-format
 msgid "Selected files tagged with URL ‘%s’"
 msgstr "所選檔案已用網址「%s」標記"
 
-#: ../src/tag_area.cc:512
+#: ../src/tag_area.cc:454
 msgid "Removed URL from selected files"
 msgstr "所選檔案的網址已移除"
 
-#: ../src/tag_area.cc:521
+#: ../src/tag_area.cc:459
 #, c-format
 msgid "Selected files tagged with encoder name ‘%s’"
 msgstr "所選檔案已用編碼程式「%s」標記"
 
-#: ../src/tag_area.cc:523
+#: ../src/tag_area.cc:459
 msgid "Removed encoder name from selected files"
 msgstr "所選檔案的編碼程式已移除"
 
-#: ../src/tag_area.cc:558
+#: ../src/tag_area.cc:494
 msgid "Selected files tagged with images"
 msgstr "所選檔案已標記圖像。"
 
-#: ../src/tag_area.cc:562
+#: ../src/tag_area.cc:498
 msgid "Removed images from selected files"
 msgstr "所選檔案的圖像已移除"
 
 #. Menu items
-#: ../src/tag_area.cc:728
+#: ../src/tag_area.cc:664
 msgid "Tag selected files with this field"
 msgstr "所選檔案已用此欄位標記"
 
-#: ../src/tag_area.cc:758
+#: ../src/tag_area.cc:694
 msgid "All uppercase"
 msgstr "全部大寫"
 
-#: ../src/tag_area.cc:764
+#: ../src/tag_area.cc:700
 msgid "All lowercase"
 msgstr "全部小寫"
 
-#: ../src/tag_area.cc:770
+#: ../src/tag_area.cc:706
 msgid "First letter uppercase"
 msgstr "首字母大寫"
 
-#: ../src/tag_area.cc:776
+#: ../src/tag_area.cc:712
 msgid "First letter uppercase of each word"
 msgstr "每個字的首字母大寫"
 
-#: ../src/tag_area.cc:792
+#: ../src/tag_area.cc:728
 msgid "Insert space before uppercase letter"
 msgstr "在大寫字母前插入空格"
 
-#: ../src/tag_area.cc:798
+#: ../src/tag_area.cc:734
 msgid "Remove duplicate spaces or underscores"
 msgstr "移除重複的空格或底線"
 
-#: ../src/tag_area.cc:804
+#: ../src/tag_area.cc:740
 msgid "Remove all text"
 msgstr "移除所有文字"
 
-#: ../src/tag_area.cc:1162 ../src/tag_area.cc:1255
+#: ../src/tag_area.cc:1098 ../src/tag_area.cc:1191
 #, c-format
 msgid "Error parsing image data ‘%s’"
 msgstr ""
 
-#: ../src/tag_area.cc:1237
+#: ../src/tag_area.cc:1173
 msgid ""
 "Cannot display the image because not enough data has been read to determine "
 "how to create the image buffer"
 msgstr "無法顯示此圖像，因為可讀取的資料不足，導致無法建立圖像緩衝區"
 
-#: ../src/tag_area.cc:1244
+#: ../src/tag_area.cc:1180
 msgid "Cannot display the image"
 msgstr "無法顯示圖像"
 
-#: ../src/tag_area.cc:1246
+#: ../src/tag_area.cc:1182
 msgid ""
 "Not enough data has been read to determine how to create the image buffer."
 msgstr "可讀取的資料不足，導致無法建立圖像緩衝區。"
 
-#: ../src/tag_area.cc:1248
+#: ../src/tag_area.cc:1184
 msgid "Load Image File"
 msgstr "載入圖像檔"
 
-#: ../src/tag_area.cc:1293 ../src/tag_area.cc:1318
+#: ../src/tag_area.cc:1229 ../src/tag_area.cc:1254
 #, c-format
 msgid "Image file not loaded ‘%s’"
 msgstr "未載入圖像檔「%s」"
 
-#: ../src/tag_area.cc:1310
+#: ../src/tag_area.cc:1246
 #, c-format
 msgid "Cannot open file ‘%s’"
 msgstr "無法開啟檔案「%s」"
 
-#: ../src/tag_area.cc:1314
+#: ../src/tag_area.cc:1250
 msgid "Image File Error"
 msgstr "圖像檔出錯"
 
-#: ../src/tag_area.cc:1325
+#: ../src/tag_area.cc:1261
 msgid "Image file loaded"
 msgstr "已載入圖像檔"
 
-#: ../src/tag_area.cc:1408
+#: ../src/tag_area.cc:1344
 msgid "Add Images"
 msgstr "加入圖像"
 
-#: ../src/tag_area.cc:1418 ../src/tag_area.cc:1745
+#: ../src/tag_area.cc:1354 ../src/tag_area.cc:1681
 msgid "All Files"
 msgstr "所有檔案"
 
-#: ../src/tag_area.cc:1425 ../src/tag_area.cc:1752
+#: ../src/tag_area.cc:1361 ../src/tag_area.cc:1688
 msgid "PNG and JPEG"
 msgstr "PNG 及 JPEG"
 
-#: ../src/tag_area.cc:1542
+#: ../src/tag_area.cc:1478
 #, c-format
 msgid "Image Properties %d/%d"
 msgstr "圖像屬性 %d/%d"
 
-#: ../src/tag_area.cc:1731
+#: ../src/tag_area.cc:1667
 #, c-format
 msgid "Save Image %d/%d"
 msgstr "儲存圖像 %d/%d"
 
-#: ../src/tag_area.cc:1811
+#: ../src/tag_area.cc:1747
 #, c-format
 msgid "Image file not saved ‘%s’"
 msgstr "未儲存圖像檔「%s」"
 
-#: ../src/tag_area.cc:2056
+#: ../src/tag_area.cc:1993
 msgid "Tag selected files with this genre"
 msgstr "以此曲風標記所選檔案"
 
-#: ../src/tag_area.cc:2705
+#: ../src/tag_area.cc:2504
 msgid "ID3 Tag"
 msgstr "ID3 標籤"
 
-#: ../src/tag_area.cc:2710
+#: ../src/tag_area.cc:2509
 msgid "Ogg Vorbis Tag"
 msgstr "Ogg Vorbis 標籤"
 
-#: ../src/tag_area.cc:2715
+#: ../src/tag_area.cc:2514
 msgid "FLAC Vorbis Tag"
 msgstr "FLAC Vorbis 標籤"
 
-#: ../src/tag_area.cc:2719
+#: ../src/tag_area.cc:2518
 msgid "APE Tag"
 msgstr "APE 標籤"
 
-#: ../src/tag_area.cc:2723
+#: ../src/tag_area.cc:2522
 msgid "MP4/M4A/AAC Tag"
 msgstr "MP4/M4A/AAC 標籤"
 
-#: ../src/tag_area.cc:2728
+#: ../src/tag_area.cc:2527
 msgid "Wavpack Tag"
 msgstr "Wavpack 標籤"
 
-#: ../src/tag_area.cc:2733
+#: ../src/tag_area.cc:2532
 msgid "Opus Tag"
 msgstr "Opus 標籤"
 
-#: ../src/tag_area.cc:3015
+#: ../src/tag_area.cc:2656
 #, c-format
 msgid "Images (%u)"
 msgstr "圖像 (%u)"
 
-#: ../src/tags/ape_tag.c:90 ../src/tags/mp4_header.cc:58
+#: ../src/tags/ape_tag.cc:90 ../src/tags/mp4_header.cc:58
 #: ../src/tags/mp4_header.cc:67 ../src/tags/mp4_tag.cc:73
 #: ../src/tags/mp4_tag.cc:86 ../src/tags/mp4_tag.cc:92
 #: ../src/tags/ogg_header.c:227
@@ -4461,11 +4552,11 @@ msgstr "圖像 (%u)"
 msgid "Error while opening file: %s"
 msgstr "開啟檔案時出錯：%s"
 
-#: ../src/tags/ape_tag.c:396
+#: ../src/tags/ape_tag.cc:402
 msgid "Failed to write APE tag"
 msgstr "未能寫入 APE 標籤"
 
-#: ../src/tags/flac_header.c:85 ../src/tags/flac_tag.c:224
+#: ../src/tags/flac_header.c:85 ../src/tags/flac_tag.cc:224
 msgid "Error opening FLAC file"
 msgstr "開啟 FLAC 檔案時出錯"
 
@@ -4483,120 +4574,120 @@ msgstr "FLAC 檔案"
 msgid "Channels:"
 msgstr "聲道數目："
 
-#: ../src/tags/flac_tag.c:784 ../src/tags/flac_tag.c:817
-#: ../src/tags/flac_tag.c:831
+#: ../src/tags/flac_tag.cc:671 ../src/tags/flac_tag.cc:704
+#: ../src/tags/flac_tag.cc:718
 #, c-format
 msgid "Error while opening file ‘%s’ as FLAC: %s"
 msgstr "將「%s」檔案視為 FLAC 開啟時出錯：%s"
 
-#: ../src/tags/flac_tag.c:1143 ../src/tags/flac_tag.c:1155
-#: ../src/tags/flac_tag.c:1175
+#: ../src/tags/flac_tag.cc:950 ../src/tags/flac_tag.cc:962
+#: ../src/tags/flac_tag.cc:982
 #, c-format
 msgid "Failed to write comments to file ‘%s’: %s"
 msgstr "未能將備註寫入「%s」檔案：%s"
 
-#: ../src/tags/id3_tag.c:217
+#: ../src/tags/id3_tag.cc:212
 msgid "Corrupted file"
 msgstr "檔案已損毀"
 
-#: ../src/tags/id3_tag.c:650
+#: ../src/tags/id3_tag.cc:431
 #, c-format
 msgid "Removed tag of ‘%s’"
 msgstr "已移除「%s」的標籤"
 
-#: ../src/tags/id3_tag.c:657 ../src/tags/id3_tag.c:741
+#: ../src/tags/id3_tag.cc:438 ../src/tags/id3_tag.cc:522
 #, c-format
 msgid "Error while removing ID3v1 tag of ‘%s’: %s"
 msgstr "移除「%s」的 ID3v1 標籤時出錯：%s"
 
-#: ../src/tags/id3_tag.c:666 ../src/tags/id3_tag.c:704
+#: ../src/tags/id3_tag.cc:447 ../src/tags/id3_tag.cc:485
 #, c-format
 msgid "Error while removing ID3v2 tag of ‘%s’: %s"
 msgstr "移除「%s」的 ID3v2 標籤時出錯：%s"
 
-#: ../src/tags/id3_tag.c:692
+#: ../src/tags/id3_tag.cc:473
 #, c-format
 msgid "Error while updating ID3v2 tag of ‘%s’: %s"
 msgstr "更新「%s」的 ID3v2 標籤時出錯：%s"
 
-#: ../src/tags/id3_tag.c:729
+#: ../src/tags/id3_tag.cc:510
 #, c-format
 msgid "Error while updating ID3v1 tag of ‘%s’: %s"
 msgstr "更新「%s」的 ID3v1 標籤時出錯：%s"
 
-#: ../src/tags/id3_tag.c:775
+#: ../src/tags/id3_tag.cc:556
 msgid "Buggy id3lib"
 msgstr ""
 
-#: ../src/tags/id3_tag.c:796
+#: ../src/tags/id3_tag.cc:577
 msgid "No error reported"
 msgstr "未有回報錯誤"
 
-#: ../src/tags/id3_tag.c:798
+#: ../src/tags/id3_tag.cc:579
 msgid "No available memory"
 msgstr "記憶體不足"
 
-#: ../src/tags/id3_tag.c:800
+#: ../src/tags/id3_tag.cc:581
 msgid "No data to parse"
 msgstr "無資料可供解析"
 
-#: ../src/tags/id3_tag.c:802
+#: ../src/tags/id3_tag.cc:583
 msgid "Improperly formatted data"
 msgstr "資料的格式不對"
 
-#: ../src/tags/id3_tag.c:804
+#: ../src/tags/id3_tag.cc:585
 msgid "No buffer to write to"
 msgstr "無緩衝區以寫入"
 
-#: ../src/tags/id3_tag.c:806
+#: ../src/tags/id3_tag.cc:587
 msgid "Buffer is too small"
 msgstr "緩衝區太小"
 
-#: ../src/tags/id3_tag.c:808
+#: ../src/tags/id3_tag.cc:589
 msgid "Invalid frame ID"
 msgstr "frame ID 無效"
 
-#: ../src/tags/id3_tag.c:810
+#: ../src/tags/id3_tag.cc:591
 msgid "Requested field not found"
 msgstr "找不到要求的欄位"
 
-#: ../src/tags/id3_tag.c:812
+#: ../src/tags/id3_tag.cc:593
 msgid "Unknown field type"
 msgstr "欄位類型不明"
 
-#: ../src/tags/id3_tag.c:814
+#: ../src/tags/id3_tag.cc:595
 msgid "Tag is already attached to a file"
 msgstr "標籤已附加到檔案"
 
-#: ../src/tags/id3_tag.c:816
+#: ../src/tags/id3_tag.cc:597
 msgid "Invalid tag version"
 msgstr "標籤版本無效"
 
-#: ../src/tags/id3_tag.c:818
+#: ../src/tags/id3_tag.cc:599
 msgid "No file to parse"
 msgstr "無檔案可供解析"
 
-#: ../src/tags/id3_tag.c:820
+#: ../src/tags/id3_tag.cc:601
 msgid "Attempting to write to a read-only file"
 msgstr "試圖寫入唯讀檔案"
 
-#: ../src/tags/id3_tag.c:822
+#: ../src/tags/id3_tag.cc:603
 msgid "Error in compression/uncompression"
 msgstr "壓縮╱解壓縮時出錯"
 
-#: ../src/tags/id3_tag.c:824
+#: ../src/tags/id3_tag.cc:605
 msgid "Unknown error message"
 msgstr "出錯訊息不明"
 
-#: ../src/tags/id3_tag.c:1568
+#: ../src/tags/id3_tag.cc:1364
 msgid "Error while creating temporary file"
 msgstr "建立暫存檔時出錯"
 
-#: ../src/tags/id3v24_tag.c:134 ../src/tags/id3v24_tag.c:189
-#: ../src/tags/id3v24_tag.c:227 ../src/tags/id3v24_tag.c:237
-#: ../src/tags/id3v24_tag.c:246 ../src/tags/id3v24_tag.c:1000
-#: ../src/tags/id3v24_tag.c:1008 ../src/tags/id3v24_tag.c:1015
-#: ../src/tags/id3v24_tag.c:1041 ../src/tags/id3v24_tag.c:1081
+#: ../src/tags/id3v24_tag.cc:135 ../src/tags/id3v24_tag.cc:190
+#: ../src/tags/id3v24_tag.cc:228 ../src/tags/id3v24_tag.cc:238
+#: ../src/tags/id3v24_tag.cc:247 ../src/tags/id3v24_tag.cc:1012
+#: ../src/tags/id3v24_tag.cc:1020 ../src/tags/id3v24_tag.cc:1027
+#: ../src/tags/id3v24_tag.cc:1053 ../src/tags/id3v24_tag.cc:1093
 #: ../src/tags/mp4_tag.cc:102 ../src/tags/ogg_header.c:277
 msgid "Error reading tags from file"
 msgstr "讀取檔案的標籤時出錯"
@@ -4611,7 +4702,7 @@ msgid "Profile:"
 msgstr "設定組合："
 
 #: ../src/tags/mp4_header.cc:68 ../src/tags/mp4_tag.cc:93
-#: ../src/tags/mp4_tag.cc:321
+#: ../src/tags/mp4_tag.cc:333
 msgid "MP4 format invalid"
 msgstr "MP4 格式無效"
 
@@ -4628,13 +4719,13 @@ msgstr "MP4/AAC 檔案"
 msgid "~%d kb/s"
 msgstr "~%d kb/秒"
 
-#: ../src/tags/mp4_tag.cc:298 ../src/tags/mp4_tag.cc:314
-#: ../src/tags/mp4_tag.cc:320
+#: ../src/tags/mp4_tag.cc:310 ../src/tags/mp4_tag.cc:326
+#: ../src/tags/mp4_tag.cc:332
 #, c-format
 msgid "Error while opening file ‘%s’: %s"
 msgstr "開啟「%s」檔案時出錯：%s"
 
-#: ../src/tags/mp4_tag.cc:331
+#: ../src/tags/mp4_tag.cc:343
 #, c-format
 msgid "Error reading tags from file ‘%s’"
 msgstr "讀取「%s」檔案的標籤時出錯"
@@ -4718,6 +4809,35 @@ msgstr "Opus 檔案"
 #: ../src/tags/wavpack_header.c:137
 msgid "Wavpack File"
 msgstr "Wavpack 檔案"
+
+#, fuzzy
+#~ msgid "Album artist"
+#~ msgstr "專輯演唱者："
+
+#, fuzzy
+#~ msgid "%S: album subtitle"
+#~ msgstr "%A：專輯演唱者"
+
+#~ msgid "Split Ogg title fields"
+#~ msgstr "分開 Ogg 曲名欄位"
+
+#~ msgid "Split Ogg artist fields"
+#~ msgstr "分開 Ogg 演唱者欄位"
+
+#~ msgid "Split Ogg album fields"
+#~ msgstr "分開 Ogg 專輯欄位"
+
+#~ msgid "Split Ogg genre fields"
+#~ msgstr "分開 Ogg 曲風欄位"
+
+#~ msgid "Split Ogg comment fields"
+#~ msgstr "分開 Ogg 備註欄位"
+
+#~ msgid "Split Ogg composer fields"
+#~ msgstr "分開 Ogg 作曲者欄位"
+
+#~ msgid "Split Ogg original artist fields"
+#~ msgstr "分開 Ogg 原唱者欄位"
 
 #, fuzzy
 #~ msgid "Original year:"
@@ -4873,10 +4993,6 @@ msgstr "Wavpack 檔案"
 #, fuzzy
 #~ msgid "available"
 #~ msgstr "記憶體不足"
-
-#, fuzzy
-#~ msgid "Ogg Vorbis file support"
-#~ msgstr "(已停用 Ogg Vorbis 格式支援)"
 
 #, fuzzy
 #~ msgid "Speex file support"
@@ -5535,9 +5651,6 @@ msgstr "Wavpack 檔案"
 #, fuzzy
 #~ msgid "Write Playlist"
 #~ msgstr "寫入播放清單..."
-
-#~ msgid "Encoded by"
-#~ msgstr "編碼程式"
 
 #, fuzzy
 #~ msgid "Move down the selected line"

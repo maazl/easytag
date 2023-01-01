@@ -178,6 +178,18 @@
                 <section>
                     <item>
                         <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Ascending by subtitle</attribute>
+                        <attribute name="target">ascending-subtitle</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Descending by subtitle</attribute>
+                        <attribute name="target">descending-subtitle</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
                         <attribute name="label" translatable="yes">Ascending by artist</attribute>
                         <attribute name="target">ascending-artist</attribute>
                     </item>
@@ -209,6 +221,18 @@
                         <attribute name="action">win.sort-mode</attribute>
                         <attribute name="label" translatable="yes">Descending by album</attribute>
                         <attribute name="target">descending-album</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Ascending by disc subtitle</attribute>
+                        <attribute name="target">ascending-disc-subtitle</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Descending by disc subtitle</attribute>
+                        <attribute name="target">descending-disc-subtitle</attribute>
                     </item>
                 </section>
                 <section>

@@ -20,6 +20,8 @@
 
 #include "misc.h"
 
+using namespace std;
+
 /*
  * Create a new File_Tag structure.
  */
@@ -54,9 +56,11 @@ et_file_tag_free (File_Tag *FileTag)
     g_return_if_fail (FileTag != NULL);
 
     g_free(FileTag->title);
+    g_free(FileTag->subtitle);
     g_free(FileTag->artist);
     g_free(FileTag->album_artist);
     g_free(FileTag->album);
+    g_free(FileTag->disc_subtitle);
     g_free(FileTag->disc_number);
     g_free(FileTag->disc_total);
     g_free(FileTag->year);
@@ -112,9 +116,11 @@ et_file_tag_copy_into (File_Tag *destination,
     destination->key = et_undo_key_new ();
 
     et_file_tag_set_title (destination, source->title);
+    et_file_tag_set_subtitle (destination, source->subtitle);
     et_file_tag_set_artist (destination, source->artist);
     et_file_tag_set_album_artist (destination, source->album_artist);
     et_file_tag_set_album (destination, source->album);
+    et_file_tag_set_disc_subtitle (destination, source->disc_subtitle);
     et_file_tag_set_disc_number (destination, source->disc_number);
     et_file_tag_set_disc_total (destination, source->disc_total);
     et_file_tag_set_year (destination, source->year);
@@ -176,6 +182,15 @@ et_file_tag_set_title (File_Tag *file_tag,
 }
 
 void
+et_file_tag_set_subtitle (File_Tag *file_tag,
+                       const gchar *subtitle)
+{
+    g_return_if_fail (file_tag != NULL);
+
+    et_file_tag_set_field (&file_tag->album, subtitle);
+}
+
+void
 et_file_tag_set_artist (File_Tag *file_tag,
                         const gchar *artist)
 {
@@ -200,6 +215,15 @@ et_file_tag_set_album (File_Tag *file_tag,
     g_return_if_fail (file_tag != NULL);
 
     et_file_tag_set_field (&file_tag->album, album);
+}
+
+void
+et_file_tag_set_disc_subtitle (File_Tag *file_tag,
+                       const gchar *disc_subtitle)
+{
+    g_return_if_fail (file_tag != NULL);
+
+    et_file_tag_set_field (&file_tag->disc_subtitle, disc_subtitle);
 }
 
 void
@@ -372,130 +396,50 @@ et_file_tag_detect_difference (const File_Tag *FileTag1,
       || (!FileTag1 &&  FileTag2) )
         return TRUE;
 
-    /* Title */
-    if (et_normalized_strcmp0 (FileTag1->title, FileTag2->title) != 0)
-    {
+    if (et_normalized_strcmp0 (FileTag1->title, FileTag2->title) != 0
+        || et_normalized_strcmp0 (FileTag1->subtitle, FileTag2->subtitle) != 0
+        || et_normalized_strcmp0 (FileTag1->artist, FileTag2->artist) != 0
+        || et_normalized_strcmp0 (FileTag1->album_artist, FileTag2->album_artist) != 0
+        || et_normalized_strcmp0 (FileTag1->album, FileTag2->album) != 0
+        || et_normalized_strcmp0 (FileTag1->disc_subtitle, FileTag2->disc_subtitle) != 0
+        || et_normalized_strcmp0 (FileTag1->disc_number, FileTag2->disc_number) != 0
+        || et_normalized_strcmp0 (FileTag1->disc_total, FileTag2->disc_total) != 0
+        || et_normalized_strcmp0 (FileTag1->year, FileTag2->year) != 0
+        || et_normalized_strcmp0 (FileTag1->release_year, FileTag2->release_year) != 0
+        || et_normalized_strcmp0 (FileTag1->track, FileTag2->track) != 0
+        || et_normalized_strcmp0 (FileTag1->track_total, FileTag2->track_total) != 0
+        || et_normalized_strcmp0 (FileTag1->genre, FileTag2->genre) != 0
+        || et_normalized_strcmp0 (FileTag1->comment, FileTag2->comment) != 0
+        || et_normalized_strcmp0 (FileTag1->composer, FileTag2->composer) != 0
+        || et_normalized_strcmp0 (FileTag1->orig_year, FileTag2->orig_year) != 0
+        || et_normalized_strcmp0 (FileTag1->orig_artist, FileTag2->orig_artist) != 0
+        || et_normalized_strcmp0 (FileTag1->copyright, FileTag2->copyright) != 0
+        || et_normalized_strcmp0 (FileTag1->url, FileTag2->url) != 0
+        || et_normalized_strcmp0 (FileTag1->encoded_by, FileTag2->encoded_by) != 0)
         return TRUE;
-    }
-
-    /* Artist */
-    if (et_normalized_strcmp0 (FileTag1->artist, FileTag2->artist) != 0)
-    {
-        return TRUE;
-    }
-
-	/* Album Artist */
-    if (et_normalized_strcmp0 (FileTag1->album_artist,
-                               FileTag2->album_artist) != 0)
-    {
-        return TRUE;
-    }
-
-    /* Album */
-    if (et_normalized_strcmp0 (FileTag1->album, FileTag2->album) != 0)
-    {
-        return TRUE;
-    }
-
-    /* Disc Number */
-    if (et_normalized_strcmp0 (FileTag1->disc_number,
-                               FileTag2->disc_number) != 0)
-    {
-        return TRUE;
-    }
-
-    /* Discs Total */
-    if (et_normalized_strcmp0 (FileTag1->disc_total,
-                               FileTag2->disc_total) != 0)
-    {
-        return TRUE;
-    }
-
-    /* Year */
-    if (et_normalized_strcmp0 (FileTag1->year, FileTag2->year) != 0)
-    {
-        return TRUE;
-    }
-
-    /* Release year */
-    if (et_normalized_strcmp0 (FileTag1->release_year, FileTag2->release_year) != 0)
-    {
-        return TRUE;
-    }
-
-    /* Track */
-    if (et_normalized_strcmp0 (FileTag1->track, FileTag2->track) != 0)
-    {
-        return TRUE;
-    }
-
-    /* Track Total */
-    if (et_normalized_strcmp0 (FileTag1->track_total,
-                               FileTag2->track_total) != 0)
-    {
-        return TRUE;
-    }
-
-    /* Genre */
-    if (et_normalized_strcmp0 (FileTag1->genre, FileTag2->genre) != 0)
-    {
-        return TRUE;
-    }
-
-    /* Comment */
-    if (et_normalized_strcmp0 (FileTag1->comment, FileTag2->comment) != 0)
-    {
-        return TRUE;
-    }
-
-    /* Composer */
-    if (et_normalized_strcmp0 (FileTag1->composer, FileTag2->composer) != 0)
-    {
-        return TRUE;
-    }
-
-    /* Original year */
-    if (et_normalized_strcmp0 (FileTag1->orig_year, FileTag2->orig_year) != 0)
-    {
-        return TRUE;
-    }
-
-    /* Original artist */
-    if (et_normalized_strcmp0 (FileTag1->orig_artist,
-                               FileTag2->orig_artist) != 0)
-    {
-        return TRUE;
-    }
-
-    /* Copyright */
-    if (et_normalized_strcmp0 (FileTag1->copyright, FileTag2->copyright) != 0)
-    {
-        return TRUE;
-    }
-
-    /* URL */
-    if (et_normalized_strcmp0 (FileTag1->url, FileTag2->url) != 0)
-    {
-        return TRUE;
-    }
-
-    /* Encoded by */
-    if (et_normalized_strcmp0 (FileTag1->encoded_by,
-                               FileTag2->encoded_by) != 0)
-    {
-        return TRUE;
-    }
 
     /* Picture */
     for (pic1 = FileTag1->picture, pic2 = FileTag2->picture;
          pic1 || pic2;
          pic1 = pic1->next, pic2 = pic2->next)
-    {
         if (et_picture_detect_difference (pic1, pic2))
-        {
             return TRUE;
-        }
-    }
 
     return FALSE; /* No changes */
+}
+
+std::string File_Tag::track_and_total() const
+{	if (et_str_empty(track))
+		return std::string();
+	if (et_str_empty(track_total))
+		return track;
+	return std::string(track) + '/' + track_total;
+}
+
+std::string File_Tag::disc_and_total() const
+{	if (et_str_empty(disc_number))
+		return std::string();
+	if (et_str_empty(disc_total))
+		return disc_number;
+	return std::string(disc_number) + '/' + disc_total;
 }

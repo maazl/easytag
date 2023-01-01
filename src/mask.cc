@@ -50,12 +50,18 @@ string MaskEvaluator::TagFieldFromMaskCode(gchar code)
 	case 't': /* Title */
 		r = tag->title;
 		break;
+	case 's': /* Subtitle */
+		r = tag->subtitle;
+		break;
 	case 'a': /* Artist */
 		r = tag->artist;
 		break;
 	case 'T': /* Album */
 	case 'b': /* for compatibility with earlier versions */
 		r = tag->album;
+		break;
+	case 'S': /* Disc subtitle */
+		r = tag->disc_subtitle;
 		break;
 	case 'd': /* Disc Number */
 		r = tag->disc_number;

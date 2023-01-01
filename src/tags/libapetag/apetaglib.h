@@ -20,6 +20,8 @@
 #ifndef _APETAGLIB_H
 #define _APETAGLIB_H
 
+G_BEGIN_DECLS
+
 /** \file
     \brief All function related to apetag
 */
@@ -263,5 +265,7 @@ readtag_id3v1_fp (apetag *mem_cnt, FILE * fp) ;
 /* debug function print all tags exclude bin (print only size for bin) */
 void
 libapetag_print_mem_cnt (apetag *mem_cnt);
+
+G_END_DECLS
 
 #endif /* _APETAGLIB_H */

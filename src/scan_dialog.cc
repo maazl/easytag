@@ -225,6 +225,10 @@ et_scan_dialog_set_file_tag_for_mask_item (File_Tag *file_tag,
             if (!overwrite && !et_str_empty (file_tag->title)) return;
             et_file_tag_set_title (file_tag, item->string);
             break;
+        case 's':
+            if (!overwrite && !et_str_empty (file_tag->subtitle)) return;
+            et_file_tag_set_subtitle (file_tag, item->string);
+            break;
         case 'a':
             if (!overwrite && !et_str_empty (file_tag->artist)) return;
             et_file_tag_set_artist (file_tag, item->string);
@@ -238,6 +242,10 @@ et_scan_dialog_set_file_tag_for_mask_item (File_Tag *file_tag,
         case 'b': /* for compatibility with earlier versions */
             if (!overwrite && !et_str_empty (file_tag->album)) return;
             et_file_tag_set_album (file_tag, item->string);
+            break;
+        case 'S':
+            if (!overwrite && !et_str_empty (file_tag->disc_subtitle)) return;
+            et_file_tag_set_disc_subtitle (file_tag, item->string);
             break;
         case 'd':
             if (!overwrite && !et_str_empty (file_tag->disc_number)) return;
@@ -1081,6 +1089,16 @@ Scan_Process_Fields_Functions (EtScanDialog *self,
 
 }
 
+static void Scan_Process_Tag_Field(EtScanDialog *self, File_Tag* FileTag, const gchar* value,
+	void (*set_func)(File_Tag *file_tag, const gchar *value))
+{
+	if (!value)
+		return;
+	gchar* string = g_strdup(value);
+	Scan_Process_Fields_Functions(self, &string);
+	et_file_tag_set_title(FileTag, string);
+	g_free(string);
+}
 
 /*****************************
  * Scanner To Process Fields *
@@ -1099,8 +1117,8 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
 
     g_return_if_fail (ETFile != NULL);
 
-    st_filename = (File_Name *)ETFile->FileNameNew->data;
-    st_filetag  = (File_Tag  *)ETFile->FileTag->data;
+    st_filename = ETFile->FileName();
+    st_filetag  = ETFile->Tag();
     process_fields = g_settings_get_flags (MainSettings, "process-fields");
 
     /* Process the filename */
@@ -1131,216 +1149,49 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
     }
 
     /* Process data of the tag */
-    if (st_filetag != NULL)
+    if (st_filetag != NULL && (process_fields & ~ET_PROCESS_FIELD_FILENAME))
     {
-        /* Title field. */
-        if (st_filetag->title
-            && (process_fields & ET_PROCESS_FIELD_TITLE))
-        {
-            if (!FileTag)
-            {
-                FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->Tag());
-            }
+        FileTag = et_file_tag_new();
+        et_file_tag_copy_into(FileTag, st_filetag);
 
-            string = g_strdup(st_filetag->title);
+        if (process_fields & ET_PROCESS_FIELD_TITLE)
+            Scan_Process_Tag_Field(self, FileTag, st_filetag->title, et_file_tag_set_title);
 
-            Scan_Process_Fields_Functions (self, &string);
+        if (process_fields & ET_PROCESS_FIELD_SUBTITLE)
+            Scan_Process_Tag_Field(self, FileTag, st_filetag->subtitle, et_file_tag_set_subtitle);
 
-            et_file_tag_set_title (FileTag, string);
+        if (process_fields & ET_PROCESS_FIELD_ARTIST)
+            Scan_Process_Tag_Field(self, FileTag, st_filetag->artist, et_file_tag_set_artist);
 
-            g_free(string);
-        }
+        if (process_fields & ET_PROCESS_FIELD_ALBUM_ARTIST)
+            Scan_Process_Tag_Field(self, FileTag, st_filetag->album_artist, et_file_tag_set_album_artist);
 
-        /* Artist field. */
-        if (st_filetag->artist
-            && (process_fields & ET_PROCESS_FIELD_ARTIST))
-        {
-            if (!FileTag)
-            {
-                FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->Tag());
-            }
+        if (process_fields & ET_PROCESS_FIELD_ALBUM)
+            Scan_Process_Tag_Field(self, FileTag, st_filetag->album, et_file_tag_set_album);
 
-            string = g_strdup(st_filetag->artist);
+        if (process_fields & ET_PROCESS_FIELD_DISC_SUBTITLE)
+            Scan_Process_Tag_Field(self, FileTag, st_filetag->disc_subtitle, et_file_tag_set_disc_subtitle);
 
-            Scan_Process_Fields_Functions (self, &string);
+        if (process_fields & ET_PROCESS_FIELD_GENRE)
+            Scan_Process_Tag_Field(self, FileTag, st_filetag->genre, et_file_tag_set_genre);
 
-            et_file_tag_set_artist (FileTag, string);
+        if (process_fields & ET_PROCESS_FIELD_COMMENT)
+            Scan_Process_Tag_Field(self, FileTag, st_filetag->comment, et_file_tag_set_comment);
 
-            g_free(string);
-        }
+        if (process_fields & ET_PROCESS_FIELD_COMPOSER)
+            Scan_Process_Tag_Field(self, FileTag, st_filetag->composer, et_file_tag_set_composer);
 
-        /* Album Artist field. */
-        if (st_filetag->album_artist
-            && (process_fields & ET_PROCESS_FIELD_ALBUM_ARTIST))
-        {
-            if (!FileTag)
-            {
-                FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->Tag());
-            }
+        if (process_fields & ET_PROCESS_FIELD_ORIGINAL_ARTIST)
+            Scan_Process_Tag_Field(self, FileTag, st_filetag->orig_artist, et_file_tag_set_orig_artist);
 
-            string = g_strdup(st_filetag->album_artist);
+        if (process_fields & ET_PROCESS_FIELD_COPYRIGHT)
+            Scan_Process_Tag_Field(self, FileTag, st_filetag->copyright, et_file_tag_set_copyright);
 
-            Scan_Process_Fields_Functions (self, &string);
+        if (process_fields & ET_PROCESS_FIELD_URL)
+            Scan_Process_Tag_Field(self, FileTag, st_filetag->url, et_file_tag_set_url);
 
-            et_file_tag_set_album_artist (FileTag, string);
-
-            g_free(string);
-        }
-
-        /* Album field. */
-        if (st_filetag->album
-            && (process_fields & ET_PROCESS_FIELD_ALBUM))
-        {
-            if (!FileTag)
-            {
-                FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->Tag());
-            }
-
-            string = g_strdup(st_filetag->album);
-
-            Scan_Process_Fields_Functions (self, &string);
-
-            et_file_tag_set_album (FileTag, string);
-
-            g_free(string);
-        }
-
-        /* Genre field. */
-        if (st_filetag->genre
-            && (process_fields & ET_PROCESS_FIELD_GENRE))
-        {
-            if (!FileTag)
-            {
-                FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->Tag());
-            }
-
-            string = g_strdup(st_filetag->genre);
-
-            Scan_Process_Fields_Functions (self, &string);
-
-            et_file_tag_set_genre (FileTag, string);
-
-            g_free(string);
-        }
-
-        /* Comment field. */
-        if (st_filetag->comment
-            && (process_fields & ET_PROCESS_FIELD_COMMENT))
-        {
-            if (!FileTag)
-            {
-                FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->Tag());
-            }
-
-            string = g_strdup(st_filetag->comment);
-
-            Scan_Process_Fields_Functions (self, &string);
-
-            et_file_tag_set_comment (FileTag, string);
-
-            g_free(string);
-        }
-
-        /* Composer field. */
-        if (st_filetag->composer
-            && (process_fields & ET_PROCESS_FIELD_COMPOSER))
-        {
-            if (!FileTag)
-            {
-                FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->Tag());
-            }
-
-            string = g_strdup(st_filetag->composer);
-
-            Scan_Process_Fields_Functions (self, &string);
-
-            et_file_tag_set_composer (FileTag, string);
-
-            g_free(string);
-        }
-
-        /* Original artist field. */
-        if (st_filetag->orig_artist
-            && (process_fields & ET_PROCESS_FIELD_ORIGINAL_ARTIST))
-        {
-            if (!FileTag)
-            {
-                FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->Tag());
-            }
-
-            string = g_strdup(st_filetag->orig_artist);
-
-            Scan_Process_Fields_Functions (self, &string);
-
-            et_file_tag_set_orig_artist (FileTag, string);
-
-            g_free(string);
-        }
-
-        /* Copyright field. */
-        if (st_filetag->copyright
-            && (process_fields & ET_PROCESS_FIELD_COPYRIGHT))
-        {
-            if (!FileTag)
-            {
-                FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->Tag());
-            }
-
-            string = g_strdup(st_filetag->copyright);
-
-            Scan_Process_Fields_Functions (self, &string);
-
-            et_file_tag_set_copyright (FileTag, string);
-
-            g_free(string);
-        }
-
-        /* URL field. */
-        if (st_filetag->url
-            && (process_fields & ET_PROCESS_FIELD_URL))
-        {
-            if (!FileTag)
-            {
-                FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->Tag());
-            }
-
-            string = g_strdup(st_filetag->url);
-
-            Scan_Process_Fields_Functions (self, &string);
-
-            et_file_tag_set_url (FileTag, string);
-
-            g_free(string);
-        }
-
-        /* 'Encoded by' field. */
-        if (st_filetag->encoded_by
-            && (process_fields & ET_PROCESS_FIELD_ENCODED_BY))
-        {
-            if (!FileTag)
-            {
-                FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, ETFile->Tag());
-            }
-
-            string = g_strdup(st_filetag->encoded_by);
-
-            Scan_Process_Fields_Functions (self, &string);
-
-            et_file_tag_set_encoded_by (FileTag, string);
-
-            g_free(string);
-        }
+        if (process_fields & ET_PROCESS_FIELD_ENCODED_BY)
+            Scan_Process_Tag_Field(self, FileTag, st_filetag->encoded_by, et_file_tag_set_encoded_by);
     }
 
     if (FileName && FileTag)

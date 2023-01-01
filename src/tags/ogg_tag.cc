@@ -201,7 +201,7 @@ populate_tag_hash_table (const vorbis_comment *vc)
         /* TODO: Use a GPtrArray instead? */
         GSList *l;
 
-        separator = memchr (comment, '=', len);
+        separator = (const gchar*)memchr (comment, '=', len);
 
         if (!separator)
         {
@@ -214,7 +214,7 @@ populate_tag_hash_table (const vorbis_comment *vc)
         field_up = g_ascii_strup (field, -1);
         g_free (field);
 
-        l = g_hash_table_lookup (ret, field_up);
+        l = (GSList*)g_hash_table_lookup (ret, field_up);
 
         /* If the lookup failed, a new list is created. The list takes
          * ownership of the field value. */
@@ -257,7 +257,7 @@ static GRegex* get_version_regex(void)
 	static GRegex* version_regex = NULL;
 
   if (version_regex == NULL)
-      version_regex = g_regex_new (VERSION_EXTRACTOR, G_REGEX_DOLLAR_ENDONLY|G_REGEX_OPTIMIZE, 0, NULL);
+      version_regex = g_regex_new(VERSION_EXTRACTOR, (GRegexCompileFlags)(G_REGEX_DOLLAR_ENDONLY|G_REGEX_OPTIMIZE), (GRegexMatchFlags)0, NULL);
   return version_regex;
 }
 
@@ -280,18 +280,23 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
 
     tags = populate_tag_hash_table (vc);
 
+    auto fetch_field = [&tags](const char* fieldname, gchar** target)
+    {   GSList *strings = (GSList*)g_hash_table_lookup(tags, fieldname);
+        if (strings)
+        {   g_slist_foreach(strings, values_list_foreach, target);
+            g_slist_free(strings);
+            g_hash_table_remove(tags, fieldname);
+        }
+    };
+
     /* Note : don't forget to add any new field to 'Save unsupported fields' */
 
-    /* Title. */
-    if ((strings = g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_TITLE)))
-    {
-        g_slist_foreach (strings, values_list_foreach, &FileTag->title);
-        g_slist_free (strings);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_TITLE);
-    }
+    fetch_field(ET_VORBIS_COMMENT_FIELD_TITLE, &FileTag->title);
+
+    fetch_field(ET_VORBIS_COMMENT_FIELD_SUBTITLE, &FileTag->subtitle);
 
     /* Version. */
-    if ((strings = g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_VERSION)))
+    if ((strings = (GSList*)g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_VERSION)))
     {
         gchar *tmp = NULL;
         g_slist_foreach (strings, values_list_foreach, &tmp);
@@ -307,58 +312,35 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
         g_free (tmp);
         g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_VERSION);
     }
-    else if (FileTag->title && g_regex_match(get_version_regex(), FileTag->title, 0, NULL))
+    else if (FileTag->title && g_regex_match(get_version_regex(), FileTag->title, (GRegexMatchFlags)0, NULL))
         /* Mark modified because on write the version will be stored in the VERSION field. */
         FileTag->saved = FALSE;
 
-    /* Artist. */
-    if ((strings = g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_ARTIST)))
-    {
-        g_slist_foreach (strings, values_list_foreach, &FileTag->artist);
-        g_slist_free (strings);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_ARTIST);
-    }
+    fetch_field(ET_VORBIS_COMMENT_FIELD_ARTIST, &FileTag->artist);
 
-    /* Album artist. */
-    if ((strings = g_hash_table_lookup (tags,
-                                        ET_VORBIS_COMMENT_FIELD_ALBUM_ARTIST)))
-    {
-        g_slist_foreach (strings, values_list_foreach, &FileTag->album_artist);
-        g_slist_free (strings);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_ALBUM_ARTIST);
-    }
+    fetch_field(ET_VORBIS_COMMENT_FIELD_ALBUM_ARTIST, &FileTag->album_artist);
 
-    /* Album */
-    if ((strings = g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_ALBUM)))
-    {
-        g_slist_foreach (strings, values_list_foreach, &FileTag->album);
-        g_slist_free (strings);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_ALBUM);
-    }
+    fetch_field(ET_VORBIS_COMMENT_FIELD_ALBUM, &FileTag->album);
+
+    fetch_field(ET_VORBIS_COMMENT_FIELD_DISC_SUBTITLE, &FileTag->disc_subtitle);
 
     /* Disc number and total discs. */
-    if ((strings = g_hash_table_lookup (tags,
-                                        ET_VORBIS_COMMENT_FIELD_DISC_TOTAL)))
+    if ((strings = (GSList*)g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_DISC_TOTAL)))
     {
         /* Only take values from the first total discs field. */
-        if (!et_str_empty (strings->data))
-        {
-            FileTag->disc_total = et_disc_number_to_string (atoi (strings->data));
-        }
+        if (!et_str_empty((const gchar*)strings->data))
+            FileTag->disc_total = et_disc_number_to_string(atoi((const gchar*)strings->data));
 
         g_slist_free_full (strings, g_free);
         g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_DISC_TOTAL);
     }
 
-    if ((strings = g_hash_table_lookup (tags,
-                                        ET_VORBIS_COMMENT_FIELD_DISC_NUMBER)))
+    if ((strings = (GSList*)g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_DISC_NUMBER)))
     {
         /* Only take values from the first disc number field. */
-        if (!et_str_empty (strings->data))
+        if (!et_str_empty((const gchar*)strings->data))
         {
-            gchar *separator;
-
-            separator = strchr (strings->data, '/');
+            gchar *separator = strchr((gchar*)strings->data, '/');
 
             if (separator && !FileTag->disc_total)
             {
@@ -366,52 +348,34 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
                 *separator = '\0';
             }
 
-            FileTag->disc_number = et_disc_number_to_string (atoi (strings->data));
+            FileTag->disc_number = et_disc_number_to_string (atoi((const gchar*)strings->data));
         }
 
         g_slist_free_full (strings, g_free);
         g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_DISC_NUMBER);
     }
 
-    /* Year. */
-    if ((strings = g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_DATE)))
-    {
-        g_slist_foreach (strings, values_list_foreach, &FileTag->year);
-        g_slist_free (strings);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_DATE);
-    }
+    fetch_field(ET_VORBIS_COMMENT_FIELD_DATE, &FileTag->year);
 
-    /* Release year. */
-    if ((strings = g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_RELEASE_DATE)))
-    {
-        g_slist_foreach (strings, values_list_foreach, &FileTag->release_year);
-        g_slist_free (strings);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_RELEASE_DATE);
-    }
+    fetch_field(ET_VORBIS_COMMENT_FIELD_RELEASE_DATE, &FileTag->release_year);
 
     /* Track number and total tracks. */
-    if ((strings = g_hash_table_lookup (tags,
-                                        ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL)))
+    if ((strings = (GSList*)g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL)))
     {
         /* Only take values from the first total tracks field. */
-        if (!et_str_empty (strings->data))
-        {
-            FileTag->track_total = et_track_number_to_string (atoi (strings->data));
-        }
+        if (!et_str_empty((const gchar*)strings->data))
+            FileTag->track_total = et_track_number_to_string(atoi((const gchar*)strings->data));
 
         g_slist_free_full (strings, g_free);
         g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL);
     }
 
-    if ((strings = g_hash_table_lookup (tags,
-                                        ET_VORBIS_COMMENT_FIELD_TRACK_NUMBER)))
+    if ((strings = (GSList*)g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_TRACK_NUMBER)))
     {
         /* Only take values from the first track number field. */
-        if (!et_str_empty (strings->data))
+        if (!et_str_empty((const gchar*)strings->data))
         {
-            gchar *separator;
-
-            separator = strchr (strings->data, '/');
+            gchar *separator = strchr((gchar*)strings->data, '/');
 
             if (separator && !FileTag->track_total)
             {
@@ -419,30 +383,19 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
                 *separator = '\0';
             }
 
-            FileTag->track = et_track_number_to_string (atoi (strings->data));
+            FileTag->track = et_track_number_to_string(atoi((const gchar*)strings->data));
         }
 
         g_slist_free_full (strings, g_free);
         g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_TRACK_NUMBER);
     }
 
-    /* Genre. */
-    if ((strings = g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_GENRE)))
-    {
-        g_slist_foreach (strings, values_list_foreach, &FileTag->genre);
-        g_slist_free (strings);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_GENRE);
-    }
+    fetch_field(ET_VORBIS_COMMENT_FIELD_GENRE, &FileTag->genre);
 
     /* Comment */
     {
-        GSList *descs;
-        GSList *comments;
-
-        descs = g_hash_table_lookup (tags,
-                                     ET_VORBIS_COMMENT_FIELD_DESCRIPTION);
-        comments = g_hash_table_lookup (tags,
-                                        ET_VORBIS_COMMENT_FIELD_COMMENT);
+        GSList *descs = (GSList*)g_hash_table_lookup(tags, ET_VORBIS_COMMENT_FIELD_DESCRIPTION);
+        GSList *comments = (GSList*)g_hash_table_lookup(tags, ET_VORBIS_COMMENT_FIELD_COMMENT);
 
         if (comments)
           g_slist_foreach (comments, values_list_foreach, &FileTag->comment);
@@ -460,62 +413,20 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
         g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_COMMENT);
     }
 
-    /* Composer. */
-    if ((strings = g_hash_table_lookup (tags,
-                                        ET_VORBIS_COMMENT_FIELD_COMPOSER)))
-    {
-        g_slist_foreach (strings, values_list_foreach, &FileTag->composer);
-        g_slist_free (strings);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_COMPOSER);
-    }
+    fetch_field(ET_VORBIS_COMMENT_FIELD_COMPOSER, &FileTag->composer);
 
-    /* Original artist. */
-    if ((strings = g_hash_table_lookup (tags,
-                                        ET_VORBIS_COMMENT_FIELD_PERFORMER)))
-    {
-        g_slist_foreach (strings, values_list_foreach, &FileTag->orig_artist);
-        g_slist_free (strings);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_PERFORMER);
-    }
+    fetch_field(ET_VORBIS_COMMENT_FIELD_PERFORMER, &FileTag->orig_artist);
 
-    /* Original year. */
-    if ((strings = g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_ORIG_DATE)))
-    {
-        g_slist_foreach (strings, values_list_foreach, &FileTag->orig_year);
-        g_slist_free (strings);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_ORIG_DATE);
-    }
+    fetch_field(ET_VORBIS_COMMENT_FIELD_ORIG_DATE, &FileTag->orig_year);
 
-    /* Copyright. */
-    if ((strings = g_hash_table_lookup (tags,
-                                        ET_VORBIS_COMMENT_FIELD_COPYRIGHT)))
-    {
-        g_slist_foreach (strings, values_list_foreach, &FileTag->copyright);
-        g_slist_free (strings);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_COPYRIGHT);
-    }
+    fetch_field(ET_VORBIS_COMMENT_FIELD_COPYRIGHT, &FileTag->copyright);
 
-    /* URL. */
-    if ((strings = g_hash_table_lookup (tags,
-                                        ET_VORBIS_COMMENT_FIELD_CONTACT)))
-    {
-        g_slist_foreach (strings, values_list_foreach, &FileTag->url);
-        g_slist_free (strings);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_CONTACT);
-    }
+    fetch_field(ET_VORBIS_COMMENT_FIELD_CONTACT, &FileTag->url);
 
-    /* Encoded by. */
-    if ((strings = g_hash_table_lookup (tags,
-                                        ET_VORBIS_COMMENT_FIELD_ENCODED_BY)))
-    {
-        g_slist_foreach (strings, values_list_foreach, &FileTag->encoded_by);
-        g_slist_free (strings);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_ENCODED_BY);
-    }
+    fetch_field(ET_VORBIS_COMMENT_FIELD_ENCODED_BY, &FileTag->encoded_by);
 
     /* Cover art. */
-    if ((strings = g_hash_table_lookup (tags,
-                                        ET_VORBIS_COMMENT_FIELD_COVER_ART)))
+    if ((strings = (GSList*)g_hash_table_lookup(tags, ET_VORBIS_COMMENT_FIELD_COVER_ART)))
     {
         GSList *l;
         GSList *m;
@@ -527,16 +438,14 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
          * field is converted to a METADATA_PICTURE_BLOCK field. */
         FileTag->saved = FALSE;
 
-        types = g_hash_table_lookup (tags,
-                                     ET_VORBIS_COMMENT_FIELD_COVER_ART_TYPE);
-        descs = g_hash_table_lookup (tags,
-                                     ET_VORBIS_COMMENT_FIELD_COVER_ART_DESCRIPTION);
+        types = (GSList*)g_hash_table_lookup(tags, ET_VORBIS_COMMENT_FIELD_COVER_ART_TYPE);
+        descs = (GSList*)g_hash_table_lookup(tags, ET_VORBIS_COMMENT_FIELD_COVER_ART_DESCRIPTION);
 
         l = strings;
         m = types;
         n = descs;
 
-        while (l && !et_str_empty (l->data))
+        while (l && !et_str_empty((gchar*)l->data))
         {
             EtPicture *pic;
             guchar *data;
@@ -546,15 +455,14 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
             const gchar *description;
 
             /* Decode picture data. */
-            data = g_base64_decode (l->data, &data_size);
+            data = g_base64_decode((const gchar*)l->data, &data_size);
             bytes = g_bytes_new_take (data, data_size);
 
             /* It is only necessary for there to be image data, but the type
              * and description are optional. */
             if (m)
             {
-                type = !et_str_empty (m->data) ? atoi (m->data)
-                                               : ET_PICTURE_TYPE_FRONT_COVER;
+                type = !et_str_empty((const gchar*)m->data) ? (EtPictureType)atoi((const gchar*)m->data) : ET_PICTURE_TYPE_FRONT_COVER;
 
                 m = g_slist_next (m);
             }
@@ -565,7 +473,7 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
 
             if (n)
             {
-                description = !et_str_empty (n->data) ? n->data : "";
+                description = !et_str_empty((const gchar*)n->data) ? (const gchar*)n->data : "";
 
                 n = g_slist_next (n);
             }
@@ -600,8 +508,7 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
     }
 
     /* METADATA_BLOCK_PICTURE tag used for picture information. */
-    if ((strings = g_hash_table_lookup (tags,
-                                        ET_VORBIS_COMMENT_FIELD_METADATA_BLOCK_PICTURE)))
+    if ((strings = (GSList*)g_hash_table_lookup(tags, ET_VORBIS_COMMENT_FIELD_METADATA_BLOCK_PICTURE)))
     {
         GSList *l;
 
@@ -618,7 +525,7 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
             gsize data_size;
 
             /* Decode picture data. */
-            decoded_ustr = g_base64_decode (l->data, &decoded_size);
+            decoded_ustr = g_base64_decode((const gchar*)l->data, &decoded_size);
 
             /* Check that the comment decoded to a long enough string to hold the
              * whole structure (8 fields of 4 bytes each). */
@@ -631,7 +538,7 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
             bytes = g_bytes_new_take (decoded_ustr, decoded_size);
 
             /* Reading picture type. */
-            type = read_guint32_from_byte (decoded_ustr, 0);
+            type = (EtPictureType)read_guint32_from_byte(decoded_ustr, 0);
             bytes_pos = 4;
 
             /* TODO: Check that there is a maximum of 1 of each of
@@ -895,11 +802,11 @@ static void
 et_ogg_set_tag (vorbis_comment *vc,
                 const gchar *tag_name,
                 const gchar *value,
-                gboolean split)
+                EtProcessField split = (EtProcessField)0)
 {
     if (value)
     {
-        if (split)
+        if (g_settings_get_flags(MainSettings, "ogg-split-fields") & split)
         {
             et_ogg_write_delimited_tag (vc, tag_name, value);
         }
@@ -962,111 +869,86 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
     /***********
      * Version *
      ***********/
-    title = g_regex_replace_eval (get_version_regex(), FileTag->title, -1, 0, 0,
+    title = g_regex_replace_eval (get_version_regex(), FileTag->title, -1, 0, (GRegexMatchFlags)0,
                                   &version_regex_cb, vc, NULL);
-
     /*********
      * Title *
      *********/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_TITLE, title,
-                    g_settings_get_boolean (MainSettings, "ogg-split-title"));
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_TITLE, title, ET_PROCESS_FIELD_TITLE);
     g_free (title);
+
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_SUBTITLE, FileTag->subtitle, ET_PROCESS_FIELD_SUBTITLE);
 
     /**********
      * Artist *
      **********/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_ARTIST, FileTag->artist,
-                    g_settings_get_boolean (MainSettings, "ogg-split-artist"));
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_ARTIST, FileTag->artist, ET_PROCESS_FIELD_ARTIST);
 
-    /****************
-     * Album Artist *
-     ****************/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_ALBUM_ARTIST,
-                    FileTag->album_artist,
-                    g_settings_get_boolean (MainSettings, "ogg-split-artist"));
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_ALBUM_ARTIST, FileTag->album_artist, ET_PROCESS_FIELD_ALBUM_ARTIST);
 
     /*********
      * Album *
      *********/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_ALBUM, FileTag->album,
-                    g_settings_get_boolean (MainSettings, "ogg-split-album"));
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_ALBUM, FileTag->album, ET_PROCESS_FIELD_ALBUM);
+
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_DISC_SUBTITLE, FileTag->disc_subtitle, ET_PROCESS_FIELD_DISC_SUBTITLE);
 
     /***************
      * Disc Number *
      ***************/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_DISC_NUMBER,
-                    FileTag->disc_number, FALSE);
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_DISC_TOTAL,
-                    FileTag->disc_total, FALSE);
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_DISC_NUMBER, FileTag->disc_number);
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_DISC_TOTAL, FileTag->disc_total);
 
     /********
      * Year *
      ********/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_DATE, FileTag->year, FALSE);
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_DATE, FileTag->year);
 
-    /****************
-     * Release year *
-     ***************/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_RELEASE_DATE, FileTag->release_year, FALSE);
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_RELEASE_DATE, FileTag->release_year);
 
     /*************************
      * Track and Total Track *
      *************************/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_TRACK_NUMBER, FileTag->track,
-                    FALSE);
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL,
-                    FileTag->track_total, FALSE);
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_TRACK_NUMBER, FileTag->track);
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL, FileTag->track_total);
 
     /*********
      * Genre *
      *********/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_GENRE, FileTag->genre,
-                    g_settings_get_boolean (MainSettings, "ogg-split-genre"));
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_GENRE, FileTag->genre, ET_PROCESS_FIELD_GENRE);
 
     /***********
      * Comment *
      ***********/
     /* Format of new specification. */
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_COMMENT, FileTag->comment,
-                    g_settings_get_boolean (MainSettings,
-                                            "ogg-split-comment"));
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_COMMENT, FileTag->comment, ET_PROCESS_FIELD_COMMENT);
 
     /************
      * Composer *
      ************/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_COMPOSER, FileTag->composer,
-                    g_settings_get_boolean (MainSettings,
-                                            "ogg-split-composer"));
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_COMPOSER, FileTag->composer, ET_PROCESS_FIELD_COMPOSER);
 
-    /*******************
-     * Original artist *
-     *******************/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_PERFORMER,
-                    FileTag->orig_artist,
-                    g_settings_get_boolean (MainSettings,
-                                            "ogg-split-original-artist"));
+    /**************************
+     * Original artist / year *
+     **************************/
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_PERFORMER, FileTag->orig_artist, ET_PROCESS_FIELD_ORIGINAL_ARTIST);
 
-    /*****************
-     * Original year *
-     ****************/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_ORIG_DATE, FileTag->orig_year, FALSE);
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_ORIG_DATE, FileTag->orig_year);
 
     /*************
      * Copyright *
      *************/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_COPYRIGHT, FileTag->copyright,
-                    FALSE);
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_COPYRIGHT, FileTag->copyright);
 
     /*******
      * URL *
      *******/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_CONTACT, FileTag->url, FALSE);
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_CONTACT, FileTag->url, ET_PROCESS_FIELD_URL);
 
     /**************
      * Encoded by *
      **************/
-    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_ENCODED_BY,
-                    FileTag->encoded_by, FALSE);
+    et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_ENCODED_BY, FileTag->encoded_by, ET_PROCESS_FIELD_ENCODED_BY);
     
     /***********
      * Picture *
@@ -1155,7 +1037,7 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
 
         /* Calculating full length of byte string and allocating. */
         desclen = pic->description ? strlen (pic->description) : 0;
-        ustring = g_malloc (4 * 8 + strlen (mime) + desclen + data_size);
+        ustring = (guchar*)g_malloc (4 * 8 + strlen (mime) + desclen + data_size);
 
         /* Adding picture type. */
         convert_to_byte_array (pic->type, array);
@@ -1194,7 +1076,7 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
         convert_to_byte_array (data_size, array);
         add_to_guchar_str (ustring, &ustring_len, array, 4);
 
-        add_to_guchar_str (ustring, &ustring_len, data, data_size);
+        add_to_guchar_str (ustring, &ustring_len, (const guchar*)data, data_size);
 
         base64_string = g_base64_encode (ustring, ustring_len);
         vorbis_comment_add_tag (vc,

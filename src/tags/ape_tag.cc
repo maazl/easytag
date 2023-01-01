@@ -102,6 +102,9 @@ ape_tag_read_file_tag (GFile *file,
     string = apefrm_getstr (ape_cnt, APE_TAG_FIELD_TITLE);
     set_string_field (&FileTag->title, string);
 
+    string = apefrm_getstr (ape_cnt, APE_TAG_FIELD_SUBTITLE);
+    set_string_field (&FileTag->subtitle, string);
+
     /* Artist */
     string = apefrm_getstr (ape_cnt, APE_TAG_FIELD_ARTIST);
     set_string_field (&FileTag->artist, string);
@@ -113,6 +116,9 @@ ape_tag_read_file_tag (GFile *file,
     /* Album */
     string = apefrm_getstr (ape_cnt, APE_TAG_FIELD_ALBUM);
     set_string_field (&FileTag->album, string);
+
+    string = apefrm_getstr (ape_cnt, "DiscSubtitle");
+    set_string_field (&FileTag->disc_subtitle, string);
 
     /* Disc Number and Disc Total */
     string = apefrm_getstr (ape_cnt, APE_TAG_FIELD_PART);

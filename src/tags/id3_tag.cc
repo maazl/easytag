@@ -40,9 +40,13 @@
 #include "id3lib/id3_bugfix.h"
 #endif
 
+#include <string>
+using namespace std;
+
 /****************
  * Declarations *
  ****************/
+/** Restrict the length of ID3 string tags on read to avoid excessive resource use. */
 #define ID3V2_MAX_STRING_LEN 4096
 
 
@@ -86,57 +90,20 @@ et_id3_error_quark (void)
     return g_quark_from_static_string ("et-id3-error-quark");
 }
 
-/**
- * et_id3tag_get_tpos_from_file_tag:
- * @FileTag: File_Tag to get disc_number and disc_total from
- *
- * This function will return TPOS from FileTag.
- * Returns: a newly allocated string, should be freed using g_free.
- */
-gchar *
-et_id3tag_get_tpos_from_file_tag (const File_Tag *FileTag)
+static bool id3tag_set_text_frame(ID3Tag* id3_tag, ID3_FrameID frame_id, const gchar* value)
 {
-    GString *gstring;
-    const gchar *p;
+	// To avoid problem with a corrupted field, we remove it before to create a new one.
+	ID3Frame *id3_frame;
+	while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag, frame_id)) )
+		ID3Tag_RemoveFrame(id3_tag, id3_frame);
 
-    gstring = g_string_new ("");
+	if (et_str_empty(value))
+		return false;
 
-    if (!FileTag->disc_number)
-    {
-        return g_string_free (gstring, FALSE);
-    }
-
-    p = FileTag->disc_number;
-
-    while (*p)
-    {
-        if (!g_ascii_isdigit (*p))
-        {
-            break;
-        }
-
-        g_string_append_c (gstring, *p);
-        p++;
-    }
-
-    if (FileTag->disc_total && *FileTag->disc_total)
-    {
-        g_string_append_c (gstring, '/');
-        p = FileTag->disc_total;
-
-        while (*p)
-        {
-            if (!g_ascii_isdigit (*p))
-            {
-                break;
-            }
-
-            g_string_append_c (gstring, *p);
-            p++;
-        }
-    }
-
-    return g_string_free (gstring, FALSE);
+	id3_frame = ID3Frame_NewID(frame_id);
+	ID3Tag_AttachFrame(id3_tag, id3_frame);
+	Id3tag_Set_Field(id3_frame, ID3FN_TEXT, value);
+	return true;
 }
 
 /*
@@ -158,30 +125,14 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     ID3_Err   error_update_id3v2 = ID3E_NoError;
     gboolean success = TRUE;
     gint number_of_frames;
-    gboolean has_title       = FALSE;
-    gboolean has_artist      = FALSE;
-    gboolean has_album_artist= FALSE;
-    gboolean has_album       = FALSE;
-    gboolean has_disc_number = FALSE;
-    gboolean has_year        = FALSE;
-    gboolean has_track       = FALSE;
-    gboolean has_genre       = FALSE;
-    gboolean has_comment     = FALSE;
-    gboolean has_composer    = FALSE;
-    gboolean has_orig_artist = FALSE;
-    gboolean has_orig_year   = FALSE;
-    gboolean has_copyright   = FALSE;
-    gboolean has_url         = FALSE;
-    gboolean has_encoded_by  = FALSE;
-    gboolean has_picture     = FALSE;
+    gboolean has_data = FALSE;
     //gboolean has_song_len    = FALSE;
     static gboolean flag_first_check = TRUE;
     static gboolean flag_id3lib_bugged = TRUE;
 
     ID3Frame *id3_frame;
     ID3Field *id3_field;
-    //gchar *string;
-    gchar *string1;
+    string tmp;
     EtPicture *pic;
 
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
@@ -258,271 +209,60 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
 
     basename_utf8 = g_path_get_basename (filename_utf8);
 
-    /*********
-     * Title *
-     *********/
-    // To avoid problem with a corrupted field, we remove it before to create a new one.
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_TITLE)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_TITLE, FileTag->title);
 
-    if (!et_str_empty (FileTag->title))
-    {
-        id3_frame = ID3Frame_NewID(ID3FID_TITLE);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, FileTag->title);
-        has_title = TRUE;
-    }
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_SUBTITLE, FileTag->subtitle);
 
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_LEADARTIST, FileTag->artist);
 
-    /**********
-     * Artist *
-     **********/
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_LEADARTIST)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_BAND, FileTag->album_artist);
 
-    if (!et_str_empty (FileTag->artist))
-    {
-        id3_frame = ID3Frame_NewID(ID3FID_LEADARTIST);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, FileTag->artist);
-        has_artist = TRUE;
-    }
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_ALBUM, FileTag->album);
 
-	/****************
-     * Album Artist *
-     ***************/
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_BAND)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_SETSUBTITLE, FileTag->disc_subtitle);
 
-    if (!et_str_empty (FileTag->album_artist))
-    {
-        id3_frame = ID3Frame_NewID(ID3FID_BAND);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, FileTag->album_artist);
-        has_album_artist = TRUE;
-    }
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_PARTINSET, FileTag->disc_and_total().c_str());
 
-    /*********
-     * Album *
-     *********/
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_ALBUM)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_YEAR, FileTag->year);
 
-    if (!et_str_empty (FileTag->album))
-    {
-        id3_frame = ID3Frame_NewID(ID3FID_ALBUM);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, FileTag->album);
-        has_album = TRUE;
-    }
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_TRACKNUM, FileTag->track_and_total().c_str());
 
-
-    /*****************************
-     * Part of set and Set Total *
-     *****************************/
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_PARTINSET)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
-
-    if (!et_str_empty (FileTag->disc_number))
-    {
-        id3_frame = ID3Frame_NewID (ID3FID_PARTINSET);
-        ID3Tag_AttachFrame (id3_tag, id3_frame);
-        string1 = et_id3tag_get_tpos_from_file_tag (FileTag);
-        Id3tag_Set_Field (id3_frame, ID3FN_TEXT, string1);
-        g_free (string1);
-        has_disc_number = TRUE;
-    }
-
-
-    /********
-     * Year *
-     ********/
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_YEAR)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
-
-    if (!et_str_empty (FileTag->year))
-    {
-        id3_frame = ID3Frame_NewID(ID3FID_YEAR);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, FileTag->year);
-        has_year = TRUE;
-    }
-
-
-    /*************************
-     * Track and Total Track *
-     *************************/
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_TRACKNUM)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
-
-    if (!et_str_empty (FileTag->track))
-    {
-        id3_frame = ID3Frame_NewID(ID3FID_TRACKNUM);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-
-        if (!et_str_empty (FileTag->track_total))
-            string1 = g_strconcat(FileTag->track,"/",FileTag->track_total,NULL);
-        else
-            string1 = g_strdup(FileTag->track);
-
-        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, string1);
-        g_free(string1);
-        has_track = TRUE;
-    }
-
-
-    /*********
-     * Genre *
-     *********
-     * Genre is written like this :
+    /* Genre is written like this :
      *    - "(<genre_id>)"              -> "(3)"
      *    - "(<genre_id>)<refinement>"  -> "(3)EuroDance"
      */
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_CONTENTTYPE)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
-
+    tmp.clear();
     if (!et_str_empty (FileTag->genre))
     {
-        gchar *genre_string_tmp;
-        guchar genre_value;
-
-        id3_frame = ID3Frame_NewID(ID3FID_CONTENTTYPE);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-
-        genre_value = Id3tag_String_To_Genre(FileTag->genre);
+        guchar genre_value = Id3tag_String_To_Genre(FileTag->genre);
         // If genre not defined don't write genre value between brackets! (priority problem noted with some tools)
         if ((genre_value == ID3_INVALID_GENRE)
             || g_settings_get_boolean (MainSettings, "id3v2-text-only-genre"))
-        {
-            genre_string_tmp = g_strdup_printf("%s",FileTag->genre);
-        }
+            tmp = FileTag->genre;
         else
-        {
-            genre_string_tmp = g_strdup_printf("(%d)",genre_value);
-        }
-
-        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, genre_string_tmp);
-        g_free(genre_string_tmp);
-        has_genre = TRUE;
+            tmp = '(' + to_string(genre_value) + ')';
     }
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_CONTENTTYPE, tmp.c_str());
 
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_COMMENT, FileTag->comment);
 
-    /***********
-     * Comment *
-     ***********/
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_COMMENT)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_COMPOSER, FileTag->composer);
 
-    if (!et_str_empty (FileTag->comment))
-    {
-        id3_frame = ID3Frame_NewID(ID3FID_COMMENT);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, FileTag->comment);
-        // These 2 following fields allow synchronisation between id3v2 and id3v1 tags with id3lib
-        // Disabled as when using unicode, the comment field stay in ISO.
-        //Id3tag_Set_Field(id3_frame, ID3FN_DESCRIPTION, "ID3v1 Comment");
-        //Id3tag_Set_Field(id3_frame, ID3FN_LANGUAGE, "XXX");
-        has_comment = TRUE;
-    }
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_ORIGARTIST, FileTag->orig_artist);
 
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_ORIGYEAR, FileTag->orig_year);
 
-    /************
-     * Composer *
-     ************/
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_COMPOSER)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_COPYRIGHT, FileTag->copyright);
 
-    if (!et_str_empty (FileTag->composer))
-    {
-        id3_frame = ID3Frame_NewID(ID3FID_COMPOSER);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, FileTag->composer);
-        has_composer = TRUE;
-    }
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_WWWUSER, FileTag->url);
 
-
-    /*******************
-     * Original artist *
-     *******************/
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_ORIGARTIST)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
-
-    if (!et_str_empty (FileTag->orig_artist))
-    {
-        id3_frame = ID3Frame_NewID(ID3FID_ORIGARTIST);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, FileTag->orig_artist);
-        has_orig_artist = TRUE;
-    }
-
-
-    /*****************
-     * Original year *
-     ****************/
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_ORIGYEAR)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
-
-    if (!et_str_empty (FileTag->orig_year))
-    {
-        id3_frame = ID3Frame_NewID(ID3FID_ORIGYEAR);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, FileTag->orig_year);
-        has_orig_year = TRUE;
-    }
-
-
-    /*************
-     * Copyright *
-     *************/
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_COPYRIGHT)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
-
-    if (!et_str_empty (FileTag->copyright))
-    {
-        id3_frame = ID3Frame_NewID(ID3FID_COPYRIGHT);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, FileTag->copyright);
-        has_copyright = TRUE;
-    }
-
-
-    /*******
-     * URL *
-     *******/
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_WWWUSER)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
-
-    if (!et_str_empty (FileTag->url))
-    {
-        id3_frame = ID3Frame_NewID(ID3FID_WWWUSER);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-        Id3tag_Set_Field(id3_frame, ID3FN_URL, FileTag->url);
-        has_composer = TRUE;
-    }
-
-
-    /**************
-     * Encoded by *
-     **************/
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_ENCODEDBY)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
-
-    if (!et_str_empty (FileTag->encoded_by))
-    {
-        id3_frame = ID3Frame_NewID(ID3FID_ENCODEDBY);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, FileTag->encoded_by);
-        has_encoded_by = TRUE;
-    }
-
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_ENCODEDBY, FileTag->encoded_by);
 
     /***********
      * Picture *
      ***********/
     while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_PICTURE)) )
         ID3Tag_RemoveFrame(id3_tag,id3_frame);
-
-    has_picture = FALSE;
 
     for (pic = FileTag->picture; pic != NULL; pic = pic->next)
     {
@@ -579,10 +319,10 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
             gsize data_size;
 
             data = g_bytes_get_data (pic->bytes, &data_size);
-            ID3Field_SetBINARY (id3_field, data, data_size);
+            ID3Field_SetBINARY (id3_field, (const uchar*)data, data_size);
         }
 
-        has_picture = TRUE;
+        has_data = TRUE;
     }
 
 
@@ -602,7 +342,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
         string = g_strdup_printf("%d",((ET_File_Info *)ETFile->ETFileInfo)->duration * 1000);
         Id3tag_Set_Field(id3_frame, ID3FN_TEXT, string);
         g_free(string);
-        has_song_len = TRUE;
+        has_data = TRUE;
     }*/
 
 
@@ -637,10 +377,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     /* If all fields (managed in the UI) are empty and option id3-strip-empty
      * is set to TRUE, we strip the ID3v1.x and ID3v2 tags. Else, write ID3v2
      * and/or ID3v1. */
-    if (g_settings_get_boolean (MainSettings, "id3-strip-empty")
-    && !has_title      && !has_artist   && !has_album_artist && !has_album     && !has_year      && !has_track
-    && !has_genre      && !has_composer && !has_orig_artist && !has_orig_year  && !has_copyright && !has_url
-    && !has_encoded_by && !has_picture  && !has_comment     && !has_disc_number)//&& !has_song_len )
+    if (g_settings_get_boolean (MainSettings, "id3-strip-empty") && !has_data)
     {
         error_strip_id3v1 = ID3Tag_Strip(id3_tag,ID3TT_ID3V1);
         error_strip_id3v2 = ID3Tag_Strip(id3_tag,ID3TT_ID3V2);
@@ -977,7 +714,29 @@ ID3_C_EXPORT size_t ID3Field_GetUNICODE_1 (const ID3Field *field, unicode_t *buf
 }
 
 
+static gchar* ID3Field_GetASCII_String(const ID3Field *field, size_t& num_chars, size_t itemNum = 0)
+{
+	num_chars = ID3Field_GetASCII_1(field, NULL, 0, itemNum);
+	if (!num_chars)
+		return nullptr;
+	if (num_chars > ID3V2_MAX_STRING_LEN)
+		num_chars = ID3V2_MAX_STRING_LEN;
+	gchar* string = (gchar*)g_malloc0(num_chars + 1);
+	ID3Field_GetASCII_1(field, string, num_chars + 1, itemNum);
+	return string;
+}
 
+static unicode_t* ID3Field_GetUNICODE_String(const ID3Field *field, size_t& num_chars, size_t itemNum = 0)
+{
+	num_chars = ID3Field_GetUNICODE_1(field, NULL, 0, itemNum);
+	if (!num_chars)
+		return nullptr;
+	if (num_chars > ID3V2_MAX_STRING_LEN)
+		num_chars = ID3V2_MAX_STRING_LEN;
+	unicode_t* string = (unicode_t*)g_malloc0(sizeof(unicode_t) * (num_chars + 1));
+	ID3Field_GetUNICODE_1(field, string, num_chars + 1, itemNum);
+	return string;
+}
 
 /*
  * Source : "http://www.id3.org/id3v2.4.0-structure.txt"
@@ -1031,7 +790,7 @@ gchar *Id3tag_Get_Field (const ID3Frame *id3_frame, ID3_FieldID id3_fieldid)
         // Get encoding from content of file...
         id3_field_encoding = ID3Frame_GetField(id3_frame,ID3FN_TEXTENC);
         if (id3_field_encoding)
-            enc = ID3Field_GetINT(id3_field_encoding);
+            enc = (ID3_TextEnc)ID3Field_GetINT(id3_field_encoding);
         // Else, get encoding from the field
         //enc = ID3Field_GetEncoding(id3_field);
 
@@ -1063,9 +822,7 @@ gchar *Id3tag_Get_Field (const ID3Frame *id3_frame, ID3_FieldID id3_fieldid)
                 }
                 else if (ID3Field_IsEncodable (id3_field))
                 {
-                    string = g_malloc0 (ID3V2_MAX_STRING_LEN + 1);
-                    num_chars = ID3Field_GetASCII_1 (id3_field, string,
-                                                     ID3V2_MAX_STRING_LEN, 0);
+                    string = ID3Field_GetASCII_String(id3_field, num_chars);
                     string1 = convert_string (string, charset, "UTF-8", FALSE);
                     /* Override to a non-standard character encoding. */
                     goto out;
@@ -1083,14 +840,12 @@ gchar *Id3tag_Get_Field (const ID3Frame *id3_frame, ID3_FieldID id3_fieldid)
         switch ( enc )
         {
             case ID3TE_ISO8859_1:
-                string = g_malloc0 (ID3V2_MAX_STRING_LEN + 1);
-                num_chars = ID3Field_GetASCII_1(id3_field,string,ID3V2_MAX_STRING_LEN,0);
+                string = ID3Field_GetASCII_String(id3_field, num_chars);
                 string1 = convert_string(string,"ISO-8859-1","UTF-8",FALSE);
                 break;
 
             case ID3TE_UTF8: // Shouldn't work with id3lib 3.8.3 (supports only ID3v2.3, not ID3v2.4)
-                string = g_malloc0 (ID3V2_MAX_STRING_LEN+1);
-                num_chars = ID3Field_GetASCII_1(id3_field,string,ID3V2_MAX_STRING_LEN,0);
+                string = ID3Field_GetASCII_String(id3_field, num_chars);
                 //string1 = convert_string(string,"UTF-8","UTF-8",FALSE); // Nothing to do
                 if (g_utf8_validate(string,-1,NULL))
                     string1 = g_strdup(string);
@@ -1099,8 +854,7 @@ gchar *Id3tag_Get_Field (const ID3Frame *id3_frame, ID3_FieldID id3_fieldid)
             case ID3TE_UTF16:
                 // Id3lib (3.8.3 at least) always returns Unicode strings in UTF-16BE.
             case ID3TE_UTF16BE:
-                string = g_malloc0(sizeof(unicode_t)*ID3V2_MAX_STRING_LEN+1);
-                num_chars = ID3Field_GetUNICODE_1(id3_field,(unicode_t *)string,ID3V2_MAX_STRING_LEN,0);
+                string = (gchar*)ID3Field_GetUNICODE_String(id3_field, num_chars);
                 // "convert_string_1" as we need to pass length for UTF-16
                 string1 = convert_string_1(string,num_chars,"UTF-16BE","UTF-8",FALSE);
                 break;
@@ -1108,8 +862,7 @@ gchar *Id3tag_Get_Field (const ID3Frame *id3_frame, ID3_FieldID id3_fieldid)
             case ID3TE_NONE:
             case ID3TE_NUMENCODINGS:
             default:
-                string = g_malloc0 (4 * ID3V2_MAX_STRING_LEN + 1);
-                num_chars = ID3Field_GetASCII_1(id3_field,string,ID3V2_MAX_STRING_LEN,0);
+                string = ID3Field_GetASCII_String(id3_field, num_chars, 0);
 
                 if (g_utf8_validate (string, -1, NULL))
                 {
@@ -1377,7 +1130,7 @@ void Id3tag_Prepare_ID3v1 (ID3Tag *id3_tag)
 
             id3_field_encoding = ID3Frame_GetField(frame, ID3FN_TEXTENC);
             if (id3_field_encoding != NULL)
-                enc = ID3Field_GetINT(id3_field_encoding);
+                enc = (ID3_TextEnc)ID3Field_GetINT(id3_field_encoding);
             id3_field_text = ID3Frame_GetField(frame, ID3FN_TEXT);
 
             /* The frames in ID3TE_ISO8859_1 are already converted to the selected
@@ -1389,8 +1142,7 @@ void Id3tag_Prepare_ID3v1 (ID3Tag *id3_tag)
                 const gchar *charset;
 
                 /* Read UTF-16 frame. */
-                string = g_malloc0(sizeof(unicode_t)*ID3V2_MAX_STRING_LEN+1);
-                num_chars = ID3Field_GetUNICODE_1(id3_field_text,(unicode_t *)string,ID3V2_MAX_STRING_LEN,0);
+                string = (gchar*)ID3Field_GetUNICODE_String(id3_field_text, num_chars);
                 // "convert_string_1" as we need to pass length for UTF-16
                 string1 = convert_string_1(string,num_chars,"UTF-16BE","UTF-8",FALSE);
 
@@ -1433,7 +1185,7 @@ Id3tag_Rules_For_ISO_Fields (const gchar *string,
     g_return_val_if_fail (string != NULL && from_codeset != NULL
                           && to_codeset != NULL, NULL);
 
-    iconv_option = g_settings_get_enum (MainSettings, "id3v1-encoding-option");
+    iconv_option = (EtTagEncoding)g_settings_get_enum (MainSettings, "id3v1-encoding-option");
 
     switch (iconv_option)
     {

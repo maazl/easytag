@@ -103,6 +103,8 @@ mp4tag_read_file_tag (GFile *file,
         return FALSE;
     }
 
+    const TagLib::PropertyMap extra_tag = tag->properties ();
+
     /*********
      * Title *
      *********/
@@ -111,6 +113,12 @@ mp4tag_read_file_tag (GFile *file,
     if (!str.isEmpty ())
     {
         et_file_tag_set_title (FileTag, str.toCString (true));
+    }
+
+    if (extra_tag.contains ("SUBTITLE"))
+    {
+        const TagLib::StringList sl = extra_tag["SUBTITLE"];
+        FileTag->subtitle = g_strdup (sl.front ().toCString (true));
     }
 
     /**********
@@ -133,7 +141,11 @@ mp4tag_read_file_tag (GFile *file,
         et_file_tag_set_album (FileTag, str.toCString (true));
     }
 
-    const TagLib::PropertyMap extra_tag = tag->properties ();
+    if (extra_tag.contains ("DISCSUBTITLE"))
+    {
+        const TagLib::StringList sl = extra_tag["DISCSUBTITLE"];
+        FileTag->disc_subtitle = g_strdup (sl.front ().toCString (true));
+    }
 
     /* Disc number. */
     /* Total disc number support in TagLib reads multiple disc numbers and
@@ -279,7 +291,6 @@ mp4tag_write_file_tag (const ET_File *ETFile,
     const gchar *filename;
     const gchar *filename_utf8;
     TagLib::MP4::Tag *tag;
-    gboolean success;
 
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
 
@@ -334,108 +345,37 @@ mp4tag_write_file_tag (const ET_File *ETFile,
 
     TagLib::PropertyMap fields;
 
-    /* Title */
-    if (!et_str_empty (FileTag->title))
+    auto add_field = [&fields](const gchar* value, const char* propertyname)
     {
-        TagLib::String string (FileTag->title, TagLib::String::UTF8);
-        fields.insert ("TITLE", string);
-    }
+        if (!et_str_empty(value))
+            fields.insert(propertyname, TagLib::String(value, TagLib::String::UTF8));
+    };
 
-    /* Artist */
-    if (!et_str_empty (FileTag->artist))
-    {
-        TagLib::String string (FileTag->artist, TagLib::String::UTF8);
-        fields.insert ("ARTIST", string);
-    }
+    add_field(FileTag->title, "TITLE");
 
-    /* Album */
-    if (!et_str_empty (FileTag->album))
-    {
-        TagLib::String string (FileTag->album, TagLib::String::UTF8);
-        fields.insert ("ALBUM", string);
-    }
+    add_field(FileTag->subtitle, "SUBTITLE");
 
-    /* Disc number. */
-    if (!et_str_empty (FileTag->disc_number))
-    {
-        if (!et_str_empty (FileTag->disc_total))
-        {
-            gchar *str;
+    add_field(FileTag->artist, "ARTIST");
 
-            str = g_strconcat (FileTag->disc_number, "/", FileTag->disc_total,
-                               NULL);
-            TagLib::String string (str, TagLib::String::UTF8);
-            fields.insert ("DISCNUMBER", string);
-            g_free (str);
-        }
-        else
-        {
-            TagLib::String string (FileTag->disc_number, TagLib::String::UTF8);
-            fields.insert ("DISCNUMBER", string);
-        }
-    }
+    add_field(FileTag->album, "ALBUM");
 
-    /* Year */
-    if (!et_str_empty (FileTag->year))
-    {
-        TagLib::String string (FileTag->year, TagLib::String::UTF8);
-        fields.insert ("DATE", string);
-    }
+    add_field(FileTag->disc_subtitle, "DISCSUBTITLE");
 
-    /* Track and Total Track */
-    if (!et_str_empty (FileTag->track))
-    {
-        if (!et_str_empty (FileTag->track_total))
-        {
-            gchar *str;
+    add_field(FileTag->disc_and_total().c_str(), "DISCNUMBER");
 
-            str = g_strconcat (FileTag->track, "/", FileTag->track_total,
-                               NULL);
-            TagLib::String string (str, TagLib::String::UTF8);
-            fields.insert ("TRACKNUMBER", string);
-            g_free (str);
-        }
-        else
-        {
-            TagLib::String string (FileTag->track, TagLib::String::UTF8);
-            fields.insert ("TRACKNUMBER", string);
-        }
-    }
+    add_field(FileTag->year, "DATE");
 
-    /* Genre */
-    if (!et_str_empty (FileTag->genre))
-    {
-        TagLib::String string (FileTag->genre, TagLib::String::UTF8);
-        fields.insert ("GENRE", string);
-    }
+    add_field(FileTag->track_and_total().c_str(), "TRACKNUMBER");
 
-    /* Comment */
-    if (!et_str_empty (FileTag->comment))
-    {
-        TagLib::String string (FileTag->comment, TagLib::String::UTF8);
-        fields.insert ("COMMENT", string);
-    }
+    add_field(FileTag->genre, "GENRE");
 
-    /* Composer or Writer */
-    if (!et_str_empty (FileTag->composer))
-    {
-        TagLib::String string (FileTag->composer, TagLib::String::UTF8);
-        fields.insert ("COMPOSER", string);
-    }
+    add_field(FileTag->comment, "COMMENT");
 
-    /* Copyright. */
-    if (!et_str_empty (FileTag->copyright))
-    {
-        TagLib::String string (FileTag->copyright, TagLib::String::UTF8);
-        fields.insert ("COPYRIGHT", string);
-    }
+    add_field(FileTag->composer, "COMPOSER");
 
-    /* Encoding Tool */
-    if (!et_str_empty (FileTag->encoded_by))
-    {
-        TagLib::String string (FileTag->encoded_by, TagLib::String::UTF8);
-        fields.insert ("ENCODEDBY", string);
-    }
+    add_field(FileTag->copyright, "COPYRIGHT");
+
+    add_field(FileTag->encoded_by, "ENCODEDBY");
 
     TagLib::MP4::ItemListMap &extra_items = tag->itemListMap ();
 
@@ -500,9 +440,8 @@ mp4tag_write_file_tag (const ET_File *ETFile,
     }
 
     tag->setProperties (fields);
-    success = mp4file.save () ? TRUE : FALSE;
 
-    return success;
+    return mp4file.save();
 }
 
 #endif /* ENABLE_MP4 */

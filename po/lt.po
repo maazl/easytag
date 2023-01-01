@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG 2.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-03 23:29+0100\n"
+"POT-Creation-Date: 2023-01-01 12:31+0100\n"
 "PO-Revision-Date: 2016-01-08 12:17+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
@@ -81,8 +81,8 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Įveskite kurį aplanką naršyti."
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3491
-#: ../src/tag_area.cc:1413
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3495
+#: ../src/tag_area.cc:1349
 msgid "_Open"
 msgstr ""
 
@@ -96,8 +96,8 @@ msgid "No files"
 msgstr "Nėra failų"
 
 #: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:23 ../data/scan_dialog.ui.h:63
-#: ../data/search_dialog.ui.h:14
+#: ../data/preferences_dialog.ui.h:24 ../data/scan_dialog.ui.h:69
+#: ../data/search_dialog.ui.h:15
 msgid "Artist"
 msgstr "Atlikėjas"
 
@@ -110,8 +110,8 @@ msgid "# Files"
 msgstr "# Failai"
 
 #: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:25 ../data/scan_dialog.ui.h:67
-#: ../data/search_dialog.ui.h:16
+#: ../data/preferences_dialog.ui.h:26 ../data/scan_dialog.ui.h:73
+#: ../data/search_dialog.ui.h:17
 msgid "Album"
 msgstr "Albumas"
 
@@ -122,102 +122,114 @@ msgstr "Kelias"
 
 #: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
 #: ../data/playlist_dialog.ui.h:2 ../data/preferences_dialog.ui.h:17
-#: ../data/scan_dialog.ui.h:59 ../data/search_dialog.ui.h:12
+#: ../data/scan_dialog.ui.h:63 ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "Failo pavadinimas"
 
 #: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:22 ../data/scan_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:22 ../data/scan_dialog.ui.h:65
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Pavadinimas"
 
-#: ../data/browser.ui.h:12 ../data/preferences_dialog.ui.h:24
-#: ../data/scan_dialog.ui.h:65 ../data/search_dialog.ui.h:15
+#: ../data/browser.ui.h:12 ../data/preferences_dialog.ui.h:23
+#: ../data/scan_dialog.ui.h:67 ../data/search_dialog.ui.h:14
+#, fuzzy
+msgid "Subtitle"
+msgstr "Pavadinimas"
+
+#: ../data/browser.ui.h:13 ../data/preferences_dialog.ui.h:25
+#: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:16
 msgid "Album Artist"
 msgstr "Albumo atlikėjas"
 
-#: ../data/browser.ui.h:13 ../data/cddb_dialog.ui.h:40
-#: ../data/preferences_dialog.ui.h:26 ../data/search_dialog.ui.h:18
+#: ../data/browser.ui.h:14 ../data/preferences_dialog.ui.h:27
+#: ../data/scan_dialog.ui.h:75 ../data/search_dialog.ui.h:18
+#, fuzzy
+msgid "Disc subtitle"
+msgstr "Pagal pavadinimą mažėjimo tvarka"
+
+#: ../data/browser.ui.h:15 ../data/cddb_dialog.ui.h:40
+#: ../data/preferences_dialog.ui.h:28 ../data/search_dialog.ui.h:20
 msgid "Year"
 msgstr "Metai"
 
-#: ../data/browser.ui.h:14 ../data/preferences_dialog.ui.h:27
+#: ../data/browser.ui.h:16 ../data/preferences_dialog.ui.h:29
 #, fuzzy
 msgid "Rel. year"
 msgstr "Originalus atlikėjas"
 
-#: ../data/browser.ui.h:15 ../data/preferences_dialog.ui.h:29
+#: ../data/browser.ui.h:17 ../data/preferences_dialog.ui.h:31
 msgid "Disc"
 msgstr "Diskas"
 
-#: ../data/browser.ui.h:16 ../data/preferences_dialog.ui.h:28
-#: ../data/search_dialog.ui.h:19
+#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:30
+#: ../data/search_dialog.ui.h:21
 msgid "Track"
 msgstr "Takelis"
 
-#: ../data/browser.ui.h:17 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:30 ../data/scan_dialog.ui.h:69
-#: ../data/search_dialog.ui.h:20
+#: ../data/browser.ui.h:19 ../data/cddb_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:32 ../data/scan_dialog.ui.h:77
+#: ../data/search_dialog.ui.h:22
 msgid "Genre"
 msgstr "Žanras"
 
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:31
-#: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:21
+#: ../data/browser.ui.h:20 ../data/preferences_dialog.ui.h:33
+#: ../data/scan_dialog.ui.h:79 ../data/search_dialog.ui.h:23
 msgid "Comment"
 msgstr "Komentaras"
 
-#: ../data/browser.ui.h:19 ../data/preferences_dialog.ui.h:32
-#: ../data/scan_dialog.ui.h:73 ../data/search_dialog.ui.h:22
+#: ../data/browser.ui.h:21 ../data/preferences_dialog.ui.h:34
+#: ../data/scan_dialog.ui.h:81 ../data/search_dialog.ui.h:24
 #: ../src/picture.c:213
 msgid "Composer"
 msgstr "Kompozitorius"
 
-#: ../data/browser.ui.h:20 ../data/preferences_dialog.ui.h:33
-#: ../data/search_dialog.ui.h:23
+#: ../data/browser.ui.h:22 ../data/preferences_dialog.ui.h:35
+#: ../data/search_dialog.ui.h:25
 msgid "Original Artist"
 msgstr "Originalus atlikėjas"
 
-#: ../data/browser.ui.h:21 ../data/preferences_dialog.ui.h:34
-#: ../data/search_dialog.ui.h:24
+#: ../data/browser.ui.h:23 ../data/preferences_dialog.ui.h:36
+#: ../data/search_dialog.ui.h:26
 #, fuzzy
 msgid "Orig. year"
 msgstr "Originalus atlikėjas"
 
-#: ../data/browser.ui.h:22 ../data/preferences_dialog.ui.h:35
-#: ../data/scan_dialog.ui.h:77 ../data/search_dialog.ui.h:25
+#: ../data/browser.ui.h:24 ../data/preferences_dialog.ui.h:37
+#: ../data/scan_dialog.ui.h:85 ../data/search_dialog.ui.h:27
 msgid "Copyright"
 msgstr "Autorinės teisės"
 
-#: ../data/browser.ui.h:23 ../data/preferences_dialog.ui.h:36
-#: ../data/scan_dialog.ui.h:79 ../data/search_dialog.ui.h:26
+#: ../data/browser.ui.h:25 ../data/preferences_dialog.ui.h:38
+#: ../data/scan_dialog.ui.h:87 ../data/search_dialog.ui.h:28
 msgid "URL"
 msgstr "URL"
 
-#: ../data/browser.ui.h:24 ../data/preferences_dialog.ui.h:37
-#: ../data/scan_dialog.ui.h:81 ../data/search_dialog.ui.h:27
+#: ../data/browser.ui.h:26 ../data/preferences_dialog.ui.h:39
+#: ../data/scan_dialog.ui.h:89 ../data/search_dialog.ui.h:29
 msgid "Encoded By"
 msgstr "Kodavo"
 
-#: ../data/browser.ui.h:25 ../data/preferences_dialog.ui.h:18
-#: ../data/search_dialog.ui.h:28
+#: ../data/browser.ui.h:27 ../data/preferences_dialog.ui.h:18
+#: ../data/search_dialog.ui.h:30
 #, fuzzy
 msgid "File size"
 msgstr "Failas"
 
-#: ../data/browser.ui.h:26 ../data/cddb_dialog.ui.h:33
-#: ../data/preferences_dialog.ui.h:19 ../data/search_dialog.ui.h:29
+#: ../data/browser.ui.h:28 ../data/cddb_dialog.ui.h:33
+#: ../data/preferences_dialog.ui.h:19 ../data/search_dialog.ui.h:31
 msgid "Duration"
 msgstr "Trukmė"
 
-#: ../data/browser.ui.h:27 ../data/preferences_dialog.ui.h:20
-#: ../data/search_dialog.ui.h:30
+#: ../data/browser.ui.h:29 ../data/preferences_dialog.ui.h:20
+#: ../data/search_dialog.ui.h:32
 #, fuzzy
 msgid "Bit rate"
 msgstr "Bitų dažnis:"
 
-#: ../data/browser.ui.h:28 ../data/preferences_dialog.ui.h:21
-#: ../data/search_dialog.ui.h:31
+#: ../data/browser.ui.h:30 ../data/preferences_dialog.ui.h:21
+#: ../data/search_dialog.ui.h:33
 msgid "Samplerate"
 msgstr ""
 
@@ -240,9 +252,9 @@ msgstr ""
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.cc:376 ../src/application_window.cc:390
 #: ../src/application_window.cc:3019 ../src/browser.cc:937
-#: ../src/browser.cc:3490 ../src/cddb_dialog.cc:2124 ../src/easytag.c:464
-#: ../src/easytag.c:471 ../src/easytag.c:599 ../src/tag_area.cc:1411
-#: ../src/tag_area.cc:1736
+#: ../src/browser.cc:3494 ../src/cddb_dialog.cc:2124 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:599 ../src/tag_area.cc:1347
+#: ../src/tag_area.cc:1672
 msgid "_Cancel"
 msgstr ""
 
@@ -262,7 +274,7 @@ msgstr ""
 "Pasirinkite kurią programą vykdyti. JI kaip parametrą gaus esamą failą."
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:105 ../src/easytag.c:565
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:109 ../src/easytag.c:565
 msgid "Rename Directory"
 msgstr "Pervadinti aplanką"
 
@@ -353,7 +365,7 @@ msgstr "CDDB failų paieška…"
 msgid "Track Name"
 msgstr "Takelio pavadinimas"
 
-#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:115
+#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:122
 #: ../src/picture.c:191
 msgid "Other"
 msgstr "Kita"
@@ -473,14 +485,14 @@ msgstr ""
 msgid "Match lines with the Levenshtein algorithm"
 msgstr "Atitikti eilutes su Levenšteino(Levenshtein) algoritmu"
 
-#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:167
+#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:174
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:24
 msgid "Whether to use the DLM algorithm to match CDDB results to files"
 msgstr ""
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
-#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:184
-#: ../data/scan_dialog.ui.h:118
+#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:191
+#: ../data/scan_dialog.ui.h:126
 msgid "_Close"
 msgstr ""
 
@@ -550,7 +562,7 @@ msgstr "Aprašymas"
 msgid "_Accept"
 msgstr ""
 
-#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:38
+#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:40
 msgid "Log"
 msgstr "Žurnalas"
 
@@ -720,7 +732,7 @@ msgstr "_Skenerio veiksena"
 msgid "Rename Files and Directories"
 msgstr "_Pervadinti failus ir aplankus…"
 
-#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:114
+#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:122
 msgid "Process Fields"
 msgstr "Apdoroti laukelius"
 
@@ -755,325 +767,345 @@ msgid "Descending by title"
 msgstr "Pagal pavadinimą mažėjimo tvarka"
 
 #: ../data/menus.ui.h:34
+#, fuzzy
+msgid "Ascending by subtitle"
+msgstr "Pagal pavadinimą didėjimo tvarka"
+
+#: ../data/menus.ui.h:35
+#, fuzzy
+msgid "Descending by subtitle"
+msgstr "Pagal pavadinimą mažėjimo tvarka"
+
+#: ../data/menus.ui.h:36
 msgid "Ascending by artist"
 msgstr "Pagal atlikėją didėjimo tvarka"
 
-#: ../data/menus.ui.h:35
+#: ../data/menus.ui.h:37
 msgid "Descending by artist"
 msgstr "Pagal atlikėją mažėjimo tvarka"
 
-#: ../data/menus.ui.h:36
+#: ../data/menus.ui.h:38
 msgid "Ascending by album artist"
 msgstr "Pagal albumo atlikėją didėjimo tvarka"
 
-#: ../data/menus.ui.h:37
+#: ../data/menus.ui.h:39
 msgid "Descending by album artist"
 msgstr "Pagal albumo atlikėją mažėjimo tvarka"
 
-#: ../data/menus.ui.h:38
+#: ../data/menus.ui.h:40
 msgid "Ascending by album"
 msgstr "Pagal albumą didėjimo tvarka"
 
-#: ../data/menus.ui.h:39
+#: ../data/menus.ui.h:41
 msgid "Descending by album"
 msgstr "Pagal albumą mažėjimo tvarka"
 
-#: ../data/menus.ui.h:40
+#: ../data/menus.ui.h:42
+#, fuzzy
+msgid "Ascending by disc subtitle"
+msgstr "Pagal pavadinimą didėjimo tvarka"
+
+#: ../data/menus.ui.h:43
+#, fuzzy
+msgid "Descending by disc subtitle"
+msgstr "Pagal pavadinimą mažėjimo tvarka"
+
+#: ../data/menus.ui.h:44
 msgid "Ascending by year"
 msgstr "Pagal metus didėjimo tvarka"
 
-#: ../data/menus.ui.h:41
+#: ../data/menus.ui.h:45
 msgid "Descending by year"
 msgstr "Pagal metus mažėjimo tvarka"
 
-#: ../data/menus.ui.h:42
+#: ../data/menus.ui.h:46
 #, fuzzy
 msgid "Ascending by release year"
 msgstr "Pagal metus didėjimo tvarka"
 
-#: ../data/menus.ui.h:43
+#: ../data/menus.ui.h:47
 #, fuzzy
 msgid "Descending by release year"
 msgstr "Pagal metus mažėjimo tvarka"
 
-#: ../data/menus.ui.h:44
+#: ../data/menus.ui.h:48
 msgid "Ascending by genre"
 msgstr "Pagal žanrą didėjimo tvarka"
 
-#: ../data/menus.ui.h:45
+#: ../data/menus.ui.h:49
 msgid "Descending by genre"
 msgstr "Pagal žanrą mažėjimo tvarka"
 
-#: ../data/menus.ui.h:46
+#: ../data/menus.ui.h:50
 msgid "Ascending by comment"
 msgstr "Pagal komentarą didėjimo tvarka"
 
-#: ../data/menus.ui.h:47
+#: ../data/menus.ui.h:51
 msgid "Descending by comment"
 msgstr "Pagal komentarą mažėjimo tvarka"
 
-#: ../data/menus.ui.h:48
+#: ../data/menus.ui.h:52
 msgid "Ascending by composer"
 msgstr "Pagal kompozitorių didėjimo tvarka"
 
-#: ../data/menus.ui.h:49
+#: ../data/menus.ui.h:53
 msgid "Descending by composer"
 msgstr "Pagal kompozitorių mažėjimo tvarka"
 
-#: ../data/menus.ui.h:50
+#: ../data/menus.ui.h:54
 msgid "Ascending by original artist"
 msgstr "Pagal originalų atlikėją didėjimo tvarka"
 
-#: ../data/menus.ui.h:51
+#: ../data/menus.ui.h:55
 msgid "Descending by original artist"
 msgstr "Pagal originalų atlikėją mažėjimo tvarka"
 
-#: ../data/menus.ui.h:52
+#: ../data/menus.ui.h:56
 #, fuzzy
 msgid "Ascending by original year"
 msgstr "Pagal originalų atlikėją didėjimo tvarka"
 
-#: ../data/menus.ui.h:53
+#: ../data/menus.ui.h:57
 #, fuzzy
 msgid "Descending by original year"
 msgstr "Pagal originalų atlikėją mažėjimo tvarka"
 
-#: ../data/menus.ui.h:54
+#: ../data/menus.ui.h:58
 msgid "Ascending by copyright"
 msgstr "Pagal autorines teises didėjimo tvarka"
 
-#: ../data/menus.ui.h:55
+#: ../data/menus.ui.h:59
 msgid "Descending by copyright"
 msgstr "Pagal autorines teises mažėjimo tvarka"
 
-#: ../data/menus.ui.h:56
+#: ../data/menus.ui.h:60
 msgid "Ascending by URL"
 msgstr "Pagal URL didėjimo tvarka"
 
-#: ../data/menus.ui.h:57
+#: ../data/menus.ui.h:61
 msgid "Descending by URL"
 msgstr "Pagal URL mažėjimo tvarka"
 
-#: ../data/menus.ui.h:58
+#: ../data/menus.ui.h:62
 msgid "Ascending by encoder name"
 msgstr "Pagal kodavimą didėjimo tvarka"
 
-#: ../data/menus.ui.h:59
+#: ../data/menus.ui.h:63
 msgid "Descending by encoder name"
 msgstr "Pagal kodavimą mažėjimo tvarka"
 
-#: ../data/menus.ui.h:60
+#: ../data/menus.ui.h:64
 msgid "Sort List by Property"
 msgstr "Rikiuoti sąrašą pagal savybę"
 
-#: ../data/menus.ui.h:61
+#: ../data/menus.ui.h:65
 #, fuzzy
 msgid "Ascending by file path"
 msgstr "Pagal failo tipą didėjimo tvarka"
 
-#: ../data/menus.ui.h:62
+#: ../data/menus.ui.h:66
 #, fuzzy
 msgid "Descending by file path"
 msgstr "Pagal failo tipą mažėjimo tvarka"
 
-#: ../data/menus.ui.h:63
+#: ../data/menus.ui.h:67
 msgid "Ascending by filename"
 msgstr "Pagal failo vardą didėjimo tvarka"
 
-#: ../data/menus.ui.h:64
+#: ../data/menus.ui.h:68
 msgid "Descending by filename"
 msgstr "Pagal failo vardą mažėjimo tvarka"
 
-#: ../data/menus.ui.h:65
+#: ../data/menus.ui.h:69
 msgid "Ascending by creation date"
 msgstr "Pagal sukūrimo datą didėjimo tvarka"
 
-#: ../data/menus.ui.h:66
+#: ../data/menus.ui.h:70
 msgid "Descending by creation date"
 msgstr "Pagal sukūrimo datą mažėjimo tvarka"
 
-#: ../data/menus.ui.h:67
+#: ../data/menus.ui.h:71
 msgid "Ascending by file type"
 msgstr "Pagal failo tipą didėjimo tvarka"
 
-#: ../data/menus.ui.h:68
+#: ../data/menus.ui.h:72
 msgid "Descending by file type"
 msgstr "Pagal failo tipą mažėjimo tvarka"
 
-#: ../data/menus.ui.h:69
+#: ../data/menus.ui.h:73
 msgid "Ascending by file size"
 msgstr "Pagal failo dydį didėjimo tvarka"
 
-#: ../data/menus.ui.h:70
+#: ../data/menus.ui.h:74
 msgid "Descending by file size"
 msgstr "Pagal failo dydį mažėjimo tvarka"
 
-#: ../data/menus.ui.h:71
+#: ../data/menus.ui.h:75
 msgid "Ascending by duration"
 msgstr "Pagal trukmę didėjimo tvarka"
 
-#: ../data/menus.ui.h:72
+#: ../data/menus.ui.h:76
 msgid "Descending by duration"
 msgstr "Pagal trukmę mažėjimo tvarka"
 
-#: ../data/menus.ui.h:73
+#: ../data/menus.ui.h:77
 #, fuzzy
 msgid "Ascending by bit rate"
 msgstr "Pagal bitų dažnį didėjimo tvarka"
 
-#: ../data/menus.ui.h:74
+#: ../data/menus.ui.h:78
 #, fuzzy
 msgid "Descending by bit rate"
 msgstr "Pagal bitų dažnį mažėjimo tvarka"
 
-#: ../data/menus.ui.h:75
+#: ../data/menus.ui.h:79
 #, fuzzy
 msgid "Ascending by sample rate"
 msgstr "Pagal diskretizacijos dažnį didėjimo tvarka"
 
-#: ../data/menus.ui.h:76
+#: ../data/menus.ui.h:80
 #, fuzzy
 msgid "Descending by sample rate"
 msgstr "Pagal diskretizacijos dažnį mažėjimo tvarka"
 
-#: ../data/menus.ui.h:77
+#: ../data/menus.ui.h:81
 #, fuzzy
 msgid "Collapse Tree"
 msgstr "_Suskleisti medį"
 
-#: ../data/menus.ui.h:78
+#: ../data/menus.ui.h:82
 #, fuzzy
 msgid "Reload Tree"
 msgstr "Į_kelti medį iš naujo"
 
-#: ../data/menus.ui.h:79
+#: ../data/menus.ui.h:83
 msgid "Reload Directory"
 msgstr "Įkelti aplanką iš naujo"
 
-#: ../data/menus.ui.h:80
+#: ../data/menus.ui.h:84
 msgid "Show Hidden Directories"
 msgstr "Rodyti paslėptus aplankus"
 
-#: ../data/menus.ui.h:81
+#: ../data/menus.ui.h:85
 msgid "_Browser"
 msgstr "Naršyklė"
 
-#: ../data/menus.ui.h:82
+#: ../data/menus.ui.h:86
 msgid "Set _Current Path as Default"
 msgstr "Nustatyti _dabartinį kelią numatytuoju"
 
-#: ../data/menus.ui.h:83
+#: ../data/menus.ui.h:87
 msgid "Rename Directory…"
 msgstr "Pervadinti aplanką…"
 
-#: ../data/menus.ui.h:84
+#: ../data/menus.ui.h:88
 msgid "Browse Directory With…"
 msgstr "Naršyti aplanką su…"
 
-#: ../data/menus.ui.h:85
+#: ../data/menus.ui.h:89
 msgid "Browse _Subdirectories"
 msgstr "Naršyti _poaplankius"
 
-#: ../data/menus.ui.h:86
+#: ../data/menus.ui.h:90
 msgid "_Miscellaneous"
 msgstr "Į_vairūs"
 
-#: ../data/menus.ui.h:87
+#: ../data/menus.ui.h:91
 msgid "CDD_B Search…"
 msgstr "CDD_B paieška…"
 
-#: ../data/menus.ui.h:88
+#: ../data/menus.ui.h:92
 msgid "Load Filenames From a Text File…"
 msgstr "Įkelti failų pavadinimus iš tekstinio failo…"
 
-#: ../data/menus.ui.h:89 ../data/toolbar.ui.h:29
+#: ../data/menus.ui.h:93 ../data/toolbar.ui.h:29
 msgid "Generate Playlist…"
 msgstr "Generuoti grojaraštį…"
 
-#: ../data/menus.ui.h:90
+#: ../data/menus.ui.h:94
 msgid "_Go"
 msgstr "_Eiti"
 
-#: ../data/menus.ui.h:91
+#: ../data/menus.ui.h:95
 msgid "_Home Directory"
 msgstr "_Namų aplankas"
 
-#: ../data/menus.ui.h:92
+#: ../data/menus.ui.h:96
 msgid "Desktop Directory"
 msgstr "Darbalaukio katalogas"
 
-#: ../data/menus.ui.h:93
+#: ../data/menus.ui.h:97
 msgid "Documents Directory"
 msgstr "Dokumentų aplankas"
 
-#: ../data/menus.ui.h:94
+#: ../data/menus.ui.h:98
 msgid "Downloads Directory"
 msgstr "Parsiuntimų aplankas"
 
-#: ../data/menus.ui.h:95
+#: ../data/menus.ui.h:99
 msgid "Music Directory"
 msgstr "Muzikos aplankas"
 
-#: ../data/menus.ui.h:96
+#: ../data/menus.ui.h:100
 msgid "_Parent Directory"
 msgstr "_Tėvinis aplankas"
 
-#: ../data/menus.ui.h:97
+#: ../data/menus.ui.h:101
 msgid "_Default Directory"
 msgstr "_Numatytasis aplankas"
 
-#: ../data/menus.ui.h:98 ../data/toolbar.ui.h:1
+#: ../data/menus.ui.h:102 ../data/toolbar.ui.h:1
 msgid "_First File"
 msgstr "_Pirmas failas"
 
-#: ../data/menus.ui.h:99
+#: ../data/menus.ui.h:103
 #, fuzzy
 msgid "Previous File"
 msgstr "_Ankstesnis failas"
 
-#: ../data/menus.ui.h:100 ../data/toolbar.ui.h:5
+#: ../data/menus.ui.h:104 ../data/toolbar.ui.h:5
 msgid "_Next File"
 msgstr "_Sekantis failas"
 
-#: ../data/menus.ui.h:101 ../data/toolbar.ui.h:7
+#: ../data/menus.ui.h:105 ../data/toolbar.ui.h:7
 msgid "_Last File"
 msgstr "_Paskutinis failas"
 
-#: ../data/menus.ui.h:102
+#: ../data/menus.ui.h:106
 #, fuzzy
 msgid "Home Directory"
 msgstr "_Namų aplankas"
 
-#: ../data/menus.ui.h:103
+#: ../data/menus.ui.h:107
 #, fuzzy
 msgid "Default Directory"
 msgstr "_Numatytasis aplankas"
 
-#: ../data/menus.ui.h:104
+#: ../data/menus.ui.h:108
 #, fuzzy
 msgid "Set Current Path as Default"
 msgstr "Nustatyti _dabartinį kelią numatytuoju"
 
-#: ../data/menus.ui.h:106
+#: ../data/menus.ui.h:110
 #, fuzzy
 msgid "Browse Subdirectories"
 msgstr "Naršyti _poaplankius"
 
-#: ../data/menus.ui.h:107
+#: ../data/menus.ui.h:111
 #, fuzzy
 msgid "Invert Selection"
 msgstr "Apversti pasirinkimą"
 
-#: ../data/menus.ui.h:108
+#: ../data/menus.ui.h:112
 msgid "CDDB Search Files…"
 msgstr "CDDB failų paieška…"
 
-#: ../data/menus.ui.h:109
+#: ../data/menus.ui.h:113
 #, fuzzy
 msgid "Find…"
 msgstr "_Rasti…"
 
-#: ../data/menus.ui.h:110
+#: ../data/menus.ui.h:114
 #, fuzzy
 msgid "Clear Log"
 msgstr "Išvalyti žurnalą"
@@ -1147,7 +1179,7 @@ msgstr "Rašyti informaciją naudojant:"
 #: ../data/playlist_dialog.ui.h:19 ../src/application_window.cc:3020
 #: ../src/browser.cc:938 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:600 ../src/easytag.c:607
-#: ../src/tag_area.cc:1738
+#: ../src/tag_area.cc:1674
 #, fuzzy
 msgid "_Save"
 msgstr "_Įrašyti failus"
@@ -1230,74 +1262,74 @@ msgstr ""
 msgid "Visible columns"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:39
+#: ../data/preferences_dialog.ui.h:41
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:49
 #, fuzzy
 msgid "Show the log"
 msgstr "Rodyti žinyną"
 
-#: ../data/preferences_dialog.ui.h:40
+#: ../data/preferences_dialog.ui.h:42
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:50
 #, fuzzy
 msgid "Whether to show the log in the main window"
 msgstr "Pagrindiniame lange rodyti žurnalą"
 
-#: ../data/preferences_dialog.ui.h:41
+#: ../data/preferences_dialog.ui.h:43
 msgid "General"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:42
+#: ../data/preferences_dialog.ui.h:44
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:39
 msgid "Show audio file header summary"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:45
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:40
 msgid ""
 "Whether to show header information, such as bit rate and duration, for audio "
 "files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:44
+#: ../data/preferences_dialog.ui.h:46
 msgid "Display changed files in list using:"
 msgstr "Pakeistus failus rodyti sąraše naudojant:"
 
-#: ../data/preferences_dialog.ui.h:45
+#: ../data/preferences_dialog.ui.h:47
 msgid "Red color"
 msgstr "Raudoną spalvą"
 
-#: ../data/preferences_dialog.ui.h:46
+#: ../data/preferences_dialog.ui.h:48
 msgid "Bold style"
 msgstr "Paryškintai"
 
-#: ../data/preferences_dialog.ui.h:47
+#: ../data/preferences_dialog.ui.h:49
 #, fuzzy
 msgid "Interface"
 msgstr "Naudotojo sąsaja"
 
-#: ../data/preferences_dialog.ui.h:48
+#: ../data/preferences_dialog.ui.h:50
 msgid "File Settings"
 msgstr "Failo nustatymai"
 
-#: ../data/preferences_dialog.ui.h:49
+#: ../data/preferences_dialog.ui.h:51
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:35
 #, fuzzy
 msgid "Preserve modification time when writing files"
 msgstr "Nepakeisti failo keitimo laiko"
 
-#: ../data/preferences_dialog.ui.h:50
+#: ../data/preferences_dialog.ui.h:52
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:36
 #, fuzzy
 msgid "Whether to preserve the existing modification time when editing files"
 msgstr "Nepakeisti failo keitimo laiko"
 
-#: ../data/preferences_dialog.ui.h:51
+#: ../data/preferences_dialog.ui.h:53
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:37
 #, fuzzy
 msgid "Update parent directory modification time when writing files"
 msgstr "Nepakeisti failo keitimo laiko"
 
-#: ../data/preferences_dialog.ui.h:52
+#: ../data/preferences_dialog.ui.h:54
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:38
 #, fuzzy
 msgid ""
@@ -1306,105 +1338,105 @@ msgid ""
 msgstr "Išsaugant failą nepakeisti failo keitimo laiko (failo savybėse)."
 
 #. Translators: a section header in the Files tab of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:54
+#: ../data/preferences_dialog.ui.h:56
 #, fuzzy
 msgid "Filenames"
 msgstr "Failo pavadinimas"
 
-#: ../data/preferences_dialog.ui.h:55
+#: ../data/preferences_dialog.ui.h:57
 #, fuzzy
 msgid "Replace illegal characters when renaming:"
 msgstr "Failo varde pakeisti netinkamus simbolius (Windows ir CD-Rom)"
 
-#: ../data/preferences_dialog.ui.h:56
+#: ../data/preferences_dialog.ui.h:58
 msgid ""
 "Convert characters which cannot be represented in filenames on some "
 "filesystems (‘\\’, ‘/’, ‘:’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’)"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:57
+#: ../data/preferences_dialog.ui.h:59
 msgid "by ASCII characters"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:58
+#: ../data/preferences_dialog.ui.h:60
 msgid "Use the ASCII characters (‘-’, ‘+’, ‘_’, ‘'’, ‘(’, ‘)’) as replacement."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:59
+#: ../data/preferences_dialog.ui.h:61
 msgid "by Unicode characters"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:62
 msgid ""
 "Use similar Unicode characters (‘&#8726;’, ‘&#8725;’, ‘&#8758;’, ‘&#8727;’, "
 "‘&#8253;’, ‘&#8221;’, ‘&#8826;’, ‘&#8827;’, ‘&#8739;’) as replacement."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:63
 #, fuzzy
 msgid "No change"
 msgstr "Nieko nekeisti"
 
-#: ../data/preferences_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:64
 msgid "You must manually ensure valid file characters."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:63
+#: ../data/preferences_dialog.ui.h:65
 msgid "Convert filename extension to:"
 msgstr "Konvertuoti failo vardo plėtinį į:"
 
-#: ../data/preferences_dialog.ui.h:64
+#: ../data/preferences_dialog.ui.h:66
 #, fuzzy
 msgid "Lower case"
 msgstr "Mažąsias raides"
 
-#: ../data/preferences_dialog.ui.h:65
+#: ../data/preferences_dialog.ui.h:67
 #, fuzzy
 msgid "For example, the extension will be converted to ‘.mp3’"
 msgstr "Pavyzdžiui, plėtinys bus konvertuotas į „.mp3“"
 
-#: ../data/preferences_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:68
 #, fuzzy
 msgid "Upper case"
 msgstr "Didžiąsias raides"
 
-#: ../data/preferences_dialog.ui.h:67
+#: ../data/preferences_dialog.ui.h:69
 #, fuzzy
 msgid "For example, the extension will be converted to ‘.MP3’"
 msgstr "Pavyzdžiui, plėtinys bus konvertuotas į „.MP3“"
 
-#: ../data/preferences_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:70
 #, fuzzy
 msgid "The extension will not be modified"
 msgstr "Plėtinys nebus konvertuotas"
 
-#: ../data/preferences_dialog.ui.h:69
+#: ../data/preferences_dialog.ui.h:71
 #, fuzzy
 msgid "Filename Encoding"
 msgstr "Failo vardo vertimas"
 
-#: ../data/preferences_dialog.ui.h:70
+#: ../data/preferences_dialog.ui.h:72
 msgid "Try another character encoding"
 msgstr "Pabandyti kitą simbolių koduotę"
 
-#: ../data/preferences_dialog.ui.h:71
+#: ../data/preferences_dialog.ui.h:73
 msgid ""
 "Try to use the encoding associated with your locale and if this fails, try "
 "the ISO-8859-1 character encoding"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:72
+#: ../data/preferences_dialog.ui.h:74
 #, fuzzy
 msgid "Transliterate characters into the system character encoding"
 msgstr "Pabandyti kitą simbolių koduotę"
 
-#: ../data/preferences_dialog.ui.h:73
+#: ../data/preferences_dialog.ui.h:75
 msgid ""
 "Replace unsupported characters with a similar character from the target "
 "character encoding"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:74
+#: ../data/preferences_dialog.ui.h:76
 #, fuzzy
 msgid ""
 "Use the system character encoding and silently discard unsupported characters"
@@ -1412,7 +1444,7 @@ msgstr ""
 "Priverstinai naudoti sistemos simbolių koduotę ir tyliai pašalinti kai "
 "kuriuos simbolius"
 
-#: ../data/preferences_dialog.ui.h:75
+#: ../data/preferences_dialog.ui.h:77
 #, fuzzy
 msgid ""
 "Discard characters which cannot be represented in the target character "
@@ -1421,77 +1453,77 @@ msgstr ""
 "Su šia parinktimi, kai simbolis negali būti atvaizduotas paskirties simbolių "
 "rinkinyje jis bus tyliai pašalintas."
 
-#: ../data/preferences_dialog.ui.h:76
+#: ../data/preferences_dialog.ui.h:78
 #, fuzzy
 msgid "Files"
 msgstr "Failas"
 
-#: ../data/preferences_dialog.ui.h:77
+#: ../data/preferences_dialog.ui.h:79
 msgid "Automatically complete date field"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:78
+#: ../data/preferences_dialog.ui.h:80
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:84
 msgid "Whether to automatically complete the date tag"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:79
+#: ../data/preferences_dialog.ui.h:81
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:89
 msgid "Automatically select the type of the image based on its filename"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:80
+#: ../data/preferences_dialog.ui.h:82
 msgid ""
 "Whether to, when adding cover art, automatically select a type for an image "
 "based on its filename"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:81
+#: ../data/preferences_dialog.ui.h:83
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:95
 msgid "Preserve the tag field focus"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:82
+#: ../data/preferences_dialog.ui.h:84
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:96
 msgid "Whether to preserve focus on the current tag field when switching file"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:83
+#: ../data/preferences_dialog.ui.h:85
 msgid "Pad the number of digits in the disc field to:"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:84
+#: ../data/preferences_dialog.ui.h:86
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:86
 #, fuzzy
 msgid "Whether the disc number tag field should be padded with leading zeroes"
 msgstr "Ar užpildyti disko lauką nuliais pradžioje"
 
-#: ../data/preferences_dialog.ui.h:85
+#: ../data/preferences_dialog.ui.h:87
 msgid "Pad the number of digits in the track field to:"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:86
+#: ../data/preferences_dialog.ui.h:88
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:92
 #, fuzzy
 msgid "Whether the track number tag field should be padded with leading zeroes"
 msgstr "Ar užpildyti disko lauką nuliais pradžioje"
 
-#: ../data/preferences_dialog.ui.h:87
+#: ../data/preferences_dialog.ui.h:89
 #, fuzzy
 msgid "Splitting"
 msgstr "Žymių skaidymas"
 
-#: ../data/preferences_dialog.ui.h:88
+#: ../data/preferences_dialog.ui.h:90
 msgid "Delimiter for split"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:89
+#: ../data/preferences_dialog.ui.h:91
 msgid ""
 "When writing the text is spilt at this delimiter. When reading it is joined "
 "with this delimier."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:90
+#: ../data/preferences_dialog.ui.h:92
 #, fuzzy
 msgid ""
 "For Vorbis tags, selected fields will be split and saved as separate tags"
@@ -1499,98 +1531,116 @@ msgstr ""
 "Vorbis žymoms, pasirinkti laukeliai bus perskirti pagal taškus ir išsaugoti "
 "kaip atskiros žymos"
 
-#: ../data/preferences_dialog.ui.h:91
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:190
+#: ../data/preferences_dialog.ui.h:93
 msgid "Whether to split title fields in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:92
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:192
+#: ../data/preferences_dialog.ui.h:94
+#, fuzzy
+msgid "Whether to split subtitle fields in Ogg comments"
+msgstr "Apdoroti originalaus atlikėjo laukelį"
+
+#: ../data/preferences_dialog.ui.h:95
 msgid "Whether to split artist fields in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:93
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:194
+#: ../data/preferences_dialog.ui.h:96
 msgid "Whether to split album fields in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:94
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:196
+#: ../data/preferences_dialog.ui.h:97
+#, fuzzy
+msgid "Whether to split disc subtitle fields in Ogg comments"
+msgstr "Apdoroti originalaus atlikėjo laukelį"
+
+#: ../data/preferences_dialog.ui.h:98
 msgid "Whether to split genre fields in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:95
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:198
+#: ../data/preferences_dialog.ui.h:99
 msgid "Whether to split comment fields in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:96
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:200
+#: ../data/preferences_dialog.ui.h:100
 msgid "Whether to split composer fields in Ogg comments"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:97
+#: ../data/preferences_dialog.ui.h:101
 msgid "Original artist"
 msgstr "Originalus atlikėjas"
 
-#: ../data/preferences_dialog.ui.h:98
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:202
+#: ../data/preferences_dialog.ui.h:102
 #, fuzzy
 msgid "Whether to split original artist fields in Ogg comments"
 msgstr "Apdoroti originalaus atlikėjo laukelį"
 
-#: ../data/preferences_dialog.ui.h:99
+#: ../data/preferences_dialog.ui.h:103
+#, fuzzy
+msgid "Whether to split URL fields in Ogg comments"
+msgstr "Apdoroti originalaus atlikėjo laukelį"
+
+#: ../data/preferences_dialog.ui.h:104
+#, fuzzy
+msgid "Encoded by"
+msgstr "Kodavimas:"
+
+#: ../data/preferences_dialog.ui.h:105
+#, fuzzy
+msgid "Whether to split encoded by fields in Ogg comments"
+msgstr "Apdoroti originalaus atlikėjo laukelį"
+
+#: ../data/preferences_dialog.ui.h:106
 msgid "Tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:100
+#: ../data/preferences_dialog.ui.h:107
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:53
 #, fuzzy
 msgid "Strip ID3 tags if all ID3 tags are empty"
 msgstr "Pašalinti žymes jei visi laukeliai tušti"
 
-#: ../data/preferences_dialog.ui.h:101
+#: ../data/preferences_dialog.ui.h:108
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:54
 msgid ""
 "Whether to remove the ID3 tag from the audio file if all the individual tag "
 "fields are empty"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:102
+#: ../data/preferences_dialog.ui.h:109
 #, fuzzy
 msgid "Non-standard encoding for reading ID3 tags:"
 msgstr "Simbolių rinkinys ID3 žymių skaitymui"
 
-#: ../data/preferences_dialog.ui.h:103
+#: ../data/preferences_dialog.ui.h:110
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:52
 msgid "Whether to use a non-standard character encoding when reading ID3 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:104
+#: ../data/preferences_dialog.ui.h:111
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:62
 #, fuzzy
 msgid "Choose the character set to be used when reading ID3v1 and ID3v2 tags"
 msgstr "Simbolių rinkinys ID3 žymių skaitymui"
 
-#: ../data/preferences_dialog.ui.h:105
+#: ../data/preferences_dialog.ui.h:112
 #, fuzzy
 msgid "ID3v2"
 msgstr "ID3v2 žymos"
 
-#: ../data/preferences_dialog.ui.h:106
+#: ../data/preferences_dialog.ui.h:113
 msgid "Write ID3v2 tag"
 msgstr "Rašyti ID3v2 žymes"
 
-#: ../data/preferences_dialog.ui.h:107
+#: ../data/preferences_dialog.ui.h:114
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:64
 msgid "Whether to write ID3v2 tags when writing ID3 tags into audio files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:108
+#: ../data/preferences_dialog.ui.h:115
 msgid "Version:"
 msgstr "Versija:"
 
-#: ../data/preferences_dialog.ui.h:109
+#: ../data/preferences_dialog.ui.h:116
 #, fuzzy
 msgid ""
 "Select the ID3v2 tag version to write:\n"
@@ -1601,36 +1651,36 @@ msgstr ""
 " - ID3v2.3 rašoma naudojant id3lib,\n"
 " - ID3v2.4 rašoma naudojant libid3tag (rekomenduojama)."
 
-#: ../data/preferences_dialog.ui.h:112
+#: ../data/preferences_dialog.ui.h:119
 #, fuzzy
 msgid "Character encoding:"
 msgstr "Pabandyti kitą simbolių koduotę"
 
-#: ../data/preferences_dialog.ui.h:113
+#: ../data/preferences_dialog.ui.h:120
 #, fuzzy
 msgid "Unicode"
 msgstr "Unikodas"
 
-#: ../data/preferences_dialog.ui.h:114
+#: ../data/preferences_dialog.ui.h:121
 msgid ""
 "Choose the Unicode character encoding to be used when writing ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:116
+#: ../data/preferences_dialog.ui.h:123
 msgid ""
 "Override the standard Unicode character encoding to be used when writing "
 "ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:117
+#: ../data/preferences_dialog.ui.h:124
 msgid "When encoding conversion fails:"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:118
+#: ../data/preferences_dialog.ui.h:125
 msgid "Report error"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:119
+#: ../data/preferences_dialog.ui.h:126
 #, fuzzy
 msgid ""
 "Display an error message when a character cannot be represented in the "
@@ -1639,171 +1689,171 @@ msgstr ""
 "Su šia parinktimi, kai simbolis negali būti atvaizduotas paskirties simbolių "
 "rinkinyje jis bus tyliai pašalintas."
 
-#: ../data/preferences_dialog.ui.h:120
+#: ../data/preferences_dialog.ui.h:127
 msgid "Transliterate"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:121
+#: ../data/preferences_dialog.ui.h:128
 #, fuzzy
 msgid "Discard"
 msgstr "Diskas"
 
-#: ../data/preferences_dialog.ui.h:122
+#: ../data/preferences_dialog.ui.h:129
 msgid "Automatically convert old ID3v2 tag versions"
 msgstr "Automatiškai konvertuoti senas ID3v2 žymių versijas"
 
-#: ../data/preferences_dialog.ui.h:123
+#: ../data/preferences_dialog.ui.h:130
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:68
 msgid ""
 "Whether to convert ID3 tags written against old version of the "
 "specification, such as ID3v2.2, to newer ones, such as ID3v2.3 or ID3v2.4"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:124
+#: ../data/preferences_dialog.ui.h:131
 #, fuzzy
 msgid "Use CRC-32"
 msgstr "Naudoti CRC32"
 
-#: ../data/preferences_dialog.ui.h:125
+#: ../data/preferences_dialog.ui.h:132
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:72
 msgid "Whether to embed a CRC-32 checksum of the audio file data in ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:126
+#: ../data/preferences_dialog.ui.h:133
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:69
 #, fuzzy
 msgid "Compress data in ID3v2 tags"
 msgstr "ID3v2 žymose nustatyti suspaudimą"
 
-#: ../data/preferences_dialog.ui.h:127
+#: ../data/preferences_dialog.ui.h:134
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:70
 #, fuzzy
 msgid "Whether to compress data in ID3v2 tags"
 msgstr "ID3v2 žymose nustatyti suspaudimą"
 
-#: ../data/preferences_dialog.ui.h:128
+#: ../data/preferences_dialog.ui.h:135
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:73
 msgid "Use text-only genre in ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:129
+#: ../data/preferences_dialog.ui.h:136
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:74
 msgid ""
 "Whether to use only a string, and not the integer-base ID3v1 genre field, "
 "when writing a genre field to ID3v2 tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:130
+#: ../data/preferences_dialog.ui.h:137
 #, fuzzy
 msgid "ID3v1"
 msgstr "ID3v1 žymos"
 
-#: ../data/preferences_dialog.ui.h:131
+#: ../data/preferences_dialog.ui.h:138
 #, fuzzy
 msgid "Write ID3v1 tag"
 msgstr "Rašyti ID3v1.x žymę"
 
-#: ../data/preferences_dialog.ui.h:132
+#: ../data/preferences_dialog.ui.h:139
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:56
 msgid "Whether to write ID3v1 tags when writing ID3 tags into audio files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:133
+#: ../data/preferences_dialog.ui.h:140
 #, fuzzy
 msgid "Choose the character set to be used when writing ID3v1 tag"
 msgstr "ID3 žymių simbolių rinkinys"
 
-#: ../data/preferences_dialog.ui.h:134
+#: ../data/preferences_dialog.ui.h:141
 #, fuzzy
 msgid "ID3 Tags"
 msgstr "ID3 žyma"
 
-#: ../data/preferences_dialog.ui.h:135
+#: ../data/preferences_dialog.ui.h:142
 #, fuzzy
 msgid "Character Conversion"
 msgstr "Žymių užpildymo skeneris - Simbolių konvertavimas"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:137
+#: ../data/preferences_dialog.ui.h:144
 #, fuzzy
 msgid "Fill Tag Scanner"
 msgstr "Užpildyti žymę"
 
-#: ../data/preferences_dialog.ui.h:139
+#: ../data/preferences_dialog.ui.h:146
 #, fuzzy, no-c-format
 msgid "Convert underscores and ‘%20’ to spaces"
 msgstr "Konvertuoti „_“ ir „%20“ į tarpus"
 
-#: ../data/preferences_dialog.ui.h:141
+#: ../data/preferences_dialog.ui.h:148
 #, fuzzy, no-c-format
 msgid "Convert spaces and ‘%20’ to underscores"
 msgstr "Konvertuoti tarpą „ “ į „_“"
 
-#: ../data/preferences_dialog.ui.h:142
+#: ../data/preferences_dialog.ui.h:149
 msgid "No conversion"
 msgstr ""
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:144
+#: ../data/preferences_dialog.ui.h:151
 #, fuzzy
 msgid "Rename File and Directory Scanner"
 msgstr "Pervadinti failą ir aplanką"
 
-#: ../data/preferences_dialog.ui.h:145 ../data/scan_dialog.ui.h:96
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:135 ../src/tag_area.cc:786
+#: ../data/preferences_dialog.ui.h:152 ../data/scan_dialog.ui.h:104
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:135 ../src/tag_area.cc:722
 msgid "Remove spaces"
 msgstr "Pašalinti tarpus"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:147
+#: ../data/preferences_dialog.ui.h:154
 #, fuzzy
 msgid "Process Fields Scanner"
 msgstr "Apdoroti laukelius"
 
-#: ../data/preferences_dialog.ui.h:148
+#: ../data/preferences_dialog.ui.h:155
 #, fuzzy
 msgid "Upper-case the first letters of all words"
 msgstr "Kiekvieno žodžio pirma raidė – didžioji"
 
-#: ../data/preferences_dialog.ui.h:149
+#: ../data/preferences_dialog.ui.h:156
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to upper-case the first letter of all words, including prepositions "
 "and other short words such as “feat.”, when processing tag fields"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:150
+#: ../data/preferences_dialog.ui.h:157
 msgid "Fields"
 msgstr "Laukeliai"
 
-#: ../data/preferences_dialog.ui.h:151
+#: ../data/preferences_dialog.ui.h:158
 msgid "Overwrite fields when scanning tags"
 msgstr "Skaitant žymas perrašyti laukelius"
 
-#: ../data/preferences_dialog.ui.h:152
+#: ../data/preferences_dialog.ui.h:159
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:101
 msgid ""
 "Whether to overwrite the tag field values when filling tags. Otherwise, only "
 "blank tag fields will be filled"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:153
+#: ../data/preferences_dialog.ui.h:160
 msgid "Set this text as default comment:"
 msgstr "Nustatyti šį tekstą kaip numatytąjį komentarą:"
 
-#: ../data/preferences_dialog.ui.h:154
+#: ../data/preferences_dialog.ui.h:161
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:103
 msgid ""
 "Whether to set the comment tag field to the provided default value when "
 "filling tags"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:155
+#: ../data/preferences_dialog.ui.h:162
 #, fuzzy
 msgid "Use CRC-32 as the default comment (for files with ID3 tags only)"
 msgstr "Kaip numatytąjį komentarą naudoti CRC32 (failam tik su ID3 žymomis)."
 
-#: ../data/preferences_dialog.ui.h:156
+#: ../data/preferences_dialog.ui.h:163
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:107
 #, fuzzy
 msgid ""
@@ -1811,53 +1861,53 @@ msgid ""
 "files with ID3 tags only"
 msgstr "Kaip numatytąjį komentarą naudoti CRC32 (failam tik su ID3 žymomis)."
 
-#: ../data/preferences_dialog.ui.h:157
+#: ../data/preferences_dialog.ui.h:164
 msgid "Scanner"
 msgstr "Skeneris"
 
-#: ../data/preferences_dialog.ui.h:158
+#: ../data/preferences_dialog.ui.h:165
 #, fuzzy
 msgid "Automatic Search Servers"
 msgstr "Automatinė paieška"
 
-#: ../data/preferences_dialog.ui.h:159
+#: ../data/preferences_dialog.ui.h:166
 #, fuzzy
 msgid "Host:"
 msgstr "Kompiuterio pavadinimas:"
 
-#: ../data/preferences_dialog.ui.h:160
+#: ../data/preferences_dialog.ui.h:167
 msgid "Port:"
 msgstr "Prievadas:"
 
-#: ../data/preferences_dialog.ui.h:161
+#: ../data/preferences_dialog.ui.h:168
 msgid "CGI Path:"
 msgstr "CGI kelias:"
 
-#: ../data/preferences_dialog.ui.h:162
+#: ../data/preferences_dialog.ui.h:169
 #, fuzzy
 msgid "Manual Search Server"
 msgstr "Rankinė paieška"
 
-#: ../data/preferences_dialog.ui.h:163
+#: ../data/preferences_dialog.ui.h:170
 #, fuzzy
 msgid "Results List"
 msgstr "Rezultatai:"
 
-#: ../data/preferences_dialog.ui.h:164
+#: ../data/preferences_dialog.ui.h:171
 #, fuzzy
 msgid ""
 "Select corresponding file (according to position or DLM if activated below)"
 msgstr ""
 "Pasirinkite atitinkamą audio failą (pagal poziciją arba DLM, jei aktyvuota)"
 
-#: ../data/preferences_dialog.ui.h:165
+#: ../data/preferences_dialog.ui.h:172
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:26
 msgid ""
 "Whether to select the file in the file list which matches the position in "
 "the CDDB results list"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:166
+#: ../data/preferences_dialog.ui.h:173
 #, fuzzy
 msgid ""
 "Use the Levenshtein algorithm (DLM) to match results (using title) with "
@@ -1866,90 +1916,90 @@ msgstr ""
 "Ieškant eilučių (naudojant pavadinimą) su audio failais (naudojant failo "
 "vardą) naudoti „Levenshtein algorithm (DLM)“"
 
-#: ../data/preferences_dialog.ui.h:168
+#: ../data/preferences_dialog.ui.h:175
 msgid "CDDB"
 msgstr "CDDB"
 
-#: ../data/preferences_dialog.ui.h:169
+#: ../data/preferences_dialog.ui.h:176
 msgid "Confirmation"
 msgstr "Patvirtinimas"
 
-#: ../data/preferences_dialog.ui.h:170
+#: ../data/preferences_dialog.ui.h:177
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:108
 #, fuzzy
 msgid "Confirm before writing tags"
 msgstr "Patvirtinti failo žymos rašymą"
 
-#: ../data/preferences_dialog.ui.h:171
+#: ../data/preferences_dialog.ui.h:178
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:109
 msgid ""
 "Whether to ask for confirmation from the user before writing tags to audio "
 "files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:172
+#: ../data/preferences_dialog.ui.h:179
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:110
 #, fuzzy
 msgid "Confirm before renaming a file"
 msgstr "Patvirtinti failo pervadinimą"
 
-#: ../data/preferences_dialog.ui.h:173
+#: ../data/preferences_dialog.ui.h:180
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:111
 msgid "Whether to ask for confirmation from the user before renaming a file"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:174
+#: ../data/preferences_dialog.ui.h:181
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:114
 #, fuzzy
 msgid "Confirm before deleting a file"
 msgstr "Patvirtinti failo šalinimą"
 
-#: ../data/preferences_dialog.ui.h:175
+#: ../data/preferences_dialog.ui.h:182
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:115
 msgid "Whether to ask for confirmation from the user before deleting a file"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:176
+#: ../data/preferences_dialog.ui.h:183
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:112
 #, fuzzy
 msgid "Confirm before writing a playlist"
 msgstr "Patvirtinti grojaraščio įrašymą"
 
-#: ../data/preferences_dialog.ui.h:177
+#: ../data/preferences_dialog.ui.h:184
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:113
 msgid "Whether to ask for confirmation from the user before writing a playlist"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:178
+#: ../data/preferences_dialog.ui.h:185
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:116
 #, fuzzy
 msgid "Confirm before losing unsaved changes to files"
 msgstr "Patvirtinti failo pervadinimą"
 
-#: ../data/preferences_dialog.ui.h:179
+#: ../data/preferences_dialog.ui.h:186
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:117
 msgid ""
 "Whether to ask for confirmation from the user before performing an operation "
 "that would lose unsaved changes on files"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:180
+#: ../data/preferences_dialog.ui.h:187
 #, fuzzy
 msgid "Scanner Dialog"
 msgstr "Skenerio langas"
 
-#: ../data/preferences_dialog.ui.h:181
+#: ../data/preferences_dialog.ui.h:188
 #, fuzzy
 msgid "Show the scanner dialog on startup"
 msgstr "Paleidžiant atverti skenerio langą"
 
-#: ../data/preferences_dialog.ui.h:182
+#: ../data/preferences_dialog.ui.h:189
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:184
 #, fuzzy
 msgid "Whether to show the scanner window on application startup"
 msgstr "Paleidžiant atverti skenerio langą"
 
-#: ../data/preferences_dialog.ui.h:183
+#: ../data/preferences_dialog.ui.h:190
 msgid "Application"
 msgstr ""
 
@@ -2064,9 +2114,9 @@ msgid "%D: number of discs"
 msgstr "%D: diskų skaičius"
 
 #: ../data/scan_dialog.ui.h:34
-#, no-c-format
-msgid "%g: genre"
-msgstr "%g: žanras"
+#, fuzzy, no-c-format
+msgid "%s: subtitle"
+msgstr "%t: pavadinimas"
 
 #: ../data/scan_dialog.ui.h:36
 #, fuzzy, no-c-format
@@ -2080,18 +2130,18 @@ msgstr "%o: orig. atlikėjas"
 
 #: ../data/scan_dialog.ui.h:40
 #, no-c-format
-msgid "%c: comment"
-msgstr "%c: komentaras"
+msgid "%g: genre"
+msgstr "%g: žanras"
 
 #: ../data/scan_dialog.ui.h:42
 #, no-c-format
-msgid "%i: ignored"
-msgstr "%i: nepaisoma"
+msgid "%c: comment"
+msgstr "%c: komentaras"
 
 #: ../data/scan_dialog.ui.h:44
-#, no-c-format
-msgid "%u: URL"
-msgstr "%u: URL"
+#, fuzzy, no-c-format
+msgid "%S: disc subtitle"
+msgstr "Pagal pavadinimą mažėjimo tvarka"
 
 #: ../data/scan_dialog.ui.h:46
 #, no-c-format
@@ -2105,23 +2155,33 @@ msgstr "%r: autorinės teisės"
 
 #: ../data/scan_dialog.ui.h:50
 #, no-c-format
+msgid "%u: URL"
+msgstr "%u: URL"
+
+#: ../data/scan_dialog.ui.h:52
+#, no-c-format
 msgid "%e: encoded by"
 msgstr "%e: kodavo"
 
-#: ../data/scan_dialog.ui.h:51
+#: ../data/scan_dialog.ui.h:54
+#, no-c-format
+msgid "%i: ignored"
+msgstr "%i: nepaisoma"
+
+#: ../data/scan_dialog.ui.h:55
 msgid "{…|…}: alternatives group"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:52
+#: ../data/scan_dialog.ui.h:56
 msgid "Fill Tag"
 msgstr "Užpildyti žymę"
 
-#: ../data/scan_dialog.ui.h:53
+#: ../data/scan_dialog.ui.h:57
 #, fuzzy
 msgid "Prefix mask with current directory"
 msgstr "Priešdėlio šablonas su esamu keliu"
 
-#: ../data/scan_dialog.ui.h:54
+#: ../data/scan_dialog.ui.h:58
 #, fuzzy
 msgid ""
 "Select or type in a mask using codes (see Legend) to parse tag fields. Used "
@@ -2134,175 +2194,185 @@ msgstr ""
 "Aplankų sukūrimui naudokite „/“. Jei pirmas simbolis yra „/“, tai yra "
 "absoliutus kelias, kitu atveju tai reliatyvus kelias(senam keliui)."
 
-#: ../data/scan_dialog.ui.h:56
+#: ../data/scan_dialog.ui.h:60
 msgid "Rename file preview"
 msgstr "Pervadinto failo peržiūra"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:57 ../src/easytag.c:574
+#: ../data/scan_dialog.ui.h:61 ../src/easytag.c:574
 msgid "Rename File"
 msgstr "Pervadinti failą"
 
-#: ../data/scan_dialog.ui.h:58
+#: ../data/scan_dialog.ui.h:62
 #, fuzzy
 msgid "Tag Fields"
 msgstr "Laukeliai"
 
-#: ../data/scan_dialog.ui.h:60
+#: ../data/scan_dialog.ui.h:64
 #, fuzzy
 msgid "Process filename"
 msgstr "Apdoroti failo pavadinimo laukelį"
 
-#: ../data/scan_dialog.ui.h:62
+#: ../data/scan_dialog.ui.h:66
 msgid "Process title field"
 msgstr "Apdoroti pavadinimo laukelį"
 
-#: ../data/scan_dialog.ui.h:64
+#: ../data/scan_dialog.ui.h:68
+#, fuzzy
+msgid "Process subtitle field"
+msgstr "Apdoroti pavadinimo laukelį"
+
+#: ../data/scan_dialog.ui.h:70
 #, fuzzy
 msgid "Process artist field"
 msgstr "Apdoroti failo atlikėjo laukelį"
 
-#: ../data/scan_dialog.ui.h:66
+#: ../data/scan_dialog.ui.h:72
 msgid "Process album artist field"
 msgstr "Apdoroti albumo atlikėjo laukelį"
 
-#: ../data/scan_dialog.ui.h:68
+#: ../data/scan_dialog.ui.h:74
 msgid "Process album field"
 msgstr "Apdoroti albumo laukelį"
 
-#: ../data/scan_dialog.ui.h:70
+#: ../data/scan_dialog.ui.h:76
+#, fuzzy
+msgid "Process disc subtitle field"
+msgstr "Apdoroti pavadinimo laukelį"
+
+#: ../data/scan_dialog.ui.h:78
 msgid "Process genre field"
 msgstr "Apdoroti žanro laukelį"
 
-#: ../data/scan_dialog.ui.h:72
+#: ../data/scan_dialog.ui.h:80
 msgid "Process comment field"
 msgstr "Apdoroti komentaro laukelį"
 
-#: ../data/scan_dialog.ui.h:74
+#: ../data/scan_dialog.ui.h:82
 msgid "Process composer field"
 msgstr "Apdoroti kompozitoriaus laukelį"
 
-#: ../data/scan_dialog.ui.h:75
+#: ../data/scan_dialog.ui.h:83
 #, fuzzy
 msgid "Orig. Artist"
 msgstr "Orig. atlikėjas:"
 
-#: ../data/scan_dialog.ui.h:76
+#: ../data/scan_dialog.ui.h:84
 msgid "Process original artist field"
 msgstr "Apdoroti originalaus atlikėjo laukelį"
 
-#: ../data/scan_dialog.ui.h:78
+#: ../data/scan_dialog.ui.h:86
 msgid "Process copyright field"
 msgstr "Apdoroti autorinių teisių laukelį"
 
-#: ../data/scan_dialog.ui.h:80
+#: ../data/scan_dialog.ui.h:88
 msgid "Process URL field"
 msgstr "Apdoroti URL kanalą laukelį"
 
-#: ../data/scan_dialog.ui.h:82
+#: ../data/scan_dialog.ui.h:90
 #, fuzzy
 msgid "Process encoded-by field"
 msgstr "Apdoroti kodavimo pavadinimo laukelį"
 
-#: ../data/scan_dialog.ui.h:83
+#: ../data/scan_dialog.ui.h:91
 #, fuzzy
 msgid "Capitalization"
 msgstr "Viską didžiosiomis"
 
-#: ../data/scan_dialog.ui.h:84
+#: ../data/scan_dialog.ui.h:92
 msgid "Capitalize all"
 msgstr "Viską didžiosiomis"
 
-#: ../data/scan_dialog.ui.h:85
+#: ../data/scan_dialog.ui.h:93
 msgid ""
 "Whether to upper-case all characters of the tag when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:86
+#: ../data/scan_dialog.ui.h:94
 msgid "Lowercase all"
 msgstr "Viską mažosiomis"
 
-#: ../data/scan_dialog.ui.h:87
+#: ../data/scan_dialog.ui.h:95
 msgid ""
 "Whether to lower-case all characters of the tag when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:88
+#: ../data/scan_dialog.ui.h:96
 msgid "Capitalize first letter"
 msgstr "Pirma raidė didžioji"
 
-#: ../data/scan_dialog.ui.h:89
+#: ../data/scan_dialog.ui.h:97
 msgid ""
 "Whether to upper-case the first letter of the tag when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:90
+#: ../data/scan_dialog.ui.h:98
 msgid "Capitalize the first letter of each word"
 msgstr "Kiekvieno žodžio pirma raidė – didžioji"
 
-#: ../data/scan_dialog.ui.h:91
+#: ../data/scan_dialog.ui.h:99
 #, fuzzy
 msgid ""
 "Whether to upper-case the first letter of each word when processing tag "
 "fields"
 msgstr "Nekeisti raidžių į pirmą didžiąją."
 
-#: ../data/scan_dialog.ui.h:92
+#: ../data/scan_dialog.ui.h:100
 msgid "Detect Roman numerals"
 msgstr "Aptikti romėniškus skaičius"
 
-#: ../data/scan_dialog.ui.h:93 ../data/org.gnome.EasyTAG.gschema.xml.h:134
+#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:134
 msgid ""
 "Whether to detect Roman numerals when applying upper-case conversions while "
 "processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:94
+#: ../data/scan_dialog.ui.h:102
 msgid "Do not change capitalization"
 msgstr "Nekeisti raidžių registro"
 
-#: ../data/scan_dialog.ui.h:95
+#: ../data/scan_dialog.ui.h:103
 msgid "Spaces Conversions"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:97 ../data/org.gnome.EasyTAG.gschema.xml.h:136
+#: ../data/scan_dialog.ui.h:105 ../data/org.gnome.EasyTAG.gschema.xml.h:136
 msgid "Whether to remove all spaces when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:98
+#: ../data/scan_dialog.ui.h:106
 msgid "Insert a space before uppercase letters"
 msgstr "Prieš didžiąją raidę įterpti tarpą"
 
-#: ../data/scan_dialog.ui.h:99 ../data/org.gnome.EasyTAG.gschema.xml.h:138
+#: ../data/scan_dialog.ui.h:107 ../data/org.gnome.EasyTAG.gschema.xml.h:138
 msgid ""
 "Whether to insert spaces before capital letters when processing tag fields"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:100
+#: ../data/scan_dialog.ui.h:108
 msgid "Remove duplicate spaces and underscores"
 msgstr "Pašalinti dvigubus tarpus ar pabraukimo simbolius"
 
-#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:140
+#: ../data/scan_dialog.ui.h:109 ../data/org.gnome.EasyTAG.gschema.xml.h:140
 #, fuzzy
 msgid ""
 "Whether to remove duplicate spaces and underscores when processing tag fields"
 msgstr "Pašalinti dvigubus tarpus ar pabraukimo simbolius"
 
-#: ../data/scan_dialog.ui.h:102
+#: ../data/scan_dialog.ui.h:110
 msgid "Do not change word separators"
 msgstr "Nekeisti žodžių skirtukų"
 
-#: ../data/scan_dialog.ui.h:103
+#: ../data/scan_dialog.ui.h:111
 #, fuzzy
 msgid "Character Conversions"
 msgstr "Žymių užpildymo skeneris - Simbolių konvertavimas"
 
-#: ../data/scan_dialog.ui.h:105 ../src/tag_area.cc:742
+#: ../data/scan_dialog.ui.h:113 ../src/tag_area.cc:678
 #, fuzzy, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "Konvertuoti „_“ ir „%20“ į tarpus"
 
-#: ../data/scan_dialog.ui.h:107
+#: ../data/scan_dialog.ui.h:115
 #, fuzzy, no-c-format
 msgid ""
 "The underscore character or the string ‘%20’ is replaced by one space. "
@@ -2311,12 +2381,12 @@ msgstr ""
 "Pabraukimo simbolis ar eilutė „%20“ pakeičiami tarpu. Pavyzdžiui, prieš: "
 "„Tekstas%20įraše“, po: „Tekstas įraše“."
 
-#: ../data/scan_dialog.ui.h:108 ../src/tag_area.cc:748
+#: ../data/scan_dialog.ui.h:116 ../src/tag_area.cc:684
 #, fuzzy
 msgid "Convert spaces to underscores"
 msgstr "Konvertuoti tarpą „ “ į „_“"
 
-#: ../data/scan_dialog.ui.h:109
+#: ../data/scan_dialog.ui.h:117
 #, fuzzy
 msgid ""
 "The space character is replaced by one underscore character. Example, "
@@ -2325,40 +2395,40 @@ msgstr ""
 "Tarpo simbolis pakeičiamas pabraukimo simboliu. Pavyzdžiui, prieš: „Tekstas "
 "įraše“, po: „Tekstas_įraše“."
 
-#: ../data/scan_dialog.ui.h:110
+#: ../data/scan_dialog.ui.h:118
 msgid "Convert:"
 msgstr "Konvertuoti:"
 
-#: ../data/scan_dialog.ui.h:111
+#: ../data/scan_dialog.ui.h:119
 #, fuzzy
 msgid "Replace a string by another one. Note that the search is case sensitive"
 msgstr "Pakeisti eilutę kita. Paieška skiria didžiąsias ir mažąsias raides."
 
-#: ../data/scan_dialog.ui.h:112
+#: ../data/scan_dialog.ui.h:120
 msgid "to: "
 msgstr "į:"
 
-#: ../data/scan_dialog.ui.h:113
+#: ../data/scan_dialog.ui.h:121
 msgid "Do not convert"
 msgstr "Nekonvertuoti"
 
-#: ../data/scan_dialog.ui.h:115
+#: ../data/scan_dialog.ui.h:123
 msgid "Show / Hide Masks Editor"
 msgstr "Rodyti/Slėpti šablonų redaktorių"
 
-#: ../data/scan_dialog.ui.h:116
+#: ../data/scan_dialog.ui.h:124
 msgid "Show / Hide Legend"
 msgstr "Rodyti/Slėpti legendą"
 
-#: ../data/scan_dialog.ui.h:117
+#: ../data/scan_dialog.ui.h:125
 msgid "Scanner Preferences"
 msgstr "Skaityklės nuostatos"
 
-#: ../data/scan_dialog.ui.h:119
+#: ../data/scan_dialog.ui.h:127
 msgid "Scan Files"
 msgstr "Skaityti failus"
 
-#: ../data/scan_dialog.ui.h:120
+#: ../data/scan_dialog.ui.h:128
 msgid "Scan selected files"
 msgstr "Skaityti pasirinktus failus"
 
@@ -2402,11 +2472,11 @@ msgstr "žymoje"
 msgid "Case sensitive"
 msgstr "Skirti mažąsias ir didžiąsias raides"
 
-#: ../data/search_dialog.ui.h:17
+#: ../data/search_dialog.ui.h:19
 msgid "CD"
 msgstr "CD"
 
-#: ../data/tag_area.ui.h:1 ../src/tag_area.cc:2756
+#: ../data/tag_area.ui.h:1 ../src/tag_area.cc:2555
 msgid "Tag"
 msgstr "Žyma"
 
@@ -2419,165 +2489,185 @@ msgid "Tag selected files with this title"
 msgstr "Žymėti pasirinktus failus su šiuo pavadinimu"
 
 #: ../data/tag_area.ui.h:4
+#, fuzzy
+msgid "Subtitle:"
+msgstr "Pavadinimas:"
+
+#: ../data/tag_area.ui.h:5
+#, fuzzy
+msgid "Tag selected files with this subtitle"
+msgstr "Žymėti pasirinktus failus su šiuo pavadinimu"
+
+#: ../data/tag_area.ui.h:6
 msgid "Artist:"
 msgstr "Atlikėjas:"
 
-#: ../data/tag_area.ui.h:5
+#: ../data/tag_area.ui.h:7
 msgid "Tag selected files with this artist"
 msgstr "Žymėti pasirinktus failus su šiuo atlikėju"
 
-#: ../data/tag_area.ui.h:6
+#: ../data/tag_area.ui.h:8
 msgid "Album artist:"
 msgstr "Albumo atlikėjas:"
 
-#: ../data/tag_area.ui.h:7
+#: ../data/tag_area.ui.h:9
 msgid "Tag selected files with this album artist"
 msgstr "Žymėti pasirinktus failus su šiuo albumo atlikėju"
 
-#: ../data/tag_area.ui.h:8
+#: ../data/tag_area.ui.h:10
 msgid "Album:"
 msgstr "Albumas:"
 
-#: ../data/tag_area.ui.h:9
+#: ../data/tag_area.ui.h:11
 msgid "Tag selected files with this album name"
 msgstr "Žymėti pasirinktus failus su šiuo albumo pavadinimu"
 
-#: ../data/tag_area.ui.h:10
+#: ../data/tag_area.ui.h:12
+#, fuzzy
+msgid "Disc subtitle:"
+msgstr "Pagal pavadinimą mažėjimo tvarka"
+
+#: ../data/tag_area.ui.h:13
+#, fuzzy
+msgid "Tag selected files with this disc subtitle"
+msgstr "Žymėti pasirinktus failus su šiuo disko numeriu"
+
+#: ../data/tag_area.ui.h:14
 msgid "Track #:"
 msgstr "Takelio nr.:"
 
-#: ../data/tag_area.ui.h:11
+#: ../data/tag_area.ui.h:15
 #, fuzzy
 msgid "Number selected tracks sequentially. Starts at 01 in each subdirectory"
 msgstr "Sunumeruoti pasirinktus takelius. Prasideda 01 kiekviename aplanke."
 
-#: ../data/tag_area.ui.h:12
+#: ../data/tag_area.ui.h:16
 #, fuzzy
 msgid ""
 "Set the number of files, in the same directory of the displayed file, to the "
 "selected tracks"
 msgstr "Nustatykite failų skaičių tame pačiame aplanke kaip ir rodomas failas."
 
-#: ../data/tag_area.ui.h:13
+#: ../data/tag_area.ui.h:17
 msgid "Tag selected files with this number of tracks"
 msgstr "Žymėti pasirinktus failus su šiuo takelių numeriu"
 
-#: ../data/tag_area.ui.h:14
+#: ../data/tag_area.ui.h:18
 msgid "CD:"
 msgstr "CD:"
 
-#: ../data/tag_area.ui.h:15
+#: ../data/tag_area.ui.h:19
 msgid "Tag selected files with this disc number"
 msgstr "Žymėti pasirinktus failus su šiuo disko numeriu"
 
-#: ../data/tag_area.ui.h:16
+#: ../data/tag_area.ui.h:20
 msgid "Year:"
 msgstr "Metai:"
 
-#: ../data/tag_area.ui.h:17
+#: ../data/tag_area.ui.h:21
 msgid "Tag selected files with this year"
 msgstr "Žymėti pasirinktus failus su šiais metais"
 
-#: ../data/tag_area.ui.h:18
+#: ../data/tag_area.ui.h:22
 msgid "Release year:"
 msgstr ""
 
-#: ../data/tag_area.ui.h:19
+#: ../data/tag_area.ui.h:23
 #, fuzzy
 msgid "Tag selected files with this release year"
 msgstr "Žymėti pasirinktus failus su šiais metais"
 
-#: ../data/tag_area.ui.h:20
+#: ../data/tag_area.ui.h:24
 msgid "Genre:"
 msgstr "Žanras:"
 
-#: ../data/tag_area.ui.h:21
+#: ../data/tag_area.ui.h:25
 msgid "Comment:"
 msgstr "Komentaras:"
 
-#: ../data/tag_area.ui.h:22
+#: ../data/tag_area.ui.h:26
 msgid "Tag selected files with this comment"
 msgstr "Žymėti pasirinktus failus su šiuo komentaru"
 
-#: ../data/tag_area.ui.h:23
+#: ../data/tag_area.ui.h:27
 msgid "Composer:"
 msgstr "Kompozitorius:"
 
-#: ../data/tag_area.ui.h:24
+#: ../data/tag_area.ui.h:28
 msgid "Tag selected files with this composer"
 msgstr "Žymėti pasirinktus failus su šiuo kompozitoriumi"
 
-#: ../data/tag_area.ui.h:25
+#: ../data/tag_area.ui.h:29
 msgid "Orig. artist:"
 msgstr "Orig. atlikėjas:"
 
-#: ../data/tag_area.ui.h:26
+#: ../data/tag_area.ui.h:30
 msgid "Tag selected files with this original artist"
 msgstr "Žymėti pasirinktus failus su šiuo originaliu atlikėju"
 
-#: ../data/tag_area.ui.h:27
+#: ../data/tag_area.ui.h:31
 #, fuzzy
 msgid "year:"
 msgstr "Metai:"
 
-#: ../data/tag_area.ui.h:28
+#: ../data/tag_area.ui.h:32
 #, fuzzy
 msgid "Tag selected files with this original year"
 msgstr "Žymėti pasirinktus failus su šiuo originaliu atlikėju"
 
-#: ../data/tag_area.ui.h:29
+#: ../data/tag_area.ui.h:33
 msgid "Copyright:"
 msgstr "Autorinės teisės:"
 
-#: ../data/tag_area.ui.h:30
+#: ../data/tag_area.ui.h:34
 msgid "Tag selected files with this copyright"
 msgstr "Žymėti pasirinktus failus su šiomis autorinėmis teisėmis"
 
-#: ../data/tag_area.ui.h:31
+#: ../data/tag_area.ui.h:35
 msgid "URL:"
 msgstr "URL:"
 
-#: ../data/tag_area.ui.h:32
+#: ../data/tag_area.ui.h:36
 msgid "Tag selected files with this URL"
 msgstr "Žymėti pasirinktus failus su šiuo URL"
 
-#: ../data/tag_area.ui.h:33
+#: ../data/tag_area.ui.h:37
 msgid "Encoded by:"
 msgstr "Kodavimas:"
 
-#: ../data/tag_area.ui.h:34
+#: ../data/tag_area.ui.h:38
 msgid "Tag selected files with this encoder name"
 msgstr "Žymėti pasirinktus failus su šiuo kodavimu"
 
-#: ../data/tag_area.ui.h:35
+#: ../data/tag_area.ui.h:39
 msgid "Common"
 msgstr "Bendra"
 
-#: ../data/tag_area.ui.h:36
+#: ../data/tag_area.ui.h:40
 msgid "You can use drag and drop to add an image"
 msgstr "Norėdami pridėti paveikslėlį galite atvilkti ir numesti jį"
 
-#: ../data/tag_area.ui.h:37
+#: ../data/tag_area.ui.h:41
 msgid "Add images to the tag"
 msgstr "Pridėti paveikslėlius žymai"
 
-#: ../data/tag_area.ui.h:38
+#: ../data/tag_area.ui.h:42
 msgid "Remove selected images from the tag"
 msgstr "Pašalinti pasirinktus paveikslėlius iš žymos"
 
-#: ../data/tag_area.ui.h:39
+#: ../data/tag_area.ui.h:43
 msgid "Save the selected images to files"
 msgstr "Įrašyti pasirinktus paveikslėlius į failus"
 
-#: ../data/tag_area.ui.h:40
+#: ../data/tag_area.ui.h:44
 msgid "Edit image properties"
 msgstr "Keisti paveikslėlio savybes"
 
-#: ../data/tag_area.ui.h:41
+#: ../data/tag_area.ui.h:45
 msgid "Tag selected files with these images"
 msgstr "Žymėti pasirinktus failus su šiais paveikslėliais"
 
-#: ../data/tag_area.ui.h:42 ../src/tag_area.cc:3034 ../src/tag_area.cc:3037
+#: ../data/tag_area.ui.h:46 ../src/tag_area.cc:2675 ../src/tag_area.cc:2678
 msgid "Images"
 msgstr "Paveikslėliai"
 
@@ -3262,41 +3352,19 @@ msgid ""
 msgstr ""
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:189
-msgid "Split Ogg title fields"
+msgid "Vorbis fields to split"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:191
-msgid "Split Ogg artist fields"
-msgstr ""
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:193
-msgid "Split Ogg album fields"
-msgstr ""
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:195
-msgid "Split Ogg genre fields"
-msgstr ""
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:197
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:190
 #, fuzzy
-msgid "Split Ogg comment fields"
-msgstr "Apdoroti komentaro laukelį"
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:199
-#, fuzzy
-msgid "Split Ogg composer fields"
-msgstr "Apdoroti kompozitoriaus laukelį"
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:201
-#, fuzzy
-msgid "Split Ogg original artist fields"
+msgid "Whether to split the selected fields in Ogg comments"
 msgstr "Apdoroti originalaus atlikėjo laukelį"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:203
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:191
 msgid "Page to show in the preferences dialog"
 msgstr "Puslapis, kurį rodyti nuostatų dialoge"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:204
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:192
 msgid "The page in the notebook of the preferences dialog"
 msgstr ""
 
@@ -3414,8 +3482,8 @@ msgid "All tags have been removed"
 msgstr "Visos žymos pašalintos"
 
 #: ../src/application_window.cc:1475 ../src/browser.cc:349
-#: ../src/browser.cc:392 ../src/browser.cc:426 ../src/browser.cc:4321
-#: ../src/browser.cc:4396
+#: ../src/browser.cc:392 ../src/browser.cc:426 ../src/browser.cc:4325
+#: ../src/browser.cc:4400
 #, fuzzy, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Nepavyko paleisti programos: %s"
@@ -3431,7 +3499,7 @@ msgstr ""
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "Pabandykite nustatyti aplinkos kintamąjį G_FILENAME_ENCODING."
 
-#: ../src/application_window.cc:2003 ../src/scan_dialog.cc:800
+#: ../src/application_window.cc:2003 ../src/scan_dialog.cc:808
 msgid "Filename translation"
 msgstr "Failo vardo vertimas"
 
@@ -3512,55 +3580,55 @@ msgstr "Patvirtinkite aplanko pakeitimą"
 msgid "All albums"
 msgstr "<Visi albumai>"
 
-#: ../src/browser.cc:3527
+#: ../src/browser.cc:3531
 msgid "Select File"
 msgstr "Pasirinkite failą"
 
-#: ../src/browser.cc:3534
+#: ../src/browser.cc:3538
 msgid "Select Directory"
 msgstr "Parinkite aplanką"
 
-#: ../src/browser.cc:3826
+#: ../src/browser.cc:3830
 #, fuzzy, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "Pervadinti aplanką „%s“ į:"
 
-#: ../src/browser.cc:3962
+#: ../src/browser.cc:3966
 msgid "You must type a directory name"
 msgstr "Turite nurodyti aplanko pavadinimą"
 
-#: ../src/browser.cc:3963 ../src/browser.cc:3985
+#: ../src/browser.cc:3967 ../src/browser.cc:3989
 msgid "Directory Name Error"
 msgstr "Aplanko pavadinimo klaida"
 
-#: ../src/browser.cc:3981
+#: ../src/browser.cc:3985
 #, fuzzy, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "Nepavyko konvertuoti „%s“ į failo pavadinimo koduotę."
 
-#: ../src/browser.cc:3984
+#: ../src/browser.cc:3988
 #, fuzzy
 msgid "Please use another name."
 msgstr "Naudokite kitą pavadinimą"
 
-#: ../src/browser.cc:4056
+#: ../src/browser.cc:4060
 #, fuzzy, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "Aplankas „%s“ jau yra"
 
-#: ../src/browser.cc:4057 ../src/easytag.c:653
+#: ../src/browser.cc:4061 ../src/easytag.c:653
 msgid "Rename File Error"
 msgstr "Failo pervadinimo klaida"
 
-#: ../src/browser.cc:4096 ../src/browser.cc:4125
+#: ../src/browser.cc:4100 ../src/browser.cc:4129
 msgid "Rename Directory Error"
 msgstr "Aplanko pervadinimo klaida"
 
-#: ../src/browser.cc:4166
+#: ../src/browser.cc:4170
 msgid "Directory renamed"
 msgstr "Aplankas pervadintas"
 
-#: ../src/browser.cc:4313 ../src/browser.cc:4388
+#: ../src/browser.cc:4317 ../src/browser.cc:4392
 #, fuzzy, c-format
 msgid "Executed command ‘%s’"
 msgstr "Vykdyta komanda: %s"
@@ -4154,20 +4222,20 @@ msgstr "Perkelti eilutę aukštyn"
 msgid "Move this line down"
 msgstr "Perkelti eilutę aukštyn"
 
-#: ../src/mask.cc:191
+#: ../src/mask.cc:198
 msgid "Incomplete placeholder at end of mask."
 msgstr ""
 
-#: ../src/mask.cc:193
+#: ../src/mask.cc:200
 #, c-format
 msgid "Invalid placeholder '%%%c'."
 msgstr ""
 
-#: ../src/mask.cc:197
+#: ../src/mask.cc:204
 msgid "Opening brace '{' without closing brace '}'."
 msgstr ""
 
-#: ../src/mask.cc:199
+#: ../src/mask.cc:206
 msgid "Closing brace '}' without opening brace '{'."
 msgstr ""
 
@@ -4285,7 +4353,7 @@ msgstr "pikseliai"
 msgid "Type"
 msgstr "Tipas"
 
-#: ../src/picture.c:478 ../src/tags/id3_tag.c:1530 ../src/tags/vcedit.c:530
+#: ../src/picture.c:478 ../src/tags/id3_tag.cc:1326 ../src/tags/vcedit.c:530
 #, c-format
 msgid "Input truncated or empty"
 msgstr ""
@@ -4308,12 +4376,12 @@ msgstr "Grojaraščio failas „%s“ įrašytas"
 msgid "Invalid scanner mask"
 msgstr "Netinkama skenerio kaukė"
 
-#: ../src/preferences_dialog.cc:796
+#: ../src/preferences_dialog.cc:809
 #, fuzzy
 msgid "The selected default path is invalid"
 msgstr "Pasirinktas kelias „Numatytasis kelias iki failų“ nėra tinkamas"
 
-#: ../src/preferences_dialog.cc:798
+#: ../src/preferences_dialog.cc:811
 #, fuzzy, c-format
 msgid ""
 "Path: ‘%s’\n"
@@ -4322,65 +4390,65 @@ msgstr ""
 "Kelias: „%s“\n"
 "Klaida: %s"
 
-#: ../src/preferences_dialog.cc:802
+#: ../src/preferences_dialog.cc:815
 msgid "Invalid Path Error"
 msgstr "Netinkamo kelio klaida"
 
-#: ../src/scan_dialog.cc:386
+#: ../src/scan_dialog.cc:394
 #, fuzzy, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "Nepavyko failo CRC vertės (%s)"
 
-#: ../src/scan_dialog.cc:401
+#: ../src/scan_dialog.cc:409
 msgid "Tag successfully scanned"
 msgstr "Žymos sėkmingai nuskaitytos"
 
-#: ../src/scan_dialog.cc:404
+#: ../src/scan_dialog.cc:412
 #, fuzzy, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Žyma sėkmingai nuskaityta %s"
 
-#: ../src/scan_dialog.cc:447
+#: ../src/scan_dialog.cc:455
 #, fuzzy, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "Žymių skaityklė: keista…, plėtinys „%s“ failo pavadinime „%s“ nerastas"
 
-#: ../src/scan_dialog.cc:539 ../src/scan_dialog.cc:570
+#: ../src/scan_dialog.cc:547 ../src/scan_dialog.cc:578
 #, fuzzy, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "Skenavimo klaida: nepavyko rasti skirtuko „%s“ faile „%s“"
 
-#: ../src/scan_dialog.cc:798
+#: ../src/scan_dialog.cc:806
 #, fuzzy, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr ""
 "Nepavyko konvertuoti failo pavadinimo „%s“ į sistemos failų pavadinimų "
 "koduotę"
 
-#: ../src/scan_dialog.cc:824
+#: ../src/scan_dialog.cc:832
 msgid "New filename successfully scanned"
 msgstr "Naujo failo pavadinimas sėkmingai nuskaitytas"
 
-#: ../src/scan_dialog.cc:828
+#: ../src/scan_dialog.cc:836
 #, fuzzy, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Naujo failo pavadinimas sėkmingai nuskaitytas: %s"
 
-#: ../src/scan_dialog.cc:993
+#: ../src/scan_dialog.cc:1001
 #, fuzzy, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "Klaida apdorojant laukus: %s."
 
-#: ../src/scan_dialog.cc:1866
+#: ../src/scan_dialog.cc:1717
 msgid "New_mask"
 msgstr "Naujas _šablonas"
 
-#: ../src/scan_dialog.cc:2334
+#: ../src/scan_dialog.cc:2185
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "Netinkama skenerio kaukė"
 
-#: ../src/scan_dialog.cc:2407
+#: ../src/scan_dialog.cc:2258
 msgid "All tags have been scanned"
 msgstr "Visos žymos nuskaitytos"
 
@@ -4417,231 +4485,251 @@ msgstr "Įkeliami numatytieji „Pervadinti failą “ šablonai…"
 msgid "Ready to start"
 msgstr "Pasiruošęs paleidimui"
 
-#: ../src/tag_area.cc:184
+#: ../src/tag_area.cc:190
 #, fuzzy, c-format
 msgid "Selected files tagged with title ‘%s’"
 msgstr "Pasirinkti failai sužymėti su pavadinimu „%s“."
 
-#: ../src/tag_area.cc:186
+#: ../src/tag_area.cc:190
 #, fuzzy
 msgid "Removed title from selected files"
 msgstr "Iš pasirinktų failų pašalintas pavadinimas."
 
 #: ../src/tag_area.cc:195
 #, fuzzy, c-format
+msgid "Selected files tagged with subtitle ‘%s’"
+msgstr "Pasirinkti failai sužymėti su pavadinimu „%s“."
+
+#: ../src/tag_area.cc:195
+#, fuzzy
+msgid "Removed subtitle from selected files"
+msgstr "Iš pasirinktų failų pašalintas pavadinimas."
+
+#: ../src/tag_area.cc:200
+#, fuzzy, c-format
 msgid "Selected files tagged with artist ‘%s’"
 msgstr "Pasirinkti failai sužymėti su atlikėju „%s“."
 
-#: ../src/tag_area.cc:197
+#: ../src/tag_area.cc:200
 #, fuzzy
 msgid "Removed artist from selected files"
 msgstr "Iš pasirinktų failų pašalintas atlikėjas."
 
-#: ../src/tag_area.cc:206
+#: ../src/tag_area.cc:205
 #, fuzzy, c-format
 msgid "Selected files tagged with album artist ‘%s’"
 msgstr "Pasirinkti failai sužymėti su albumo atlikėju „%s“."
 
-#: ../src/tag_area.cc:208
+#: ../src/tag_area.cc:205
 #, fuzzy
 msgid "Removed album artist from selected files"
 msgstr "Iš pasirinktų failų pašalintas albumo atlikėjas."
 
-#: ../src/tag_area.cc:217
+#: ../src/tag_area.cc:210
 #, fuzzy, c-format
 msgid "Selected files tagged with album ‘%s’"
 msgstr "Pasirinkti failai sužymėti su albumu „%s“."
 
-#: ../src/tag_area.cc:219
+#: ../src/tag_area.cc:210
 #, fuzzy
 msgid "Removed album name from selected files"
 msgstr "Iš pasirinktų failų pašalintas albumas."
 
-#: ../src/tag_area.cc:256
+#: ../src/tag_area.cc:215
+#, fuzzy, c-format
+msgid "Selected files tagged with disc subtitle ‘%s’"
+msgstr "Pasirinkti failai sužymėti su pavadinimu „%s“."
+
+#: ../src/tag_area.cc:215
+#, fuzzy
+msgid "Removed disc subtitle from selected files"
+msgstr "Iš pasirinktų failų pašalintas disko numeris."
+
+#: ../src/tag_area.cc:252
 #, fuzzy, c-format
 msgid "Selected files tagged with disc number ‘%s/%s’"
 msgstr "Pasirinkti failai sužymėti su disko numeriu „%s/%s“."
 
-#: ../src/tag_area.cc:263
+#: ../src/tag_area.cc:259
 #, fuzzy, c-format
 msgid "Selected files tagged with disc number like ‘xx’"
 msgstr "Pasirinkti failai sužymėti su disko numeriu „xx“."
 
-#: ../src/tag_area.cc:268
+#: ../src/tag_area.cc:264
 #, fuzzy
 msgid "Removed disc number from selected files"
 msgstr "Iš pasirinktų failų pašalintas disko numeris."
 
-#: ../src/tag_area.cc:280
+#: ../src/tag_area.cc:272
 #, fuzzy, c-format
 msgid "Selected files tagged with year ‘%s’"
 msgstr "Pasirinkti failai sužymėti su metais „%s“."
 
-#: ../src/tag_area.cc:282
+#: ../src/tag_area.cc:272
 #, fuzzy
 msgid "Removed year from selected files"
 msgstr "Iš pasirinktų failų pašalinti metai."
 
-#: ../src/tag_area.cc:291
+#: ../src/tag_area.cc:277
 #, fuzzy, c-format
 msgid "Selected files tagged with release year ‘%s’"
 msgstr "Pasirinkti failai sužymėti su metais „%s“."
 
-#: ../src/tag_area.cc:293
+#: ../src/tag_area.cc:277
 #, fuzzy
 msgid "Removed release year from selected files"
 msgstr "Iš pasirinktų failų pašalinti metai."
 
-#: ../src/tag_area.cc:322 ../src/tag_area.cc:427
+#: ../src/tag_area.cc:306 ../src/tag_area.cc:411
 #, fuzzy, c-format
 msgid "Selected files tagged with track like ‘xx/%s’"
 msgstr "Pasirinkti failai sužymėti su takeliu „xx/%s“."
 
-#: ../src/tag_area.cc:326
+#: ../src/tag_area.cc:310
 #, fuzzy, c-format
 msgid "Selected files tagged with track like ‘xx’"
 msgstr "Pasirinkti failai sužymėti su takeliu „xx“."
 
-#: ../src/tag_area.cc:331 ../src/tag_area.cc:432
+#: ../src/tag_area.cc:315 ../src/tag_area.cc:416
 #, fuzzy
 msgid "Removed track number from selected files"
 msgstr "Iš pasirinktų failų pašalintas takelio numeris."
 
 #. msg = g_strdup_printf(_("All %d tracks numbered sequentially."), ETCore->ETFileSelectionList_Length);
-#: ../src/tag_area.cc:390
+#: ../src/tag_area.cc:374
 #, fuzzy, c-format
 msgid "Selected tracks numbered sequentially"
 msgstr "Pasirinkti failai sunumeruoti iš eilės."
 
-#: ../src/tag_area.cc:444
+#: ../src/tag_area.cc:424
 #, fuzzy, c-format
 msgid "Selected files tagged with genre ‘%s’"
 msgstr "Pasirinkti failai sužymėti su žanru „%s“."
 
-#: ../src/tag_area.cc:446
+#: ../src/tag_area.cc:424
 #, fuzzy
 msgid "Removed genre from selected files"
 msgstr "Iš pasirinktų failų pašalintas žanras."
 
-#: ../src/tag_area.cc:455
+#: ../src/tag_area.cc:429
 #, fuzzy, c-format
 msgid "Selected files tagged with comment ‘%s’"
 msgstr "Pasirinkti failai sužymėti su komentaru „%s“."
 
-#: ../src/tag_area.cc:457
+#: ../src/tag_area.cc:429
 #, fuzzy
 msgid "Removed comment from selected files"
 msgstr "Iš pasirinktų failų pašalintas komentaras."
 
-#: ../src/tag_area.cc:466
+#: ../src/tag_area.cc:434
 #, fuzzy, c-format
 msgid "Selected files tagged with composer ‘%s’"
 msgstr "Pasirinkti failai sužymėti su kompozitoriumi „%s“."
 
-#: ../src/tag_area.cc:468
+#: ../src/tag_area.cc:434
 #, fuzzy
 msgid "Removed composer from selected files"
 msgstr "Iš pasirinktų failų pašalintas kompozitorius."
 
-#: ../src/tag_area.cc:477
+#: ../src/tag_area.cc:439
 #, fuzzy, c-format
 msgid "Selected files tagged with original artist ‘%s’"
 msgstr "Pasirinkti failai sužymėti su originaliu atlikėju „%s“."
 
-#: ../src/tag_area.cc:479
+#: ../src/tag_area.cc:439
 #, fuzzy
 msgid "Removed original artist from selected files"
 msgstr "Iš pasirinktų failų pašalintas originalus atlikėjas."
 
-#: ../src/tag_area.cc:488
+#: ../src/tag_area.cc:444
 #, fuzzy, c-format
 msgid "Selected files tagged with original year ‘%s’"
 msgstr "Pasirinkti failai sužymėti su originaliu atlikėju „%s“."
 
-#: ../src/tag_area.cc:490
+#: ../src/tag_area.cc:444
 #, fuzzy
 msgid "Removed original year from selected files"
 msgstr "Iš pasirinktų failų pašalintas originalus atlikėjas."
 
-#: ../src/tag_area.cc:499
+#: ../src/tag_area.cc:449
 #, fuzzy, c-format
 msgid "Selected files tagged with copyright ‘%s’"
 msgstr "Pasirinkti failai sužymėti su autorinėmis teisėmis „%s“."
 
-#: ../src/tag_area.cc:501
+#: ../src/tag_area.cc:449
 #, fuzzy
 msgid "Removed copyright from selected files"
 msgstr "Iš pasirinktų failų pašalintos autorinės teisės."
 
-#: ../src/tag_area.cc:510
+#: ../src/tag_area.cc:454
 #, fuzzy, c-format
 msgid "Selected files tagged with URL ‘%s’"
 msgstr "Pasirinkti failai sužymėti su URL „%s“."
 
-#: ../src/tag_area.cc:512
+#: ../src/tag_area.cc:454
 #, fuzzy
 msgid "Removed URL from selected files"
 msgstr "Iš pasirinktų failų pašalintas URL."
 
-#: ../src/tag_area.cc:521
+#: ../src/tag_area.cc:459
 #, fuzzy, c-format
 msgid "Selected files tagged with encoder name ‘%s’"
 msgstr "Pasirinkti failai sužymėti su kodavimu „%s“."
 
-#: ../src/tag_area.cc:523
+#: ../src/tag_area.cc:459
 #, fuzzy
 msgid "Removed encoder name from selected files"
 msgstr "Iš pasirinktų failų pašalintas kodavimas."
 
-#: ../src/tag_area.cc:558
+#: ../src/tag_area.cc:494
 #, fuzzy
 msgid "Selected files tagged with images"
 msgstr "Pasirinkti failai sužymėti su paveikslėliais."
 
-#: ../src/tag_area.cc:562
+#: ../src/tag_area.cc:498
 #, fuzzy
 msgid "Removed images from selected files"
 msgstr "Iš pasirinktų failų pašalinti paveikslėliai."
 
 #. Menu items
-#: ../src/tag_area.cc:728
+#: ../src/tag_area.cc:664
 msgid "Tag selected files with this field"
 msgstr "Pažymėti pasirinktus failus su šiuo laukeliu"
 
-#: ../src/tag_area.cc:758
+#: ../src/tag_area.cc:694
 msgid "All uppercase"
 msgstr "Visos didžiosios"
 
-#: ../src/tag_area.cc:764
+#: ../src/tag_area.cc:700
 msgid "All lowercase"
 msgstr "Visos mažosios"
 
-#: ../src/tag_area.cc:770
+#: ../src/tag_area.cc:706
 msgid "First letter uppercase"
 msgstr "Pirma raidė – didžioji"
 
-#: ../src/tag_area.cc:776
+#: ../src/tag_area.cc:712
 msgid "First letter uppercase of each word"
 msgstr "Kiekvieno žodžio pirma raidė – didžioji"
 
-#: ../src/tag_area.cc:792
+#: ../src/tag_area.cc:728
 msgid "Insert space before uppercase letter"
 msgstr "Prieš didžiąją raidę įterpti tarpą"
 
-#: ../src/tag_area.cc:798
+#: ../src/tag_area.cc:734
 msgid "Remove duplicate spaces or underscores"
 msgstr "Pašalinti dvigubus tarpus ar pabraukimo simbolius"
 
-#: ../src/tag_area.cc:804
+#: ../src/tag_area.cc:740
 msgid "Remove all text"
 msgstr "Pašalinti visą tekstą"
 
-#: ../src/tag_area.cc:1162 ../src/tag_area.cc:1255
+#: ../src/tag_area.cc:1098 ../src/tag_area.cc:1191
 #, c-format
 msgid "Error parsing image data ‘%s’"
 msgstr ""
 
-#: ../src/tag_area.cc:1237
+#: ../src/tag_area.cc:1173
 #, fuzzy
 msgid ""
 "Cannot display the image because not enough data has been read to determine "
@@ -4650,103 +4738,103 @@ msgstr ""
 "Parodyti paveikslėlio neįmanoma, nes nenuskaityta pakankamai duomenų, kad "
 "būtų galima sukurti paveikslėlio buferį."
 
-#: ../src/tag_area.cc:1244
+#: ../src/tag_area.cc:1180
 msgid "Cannot display the image"
 msgstr "Nepavyko parodyti paveikslėlio"
 
-#: ../src/tag_area.cc:1246
+#: ../src/tag_area.cc:1182
 msgid ""
 "Not enough data has been read to determine how to create the image buffer."
 msgstr ""
 "Nenuskaityta pakankamai duomenų, kad būtų galima sukurti paveikslėlio buferį."
 
-#: ../src/tag_area.cc:1248
+#: ../src/tag_area.cc:1184
 msgid "Load Image File"
 msgstr "Įkelti paveikslėlio failą"
 
-#: ../src/tag_area.cc:1293 ../src/tag_area.cc:1318
+#: ../src/tag_area.cc:1229 ../src/tag_area.cc:1254
 #, fuzzy, c-format
 msgid "Image file not loaded ‘%s’"
 msgstr "Paveikslėlio failas neįkeltas: %s"
 
-#: ../src/tag_area.cc:1310
+#: ../src/tag_area.cc:1246
 #, fuzzy, c-format
 msgid "Cannot open file ‘%s’"
 msgstr "Nepavyko atverti failo: „%s“"
 
-#: ../src/tag_area.cc:1314
+#: ../src/tag_area.cc:1250
 msgid "Image File Error"
 msgstr "Failo pervadinimo klaida"
 
-#: ../src/tag_area.cc:1325
+#: ../src/tag_area.cc:1261
 msgid "Image file loaded"
 msgstr "Paveikslėlio failas įkeltas"
 
-#: ../src/tag_area.cc:1408
+#: ../src/tag_area.cc:1344
 msgid "Add Images"
 msgstr "Pridėti paveikslėlius"
 
-#: ../src/tag_area.cc:1418 ../src/tag_area.cc:1745
+#: ../src/tag_area.cc:1354 ../src/tag_area.cc:1681
 msgid "All Files"
 msgstr "Visi failai"
 
-#: ../src/tag_area.cc:1425 ../src/tag_area.cc:1752
+#: ../src/tag_area.cc:1361 ../src/tag_area.cc:1688
 msgid "PNG and JPEG"
 msgstr "PNG ir JPEG"
 
-#: ../src/tag_area.cc:1542
+#: ../src/tag_area.cc:1478
 #, c-format
 msgid "Image Properties %d/%d"
 msgstr "Paveikslėlio savybės %d/%d"
 
-#: ../src/tag_area.cc:1731
+#: ../src/tag_area.cc:1667
 #, c-format
 msgid "Save Image %d/%d"
 msgstr "Įrašyti paveikslėlį %d/%d"
 
-#: ../src/tag_area.cc:1811
+#: ../src/tag_area.cc:1747
 #, fuzzy, c-format
 msgid "Image file not saved ‘%s’"
 msgstr "Paveikslėlio failas neįrašytas: %s"
 
-#: ../src/tag_area.cc:2056
+#: ../src/tag_area.cc:1993
 msgid "Tag selected files with this genre"
 msgstr "Žymėti pasirinktus failus su šiuo žanru"
 
-#: ../src/tag_area.cc:2705
+#: ../src/tag_area.cc:2504
 msgid "ID3 Tag"
 msgstr "ID3 žyma"
 
-#: ../src/tag_area.cc:2710
+#: ../src/tag_area.cc:2509
 msgid "Ogg Vorbis Tag"
 msgstr "Ogg Vorbis žyma"
 
-#: ../src/tag_area.cc:2715
+#: ../src/tag_area.cc:2514
 msgid "FLAC Vorbis Tag"
 msgstr "FLAC Vorbis žyma"
 
-#: ../src/tag_area.cc:2719
+#: ../src/tag_area.cc:2518
 msgid "APE Tag"
 msgstr "APE žyma"
 
-#: ../src/tag_area.cc:2723
+#: ../src/tag_area.cc:2522
 msgid "MP4/M4A/AAC Tag"
 msgstr "MP4/M4A/AAC žyma"
 
-#: ../src/tag_area.cc:2728
+#: ../src/tag_area.cc:2527
 msgid "Wavpack Tag"
 msgstr "Wavpack žyma"
 
-#: ../src/tag_area.cc:2733
+#: ../src/tag_area.cc:2532
 msgid "Opus Tag"
 msgstr "Opus žyma"
 
-#: ../src/tag_area.cc:3015
+#: ../src/tag_area.cc:2656
 #, fuzzy, c-format
 msgid "Images (%u)"
 msgstr "Paveikslėliai (%d)"
 
-#: ../src/tags/ape_tag.c:90 ../src/tags/mp4_header.cc:58
+#: ../src/tags/ape_tag.cc:90 ../src/tags/mp4_header.cc:58
 #: ../src/tags/mp4_header.cc:67 ../src/tags/mp4_tag.cc:73
 #: ../src/tags/mp4_tag.cc:86 ../src/tags/mp4_tag.cc:92
 #: ../src/tags/ogg_header.c:227
@@ -4754,11 +4842,11 @@ msgstr "Paveikslėliai (%d)"
 msgid "Error while opening file: %s"
 msgstr "Klaida atveriant failą: „%s“ (%s)"
 
-#: ../src/tags/ape_tag.c:396
+#: ../src/tags/ape_tag.cc:402
 msgid "Failed to write APE tag"
 msgstr ""
 
-#: ../src/tags/flac_header.c:85 ../src/tags/flac_tag.c:224
+#: ../src/tags/flac_header.c:85 ../src/tags/flac_tag.cc:224
 #, fuzzy
 msgid "Error opening FLAC file"
 msgstr "Klaida skaitant failą (%s)"
@@ -4777,120 +4865,120 @@ msgstr "FLAC failas"
 msgid "Channels:"
 msgstr "Kanalai:"
 
-#: ../src/tags/flac_tag.c:784 ../src/tags/flac_tag.c:817
-#: ../src/tags/flac_tag.c:831
+#: ../src/tags/flac_tag.cc:671 ../src/tags/flac_tag.cc:704
+#: ../src/tags/flac_tag.cc:718
 #, fuzzy, c-format
 msgid "Error while opening file ‘%s’ as FLAC: %s"
 msgstr "Klaida atveriant failą: „%s“ kaip FLAC (%s)."
 
-#: ../src/tags/flac_tag.c:1143 ../src/tags/flac_tag.c:1155
-#: ../src/tags/flac_tag.c:1175
+#: ../src/tags/flac_tag.cc:950 ../src/tags/flac_tag.cc:962
+#: ../src/tags/flac_tag.cc:982
 #, fuzzy, c-format
 msgid "Failed to write comments to file ‘%s’: %s"
 msgstr "Klaida: į failą „%s“ nepavyko įrašyti komentarų(%s)."
 
-#: ../src/tags/id3_tag.c:217
+#: ../src/tags/id3_tag.cc:212
 msgid "Corrupted file"
 msgstr "Sugadintas failas"
 
-#: ../src/tags/id3_tag.c:650
+#: ../src/tags/id3_tag.cc:431
 #, fuzzy, c-format
 msgid "Removed tag of ‘%s’"
 msgstr "„%s“ žyma pašalinta"
 
-#: ../src/tags/id3_tag.c:657 ../src/tags/id3_tag.c:741
+#: ../src/tags/id3_tag.cc:438 ../src/tags/id3_tag.cc:522
 #, fuzzy, c-format
 msgid "Error while removing ID3v1 tag of ‘%s’: %s"
 msgstr "Klaida šalinant „%s“ ID3v1 žymę (%s)"
 
-#: ../src/tags/id3_tag.c:666 ../src/tags/id3_tag.c:704
+#: ../src/tags/id3_tag.cc:447 ../src/tags/id3_tag.cc:485
 #, fuzzy, c-format
 msgid "Error while removing ID3v2 tag of ‘%s’: %s"
 msgstr "Klaida šalinant „%s“ ID3v2 žymę (%s)"
 
-#: ../src/tags/id3_tag.c:692
+#: ../src/tags/id3_tag.cc:473
 #, fuzzy, c-format
 msgid "Error while updating ID3v2 tag of ‘%s’: %s"
 msgstr "Klaida atnaujinat „%s“ ID3v2 žymę (%s)"
 
-#: ../src/tags/id3_tag.c:729
+#: ../src/tags/id3_tag.cc:510
 #, fuzzy, c-format
 msgid "Error while updating ID3v1 tag of ‘%s’: %s"
 msgstr "Klaida atnaujinant ID3v1 „%s“ žymę (%s)"
 
-#: ../src/tags/id3_tag.c:775
+#: ../src/tags/id3_tag.cc:556
 msgid "Buggy id3lib"
 msgstr "Klaidinga id3lib"
 
-#: ../src/tags/id3_tag.c:796
+#: ../src/tags/id3_tag.cc:577
 msgid "No error reported"
 msgstr "Neaptikta jokių klaidų"
 
-#: ../src/tags/id3_tag.c:798
+#: ../src/tags/id3_tag.cc:579
 msgid "No available memory"
 msgstr "Nėra prieinamos atminties"
 
-#: ../src/tags/id3_tag.c:800
+#: ../src/tags/id3_tag.cc:581
 msgid "No data to parse"
 msgstr "Nėra duomenų apdrojimui"
 
-#: ../src/tags/id3_tag.c:802
+#: ../src/tags/id3_tag.cc:583
 msgid "Improperly formatted data"
 msgstr "Netinkamai suformuoti duomenys"
 
-#: ../src/tags/id3_tag.c:804
+#: ../src/tags/id3_tag.cc:585
 msgid "No buffer to write to"
 msgstr "Nėra buferio rašymui"
 
-#: ../src/tags/id3_tag.c:806
+#: ../src/tags/id3_tag.cc:587
 msgid "Buffer is too small"
 msgstr "Buferis per mažas"
 
-#: ../src/tags/id3_tag.c:808
+#: ../src/tags/id3_tag.cc:589
 msgid "Invalid frame ID"
 msgstr "Netinkamas kadro ID"
 
-#: ../src/tags/id3_tag.c:810
+#: ../src/tags/id3_tag.cc:591
 msgid "Requested field not found"
 msgstr "Pageidaujamas laukelis nerastas"
 
-#: ../src/tags/id3_tag.c:812
+#: ../src/tags/id3_tag.cc:593
 msgid "Unknown field type"
 msgstr "Nežinomas laukelio tipas"
 
-#: ../src/tags/id3_tag.c:814
+#: ../src/tags/id3_tag.cc:595
 msgid "Tag is already attached to a file"
 msgstr "Žyma jau susieta su failu"
 
-#: ../src/tags/id3_tag.c:816
+#: ../src/tags/id3_tag.cc:597
 msgid "Invalid tag version"
 msgstr "Netinkama žymos versija"
 
-#: ../src/tags/id3_tag.c:818
+#: ../src/tags/id3_tag.cc:599
 msgid "No file to parse"
 msgstr "Nėra failo apdorojimui"
 
-#: ../src/tags/id3_tag.c:820
+#: ../src/tags/id3_tag.cc:601
 msgid "Attempting to write to a read-only file"
 msgstr "Bandoma rašyti į tik skaitomą failą"
 
-#: ../src/tags/id3_tag.c:822
+#: ../src/tags/id3_tag.cc:603
 msgid "Error in compression/uncompression"
 msgstr "Klaida suspaudime/išskleidime"
 
-#: ../src/tags/id3_tag.c:824
+#: ../src/tags/id3_tag.cc:605
 msgid "Unknown error message"
 msgstr "Nežinomas klaidos pranešimas"
 
-#: ../src/tags/id3_tag.c:1568
+#: ../src/tags/id3_tag.cc:1364
 msgid "Error while creating temporary file"
 msgstr "Klaida kuriant laikiną failą"
 
-#: ../src/tags/id3v24_tag.c:134 ../src/tags/id3v24_tag.c:189
-#: ../src/tags/id3v24_tag.c:227 ../src/tags/id3v24_tag.c:237
-#: ../src/tags/id3v24_tag.c:246 ../src/tags/id3v24_tag.c:1000
-#: ../src/tags/id3v24_tag.c:1008 ../src/tags/id3v24_tag.c:1015
-#: ../src/tags/id3v24_tag.c:1041 ../src/tags/id3v24_tag.c:1081
+#: ../src/tags/id3v24_tag.cc:135 ../src/tags/id3v24_tag.cc:190
+#: ../src/tags/id3v24_tag.cc:228 ../src/tags/id3v24_tag.cc:238
+#: ../src/tags/id3v24_tag.cc:247 ../src/tags/id3v24_tag.cc:1012
+#: ../src/tags/id3v24_tag.cc:1020 ../src/tags/id3v24_tag.cc:1027
+#: ../src/tags/id3v24_tag.cc:1053 ../src/tags/id3v24_tag.cc:1093
 #: ../src/tags/mp4_tag.cc:102 ../src/tags/ogg_header.c:277
 #, fuzzy
 msgid "Error reading tags from file"
@@ -4906,7 +4994,7 @@ msgid "Profile:"
 msgstr "Profilis:"
 
 #: ../src/tags/mp4_header.cc:68 ../src/tags/mp4_tag.cc:93
-#: ../src/tags/mp4_tag.cc:321
+#: ../src/tags/mp4_tag.cc:333
 msgid "MP4 format invalid"
 msgstr "Netinkamas MP4 formatas"
 
@@ -4924,13 +5012,13 @@ msgstr "MP4/AAC failas"
 msgid "~%d kb/s"
 msgstr "~%d kb/s"
 
-#: ../src/tags/mp4_tag.cc:298 ../src/tags/mp4_tag.cc:314
-#: ../src/tags/mp4_tag.cc:320
+#: ../src/tags/mp4_tag.cc:310 ../src/tags/mp4_tag.cc:326
+#: ../src/tags/mp4_tag.cc:332
 #, fuzzy, c-format
 msgid "Error while opening file ‘%s’: %s"
 msgstr "Klaida atveriant failą: „%s“ (%s)"
 
-#: ../src/tags/mp4_tag.cc:331
+#: ../src/tags/mp4_tag.cc:343
 #, fuzzy, c-format
 msgid "Error reading tags from file ‘%s’"
 msgstr "Klaida skaitant žymas iš failo: „%s“"
@@ -5024,6 +5112,26 @@ msgstr "Opus failas"
 #: ../src/tags/wavpack_header.c:137
 msgid "Wavpack File"
 msgstr "Wavpack failas"
+
+#, fuzzy
+#~ msgid "Album artist"
+#~ msgstr "Albumo atlikėjas:"
+
+#, fuzzy
+#~ msgid "%S: album subtitle"
+#~ msgstr "%A: albumo atlikėjas"
+
+#, fuzzy
+#~ msgid "Split Ogg comment fields"
+#~ msgstr "Apdoroti komentaro laukelį"
+
+#, fuzzy
+#~ msgid "Split Ogg composer fields"
+#~ msgstr "Apdoroti kompozitoriaus laukelį"
+
+#, fuzzy
+#~ msgid "Split Ogg original artist fields"
+#~ msgstr "Apdoroti originalaus atlikėjo laukelį"
 
 #, fuzzy
 #~ msgid "Original year:"

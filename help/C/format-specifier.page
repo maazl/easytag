@@ -55,14 +55,6 @@
       </tr>
       <tr>
         <td>
-          <p its:translate="no">%T %b</p>
-        </td>
-        <td>
-          <p>Album title</p>
-        </td>
-      </tr>
-      <tr>
-        <td>
           <p its:translate="no">%c</p>
         </td>
         <td>
@@ -71,27 +63,18 @@
       </tr>
       <tr>
         <td>
-          <p its:translate="no">%p</p>
-        </td>
-        <td>
-          <p>Composer: this is the creator of the track</p>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <p its:translate="no">%r</p>
-        </td>
-        <td>
-          <p>Copyright holder: this is usually the artist, but it can also be
-          the record label</p>
-        </td>
-      </tr>
-      <tr>
-        <td>
           <p its:translate="no">%d</p>
         </td>
         <td>
           <p>Disc number</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p its:translate="no">%D %x</p>
+        </td>
+        <td>
+          <p>Number of discs</p>
         </td>
       </tr>
       <tr>
@@ -124,6 +107,14 @@
       </tr>
       <tr>
         <td>
+          <p its:translate="no">%n</p>
+        </td>
+        <td>
+          <p>Track number</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
           <p its:translate="no">%N %l</p>
         </td>
         <td>
@@ -140,18 +131,19 @@
       </tr>
       <tr>
         <td>
-          <p its:translate="no">%w</p>
+          <p its:translate="no">%p</p>
         </td>
         <td>
-          <p>Original year</p>
+          <p>Composer: this is the creator of the track</p>
         </td>
       </tr>
       <tr>
         <td>
-          <p its:translate="no">%n</p>
+          <p its:translate="no">%r</p>
         </td>
         <td>
-          <p>Track number</p>
+          <p>Copyright holder: this is usually the artist, but it can also be
+          the record label</p>
         </td>
       </tr>
       <tr>
@@ -164,6 +156,30 @@
       </tr>
       <tr>
         <td>
+          <p its:translate="no">%T %b</p>
+        </td>
+        <td>
+          <p>Album title</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p its:translate="no">%s</p>
+        </td>
+        <td>
+          <p>Subtitle</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p its:translate="no">%S</p>
+        </td>
+        <td>
+          <p>Disc subtitle</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
           <p its:translate="no">%u</p>
         </td>
         <td>
@@ -172,10 +188,10 @@
       </tr>
       <tr>
         <td>
-          <p its:translate="no">%D %x</p>
+          <p its:translate="no">%w</p>
         </td>
         <td>
-          <p>Number of discs</p>
+          <p>Original year</p>
         </td>
       </tr>
       <tr>

@@ -327,6 +327,10 @@ gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1,
 		return CmpTagString<&File_Tag::title, false>();
 	case ET_SORT_MODE_DESCENDING_TITLE:
 		return CmpTagString<&File_Tag::title, true>();
+	case ET_SORT_MODE_ASCENDING_SUBTITLE:
+		return CmpTagString<&File_Tag::subtitle, false, true>();
+	case ET_SORT_MODE_DESCENDING_SUBTITLE:
+		return CmpTagString<&File_Tag::subtitle, true, true>();
 	case ET_SORT_MODE_ASCENDING_ARTIST:
 		return CmpTagString<&File_Tag::artist, false>();
 	case ET_SORT_MODE_DESCENDING_ARTIST:
@@ -339,6 +343,10 @@ gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1,
 		return CmpTagString<&File_Tag::album, false, true>();
 	case ET_SORT_MODE_DESCENDING_ALBUM:
 		return CmpTagString<&File_Tag::album, true, true>();
+	case ET_SORT_MODE_ASCENDING_DISC_SUBTITLE:
+		return CmpTagString<&File_Tag::disc_subtitle, false, true>();
+	case ET_SORT_MODE_DESCENDING_DISC_SUBTITLE:
+		return CmpTagString<&File_Tag::disc_subtitle, true, true>();
 	case ET_SORT_MODE_ASCENDING_YEAR:
 		return CmpTagInt<&File_Tag::year>;
 	case ET_SORT_MODE_DESCENDING_YEAR:
@@ -411,9 +419,9 @@ gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1,
 		return CmpInfoInt<&ET_File_Info::samplerate>;
 	case ET_SORT_MODE_DESCENDING_FILE_SAMPLERATE:
 		return CmpRev<CmpInfoInt<&ET_File_Info::samplerate>>;
+	default:
+		g_assert_not_reached ();
 	}
-	g_assert_not_reached ();
-	return NULL;
 }
 
 /*********************
@@ -578,19 +586,12 @@ ET_Save_File_Tag_Internal (ET_File *ETFile, File_Tag *FileTag)
 
     FileTagCur = (File_Tag *)ETFile->FileTag->data;
 
-    /* Title */
     FileTag->title = strip_value(FileTagCur->title);
-
-    /* Artist */
+    FileTag->subtitle = strip_value(FileTagCur->subtitle);
     FileTag->artist = strip_value(FileTagCur->artist);
-
-    /* Album Artist */
     FileTag->album_artist = strip_value(FileTagCur->album_artist);
-
-    /* Album */
     FileTag->album = strip_value(FileTagCur->album);
-
-    /* Disc Number */
+    FileTag->disc_subtitle = strip_value(FileTagCur->disc_subtitle);
     FileTag->disc_number = strip_value(FileTagCur->disc_number);
 
     /* Discs Total */
@@ -604,10 +605,7 @@ ET_Save_File_Tag_Internal (ET_File *ETFile, File_Tag *FileTag)
         FileTag->disc_total = NULL;
     }
 
-    /* Year */
     FileTag->year = strip_value(FileTagCur->year);
-
-    /* Release year */
     FileTag->release_year = strip_value(FileTagCur->release_year);
 
     /* Track */
@@ -637,28 +635,13 @@ ET_Save_File_Tag_Internal (ET_File *ETFile, File_Tag *FileTag)
         FileTag->track_total = NULL;
     }
 
-    /* Genre */
     FileTag->genre = strip_value(FileTagCur->genre);
-
-    /* Comment */
     FileTag->comment = strip_value(FileTagCur->comment);
-
-    /* Composer */
     FileTag->composer = strip_value(FileTagCur->composer);
-
-    /* Original Artist */
     FileTag->orig_artist = strip_value(FileTagCur->orig_artist);
-
-    /* Original year */
     FileTag->orig_year = strip_value(FileTagCur->orig_year);
-
-    /* Copyright */
     FileTag->copyright = strip_value(FileTagCur->copyright);
-
-    /* URL */
     FileTag->url = strip_value(FileTagCur->url);
-
-    /* Encoded by */
     FileTag->encoded_by = strip_value(FileTagCur->encoded_by);
 
     /* Picture */

@@ -561,41 +561,6 @@ ET_Comp_Func_Sort_Artist_Item_By_Ascending_Artist (const GList *AlbumList1,
 }
 
 /*
- * Comparison function for sorting by ascending album in the ArtistAlbumList.
- */
-static gint
-ET_Comp_Func_Sort_Album_Item_By_Ascending_Album (const GList *etfilelist1,
-                                                 const GList *etfilelist2)
-{
-    const ET_File *etfile1;
-    const ET_File *etfile2;
-    const gchar *etfile1_album;
-    const gchar *etfile2_album;
-
-    if (!etfilelist1 || !(etfile1 = (ET_File *)etfilelist1->data))
-    {
-        return -1;
-    }
-
-    if (!etfilelist2 || !(etfile2 = (ET_File *)etfilelist2->data))
-    {
-        return 1;
-    }
-
-    etfile1_album  = ((File_Tag *)etfile1->FileTag->data)->album;
-    etfile2_album  = ((File_Tag *)etfile2->FileTag->data)->album;
-
-    if (g_settings_get_boolean (MainSettings, "sort-case-sensitive"))
-    {
-        return et_normalized_strcmp0 (etfile1_album, etfile2_album);
-    }
-    else
-    {
-        return et_normalized_strcasecmp0 (etfile1_album, etfile2_album);
-    }
-}
-
-/*
  * The ETArtistAlbumFileList contains 3 levels of lists to sort the ETFile by artist then by album :
  *  - "ETArtistAlbumFileList" list is a list of "ArtistList" items,
  *  - "ArtistList" list is a list of "AlbumList" items,

@@ -121,6 +121,14 @@ wavpack_tag_read_file_tag (GFile *file,
 
     memset (field, '\0', MAXLEN);
 
+    length = WavpackGetTagItem(wpc, "subtitle", field, MAXLEN);
+
+    if ( length > 0 && FileTag->subtitle == NULL ) {
+        FileTag->subtitle = Try_To_Validate_Utf8_String(field);
+    }
+
+    memset (field, '\0', MAXLEN);
+
     /*
      * Artist
      */
@@ -149,6 +157,14 @@ wavpack_tag_read_file_tag (GFile *file,
 
     if ( length > 0 && FileTag->album == NULL ) {
         FileTag->album = Try_To_Validate_Utf8_String(field);
+    }
+
+    memset (field, '\0', MAXLEN);
+
+    length = WavpackGetTagItem(wpc, "discsubtitle", field, MAXLEN);
+
+    if ( length > 0 && FileTag->disc_subtitle == NULL ) {
+        FileTag->disc_subtitle = Try_To_Validate_Utf8_String(field);
     }
 
     memset (field, '\0', MAXLEN);
@@ -349,7 +365,7 @@ et_wavpack_append_or_delete_tag_item (WavpackContext *wpc,
                                       const gchar *tag,
                                       const gchar *value)
 {
-    if (value)
+    if (!et_str_empty(value))
     {
         return WavpackAppendTagItem (wpc, tag, value, strlen (value));
     }
@@ -376,7 +392,6 @@ wavpack_tag_write_file_tag (const ET_File *ETFile,
     const File_Tag *FileTag;
     WavpackContext *wpc;
     gchar message[80];
-    gchar *buffer;
 
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -421,148 +436,72 @@ wavpack_tag_write_file_tag (const ET_File *ETFile,
 
     /* Title. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "title", FileTag->title))
-    {
         goto err;
-    }
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "subtitle", FileTag->subtitle))
+        goto err;
 
     /* Artist. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "artist", FileTag->artist))
-    {
         goto err;
-    }
-
-    /* Album artist. */
-    if (!et_wavpack_append_or_delete_tag_item (wpc, "album artist",
-                                               FileTag->album_artist))
-    {
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "album artist", FileTag->album_artist))
         goto err;
-    }
 
     /* Album. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "album", FileTag->album))
-    {
         goto err;
-    }
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "discsubtitle", FileTag->disc_subtitle))
+        goto err;
 
     /* Discnumber. */
-    if (FileTag->disc_number && FileTag->disc_total)
-    {
-        buffer = g_strdup_printf ("%s/%s", FileTag->disc_number,
-                                  FileTag->disc_total);
-
-        if (!et_wavpack_append_or_delete_tag_item (wpc, "part", buffer))
-        {
-            g_free (buffer);
-            goto err;
-        }
-        else
-        {
-            g_free (buffer);
-        }
-    }
-    else
-    {
-        if (!et_wavpack_append_or_delete_tag_item (wpc, "part",
-                                                   FileTag->disc_number))
-        {
-            goto err;
-        }
-    }
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "part", FileTag->disc_and_total().c_str()))
+        goto err;
 
     /* Year. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "year", FileTag->year))
-    {
         goto err;
-    }
 
     /* Year. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "release year", FileTag->release_year))
-    {
         goto err;
-    }
 
     /* Tracknumber + tracktotal. */
-    if (FileTag->track_total)
-    {
-        buffer = g_strdup_printf ("%s/%s", FileTag->track,
-                                  FileTag->track_total);
-
-        if (!et_wavpack_append_or_delete_tag_item (wpc, "track", buffer))
-        {
-            g_free (buffer);
-            goto err;
-        }
-        else
-        {
-            g_free (buffer);
-        }
-    }
-    else
-    {
-        if (!et_wavpack_append_or_delete_tag_item (wpc, "track",
-                                                   FileTag->track))
-        {
-            goto err;
-        }
-    }
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "track", FileTag->track_and_total().c_str()))
+        goto err;
 
     /* Genre. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "genre", FileTag->genre))
-    {
         goto err;
-    }
 
     /* Comment. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "comment", FileTag->comment))
-    {
         goto err;
-    }
 
     /* Composer. */
-    if (!et_wavpack_append_or_delete_tag_item (wpc, "composer",
-                                               FileTag->composer))
-    {
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "composer", FileTag->composer))
         goto err;
-    }
 
     /* Original artist. */
-    if (!et_wavpack_append_or_delete_tag_item (wpc, "original artist",
-                                               FileTag->orig_artist))
-    {
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "original artist", FileTag->orig_artist))
         goto err;
-    }
 
     /* Year. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "original year", FileTag->orig_year))
-    {
         goto err;
-    }
 
     /* Copyright. */
-    if (!et_wavpack_append_or_delete_tag_item (wpc, "copyright",
-                                               FileTag->copyright))
-    {
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "copyright", FileTag->copyright))
         goto err;
-    }
 
     /* URL. */
-    if (!et_wavpack_append_or_delete_tag_item (wpc, "copyright url",
-                                               FileTag->url))
-    {
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "copyright url", FileTag->url))
         goto err;
-    }
 
     /* Encoded by. */
-    if (!et_wavpack_append_or_delete_tag_item (wpc, "encoded by",
-                                               FileTag->encoded_by))
-    {
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "encoded by", FileTag->encoded_by))
         goto err;
-    }
 
     if (WavpackWriteTag (wpc) == 0)
-    {
         goto err;
-    }
 
     WavpackCloseFile (wpc);
 

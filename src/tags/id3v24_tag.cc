@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#ifdef ENABLE_MP3
+
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <errno.h>
@@ -39,12 +41,11 @@
 
 #include "win32/win32dep.h"
 
-
-#ifdef ENABLE_MP3
-
 #include <id3tag.h>
 #include "genres.h"
 
+#include <string>
+using namespace std;
 
 /****************
  * Declarations *
@@ -115,7 +116,7 @@ id3tag_read_file_tag (GFile *gfile,
         return FALSE;
     }
 
-    string1 = g_malloc0 (ID3_TAG_QUERYSIZE);
+    string1 = (gchar*)g_malloc0 (ID3_TAG_QUERYSIZE);
 
     /* Check if the file has an ID3v2 tag or/and an ID3v1 tags.
      * 1) ID3v2 tag. */
@@ -150,7 +151,7 @@ id3tag_read_file_tag (GFile *gfile,
         {
             /* Determine version if user want to upgrade old tags */
             if (g_settings_get_boolean (MainSettings, "id3v2-convert-old")
-            && (string1 = g_realloc (string1, tagsize))
+            && (string1 = (gchar*)g_realloc (string1, tagsize))
                 && g_input_stream_read_all (istream,
                                             &string1[ID3_TAG_QUERYSIZE],
                                             tagsize - ID3_TAG_QUERYSIZE,
@@ -254,6 +255,12 @@ id3tag_read_file_tag (GFile *gfile,
     if ( (frame = id3_tag_findframe(tag, ID3_FRAME_TITLE, 0)) )
         update |= libid3tag_Get_Frame_Str(frame, EASYTAG_ID3_FIELD_STRINGLIST, &FileTag->title);
 
+    /****************
+     * Subtitle (TIT3) *
+     ****************/
+    if ( (frame = id3_tag_findframe(tag, "TIT3", 0)) )
+        update |= libid3tag_Get_Frame_Str(frame, EASYTAG_ID3_FIELD_STRINGLIST, &FileTag->subtitle);
+
     /*****************
      * Artist (TPE1) *
      *****************/
@@ -271,6 +278,12 @@ id3tag_read_file_tag (GFile *gfile,
      ****************/
     if ( (frame = id3_tag_findframe(tag, ID3_FRAME_ALBUM, 0)) )
         update |= libid3tag_Get_Frame_Str(frame, ~0, &FileTag->album);
+
+    /****************
+     * Disc subtitle (TSST) *
+     ****************/
+    if ( (frame = id3_tag_findframe(tag, "TSST", 0)) )
+        update |= libid3tag_Get_Frame_Str(frame, EASYTAG_ID3_FIELD_STRINGLIST, &FileTag->disc_subtitle);
 
     /************************
      * Part of a set (TPOS) *
@@ -518,7 +531,7 @@ id3tag_read_file_tag (GFile *gfile,
             }
             else if (field_type == ID3_FIELD_TYPE_INT8)
             {
-                type = id3_field_getint (field);
+                type = (EtPictureType)id3_field_getint (field);
             }
         }
 
@@ -683,7 +696,7 @@ etag_guess_byteorder(const id3_ucs4_t *ustr, gchar **ret) /* XXX */
 
     for (len = 0; ustr[len]; len++);
 
-    gstr = g_try_malloc(sizeof(gunichar) * (len + 1));
+    gstr = (gunichar*)g_try_malloc(sizeof(gunichar) * (len + 1));
     if ( gstr == NULL )
     {
         if (ret)
@@ -971,7 +984,6 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
     struct id3_tag   *v1tag, *v2tag;
     struct id3_frame *frame;
     union id3_field  *field;
-    gchar            *string1;
     EtPicture          *pic;
     gboolean strip_tags = TRUE;
     guchar genre_value = ID3_INVALID_GENRE;
@@ -1027,7 +1039,7 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
         /* XXX Create new tag and copy all frames*/
         tagsize = id3_tag_render(tmptag, NULL);
         if ((tagsize > 10)
-        && (tmpbuf = g_try_malloc(tagsize))
+        && (tmpbuf = (id3_byte_t*)g_try_malloc(tagsize))
         && (id3_tag_render(tmptag, tmpbuf) != 0)
         )
             v2tag = id3_tag_parse(tmpbuf, tagsize);
@@ -1091,14 +1103,13 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
      *********/
     etag_set_tags(FileTag->title, ID3_FRAME_TITLE, ID3_FIELD_TYPE_STRINGLIST, v1tag, v2tag, &strip_tags);
 
+    etag_set_tags(FileTag->subtitle, "TIT3", ID3_FIELD_TYPE_STRINGLIST, NULL, v2tag, &strip_tags);
+
     /**********
      * Artist *
      **********/
     etag_set_tags(FileTag->artist, ID3_FRAME_ARTIST, ID3_FIELD_TYPE_STRINGLIST, v1tag, v2tag, &strip_tags);
 
-    /**********
-     * Album Artist *
-     **********/
     etag_set_tags(FileTag->album_artist, "TPE2", ID3_FIELD_TYPE_STRINGLIST, NULL, v2tag, &strip_tags);
 
     /*********
@@ -1106,13 +1117,12 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
      *********/
     etag_set_tags(FileTag->album, ID3_FRAME_ALBUM, ID3_FIELD_TYPE_STRINGLIST, v1tag, v2tag, &strip_tags);
 
+    etag_set_tags(FileTag->disc_subtitle, "TSST", ID3_FIELD_TYPE_STRINGLIST, NULL, v2tag, &strip_tags);
+
     /***************
      * Part of set *
      ***************/
-    string1 = et_id3tag_get_tpos_from_file_tag (FileTag);
-    etag_set_tags (string1, "TPOS", ID3_FIELD_TYPE_STRINGLIST, NULL, v2tag,
-                   &strip_tags);
-    g_free (string1);
+    etag_set_tags(FileTag->disc_and_total().c_str(), "TPOS", ID3_FIELD_TYPE_STRINGLIST, NULL, v2tag, &strip_tags);
 
     /********
      * Year *
@@ -1127,16 +1137,8 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
     /*************************
      * Track and Total Track *
      *************************/
-    if ( FileTag->track 
-    &&   FileTag->track_total 
-    &&  *FileTag->track_total )
-        string1 = g_strconcat(FileTag->track,"/",FileTag->track_total,NULL);
-    else
-        string1 = NULL;
-
-    etag_set_tags(string1 ? string1 : FileTag->track, ID3_FRAME_TRACK, ID3_FIELD_TYPE_STRINGLIST, NULL, v2tag, &strip_tags);
+    etag_set_tags(FileTag->track_and_total().c_str(), ID3_FRAME_TRACK, ID3_FIELD_TYPE_STRINGLIST, NULL, v2tag, &strip_tags);
     etag_set_tags(FileTag->track, ID3_FRAME_TRACK, ID3_FIELD_TYPE_STRINGLIST, v1tag, NULL, &strip_tags);
-    g_free(string1);
 
     /*********
      * Genre *
@@ -1162,10 +1164,8 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
                        ID3_FIELD_TYPE_STRINGLIST, v1tag, NULL, &strip_tags);
 
         /* Only the ID3v2 tag is converted to the bracketed form. */
-        string1 = g_strdup_printf ("(%d)",genre_value);
-        etag_set_tags (string1, ID3_FRAME_GENRE,
+        etag_set_tags (('(' + to_string(genre_value) + ')').c_str(), ID3_FRAME_GENRE,
                        ID3_FIELD_TYPE_STRINGLIST, NULL, v2tag, &strip_tags);
-        g_free (string1);
     }
 
     /***********
@@ -1250,7 +1250,7 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
                     gsize data_size;
 
                     data = g_bytes_get_data (pic->bytes, &data_size);
-                    id3_field_setbinarydata (field, data, data_size);
+                    id3_field_setbinarydata (field, (id3_byte_t const*)data, data_size);
                 }
             }
 
@@ -1386,11 +1386,9 @@ id3taglib_set_field(struct id3_frame *frame,
                 const gchar *charset;
                 EtTagEncoding iconv_option;
 
-                id3v1_charset = g_settings_get_enum (MainSettings,
-                                                     "id3v1-charset");
+                id3v1_charset = g_settings_get_enum (MainSettings, "id3v1-charset");
                 charset = et_charset_get_name_from_index (id3v1_charset);
-                iconv_option = g_settings_get_enum (MainSettings,
-                                                    "id3v1-encoding-option");
+                iconv_option = (EtTagEncoding)g_settings_get_enum (MainSettings, "id3v1-encoding-option");
 
                 if (iconv_option != ET_TAG_ENCODING_NONE)
                 {
@@ -1412,11 +1410,9 @@ id3taglib_set_field(struct id3_frame *frame,
                     const gchar *charset;
                     EtTagEncoding iconv_option;
 
-                    id3v2_charset = g_settings_get_enum (MainSettings,
-                                                         "id3v2-no-unicode-charset");
+                    id3v2_charset = g_settings_get_enum (MainSettings, "id3v2-no-unicode-charset");
                     charset = et_charset_get_name_from_index (id3v2_charset);
-                    iconv_option = g_settings_get_enum (MainSettings,
-                                                        "id3v2-encoding-option");
+                    iconv_option = (EtTagEncoding)g_settings_get_enum (MainSettings, "id3v2-encoding-option");
                     if (iconv_option != ET_TAG_ENCODING_NONE)
                     {
                         encname = g_strconcat (charset,
@@ -1651,7 +1647,7 @@ etag_write_tags (const gchar *filename,
 
             if (v1size == ID3V1_TAG_SIZE)
             {
-                v1buf = g_malloc (v1size);
+                v1buf = (id3_byte_t*)g_malloc (v1size);
 
                 if (id3_tag_render (v1tag, v1buf) != v1size)
                 {
@@ -1669,7 +1665,7 @@ etag_write_tags (const gchar *filename,
 
             if (v2size > 10)
             {
-                v2buf = g_malloc0 (v2size);
+                v2buf = (id3_byte_t*)g_malloc0 (v2size);
 
                 if ((v2size = id3_tag_render (v2tag, v2buf)) == 0)
                 {
@@ -1866,7 +1862,7 @@ etag_write_tags (const gchar *filename,
         }
 
         audio_length = g_seekable_tell (seekable) - filev2size;
-        audio_buffer = g_malloc (audio_length);
+        audio_buffer = (gchar*)g_malloc (audio_length);
 
         if (!g_seekable_seek (seekable, filev2size, G_SEEK_SET, NULL, error))
         {

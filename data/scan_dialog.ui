@@ -310,9 +310,9 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="genre_label">
+                                            <object class="GtkLabel" id="subtitle_label">
                                                 <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%g: genre</property>
+                                                <property name="label" translatable="yes">%s: subtitle</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
@@ -343,9 +343,9 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="comment_label">
+                                            <object class="GtkLabel" id="genre_label">
                                                 <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%c: comment</property>
+                                                <property name="label" translatable="yes">%g: genre</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
@@ -354,9 +354,9 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="ignored_label">
+                                            <object class="GtkLabel" id="comment_label">
                                                 <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%i: ignored</property>
+                                                <property name="label" translatable="yes">%c: comment</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
@@ -365,9 +365,9 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="url_label">
+                                            <object class="GtkLabel" id="disc_subtitle_label">
                                                 <property name="halign">start</property>
-                                                <property name="label" translatable="yes">%u: URL</property>
+                                                <property name="label" translatable="yes">%S: disc subtitle</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
@@ -398,6 +398,17 @@
                                             </packing>
                                         </child>
                                         <child>
+                                            <object class="GtkLabel" id="url_label">
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">%u: URL</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">3</property>
+                                                <property name="top-attach">4</property>
+                                            </packing>
+                                        </child>
+                                        <child>
                                             <object class="GtkLabel" id="encoded_by_label">
                                                 <property name="halign">start</property>
                                                 <property name="label" translatable="yes">%e: encoded by</property>
@@ -405,7 +416,18 @@
                                             </object>
                                             <packing>
                                                 <property name="left-attach">3</property>
-                                                <property name="top-attach">4</property>
+                                                <property name="top-attach">5</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkLabel" id="ignored_label">
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes">%i: ignored</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">6</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -415,8 +437,9 @@
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left-attach">3</property>
-                                                <property name="top-attach">5</property>
+                                                <property name="left-attach">1</property>
+                                                <property name="top-attach">6</property>
+                                                <property name="width">3</property>
                                             </packing>
                                         </child>
                                     </object>
@@ -526,6 +549,18 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                             </packing>
                                         </child>
                                         <child>
+                                            <object class="GtkCheckButton" id="process_subtitle_check">
+                                                <property name="label" translatable="yes">Subtitle</property>
+                                                <property name="name">subtitle</property>
+                                                <property name="tooltip-text" translatable="yes">Process subtitle field</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">2</property>
+                                                <property name="top-attach">0</property>
+                                            </packing>
+                                        </child>
+                                        <child>
                                             <object class="GtkCheckButton" id="process_artist_check">
                                                 <property name="label" translatable="yes">Artist</property>
                                                 <property name="name">artist</property>
@@ -533,7 +568,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left-attach">2</property>
+                                                <property name="left-attach">3</property>
                                                 <property name="top-attach">0</property>
                                             </packing>
                                         </child>
@@ -545,7 +580,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left-attach">3</property>
+                                                <property name="left-attach">4</property>
                                                 <property name="top-attach">0</property>
                                             </packing>
                                         </child>
@@ -557,7 +592,19 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left-attach">4</property>
+                                                <property name="left-attach">5</property>
+                                                <property name="top-attach">0</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="process_disc_subtitle_check">
+                                                <property name="label" translatable="yes">Disc subtitle</property>
+                                                <property name="name">disc-subtitle</property>
+                                                <property name="tooltip-text" translatable="yes">Process disc subtitle field</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">6</property>
                                                 <property name="top-attach">0</property>
                                             </packing>
                                         </child>
@@ -569,8 +616,8 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left-attach">5</property>
-                                                <property name="top-attach">0</property>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">1</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -581,7 +628,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left-attach">0</property>
+                                                <property name="left-attach">1</property>
                                                 <property name="top-attach">1</property>
                                             </packing>
                                         </child>
@@ -593,7 +640,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left-attach">1</property>
+                                                <property name="left-attach">2</property>
                                                 <property name="top-attach">1</property>
                                             </packing>
                                         </child>
@@ -605,7 +652,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left-attach">2</property>
+                                                <property name="left-attach">3</property>
                                                 <property name="top-attach">1</property>
                                             </packing>
                                         </child>
@@ -617,7 +664,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left-attach">3</property>
+                                                <property name="left-attach">4</property>
                                                 <property name="top-attach">1</property>
                                             </packing>
                                         </child>
@@ -629,7 +676,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left-attach">4</property>
+                                                <property name="left-attach">5</property>
                                                 <property name="top-attach">1</property>
                                             </packing>
                                         </child>
@@ -641,7 +688,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left-attach">5</property>
+                                                <property name="left-attach">6</property>
                                                 <property name="top-attach">1</property>
                                             </packing>
                                         </child>

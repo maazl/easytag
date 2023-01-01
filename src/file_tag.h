@@ -21,9 +21,11 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
-
 #include "picture.h"
+
+#ifdef __cplusplus
+#include <string>
+#endif
 
 /*
  * File_Tag:
@@ -56,9 +58,11 @@ typedef struct
     gboolean saved;
 
     gchar *title;
+    gchar *subtitle;
     gchar *artist;
     gchar *album_artist;
     gchar *album;
+    gchar *disc_subtitle;
     gchar *disc_number;
     gchar *disc_total;
     gchar *year;
@@ -75,15 +79,24 @@ typedef struct
     gchar *encoded_by;
     EtPicture *picture;
     GList *other;
+
+#ifdef __cplusplus
+    std::string track_and_total() const;
+    std::string disc_and_total() const;
+#endif
 } File_Tag;
+
+G_BEGIN_DECLS
 
 File_Tag * et_file_tag_new (void);
 void et_file_tag_free (File_Tag *file_tag);
 
 void et_file_tag_set_title (File_Tag *file_tag, const gchar *title);
+void et_file_tag_set_subtitle (File_Tag *file_tag, const gchar *subtitle);
 void et_file_tag_set_artist (File_Tag *file_tag, const gchar *artist);
 void et_file_tag_set_album_artist (File_Tag *file_tag, const gchar *album_artist);
 void et_file_tag_set_album (File_Tag *file_tag, const gchar *album);
+void et_file_tag_set_disc_subtitle (File_Tag *file_tag, const gchar *disc_subtitle);
 void et_file_tag_set_disc_number (File_Tag *file_tag, const gchar *disc_number);
 void et_file_tag_set_disc_total (File_Tag *file_tag, const gchar *disc_total);
 void et_file_tag_set_year (File_Tag *file_tag, const gchar *year);

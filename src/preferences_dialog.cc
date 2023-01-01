@@ -49,9 +49,11 @@ typedef struct
     GtkWidget *browser_columns_filepath_check;
     GtkWidget *browser_columns_filename_check;
     GtkWidget *browser_columns_title_check;
+    GtkWidget *browser_columns_subtitle_check;
     GtkWidget *browser_columns_artist_check;
     GtkWidget *browser_columns_album_artist_check;
     GtkWidget *browser_columns_album_check;
+    GtkWidget *browser_columns_disc_subtitle_check;
     GtkWidget *browser_columns_year_check;
     GtkWidget *browser_columns_release_year_check;
     GtkWidget *browser_columns_disc_number_check;
@@ -91,13 +93,19 @@ typedef struct
     GtkWidget *tags_disc_button;
     GtkWidget *tags_preserve_focus_check;
     GtkWidget *split_title_check;
+    GtkWidget *split_subtitle_check;
     GtkWidget *split_artist_check;
+    GtkWidget *split_album_artist_check;
     GtkWidget *split_album_check;
+    GtkWidget *split_disc_subtitle_check;
     GtkWidget *split_genre_check;
     GtkWidget *split_comment_check;
     GtkWidget *split_composer_check;
     GtkWidget *split_orig_artist_check;
+    GtkWidget *split_url_check;
+    GtkWidget *split_encoded_by_check;
     GtkWidget *split_delimiter;
+
     GtkWidget *id3_strip_check;
     GtkWidget *id3_v2_convert_check;
     GtkWidget *id3_v2_crc32_check;
@@ -297,19 +305,17 @@ struct enum_info
 };
 
 static gint strv_indexof(const gchar*const* strv, const char* value)
-{	const gchar*const* strvold = strv;
-	if (strv)
-		do
-			if (strcmp(value, *strv) == 0)
-				return strv -strvold;
-		while (*++strv);
+{	if (strv)
+		for (const gchar*const* strvi = strv; *strvi; ++strvi)
+			if (strcmp(value, *strvi) == 0)
+				return strvi - strv;
 	return -1;
 }
 
 static gboolean flags_value_get(GValue *value, GVariant *variant, gpointer user_data)
 {	const enum_info* data = (enum_info*)user_data;
 	const gchar** values = g_variant_get_strv(variant, NULL);
-	g_value_set_boolean(value, strv_indexof(values, data->enum_nick) >= 0);
+	g_value_set_boolean(value, values && strv_indexof(values, data->enum_nick) >= 0);
 	g_free(values);
 	return TRUE;
 }
@@ -387,9 +393,11 @@ create_preferences_dialog (EtPreferencesDialog *self)
     bind_flags_value("visible-columns", priv->browser_columns_filepath_check);
     bind_flags_value("visible-columns", priv->browser_columns_filename_check);
     bind_flags_value("visible-columns", priv->browser_columns_title_check);
+    bind_flags_value("visible-columns", priv->browser_columns_subtitle_check);
     bind_flags_value("visible-columns", priv->browser_columns_artist_check);
     bind_flags_value("visible-columns", priv->browser_columns_album_artist_check);
     bind_flags_value("visible-columns", priv->browser_columns_album_check);
+    bind_flags_value("visible-columns", priv->browser_columns_disc_subtitle_check);
     bind_flags_value("visible-columns", priv->browser_columns_year_check);
     bind_flags_value("visible-columns", priv->browser_columns_release_year_check);
     bind_flags_value("visible-columns", priv->browser_columns_disc_number_check);
@@ -472,13 +480,18 @@ create_preferences_dialog (EtPreferencesDialog *self)
     /* Tag Splitting */
     g_settings_bind (MainSettings, "split-delimiter",
         priv->split_delimiter, "text", G_SETTINGS_BIND_DEFAULT);
-    bind_boolean("ogg-split-title", priv->split_title_check);
-    bind_boolean("ogg-split-artist", priv->split_artist_check);
-    bind_boolean("ogg-split-album", priv->split_album_check);
-    bind_boolean("ogg-split-genre", priv->split_genre_check);
-    bind_boolean("ogg-split-comment", priv->split_comment_check);
-    bind_boolean("ogg-split-composer", priv->split_composer_check);
-    bind_boolean("ogg-split-original-artist", priv->split_orig_artist_check);
+    bind_flags_value("ogg-split-fields", priv->split_title_check);
+    bind_flags_value("ogg-split-fields", priv->split_subtitle_check);
+    bind_flags_value("ogg-split-fields", priv->split_artist_check);
+    bind_flags_value("ogg-split-fields", priv->split_album_artist_check);
+    bind_flags_value("ogg-split-fields", priv->split_album_check);
+    bind_flags_value("ogg-split-fields", priv->split_disc_subtitle_check);
+    bind_flags_value("ogg-split-fields", priv->split_genre_check);
+    bind_flags_value("ogg-split-fields", priv->split_comment_check);
+    bind_flags_value("ogg-split-fields", priv->split_composer_check);
+    bind_flags_value("ogg-split-fields", priv->split_orig_artist_check);
+    bind_flags_value("ogg-split-fields", priv->split_url_check);
+    bind_flags_value("ogg-split-fields", priv->split_encoded_by_check);
 
     /*
      * ID3 Tag Settings
@@ -890,9 +903,11 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_filepath_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_filename_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_title_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_subtitle_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_artist_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_album_artist_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_album_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_disc_subtitle_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_year_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_release_year_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_columns_disc_number_check);
@@ -931,12 +946,17 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, tags_disc_button);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, tags_preserve_focus_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_title_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_subtitle_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_artist_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_album_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_album_artist_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_disc_subtitle_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_genre_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_comment_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_composer_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_orig_artist_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_url_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_encoded_by_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_delimiter);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_strip_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v2_convert_check);

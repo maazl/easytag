@@ -144,6 +144,15 @@
                                             </object>
                                         </child>
                                         <child>
+                                            <object class="GtkTreeViewColumn" id="subtitle_column">
+                                                <property name="resizable">True</property>
+                                                <property name="title" translatable="yes">Subtitle</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="subtitle_renderer"/>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
                                             <object class="GtkTreeViewColumn" id="artist_column">
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">Artist</property>
@@ -167,6 +176,15 @@
                                                 <property name="title" translatable="yes">Album</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="album_renderer"/>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="disc_subtitle_column">
+                                                <property name="resizable">True</property>
+                                                <property name="title" translatable="yes">Disc subtitle</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="disc_subtitle_renderer"/>
                                                 </child>
                                             </object>
                                         </child>
