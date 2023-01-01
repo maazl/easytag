@@ -54,54 +54,6 @@ misc_convert_duration (void)
 }
 
 static void
-misc_filename_prepare (void)
-{
-    gsize i;
-
-    static const struct
-    {
-        const gchar *filename;
-        const gchar *result_replace;
-        const gchar *result;
-    } filenames[] =
-    {
-        { "foo:bar", "foo-bar", "foo:bar" },
-        { "foo" G_DIR_SEPARATOR_S "bar", "foo-bar", "foo-bar" },
-        { "foo*bar", "foo+bar", "foo*bar" },
-        { "foo?bar", "foo_bar", "foo?bar" },
-        { "foo\"bar", "foo\'bar", "foo\"bar" },
-        { "foo<bar", "foo(bar", "foo<bar" },
-        { "foo>bar", "foo)bar", "foo>bar" },
-        { "foo|bar", "foo-bar", "foo|bar" },
-        { "foo|bar*baz", "foo-bar+baz", "foo|bar*baz" },
-        { "foo.", "foo_", "foo." },
-        { "foo ", "foo_", "foo " }
-        /* TODO: Add more tests. */
-    };
-
-    for (i = 0; i < G_N_ELEMENTS (filenames); i++)
-    {
-        gchar *filename;
-
-        filename = g_strdup (filenames[i].filename);
-
-        /* Replace illegal characters. */
-        et_filename_prepare (filename, TRUE);
-        g_assert_cmpstr (filename, ==, filenames[i].result_replace);
-
-        g_free (filename);
-
-        filename = g_strdup (filenames[i].filename);
-
-        /* Leave illegal characters unchanged. */
-        et_filename_prepare (filename, FALSE);
-        g_assert_cmpstr (filename, ==, filenames[i].result);
-
-        g_free (filename);
-    }
-}
-
-static void
 misc_normalized_strcmp0 (void)
 {
     static const gchar str1[] = "foo";
@@ -255,13 +207,13 @@ misc_undo_key (void)
     g_assert_cmpint (undo_key, >, 0U);
     g_assert_cmpint (undo_key, <, et_undo_key_new ());
 }
+
 int
 main (int argc, char** argv)
 {
     g_test_init (&argc, &argv, NULL);
 
     g_test_add_func ("/misc/convert-duration", misc_convert_duration);
-    g_test_add_func ("/misc/filename-prepare", misc_filename_prepare);
     g_test_add_func ("/misc/normalized-strcmp0", misc_normalized_strcmp0);
     g_test_add_func ("/misc/normalized-strcasecmp0",
                      misc_normalized_strcasecmp0);

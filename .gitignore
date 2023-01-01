@@ -61,4 +61,5 @@ configure
 /tests/.deps/
 /tests/test-*
 !/tests/*.c
+!/tests/*.cc
 stamp-h1

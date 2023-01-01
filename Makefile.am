@@ -457,6 +457,7 @@ check_PROGRAMS = \
 common_test_cppflags = \
 	-I$(top_srcdir)/src \
 	-I$(top_builddir) \
+	$(EASYTAG_CFLAGS) \
 	$(GLIB_DEPRECATION_FLAGS) \
 	$(GTK_DEPRECATION_FLAGS)
 
@@ -512,8 +513,8 @@ tests_test_file_tag_CFLAGS = \
 
 tests_test_file_tag_SOURCES = \
 	tests/test-file_tag.c \
-	src/file_tag.c \
-	src/misc.c \
+	src/file_tag.cc \
+	src/misc.cc \
 	src/picture.c
 
 tests_test_file_tag_LDADD = \
@@ -540,7 +541,7 @@ tests_test_misc_CFLAGS = \
 
 tests_test_misc_SOURCES = \
 	tests/test-misc.c \
-	src/misc.c
+	src/misc.cc
 
 tests_test_misc_LDADD = \
 	$(EASYTAG_LIBS)
@@ -554,7 +555,7 @@ tests_test_picture_CFLAGS = \
 
 tests_test_picture_SOURCES = \
 	tests/test-picture.c \
-	src/misc.c \
+	src/misc.cc \
 	src/picture.c
 
 tests_test_picture_LDADD = \
