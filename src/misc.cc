@@ -335,34 +335,41 @@ gchar *Convert_Duration (gulong duration)
     return data;
 }
 
-gchar *
-et_disc_number_to_string (const guint disc_number)
+static gchar* pad_number(const gchar* number, const gchar* flag, const gchar* length)
 {
-    if (g_settings_get_boolean (MainSettings, "tag-disc-padded"))
-    {
-        return g_strdup_printf ("%.*u",
-                                (gint)g_settings_get_uint (MainSettings,
-                                                           "tag-disc-length"),
-                                disc_number);
-    }
+	if (!number)
+		return nullptr;
 
-    return g_strdup_printf ("%u", disc_number);
+	// trim
+	while (*number == ' ') ++number;
+	size_t len = strlen(number);
+	if (!len)
+		return nullptr;
+	while (number[len-1] == ' ') --len;
+
+	if (g_settings_get_boolean(MainSettings, flag))
+	{	size_t numcnt = strspn(number, "0123456789");
+		if (numcnt == len) // all digit?
+		{	len = g_settings_get_uint(MainSettings, length);
+			if (numcnt < len)
+			{	char* ret = g_strnfill(len, '0');
+				memcpy(ret + len - numcnt, number, numcnt);
+				return ret;
+			}
+		}
+	}
+
+	return g_strndup(number, len);
 }
 
-gchar *
-et_track_number_to_string (const guint track_number)
+gchar* et_disc_number_to_string(const gchar* disc_number)
 {
-    if (g_settings_get_boolean (MainSettings, "tag-number-padded"))
-    {
-        return g_strdup_printf ("%.*u",
-                                (gint)g_settings_get_uint (MainSettings,
-                                                           "tag-number-length"),
-                                track_number);
-    }
-    else
-    {
-        return g_strdup_printf ("%u", track_number);
-    }
+	return pad_number(disc_number, "tag-disc-padded", "tag-disc-length");
+}
+
+gchar* et_track_number_to_string (const gchar* track_number)
+{
+	return pad_number(track_number, "tag-number-padded", "tag-number-length");
 }
 
 /*
@@ -518,15 +525,10 @@ et_normalized_strcmp0 (const gchar *str1,
     gchar *normalized2;
 
     /* Check for NULL, as it cannot be passed to g_utf8_normalize(). */
-    if (!str1)
-    {
-        return -(str1 != str2);
-    }
-
     if (!str2)
-    {
-        return str1 != str2;
-    }
+        return str1 != nullptr;
+    if (!str1)
+        return -1;
 
     normalized1 = g_utf8_normalize (str1, -1, G_NORMALIZE_DEFAULT);
     normalized2 = g_utf8_normalize (str2, -1, G_NORMALIZE_DEFAULT);

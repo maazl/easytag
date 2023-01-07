@@ -115,6 +115,7 @@ const FileNameColumnRenderer
 	R_File(ET_SORT_MODE_ASCENDING_FILENAME, &File_Name::file_value_utf8);
 const TagColumnRenderer
 	R_Title(ET_SORT_MODE_ASCENDING_TITLE, &File_Tag::title),
+	R_Version(ET_SORT_MODE_ASCENDING_VERSION, &File_Tag::version),
 	R_Subtitle(ET_SORT_MODE_ASCENDING_SUBTITLE, &File_Tag::subtitle),
 	R_Artist(ET_SORT_MODE_ASCENDING_ARTIST, &File_Tag::artist),
 	R_AlbumArtist(ET_SORT_MODE_ASCENDING_ALBUM_ARTIST, &File_Tag::album_artist),

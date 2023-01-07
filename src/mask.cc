@@ -50,6 +50,9 @@ string MaskEvaluator::TagFieldFromMaskCode(gchar code)
 	case 't': /* Title */
 		r = tag->title;
 		break;
+	case 'v': /* Version */
+		r = tag->version;
+		break;
 	case 's': /* Subtitle */
 		r = tag->subtitle;
 		break;

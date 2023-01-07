@@ -135,26 +135,18 @@ static const gchar *Scan_Masks [] =
 
 static const gchar *Rename_File_Masks [] =
 {
-    "{%n - |}%a - %t",
-    "{%n_-_|}%a_-_%t",
-    "{%n. |}%a - %t",
-    "{%n._|}%a_-_%t",
-    "{%A|%a} - %T" G_DIR_SEPARATOR_S "%n - %t",
-    "{%A|%a} - %T ({%Y|%y}){ - %g|}" G_DIR_SEPARATOR_S "{%d.|}%n - %t",
-    "{%A|%a} - %T ({%Y|%y}){ - %g|}" G_DIR_SEPARATOR_S "%n - %t",
-    "{%A|%a}" G_DIR_SEPARATOR_S "%T ({%Y|%y})" G_DIR_SEPARATOR_S "{%n - %t|Track %n}",
-    "%n - %t",
-    "%n_-_%t",
-    "%n. %t",
-    "%n._%t",
-    "%n - %a - %T - %t",
-    "%n_-_%a_-_%T_-_%t",
-    "%a - %T - %t",
-    "%a_-_%T_-_%t",
-    "%a - %T - %n - %t",
-    "%a_-_%T_-_%n_-_%t",
-    "%a - %t",
-    "%a_-_%t",
+    "{%n - |}%a - %t{ (%v)|}",
+    "{%n. |}%a - %t{ (%v)|}",
+    "{%A|%a} - %T" G_DIR_SEPARATOR_S "%n - %t{ (%v)|}",
+    "{%A|%a} - %T ({%Y|%y}){ - %g|}" G_DIR_SEPARATOR_S "{%d.|}%n - %t{ (%v)|}",
+    "{%A|%a} - %T ({%Y|%y}){ - %g|}" G_DIR_SEPARATOR_S "%n - %t{ (%v)|}",
+    "{%A|%a}" G_DIR_SEPARATOR_S "%T ({%Y|%y})" G_DIR_SEPARATOR_S "{%n - %t{ (%v)|}|Track %n}",
+    "%n - %t{ (%v)|}",
+    "%n. %t{ (%v)|}",
+    "%n - %a - %T - %t{ (%v)|}",
+    "%a - %T - %t{ (%v)}",
+    "%a - %T - %n - %t{ (%v)|}",
+    "%a - %t{ (%v)|}",
     "Track %n",
     NULL
 };
@@ -224,6 +216,10 @@ et_scan_dialog_set_file_tag_for_mask_item (File_Tag *file_tag,
         case 't':
             if (!overwrite && !et_str_empty (file_tag->title)) return;
             et_file_tag_set_title (file_tag, item->string);
+            break;
+        case 'v':
+            if (!overwrite && !et_str_empty (file_tag->version)) return;
+            et_file_tag_set_version (file_tag, item->string);
             break;
         case 's':
             if (!overwrite && !et_str_empty (file_tag->subtitle)) return;
@@ -1096,7 +1092,7 @@ static void Scan_Process_Tag_Field(EtScanDialog *self, File_Tag* FileTag, const 
 		return;
 	gchar* string = g_strdup(value);
 	Scan_Process_Fields_Functions(self, &string);
-	et_file_tag_set_title(FileTag, string);
+	set_func(FileTag, string);
 	g_free(string);
 }
 
@@ -1156,6 +1152,9 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
 
         if (process_fields & ET_PROCESS_FIELD_TITLE)
             Scan_Process_Tag_Field(self, FileTag, st_filetag->title, et_file_tag_set_title);
+
+        if (process_fields & ET_PROCESS_FIELD_VERSION)
+            Scan_Process_Tag_Field(self, FileTag, st_filetag->version, et_file_tag_set_version);
 
         if (process_fields & ET_PROCESS_FIELD_SUBTITLE)
             Scan_Process_Tag_Field(self, FileTag, st_filetag->subtitle, et_file_tag_set_subtitle);

@@ -157,10 +157,10 @@ mp4tag_read_file_tag (GFile *file,
 
         if (offset != -1)
         {
-            FileTag->disc_total = et_disc_number_to_string (disc_numbers.front ().substr (offset + 1).toInt ());
+            FileTag->disc_total = et_disc_number_to_string (disc_numbers.front().substr(offset + 1).toCString(true));
         }
 
-        FileTag->disc_number = et_disc_number_to_string (disc_numbers.front ().toInt ());
+        FileTag->disc_number = et_disc_number_to_string (disc_numbers.front().toCString(true));
     }
 
     /********
@@ -183,10 +183,10 @@ mp4tag_read_file_tag (GFile *file,
 
         if (offset != -1)
         {
-            FileTag->track_total = et_track_number_to_string (track_numbers.front ().substr (offset + 1).toInt ());
+            FileTag->track_total = et_track_number_to_string (track_numbers.front ().substr (offset + 1).toCString(true));
         }
 
-        FileTag->track = et_track_number_to_string (track_numbers.front ().toInt ());
+        FileTag->track = et_track_number_to_string (track_numbers.front ().toCString(true));
     }
 
     /*********

@@ -154,18 +154,6 @@
                 <section>
                     <item>
                         <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by track number</attribute>
-                        <attribute name="target">ascending-track-number</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by track number</attribute>
-                        <attribute name="target">descending-track-number</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
                         <attribute name="label" translatable="yes">Ascending by title</attribute>
                         <attribute name="target">ascending-title</attribute>
                     </item>
@@ -185,6 +173,18 @@
                         <attribute name="action">win.sort-mode</attribute>
                         <attribute name="label" translatable="yes">Descending by subtitle</attribute>
                         <attribute name="target">descending-subtitle</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Ascending by version</attribute>
+                        <attribute name="target">ascending-version</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Descending by version</attribute>
+                        <attribute name="target">descending-version</attribute>
                     </item>
                 </section>
                 <section>
@@ -233,6 +233,30 @@
                         <attribute name="action">win.sort-mode</attribute>
                         <attribute name="label" translatable="yes">Descending by disc subtitle</attribute>
                         <attribute name="target">descending-disc-subtitle</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Ascending by track number</attribute>
+                        <attribute name="target">ascending-track-number</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Descending by track number</attribute>
+                        <attribute name="target">descending-track-number</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Ascending by disc number</attribute>
+                        <attribute name="target">ascending-disc-number</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Descending by disc number</attribute>
+                        <attribute name="target">descending-disc-number</attribute>
                     </item>
                 </section>
                 <section>
@@ -711,18 +735,6 @@
                 <section>
                     <item>
                         <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by track number</attribute>
-                        <attribute name="target">ascending-track-number</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by track number</attribute>
-                        <attribute name="target">descending-track-number</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
                         <attribute name="label" translatable="yes">Ascending by title</attribute>
                         <attribute name="target">ascending-title</attribute>
                     </item>
@@ -730,6 +742,30 @@
                         <attribute name="action">win.sort-mode</attribute>
                         <attribute name="label" translatable="yes">Descending by title</attribute>
                         <attribute name="target">descending-title</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Ascending by version</attribute>
+                        <attribute name="target">ascending-version</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Descending by version</attribute>
+                        <attribute name="target">descending-version</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Ascending by subtitle</attribute>
+                        <attribute name="target">ascending-subtitle</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Descending by subtitle</attribute>
+                        <attribute name="target">descending-subtitle</attribute>
                     </item>
                 </section>
                 <section>
@@ -771,6 +807,42 @@
                 <section>
                     <item>
                         <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Ascending by disc subtitle</attribute>
+                        <attribute name="target">ascending-disc-subtitle</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Descending by disc subtitle</attribute>
+                        <attribute name="target">descending-disc-subtitle</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Ascending by track number</attribute>
+                        <attribute name="target">ascending-track-number</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Descending by track number</attribute>
+                        <attribute name="target">descending-track-number</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Ascending by disc number</attribute>
+                        <attribute name="target">ascending-disc-number</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Descending by disc number</attribute>
+                        <attribute name="target">descending-disc-number</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
                         <attribute name="label" translatable="yes">Ascending by year</attribute>
                         <attribute name="target">ascending-year</attribute>
                     </item>
@@ -778,6 +850,18 @@
                         <attribute name="action">win.sort-mode</attribute>
                         <attribute name="label" translatable="yes">Descending by year</attribute>
                         <attribute name="target">descending-year</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Ascending by release year</attribute>
+                        <attribute name="target">ascending-release-year</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Descending by release year</attribute>
+                        <attribute name="target">descending-release-year</attribute>
                     </item>
                 </section>
                 <section>
@@ -826,6 +910,18 @@
                         <attribute name="action">win.sort-mode</attribute>
                         <attribute name="label" translatable="yes">Descending by original artist</attribute>
                         <attribute name="target">descending-orig-artist</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Ascending by original year</attribute>
+                        <attribute name="target">ascending-orig-year</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-mode</attribute>
+                        <attribute name="label" translatable="yes">Descending by original year</attribute>
+                        <attribute name="target">descending-orig-year</attribute>
                     </item>
                 </section>
                 <section>

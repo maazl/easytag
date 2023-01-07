@@ -252,15 +252,6 @@ values_list_foreach (gpointer data,
     }
 }
 
-static GRegex* get_version_regex(void)
-{
-	static GRegex* version_regex = NULL;
-
-  if (version_regex == NULL)
-      version_regex = g_regex_new(VERSION_EXTRACTOR, (GRegexCompileFlags)(G_REGEX_DOLLAR_ENDONLY|G_REGEX_OPTIMIZE), (GRegexMatchFlags)0, NULL);
-  return version_regex;
-}
-
 /*
  * et_add_file_tags_from_vorbis_comments:
  * @vc: Vorbis comment from which to fill @FileTag
@@ -292,44 +283,20 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
     /* Note : don't forget to add any new field to 'Save unsupported fields' */
 
     fetch_field(ET_VORBIS_COMMENT_FIELD_TITLE, &FileTag->title);
-
+    fetch_field(ET_VORBIS_COMMENT_FIELD_VERSION, &FileTag->version);
     fetch_field(ET_VORBIS_COMMENT_FIELD_SUBTITLE, &FileTag->subtitle);
 
-    /* Version. */
-    if ((strings = (GSList*)g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_VERSION)))
-    {
-        gchar *tmp = NULL;
-        g_slist_foreach (strings, values_list_foreach, &tmp);
-        g_slist_free (strings);
-        if (FileTag->title)
-        {
-            gchar *tmp2 = FileTag->title;
-            FileTag->title = g_strconcat (FileTag->title, " [", tmp, "]", NULL);
-            g_free(tmp2);
-        }
-        else
-            FileTag->title = g_strconcat (" [", tmp, "]", NULL);
-        g_free (tmp);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_VERSION);
-    }
-    else if (FileTag->title && g_regex_match(get_version_regex(), FileTag->title, (GRegexMatchFlags)0, NULL))
-        /* Mark modified because on write the version will be stored in the VERSION field. */
-        FileTag->saved = FALSE;
-
     fetch_field(ET_VORBIS_COMMENT_FIELD_ARTIST, &FileTag->artist);
-
     fetch_field(ET_VORBIS_COMMENT_FIELD_ALBUM_ARTIST, &FileTag->album_artist);
 
     fetch_field(ET_VORBIS_COMMENT_FIELD_ALBUM, &FileTag->album);
-
     fetch_field(ET_VORBIS_COMMENT_FIELD_DISC_SUBTITLE, &FileTag->disc_subtitle);
 
     /* Disc number and total discs. */
     if ((strings = (GSList*)g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_DISC_TOTAL)))
     {
         /* Only take values from the first total discs field. */
-        if (!et_str_empty((const gchar*)strings->data))
-            FileTag->disc_total = et_disc_number_to_string(atoi((const gchar*)strings->data));
+        FileTag->disc_total = et_disc_number_to_string((const gchar*)strings->data);
 
         g_slist_free_full (strings, g_free);
         g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_DISC_TOTAL);
@@ -344,11 +311,11 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
 
             if (separator && !FileTag->disc_total)
             {
-                FileTag->disc_total = et_disc_number_to_string (atoi (separator + 1));
+                FileTag->disc_total = et_disc_number_to_string(separator + 1);
                 *separator = '\0';
             }
 
-            FileTag->disc_number = et_disc_number_to_string (atoi((const gchar*)strings->data));
+            FileTag->disc_number = et_disc_number_to_string((const gchar*)strings->data);
         }
 
         g_slist_free_full (strings, g_free);
@@ -356,15 +323,13 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
     }
 
     fetch_field(ET_VORBIS_COMMENT_FIELD_DATE, &FileTag->year);
-
     fetch_field(ET_VORBIS_COMMENT_FIELD_RELEASE_DATE, &FileTag->release_year);
 
     /* Track number and total tracks. */
     if ((strings = (GSList*)g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL)))
     {
         /* Only take values from the first total tracks field. */
-        if (!et_str_empty((const gchar*)strings->data))
-            FileTag->track_total = et_track_number_to_string(atoi((const gchar*)strings->data));
+        FileTag->track_total = et_track_number_to_string((const gchar*)strings->data);
 
         g_slist_free_full (strings, g_free);
         g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL);
@@ -379,11 +344,11 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
 
             if (separator && !FileTag->track_total)
             {
-                FileTag->track_total = et_track_number_to_string (atoi (separator + 1));
+                FileTag->track_total = et_track_number_to_string(separator + 1);
                 *separator = '\0';
             }
 
-            FileTag->track = et_track_number_to_string(atoi((const gchar*)strings->data));
+            FileTag->track = et_track_number_to_string((const gchar*)strings->data);
         }
 
         g_slist_free_full (strings, g_free);
@@ -414,15 +379,11 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
     }
 
     fetch_field(ET_VORBIS_COMMENT_FIELD_COMPOSER, &FileTag->composer);
-
     fetch_field(ET_VORBIS_COMMENT_FIELD_PERFORMER, &FileTag->orig_artist);
-
     fetch_field(ET_VORBIS_COMMENT_FIELD_ORIG_DATE, &FileTag->orig_year);
 
     fetch_field(ET_VORBIS_COMMENT_FIELD_COPYRIGHT, &FileTag->copyright);
-
     fetch_field(ET_VORBIS_COMMENT_FIELD_CONTACT, &FileTag->url);
-
     fetch_field(ET_VORBIS_COMMENT_FIELD_ENCODED_BY, &FileTag->encoded_by);
 
     /* Cover art. */
@@ -817,17 +778,6 @@ et_ogg_set_tag (vorbis_comment *vc,
     }
 }
 
-static gboolean
-version_regex_cb (const GMatchInfo* match_info,
-                  GString* result,
-                  gpointer user_data)
-{
-    gchar *version = g_match_info_fetch (match_info, 1);
-    vorbis_comment_add_tag ((vorbis_comment*)user_data, ET_VORBIS_COMMENT_FIELD_VERSION, version);
-    g_free (version);
-    return FALSE;
-}
-
 gboolean
 ogg_tag_write_file_tag (const ET_File *ETFile,
                         GError **error)
@@ -866,88 +816,34 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
     vorbis_comment_clear(vc);
     vorbis_comment_init(vc);
 
-    /***********
-     * Version *
-     ***********/
-    title = g_regex_replace_eval (get_version_regex(), FileTag->title, -1, 0, (GRegexMatchFlags)0,
-                                  &version_regex_cb, vc, NULL);
-    /*********
-     * Title *
-     *********/
-    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_TITLE, title, ET_PROCESS_FIELD_TITLE);
-    g_free (title);
-
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_TITLE, FileTag->title, ET_PROCESS_FIELD_TITLE);
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_VERSION, FileTag->version, ET_PROCESS_FIELD_VERSION);
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_SUBTITLE, FileTag->subtitle, ET_PROCESS_FIELD_SUBTITLE);
 
-    /**********
-     * Artist *
-     **********/
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_ARTIST, FileTag->artist, ET_PROCESS_FIELD_ARTIST);
-
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_ALBUM_ARTIST, FileTag->album_artist, ET_PROCESS_FIELD_ALBUM_ARTIST);
 
-    /*********
-     * Album *
-     *********/
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_ALBUM, FileTag->album, ET_PROCESS_FIELD_ALBUM);
-
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_DISC_SUBTITLE, FileTag->disc_subtitle, ET_PROCESS_FIELD_DISC_SUBTITLE);
 
-    /***************
-     * Disc Number *
-     ***************/
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_DISC_NUMBER, FileTag->disc_number);
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_DISC_TOTAL, FileTag->disc_total);
 
-    /********
-     * Year *
-     ********/
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_DATE, FileTag->year);
-
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_RELEASE_DATE, FileTag->release_year);
 
-    /*************************
-     * Track and Total Track *
-     *************************/
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_TRACK_NUMBER, FileTag->track);
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL, FileTag->track_total);
 
-    /*********
-     * Genre *
-     *********/
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_GENRE, FileTag->genre, ET_PROCESS_FIELD_GENRE);
-
-    /***********
-     * Comment *
-     ***********/
-    /* Format of new specification. */
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_COMMENT, FileTag->comment, ET_PROCESS_FIELD_COMMENT);
 
-    /************
-     * Composer *
-     ************/
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_COMPOSER, FileTag->composer, ET_PROCESS_FIELD_COMPOSER);
-
-    /**************************
-     * Original artist / year *
-     **************************/
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_PERFORMER, FileTag->orig_artist, ET_PROCESS_FIELD_ORIGINAL_ARTIST);
-
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_ORIG_DATE, FileTag->orig_year);
 
-    /*************
-     * Copyright *
-     *************/
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_COPYRIGHT, FileTag->copyright);
-
-    /*******
-     * URL *
-     *******/
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_CONTACT, FileTag->url, ET_PROCESS_FIELD_URL);
-
-    /**************
-     * Encoded by *
-     **************/
     et_ogg_set_tag (vc, ET_VORBIS_COMMENT_FIELD_ENCODED_BY, FileTag->encoded_by, ET_PROCESS_FIELD_ENCODED_BY);
     
     /***********

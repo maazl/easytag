@@ -267,10 +267,12 @@ flac_tag_read_file_tag (GFile *file,
             };
 
             fetch_field(ET_VORBIS_COMMENT_FIELD_TITLE, &FileTag->title);
+            fetch_field(ET_VORBIS_COMMENT_FIELD_VERSION, &FileTag->version);
             fetch_field(ET_VORBIS_COMMENT_FIELD_SUBTITLE, &FileTag->subtitle);
             fetch_field(ET_VORBIS_COMMENT_FIELD_ARTIST, &FileTag->artist);
             fetch_field(ET_VORBIS_COMMENT_FIELD_ALBUM_ARTIST, &FileTag->album_artist);
             fetch_field(ET_VORBIS_COMMENT_FIELD_ALBUM, &FileTag->album);
+            fetch_field(ET_VORBIS_COMMENT_FIELD_DISC_SUBTITLE, &FileTag->disc_subtitle);
 
             /* Disc number and total discs. */
             if ((strings = (GSList*)g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_DISC_TOTAL)))
@@ -278,7 +280,7 @@ flac_tag_read_file_tag (GFile *file,
                 /* Only take values from the first total discs field. */
                 if (!et_str_empty ((const gchar*)strings->data))
                 {
-                    FileTag->disc_total = et_disc_number_to_string (atoi ((const gchar*)strings->data));
+                    FileTag->disc_total = et_disc_number_to_string((const gchar*)strings->data);
                 }
 
                 g_slist_free_full (strings, g_free);
@@ -296,11 +298,11 @@ flac_tag_read_file_tag (GFile *file,
 
                     if (separator && !FileTag->disc_total)
                     {
-                        FileTag->disc_total = et_disc_number_to_string (atoi (separator + 1));
+                        FileTag->disc_total = et_disc_number_to_string(separator + 1);
                         *separator = '\0';
                     }
 
-                    FileTag->disc_number = et_disc_number_to_string (atoi ((const gchar*)strings->data));
+                    FileTag->disc_number = et_disc_number_to_string((const gchar*)strings->data);
                 }
 
                 g_slist_free_full (strings, g_free);
@@ -313,7 +315,7 @@ flac_tag_read_file_tag (GFile *file,
                 /* Only take values from the first total tracks field. */
                 if (!et_str_empty ((const gchar*)strings->data))
                 {
-                    FileTag->track_total = et_track_number_to_string (atoi ((const gchar*)strings->data));
+                    FileTag->track_total = et_track_number_to_string((const gchar*)strings->data);
                 }
 
                 g_slist_free_full (strings, g_free);
@@ -331,11 +333,11 @@ flac_tag_read_file_tag (GFile *file,
 
                     if (separator && !FileTag->track_total)
                     {
-                        FileTag->track_total = et_track_number_to_string (atoi (separator + 1));
+                        FileTag->track_total = et_track_number_to_string(separator + 1);
                         *separator = '\0';
                     }
 
-                    FileTag->track = et_track_number_to_string (atoi ((const gchar*)strings->data));
+                    FileTag->track = et_track_number_to_string((const gchar*)strings->data);
                 }
 
                 g_slist_free_full (strings, g_free);
@@ -456,6 +458,7 @@ flac_tag_read_file_tag (GFile *file,
     /* If no FLAC vorbis tag found : we try to get the ID3 tag if it exists
      * (but it will be deleted when rewriting the tag) */
     if ( FileTag->title       == NULL
+      && FileTag->version     == NULL
       && FileTag->subtitle    == NULL
       && FileTag->artist      == NULL
       && FileTag->album_artist == NULL
@@ -482,6 +485,7 @@ flac_tag_read_file_tag (GFile *file,
         // If an ID3 tag has been found (and no FLAC tag), we mark the file as
         // unsaved to rewrite a flac tag.
         if ( FileTag->title       != NULL
+          || FileTag->version     != NULL
           || FileTag->subtitle    != NULL
           || FileTag->artist      != NULL
           || FileTag->album_artist != NULL
@@ -776,41 +780,33 @@ flac_tag_write_file_tag (const ET_File *ETFile,
         }
 
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_TITLE, FileTag->title, ET_PROCESS_FIELD_TITLE);
-
+        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_VERSION, FileTag->version, ET_PROCESS_FIELD_VERSION);
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_SUBTITLE, FileTag->subtitle, ET_PROCESS_FIELD_SUBTITLE);
 
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_ARTIST, FileTag->artist, ET_PROCESS_FIELD_ARTIST);
-
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_ALBUM_ARTIST, FileTag->album_artist, ET_PROCESS_FIELD_ALBUM_ARTIST);
 
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_ALBUM, FileTag->album, ET_PROCESS_FIELD_ALBUM);
-
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_SUBTITLE, FileTag->disc_subtitle, ET_PROCESS_FIELD_DISC_SUBTITLE);
+        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_DISC_SUBTITLE, FileTag->disc_subtitle, ET_PROCESS_FIELD_DISC_SUBTITLE);
 
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_DISC_NUMBER, FileTag->disc_number);
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_DISC_TOTAL, FileTag->disc_total);
 
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_DATE, FileTag->year);
-
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_RELEASE_DATE, FileTag->release_year);
 
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_TRACK_NUMBER, FileTag->track);
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL, FileTag->track_total);
 
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_GENRE, FileTag->genre, ET_PROCESS_FIELD_GENRE);
-
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_DESCRIPTION, FileTag->comment, ET_PROCESS_FIELD_COMMENT);
 
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_COMPOSER, FileTag->composer, ET_PROCESS_FIELD_COMPOSER);
-
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_PERFORMER, FileTag->orig_artist, ET_PROCESS_FIELD_ORIGINAL_ARTIST);
-
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_ORIG_DATE, FileTag->orig_year);
 
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_COPYRIGHT, FileTag->copyright);
-
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_CONTACT, FileTag->url, ET_PROCESS_FIELD_URL);
-
         vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_ENCODED_BY, FileTag->encoded_by, ET_PROCESS_FIELD_ENCODED_BY);
 
         /**************************

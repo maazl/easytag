@@ -105,6 +105,9 @@ ape_tag_read_file_tag (GFile *file,
     string = apefrm_getstr (ape_cnt, APE_TAG_FIELD_SUBTITLE);
     set_string_field (&FileTag->subtitle, string);
 
+    string = apefrm_getstr (ape_cnt, "Version");
+    set_string_field (&FileTag->version, string);
+
     /* Artist */
     string = apefrm_getstr (ape_cnt, APE_TAG_FIELD_ARTIST);
     set_string_field (&FileTag->artist, string);
@@ -131,12 +134,11 @@ ape_tag_read_file_tag (GFile *file,
 
         if (string1)
         {
-            FileTag->disc_total = et_disc_number_to_string (atoi (string1
-                                                                  + 1));
+            FileTag->disc_total = et_disc_number_to_string(string1 + 1);
             *string1 = '\0';
         }
 
-        FileTag->disc_number = et_disc_number_to_string (atoi (string));
+        FileTag->disc_number = et_disc_number_to_string(string);
 
         g_free (string);
     }
@@ -164,11 +166,10 @@ ape_tag_read_file_tag (GFile *file,
 
         if (string1)
         {
-            FileTag->track_total = et_track_number_to_string (atoi (string1
-                                                                    + 1));
+            FileTag->track_total = et_track_number_to_string(string1 + 1);
             *string1 = '\0';
         }
-        FileTag->track = et_track_number_to_string (atoi (string));
+        FileTag->track = et_track_number_to_string(string);
 
         g_free(string);
     } else
@@ -220,9 +221,6 @@ ape_tag_write_file_tag (const ET_File *ETFile,
 {
     const File_Tag *FileTag;
     const gchar *filename_in;
-    //FILE     *file_in;
-    gchar    *string;
-    //GList    *list;
     apetag   *ape_mem;
 
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
@@ -241,158 +239,40 @@ ape_tag_write_file_tag (const ET_File *ETFile,
         return FALSE;
     }
 
-    /*********
-     * Title *
-     *********/
-    if (!et_str_empty (FileTag->title))
-        apefrm_add(ape_mem, 0, APE_TAG_FIELD_TITLE, FileTag->title);
-    else
-        apefrm_remove(ape_mem,APE_TAG_FIELD_TITLE);
-
-
-    /**********
-     * Artist *
-     **********/
-    if (!et_str_empty (FileTag->artist))
-        apefrm_add(ape_mem, 0, APE_TAG_FIELD_ARTIST, FileTag->artist);
-    else
-        apefrm_remove(ape_mem,APE_TAG_FIELD_ARTIST);
-
-    /* Album artist. */
-    if (!et_str_empty (FileTag->album_artist))
-    {
-        apefrm_add (ape_mem, 0, APE_TAG_FIELD_ALBUMARTIST,
-                    FileTag->album_artist);
-    }
-    else
-    {
-        apefrm_remove (ape_mem, APE_TAG_FIELD_ALBUMARTIST);
-    }
-
-    /*********
-     * Album *
-     *********/
-    if (!et_str_empty (FileTag->album))
-        apefrm_add(ape_mem, 0, APE_TAG_FIELD_ALBUM, FileTag->album);
-    else
-        apefrm_remove(ape_mem,APE_TAG_FIELD_ALBUM);
-
-    /******************************
-     * Disc Number and Disc Total *
-     ******************************/
-    if (!et_str_empty (FileTag->disc_number))
-    {
-        if (!et_str_empty (FileTag->disc_total))
-        {
-            string = g_strconcat (FileTag->disc_number, "/",
-                                  FileTag->disc_total, NULL);
-        }
+    auto ape_set = [ape_mem](const char* fieldname, const char* value)
+    {   if (!et_str_empty(value))
+            apefrm_add(ape_mem, 0, fieldname, value);
         else
-        {
-            string = g_strconcat (FileTag->disc_number, NULL);
-        }
+            apefrm_remove(ape_mem, fieldname);
+    };
 
-        apefrm_add (ape_mem, 0, APE_TAG_FIELD_PART, string);
-        g_free (string);
-    }
-    else
-    {
-        apefrm_remove (ape_mem, APE_TAG_FIELD_PART);
-    }
+    ape_set(APE_TAG_FIELD_TITLE, FileTag->title);
+    ape_set("Version", FileTag->version);
+    ape_set(APE_TAG_FIELD_SUBTITLE, FileTag->subtitle);
 
-    /********
-     * Year *
-     ********/
-    if (!et_str_empty (FileTag->year))
-        apefrm_add(ape_mem, 0, APE_TAG_FIELD_YEAR, FileTag->year);
-    else
-        apefrm_remove(ape_mem,APE_TAG_FIELD_YEAR);
+    ape_set(APE_TAG_FIELD_ARTIST, FileTag->artist);
+    ape_set(APE_TAG_FIELD_ALBUMARTIST, FileTag->album_artist);
 
-    /****************
-     * Release year *
-     ***************/
-    if (!et_str_empty (FileTag->release_year))
-        apefrm_add(ape_mem, 0, "Release Year", FileTag->release_year);
-    else
-        apefrm_remove(ape_mem, "Release Year");
+    ape_set(APE_TAG_FIELD_ALBUM, FileTag->album);
+    ape_set("DiscSubtitle", FileTag->disc_subtitle);
+    ape_set(APE_TAG_FIELD_PART, FileTag->disc_and_total().c_str());
 
-    /*************************
-     * Track and Total Track *
-     *************************/
-    if (!et_str_empty (FileTag->track))
-    {
-        if (!et_str_empty (FileTag->track_total))
-            string = g_strconcat(FileTag->track,"/",FileTag->track_total,NULL);
-        else
-            string = g_strconcat(FileTag->track,NULL);
-        apefrm_add(ape_mem, 0, APE_TAG_FIELD_TRACK, string);
-        g_free(string);
-    } else
-        apefrm_remove(ape_mem,APE_TAG_FIELD_TRACK);
+    ape_set(APE_TAG_FIELD_YEAR, FileTag->year);
+    ape_set("Release Year", FileTag->release_year);
 
-    /*********
-     * Genre *
-     *********/
-    if (!et_str_empty (FileTag->genre))
-        apefrm_add(ape_mem, 0, APE_TAG_FIELD_GENRE, FileTag->genre);
-    else
-        apefrm_remove(ape_mem,APE_TAG_FIELD_GENRE);
+    ape_set(APE_TAG_FIELD_TRACK, FileTag->track_and_total().c_str());
 
-    /***********
-     * Comment *
-     ***********/
-    if (!et_str_empty (FileTag->comment))
-        apefrm_add (ape_mem, 0, APE_TAG_FIELD_COMMENT, FileTag->comment);
-    else
-        apefrm_remove(ape_mem,APE_TAG_FIELD_COMMENT);
+    ape_set(APE_TAG_FIELD_GENRE, FileTag->genre);
+    ape_set(APE_TAG_FIELD_COMMENT, FileTag->comment);
 
-    /************
-     * Composer *
-     ************/
-    if (!et_str_empty (FileTag->composer))
-        apefrm_add(ape_mem, 0, APE_TAG_FIELD_COMPOSER, FileTag->composer);
-    else
-        apefrm_remove(ape_mem,APE_TAG_FIELD_COMPOSER);
+    ape_set(APE_TAG_FIELD_COMPOSER, FileTag->composer);
+    ape_set("Original Artist", FileTag->orig_artist);
+    ape_set("Original Year", FileTag->orig_year);
 
-    /*******************
-     * Original artist *
-     *******************/
-    if (!et_str_empty (FileTag->orig_artist))
-        apefrm_add(ape_mem, 0, "Original Artist", FileTag->orig_artist);
-    else
-        apefrm_remove(ape_mem,"Original Artist");
+    ape_set(APE_TAG_FIELD_COPYRIGHT, FileTag->copyright);
+    ape_set(APE_TAG_FIELD_RELATED_URL, FileTag->url);
 
-    /*****************
-     * Original year *
-     ****************/
-    if (!et_str_empty (FileTag->orig_year))
-        apefrm_add(ape_mem, 0, "Original Year", FileTag->orig_year);
-    else
-        apefrm_remove(ape_mem, "Original Year");
-
-    /*************
-     * Copyright *
-     *************/
-    if (!et_str_empty (FileTag->copyright))
-        apefrm_add(ape_mem, 0, APE_TAG_FIELD_COPYRIGHT, FileTag->copyright);
-    else
-        apefrm_remove(ape_mem,APE_TAG_FIELD_COPYRIGHT);
-
-    /*******
-     * URL *
-     *******/
-    if (!et_str_empty (FileTag->url))
-        apefrm_add(ape_mem, 0, APE_TAG_FIELD_RELATED_URL, FileTag->url);
-    else
-        apefrm_remove(ape_mem,APE_TAG_FIELD_RELATED_URL);
-
-    /**************
-     * Encoded by *
-     **************/
-    if (!et_str_empty (FileTag->encoded_by))
-        apefrm_add(ape_mem, 0, "Encoded By", FileTag->encoded_by);
-    else
-        apefrm_remove(ape_mem,"Encoded By");
+    ape_set("Encoded By", FileTag->encoded_by);
 
     /* reread all tag-type again  excl. changed frames by apefrm_remove() */
     if (apetag_save (filename_in, ape_mem, APE_TAG_V2 + SAVE_NEW_OLD_APE_TAG)

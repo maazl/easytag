@@ -56,6 +56,7 @@ et_file_tag_free (File_Tag *FileTag)
     g_return_if_fail (FileTag != NULL);
 
     g_free(FileTag->title);
+    g_free(FileTag->version);
     g_free(FileTag->subtitle);
     g_free(FileTag->artist);
     g_free(FileTag->album_artist);
@@ -116,6 +117,7 @@ et_file_tag_copy_into (File_Tag *destination,
     destination->key = et_undo_key_new ();
 
     et_file_tag_set_title (destination, source->title);
+    et_file_tag_set_version (destination, source->version);
     et_file_tag_set_subtitle (destination, source->subtitle);
     et_file_tag_set_artist (destination, source->artist);
     et_file_tag_set_album_artist (destination, source->album_artist);
@@ -179,6 +181,13 @@ et_file_tag_set_title (File_Tag *file_tag,
     g_return_if_fail (file_tag != NULL);
 
     et_file_tag_set_field (&file_tag->title, title);
+}
+
+void et_file_tag_set_version (File_Tag *file_tag, const gchar *version)
+{
+    g_return_if_fail (file_tag != NULL);
+
+    et_file_tag_set_field (&file_tag->version, version);
 }
 
 void
@@ -397,6 +406,7 @@ et_file_tag_detect_difference (const File_Tag *FileTag1,
         return TRUE;
 
     if (et_normalized_strcmp0 (FileTag1->title, FileTag2->title) != 0
+        || et_normalized_strcmp0 (FileTag1->version, FileTag2->version) != 0
         || et_normalized_strcmp0 (FileTag1->subtitle, FileTag2->subtitle) != 0
         || et_normalized_strcmp0 (FileTag1->artist, FileTag2->artist) != 0
         || et_normalized_strcmp0 (FileTag1->album_artist, FileTag2->album_artist) != 0

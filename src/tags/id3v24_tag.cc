@@ -298,12 +298,11 @@ id3tag_read_file_tag (GFile *gfile,
 
             if (string2)
             {
-                FileTag->disc_total = et_disc_number_to_string (atoi (string2
-                                                                      + 1));
+                FileTag->disc_total = et_disc_number_to_string (string2 + 1);
                 *string2 = '\0';
             }
 
-            FileTag->disc_number = et_disc_number_to_string (atoi (string1));
+            FileTag->disc_number = et_disc_number_to_string (string1);
             g_free (string1);
         }
     }
@@ -346,10 +345,10 @@ id3tag_read_file_tag (GFile *gfile,
 
             if (string2)
             {
-                FileTag->track_total = et_track_number_to_string (atoi (string2 + 1));
+                FileTag->track_total = et_track_number_to_string(string2 + 1);
                 *string2 = '\0'; // To cut string1
             }
-            FileTag->track = et_track_number_to_string (atoi (string1));
+            FileTag->track = et_track_number_to_string(string1);
 
             g_free(string1);
 

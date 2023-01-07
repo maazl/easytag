@@ -121,6 +121,14 @@ wavpack_tag_read_file_tag (GFile *file,
 
     memset (field, '\0', MAXLEN);
 
+    length = WavpackGetTagItem(wpc, "version", field, MAXLEN);
+
+    if ( length > 0 && FileTag->version == NULL ) {
+        FileTag->version = Try_To_Validate_Utf8_String(field);
+    }
+
+    memset (field, '\0', MAXLEN);
+
     length = WavpackGetTagItem(wpc, "subtitle", field, MAXLEN);
 
     if ( length > 0 && FileTag->subtitle == NULL ) {
@@ -187,7 +195,7 @@ wavpack_tag_read_file_tag (GFile *file,
         gchar *tmp;
 
         tmp = Try_To_Validate_Utf8_String (field2);
-        FileTag->disc_total = et_disc_number_to_string (atoi (tmp));
+        FileTag->disc_total = et_disc_number_to_string (tmp);
         g_free (tmp);
     }
 
@@ -196,7 +204,7 @@ wavpack_tag_read_file_tag (GFile *file,
         gchar *tmp;
 
         tmp = Try_To_Validate_Utf8_String (field);
-        FileTag->disc_number = et_disc_number_to_string (atoi (tmp));
+        FileTag->disc_number = et_disc_number_to_string (tmp);
         g_free (tmp);
     }
 
@@ -241,7 +249,7 @@ wavpack_tag_read_file_tag (GFile *file,
         gchar *tmp;
 
         tmp = Try_To_Validate_Utf8_String (field2);
-        FileTag->track_total = et_track_number_to_string (atoi (tmp));
+        FileTag->track_total = et_track_number_to_string (tmp);
         g_free (tmp);
     }
 
@@ -250,7 +258,7 @@ wavpack_tag_read_file_tag (GFile *file,
         gchar *tmp;
 
         tmp = Try_To_Validate_Utf8_String (field);
-        FileTag->track = et_track_number_to_string (atoi (tmp));
+        FileTag->track = et_track_number_to_string (tmp);
         g_free (tmp);
     }
 
@@ -434,69 +442,50 @@ wavpack_tag_write_file_tag (const ET_File *ETFile,
         return FALSE;
     }
 
-    /* Title. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "title", FileTag->title))
+        goto err;
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "version", FileTag->version))
         goto err;
     if (!et_wavpack_append_or_delete_tag_item (wpc, "subtitle", FileTag->subtitle))
         goto err;
 
-    /* Artist. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "artist", FileTag->artist))
         goto err;
     if (!et_wavpack_append_or_delete_tag_item (wpc, "album artist", FileTag->album_artist))
         goto err;
 
-    /* Album. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "album", FileTag->album))
         goto err;
     if (!et_wavpack_append_or_delete_tag_item (wpc, "discsubtitle", FileTag->disc_subtitle))
         goto err;
 
-    /* Discnumber. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "part", FileTag->disc_and_total().c_str()))
         goto err;
 
-    /* Year. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "year", FileTag->year))
         goto err;
-
-    /* Year. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "release year", FileTag->release_year))
         goto err;
 
-    /* Tracknumber + tracktotal. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "track", FileTag->track_and_total().c_str()))
         goto err;
 
-    /* Genre. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "genre", FileTag->genre))
         goto err;
-
-    /* Comment. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "comment", FileTag->comment))
         goto err;
 
-    /* Composer. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "composer", FileTag->composer))
         goto err;
-
-    /* Original artist. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "original artist", FileTag->orig_artist))
         goto err;
-
-    /* Year. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "original year", FileTag->orig_year))
         goto err;
 
-    /* Copyright. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "copyright", FileTag->copyright))
         goto err;
-
-    /* URL. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "copyright url", FileTag->url))
         goto err;
-
-    /* Encoded by. */
     if (!et_wavpack_append_or_delete_tag_item (wpc, "encoded by", FileTag->encoded_by))
         goto err;
 

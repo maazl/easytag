@@ -57,8 +57,16 @@ gchar *Convert_Duration (gulong duration);
 gboolean et_run_audio_player (GList *files, GError **error);
 gboolean et_run_program (const gchar *program_name, GList *args_list, GError **error);
 
-gchar * et_disc_number_to_string (const guint disc_number);
-gchar * et_track_number_to_string (const guint track_number);
+/** Pad the number with trailing zeros according to settings "tag-disc-padded", "tag-disc-length".
+ * @param disc_number
+ * @return new string
+ */
+gchar* et_disc_number_to_string (const gchar* disc_number);
+/** Pad the number with trailing zeros according to settings "tag-number-padded", "tag-number-length".
+ * @param disc_number
+ * @return new string
+ */
+gchar* et_track_number_to_string (const gchar* track_number);
 
 gboolean et_rename_file (const gchar *old_filename, const gchar *new_filename, GError **error);
 

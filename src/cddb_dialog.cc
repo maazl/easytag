@@ -1937,9 +1937,9 @@ set_et_file_from_cddb_album (ET_File * etfile,
 
         if (set_fields & ET_CDDB_SET_FIELD_TRACK)
         {
-            gchar *track_number;
-
-            track_number = et_track_number_to_string (cddbtrackalbum->track_number);
+            char buf[12];
+            sprintf(buf, "%u", cddbtrackalbum->track_number);
+            gchar *track_number = et_track_number_to_string(buf);
 
             et_file_tag_set_track_number (FileTag, track_number);
 
@@ -1948,9 +1948,9 @@ set_et_file_from_cddb_album (ET_File * etfile,
 
         if (set_fields & ET_CDDB_SET_FIELD_TRACK_TOTAL)
         {
-            gchar *track_total;
-
-            track_total = et_track_number_to_string (list_length);
+            char buf[12];
+            sprintf(buf, "%u", list_length);
+            gchar *track_total = et_track_number_to_string(buf);
 
             et_file_tag_set_track_total (FileTag, track_total);
 
@@ -1984,7 +1984,9 @@ set_et_file_from_cddb_album (ET_File * etfile,
         FileName = et_file_name_new ();
 
         /* Build the filename with the path. */
-        track_number = et_track_number_to_string (cddbtrackalbum->track_number);
+        char buf[12];
+        sprintf(buf, "%u", cddbtrackalbum->track_number);
+        track_number = et_track_number_to_string(buf);
 
         string filename_generated_utf8 = string(track_number) + " - " + cddbtrackalbum->track_name;
         File_Name::prepare_func((EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"), ET_CONVERT_SPACES_NO_CHANGE)(filename_generated_utf8, 0);

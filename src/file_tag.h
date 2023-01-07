@@ -59,6 +59,7 @@ typedef struct
 
     gchar *title;
     gchar *subtitle;
+    gchar *version;
     gchar *artist;
     gchar *album_artist;
     gchar *album;
@@ -92,6 +93,7 @@ File_Tag * et_file_tag_new (void);
 void et_file_tag_free (File_Tag *file_tag);
 
 void et_file_tag_set_title (File_Tag *file_tag, const gchar *title);
+void et_file_tag_set_version (File_Tag *file_tag, const gchar *version);
 void et_file_tag_set_subtitle (File_Tag *file_tag, const gchar *subtitle);
 void et_file_tag_set_artist (File_Tag *file_tag, const gchar *artist);
 void et_file_tag_set_album_artist (File_Tag *file_tag, const gchar *album_artist);

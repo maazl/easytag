@@ -321,6 +321,16 @@
                                             </object>
                                         </child>
                                         <child>
+                                            <object class="GtkTreeViewColumn" id="version_column">
+                                                <property name="clickable">True</property>
+                                                <property name="resizable">True</property>
+                                                <property name="title" translatable="yes">Version</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="version_renderer"/>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
                                             <object class="GtkTreeViewColumn" id="artist_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
@@ -361,26 +371,6 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkTreeViewColumn" id="year_column">
-                                                <property name="clickable">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="title" translatable="yes">Year</property>
-                                                <child>
-                                                    <object class="GtkCellRendererText" id="year_renderer"/>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="release_year_column">
-                                                <property name="clickable">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="title" translatable="yes">Rel. year</property>
-                                                <child>
-                                                    <object class="GtkCellRendererText" id="release_year_renderer"/>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
                                             <object class="GtkTreeViewColumn" id="disc_number_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
@@ -397,6 +387,26 @@
                                                 <property name="title" translatable="yes">Track</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="track_renderer"/>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="year_column">
+                                                <property name="clickable">True</property>
+                                                <property name="resizable">True</property>
+                                                <property name="title" translatable="yes">Year</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="year_renderer"/>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="release_year_column">
+                                                <property name="clickable">True</property>
+                                                <property name="resizable">True</property>
+                                                <property name="title" translatable="yes">Rel. year</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="release_year_renderer"/>
                                                 </child>
                                             </object>
                                         </child>

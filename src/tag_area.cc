@@ -45,6 +45,8 @@ typedef struct
     GtkWidget *common_grid;
 
     GtkWidget *title_entry;
+    GtkWidget *version_label;
+    GtkWidget *version_entry;
     GtkWidget *subtitle_label;
     GtkWidget *subtitle_entry;
     GtkWidget *artist_entry;
@@ -188,6 +190,11 @@ on_apply_to_selection (GObject *object,
     {
         msg = apply_field_to_selection(priv->title_entry, etfilelist, &et_file_tag_set_title,
             _("Selected files tagged with title ‘%s’"), _("Removed title from selected files"));
+    }
+    else if (object == G_OBJECT (priv->version_entry))
+    {
+        msg = apply_field_to_selection(priv->version_entry, etfilelist, &et_file_tag_set_version,
+            _("Selected files tagged with version ‘%s’"), _("Removed version from selected files"));
     }
     else if (object == G_OBJECT (priv->subtitle_entry))
     {
@@ -348,7 +355,9 @@ on_apply_to_selection (GObject *object,
             if ( path && path1 && strcmp(path,path1)!=0 )
                 i = 0;
 
-            track_string = et_track_number_to_string (++i);
+            char buf[12];
+            sprintf(buf, "%i", ++i);
+            track_string = et_track_number_to_string(buf);
 
             // The file is in the selection?
             if ( (ET_File *)etfilelistfull->data == etfile )
@@ -388,7 +397,9 @@ on_apply_to_selection (GObject *object,
             filename_utf8 = ((File_Name *)etfile->FileNameNew->data)->value_utf8;
             path_utf8     = g_path_get_dirname(filename_utf8);
 
-            track_string = et_track_number_to_string (et_file_list_get_n_files_in_path (ETCore->ETFileList, path_utf8));
+            char buf[12];
+            sprintf(buf, "%u", et_file_list_get_n_files_in_path(ETCore->ETFileList, path_utf8));
+            track_string = et_track_number_to_string(buf);
 
             g_free (path_utf8);
 
@@ -671,8 +682,7 @@ on_entry_populate_popup (GtkEntry *entry,
                               G_CALLBACK (on_apply_to_selection_menu_item),
                               G_OBJECT (entry));
 
-    /* Separator */
-    menu_item = gtk_menu_item_new ();
+    menu_item = gtk_separator_menu_item_new ();
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
     menu_item = gtk_menu_item_new_with_label (_("Convert ‘_’ and ‘%20’ to spaces"));
@@ -687,8 +697,7 @@ on_entry_populate_popup (GtkEntry *entry,
                               G_CALLBACK (Convert_Space_Into_Underscore),
                               G_OBJECT (entry));
 
-    /* Separator */
-    menu_item = gtk_menu_item_new ();
+    menu_item = gtk_separator_menu_item_new ();
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
     menu_item = gtk_menu_item_new_with_label (_("All uppercase"));
@@ -715,8 +724,7 @@ on_entry_populate_popup (GtkEntry *entry,
                               G_CALLBACK (Convert_First_Letters_Uppercase),
                               G_OBJECT (entry));
 
-    /* Separator */
-    menu_item = gtk_menu_item_new ();
+    menu_item = gtk_separator_menu_item_new ();
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
     menu_item = gtk_menu_item_new_with_label (_("Remove spaces"));
@@ -847,7 +855,9 @@ populate_track_combo (EtTagArea *self)
     /* Create list of tracks. */
     for (i = 1; i <= len; i++)
     {
-        text = et_track_number_to_string (i);
+        char buf[12];
+        sprintf(buf, "%lu", i);
+        text = et_track_number_to_string(buf);
 
         gtk_list_store_insert_with_values (priv->track_combo_model, NULL,
                                            G_MAXINT, TRACK_COLUMN_TRACK_NUMBER,
@@ -1949,6 +1959,7 @@ create_tag_area (EtTagArea *self)
 
     /* Page for common tag fields. */
     et_tag_field_connect_signals (GTK_ENTRY (priv->title_entry), self);
+    et_tag_field_connect_signals (GTK_ENTRY (priv->version_entry), self);
     et_tag_field_connect_signals (GTK_ENTRY (priv->subtitle_entry), self);
     et_tag_field_connect_signals (GTK_ENTRY (priv->artist_entry), self);
     et_tag_field_connect_signals (GTK_ENTRY (priv->album_artist_entry), self);
@@ -2006,6 +2017,7 @@ create_tag_area (EtTagArea *self)
     /* Set focus chain. */
     /* TODO: Use focus-chain GtkBuilder element in GTK+ 3.16. */
     focus_chain = g_list_prepend (focus_chain, priv->title_entry);
+    focus_chain = g_list_prepend (focus_chain, priv->version_entry);
     focus_chain = g_list_prepend (focus_chain, priv->subtitle_entry);
     focus_chain = g_list_prepend (focus_chain, priv->artist_entry);
     focus_chain = g_list_prepend (focus_chain, priv->album_artist_entry);
@@ -2065,6 +2077,8 @@ et_tag_area_class_init (EtTagAreaClass *klass)
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, tag_label);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, tag_notebook);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, title_entry);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, version_label);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, version_entry);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, subtitle_label);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, subtitle_entry);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, artist_entry);
@@ -2175,6 +2189,7 @@ et_tag_area_update_controls (EtTagArea *self,
     switch (ETFile->ETFileDescription->TagType)
     {
     case ID3_TAG:
+        hide.insert(priv->version_entry);
         if (g_settings_get_boolean (MainSettings, "id3v2-enabled"))
         {
             if (!g_settings_get_boolean (MainSettings, "id3v2-version-4"))
@@ -2199,6 +2214,7 @@ et_tag_area_update_controls (EtTagArea *self,
 #endif
     case UNKNOWN_TAG:
     default:
+        hide.insert(priv->version_entry);
         hide.insert(priv->subtitle_entry);
         hide.insert(priv->album_artist_entry);
         hide.insert(priv->disc_subtitle_entry);
@@ -2233,6 +2249,7 @@ et_tag_area_update_controls (EtTagArea *self,
 
 #ifdef ENABLE_MP4
     case MP4_TAG:
+        hide.insert(priv->version_entry);
         hide.insert(priv->release_year_entry);
         hide.insert(priv->orig_artist_entry);
         hide.insert(priv->orig_year_entry);
@@ -2241,6 +2258,7 @@ et_tag_area_update_controls (EtTagArea *self,
 #endif
     }
 
+    show_hide(priv->version_entry, priv->version_label, nullptr);
     show_hide(priv->subtitle_entry, priv->subtitle_label, nullptr);
     show_hide(priv->album_artist_entry, priv->album_artist_label, nullptr);
     show_hide(priv->disc_subtitle_entry, priv->disc_subtitle_label, nullptr);
@@ -2266,6 +2284,7 @@ et_tag_area_clear (EtTagArea *self)
     priv = et_tag_area_get_instance_private (self);
 
     gtk_entry_set_text (GTK_ENTRY (priv->title_entry), "");
+    gtk_entry_set_text (GTK_ENTRY (priv->version_entry), "");
     gtk_entry_set_text (GTK_ENTRY (priv->subtitle_entry), "");
     gtk_entry_set_text (GTK_ENTRY (priv->artist_entry), "");
     gtk_entry_set_text (GTK_ENTRY (priv->album_artist_entry), "");
@@ -2336,6 +2355,9 @@ et_tag_area_create_file_tag (EtTagArea *self)
     buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->title_entry)));
     FileTag->title = strip_value(buffer);
 
+    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->version_entry)));
+    FileTag->version = strip_value(buffer);
+
     buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->subtitle_entry)));
     FileTag->subtitle = strip_value(buffer);
 
@@ -2390,22 +2412,12 @@ et_tag_area_create_file_tag (EtTagArea *self)
 
     /* Track */
     buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->track_combo_entry)))));
-    g_strstrip (buffer);
-
-    if (*buffer)
-        FileTag->track = et_track_number_to_string (atoi (buffer));
-    else
-        FileTag->track = NULL;
+    FileTag->track = et_track_number_to_string(buffer);
     g_free (buffer);
 
     /* Track Total */
     buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->track_total_entry)));
-    g_strstrip (buffer);
-
-    if (*buffer)
-        FileTag->track_total = et_track_number_to_string (atoi (buffer));
-    else
-        FileTag->track_total = NULL;
+    FileTag->track_total = et_track_number_to_string(buffer);
     g_free (buffer);
 
     buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->genre_combo_entry)))));
@@ -2573,6 +2585,8 @@ et_tag_area_display_et_file (EtTagArea *self,
     }
 
     et_tag_area_set_text_field(FileTag->title, GTK_ENTRY(priv->title_entry));
+
+    et_tag_area_set_text_field(FileTag->version, GTK_ENTRY(priv->version_entry));
 
     et_tag_area_set_text_field(FileTag->subtitle, GTK_ENTRY(priv->subtitle_entry));
 

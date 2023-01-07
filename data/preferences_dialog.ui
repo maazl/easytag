@@ -668,13 +668,24 @@
                                             </packing>
                                         </child>
                                         <child>
+                                            <object class="GtkCheckButton" id="split_version_check">
+                                                <property name="label" translatable="yes">Version</property>
+                                                <property name="name">version</property>
+                                                <property name="tooltip-text" translatable="yes">Whether to split version fields in Ogg comments</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">0</property>
+                                            </packing>
+                                        </child>
+                                        <child>
                                             <object class="GtkCheckButton" id="split_subtitle_check">
                                                 <property name="label" translatable="yes">Subtitle</property>
                                                 <property name="name">subtitle</property>
                                                 <property name="tooltip-text" translatable="yes">Whether to split subtitle fields in Ogg comments</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">1</property>
+                                                <property name="left_attach">2</property>
                                                 <property name="top_attach">0</property>
                                             </packing>
                                         </child>
@@ -685,7 +696,7 @@
                                                 <property name="tooltip-text" translatable="yes">Whether to split artist fields in Ogg comments</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">2</property>
+                                                <property name="left_attach">3</property>
                                                 <property name="top_attach">0</property>
                                             </packing>
                                         </child>
@@ -696,7 +707,7 @@
                                                 <property name="tooltip-text" translatable="yes">Whether to split artist fields in Ogg comments</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">3</property>
+                                                <property name="left_attach">4</property>
                                                 <property name="top_attach">0</property>
                                             </packing>
                                         </child>
@@ -708,8 +719,8 @@
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">4</property>
-                                                <property name="top_attach">0</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">1</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -719,8 +730,8 @@
                                                 <property name="tooltip-text" translatable="yes">Whether to split disc subtitle fields in Ogg comments</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">5</property>
-                                                <property name="top_attach">0</property>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">1</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -730,7 +741,7 @@
                                                 <property name="tooltip-text" translatable="yes">Whether to split genre fields in Ogg comments</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">0</property>
+                                                <property name="left_attach">2</property>
                                                 <property name="top_attach">1</property>
                                             </packing>
                                         </child>
@@ -741,7 +752,7 @@
                                                 <property name="tooltip-text" translatable="yes">Whether to split comment fields in Ogg comments</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">1</property>
+                                                <property name="left_attach">3</property>
                                                 <property name="top_attach">1</property>
                                             </packing>
                                         </child>
@@ -752,7 +763,7 @@
                                                 <property name="tooltip-text" translatable="yes">Whether to split composer fields in Ogg comments</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">2</property>
+                                                <property name="left_attach">4</property>
                                                 <property name="top_attach">1</property>
                                             </packing>
                                         </child>
@@ -763,8 +774,8 @@
                                                 <property name="tooltip-text" translatable="yes">Whether to split original artist fields in Ogg comments</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">3</property>
-                                                <property name="top_attach">1</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">2</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -774,8 +785,8 @@
                                                 <property name="tooltip-text" translatable="yes">Whether to split URL fields in Ogg comments</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">4</property>
-                                                <property name="top_attach">1</property>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">2</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -785,8 +796,8 @@
                                                 <property name="tooltip-text" translatable="yes">Whether to split encoded by fields in Ogg comments</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">5</property>
-                                                <property name="top_attach">1</property>
+                                                <property name="left_attach">2</property>
+                                                <property name="top_attach">2</property>
                                             </packing>
                                         </child>
                                     </object>

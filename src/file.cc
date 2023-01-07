@@ -327,6 +327,10 @@ gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1,
 		return CmpTagString<&File_Tag::title, false>();
 	case ET_SORT_MODE_DESCENDING_TITLE:
 		return CmpTagString<&File_Tag::title, true>();
+	case ET_SORT_MODE_ASCENDING_VERSION:
+		return CmpTagString<&File_Tag::version, false>();
+	case ET_SORT_MODE_DESCENDING_VERSION:
+		return CmpTagString<&File_Tag::version, true>();
 	case ET_SORT_MODE_ASCENDING_SUBTITLE:
 		return CmpTagString<&File_Tag::subtitle, false, true>();
 	case ET_SORT_MODE_DESCENDING_SUBTITLE:
@@ -578,68 +582,36 @@ static gchar* strip_value(const gchar* value)
 gboolean
 ET_Save_File_Tag_Internal (ET_File *ETFile, File_Tag *FileTag)
 {
-    File_Tag *FileTagCur;
-
-
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL
                           && FileTag != NULL, FALSE);
 
-    FileTagCur = (File_Tag *)ETFile->FileTag->data;
+    File_Tag *FileTagCur = (File_Tag *)ETFile->FileTag->data;
 
     FileTag->title = strip_value(FileTagCur->title);
+    FileTag->version = strip_value(FileTagCur->version);
     FileTag->subtitle = strip_value(FileTagCur->subtitle);
+
     FileTag->artist = strip_value(FileTagCur->artist);
     FileTag->album_artist = strip_value(FileTagCur->album_artist);
     FileTag->album = strip_value(FileTagCur->album);
     FileTag->disc_subtitle = strip_value(FileTagCur->disc_subtitle);
-    FileTag->disc_number = strip_value(FileTagCur->disc_number);
 
-    /* Discs Total */
-    if (!et_str_empty (FileTagCur->disc_total))
-    {
-        FileTag->disc_total = et_disc_number_to_string (atoi (FileTagCur->disc_total));
-        g_strstrip (FileTag->disc_total);
-    }
-    else
-    {
-        FileTag->disc_total = NULL;
-    }
+    FileTag->disc_number = et_disc_number_to_string(FileTagCur->disc_number);
+    FileTag->disc_total = et_disc_number_to_string(FileTagCur->disc_total);
 
     FileTag->year = strip_value(FileTagCur->year);
     FileTag->release_year = strip_value(FileTagCur->release_year);
 
-    /* Track */
-    if (!et_str_empty (FileTagCur->track))
-    {
-        gchar *tmp_str;
-
-        FileTag->track = et_track_number_to_string (atoi (FileTagCur->track));
-
-        /* This field must contain only digits. */
-        tmp_str = FileTag->track;
-        while (g_ascii_isdigit (*tmp_str)) tmp_str++;
-            *tmp_str = 0;
-        g_strstrip (FileTag->track);
-    } else
-    {
-        FileTag->track = NULL;
-    }
-
-    /* Track Total */
-    if (!et_str_empty (FileTagCur->track_total))
-    {
-        FileTag->track_total = et_track_number_to_string (atoi (FileTagCur->track_total));
-        g_strstrip (FileTag->track_total);
-    } else
-    {
-        FileTag->track_total = NULL;
-    }
+    FileTag->track = et_track_number_to_string(FileTagCur->track);
+    FileTag->track_total = et_track_number_to_string(FileTagCur->track_total);
 
     FileTag->genre = strip_value(FileTagCur->genre);
     FileTag->comment = strip_value(FileTagCur->comment);
+
     FileTag->composer = strip_value(FileTagCur->composer);
     FileTag->orig_artist = strip_value(FileTagCur->orig_artist);
     FileTag->orig_year = strip_value(FileTagCur->orig_year);
+
     FileTag->copyright = strip_value(FileTagCur->copyright);
     FileTag->url = strip_value(FileTagCur->url);
     FileTag->encoded_by = strip_value(FileTagCur->encoded_by);
