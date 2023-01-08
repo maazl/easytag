@@ -151,31 +151,9 @@ static const gchar *Rename_File_Masks [] =
     NULL
 };
 
-typedef enum
-{
-    UNKNOWN = 0,           /* Default value when initialized */
-    LEADING_SEPARATOR,     /* characters before the first code */
-    TRAILING_SEPARATOR,    /* characters after the last code */
-    SEPARATOR,             /* item is a separator between two codes */
-    DIRECTORY_SEPARATOR,   /* item is a separator between two codes with character '/' (G_DIR_SEPARATOR) */
-    FIELD,                 /* item contains text (not empty) of entry */
-    EMPTY_FIELD            /* item when entry contains no text */
-} Mask_Item_Type;
-
-
 enum {
     MASK_EDITOR_TEXT,
     MASK_EDITOR_COUNT
-};
-
-/*
- * Used into Rename File Scanner
- */
-typedef struct _File_Mask_Item File_Mask_Item;
-struct _File_Mask_Item
-{
-    Mask_Item_Type  type;
-    gchar          *string;
 };
 
 /*
@@ -187,7 +165,6 @@ struct _Scan_Mask_Item
     gchar  code;   // The code of the mask without % (ex: %a => a)
     gchar *string; // The string found by the scanner for the code defined the line above
 };
-
 
 
 /**************
