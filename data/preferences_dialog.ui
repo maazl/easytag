@@ -117,7 +117,7 @@
                                         <property name="visible">True</property>
                                     </object>
                                 </child>
-                                <child>
+                                <!--child>
                                     <object class="GtkLabel" id="browser_columns_label">
                                         <property name="halign">start</property>
                                         <property name="label" translatable="yes">Visible columns</property>
@@ -287,7 +287,7 @@
                                             </object>
                                         </child>
                                     </object>
-                                </child>
+                                </child-->
                                 <child>
                                     <object class="GtkLabel" id="log_label">
                                         <property name="halign">start</property>

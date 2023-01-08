@@ -139,6 +139,57 @@ gboolean Add_String_To_Combo_List (GtkListStore *liststore, const gchar *str)
 #endif
 }
 
+gboolean et_variant_string_array_contains(GVariant* variant, const char* value)
+{	if (!variant)
+		return FALSE;
+	GVariantIter iter;
+	const gchar *flag;
+	g_variant_iter_init(&iter, variant);
+	while (g_variant_iter_next(&iter, "&s", &flag))
+		if (strcmp(flag, value) == 0)
+			return TRUE;
+	return FALSE;
+}
+
+GVariant* et_variant_string_array_toggle(GVariant* variant, const char* value)
+{	bool found = false;
+	const gchar* newvalue[(variant ? g_variant_n_children(variant) : 0) + 1]; // space for new value
+	const gchar** next = newvalue;
+	if (variant)
+	{	GVariantIter iter;
+		const gchar *flag;
+		g_variant_iter_init(&iter, variant);
+		while (g_variant_iter_next(&iter, "&s", &flag))
+			if (strcmp(flag, value) == 0)
+				found = true;
+			else
+				*next++ = flag;
+	}
+	if (!found)
+		*next++ = value;
+	return g_variant_new_strv(newvalue, next - newvalue);
+}
+
+GVariant* et_variant_string_array_set(GVariant* variant, const char* value, gboolean set)
+{	const gchar* newvalue[(variant ? g_variant_n_children(variant) : 0) + !!set]; // space for new value
+	const gchar** next = newvalue;
+	if (variant)
+	{	GVariantIter iter;
+		const gchar *flag;
+		g_variant_iter_init(&iter, variant);
+		while (g_variant_iter_next(&iter, "&s", &flag))
+			if (strcmp(flag, value) != 0)
+				*next++ = flag;
+			else if (set)
+				return g_variant_ref(variant);
+	}
+	if (set)
+		*next++ = value;
+	else
+		return g_variant_ref(variant);
+	return g_variant_new_strv(newvalue, next - newvalue);
+}
+
 /*
  * Run a program with a list of parameters
  *  - args_list : list of filename (with path)

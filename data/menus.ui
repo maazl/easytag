@@ -479,6 +479,105 @@
                     </item>
                 </section>
             </submenu>
+            <submenu>
+                <attribute name="label" translatable="yes">Visible columns</attribute>
+                <item>
+                    <attribute name="action">win.visible-columns.filepath</attribute>
+                    <attribute name="label" translatable="yes">Path</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.filename</attribute>
+                    <attribute name="label" translatable="yes">Filename</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.title</attribute>
+                    <attribute name="label" translatable="yes">Title</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.subtitle</attribute>
+                    <attribute name="label" translatable="yes">Subtitle</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.artist</attribute>
+                    <attribute name="label" translatable="yes">Artist</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.album-artist</attribute>
+                    <attribute name="label" translatable="yes">Album Artist</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.album</attribute>
+                    <attribute name="label" translatable="yes">Album</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.disc-subtitle</attribute>
+                    <attribute name="label" translatable="yes">Disc subtitle</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.year</attribute>
+                    <attribute name="label" translatable="yes">Year</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.release-year</attribute>
+                    <attribute name="label" translatable="yes">Release year</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.track-number</attribute>
+                    <attribute name="label" translatable="yes">Track</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.disc-number</attribute>
+                    <attribute name="label" translatable="yes">Disc</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.genre</attribute>
+                    <attribute name="label" translatable="yes">Genre</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.comment</attribute>
+                    <attribute name="label" translatable="yes">Comment</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.composer</attribute>
+                    <attribute name="label" translatable="yes">Composer</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.orig-artist</attribute>
+                    <attribute name="label" translatable="yes">Original Artist</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.orig-year</attribute>
+                    <attribute name="label" translatable="yes">Original year</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.copyright</attribute>
+                    <attribute name="label" translatable="yes">Copyright</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.url</attribute>
+                    <attribute name="label" translatable="yes">URL</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.encoded-by</attribute>
+                    <attribute name="label" translatable="yes">Encoded By</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.file-size</attribute>
+                    <attribute name="label" translatable="yes">File size</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.file-duration</attribute>
+                    <attribute name="label" translatable="yes">Duration</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.file-bitrate</attribute>
+                    <attribute name="label" translatable="yes">Bit rate</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.file-samplerate</attribute>
+                    <attribute name="label" translatable="yes">Samplerate</attribute>
+                </item>
+            </submenu>
             <section>
                 <item>
                     <attribute name="accel">&lt;Primary&gt;&lt;Shift&gt;c</attribute>
@@ -1059,6 +1158,105 @@
                         <attribute name="target">descending-file-samplerate</attribute>
                     </item>
                 </section>
+            </submenu>
+            <submenu>
+                <attribute name="label" translatable="yes">Visible columns</attribute>
+                <item>
+                    <attribute name="action">win.visible-columns.filepath</attribute>
+                    <attribute name="label" translatable="yes">Path</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.filename</attribute>
+                    <attribute name="label" translatable="yes">Filename</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.title</attribute>
+                    <attribute name="label" translatable="yes">Title</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.subtitle</attribute>
+                    <attribute name="label" translatable="yes">Subtitle</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.artist</attribute>
+                    <attribute name="label" translatable="yes">Artist</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.album-artist</attribute>
+                    <attribute name="label" translatable="yes">Album Artist</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.album</attribute>
+                    <attribute name="label" translatable="yes">Album</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.disc-subtitle</attribute>
+                    <attribute name="label" translatable="yes">Disc subtitle</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.year</attribute>
+                    <attribute name="label" translatable="yes">Year</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.release-year</attribute>
+                    <attribute name="label" translatable="yes">Release year</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.track-number</attribute>
+                    <attribute name="label" translatable="yes">Track</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.disc-number</attribute>
+                    <attribute name="label" translatable="yes">Disc</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.genre</attribute>
+                    <attribute name="label" translatable="yes">Genre</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.comment</attribute>
+                    <attribute name="label" translatable="yes">Comment</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.composer</attribute>
+                    <attribute name="label" translatable="yes">Composer</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.orig-artist</attribute>
+                    <attribute name="label" translatable="yes">Original Artist</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.orig-year</attribute>
+                    <attribute name="label" translatable="yes">Original year</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.copyright</attribute>
+                    <attribute name="label" translatable="yes">Copyright</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.url</attribute>
+                    <attribute name="label" translatable="yes">URL</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.encoded-by</attribute>
+                    <attribute name="label" translatable="yes">Encoded By</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.file-size</attribute>
+                    <attribute name="label" translatable="yes">File size</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.file-duration</attribute>
+                    <attribute name="label" translatable="yes">Duration</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.file-bitrate</attribute>
+                    <attribute name="label" translatable="yes">Bit rate</attribute>
+                </item>
+                <item>
+                    <attribute name="action">win.visible-columns.file-samplerate</attribute>
+                    <attribute name="label" translatable="yes">Samplerate</attribute>
+                </item>
             </submenu>
         </section>
     </menu>

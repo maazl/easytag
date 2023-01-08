@@ -22,6 +22,7 @@
 
 #include <glib/gi18n.h>
 
+#include "etflagsaction.h"
 #include "browser.h"
 #include "cddb_dialog.h"
 #include "charset.h"
@@ -1635,6 +1636,10 @@ et_application_window_init (EtApplicationWindow *self)
     g_object_unref (action);
     action = g_settings_create_action (MainSettings, "sort-mode");
     g_action_map_add_action (G_ACTION_MAP (self), action);
+    g_object_unref (action);
+
+    action = g_settings_create_action (MainSettings, "visible-columns");
+    et_flags_action_add_all_values(G_ACTION_MAP (self), action);
     g_object_unref (action);
 
     window = GTK_WINDOW (self);
