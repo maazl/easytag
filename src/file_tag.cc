@@ -83,282 +83,150 @@ et_file_tag_free (File_Tag *FileTag)
 }
 
 /*
- * Duplicate the 'other' list, preserving the list already in @destination.
- */
-void
-et_file_tag_copy_other_into (File_Tag *destination,
-                             const File_Tag *source)
-{
-    GList *l;
-    GList *new_other = NULL;
-
-    for (l = source->other; l != NULL; l = g_list_next (l))
-    {
-        new_other = g_list_prepend (new_other, g_strdup ((gchar *)l->data));
-    }
-
-    new_other = g_list_reverse (new_other);
-    destination->other = g_list_concat (destination->other, new_other);
-}
-
-
-/*
  * Copy data of the File_Tag structure (of ETFile) to the FileTag item.
  * Reallocate data if not null.
  */
-void
-et_file_tag_copy_into (File_Tag *destination,
-                       const File_Tag *source)
+File_Tag* File_Tag::clone() const
 {
-    g_return_if_fail (source != NULL);
-    g_return_if_fail (destination != NULL);
+	File_Tag* destination = et_file_tag_new();
 
-    /* Key for the item, may be overwritten. */
-    destination->key = et_undo_key_new ();
+	/* Key for the item, may be overwritten. */
+	destination->key = et_undo_key_new();
 
-    et_file_tag_set_title (destination, source->title);
-    et_file_tag_set_version (destination, source->version);
-    et_file_tag_set_subtitle (destination, source->subtitle);
-    et_file_tag_set_artist (destination, source->artist);
-    et_file_tag_set_album_artist (destination, source->album_artist);
-    et_file_tag_set_album (destination, source->album);
-    et_file_tag_set_disc_subtitle (destination, source->disc_subtitle);
-    et_file_tag_set_disc_number (destination, source->disc_number);
-    et_file_tag_set_disc_total (destination, source->disc_total);
-    et_file_tag_set_year (destination, source->year);
-    et_file_tag_set_release_year (destination, source->release_year);
-    et_file_tag_set_track_number (destination, source->track);
-    et_file_tag_set_track_total (destination, source->track_total);
-    et_file_tag_set_genre (destination, source->genre);
-    et_file_tag_set_comment (destination, source->comment);
-    et_file_tag_set_composer (destination, source->composer);
-    et_file_tag_set_orig_artist (destination, source->orig_artist);
-    et_file_tag_set_orig_year (destination, source->orig_year);
-    et_file_tag_set_copyright (destination, source->copyright);
-    et_file_tag_set_url (destination, source->url);
-    et_file_tag_set_encoded_by (destination, source->encoded_by);
-    et_file_tag_set_picture (destination, source->picture);
+	et_file_tag_set_title(destination, title);
+	et_file_tag_set_version(destination, version);
+	et_file_tag_set_subtitle(destination, subtitle);
+	et_file_tag_set_artist(destination, artist);
+	et_file_tag_set_album_artist(destination, album_artist);
+	et_file_tag_set_album(destination, album);
+	et_file_tag_set_disc_subtitle(destination, disc_subtitle);
+	et_file_tag_set_disc_number(destination, disc_number);
+	et_file_tag_set_disc_total(destination, disc_total);
+	et_file_tag_set_year(destination, year);
+	et_file_tag_set_release_year(destination, release_year);
+	et_file_tag_set_track_number(destination, track);
+	et_file_tag_set_track_total(destination, track_total);
+	et_file_tag_set_genre(destination, genre);
+	et_file_tag_set_comment(destination, comment);
+	et_file_tag_set_composer(destination, composer);
+	et_file_tag_set_orig_artist(destination, orig_artist);
+	et_file_tag_set_orig_year(destination, orig_year);
+	et_file_tag_set_copyright(destination, copyright);
+	et_file_tag_set_url(destination, url);
+	et_file_tag_set_encoded_by(destination, encoded_by);
+	et_file_tag_set_picture(destination, picture);
 
-    if (source->other)
-    {
-        et_file_tag_copy_other_into (destination, source);
-    }
-    else
-    {
-        et_file_tag_free_other_field (destination);
-    }
+	GList *new_other = NULL;
+	for (GList* l = other; l != NULL; l = g_list_next(l))
+		new_other = g_list_prepend(new_other, g_strdup((gchar*)l->data));
+	destination->other = g_list_reverse(new_other);
+
+	return destination;
 }
 
-/*
- * Set the value of a field of a FileTag item (for ex, value of FileTag->title)
- * Must be used only for the 'gchar *' components
- */
-static void
-et_file_tag_set_field (gchar **FileTagField,
-                       const gchar *value)
-{
-    g_return_if_fail (FileTagField != NULL);
-
-    if (*FileTagField != NULL)
-    {
-        g_free (*FileTagField);
-        *FileTagField = NULL;
-    }
-
-    if (value != NULL)
-    {
-        if (*value != '\0')
-        {
-            *FileTagField = g_strdup (value);
-        }
-    }
+void et_file_tag_set_title(File_Tag *file_tag, const gchar *title)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::title, title);
 }
 
-void
-et_file_tag_set_title (File_Tag *file_tag,
-                       const gchar *title)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->title, title);
+void et_file_tag_set_version(File_Tag *file_tag, const gchar *version)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::version, version);
 }
 
-void et_file_tag_set_version (File_Tag *file_tag, const gchar *version)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->version, version);
+void et_file_tag_set_subtitle(File_Tag *file_tag, const gchar *subtitle)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::subtitle, subtitle);
 }
 
-void
-et_file_tag_set_subtitle (File_Tag *file_tag,
-                       const gchar *subtitle)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->album, subtitle);
+void et_file_tag_set_artist(File_Tag *file_tag, const gchar *artist)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::artist, artist);
 }
 
-void
-et_file_tag_set_artist (File_Tag *file_tag,
-                        const gchar *artist)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->artist, artist);
+void et_file_tag_set_album_artist(File_Tag *file_tag, const gchar *album_artist)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::album_artist, album_artist);
 }
 
-void
-et_file_tag_set_album_artist (File_Tag *file_tag,
-                              const gchar *album_artist)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->album_artist, album_artist);
+void et_file_tag_set_album(File_Tag *file_tag, const gchar *album)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::album, album);
 }
 
-void
-et_file_tag_set_album (File_Tag *file_tag,
-                       const gchar *album)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->album, album);
+void et_file_tag_set_disc_subtitle(File_Tag *file_tag, const gchar *disc_subtitle)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::disc_subtitle, disc_subtitle);
 }
 
-void
-et_file_tag_set_disc_subtitle (File_Tag *file_tag,
-                       const gchar *disc_subtitle)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->disc_subtitle, disc_subtitle);
+void et_file_tag_set_disc_number(File_Tag *file_tag, const gchar *disc_number)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::disc_number, disc_number);
 }
 
-void
-et_file_tag_set_disc_number (File_Tag *file_tag,
-                             const gchar *disc_number)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->disc_number, disc_number);
+void et_file_tag_set_disc_total(File_Tag *file_tag, const gchar *disc_total)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::disc_total, disc_total);
 }
 
-void
-et_file_tag_set_disc_total (File_Tag *file_tag,
-                            const gchar *disc_total)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->disc_total, disc_total);
+void et_file_tag_set_year(File_Tag *file_tag, const gchar *year)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::year, year);
 }
 
-void
-et_file_tag_set_year (File_Tag *file_tag,
-                      const gchar *year)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->year, year);
+void et_file_tag_set_release_year(File_Tag *file_tag, const gchar *release_year)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::release_year, release_year);
 }
 
-void
-et_file_tag_set_release_year (File_Tag *file_tag,
-                              const gchar *year)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->release_year, year);
+void et_file_tag_set_track_number(File_Tag *file_tag, const gchar *track_number)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::track, track_number);
 }
 
-void
-et_file_tag_set_track_number (File_Tag *file_tag,
-                              const gchar *track_number)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->track, track_number);
+void et_file_tag_set_track_total(File_Tag *file_tag, const gchar *track_total)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::track_total, track_total);
 }
 
-void
-et_file_tag_set_track_total (File_Tag *file_tag,
-                             const gchar *track_total)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->track_total, track_total);
+void et_file_tag_set_genre(File_Tag *file_tag, const gchar *genre)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::genre, genre);
 }
 
-void
-et_file_tag_set_genre (File_Tag *file_tag,
-                       const gchar *genre)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->genre, genre);
+void et_file_tag_set_comment(File_Tag *file_tag, const gchar *comment)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::comment, comment);
 }
 
-void
-et_file_tag_set_comment (File_Tag *file_tag,
-                         const gchar *comment)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->comment, comment);
+void et_file_tag_set_composer(File_Tag *file_tag, const gchar *composer)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::composer, composer);
 }
 
-void
-et_file_tag_set_composer (File_Tag *file_tag,
-                          const gchar *composer)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->composer, composer);
+void et_file_tag_set_orig_artist(File_Tag *file_tag, const gchar *orig_artist)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::orig_artist, orig_artist);
 }
 
-void
-et_file_tag_set_orig_artist (File_Tag *file_tag,
-                             const gchar *orig_artist)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->orig_artist, orig_artist);
+void et_file_tag_set_orig_year(File_Tag *file_tag, const gchar *orig_year)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::orig_year, orig_year);
 }
 
-void
-et_file_tag_set_orig_year (File_Tag *file_tag,
-                           const gchar *year)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->orig_year, year);
+void et_file_tag_set_copyright(File_Tag *file_tag, const gchar *copyright)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::copyright, copyright);
 }
 
-void
-et_file_tag_set_copyright (File_Tag *file_tag,
-                           const gchar *copyright)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->copyright, copyright);
+void et_file_tag_set_url(File_Tag *file_tag, const gchar *url)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::url, url);
 }
 
-void
-et_file_tag_set_url (File_Tag *file_tag,
-                     const gchar *url)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->url, url);
-}
-
-void
-et_file_tag_set_encoded_by (File_Tag *file_tag,
-                            const gchar *encoded_by)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    et_file_tag_set_field (&file_tag->encoded_by, encoded_by);
+void et_file_tag_set_encoded_by(File_Tag *file_tag, const gchar *encoded_by)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::encoded_by, encoded_by);
 }
 
 /*

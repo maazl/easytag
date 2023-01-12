@@ -168,6 +168,12 @@
       <default>['filepath','filename','title','artist','album-artist','album','year','release-year','disc-number','track-number','genre','comment','composer','orig-artist','orig-year','copyright','url','encoded-by']</default>
     </key>
 
+    <key name="hide-fields" flags="org.gnome.EasyTAG.EtColumn">
+      <summary>Fields to hide in the tag area</summary>
+      <description>List of hidden input controls when editing a tag.</description>
+      <default>[]</default>
+    </key>
+
     <key name="log-show" type="b">
       <summary>Show the log</summary>
       <description>Whether to show the log in the main window</description>

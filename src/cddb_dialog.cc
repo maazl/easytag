@@ -1905,8 +1905,7 @@ set_et_file_from_cddb_album (ET_File * etfile,
     if (set_fields != 0)
     {
         /* Allocation of a new FileTag. */
-        FileTag = et_file_tag_new ();
-        et_file_tag_copy_into (FileTag, etfile->Tag());
+        FileTag = etfile->Tag()->clone();
 
         if (set_fields & ET_CDDB_SET_FIELD_TITLE)
         {

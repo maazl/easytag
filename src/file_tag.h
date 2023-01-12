@@ -21,6 +21,7 @@
 
 #include <glib.h>
 
+#include "misc.h"
 #include "picture.h"
 
 #ifdef __cplusplus
@@ -52,7 +53,7 @@
  * @other: a list of other tags, used for Vorbis comments
  * Description of each item of the TagList list
  */
-typedef struct
+typedef struct File_Tag
 {
     guint key;
     gboolean saved;
@@ -84,6 +85,13 @@ typedef struct
 #ifdef __cplusplus
     std::string track_and_total() const;
     std::string disc_and_total() const;
+
+    File_Tag* clone() const;
+    gchar* set_field(gchar* File_Tag::*field, const gchar* value)
+    {	g_free(this->*field);
+    	return this->*field = et_str_empty(value) ? nullptr : g_strdup(value);
+    }
+
 #endif
 } File_Tag;
 
@@ -114,9 +122,6 @@ void et_file_tag_set_copyright (File_Tag *file_tag, const gchar *copyright);
 void et_file_tag_set_url (File_Tag *file_tag, const gchar *url);
 void et_file_tag_set_encoded_by (File_Tag *file_tag, const gchar *encoded_by);
 void et_file_tag_set_picture (File_Tag *file_tag, const EtPicture *pic);
-
-void et_file_tag_copy_into (File_Tag *destination, const File_Tag *source);
-void et_file_tag_copy_other_into (File_Tag *destination, const File_Tag *source);
 
 gboolean et_file_tag_detect_difference (const File_Tag *FileTag1, const File_Tag  *FileTag2);
 

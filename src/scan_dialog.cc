@@ -310,8 +310,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
     if (!mask) return;
 
     // Create a new File_Tag item
-    FileTag = et_file_tag_new ();
-    et_file_tag_copy_into (FileTag, ETFile->Tag());
+    FileTag = ETFile->Tag()->clone();
 
     // Process this mask with file
     fill_tag_list = Scan_Generate_New_Tag_From_Mask(ETFile,mask);
@@ -1124,8 +1123,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
     /* Process data of the tag */
     if (st_filetag != NULL && (process_fields & ~ET_PROCESS_FIELD_FILENAME))
     {
-        FileTag = et_file_tag_new();
-        et_file_tag_copy_into(FileTag, st_filetag);
+        FileTag = st_filetag->clone();
 
         if (process_fields & ET_PROCESS_FIELD_TITLE)
             Scan_Process_Tag_Field(self, FileTag, st_filetag->title, et_file_tag_set_title);

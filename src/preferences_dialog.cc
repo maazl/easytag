@@ -46,6 +46,17 @@ typedef struct
     GtkWidget *browser_expand_subdirs_check;
     GtkWidget *browser_hidden_check;
     GtkWidget *browser_case_check;
+    GtkWidget *hide_fields_subtitle_check;
+    GtkWidget *hide_fields_album_artist_check;
+    GtkWidget *hide_fields_disc_subtitle_check;
+    GtkWidget *hide_fields_disc_number_check;
+    GtkWidget *hide_fields_release_year_check;
+    GtkWidget *hide_fields_composer_check;
+    GtkWidget *hide_fields_orig_artist_check;
+    GtkWidget *hide_fields_orig_year_check;
+    GtkWidget *hide_fields_copyright_check;
+    GtkWidget *hide_fields_url_check;
+    GtkWidget *hide_fields_encoded_by_check;
     GtkWidget *log_show_check;
     GtkWidget *header_show_check;
     GtkWidget *list_bold_radio;
@@ -364,6 +375,19 @@ create_preferences_dialog (EtPreferencesDialog *self)
     /* Browse hidden directories */
     bind_boolean("browse-show-hidden", priv->browser_hidden_check);
     bind_boolean("sort-case-sensitive", priv->browser_case_check);
+
+    bind_flags_value("hide-fields", priv->split_orig_artist_check);
+    bind_flags_value("hide-fields", priv->hide_fields_subtitle_check);
+    bind_flags_value("hide-fields", priv->hide_fields_album_artist_check);
+    bind_flags_value("hide-fields", priv->hide_fields_disc_subtitle_check);
+    bind_flags_value("hide-fields", priv->hide_fields_disc_number_check);
+    bind_flags_value("hide-fields", priv->hide_fields_release_year_check);
+    bind_flags_value("hide-fields", priv->hide_fields_composer_check);
+    bind_flags_value("hide-fields", priv->hide_fields_orig_artist_check);
+    bind_flags_value("hide-fields", priv->hide_fields_orig_year_check);
+    bind_flags_value("hide-fields", priv->hide_fields_copyright_check);
+    bind_flags_value("hide-fields", priv->hide_fields_url_check);
+    bind_flags_value("hide-fields", priv->hide_fields_encoded_by_check);
 
     /* Show / hide log view. */
     bind_boolean("log-show", priv->log_show_check);
@@ -850,6 +874,17 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_expand_subdirs_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_hidden_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_case_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_subtitle_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_album_artist_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_disc_subtitle_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_disc_number_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_release_year_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_composer_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_orig_artist_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_orig_year_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_copyright_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_url_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_encoded_by_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, log_show_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, header_show_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, list_bold_radio);

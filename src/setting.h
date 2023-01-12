@@ -284,7 +284,8 @@ typedef enum
     ET_COLUMN_FILE_SIZE       = 1 << 23,
     ET_COLUMN_FILE_DURATION   = 1 << 24,
     ET_COLUMN_FILE_BITRATE    = 1 << 25,
-    ET_COLUMN_FILE_SAMPLERATE = 1 << 26
+    ET_COLUMN_FILE_SAMPLERATE = 1 << 26,
+    ET_COLUMN_IMAGE           = 1 << 27
 } EtColumn;
 
 /* Additional options to be passed to iconv(). */

@@ -3661,8 +3661,7 @@ create_browser (EtBrowser *self)
     g_signal_connect_swapped(MainSettings, "changed::visible-columns", G_CALLBACK(on_visible_columns_changed), self);
     on_visible_columns_changed(self, "visible-columns", MainSettings);
 
-    g_signal_connect_swapped (MainSettings, "changed::sort-mode",
-                              G_CALLBACK (on_sort_mode_changed), self);
+    g_signal_connect_swapped (MainSettings, "changed::sort-mode", G_CALLBACK (on_sort_mode_changed), self);
     // To sort list
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->file_model), 0, GTK_SORT_ASCENDING);
     on_sort_mode_changed(self, "sort-mode", MainSettings);

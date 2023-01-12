@@ -93,7 +93,7 @@ typedef struct
 #define et_application_window_get_instance_private et_application_window_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtApplicationWindow, et_application_window, GTK_TYPE_APPLICATION_WINDOW)
 #undef et_application_window_get_instance_private
-#define et_application_window_get_instance_private(x) (EtApplicationWindowPrivate*)et_application_window_get_instance_private_(x)
+#define et_application_window_get_instance_private(x) ((EtApplicationWindowPrivate*)et_application_window_get_instance_private_(x))
 
 /* Used to force to hide the msgbox when deleting file */
 static gboolean SF_HideMsgbox_Delete_File;
@@ -276,8 +276,8 @@ on_paned_notify_position (EtApplicationWindow *self,
     priv->paned_position = gtk_paned_get_position (priv->hpaned);
 }
 
-File_Tag *
-et_application_window_tag_area_create_file_tag (EtApplicationWindow *self)
+static File_Tag *
+et_application_window_tag_area_create_file_tag(EtApplicationWindow *self, const File_Tag *tag)
 {
     EtApplicationWindowPrivate *priv;
 
@@ -285,7 +285,10 @@ et_application_window_tag_area_create_file_tag (EtApplicationWindow *self)
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_tag_area_create_file_tag (ET_TAG_AREA (priv->tag_area));
+    /* Save tag data and generate undo for tag. */
+    File_Tag* fileTag = tag->clone();
+    et_tag_area_store_file_tag(ET_TAG_AREA(priv->tag_area), fileTag);
+    return fileTag;
 }
 
 static gboolean
@@ -1487,6 +1490,12 @@ on_stop (GSimpleAction *action,
     Action_Main_Stop_Button_Pressed ();
 }
 
+static void on_fields_changed(EtApplicationWindow *self, const gchar *key, GSettings *settings)
+{
+  et_application_window_tag_area_display_controls(self, ETCore->ETFileDisplayed);
+}
+
+
 static const GActionEntry actions[] =
 {
     /* File menu. */
@@ -1726,6 +1735,10 @@ et_application_window_init (EtApplicationWindow *self)
      * force-enabling the visibility on startup. */
     g_settings_bind (MainSettings, "log-show", priv->log_area, "visible",
                      G_SETTINGS_BIND_DEFAULT);
+
+    g_signal_connect_swapped(MainSettings, "changed::hide-fields", G_CALLBACK(on_fields_changed), self);
+    g_signal_connect_swapped(MainSettings, "changed::id3v2-enabled", G_CALLBACK(on_fields_changed), self);
+    g_signal_connect_swapped(MainSettings, "changed::id3v2-version-4", G_CALLBACK(on_fields_changed), self);
 }
 
 static void
@@ -2094,8 +2107,7 @@ et_application_window_update_et_file_from_ui (EtApplicationWindow *self)
         case OPUS_TAG:
 #endif
         case APE_TAG:
-            FileTag = et_application_window_tag_area_create_file_tag (self);
-            et_file_tag_copy_other_into (FileTag, et_file->Tag());
+            FileTag = et_application_window_tag_area_create_file_tag(self, et_file->Tag());
             break;
 #ifndef ENABLE_MP3
         case ID3_TAG:
@@ -2806,14 +2818,10 @@ void
 et_application_window_tag_area_display_controls (EtApplicationWindow *self,
                                                  const ET_File *ETFile)
 {
-    EtApplicationWindowPrivate *priv;
-
     g_return_if_fail (ET_APPLICATION_WINDOW (self));
-    g_return_if_fail (ETFile != NULL && ETFile->ETFileDescription != NULL);
 
-    priv = et_application_window_get_instance_private (self);
-
-    et_tag_area_update_controls (ET_TAG_AREA (priv->tag_area), ETFile);
+    et_tag_area_update_controls (ET_TAG_AREA(et_application_window_get_instance_private(self)->tag_area),
+        ETFile != NULL && ETFile->ETFileDescription != NULL ? ETFile->ETFileDescription->TagType : UNKNOWN_TAG);
 }
 
 void

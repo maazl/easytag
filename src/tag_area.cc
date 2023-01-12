@@ -150,8 +150,7 @@ static gchar* apply_field_to_selection(GtkWidget* field, GList *etfilelist,
     for (GList *l = etfilelist; l != NULL; l = g_list_next (l))
     {
         ET_File *etfile = (ET_File *)l->data;
-        File_Tag *FileTag = et_file_tag_new ();
-        et_file_tag_copy_into (FileTag, etfile->Tag());
+        File_Tag *FileTag = etfile->Tag()->clone();
         apply_func (FileTag, string_to_set);
         ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
     }
@@ -244,8 +243,7 @@ on_apply_to_selection (GObject *object,
         for (l = etfilelist; l != NULL; l = g_list_next (l))
         {
             etfile = (ET_File *)l->data;
-            FileTag = et_file_tag_new ();
-            et_file_tag_copy_into (FileTag, etfile->Tag());
+            FileTag = etfile->Tag()->clone();
             et_file_tag_set_disc_number (FileTag, disc_number ? disc_number
                                                               : string_to_set);
             et_file_tag_set_disc_total (FileTag, string_to_set1);
@@ -292,8 +290,7 @@ on_apply_to_selection (GObject *object,
         for (l = etfilelist; l != NULL; l = g_list_next (l))
         {
             etfile = (ET_File *)l->data;
-            FileTag = et_file_tag_new ();
-            et_file_tag_copy_into (FileTag, etfile->Tag());
+            FileTag = etfile->Tag()->clone();
 
             // We apply the TrackEntry field to all others files only if it is to delete
             // the field (string=""). Else we don't overwrite the track number
@@ -362,8 +359,7 @@ on_apply_to_selection (GObject *object,
             // The file is in the selection?
             if ( (ET_File *)etfilelistfull->data == etfile )
             {
-                FileTag = et_file_tag_new ();
-                et_file_tag_copy_into (FileTag, etfile->Tag());
+                FileTag = etfile->Tag()->clone();
                 et_file_tag_set_track_number (FileTag, track_string);
                 ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
 
@@ -409,8 +405,7 @@ on_apply_to_selection (GObject *object,
                 track_total = g_strdup (track_string);
             }
 
-            FileTag = et_file_tag_new ();
-            et_file_tag_copy_into (FileTag, etfile->Tag());
+            FileTag = etfile->Tag()->clone();
             et_file_tag_set_track_total (FileTag, track_string);
             ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
 
@@ -495,8 +490,7 @@ on_apply_to_selection (GObject *object,
         for (l = etfilelist; l != NULL; l = g_list_next (l))
         {
             etfile = (ET_File *)l->data;
-            FileTag = et_file_tag_new ();
-            et_file_tag_copy_into (FileTag, etfile->Tag());
+            FileTag = etfile->Tag()->clone();
             et_file_tag_set_picture (FileTag, res);
             ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
         }
@@ -2156,44 +2150,23 @@ et_tag_area_new (void)
  *
  * Update the visibility of entry fields depending on the type of file.
  */
-void
-et_tag_area_update_controls (EtTagArea *self,
-                             const ET_File *ETFile)
+void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
 {
     g_return_if_fail (ET_TAG_AREA (self));
 
     EtTagAreaPrivate *priv = et_tag_area_get_instance_private (self);
 
-    unordered_set<GtkWidget*> hide;
-    auto show_hide = [&hide](GtkWidget* master, GtkWidget* slave, GtkWidget* slave2)
-    {
-        if (!hide.count(master))
-        {
-            gtk_widget_show(master);
-            if (slave)
-                gtk_widget_show(slave);
-            if (slave2)
-                gtk_widget_show(slave2);
-        }
-        else
-        {
-            gtk_widget_hide(master);
-            if (slave)
-                gtk_widget_hide(slave);
-            if (slave2)
-                gtk_widget_hide(slave2);
-        }
-    };
+    guint hide = g_settings_get_flags(MainSettings, "hide-fields");
 
     /* Special controls to display or not! */
-    switch (ETFile->ETFileDescription->TagType)
+    switch (type)
     {
     case ID3_TAG:
-        hide.insert(priv->version_entry);
+        hide |= ET_COLUMN_VERSION;
         if (g_settings_get_boolean (MainSettings, "id3v2-enabled"))
         {
             if (!g_settings_get_boolean (MainSettings, "id3v2-version-4"))
-                hide.insert(priv->release_year_entry);
+                hide |= ET_COLUMN_RELEASE_YEAR;
             break;
         }
         /* ID3v1 : Hide specifics ID3v2 fields if not activated! */
@@ -2212,24 +2185,21 @@ et_tag_area_update_controls (EtTagArea *self,
 #ifndef ENABLE_OPUS
     case OPUS_TAG:
 #endif
-    case UNKNOWN_TAG:
     default:
-        hide.insert(priv->version_entry);
-        hide.insert(priv->subtitle_entry);
-        hide.insert(priv->album_artist_entry);
-        hide.insert(priv->disc_subtitle_entry);
-        hide.insert(priv->track_total_entry);
-        hide.insert(priv->disc_number_entry);
-        hide.insert(priv->release_year_entry);
-        hide.insert(priv->composer_entry);
-        hide.insert(priv->orig_artist_entry);
-        hide.insert(priv->orig_year_entry);
-        hide.insert(priv->copyright_entry);
-        hide.insert(priv->url_entry);
-        hide.insert(priv->encoded_by_entry);
-        hide.insert(priv->images_grid);
+        hide |= ET_COLUMN_VERSION | ET_COLUMN_SUBTITLE | ET_COLUMN_ALBUM_ARTIST
+            | ET_COLUMN_DISC_SUBTITLE | ET_COLUMN_TRACK_NUMBER | ET_COLUMN_DISC_NUMBER
+            | ET_COLUMN_RELEASE_YEAR | ET_COLUMN_COMPOSER | ET_COLUMN_ORIG_ARTIST
+            | ET_COLUMN_ORIG_YEAR | ET_COLUMN_COPYRIGHT | ET_COLUMN_URL
+            | ET_COLUMN_ENCODED_BY | ET_COLUMN_IMAGE;
         break;
 
+    // APEv2 does not support all fields but the data can be stored in unsupported tag names.
+#ifdef ENABLE_WAVPACK
+    case WAVPACK_TAG:
+#endif
+    case APE_TAG:
+
+    // Vorbis comments support all tag fields.
 #ifdef ENABLE_OGG
     case OGG_TAG:
 #endif
@@ -2239,39 +2209,52 @@ et_tag_area_update_controls (EtTagArea *self,
 #ifdef ENABLE_OPUS
     case OPUS_TAG:
 #endif
-        break; // Vorbis comments support all tag fields.
 
-#ifdef ENABLE_WAVPACK
-    case WAVPACK_TAG:
-#endif
-    case APE_TAG:
-        break; // APEv2 does not support all fields but the data can be stored in unsupported tag names.
+    case UNKNOWN_TAG:
+        break;
 
 #ifdef ENABLE_MP4
     case MP4_TAG:
-        hide.insert(priv->version_entry);
-        hide.insert(priv->release_year_entry);
-        hide.insert(priv->orig_artist_entry);
-        hide.insert(priv->orig_year_entry);
-        hide.insert(priv->url_entry);
+      hide |= ET_COLUMN_VERSION | ET_COLUMN_RELEASE_YEAR | ET_COLUMN_ORIG_ARTIST
+          | ET_COLUMN_ORIG_YEAR | ET_COLUMN_URL;
         break;
 #endif
     }
 
-    show_hide(priv->version_entry, priv->version_label, nullptr);
-    show_hide(priv->subtitle_entry, priv->subtitle_label, nullptr);
-    show_hide(priv->album_artist_entry, priv->album_artist_label, nullptr);
-    show_hide(priv->disc_subtitle_entry, priv->disc_subtitle_label, nullptr);
-    show_hide(priv->track_total_entry, priv->track_number_button, priv->track_separator_label);
-    show_hide(priv->disc_number_entry, priv->disc_number_label, priv->disc_separator);
-    show_hide(priv->release_year_entry, priv->release_year_label, priv->year_separator);
-    show_hide(priv->composer_entry, priv->composer_label, nullptr);
-    show_hide(priv->orig_artist_entry, priv->orig_artist_label, nullptr);
-    show_hide(priv->orig_year_entry, priv->orig_year_label, nullptr);
-    show_hide(priv->copyright_entry, priv->copyright_label, nullptr);
-    show_hide(priv->url_entry, priv->url_label, nullptr);
-    show_hide(priv->encoded_by_entry, priv->encoded_by_label, nullptr);
-    show_hide(priv->images_grid, nullptr, nullptr);
+    auto show_hide = [hide](EtColumn col, GtkWidget* w1, GtkWidget* w2, GtkWidget* w3)
+    {
+        if (!(hide & col))
+        {
+            gtk_widget_show(w1);
+            if (w2)
+                gtk_widget_show(w2);
+            if (w3)
+                gtk_widget_show(w3);
+        }
+        else
+        {
+            gtk_widget_hide(w1);
+            if (w2)
+                gtk_widget_hide(w2);
+            if (w3)
+                gtk_widget_hide(w3);
+        }
+    };
+
+    show_hide(ET_COLUMN_VERSION, priv->version_entry, priv->version_label, nullptr);
+    show_hide(ET_COLUMN_SUBTITLE, priv->subtitle_entry, priv->subtitle_label, nullptr);
+    show_hide(ET_COLUMN_ALBUM_ARTIST, priv->album_artist_entry, priv->album_artist_label, nullptr);
+    show_hide(ET_COLUMN_DISC_SUBTITLE, priv->disc_subtitle_entry, priv->disc_subtitle_label, nullptr);
+    show_hide(ET_COLUMN_TRACK_NUMBER, priv->track_total_entry, priv->track_number_button, priv->track_separator_label);
+    show_hide(ET_COLUMN_DISC_NUMBER, priv->disc_number_entry, priv->disc_number_label, priv->disc_separator);
+    show_hide(ET_COLUMN_RELEASE_YEAR, priv->release_year_entry, priv->release_year_label, priv->year_separator);
+    show_hide(ET_COLUMN_COMPOSER, priv->composer_entry, priv->composer_label, nullptr);
+    show_hide(ET_COLUMN_ORIG_ARTIST, priv->orig_artist_entry, priv->orig_artist_label, nullptr);
+    show_hide(ET_COLUMN_ORIG_YEAR, priv->orig_year_entry, priv->orig_year_label, nullptr);
+    show_hide(ET_COLUMN_COPYRIGHT, priv->copyright_entry, priv->copyright_label, nullptr);
+    show_hide(ET_COLUMN_URL, priv->url_entry, priv->url_label, nullptr);
+    show_hide(ET_COLUMN_ENCODED_BY, priv->encoded_by_entry, priv->encoded_by_label, nullptr);
+    show_hide(ET_COLUMN_IMAGE, priv->images_grid, nullptr, nullptr);
 }
 
 void
@@ -2319,164 +2302,120 @@ et_tag_area_title_grab_focus (EtTagArea *self)
 }
 
 /*
- * strip spaces and convert empty string to NULL.
- * The function takes the ownership of value.
- */
-static gchar* strip_value(gchar* value)
-{
-    g_strstrip (value);
-
-    if (*value)
-        return value;
-
-    g_free (value);
-    return NULL;
-}
-
-/*
  * et_tag_area_create_file_tag:
  *
  * Create a new File_Tag structure and poopulate it with values from the UI.
  */
-File_Tag *
-et_tag_area_create_file_tag (EtTagArea *self)
+void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 {
-    EtTagAreaPrivate *priv;
-    gchar *buffer;
-    File_Tag *FileTag;
+	g_return_if_fail (ET_TAG_AREA(self));
 
-    g_return_val_if_fail (ET_TAG_AREA (self), NULL);
+	EtTagAreaPrivate *priv = et_tag_area_get_instance_private (self);
 
-    priv = et_tag_area_get_instance_private (self);
+	auto store_field = [FileTag](gchar* File_Tag::*field, const gchar* value)
+	{	gchar* v = FileTag->set_field(field, value);
+		if (v)
+			g_strstrip(v);
+	};
 
-    /* Save tag data and generate undo for tag. */
-    FileTag = et_file_tag_new ();
+	store_field(&File_Tag::title, gtk_entry_get_text(GTK_ENTRY(priv->title_entry)));
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->title_entry)));
-    FileTag->title = strip_value(buffer);
+	if (gtk_widget_get_visible(priv->version_entry))
+		store_field(&File_Tag::version, gtk_entry_get_text(GTK_ENTRY(priv->version_entry)));
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->version_entry)));
-    FileTag->version = strip_value(buffer);
+	if (gtk_widget_get_visible(priv->subtitle_entry))
+		store_field(&File_Tag::subtitle, gtk_entry_get_text(GTK_ENTRY(priv->subtitle_entry)));
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->subtitle_entry)));
-    FileTag->subtitle = strip_value(buffer);
+	store_field(&File_Tag::artist, gtk_entry_get_text(GTK_ENTRY(priv->artist_entry)));
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->artist_entry)));
-    FileTag->artist = strip_value(buffer);
+	if (gtk_widget_get_visible(priv->album_artist_entry))
+		store_field(&File_Tag::album_artist, gtk_entry_get_text(GTK_ENTRY(priv->album_artist_entry)));
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->album_artist_entry)));
-    FileTag->album_artist = strip_value(buffer);
+	store_field(&File_Tag::album, gtk_entry_get_text(GTK_ENTRY(priv->album_entry)));
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->album_entry)));
-    FileTag->album = strip_value(buffer);
+	if (gtk_widget_get_visible(priv->disc_subtitle_entry))
+		store_field(&File_Tag::disc_subtitle, gtk_entry_get_text(GTK_ENTRY(priv->disc_subtitle_entry)));
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->disc_subtitle_entry)));
-    FileTag->disc_subtitle = strip_value(buffer);
+	/* Disc number and total number of discs. */
+	if (gtk_widget_get_visible(priv->disc_number_entry))
+	{	g_free(FileTag->disc_number);
+		g_free(FileTag->disc_total);
 
-    /* Disc number and total number of discs. */
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->disc_number_entry)));
-    g_strstrip (buffer);
+		string disc = gtk_entry_get_text(GTK_ENTRY(priv->disc_number_entry));
+		auto separator = disc.find('/');
+		if (separator != string::npos && disc.length() > separator + 1)
+		{	FileTag->disc_total = et_disc_number_to_string(disc.c_str() + separator + 1);
+			disc.erase(separator);
+		} else
+			FileTag->disc_total = nullptr;
+		FileTag->disc_number = et_disc_number_to_string(disc.c_str());
+	}
 
-    if (*buffer)
-    {
-        gchar *separator;
+	store_field(&File_Tag::year, gtk_entry_get_text(GTK_ENTRY(priv->year_entry)));
 
-        separator = strchr (buffer, '/');
+	if (gtk_widget_get_visible(priv->release_year_entry))
+		store_field(&File_Tag::release_year, gtk_entry_get_text(GTK_ENTRY(priv->release_year_entry)));
 
-        if (separator && *(separator + 1))
-        {
-            /* Copy before the separator for the disc number, beyond the
-             * separator for the total number of discs. */
-            FileTag->disc_number = g_strndup (buffer, separator - buffer);
-            FileTag->disc_total = g_strdup (separator + 1);
-            g_free (buffer);
-        }
-        else
-        {
-            FileTag->disc_number = buffer;
-            FileTag->disc_total = NULL;
-        }
-    }
-    else
-    {
-        FileTag->disc_number = NULL;
-        FileTag->disc_total = NULL;
-        g_free (buffer);
-    }
+	/* Track */
+	g_free(FileTag->track);
+	FileTag->track = et_track_number_to_string(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->track_combo_entry)))));
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->year_entry)));
-    FileTag->year = strip_value(buffer);
+	/* Track Total */
+	if (gtk_widget_get_visible(priv->track_total_entry))
+	{	g_free(FileTag->track_total);
+		FileTag->track_total = et_track_number_to_string(gtk_entry_get_text(GTK_ENTRY(priv->track_total_entry)));
+	}
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->release_year_entry)));
-    FileTag->release_year = strip_value(buffer);
+	store_field(&File_Tag::genre, gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->genre_combo_entry)))));
 
-    /* Track */
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->track_combo_entry)))));
-    FileTag->track = et_track_number_to_string(buffer);
-    g_free (buffer);
+	store_field(&File_Tag::comment, gtk_entry_get_text(GTK_ENTRY(priv->comment_entry)));
 
-    /* Track Total */
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->track_total_entry)));
-    FileTag->track_total = et_track_number_to_string(buffer);
-    g_free (buffer);
+	if (gtk_widget_get_visible(priv->composer_entry))
+		store_field(&File_Tag::composer, gtk_entry_get_text(GTK_ENTRY(priv->composer_entry)));
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->genre_combo_entry)))));
-    FileTag->genre = strip_value(buffer);
+	if (gtk_widget_get_visible(priv->orig_artist_entry))
+		store_field(&File_Tag::orig_artist, gtk_entry_get_text(GTK_ENTRY(priv->orig_artist_entry)));
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->comment_entry)));
-    FileTag->comment = strip_value(buffer);
+	if (gtk_widget_get_visible(priv->orig_year_entry))
+		store_field(&File_Tag::orig_year, gtk_entry_get_text(GTK_ENTRY(priv->orig_year_entry)));
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->composer_entry)));
-    FileTag->composer = strip_value(buffer);
+	if (gtk_widget_get_visible(priv->copyright_entry))
+		store_field(&File_Tag::copyright, gtk_entry_get_text(GTK_ENTRY(priv->copyright_entry)));
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->orig_artist_entry)));
-    FileTag->orig_artist = strip_value(buffer);
+	if (gtk_widget_get_visible(priv->url_entry))
+		store_field(&File_Tag::url, gtk_entry_get_text(GTK_ENTRY(priv->url_entry)));
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->orig_year_entry)));
-    FileTag->orig_year = strip_value(buffer);
+	if (gtk_widget_get_visible(priv->encoded_by_entry))
+		store_field(&File_Tag::encoded_by, gtk_entry_get_text(GTK_ENTRY(priv->encoded_by_entry)));
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->copyright_entry)));
-    FileTag->copyright = strip_value(buffer);
+	/* Picture */
+	if (gtk_widget_get_visible(priv->images_grid))
+	{
+		EtPicture *pic, *prev_pic = NULL;
+		GtkTreeModel *model;
+		GtkTreeIter iter;
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->url_entry)));
-    FileTag->url = strip_value(buffer);
+		et_file_tag_set_picture (FileTag, NULL);
 
-    buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->encoded_by_entry)));
-    FileTag->encoded_by = strip_value(buffer);
+		model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->images_view));
 
-    /* Picture */
-    {
-        EtPicture *pic, *prev_pic = NULL;
-        GtkTreeModel *model;
-        GtkTreeIter iter;
+		if (gtk_tree_model_get_iter_first (model, &iter))
+		{
+			do
+			{
+				gtk_tree_model_get (model, &iter, PICTURE_COLUMN_DATA, &pic, -1);
 
-        et_file_tag_set_picture (FileTag, NULL);
+				if (!FileTag->picture)
+					FileTag->picture = pic;
+				else
+					prev_pic->next = pic;
 
-        model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->images_view));
-
-        if (gtk_tree_model_get_iter_first (model, &iter))
-        {
-            do
-            {
-                gtk_tree_model_get (model, &iter, PICTURE_COLUMN_DATA, &pic,
-                                    -1);
-
-                if (!FileTag->picture)
-                {
-                    FileTag->picture = pic;
-                }
-                else
-                {
-                    prev_pic->next = pic;
-                }
-
-                prev_pic = pic;
-            } while (gtk_tree_model_iter_next (model, &iter));
-        }
-    }
-
-    return FileTag;
+				prev_pic = pic;
+			} while (gtk_tree_model_iter_next (model, &iter));
+		}
+	}
 }
+
 static void et_tag_area_set_text_field(const gchar* value, GtkEntry* entry)
 {
   if (!et_str_empty(value))
