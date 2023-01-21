@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: easytag master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-01 12:31+0100\n"
+"POT-Creation-Date: 2023-01-21 17:30+0100\n"
 "PO-Revision-Date: 2020-08-30 23:45+0900\n"
 "Last-Translator: Seong-ho Cho <shcho@gnome.org>\n"
 "Language-Team: Korean <gnome-kr@googlegroups.com>\n"
@@ -76,7 +76,7 @@ msgid "Choose a directory to show in the browser"
 msgstr "브라우저에서 표시할 디렉터리를 선택하십시오"
 
 #: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3495
-#: ../src/tag_area.cc:1349
+#: ../src/tag_area.cc:1353
 msgid "_Open"
 msgstr "열기(_O)"
 
@@ -89,8 +89,8 @@ msgstr "탐색할 디렉터리를 선택하십시오"
 msgid "No files"
 msgstr "파일 없음"
 
-#: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
-#: ../data/preferences_dialog.ui.h:24 ../data/scan_dialog.ui.h:69
+#: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12 ../data/menus.ui.h:90
+#: ../data/preferences_dialog.ui.h:86 ../data/scan_dialog.ui.h:73
 #: ../data/search_dialog.ui.h:15
 msgid "Artist"
 msgstr "음악가"
@@ -103,127 +103,135 @@ msgstr "앨범 갯수"
 msgid "# Files"
 msgstr "파일 갯수"
 
-#: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
-#: ../data/preferences_dialog.ui.h:26 ../data/scan_dialog.ui.h:73
+#: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13 ../data/menus.ui.h:92
+#: ../data/preferences_dialog.ui.h:88 ../data/scan_dialog.ui.h:77
 #: ../data/search_dialog.ui.h:17
 msgid "Album"
 msgstr "앨범 제목"
 
-#: ../data/browser.ui.h:9 ../data/preferences_dialog.ui.h:16
-#: ../data/search_dialog.ui.h:11
+#: ../data/browser.ui.h:9 ../data/menus.ui.h:86 ../data/search_dialog.ui.h:11
 msgid "Path"
 msgstr "경로"
 
-#: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38
-#: ../data/playlist_dialog.ui.h:2 ../data/preferences_dialog.ui.h:17
-#: ../data/scan_dialog.ui.h:63 ../data/search_dialog.ui.h:12
+#: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38 ../data/menus.ui.h:87
+#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:65
+#: ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "파일 이름"
 
-#: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39
-#: ../data/preferences_dialog.ui.h:22 ../data/scan_dialog.ui.h:65
+#: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39 ../data/menus.ui.h:88
+#: ../data/preferences_dialog.ui.h:81 ../data/scan_dialog.ui.h:67
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "제목"
 
-#: ../data/browser.ui.h:12 ../data/preferences_dialog.ui.h:23
-#: ../data/scan_dialog.ui.h:67 ../data/search_dialog.ui.h:14
+#: ../data/browser.ui.h:12 ../data/menus.ui.h:89
+#: ../data/preferences_dialog.ui.h:17 ../data/scan_dialog.ui.h:71
+#: ../data/search_dialog.ui.h:14
 #, fuzzy
 msgid "Subtitle"
 msgstr "제목"
 
-#: ../data/browser.ui.h:13 ../data/preferences_dialog.ui.h:25
-#: ../data/scan_dialog.ui.h:71 ../data/search_dialog.ui.h:16
+#: ../data/browser.ui.h:13 ../data/preferences_dialog.ui.h:83
+#: ../data/scan_dialog.ui.h:69
+#, fuzzy
+msgid "Version"
+msgstr "버전:"
+
+#: ../data/browser.ui.h:14 ../data/menus.ui.h:91
+#: ../data/preferences_dialog.ui.h:18 ../data/scan_dialog.ui.h:75
+#: ../data/search_dialog.ui.h:16
 msgid "Album Artist"
 msgstr "앨범 음악가"
 
-#: ../data/browser.ui.h:14 ../data/preferences_dialog.ui.h:27
-#: ../data/scan_dialog.ui.h:75 ../data/search_dialog.ui.h:18
+#: ../data/browser.ui.h:15 ../data/menus.ui.h:93
+#: ../data/preferences_dialog.ui.h:19 ../data/scan_dialog.ui.h:79
+#: ../data/search_dialog.ui.h:18
 #, fuzzy
 msgid "Disc subtitle"
 msgstr "제목 기준 내림차순 정렬"
 
-#: ../data/browser.ui.h:15 ../data/cddb_dialog.ui.h:40
-#: ../data/preferences_dialog.ui.h:28 ../data/search_dialog.ui.h:20
+#: ../data/browser.ui.h:16 ../data/menus.ui.h:97
+#: ../data/preferences_dialog.ui.h:20
+msgid "Disc"
+msgstr "디스크"
+
+#: ../data/browser.ui.h:17 ../data/menus.ui.h:96 ../data/search_dialog.ui.h:21
+msgid "Track"
+msgstr "트랙"
+
+#: ../data/browser.ui.h:18 ../data/cddb_dialog.ui.h:40 ../data/menus.ui.h:94
+#: ../data/search_dialog.ui.h:20
 msgid "Year"
 msgstr "연도"
 
-#: ../data/browser.ui.h:16 ../data/preferences_dialog.ui.h:29
+#: ../data/browser.ui.h:19
 #, fuzzy
 msgid "Rel. year"
 msgstr "원작자"
 
-#: ../data/browser.ui.h:17 ../data/preferences_dialog.ui.h:31
-msgid "Disc"
-msgstr "디스크"
-
-#: ../data/browser.ui.h:18 ../data/preferences_dialog.ui.h:30
-#: ../data/search_dialog.ui.h:21
-msgid "Track"
-msgstr "트랙"
-
-#: ../data/browser.ui.h:19 ../data/cddb_dialog.ui.h:43
-#: ../data/preferences_dialog.ui.h:32 ../data/scan_dialog.ui.h:77
+#: ../data/browser.ui.h:20 ../data/cddb_dialog.ui.h:43 ../data/menus.ui.h:98
+#: ../data/preferences_dialog.ui.h:91 ../data/scan_dialog.ui.h:81
 #: ../data/search_dialog.ui.h:22
 msgid "Genre"
 msgstr "장르"
 
-#: ../data/browser.ui.h:20 ../data/preferences_dialog.ui.h:33
-#: ../data/scan_dialog.ui.h:79 ../data/search_dialog.ui.h:23
+#: ../data/browser.ui.h:21 ../data/menus.ui.h:99
+#: ../data/preferences_dialog.ui.h:93 ../data/scan_dialog.ui.h:83
+#: ../data/search_dialog.ui.h:23
 msgid "Comment"
 msgstr "설명"
 
-#: ../data/browser.ui.h:21 ../data/preferences_dialog.ui.h:34
-#: ../data/scan_dialog.ui.h:81 ../data/search_dialog.ui.h:24
-#: ../src/picture.c:213
+#: ../data/browser.ui.h:22 ../data/menus.ui.h:100
+#: ../data/preferences_dialog.ui.h:22 ../data/scan_dialog.ui.h:85
+#: ../data/search_dialog.ui.h:24 ../src/picture.c:213
 msgid "Composer"
 msgstr "작곡가"
 
-#: ../data/browser.ui.h:22 ../data/preferences_dialog.ui.h:35
-#: ../data/search_dialog.ui.h:25
+#: ../data/browser.ui.h:23 ../data/menus.ui.h:101
+#: ../data/preferences_dialog.ui.h:23 ../data/search_dialog.ui.h:25
 msgid "Original Artist"
 msgstr "원작자"
 
-#: ../data/browser.ui.h:23 ../data/preferences_dialog.ui.h:36
-#: ../data/search_dialog.ui.h:26
+#: ../data/browser.ui.h:24 ../data/search_dialog.ui.h:26
 #, fuzzy
 msgid "Orig. year"
 msgstr "원작자"
 
-#: ../data/browser.ui.h:24 ../data/preferences_dialog.ui.h:37
-#: ../data/scan_dialog.ui.h:85 ../data/search_dialog.ui.h:27
+#: ../data/browser.ui.h:25 ../data/menus.ui.h:103
+#: ../data/preferences_dialog.ui.h:25 ../data/scan_dialog.ui.h:89
+#: ../data/search_dialog.ui.h:27
 msgid "Copyright"
 msgstr "저작권자"
 
-#: ../data/browser.ui.h:25 ../data/preferences_dialog.ui.h:38
-#: ../data/scan_dialog.ui.h:87 ../data/search_dialog.ui.h:28
+#: ../data/browser.ui.h:26 ../data/menus.ui.h:104
+#: ../data/preferences_dialog.ui.h:26 ../data/scan_dialog.ui.h:91
+#: ../data/search_dialog.ui.h:28
 msgid "URL"
 msgstr "URL"
 
-#: ../data/browser.ui.h:26 ../data/preferences_dialog.ui.h:39
-#: ../data/scan_dialog.ui.h:89 ../data/search_dialog.ui.h:29
+#: ../data/browser.ui.h:27 ../data/menus.ui.h:105
+#: ../data/preferences_dialog.ui.h:27 ../data/scan_dialog.ui.h:93
+#: ../data/search_dialog.ui.h:29
 msgid "Encoded By"
 msgstr "인코더"
 
-#: ../data/browser.ui.h:27 ../data/preferences_dialog.ui.h:18
-#: ../data/search_dialog.ui.h:30
+#: ../data/browser.ui.h:28 ../data/menus.ui.h:106 ../data/search_dialog.ui.h:30
 #, fuzzy
 msgid "File size"
 msgstr "파일"
 
-#: ../data/browser.ui.h:28 ../data/cddb_dialog.ui.h:33
-#: ../data/preferences_dialog.ui.h:19 ../data/search_dialog.ui.h:31
+#: ../data/browser.ui.h:29 ../data/cddb_dialog.ui.h:33 ../data/menus.ui.h:107
+#: ../data/search_dialog.ui.h:31
 msgid "Duration"
 msgstr "재생 시간"
 
-#: ../data/browser.ui.h:29 ../data/preferences_dialog.ui.h:20
-#: ../data/search_dialog.ui.h:32
+#: ../data/browser.ui.h:30 ../data/menus.ui.h:108 ../data/search_dialog.ui.h:32
 #, fuzzy
 msgid "Bit rate"
 msgstr "비트전송율:"
 
-#: ../data/browser.ui.h:30 ../data/preferences_dialog.ui.h:21
-#: ../data/search_dialog.ui.h:33
+#: ../data/browser.ui.h:31 ../data/menus.ui.h:109 ../data/search_dialog.ui.h:33
 #, fuzzy
 msgid "Samplerate"
 msgstr "샘플 주파수:"
@@ -243,11 +251,11 @@ msgid ""
 msgstr "실행할 프로그램을 입력하십시오. 현재 디렉터리를 매개 변수로 받습니다."
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
-#: ../src/application_window.cc:376 ../src/application_window.cc:390
-#: ../src/application_window.cc:3019 ../src/browser.cc:937
-#: ../src/browser.cc:3494 ../src/cddb_dialog.cc:2124 ../src/easytag.c:464
-#: ../src/easytag.c:471 ../src/easytag.c:599 ../src/tag_area.cc:1347
-#: ../src/tag_area.cc:1672
+#: ../src/application_window.cc:380 ../src/application_window.cc:394
+#: ../src/application_window.cc:3032 ../src/browser.cc:937
+#: ../src/browser.cc:3494 ../src/cddb_dialog.cc:2125 ../src/easytag.c:464
+#: ../src/easytag.c:471 ../src/easytag.c:599 ../src/tag_area.cc:1351
+#: ../src/tag_area.cc:1676
 msgid "_Cancel"
 msgstr "취소(_C)"
 
@@ -265,7 +273,7 @@ msgid ""
 msgstr "실행할 프로그램을 입력하십시오. 현재 파일 이름을 매개 변수로 받습니다."
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:109 ../src/easytag.c:565
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:138 ../src/easytag.c:565
 msgid "Rename Directory"
 msgstr "디렉터리 이름 바꾸기"
 
@@ -278,7 +286,7 @@ msgstr "일반 이름:"
 msgid "Use mask:"
 msgstr "마스크 사용:"
 
-#: ../data/browser_dialogs.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:170
+#: ../data/browser_dialogs.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:172
 msgid "Whether to use a mask when renaming directories"
 msgstr "디렉터리 이름을 바꿀 때 마스크 사용 여부"
 
@@ -344,7 +352,7 @@ msgstr "검색 필드"
 msgid "Track Name"
 msgstr "트랙 이름"
 
-#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:122
+#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:117
 #: ../src/picture.c:191
 msgid "Other"
 msgstr "기타"
@@ -458,19 +466,19 @@ msgstr "CDDB 결과에 대해 현재 설정으로 태그 탐색기를 실행할�
 msgid "Match lines with the Levenshtein algorithm"
 msgstr "레번슈타인 알고리즘으로 줄 비교"
 
-#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:174
+#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:169
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:24
 msgid "Whether to use the DLM algorithm to match CDDB results to files"
 msgstr "파일과 CDDB 결과를 비교할 때 DLM 알고리즘을 적용할지 여부"
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
-#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:191
-#: ../data/scan_dialog.ui.h:126
+#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:186
+#: ../data/scan_dialog.ui.h:130
 msgid "_Close"
 msgstr "닫기(_C)"
 
 #: ../data/cddb_dialog.ui.h:49 ../data/load_files_dialog.ui.h:17
-#: ../src/cddb_dialog.cc:2125
+#: ../src/cddb_dialog.cc:2126
 msgid "_Apply"
 msgstr "적용(_A)"
 
@@ -479,7 +487,7 @@ msgid "Load the selected lines or all lines (if no lines are selected)"
 msgstr "(선택한 줄이 없으면) 선택한 줄 또는 모든 줄을 불러옵니다"
 
 #. Default values are MPEG data.
-#: ../data/file_area.ui.h:1 ../src/application_window.cc:2189
+#: ../data/file_area.ui.h:1 ../src/application_window.cc:2206
 #: ../src/file_area.c:155
 msgid "File"
 msgstr "파일"
@@ -532,7 +540,7 @@ msgstr "설명"
 msgid "_Accept"
 msgstr "수락(_A)"
 
-#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:40
+#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:28
 msgid "Log"
 msgstr "로그"
 
@@ -591,7 +599,7 @@ msgid "Selected line:"
 msgstr "선택한 줄:"
 
 #: ../data/load_files_dialog.ui.h:15
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:119
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:121
 msgid ""
 "Whether to run the currently selected scanner on filenames loaded from a "
 "text file"
@@ -694,7 +702,7 @@ msgstr "검색기 모드"
 msgid "Rename Files and Directories"
 msgstr "파일 및 디렉터리 이름 바꾸기"
 
-#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:122
+#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:126
 msgid "Process Fields"
 msgstr "처리 필드"
 
@@ -711,30 +719,32 @@ msgid "Sort List by Tag"
 msgstr "태그 기준 목록 정렬"
 
 #: ../data/menus.ui.h:30
-msgid "Ascending by track number"
-msgstr "트랙 번호 기준 오름차순 정렬"
-
-#: ../data/menus.ui.h:31
-msgid "Descending by track number"
-msgstr "트랙 번호 기준 내림차순 정렬"
-
-#: ../data/menus.ui.h:32
 msgid "Ascending by title"
 msgstr "제목 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:33
+#: ../data/menus.ui.h:31
 msgid "Descending by title"
 msgstr "제목 기준 내림차순 정렬"
 
-#: ../data/menus.ui.h:34
+#: ../data/menus.ui.h:32
 #, fuzzy
 msgid "Ascending by subtitle"
 msgstr "제목 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:35
+#: ../data/menus.ui.h:33
 #, fuzzy
 msgid "Descending by subtitle"
 msgstr "제목 기준 내림차순 정렬"
+
+#: ../data/menus.ui.h:34
+#, fuzzy
+msgid "Ascending by version"
+msgstr "재생 시간 기준 오름차순 정렬"
+
+#: ../data/menus.ui.h:35
+#, fuzzy
+msgid "Descending by version"
+msgstr "재생 시간 기준 내림차순 정렬"
 
 #: ../data/menus.ui.h:36
 msgid "Ascending by artist"
@@ -771,288 +781,320 @@ msgid "Descending by disc subtitle"
 msgstr "제목 기준 내림차순 정렬"
 
 #: ../data/menus.ui.h:44
+msgid "Ascending by track number"
+msgstr "트랙 번호 기준 오름차순 정렬"
+
+#: ../data/menus.ui.h:45
+msgid "Descending by track number"
+msgstr "트랙 번호 기준 내림차순 정렬"
+
+#: ../data/menus.ui.h:46
+#, fuzzy
+msgid "Ascending by disc number"
+msgstr "트랙 번호 기준 오름차순 정렬"
+
+#: ../data/menus.ui.h:47
+#, fuzzy
+msgid "Descending by disc number"
+msgstr "트랙 번호 기준 내림차순 정렬"
+
+#: ../data/menus.ui.h:48
 msgid "Ascending by year"
 msgstr "연도별 오름차순 정렬"
 
-#: ../data/menus.ui.h:45
+#: ../data/menus.ui.h:49
 msgid "Descending by year"
 msgstr "연도별 내림차순 정렬"
 
-#: ../data/menus.ui.h:46
+#: ../data/menus.ui.h:50
 #, fuzzy
 msgid "Ascending by release year"
 msgstr "연도별 오름차순 정렬"
 
-#: ../data/menus.ui.h:47
+#: ../data/menus.ui.h:51
 #, fuzzy
 msgid "Descending by release year"
 msgstr "연도별 내림차순 정렬"
 
-#: ../data/menus.ui.h:48
+#: ../data/menus.ui.h:52
 msgid "Ascending by genre"
 msgstr "장르별 오름차순 정렬"
 
-#: ../data/menus.ui.h:49
+#: ../data/menus.ui.h:53
 msgid "Descending by genre"
 msgstr "장르별 내림차순 정렬"
 
-#: ../data/menus.ui.h:50
+#: ../data/menus.ui.h:54
 msgid "Ascending by comment"
 msgstr "설명 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:51
+#: ../data/menus.ui.h:55
 msgid "Descending by comment"
 msgstr "설명 기준 내림차순 정렬"
 
-#: ../data/menus.ui.h:52
+#: ../data/menus.ui.h:56
 msgid "Ascending by composer"
 msgstr "작곡가 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:53
+#: ../data/menus.ui.h:57
 msgid "Descending by composer"
 msgstr "작곡가 기준 내림차순 정렬"
 
-#: ../data/menus.ui.h:54
+#: ../data/menus.ui.h:58
 msgid "Ascending by original artist"
 msgstr "원작자 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:55
+#: ../data/menus.ui.h:59
 msgid "Descending by original artist"
 msgstr "원작자 기준 내림차순 정렬"
 
-#: ../data/menus.ui.h:56
+#: ../data/menus.ui.h:60
 #, fuzzy
 msgid "Ascending by original year"
 msgstr "원작자 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:57
+#: ../data/menus.ui.h:61
 #, fuzzy
 msgid "Descending by original year"
 msgstr "원작자 기준 내림차순 정렬"
 
-#: ../data/menus.ui.h:58
+#: ../data/menus.ui.h:62
 msgid "Ascending by copyright"
 msgstr "저작권자 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:59
+#: ../data/menus.ui.h:63
 msgid "Descending by copyright"
 msgstr "저작권자 기준 내림차순 정렬"
 
-#: ../data/menus.ui.h:60
+#: ../data/menus.ui.h:64
 msgid "Ascending by URL"
 msgstr "URL 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:61
+#: ../data/menus.ui.h:65
 msgid "Descending by URL"
 msgstr "URL 기준 내림차순 정렬"
 
-#: ../data/menus.ui.h:62
+#: ../data/menus.ui.h:66
 msgid "Ascending by encoder name"
 msgstr "인코더 이름 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:63
+#: ../data/menus.ui.h:67
 msgid "Descending by encoder name"
 msgstr "인코더 이름 기준 내림차순 정렬"
 
-#: ../data/menus.ui.h:64
+#: ../data/menus.ui.h:68
 msgid "Sort List by Property"
 msgstr "속성 기준 목록 정렬"
 
-#: ../data/menus.ui.h:65
+#: ../data/menus.ui.h:69
 #, fuzzy
 msgid "Ascending by file path"
 msgstr "파일 형식 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:66
+#: ../data/menus.ui.h:70
 #, fuzzy
 msgid "Descending by file path"
 msgstr "파일 형식 기준 내림차순 정렬"
 
-#: ../data/menus.ui.h:67
+#: ../data/menus.ui.h:71
 msgid "Ascending by filename"
 msgstr "파일 이름 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:68
+#: ../data/menus.ui.h:72
 msgid "Descending by filename"
 msgstr "파일 이름 기준 내림차순 정렬"
 
-#: ../data/menus.ui.h:69
+#: ../data/menus.ui.h:73
 msgid "Ascending by creation date"
 msgstr "만든 날짜 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:70
+#: ../data/menus.ui.h:74
 msgid "Descending by creation date"
 msgstr "만든 날짜 기준 내림차순 정렬"
 
-#: ../data/menus.ui.h:71
+#: ../data/menus.ui.h:75
 msgid "Ascending by file type"
 msgstr "파일 형식 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:72
+#: ../data/menus.ui.h:76
 msgid "Descending by file type"
 msgstr "파일 형식 기준 내림차순 정렬"
 
-#: ../data/menus.ui.h:73
+#: ../data/menus.ui.h:77
 msgid "Ascending by file size"
 msgstr "파일 크기 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:74
+#: ../data/menus.ui.h:78
 msgid "Descending by file size"
 msgstr "파일 크기 기준 내림차순 정렬"
 
-#: ../data/menus.ui.h:75
+#: ../data/menus.ui.h:79
 msgid "Ascending by duration"
 msgstr "재생 시간 기준 오름차순 정렬"
 
-#: ../data/menus.ui.h:76
+#: ../data/menus.ui.h:80
 msgid "Descending by duration"
 msgstr "재생 시간 기준 내림차순 정렬"
 
-#: ../data/menus.ui.h:77
+#: ../data/menus.ui.h:81
 msgid "Ascending by bit rate"
 msgstr "비트 전송율순 오름차순 정렬"
 
-#: ../data/menus.ui.h:78
+#: ../data/menus.ui.h:82
 msgid "Descending by bit rate"
 msgstr "비트 전송율순 내림차순 정렬"
 
-#: ../data/menus.ui.h:79
+#: ../data/menus.ui.h:83
 msgid "Ascending by sample rate"
 msgstr "샘플 주파수순 오름차순 정렬"
 
-#: ../data/menus.ui.h:80
+#: ../data/menus.ui.h:84
 msgid "Descending by sample rate"
 msgstr "샘플 주파수순 내림차순 정렬"
 
-#: ../data/menus.ui.h:81
+#: ../data/menus.ui.h:85
+msgid "Visible columns"
+msgstr ""
+
+#: ../data/menus.ui.h:95 ../data/preferences_dialog.ui.h:21
+#, fuzzy
+msgid "Release year"
+msgstr "%o: 원작자"
+
+#: ../data/menus.ui.h:102 ../data/preferences_dialog.ui.h:24
+#, fuzzy
+msgid "Original year"
+msgstr "원작자"
+
+#: ../data/menus.ui.h:110
 msgid "Collapse Tree"
 msgstr "트리 말아올리기"
 
-#: ../data/menus.ui.h:82
+#: ../data/menus.ui.h:111
 msgid "Reload Tree"
 msgstr "트리 다시 불러오기"
 
-#: ../data/menus.ui.h:83
+#: ../data/menus.ui.h:112
 msgid "Reload Directory"
 msgstr "디렉터리 다시 불러오기"
 
-#: ../data/menus.ui.h:84
+#: ../data/menus.ui.h:113
 msgid "Show Hidden Directories"
 msgstr "숨긴 디렉터리 표시"
 
-#: ../data/menus.ui.h:85
+#: ../data/menus.ui.h:114
 msgid "_Browser"
 msgstr "탐색기(_B)"
 
-#: ../data/menus.ui.h:86
+#: ../data/menus.ui.h:115
 msgid "Set _Current Path as Default"
 msgstr "현재 경로를 기본으로 설정(_C)"
 
-#: ../data/menus.ui.h:87
+#: ../data/menus.ui.h:116
 msgid "Rename Directory…"
 msgstr "디렉터리 이름 바꾸기…"
 
-#: ../data/menus.ui.h:88
+#: ../data/menus.ui.h:117
 msgid "Browse Directory With…"
 msgstr "다음 프로그램으로 디렉터리 탐색…"
 
-#: ../data/menus.ui.h:89
+#: ../data/menus.ui.h:118
 msgid "Browse _Subdirectories"
 msgstr "하위 디렉터리 탐색(_S)"
 
-#: ../data/menus.ui.h:90
+#: ../data/menus.ui.h:119
 msgid "_Miscellaneous"
 msgstr "기타(_M)"
 
-#: ../data/menus.ui.h:91
+#: ../data/menus.ui.h:120
 msgid "CDD_B Search…"
 msgstr "CDDB 검색(_B)…"
 
-#: ../data/menus.ui.h:92
+#: ../data/menus.ui.h:121
 msgid "Load Filenames From a Text File…"
 msgstr "텍스트 파일에서 파일 이름 불러오기…"
 
-#: ../data/menus.ui.h:93 ../data/toolbar.ui.h:29
+#: ../data/menus.ui.h:122 ../data/toolbar.ui.h:29
 msgid "Generate Playlist…"
 msgstr "재생 목록 만들기…"
 
-#: ../data/menus.ui.h:94
+#: ../data/menus.ui.h:123
 msgid "_Go"
 msgstr "이동(_G)"
 
-#: ../data/menus.ui.h:95
+#: ../data/menus.ui.h:124
 msgid "_Home Directory"
 msgstr "내 폴더(_H)"
 
-#: ../data/menus.ui.h:96
+#: ../data/menus.ui.h:125
 msgid "Desktop Directory"
 msgstr "데스크톱 디렉터리"
 
-#: ../data/menus.ui.h:97
+#: ../data/menus.ui.h:126
 msgid "Documents Directory"
 msgstr "문서 디렉터리"
 
-#: ../data/menus.ui.h:98
+#: ../data/menus.ui.h:127
 msgid "Downloads Directory"
 msgstr "다운로드 디렉터리"
 
-#: ../data/menus.ui.h:99
+#: ../data/menus.ui.h:128
 msgid "Music Directory"
 msgstr "음악 디렉터리"
 
-#: ../data/menus.ui.h:100
+#: ../data/menus.ui.h:129
 msgid "_Parent Directory"
 msgstr "상위 디렉터리(_P)"
 
-#: ../data/menus.ui.h:101
+#: ../data/menus.ui.h:130
 msgid "_Default Directory"
 msgstr "기본 디렉터리(_D)"
 
-#: ../data/menus.ui.h:102 ../data/toolbar.ui.h:1
+#: ../data/menus.ui.h:131 ../data/toolbar.ui.h:1
 msgid "_First File"
 msgstr "처음 파일(_F)"
 
-#: ../data/menus.ui.h:103
+#: ../data/menus.ui.h:132
 msgid "Previous File"
 msgstr "이전 파일"
 
-#: ../data/menus.ui.h:104 ../data/toolbar.ui.h:5
+#: ../data/menus.ui.h:133 ../data/toolbar.ui.h:5
 msgid "_Next File"
 msgstr "다음 파일(_N)"
 
-#: ../data/menus.ui.h:105 ../data/toolbar.ui.h:7
+#: ../data/menus.ui.h:134 ../data/toolbar.ui.h:7
 msgid "_Last File"
 msgstr "마지막 파일(_L)"
 
-#: ../data/menus.ui.h:106
+#: ../data/menus.ui.h:135
 msgid "Home Directory"
 msgstr "내 폴더"
 
-#: ../data/menus.ui.h:107
+#: ../data/menus.ui.h:136
 msgid "Default Directory"
 msgstr "기본 디렉터리"
 
-#: ../data/menus.ui.h:108
+#: ../data/menus.ui.h:137
 msgid "Set Current Path as Default"
 msgstr "현재 경로를 기본으로 설정"
 
-#: ../data/menus.ui.h:110
+#: ../data/menus.ui.h:139
 msgid "Browse Subdirectories"
 msgstr "하위 디렉터리 탐색"
 
-#: ../data/menus.ui.h:111
+#: ../data/menus.ui.h:140
 msgid "Invert Selection"
 msgstr "선택 반전"
 
-#: ../data/menus.ui.h:112
+#: ../data/menus.ui.h:141
 msgid "CDDB Search Files…"
 msgstr "CDDB 파일 검색…"
 
-#: ../data/menus.ui.h:113
+#: ../data/menus.ui.h:142
 msgid "Find…"
 msgstr "찾기…"
 
-#: ../data/menus.ui.h:114
+#: ../data/menus.ui.h:143
 msgid "Clear Log"
 msgstr "로그 지우기"
 
@@ -1072,7 +1114,7 @@ msgstr "옵션"
 msgid "Include only the selected files"
 msgstr "선택한 파일만 포함"
 
-#: ../data/playlist_dialog.ui.h:7 ../data/org.gnome.EasyTAG.gschema.xml.h:146
+#: ../data/playlist_dialog.ui.h:7 ../data/org.gnome.EasyTAG.gschema.xml.h:148
 msgid ""
 "Whether to use only the selected files or all files when creating playlists"
 msgstr "재생 목록을 만들 때 선택한 파일 또는 모든 파일을 활용할지 여부"
@@ -1089,7 +1131,7 @@ msgstr "재생 목록에 파일에 대한 상대 경로 사용"
 msgid "Create playlist in the parent directory"
 msgstr "상위 디렉터리에 재생 목록 만들기"
 
-#: ../data/playlist_dialog.ui.h:11 ../data/org.gnome.EasyTAG.gschema.xml.h:150
+#: ../data/playlist_dialog.ui.h:11 ../data/org.gnome.EasyTAG.gschema.xml.h:152
 msgid "Whether to create the playlist in the parent directory"
 msgstr "상위 디렉터리에 재생 목록 만들기 여부"
 
@@ -1097,7 +1139,7 @@ msgstr "상위 디렉터리에 재생 목록 만들기 여부"
 msgid "Use DOS directory separator"
 msgstr "DOS 디렉터리 구분 문자 사용"
 
-#: ../data/playlist_dialog.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:152
+#: ../data/playlist_dialog.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:154
 msgid ""
 "Whether to use backslash as directory separator when generating playlists"
 msgstr "재생 목록을 만들 때 디렉터리 구분 문자를 백슬래시로 사용할지 여부"
@@ -1118,10 +1160,10 @@ msgstr "파일 이름으로 정보 기록"
 msgid "Write information using:"
 msgstr "다음으로 정보 기록:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.cc:3020
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.cc:3033
 #: ../src/browser.cc:938 ../src/easytag.c:234 ../src/easytag.c:465
 #: ../src/easytag.c:472 ../src/easytag.c:600 ../src/easytag.c:607
-#: ../src/tag_area.cc:1674
+#: ../src/tag_area.cc:1678
 msgid "_Save"
 msgstr "저장(_S)"
 
@@ -1196,71 +1238,75 @@ msgid "Whether file sorting is case-sensitive"
 msgstr "대소문자별로 파일을 정렬할지 여부"
 
 #: ../data/preferences_dialog.ui.h:15
-msgid "Visible columns"
+msgid "Hide fields"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:41
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:49
+#: ../data/preferences_dialog.ui.h:16
+msgid "Hide these fields in the tag area."
+msgstr ""
+
+#: ../data/preferences_dialog.ui.h:29
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:51
 msgid "Show the log"
 msgstr "로그를 표시합니다"
 
-#: ../data/preferences_dialog.ui.h:42
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:50
+#: ../data/preferences_dialog.ui.h:30
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:52
 msgid "Whether to show the log in the main window"
 msgstr "메인 창 로그 표시 여부"
 
-#: ../data/preferences_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:31
 msgid "General"
 msgstr "일반 설정"
 
-#: ../data/preferences_dialog.ui.h:44
+#: ../data/preferences_dialog.ui.h:32
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:39
 msgid "Show audio file header summary"
 msgstr "오디오 파일 헤더 요약 정보 표시"
 
-#: ../data/preferences_dialog.ui.h:45
+#: ../data/preferences_dialog.ui.h:33
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:40
 msgid ""
 "Whether to show header information, such as bit rate and duration, for audio "
 "files"
 msgstr "오디오 파일의 비트 전송율, 길이와 같은 헤더 정보를 표시할지 여부"
 
-#: ../data/preferences_dialog.ui.h:46
+#: ../data/preferences_dialog.ui.h:34
 msgid "Display changed files in list using:"
 msgstr "다음 형태로 바뀐 파일의 목록 표시:"
 
-#: ../data/preferences_dialog.ui.h:47
+#: ../data/preferences_dialog.ui.h:35
 msgid "Red color"
 msgstr "붉은 색상"
 
-#: ../data/preferences_dialog.ui.h:48
+#: ../data/preferences_dialog.ui.h:36
 msgid "Bold style"
 msgstr "굵게"
 
-#: ../data/preferences_dialog.ui.h:49
+#: ../data/preferences_dialog.ui.h:37
 msgid "Interface"
 msgstr "인터페이스"
 
-#: ../data/preferences_dialog.ui.h:50
+#: ../data/preferences_dialog.ui.h:38
 msgid "File Settings"
 msgstr "파일 설정"
 
-#: ../data/preferences_dialog.ui.h:51
+#: ../data/preferences_dialog.ui.h:39
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:35
 msgid "Preserve modification time when writing files"
 msgstr "파일 기록시 수정시간 보존"
 
-#: ../data/preferences_dialog.ui.h:52
+#: ../data/preferences_dialog.ui.h:40
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:36
 msgid "Whether to preserve the existing modification time when editing files"
 msgstr "파일을 편집할 때 기존 수정 시간을 보존할지 여부"
 
-#: ../data/preferences_dialog.ui.h:53
+#: ../data/preferences_dialog.ui.h:41
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:37
 msgid "Update parent directory modification time when writing files"
 msgstr "파일 기록시 상위 디렉터리 수정 시간 업데이트"
 
-#: ../data/preferences_dialog.ui.h:54
+#: ../data/preferences_dialog.ui.h:42
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:38
 msgid ""
 "Whether to update the modification time on the parent directory when editing "
@@ -1268,16 +1314,16 @@ msgid ""
 msgstr "파일을 편집할 때 상위 디렉터리의 수정 시간을 업데이트할지 여부"
 
 #. Translators: a section header in the Files tab of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:56
+#: ../data/preferences_dialog.ui.h:44
 msgid "Filenames"
 msgstr "파일 이름"
 
-#: ../data/preferences_dialog.ui.h:57
+#: ../data/preferences_dialog.ui.h:45
 #, fuzzy
 msgid "Replace illegal characters when renaming:"
 msgstr "이름을 바꿀 때 잘못된 문자 바꾸기"
 
-#: ../data/preferences_dialog.ui.h:58
+#: ../data/preferences_dialog.ui.h:46
 #, fuzzy
 msgid ""
 "Convert characters which cannot be represented in filenames on some "
@@ -1286,68 +1332,68 @@ msgstr ""
 "FAT32/16 및 Joliet 파일 시스템의 파일 이름에서 나타나지 않는 문자(‘\\’, ‘:’, "
 "‘;’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’) 변환"
 
-#: ../data/preferences_dialog.ui.h:59
+#: ../data/preferences_dialog.ui.h:47
 msgid "by ASCII characters"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:48
 msgid "Use the ASCII characters (‘-’, ‘+’, ‘_’, ‘'’, ‘(’, ‘)’) as replacement."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:49
 msgid "by Unicode characters"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:50
 msgid ""
 "Use similar Unicode characters (‘&#8726;’, ‘&#8725;’, ‘&#8758;’, ‘&#8727;’, "
 "‘&#8253;’, ‘&#8221;’, ‘&#8826;’, ‘&#8827;’, ‘&#8739;’) as replacement."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:63
+#: ../data/preferences_dialog.ui.h:51
 #, fuzzy
 msgid "No change"
 msgstr "바꾸지 않음"
 
-#: ../data/preferences_dialog.ui.h:64
+#: ../data/preferences_dialog.ui.h:52
 msgid "You must manually ensure valid file characters."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:65
+#: ../data/preferences_dialog.ui.h:53
 msgid "Convert filename extension to:"
 msgstr "파일 이름 확장자 변환 형식:"
 
-#: ../data/preferences_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:54
 #, fuzzy
 msgid "Lower case"
 msgstr "소문자"
 
-#: ../data/preferences_dialog.ui.h:67
+#: ../data/preferences_dialog.ui.h:55
 msgid "For example, the extension will be converted to ‘.mp3’"
 msgstr "확장자를 '.mp3'와 같은 식으로 바꿉니다"
 
-#: ../data/preferences_dialog.ui.h:68
+#: ../data/preferences_dialog.ui.h:56
 #, fuzzy
 msgid "Upper case"
 msgstr "대문자"
 
-#: ../data/preferences_dialog.ui.h:69
+#: ../data/preferences_dialog.ui.h:57
 msgid "For example, the extension will be converted to ‘.MP3’"
 msgstr "확장자를 '.MP3'와 같은 식으로 바꿉니다"
 
-#: ../data/preferences_dialog.ui.h:70
+#: ../data/preferences_dialog.ui.h:58
 msgid "The extension will not be modified"
 msgstr "확장자를 변환하지 않습니다"
 
-#: ../data/preferences_dialog.ui.h:71
+#: ../data/preferences_dialog.ui.h:59
 msgid "Filename Encoding"
 msgstr "파일 이름 인코딩"
 
-#: ../data/preferences_dialog.ui.h:72
+#: ../data/preferences_dialog.ui.h:60
 msgid "Try another character encoding"
 msgstr "다른 문자 인코딩 시도"
 
-#: ../data/preferences_dialog.ui.h:73
+#: ../data/preferences_dialog.ui.h:61
 msgid ""
 "Try to use the encoding associated with your locale and if this fails, try "
 "the ISO-8859-1 character encoding"
@@ -1355,94 +1401,94 @@ msgstr ""
 "사용 중인 로캘과 관련된 인코딩을 사용하며, 실패했을 경우 ISO-8859-1 문자 인코"
 "딩으로 시도"
 
-#: ../data/preferences_dialog.ui.h:74
+#: ../data/preferences_dialog.ui.h:62
 msgid "Transliterate characters into the system character encoding"
 msgstr "문자를 시스템 문자 인코딩에서 지원하는 문자로 바꾸기"
 
-#: ../data/preferences_dialog.ui.h:75
+#: ../data/preferences_dialog.ui.h:63
 msgid ""
 "Replace unsupported characters with a similar character from the target "
 "character encoding"
 msgstr "대상 문자 인코딩 과정에서 유사 문자로 지원하지 않는 문자를 바꿈"
 
-#: ../data/preferences_dialog.ui.h:76
+#: ../data/preferences_dialog.ui.h:64
 msgid ""
 "Use the system character encoding and silently discard unsupported characters"
 msgstr "시스템 문자 인코딩을 사용하고 지원하지 않는 문자는 조용히 무시"
 
-#: ../data/preferences_dialog.ui.h:77
+#: ../data/preferences_dialog.ui.h:65
 msgid ""
 "Discard characters which cannot be represented in the target character "
 "encoding"
 msgstr "이 옵션으로 대상 문자 인코딩으로 표현할 수 없는 문자 무시"
 
-#: ../data/preferences_dialog.ui.h:78
+#: ../data/preferences_dialog.ui.h:66
 msgid "Files"
 msgstr "파일"
 
-#: ../data/preferences_dialog.ui.h:79
+#: ../data/preferences_dialog.ui.h:67
 msgid "Automatically complete date field"
 msgstr "날짜 항목을 자동으로 완성"
 
-#: ../data/preferences_dialog.ui.h:80
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:84
+#: ../data/preferences_dialog.ui.h:68
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:86
 msgid "Whether to automatically complete the date tag"
 msgstr "날짜 항목을 자동으로 채울지 여부"
 
-#: ../data/preferences_dialog.ui.h:81
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:89
+#: ../data/preferences_dialog.ui.h:69
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:91
 msgid "Automatically select the type of the image based on its filename"
 msgstr "파일 이름에 따라 그림 형식을 자동으로 선택"
 
-#: ../data/preferences_dialog.ui.h:82
+#: ../data/preferences_dialog.ui.h:70
 msgid ""
 "Whether to, when adding cover art, automatically select a type for an image "
 "based on its filename"
 msgstr "표지를 추가할 때 파일 이름에 따라 그림 형식을 자동으로 선택할지 여부"
 
-#: ../data/preferences_dialog.ui.h:83
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:95
+#: ../data/preferences_dialog.ui.h:71
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:97
 msgid "Preserve the tag field focus"
 msgstr "태그 입력칸 포커스 유지"
 
-#: ../data/preferences_dialog.ui.h:84
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:96
+#: ../data/preferences_dialog.ui.h:72
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:98
 msgid "Whether to preserve focus on the current tag field when switching file"
 msgstr "파일을 전환할 때 현재 태그 입력창 포커스를 유지할지 여부"
 
-#: ../data/preferences_dialog.ui.h:85
+#: ../data/preferences_dialog.ui.h:73
 msgid "Pad the number of digits in the disc field to:"
 msgstr "디스크 필드에 최대 자릿수만큼 붙일 문자:"
 
-#: ../data/preferences_dialog.ui.h:86
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:86
+#: ../data/preferences_dialog.ui.h:74
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:88
 msgid "Whether the disc number tag field should be padded with leading zeroes"
 msgstr "디스크 번호 태그 필드에 0을 붙일 지 여부"
 
-#: ../data/preferences_dialog.ui.h:87
+#: ../data/preferences_dialog.ui.h:75
 msgid "Pad the number of digits in the track field to:"
 msgstr "트랙 필드에 최대 자릿수만큼 붙일 문자:"
 
-#: ../data/preferences_dialog.ui.h:88
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:92
+#: ../data/preferences_dialog.ui.h:76
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:94
 msgid "Whether the track number tag field should be padded with leading zeroes"
 msgstr "트랙 번호 태그 필드에 0을 붙일 지 여부"
 
-#: ../data/preferences_dialog.ui.h:89
+#: ../data/preferences_dialog.ui.h:77
 msgid "Splitting"
 msgstr "분할"
 
-#: ../data/preferences_dialog.ui.h:90
+#: ../data/preferences_dialog.ui.h:78
 msgid "Delimiter for split"
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:91
+#: ../data/preferences_dialog.ui.h:79
 msgid ""
 "When writing the text is spilt at this delimiter. When reading it is joined "
 "with this delimier."
 msgstr ""
 
-#: ../data/preferences_dialog.ui.h:92
+#: ../data/preferences_dialog.ui.h:80
 #, fuzzy
 msgid ""
 "For Vorbis tags, selected fields will be split and saved as separate tags"
@@ -1450,119 +1496,124 @@ msgstr ""
 "Vorbis 태그에 대해 선택한 필드는 대시 문자로 구분하며 구분된 태그 이름으로 저"
 "장합니다."
 
-#: ../data/preferences_dialog.ui.h:93
+#: ../data/preferences_dialog.ui.h:82
 #, fuzzy
 msgid "Whether to split title fields in Ogg comments"
 msgstr "Ogg 주석에서 “ - “ 구분 문자를 중심으로 제목 필드를 나눌 지 여부"
 
-#: ../data/preferences_dialog.ui.h:94
+#: ../data/preferences_dialog.ui.h:84
+#, fuzzy
+msgid "Whether to split version fields in Ogg comments"
+msgstr "Ogg 주석에서 “ - “ 구분 문자를 중심으로 장르 필드를 나눌 지 여부"
+
+#: ../data/preferences_dialog.ui.h:85
 #, fuzzy
 msgid "Whether to split subtitle fields in Ogg comments"
 msgstr "Ogg 주석에서 “ - “ 구분 문자를 중심으로 제목 필드를 나눌 지 여부"
 
-#: ../data/preferences_dialog.ui.h:95
+#: ../data/preferences_dialog.ui.h:87
 #, fuzzy
 msgid "Whether to split artist fields in Ogg comments"
 msgstr "Ogg 주석에서 “ - “ 구분 문자를 중심으로 음악가 필드를 나눌 지 여부"
 
-#: ../data/preferences_dialog.ui.h:96
+#: ../data/preferences_dialog.ui.h:89
 #, fuzzy
 msgid "Whether to split album fields in Ogg comments"
 msgstr "Ogg 주석에서 “ - “ 구분 문자를 중심으로 앨범 제목 필드를 나눌 지 여부"
 
-#: ../data/preferences_dialog.ui.h:97
+#: ../data/preferences_dialog.ui.h:90
 #, fuzzy
 msgid "Whether to split disc subtitle fields in Ogg comments"
 msgstr "Ogg 주석에서 “ - “ 구분 문자를 중심으로 제목 필드를 나눌 지 여부"
 
-#: ../data/preferences_dialog.ui.h:98
+#: ../data/preferences_dialog.ui.h:92
 #, fuzzy
 msgid "Whether to split genre fields in Ogg comments"
 msgstr "Ogg 주석에서 “ - “ 구분 문자를 중심으로 장르 필드를 나눌 지 여부"
 
-#: ../data/preferences_dialog.ui.h:99
+#: ../data/preferences_dialog.ui.h:94
 #, fuzzy
 msgid "Whether to split comment fields in Ogg comments"
 msgstr "Ogg 주석에서 “ - “ 구분 문자를 중심으로 설명 필드를 나눌 지 여부"
 
-#: ../data/preferences_dialog.ui.h:100
+#: ../data/preferences_dialog.ui.h:95
 #, fuzzy
 msgid "Whether to split composer fields in Ogg comments"
 msgstr "Ogg 주석에서 “ - “ 구분 문자를 중심으로 작곡가 필드를 나눌 지 여부"
 
-#: ../data/preferences_dialog.ui.h:101
+#: ../data/preferences_dialog.ui.h:96
 msgid "Original artist"
 msgstr "원작자"
 
-#: ../data/preferences_dialog.ui.h:102
+#: ../data/preferences_dialog.ui.h:97
 #, fuzzy
 msgid "Whether to split original artist fields in Ogg comments"
 msgstr "Ogg 주석에서 “ - “ 구분 문자를 중심으로 원 저작자 필드를 나눌 지 여부"
 
-#: ../data/preferences_dialog.ui.h:103
+#: ../data/preferences_dialog.ui.h:98
 #, fuzzy
 msgid "Whether to split URL fields in Ogg comments"
 msgstr "Ogg 주석에서 “ - “ 구분 문자를 중심으로 제목 필드를 나눌 지 여부"
 
-#: ../data/preferences_dialog.ui.h:104
+#: ../data/preferences_dialog.ui.h:99
 #, fuzzy
 msgid "Encoded by"
 msgstr "인코더:"
 
-#: ../data/preferences_dialog.ui.h:105
+#: ../data/preferences_dialog.ui.h:100
 #, fuzzy
 msgid "Whether to split encoded by fields in Ogg comments"
 msgstr "Ogg 주석에서 “ - “ 구분 문자를 중심으로 장르 필드를 나눌 지 여부"
 
-#: ../data/preferences_dialog.ui.h:106
+#: ../data/preferences_dialog.ui.h:101
 msgid "Tags"
 msgstr "태그"
 
-#: ../data/preferences_dialog.ui.h:107
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:53
+#: ../data/preferences_dialog.ui.h:102
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:55
 msgid "Strip ID3 tags if all ID3 tags are empty"
 msgstr "모든 ID3 태그가 비어 있으면 ID3 태그를 없앰"
 
-#: ../data/preferences_dialog.ui.h:108
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:54
+#: ../data/preferences_dialog.ui.h:103
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:56
 msgid ""
 "Whether to remove the ID3 tag from the audio file if all the individual tag "
 "fields are empty"
 msgstr ""
 "각각의 모든 태그 필드가 비어있을 때 오디오 파일에서 ID3 태그를 제거할지 여부"
 
-#: ../data/preferences_dialog.ui.h:109
+#: ../data/preferences_dialog.ui.h:104
 msgid "Non-standard encoding for reading ID3 tags:"
 msgstr "ID3 태그를 읽을 때 사용할 비 표준 인코딩:"
 
-#: ../data/preferences_dialog.ui.h:110
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:52
+#: ../data/preferences_dialog.ui.h:105
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:54
 msgid "Whether to use a non-standard character encoding when reading ID3 tags"
 msgstr "ID3 태그를 읽을 때 비표준 문자 인코딩을 사용할지 여부"
 
-#: ../data/preferences_dialog.ui.h:111
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:62
+#: ../data/preferences_dialog.ui.h:106
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:64
 msgid "Choose the character set to be used when reading ID3v1 and ID3v2 tags"
 msgstr "ID3v1 태그와 ID3v2 태그를 읽을 때 사용할 문자 세트를 선택하십시오"
 
-#: ../data/preferences_dialog.ui.h:112
+#: ../data/preferences_dialog.ui.h:107
 msgid "ID3v2"
 msgstr "ID3v2"
 
-#: ../data/preferences_dialog.ui.h:113
+#: ../data/preferences_dialog.ui.h:108
 msgid "Write ID3v2 tag"
 msgstr "ID3v2 태그 기록"
 
-#: ../data/preferences_dialog.ui.h:114
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:64
+#: ../data/preferences_dialog.ui.h:109
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:66
 msgid "Whether to write ID3v2 tags when writing ID3 tags into audio files"
 msgstr "오디오 파일에 ID3 태그를 기록할 때 ID3v2 태그를 기록할지 여부"
 
-#: ../data/preferences_dialog.ui.h:115
+#: ../data/preferences_dialog.ui.h:110 ../data/tag_area.ui.h:4
 msgid "Version:"
 msgstr "버전:"
 
-#: ../data/preferences_dialog.ui.h:116
+#: ../data/preferences_dialog.ui.h:111
 msgid ""
 "Select the ID3v2 tag version to write:\n"
 "• ID3v2.3 is written using id3lib,\n"
@@ -1572,34 +1623,34 @@ msgstr ""
 " - ID3v2.3은 id3lib를 사용하여 기록합니다,\n"
 " - ID3v2.4는 libid3tag를 사용하여 기록합니다(추천)"
 
-#: ../data/preferences_dialog.ui.h:119
+#: ../data/preferences_dialog.ui.h:114
 msgid "Character encoding:"
 msgstr "문자 인코딩:"
 
-#: ../data/preferences_dialog.ui.h:120
+#: ../data/preferences_dialog.ui.h:115
 msgid "Unicode"
 msgstr "유니코드"
 
-#: ../data/preferences_dialog.ui.h:121
+#: ../data/preferences_dialog.ui.h:116
 msgid ""
 "Choose the Unicode character encoding to be used when writing ID3v2 tags"
 msgstr "ID3v2 태그를 기록할 때 사용할 유니코드 문자 인코딩 선택"
 
-#: ../data/preferences_dialog.ui.h:123
+#: ../data/preferences_dialog.ui.h:118
 msgid ""
 "Override the standard Unicode character encoding to be used when writing "
 "ID3v2 tags"
 msgstr "ID3v2 태그를 기록할 때 사용할 표준 유니코드 문자 인코딩 중복 적용"
 
-#: ../data/preferences_dialog.ui.h:124
+#: ../data/preferences_dialog.ui.h:119
 msgid "When encoding conversion fails:"
 msgstr "인코딩 변환에 실패했을 때:"
 
-#: ../data/preferences_dialog.ui.h:125
+#: ../data/preferences_dialog.ui.h:120
 msgid "Report error"
 msgstr "보고 오류"
 
-#: ../data/preferences_dialog.ui.h:126
+#: ../data/preferences_dialog.ui.h:121
 msgid ""
 "Display an error message when a character cannot be represented in the "
 "target character encoding and keep the original character"
@@ -1607,20 +1658,20 @@ msgstr ""
 "문자를 대상 인코딩으로 표시할 수 없을 때 오류메시지를 출력하며 원본 문자는 유"
 "지합니다"
 
-#: ../data/preferences_dialog.ui.h:127
+#: ../data/preferences_dialog.ui.h:122
 msgid "Transliterate"
 msgstr "문자 대체"
 
-#: ../data/preferences_dialog.ui.h:128
+#: ../data/preferences_dialog.ui.h:123
 msgid "Discard"
 msgstr "무시"
 
-#: ../data/preferences_dialog.ui.h:129
+#: ../data/preferences_dialog.ui.h:124
 msgid "Automatically convert old ID3v2 tag versions"
 msgstr "이전 ID3v2 태그 버전으로 자동으로 변환"
 
-#: ../data/preferences_dialog.ui.h:130
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:68
+#: ../data/preferences_dialog.ui.h:125
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:70
 msgid ""
 "Whether to convert ID3 tags written against old version of the "
 "specification, such as ID3v2.2, to newer ones, such as ID3v2.3 or ID3v2.4"
@@ -1628,32 +1679,32 @@ msgstr ""
 "ID3v2.2와 같은 이전 명세로 작성한 태그를 ID3v2.3, ID3v2.4와 같은 새 버전으로 "
 "변환할지 여부"
 
-#: ../data/preferences_dialog.ui.h:131
+#: ../data/preferences_dialog.ui.h:126
 msgid "Use CRC-32"
 msgstr "CRC-32 사용"
 
-#: ../data/preferences_dialog.ui.h:132
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:72
+#: ../data/preferences_dialog.ui.h:127
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:74
 msgid "Whether to embed a CRC-32 checksum of the audio file data in ID3v2 tags"
 msgstr "ID3v2 태그에 오디오 파일 데이터의 CRC-32 체크섬을 넣을 지 여부"
 
-#: ../data/preferences_dialog.ui.h:133
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:69
+#: ../data/preferences_dialog.ui.h:128
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:71
 msgid "Compress data in ID3v2 tags"
 msgstr "ID3v2 태그 데이터 압축"
 
-#: ../data/preferences_dialog.ui.h:134
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:70
+#: ../data/preferences_dialog.ui.h:129
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:72
 msgid "Whether to compress data in ID3v2 tags"
 msgstr "ID3v2 태그의 데이터 압축 여부"
 
-#: ../data/preferences_dialog.ui.h:135
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:73
+#: ../data/preferences_dialog.ui.h:130
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:75
 msgid "Use text-only genre in ID3v2 tags"
 msgstr "ID3v2 태그에서 장르 이름에 일반 문자만 사용"
 
-#: ../data/preferences_dialog.ui.h:136
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:74
+#: ../data/preferences_dialog.ui.h:131
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:76
 msgid ""
 "Whether to use only a string, and not the integer-base ID3v1 genre field, "
 "when writing a genre field to ID3v2 tags"
@@ -1661,71 +1712,71 @@ msgstr ""
 "장르 필드를 ID3v2 형식의 태그로 기록할 때 문자열만 사용하고 비 정수형 기반 "
 "ID3v1 장르 필드를 사용 안할지 여부"
 
-#: ../data/preferences_dialog.ui.h:137
+#: ../data/preferences_dialog.ui.h:132
 msgid "ID3v1"
 msgstr "ID3v1"
 
-#: ../data/preferences_dialog.ui.h:138
+#: ../data/preferences_dialog.ui.h:133
 msgid "Write ID3v1 tag"
 msgstr "ID3v1 태그 기록"
 
-#: ../data/preferences_dialog.ui.h:139
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:56
+#: ../data/preferences_dialog.ui.h:134
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:58
 msgid "Whether to write ID3v1 tags when writing ID3 tags into audio files"
 msgstr "ID3 태그를 오디오 파일에 기록할 때 ID3v1 태그를 기록할지 여부"
 
-#: ../data/preferences_dialog.ui.h:140
+#: ../data/preferences_dialog.ui.h:135
 msgid "Choose the character set to be used when writing ID3v1 tag"
 msgstr "ID3 태그를 기록할 문자 세트 선택"
 
-#: ../data/preferences_dialog.ui.h:141
+#: ../data/preferences_dialog.ui.h:136
 msgid "ID3 Tags"
 msgstr "ID3 태그"
 
-#: ../data/preferences_dialog.ui.h:142
+#: ../data/preferences_dialog.ui.h:137
 msgid "Character Conversion"
 msgstr "문자 변환"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:144
+#: ../data/preferences_dialog.ui.h:139
 msgid "Fill Tag Scanner"
 msgstr "태그 채움 검색기"
 
-#: ../data/preferences_dialog.ui.h:146
+#: ../data/preferences_dialog.ui.h:141
 #, no-c-format
 msgid "Convert underscores and ‘%20’ to spaces"
 msgstr "밑줄 문자와 '%20'을 공백 문자로 치환"
 
-#: ../data/preferences_dialog.ui.h:148
+#: ../data/preferences_dialog.ui.h:143
 #, no-c-format
 msgid "Convert spaces and ‘%20’ to underscores"
 msgstr "공백 문자와 ‘%20’을 밑줄 문자로 치환"
 
-#: ../data/preferences_dialog.ui.h:149
+#: ../data/preferences_dialog.ui.h:144
 msgid "No conversion"
 msgstr "변환 안 함"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:151
+#: ../data/preferences_dialog.ui.h:146
 msgid "Rename File and Directory Scanner"
 msgstr "파일 및 디렉터리 이름 바꾸기 검색기"
 
-#: ../data/preferences_dialog.ui.h:152 ../data/scan_dialog.ui.h:104
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:135 ../src/tag_area.cc:722
+#: ../data/preferences_dialog.ui.h:147 ../data/scan_dialog.ui.h:108
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:137 ../src/tag_area.cc:724
 msgid "Remove spaces"
 msgstr "공백 문자 제거"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:154
+#: ../data/preferences_dialog.ui.h:149
 msgid "Process Fields Scanner"
 msgstr "처리 필드 검색기"
 
-#: ../data/preferences_dialog.ui.h:155
+#: ../data/preferences_dialog.ui.h:150
 msgid "Upper-case the first letters of all words"
 msgstr "각 단어의 첫 글자를 대문자로"
 
-#: ../data/preferences_dialog.ui.h:156
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:132
+#: ../data/preferences_dialog.ui.h:151
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:134
 msgid ""
 "Whether to upper-case the first letter of all words, including prepositions "
 "and other short words such as “feat.”, when processing tag fields"
@@ -1733,16 +1784,16 @@ msgstr ""
 "태그 필드를 처리할 때, “feat.”와 같은 접두어의 첫번째 글자를 대문자로 처리할 "
 "지 여부"
 
-#: ../data/preferences_dialog.ui.h:157
+#: ../data/preferences_dialog.ui.h:152
 msgid "Fields"
 msgstr "필드"
 
-#: ../data/preferences_dialog.ui.h:158
+#: ../data/preferences_dialog.ui.h:153
 msgid "Overwrite fields when scanning tags"
 msgstr "태그를 검색할 때 필드 덮어쓰기"
 
-#: ../data/preferences_dialog.ui.h:159
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:101
+#: ../data/preferences_dialog.ui.h:154
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:103
 msgid ""
 "Whether to overwrite the tag field values when filling tags. Otherwise, only "
 "blank tag fields will be filled"
@@ -1750,23 +1801,23 @@ msgstr ""
 "태그를 채울 때 태그 필드 값을 덮어쓸지 여부입니다. 설정하지 않으면, 빈 태그 "
 "필드만 채웁니다"
 
-#: ../data/preferences_dialog.ui.h:160
+#: ../data/preferences_dialog.ui.h:155
 msgid "Set this text as default comment:"
 msgstr "기본 설명으로 다음 텍스트 설정:"
 
-#: ../data/preferences_dialog.ui.h:161
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:103
+#: ../data/preferences_dialog.ui.h:156
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:105
 msgid ""
 "Whether to set the comment tag field to the provided default value when "
 "filling tags"
 msgstr "태그를 채울 때 제시한 기본값에 주석 태그 필드를 설정할지 여부"
 
-#: ../data/preferences_dialog.ui.h:162
+#: ../data/preferences_dialog.ui.h:157
 msgid "Use CRC-32 as the default comment (for files with ID3 tags only)"
 msgstr "기본 설명에 CRC-32 사용(ID3 태그를 넣은 파일 전용)."
 
-#: ../data/preferences_dialog.ui.h:163
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:107
+#: ../data/preferences_dialog.ui.h:158
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:109
 msgid ""
 "Whether to use the CRC-32 of the audio file data as the default comment, for "
 "files with ID3 tags only"
@@ -1774,49 +1825,49 @@ msgstr ""
 "ID3 태그를 넣은 파일에만 오디오 파일 데이터의 기본 설명에 CRC-32를 사용할지 "
 "여부"
 
-#: ../data/preferences_dialog.ui.h:164
+#: ../data/preferences_dialog.ui.h:159
 msgid "Scanner"
 msgstr "검색기"
 
-#: ../data/preferences_dialog.ui.h:165
+#: ../data/preferences_dialog.ui.h:160
 msgid "Automatic Search Servers"
 msgstr "자동 검색 서버"
 
-#: ../data/preferences_dialog.ui.h:166
+#: ../data/preferences_dialog.ui.h:161
 msgid "Host:"
 msgstr "호스트 이름:"
 
-#: ../data/preferences_dialog.ui.h:167
+#: ../data/preferences_dialog.ui.h:162
 msgid "Port:"
 msgstr "포트:"
 
-#: ../data/preferences_dialog.ui.h:168
+#: ../data/preferences_dialog.ui.h:163
 msgid "CGI Path:"
 msgstr "CGI 경로:"
 
-#: ../data/preferences_dialog.ui.h:169
+#: ../data/preferences_dialog.ui.h:164
 msgid "Manual Search Server"
 msgstr "직접 검색 서버"
 
-#: ../data/preferences_dialog.ui.h:170
+#: ../data/preferences_dialog.ui.h:165
 msgid "Results List"
 msgstr "결과 목록:"
 
-#: ../data/preferences_dialog.ui.h:171
+#: ../data/preferences_dialog.ui.h:166
 msgid ""
 "Select corresponding file (according to position or DLM if activated below)"
 msgstr ""
 "각각의 파일을 선택하십시오(위치에 따르거나 하단에서 활성화 했을 경우 DLM에 따"
 "름)"
 
-#: ../data/preferences_dialog.ui.h:172
+#: ../data/preferences_dialog.ui.h:167
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:26
 msgid ""
 "Whether to select the file in the file list which matches the position in "
 "the CDDB results list"
 msgstr "CDDB 결과 목록에서 파일 목록과 일치하는 위치의 파일을 선택할지 여부"
 
-#: ../data/preferences_dialog.ui.h:173
+#: ../data/preferences_dialog.ui.h:168
 msgid ""
 "Use the Levenshtein algorithm (DLM) to match results (using title) with "
 "audio files (using filename)"
@@ -1824,63 +1875,63 @@ msgstr ""
 "줄의 내용(제목)이 오디오 파일(파일 이름)과 일치하는지 여부를 비교할 때 레번슈"
 "타인 알고리즘(DLM) 사용"
 
-#: ../data/preferences_dialog.ui.h:175
+#: ../data/preferences_dialog.ui.h:170
 msgid "CDDB"
 msgstr "CDDB"
 
-#: ../data/preferences_dialog.ui.h:176
+#: ../data/preferences_dialog.ui.h:171
 msgid "Confirmation"
 msgstr "확인"
 
-#: ../data/preferences_dialog.ui.h:177
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:108
+#: ../data/preferences_dialog.ui.h:172
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:110
 msgid "Confirm before writing tags"
 msgstr "태그 기록 전 확인"
 
-#: ../data/preferences_dialog.ui.h:178
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:109
+#: ../data/preferences_dialog.ui.h:173
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:111
 msgid ""
 "Whether to ask for confirmation from the user before writing tags to audio "
 "files"
 msgstr "오디오 파일에 태그를 기록하기 전 사용자에게 확인을 요청할지 여부"
 
-#: ../data/preferences_dialog.ui.h:179
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:110
+#: ../data/preferences_dialog.ui.h:174
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:112
 msgid "Confirm before renaming a file"
 msgstr "파일 이름 바꾸기 전 확인"
 
-#: ../data/preferences_dialog.ui.h:180
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:111
+#: ../data/preferences_dialog.ui.h:175
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:113
 msgid "Whether to ask for confirmation from the user before renaming a file"
 msgstr "파일 이름을 바꾸기 전 사용자에게 확인을 요청할지 여부"
 
-#: ../data/preferences_dialog.ui.h:181
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:114
+#: ../data/preferences_dialog.ui.h:176
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:116
 msgid "Confirm before deleting a file"
 msgstr "파일 삭제 전 확인"
 
-#: ../data/preferences_dialog.ui.h:182
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:115
+#: ../data/preferences_dialog.ui.h:177
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:117
 msgid "Whether to ask for confirmation from the user before deleting a file"
 msgstr "파일을 삭제하기 전 사용자에게 확인을 요청할지 여부"
 
-#: ../data/preferences_dialog.ui.h:183
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:112
+#: ../data/preferences_dialog.ui.h:178
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:114
 msgid "Confirm before writing a playlist"
 msgstr "재생 목록 기록 전 확인"
 
-#: ../data/preferences_dialog.ui.h:184
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:113
+#: ../data/preferences_dialog.ui.h:179
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:115
 msgid "Whether to ask for confirmation from the user before writing a playlist"
 msgstr "재생 목록을 기록하기 전 사용자에게 확인을 요청할지 여부"
 
-#: ../data/preferences_dialog.ui.h:185
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:116
+#: ../data/preferences_dialog.ui.h:180
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:118
 msgid "Confirm before losing unsaved changes to files"
 msgstr "파일에 저장하지 않은 내용을 잃기 전 확인"
 
-#: ../data/preferences_dialog.ui.h:186
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:117
+#: ../data/preferences_dialog.ui.h:181
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:119
 msgid ""
 "Whether to ask for confirmation from the user before performing an operation "
 "that would lose unsaved changes on files"
@@ -1888,20 +1939,20 @@ msgstr ""
 "파일에서 저장하지 않은 내용을 잃을 수 있는 동작을 수행하기 전 사용자에게 확인"
 "을 요청할지 여부"
 
-#: ../data/preferences_dialog.ui.h:187
+#: ../data/preferences_dialog.ui.h:182
 msgid "Scanner Dialog"
 msgstr "검색기 대화 상자"
 
-#: ../data/preferences_dialog.ui.h:188
+#: ../data/preferences_dialog.ui.h:183
 msgid "Show the scanner dialog on startup"
 msgstr "시작할 때 검색기 대화상자 표시"
 
-#: ../data/preferences_dialog.ui.h:189
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:184
+#: ../data/preferences_dialog.ui.h:184
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:186
 msgid "Whether to show the scanner window on application startup"
 msgstr "프로그램을 시작할 때 검색기 창을 표시할지 여부"
 
-#: ../data/preferences_dialog.ui.h:190
+#: ../data/preferences_dialog.ui.h:185
 msgid "Application"
 msgstr "프로그램"
 
@@ -1983,98 +2034,103 @@ msgid "%d: disc number"
 msgstr "%d: 디스크 번호"
 
 #: ../data/scan_dialog.ui.h:24
-#, no-c-format
-msgid "%T: album"
-msgstr "%T: 앨범 제목"
-
-#: ../data/scan_dialog.ui.h:26
-#, no-c-format
-msgid "%A: album artist"
-msgstr "%A: 앨범 음악가"
-
-#: ../data/scan_dialog.ui.h:28
-#, fuzzy, no-c-format
-msgid "%Y: release year"
-msgstr "%o: 원작자"
-
-#: ../data/scan_dialog.ui.h:30
-#, no-c-format
-msgid "%N: number of tracks"
-msgstr "%N: 트랙 갯수"
-
-#: ../data/scan_dialog.ui.h:32
-#, no-c-format
-msgid "%D: number of discs"
-msgstr "%D: 디스크 수"
-
-#: ../data/scan_dialog.ui.h:34
 #, fuzzy, no-c-format
 msgid "%s: subtitle"
 msgstr "%t: 제목"
 
-#: ../data/scan_dialog.ui.h:36
+#: ../data/scan_dialog.ui.h:26
 #, no-c-format
-msgid "%o: original artist"
-msgstr "%o: 원작자"
+msgid "%T: album"
+msgstr "%T: 앨범 제목"
 
-#: ../data/scan_dialog.ui.h:38
+#: ../data/scan_dialog.ui.h:28
+#, no-c-format
+msgid "%A: album artist"
+msgstr "%A: 앨범 음악가"
+
+#: ../data/scan_dialog.ui.h:30
 #, fuzzy, no-c-format
-msgid "%w: original year"
+msgid "%Y: release year"
 msgstr "%o: 원작자"
 
-#: ../data/scan_dialog.ui.h:40
+#: ../data/scan_dialog.ui.h:32
 #, no-c-format
-msgid "%g: genre"
-msgstr "%g: 장르"
+msgid "%N: number of tracks"
+msgstr "%N: 트랙 갯수"
 
-#: ../data/scan_dialog.ui.h:42
+#: ../data/scan_dialog.ui.h:34
 #, no-c-format
-msgid "%c: comment"
-msgstr "%c: 설명"
+msgid "%D: number of discs"
+msgstr "%D: 디스크 수"
 
-#: ../data/scan_dialog.ui.h:44
+#: ../data/scan_dialog.ui.h:36
 #, fuzzy, no-c-format
 msgid "%S: disc subtitle"
 msgstr "제목 기준 내림차순 정렬"
 
+#: ../data/scan_dialog.ui.h:38
+#, fuzzy, no-c-format
+msgid "%v: version"
+msgstr "변환 안 함"
+
+#: ../data/scan_dialog.ui.h:40
+#, no-c-format
+msgid "%o: original artist"
+msgstr "%o: 원작자"
+
+#: ../data/scan_dialog.ui.h:42
+#, fuzzy, no-c-format
+msgid "%w: original year"
+msgstr "%o: 원작자"
+
+#: ../data/scan_dialog.ui.h:44
+#, no-c-format
+msgid "%g: genre"
+msgstr "%g: 장르"
+
 #: ../data/scan_dialog.ui.h:46
 #, no-c-format
-msgid "%p: composer"
-msgstr "%p: 작곡가"
+msgid "%c: comment"
+msgstr "%c: 설명"
 
 #: ../data/scan_dialog.ui.h:48
-#, no-c-format
-msgid "%r: copyright"
-msgstr "%r: 저작권자"
-
-#: ../data/scan_dialog.ui.h:50
-#, no-c-format
-msgid "%u: URL"
-msgstr "%u: URL"
-
-#: ../data/scan_dialog.ui.h:52
-#, no-c-format
-msgid "%e: encoded by"
-msgstr "%e: 인코더 이름"
-
-#: ../data/scan_dialog.ui.h:54
 #, no-c-format
 msgid "%i: ignored"
 msgstr "%i: 무시함"
 
-#: ../data/scan_dialog.ui.h:55
+#: ../data/scan_dialog.ui.h:50
+#, no-c-format
+msgid "%p: composer"
+msgstr "%p: 작곡가"
+
+#: ../data/scan_dialog.ui.h:52
+#, no-c-format
+msgid "%r: copyright"
+msgstr "%r: 저작권자"
+
+#: ../data/scan_dialog.ui.h:54
+#, no-c-format
+msgid "%u: URL"
+msgstr "%u: URL"
+
+#: ../data/scan_dialog.ui.h:56
+#, no-c-format
+msgid "%e: encoded by"
+msgstr "%e: 인코더 이름"
+
+#: ../data/scan_dialog.ui.h:57
 msgid "{…|…}: alternatives group"
 msgstr ""
 
-#: ../data/scan_dialog.ui.h:56
+#: ../data/scan_dialog.ui.h:58
 msgid "Fill Tag"
 msgstr "태그 채우기"
 
-#: ../data/scan_dialog.ui.h:57
+#: ../data/scan_dialog.ui.h:59
 msgid "Prefix mask with current directory"
 msgstr "현재 디렉터리의 접두 마스크"
 
-#: ../data/scan_dialog.ui.h:58
+#: ../data/scan_dialog.ui.h:60
 msgid ""
 "Select or type in a mask using codes (see Legend) to parse tag fields. Used "
 "to rename the file.\n"
@@ -2086,177 +2142,182 @@ msgstr ""
 "디렉터리를 만들려면 ‘/’를 사용하십시오. 첫번째 문자가 ‘/’ 라면, 절대 경로입니"
 "다. 그렇지 않으면, 이전 경로의 상대 경로입니다."
 
-#: ../data/scan_dialog.ui.h:60
+#: ../data/scan_dialog.ui.h:62
 msgid "Rename file preview"
 msgstr "파일 이름 바꾸기 미리 보기"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:61 ../src/easytag.c:574
+#: ../data/scan_dialog.ui.h:63 ../src/easytag.c:574
 msgid "Rename File"
 msgstr "파일 이름 바꾸기"
 
-#: ../data/scan_dialog.ui.h:62
+#: ../data/scan_dialog.ui.h:64
 msgid "Tag Fields"
 msgstr "태그 필드"
 
-#: ../data/scan_dialog.ui.h:64
+#: ../data/scan_dialog.ui.h:66
 msgid "Process filename"
 msgstr "파일 이름 처리"
 
-#: ../data/scan_dialog.ui.h:66
+#: ../data/scan_dialog.ui.h:68
 msgid "Process title field"
 msgstr "제목 처리 필드"
 
-#: ../data/scan_dialog.ui.h:68
+#: ../data/scan_dialog.ui.h:70
+#, fuzzy
+msgid "Process version field"
+msgstr "장르 처리 필드"
+
+#: ../data/scan_dialog.ui.h:72
 #, fuzzy
 msgid "Process subtitle field"
 msgstr "제목 처리 필드"
 
-#: ../data/scan_dialog.ui.h:70
+#: ../data/scan_dialog.ui.h:74
 msgid "Process artist field"
 msgstr "음악가 필드 처리"
 
-#: ../data/scan_dialog.ui.h:72
+#: ../data/scan_dialog.ui.h:76
 msgid "Process album artist field"
 msgstr "앨범 음악가 처리 필드"
 
-#: ../data/scan_dialog.ui.h:74
+#: ../data/scan_dialog.ui.h:78
 msgid "Process album field"
 msgstr "앨범 이름 처리 필드"
 
-#: ../data/scan_dialog.ui.h:76
+#: ../data/scan_dialog.ui.h:80
 #, fuzzy
 msgid "Process disc subtitle field"
 msgstr "제목 처리 필드"
 
-#: ../data/scan_dialog.ui.h:78
+#: ../data/scan_dialog.ui.h:82
 msgid "Process genre field"
 msgstr "장르 처리 필드"
 
-#: ../data/scan_dialog.ui.h:80
+#: ../data/scan_dialog.ui.h:84
 msgid "Process comment field"
 msgstr "설명 처리 필드"
 
-#: ../data/scan_dialog.ui.h:82
+#: ../data/scan_dialog.ui.h:86
 msgid "Process composer field"
 msgstr "작곡가 처리 필드"
 
-#: ../data/scan_dialog.ui.h:83
+#: ../data/scan_dialog.ui.h:87
 msgid "Orig. Artist"
 msgstr "원작자"
 
-#: ../data/scan_dialog.ui.h:84
+#: ../data/scan_dialog.ui.h:88
 msgid "Process original artist field"
 msgstr "원작자 처리 필드"
 
-#: ../data/scan_dialog.ui.h:86
+#: ../data/scan_dialog.ui.h:90
 msgid "Process copyright field"
 msgstr "저작권자 처리 필드"
 
-#: ../data/scan_dialog.ui.h:88
+#: ../data/scan_dialog.ui.h:92
 msgid "Process URL field"
 msgstr "URL 처리 필드"
 
-#: ../data/scan_dialog.ui.h:90
+#: ../data/scan_dialog.ui.h:94
 msgid "Process encoded-by field"
 msgstr "인코더 필드 처리"
 
-#: ../data/scan_dialog.ui.h:91
+#: ../data/scan_dialog.ui.h:95
 msgid "Capitalization"
 msgstr "대문자로 바꾸기"
 
-#: ../data/scan_dialog.ui.h:92
+#: ../data/scan_dialog.ui.h:96
 msgid "Capitalize all"
 msgstr "모두 대문자로"
 
-#: ../data/scan_dialog.ui.h:93
+#: ../data/scan_dialog.ui.h:97
 msgid ""
 "Whether to upper-case all characters of the tag when processing tag fields"
 msgstr "태그 필드를 처리할 때 태그의 모든 문자를 대문자로 바꿀 지 여부"
 
-#: ../data/scan_dialog.ui.h:94
+#: ../data/scan_dialog.ui.h:98
 msgid "Lowercase all"
 msgstr "모두 소문자로"
 
-#: ../data/scan_dialog.ui.h:95
+#: ../data/scan_dialog.ui.h:99
 msgid ""
 "Whether to lower-case all characters of the tag when processing tag fields"
 msgstr "태그 필드를 처리할 때 태그의 모든 문자를 소문자로 바꿀 지 여부"
 
-#: ../data/scan_dialog.ui.h:96
+#: ../data/scan_dialog.ui.h:100
 msgid "Capitalize first letter"
 msgstr "첫 글자를 대문자로"
 
-#: ../data/scan_dialog.ui.h:97
+#: ../data/scan_dialog.ui.h:101
 msgid ""
 "Whether to upper-case the first letter of the tag when processing tag fields"
 msgstr "태그 필드를 처리할 때 태그 단어의 첫 글자를 대문자로 할지 여부"
 
-#: ../data/scan_dialog.ui.h:98
+#: ../data/scan_dialog.ui.h:102
 msgid "Capitalize the first letter of each word"
 msgstr "각 단어의 첫 글자를 대문자로 합니다"
 
-#: ../data/scan_dialog.ui.h:99
+#: ../data/scan_dialog.ui.h:103
 msgid ""
 "Whether to upper-case the first letter of each word when processing tag "
 "fields"
 msgstr "태그 필드를 처리할 때 각 단어의 첫 글자를 대문자로 할지 여부"
 
-#: ../data/scan_dialog.ui.h:100
+#: ../data/scan_dialog.ui.h:104
 msgid "Detect Roman numerals"
 msgstr "로마 숫자 감지"
 
-#: ../data/scan_dialog.ui.h:101 ../data/org.gnome.EasyTAG.gschema.xml.h:134
+#: ../data/scan_dialog.ui.h:105 ../data/org.gnome.EasyTAG.gschema.xml.h:136
 msgid ""
 "Whether to detect Roman numerals when applying upper-case conversions while "
 "processing tag fields"
 msgstr ""
 "태그 필드를 처리하는 동안 대문자 변환을 처리할 때 로마 숫자를 감지할지 여부"
 
-#: ../data/scan_dialog.ui.h:102
+#: ../data/scan_dialog.ui.h:106
 msgid "Do not change capitalization"
 msgstr "대문자로 바꾸지 않음"
 
-#: ../data/scan_dialog.ui.h:103
+#: ../data/scan_dialog.ui.h:107
 msgid "Spaces Conversions"
 msgstr "공백 변환"
 
-#: ../data/scan_dialog.ui.h:105 ../data/org.gnome.EasyTAG.gschema.xml.h:136
+#: ../data/scan_dialog.ui.h:109 ../data/org.gnome.EasyTAG.gschema.xml.h:138
 msgid "Whether to remove all spaces when processing tag fields"
 msgstr "태그 필드를 처리할 때 모든 공백을 제거할지 여부"
 
-#: ../data/scan_dialog.ui.h:106
+#: ../data/scan_dialog.ui.h:110
 msgid "Insert a space before uppercase letters"
 msgstr "대문자 앞에 공백 삽입"
 
-#: ../data/scan_dialog.ui.h:107 ../data/org.gnome.EasyTAG.gschema.xml.h:138
+#: ../data/scan_dialog.ui.h:111 ../data/org.gnome.EasyTAG.gschema.xml.h:140
 msgid ""
 "Whether to insert spaces before capital letters when processing tag fields"
 msgstr "태그 필드를 처리할 때 대문자 앞에 공백을 넣을 지 여부"
 
-#: ../data/scan_dialog.ui.h:108
+#: ../data/scan_dialog.ui.h:112
 msgid "Remove duplicate spaces and underscores"
 msgstr "중복 공백 문자와 밑줄 문자 제거"
 
-#: ../data/scan_dialog.ui.h:109 ../data/org.gnome.EasyTAG.gschema.xml.h:140
+#: ../data/scan_dialog.ui.h:113 ../data/org.gnome.EasyTAG.gschema.xml.h:142
 msgid ""
 "Whether to remove duplicate spaces and underscores when processing tag fields"
 msgstr "태그 필드를 처리할 때 중복 공백 문자와 밑줄 문자를 제거할지 여부"
 
-#: ../data/scan_dialog.ui.h:110
+#: ../data/scan_dialog.ui.h:114
 msgid "Do not change word separators"
 msgstr "단어 구분 문자 바꾸지 않음"
 
-#: ../data/scan_dialog.ui.h:111
+#: ../data/scan_dialog.ui.h:115
 msgid "Character Conversions"
 msgstr "문자 변환"
 
-#: ../data/scan_dialog.ui.h:113 ../src/tag_area.cc:678
+#: ../data/scan_dialog.ui.h:117 ../src/tag_area.cc:682
 #, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "'_'와 '%20'을 공백 문자로 치환"
 
-#: ../data/scan_dialog.ui.h:115
+#: ../data/scan_dialog.ui.h:119
 #, no-c-format
 msgid ""
 "The underscore character or the string ‘%20’ is replaced by one space. "
@@ -2265,11 +2326,11 @@ msgstr ""
 "밑줄 문자 또는 '%20' 문자열을 하나의 공백 문자로 바꿉니다. 'Text%20In"
 "%20An_Entry'를 'Text In An Entry'로 바꿉니다"
 
-#: ../data/scan_dialog.ui.h:116 ../src/tag_area.cc:684
+#: ../data/scan_dialog.ui.h:120 ../src/tag_area.cc:688
 msgid "Convert spaces to underscores"
 msgstr "공백 문자를 밑줄 문자로 치환"
 
-#: ../data/scan_dialog.ui.h:117
+#: ../data/scan_dialog.ui.h:121
 msgid ""
 "The space character is replaced by one underscore character. Example, "
 "before: ‘Text In An Entry’, after: ‘Text_In_An_Entry’"
@@ -2277,40 +2338,40 @@ msgstr ""
 "공백 문자를 하나의 밑줄 문자로 바꿉니다. 'Text In An Entry'를 "
 "'Text_In_An_Entry'로 바꿉니다"
 
-#: ../data/scan_dialog.ui.h:118
+#: ../data/scan_dialog.ui.h:122
 msgid "Convert:"
 msgstr "변환:"
 
-#: ../data/scan_dialog.ui.h:119
+#: ../data/scan_dialog.ui.h:123
 msgid "Replace a string by another one. Note that the search is case sensitive"
 msgstr ""
 "기존의 문자열을 다른 문자열로 바꿉니다. 참고로 검색은 대소문자를 구분합니다"
 
-#: ../data/scan_dialog.ui.h:120
+#: ../data/scan_dialog.ui.h:124
 msgid "to: "
 msgstr "대상:"
 
-#: ../data/scan_dialog.ui.h:121
+#: ../data/scan_dialog.ui.h:125
 msgid "Do not convert"
 msgstr "변환하지 않음"
 
-#: ../data/scan_dialog.ui.h:123
+#: ../data/scan_dialog.ui.h:127
 msgid "Show / Hide Masks Editor"
 msgstr "마스크 편집기 표시 / 숨기기"
 
-#: ../data/scan_dialog.ui.h:124
+#: ../data/scan_dialog.ui.h:128
 msgid "Show / Hide Legend"
 msgstr "범례 표시 / 숨기기"
 
-#: ../data/scan_dialog.ui.h:125
+#: ../data/scan_dialog.ui.h:129
 msgid "Scanner Preferences"
 msgstr "검색기 기본 설정"
 
-#: ../data/scan_dialog.ui.h:127
+#: ../data/scan_dialog.ui.h:131
 msgid "Scan Files"
 msgstr "파일 검색"
 
-#: ../data/scan_dialog.ui.h:128
+#: ../data/scan_dialog.ui.h:132
 msgid "Scan selected files"
 msgstr "선택한 파일을 검색합니다"
 
@@ -2356,7 +2417,7 @@ msgstr "대소문자 구별"
 msgid "CD"
 msgstr "CD"
 
-#: ../data/tag_area.ui.h:1 ../src/tag_area.cc:2555
+#: ../data/tag_area.ui.h:1 ../src/tag_area.cc:2507
 msgid "Tag"
 msgstr "태그"
 
@@ -2368,185 +2429,190 @@ msgstr "제목:"
 msgid "Tag selected files with this title"
 msgstr "이 제목으로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:4
+#: ../data/tag_area.ui.h:5
+#, fuzzy
+msgid "Tag selected files with this version"
+msgstr "이 연도로 선택 파일에 태그"
+
+#: ../data/tag_area.ui.h:6
 #, fuzzy
 msgid "Subtitle:"
 msgstr "제목:"
 
-#: ../data/tag_area.ui.h:5
+#: ../data/tag_area.ui.h:7
 #, fuzzy
 msgid "Tag selected files with this subtitle"
 msgstr "이 제목으로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:6
+#: ../data/tag_area.ui.h:8
 msgid "Artist:"
 msgstr "음악가:"
 
-#: ../data/tag_area.ui.h:7
+#: ../data/tag_area.ui.h:9
 msgid "Tag selected files with this artist"
 msgstr "이 음악가 이름으로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:8
+#: ../data/tag_area.ui.h:10
 msgid "Album artist:"
 msgstr "앨범 음악가:"
 
-#: ../data/tag_area.ui.h:9
+#: ../data/tag_area.ui.h:11
 msgid "Tag selected files with this album artist"
 msgstr "이 앨범 음악가 이름으로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:10
+#: ../data/tag_area.ui.h:12
 msgid "Album:"
 msgstr "앨범:"
 
-#: ../data/tag_area.ui.h:11
+#: ../data/tag_area.ui.h:13
 msgid "Tag selected files with this album name"
 msgstr "이 앨범 이름으로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:12
+#: ../data/tag_area.ui.h:14
 #, fuzzy
 msgid "Disc subtitle:"
 msgstr "제목 기준 내림차순 정렬"
 
-#: ../data/tag_area.ui.h:13
+#: ../data/tag_area.ui.h:15
 #, fuzzy
 msgid "Tag selected files with this disc subtitle"
 msgstr "이 디스크 번호로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:14
+#: ../data/tag_area.ui.h:16
 msgid "Track #:"
 msgstr "트랙 번호:"
 
-#: ../data/tag_area.ui.h:15
+#: ../data/tag_area.ui.h:17
 msgid "Number selected tracks sequentially. Starts at 01 in each subdirectory"
 msgstr ""
 "숫자는 트랙을 순서대로 선택합니다. 각 하위 디렉터리에서 01번으로 시작합니다."
 
-#: ../data/tag_area.ui.h:16
+#: ../data/tag_area.ui.h:18
 msgid ""
 "Set the number of files, in the same directory of the displayed file, to the "
 "selected tracks"
 msgstr "동일한 디렉터리에 나타난 여러 파일을 선택한 트랙으로 설정"
 
-#: ../data/tag_area.ui.h:17
+#: ../data/tag_area.ui.h:19
 msgid "Tag selected files with this number of tracks"
 msgstr "이 트랙 번호로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:18
+#: ../data/tag_area.ui.h:20
 msgid "CD:"
 msgstr "CD:"
 
-#: ../data/tag_area.ui.h:19
+#: ../data/tag_area.ui.h:21
 msgid "Tag selected files with this disc number"
 msgstr "이 디스크 번호로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:20
+#: ../data/tag_area.ui.h:22
 msgid "Year:"
 msgstr "연도:"
 
-#: ../data/tag_area.ui.h:21
+#: ../data/tag_area.ui.h:23
 msgid "Tag selected files with this year"
 msgstr "이 연도로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:22
+#: ../data/tag_area.ui.h:24
 msgid "Release year:"
 msgstr ""
 
-#: ../data/tag_area.ui.h:23
+#: ../data/tag_area.ui.h:25
 #, fuzzy
 msgid "Tag selected files with this release year"
 msgstr "이 연도로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:24
+#: ../data/tag_area.ui.h:26
 msgid "Genre:"
 msgstr "장르:"
 
-#: ../data/tag_area.ui.h:25
+#: ../data/tag_area.ui.h:27
 msgid "Comment:"
 msgstr "설명:"
 
-#: ../data/tag_area.ui.h:26
+#: ../data/tag_area.ui.h:28
 msgid "Tag selected files with this comment"
 msgstr "이 설명으로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:27
+#: ../data/tag_area.ui.h:29
 msgid "Composer:"
 msgstr "작곡가:"
 
-#: ../data/tag_area.ui.h:28
+#: ../data/tag_area.ui.h:30
 msgid "Tag selected files with this composer"
 msgstr "이 작곡가 이름으로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:29
+#: ../data/tag_area.ui.h:31
 msgid "Orig. artist:"
 msgstr "원작자:"
 
-#: ../data/tag_area.ui.h:30
+#: ../data/tag_area.ui.h:32
 msgid "Tag selected files with this original artist"
 msgstr "이 원작자 이름으로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:31
+#: ../data/tag_area.ui.h:33
 #, fuzzy
 msgid "year:"
 msgstr "연도:"
 
-#: ../data/tag_area.ui.h:32
+#: ../data/tag_area.ui.h:34
 #, fuzzy
 msgid "Tag selected files with this original year"
 msgstr "이 원작자 이름으로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:33
+#: ../data/tag_area.ui.h:35
 msgid "Copyright:"
 msgstr "저작권자:"
 
-#: ../data/tag_area.ui.h:34
+#: ../data/tag_area.ui.h:36
 msgid "Tag selected files with this copyright"
 msgstr "이 저작권자 정보로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:35
+#: ../data/tag_area.ui.h:37
 msgid "URL:"
 msgstr "URL:"
 
-#: ../data/tag_area.ui.h:36
+#: ../data/tag_area.ui.h:38
 msgid "Tag selected files with this URL"
 msgstr "이 URL로 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:37
+#: ../data/tag_area.ui.h:39
 msgid "Encoded by:"
 msgstr "인코더:"
 
-#: ../data/tag_area.ui.h:38
+#: ../data/tag_area.ui.h:40
 msgid "Tag selected files with this encoder name"
 msgstr "이 인코더 이름을 선택 파일에 태그"
 
-#: ../data/tag_area.ui.h:39
+#: ../data/tag_area.ui.h:41
 msgid "Common"
 msgstr "일반"
 
-#: ../data/tag_area.ui.h:40
+#: ../data/tag_area.ui.h:42
 msgid "You can use drag and drop to add an image"
 msgstr "이미지를 추가할 때 끌어 놓을 수 있습니다"
 
-#: ../data/tag_area.ui.h:41
+#: ../data/tag_area.ui.h:43
 msgid "Add images to the tag"
 msgstr "태그에 이미지 추가"
 
-#: ../data/tag_area.ui.h:42
+#: ../data/tag_area.ui.h:44
 msgid "Remove selected images from the tag"
 msgstr "태그에서 선택한 이미지 제거"
 
-#: ../data/tag_area.ui.h:43
+#: ../data/tag_area.ui.h:45
 msgid "Save the selected images to files"
 msgstr "파일에 선택한 이미지 저장"
 
-#: ../data/tag_area.ui.h:44
+#: ../data/tag_area.ui.h:46
 msgid "Edit image properties"
 msgstr "이미지 속성 편집"
 
-#: ../data/tag_area.ui.h:45
+#: ../data/tag_area.ui.h:47
 msgid "Tag selected files with these images"
 msgstr "이 이미지가 있는 선택 파일 태그"
 
-#: ../data/tag_area.ui.h:46 ../src/tag_area.cc:2675 ../src/tag_area.cc:2678
+#: ../data/tag_area.ui.h:48 ../src/tag_area.cc:2629 ../src/tag_area.cc:2632
 msgid "Images"
 msgstr "그림"
 
@@ -2757,27 +2823,35 @@ msgstr ""
 msgid "List of visible columns in the file browser."
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:51
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:49
+msgid "Fields to hide in the tag area"
+msgstr ""
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:50
+msgid "List of hidden input controls when editing a tag."
+msgstr ""
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:53
 msgid "Use a non-standard character encoding when reading ID3 tags"
 msgstr "ID3 태그를 읽을 때 비표준 문자 인코딩 사용"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:55
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:57
 msgid "Write ID3v1 tags"
 msgstr "ID3v1 태그 기록"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:57
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:59
 msgid "The character set for writing ID3v1 tags"
 msgstr "ID3v1 태그를 기록할 문자세트"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:58
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:60
 msgid "Choose the character set to be used when writing ID3v1 tags"
 msgstr "ID3v1 태그를 기록할 때 사용할 문자세트를 선택하십시오"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:59
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:61
 msgid "Encoding options when writing ID3v1 tags"
 msgstr "ID3v1 태그를 기록할 때의 인코딩 옵션"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:60
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:62
 msgid ""
 "Additional options to pass to iconv() when converting between encodings when "
 "writing ID3v1 tags"
@@ -2785,60 +2859,60 @@ msgstr ""
 "ID3v1 태그를 기록할 때 인코딩을 처리하는 과정에 iconv() 처리를 건너뛰는 추가 "
 "옵션"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:61
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:63
 msgid "The character set for reading ID3v1 and ID3v2 tags"
 msgstr "ID3v1 태그와 ID3v2태그를 읽을 때 사용할 문자세트"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:63
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:65
 msgid "Write ID3v2 tags"
 msgstr "ID3v2 태그 기록"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:65
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:67
 msgid "Enable ID3v2.4 support"
 msgstr "ID3v2.4 자원 활성화"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:66
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:68
 msgid "Whether to write ID3v2.4 tags when ID3v2 support is enabled"
 msgstr "ID3v2 지원을 활성화했을 때 ID3v2.4 태그를 기록할지 여부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:67
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:69
 msgid "Convert old ID3 tag versions to new ones"
 msgstr "이전 ID3v2 태그 버전을 새 버전으로 변환"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:71
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:73
 msgid "Use CRC-32 in ID3v2 tags"
 msgstr "ID3v2 태그에 CRC-32 사용"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:75
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:77
 msgid "Use Unicode character encoding in ID3v2 tags"
 msgstr "ID3v2 태그에 유니코드 문자 인코딩 사용"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:76
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:78
 msgid "Whether to use a Unicode character set when writing ID3v2 tags"
 msgstr "ID3v2 태그를 기록할 때 유니코드 문자 인코딩을 사용할지 여부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:77
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:79
 msgid "The Unicode character set for writing ID3v2 tags"
 msgstr "ID3v2 태그를 기록할 유니코드 문자세트"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:78
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:80
 msgid "Choose the Unicode character set to be used when writing ID3v2 tags"
 msgstr "ID3v2 태그를 기록할 때 사용할 유니코드 문자세트를 선택합니다"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:79
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:81
 msgid "The character set for writing ID3v2 tags"
 msgstr "ID3v2 태그를 기록할 문자세트"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:80
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:82
 msgid ""
 "Override the typical Unicode character set to be used when writing ID3v2 tags"
 msgstr "ID3v2 태그를 기록할 때 사용할 일반 유니코드 문자세트 우선 적용"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:81
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:83
 msgid "Encoding options when writing ID3v2 tags"
 msgstr "ID3v2 태그를 기록할 때 인코딩 옵션"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:82
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:84
 msgid ""
 "Additional options to pass to iconv() when converting between encodings when "
 "writing ID3v2 tags"
@@ -2846,50 +2920,50 @@ msgstr ""
 "ID3v2 태그를 기록할 때 인코딩을 처리하는 과정에 iconv() 처리를 건너뛰는 추가 "
 "옵션"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:83
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:85
 msgid "Automatically complete the date"
 msgstr "날짜 자동 채우기"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:85
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:87
 msgid "Pad the disc number tag field"
 msgstr "디스크 번호 태그 필드에 패딩"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:87
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:89
 msgid "The length of the disc number field"
 msgstr "디스크 번호 필드의 길이"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:88
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:90
 msgid ""
 "The length of the disc number field, which controls if the field is padded "
 "with leading zeroes"
 msgstr "필드에 0이 따라 붙는 경우 이를 처리하는 디스크 숫자 필드 길이입니다"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:90
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:92
 msgid ""
 "Whether to, when adding cover art, automatically select the type for an "
 "image based on its filename"
 msgstr ""
 "표지 아트를 추가할 때 파일 이름을 기반으로 그림 형식을 자동으로 선택할지 여부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:91
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:93
 msgid "Pad the track number tag field"
 msgstr "트랙 번호 태그 필드 패딩"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:93
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:95
 msgid "The length of the track number field"
 msgstr "트랙 번호 필드 길이"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:94
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:96
 msgid ""
 "The length of the track number field, which controls if the field is padded "
 "with leading zeroes"
 msgstr "필드에 0을 붙일 경우 처리할 트랙 번호 필드의 길이"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:97
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:99
 msgid "Convert spaces and underscores when filling tag fields"
 msgstr "태그 필드를 채울 때 공백 문자를 밑줄 문자로 변환"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:99
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:101
 #, no-c-format
 msgid ""
 "Whether to convert to spaces (and %20) or underscores when filling tag "
@@ -2899,43 +2973,43 @@ msgstr ""
 "\n"
 " 또는 밑줄 문자의 변환 여부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:100
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:102
 msgid "Overwrite tag field"
 msgstr "태그 필드 덮어쓰기"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:102
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:104
 msgid "Set the default comment"
 msgstr "기본 설명 설정"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:104
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:106
 msgid "Default comment for filling tags"
 msgstr "태그 채우기 기본 설명"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:105
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:107
 msgid "The default comment to use when filling tags"
 msgstr "태그를 채울 때 사용할 기본 설명"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:106
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:108
 msgid "Use the CRC-32 as the default comment"
 msgstr "기본 설명에 CRC-32 활용"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:118
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:120
 msgid "Run the current scanner when loading filenames from a file"
 msgstr "파일의 파일 이름을 불러올 때 현재 검색기 실행"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:120
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:122
 msgid "Process these tag fields"
 msgstr "이 태그 필드 처리"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:121
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:123
 msgid "The tag fields to process when using the scanner"
 msgstr "탐색기를 사용할 때 처리할 태그 필드"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:122
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:124
 msgid "Convert tag fields when processing"
 msgstr "처리시 태그 필드 변환"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:124
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:126
 #, no-c-format
 msgid ""
 "Whether to convert to spaces (and %20), underscores or other characters when "
@@ -2944,92 +3018,92 @@ msgstr ""
 "태그 필드를 처리할 때 공백(및 %20), 밑줄 문자 또는 기타 문자를을 변환할지 여"
 "부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:125
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:127
 msgid "Convert characters in tags"
 msgstr "태그 문자 변환"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:126
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:128
 msgid ""
 "Whether to convert characters of the tag from one value to another when "
 "processing tag fields"
 msgstr ""
 "태그 필드를 처리할 때 어떤 값에서 다른 값으로 태그 문자를 변환할지 여부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:127
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:129
 msgid "Convert the following characters when processing tag fields"
 msgstr "태그 필드를 처리할 때 다음 문자를 변환"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:128
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:130
 msgid ""
 "Replace any matched sequence of characters with this string when processing "
 "tag fields"
 msgstr "태그 필드를 처리할 때 이 문자열과 일치하는 문자열을 바꿈"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:129
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:131
 msgid "Capitalize tag fields when processing"
 msgstr "처리시 태그 필드 대문자 변환 처리"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:130
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid "Whether to change the capitalization when processing tag fields"
 msgstr "태그 필드 처리시 모든 공백 제거 여부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:131
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:133
 msgid "Upper-case prepositions"
 msgstr "앞 글자를 대문자로"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:133
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:135
 msgid "Detect roman numerals"
 msgstr "로마 숫자 감지"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:137
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:139
 msgid "Insert spaces before capital letters"
 msgstr "대문자 앞에 공백 문자 삽입"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:139
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:141
 msgid "Remove duplicate spaces"
 msgstr "중복 공백 제거"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:141
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:143
 msgid "Playlist filename mask"
 msgstr "재생 목록 파일 이름 마스크"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:142
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:144
 msgid "The default filename mask to use for a new playlist"
 msgstr "새 재생 목록에서 사용할 기본 파일 이름 마스크"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:143
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:145
 msgid "Use a filename mask when generating a playlist"
 msgstr "재생 목록을 만들 때 파일 이름 마스크 사용"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:144
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:146
 msgid "Whether to use a filename mask when creating playlists"
 msgstr "재생 목록을 만들 때 파일 이름 마스크를 사용할지 여부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:145
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:147
 msgid "Create playlists with only the selected files"
 msgstr "상위 디렉터리에만 재생 목록 만들기"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:147
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:149
 msgid "Use relative paths when creating playlists"
 msgstr "재생 목록을 만들 때 상대 경로 사용"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:148
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:150
 msgid "Whether to use relative paths for files when creating playlists"
 msgstr "재생 목록을 만들 때 파일에 상대 경로를 사용할지 여부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:149
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:151
 msgid "Create the playlist in the parent directory"
 msgstr "상위 디렉터리에 재생 목록 만들기"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:151
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:153
 msgid "Use DOS separators for playlists"
 msgstr "재생 목록에 DOS 구분 문자 사용"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:153
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:155
 msgid "Content of generated playlists"
 msgstr "만든 재생 목록의 내용"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:154
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:156
 msgid ""
 "Write a plain list of files, include extended information from the filename "
 "or extended information using a supplied mask"
@@ -3037,92 +3111,92 @@ msgstr ""
 "제공 마스크를 통한 확장 정보 또는 파일 이름의 확장 정보로 있는 그대로의 파일 "
 "목록을 기록"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:155
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:157
 msgid "Playlist default mask"
 msgstr "재생 목록 기본 마스크"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:156
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:158
 msgid "The default mask to use for files in a playlist"
 msgstr "재생 목록의 파일에 사용할 기본 마스크"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:157
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:159
 msgid "Search for files case-sensitively"
 msgstr "대소문자별 파일 검색"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:158
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:160
 msgid "Whether matches when searching for files are case-sensitive"
 msgstr "파일을 검색할 때 대소문자를 구분하여 일치할지 여부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:159
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:161
 msgid "Search in filenames"
 msgstr "파일 이름 검색"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:160
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:162
 msgid "Perform the search on filenames"
 msgstr "파일 이름 검색 수행"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:161
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:163
 msgid "Search in tags"
 msgstr "태그 검색"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:162
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:164
 msgid "Perform the search on tags"
 msgstr "태그 검색 수행"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:163
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:165
 msgid "Mask for filling tags from filenames"
 msgstr "파일 이름에 태그 채우기용 마스크"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:164
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:166
 msgid ""
 "The default mask to use when automatically filling tags with information "
 "from filenames"
 msgstr "파일 이름 정보로 태그를 자동으로 채울 때 사용할 기본 마스크"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:165
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:167
 msgid "Mask for renaming files"
 msgstr "파일 이름 바꾸기용 마스크"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:166
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:168
 msgid "The default mask to use when renaming files"
 msgstr "파일 이름을 바꿀 때 사용할 기본 마스크"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:167
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:169
 msgid "Mask for renaming directories"
 msgstr "디렉터리 이름 바꾸기용 마스크"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:168
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:170
 msgid "The default mask to use when renaming directories"
 msgstr "디렉터리 이름을 바꿨을 때 사용할 기본 마스크"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:169
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:171
 msgid "Use a mask when renaming directories"
 msgstr "디렉터리 이름을 바꿀 때 마스크 사용"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:171
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:173
 msgid "Convert spaces and underscores when renaming files"
 msgstr "파일 이름을 바꿀 때 공백 문자를 밑줄 문자로 치환"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:172
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:174
 msgid "Whether to convert to spaces or underscores when renaming files"
 msgstr "파일 이름을 바꿀 때 공백 문자 또는 밑줄로 바꿀 지 여부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:173
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
 msgid "How to modify filename extensions when renaming"
 msgstr "이름을 바꿀 때 파일 이름 확장자를 수정하는 방식"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:174
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:176
 msgid ""
 "Change the file extension to all lower-case, all upper-case or do not change "
 "it"
 msgstr ""
 "파일 확장자를 모두 소문자로 바꾸거나, 모두 대문자로 바꾸거나 바꾸지 않음"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:177
 msgid "Encoding options when renaming files"
 msgstr "파일 이름을 바꿀 때 인코딩 옵션"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:176
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:178
 msgid ""
 "If the encoding of the filename does not match the filesystem encoding, "
 "choose whether to try another encoding, approximate the filesystem encoding "
@@ -3132,68 +3206,68 @@ msgstr ""
 "부를 선택하시고, 문자 변환 또는 주어진 문자를 무시하는 식의 평균적인 파일 시"
 "스템 인코딩을 추정합니다."
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:177
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:179
 msgid "Replace illegal characters when renaming"
 msgstr "이름을 바꿀 때 잘못된 문자 바꾸기"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:178
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:180
 msgid ""
 "Whether to replace illegal characters in a filename when using the rename "
 "function"
 msgstr "이름 바꾸기 기능을 사용할 때 파일 이름의 잘못된 문자를 바꿀 지 여부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:179
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:181
 msgid "Show the scanner mask editor"
 msgstr "검색 마스크 편집기 표시"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:180
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:182
 msgid "Whether to show the scanner mask editor in the tag scanner"
 msgstr "태그 탐색기에 탐색기 마스크 편집기 표시 여부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:181
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:183
 msgid "Show the scanner legend"
 msgstr "검색기 범례 표시"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:182
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:184
 msgid "Whether to show the scanner legend in the tag scanner"
 msgstr "태그 검색기의 검색기 범례 표시 여부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:183
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:185
 msgid "Show the scanner window on startup"
 msgstr "시작할 때 검색 창 표시"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:185
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:187
 msgid "The scan mode"
 msgstr "탐색 모드"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:186
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:188
 msgid "Which type of scan to show in the scanner"
 msgstr "탐색기에서 보여줄 검색 형식"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:187
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:189
 msgid "Split fields at this separator"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:188
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:190
 msgid ""
 "Seperator used when splitting e.g. Ogg fields or joining multiple field "
 "values"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:189
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:191
 msgid "Vorbis fields to split"
 msgstr ""
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:190
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:192
 #, fuzzy
 msgid "Whether to split the selected fields in Ogg comments"
 msgstr "Ogg 주석에서 “ - “ 구분 문자를 중심으로 제목 필드를 나눌 지 여부"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:191
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:193
 msgid "Page to show in the preferences dialog"
 msgstr "기본 설정 대화상자를 보여줄 페이지"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:192
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:194
 msgid "The page in the notebook of the preferences dialog"
 msgstr "기본 설정 대화상자의 노트북 페이지"
 
@@ -3261,78 +3335,78 @@ msgstr "‘%s’ 파일 정보를 요청하는 중 오류 발생: %s"
 msgid "Cannot open path ‘%s’"
 msgstr "'%s' 경로를 열 수 없습니다"
 
-#: ../src/application_window.cc:369 ../src/application_window.cc:387
+#: ../src/application_window.cc:373 ../src/application_window.cc:391
 #, c-format
 msgid "Do you really want to delete the file ‘%s’?"
 msgstr "‘%s’ 파일을 정말로 삭제하시겠습니까?"
 
-#: ../src/application_window.cc:372 ../src/easytag.c:459 ../src/easytag.c:595
+#: ../src/application_window.cc:376 ../src/easytag.c:459 ../src/easytag.c:595
 msgid "Repeat action for the remaining files"
 msgstr "나머지 파일에 같은 동작 반복"
 
-#: ../src/application_window.cc:375
+#: ../src/application_window.cc:379
 msgid "_Skip"
 msgstr "건너뛰기(_S)"
 
-#: ../src/application_window.cc:377 ../src/application_window.cc:391
+#: ../src/application_window.cc:381 ../src/application_window.cc:395
 msgid "_Delete"
 msgstr "삭제(_D)"
 
-#: ../src/application_window.cc:379 ../src/application_window.cc:389
+#: ../src/application_window.cc:383 ../src/application_window.cc:393
 msgid "Delete File"
 msgstr "파일 삭제"
 
-#: ../src/application_window.cc:416
+#: ../src/application_window.cc:420
 #, c-format
 msgid "File ‘%s’ deleted"
 msgstr "'%s' 파일을 삭제했습니다"
 
-#: ../src/application_window.cc:587
+#: ../src/application_window.cc:591
 #, c-format
 msgid "Cannot delete file ‘%s’"
 msgstr "‘%s’ 파일을 삭제할 수 없습니다"
 
-#: ../src/application_window.cc:611
+#: ../src/application_window.cc:615
 msgid "Some files were not deleted"
 msgstr "일부 파일을 삭제하지 않았습니다"
 
-#: ../src/application_window.cc:613
+#: ../src/application_window.cc:617
 msgid "All files have been deleted"
 msgstr "모든 파일을 삭제했습니다"
 
-#: ../src/application_window.cc:918
+#: ../src/application_window.cc:922
 msgid "All tags have been removed"
 msgstr "모든 태그를 제거했습니다"
 
-#: ../src/application_window.cc:1475 ../src/browser.cc:349
-#: ../src/browser.cc:392 ../src/browser.cc:426 ../src/browser.cc:4325
-#: ../src/browser.cc:4400
+#: ../src/application_window.cc:1479 ../src/browser.cc:349
+#: ../src/browser.cc:392 ../src/browser.cc:426 ../src/browser.cc:4324
+#: ../src/browser.cc:4399
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "‘%s’ 프로그램 실행에 실패했습니다"
 
-#: ../src/application_window.cc:1998
+#: ../src/application_window.cc:2016
 #, c-format
 msgid "Could not convert filename ‘%s’ to system filename encoding"
 msgstr "‘%s’ 파일 이름을 시스템 파일 이름 인코딩으로 변환할 수 없습니다"
 
-#: ../src/application_window.cc:2001
+#: ../src/application_window.cc:2019
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "G_FILENAME_ENCODING 환경 변수를 설정해보십시오."
 
-#: ../src/application_window.cc:2003 ../src/scan_dialog.cc:808
+#: ../src/application_window.cc:2021 ../src/scan_dialog.cc:780
 msgid "Filename translation"
 msgstr "파일 이름 번역"
 
 #. And refresh the number of files in this directory
-#: ../src/application_window.cc:2163
+#: ../src/application_window.cc:2180
 #, c-format
 msgid "One file"
 msgid_plural "%u files"
 msgstr[0] "한 개(또는 %u)개 파일"
 
 #. Bitrate
-#: ../src/application_window.cc:2196 ../src/tags/flac_header.c:189
+#: ../src/application_window.cc:2213 ../src/tags/flac_header.c:189
 #: ../src/tags/monkeyaudio_header.c:76 ../src/tags/mp4_header.cc:144
 #: ../src/tags/mpeg_header.c:274 ../src/tags/musepack_header.c:78
 #: ../src/tags/ogg_header.c:411 ../src/tags/opus_header.c:231
@@ -3342,7 +3416,7 @@ msgid "%d kb/s"
 msgstr "%d kb/s"
 
 #. Samplerate
-#: ../src/application_window.cc:2199 ../src/tags/flac_header.c:192
+#: ../src/application_window.cc:2216 ../src/tags/flac_header.c:192
 #: ../src/tags/monkeyaudio_header.c:79 ../src/tags/mp4_header.cc:148
 #: ../src/tags/mpeg_header.c:279 ../src/tags/musepack_header.c:81
 #: ../src/tags/ogg_header.c:414 ../src/tags/opus_header.c:234
@@ -3351,30 +3425,30 @@ msgstr "%d kb/s"
 msgid "%d Hz"
 msgstr "%d Hz"
 
-#: ../src/application_window.cc:2354 ../src/easytag.c:915
+#: ../src/application_window.cc:2371 ../src/easytag.c:915
 #, c-format
 msgid "File: ‘%s’"
 msgstr "파일: ‘%s’"
 
 #. Quit EasyTAG.
-#: ../src/application_window.cc:2983
+#: ../src/application_window.cc:2996
 msgid "Normal exit"
 msgstr "정상적으로 빠져나갑니다"
 
-#: ../src/application_window.cc:3017 ../src/browser.cc:932
+#: ../src/application_window.cc:3030 ../src/browser.cc:932
 msgid "Some files have been modified but not saved"
 msgstr "일부 파일을 수정했지만 저장하지 않았습니다"
 
-#: ../src/application_window.cc:3018 ../src/browser.cc:936 ../src/easytag.c:233
+#: ../src/application_window.cc:3031 ../src/browser.cc:936 ../src/easytag.c:233
 #: ../src/easytag.c:463 ../src/easytag.c:598 ../src/easytag.c:606
 msgid "_Discard"
 msgstr "무시(_D)"
 
-#: ../src/application_window.cc:3024 ../src/easytag.c:239
+#: ../src/application_window.cc:3037 ../src/easytag.c:239
 msgid "Quit"
 msgstr "끝내기"
 
-#: ../src/application_window.cc:3027
+#: ../src/application_window.cc:3040
 msgid "Do you want to save them before quitting?"
 msgstr "끝내기 전에 저장하시겠습니까?"
 
@@ -3402,46 +3476,46 @@ msgstr "파일 선택"
 msgid "Select Directory"
 msgstr "디렉터리 선택"
 
-#: ../src/browser.cc:3830
+#: ../src/browser.cc:3829
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "'%s' 디렉터리 이름을 다음으로 바꿉니다:"
 
-#: ../src/browser.cc:3966
+#: ../src/browser.cc:3965
 msgid "You must type a directory name"
 msgstr "디렉터리 이름을 입력해야 합니다"
 
-#: ../src/browser.cc:3967 ../src/browser.cc:3989
+#: ../src/browser.cc:3966 ../src/browser.cc:3988
 msgid "Directory Name Error"
 msgstr "디렉터리 이름 오류"
 
-#: ../src/browser.cc:3985
+#: ../src/browser.cc:3984
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "‘%s’ 이름을 파일 이름 인코딩으로 변환할 수 없습니다"
 
-#: ../src/browser.cc:3988
+#: ../src/browser.cc:3987
 msgid "Please use another name."
 msgstr "다른 이름을 사용하십시오."
 
-#: ../src/browser.cc:4060
+#: ../src/browser.cc:4059
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "‘%s’ 디렉터리 이름이 이미 있습니다."
 
-#: ../src/browser.cc:4061 ../src/easytag.c:653
+#: ../src/browser.cc:4060 ../src/easytag.c:653
 msgid "Rename File Error"
 msgstr "파일 이름 바꾸기 오류"
 
-#: ../src/browser.cc:4100 ../src/browser.cc:4129
+#: ../src/browser.cc:4099 ../src/browser.cc:4128
 msgid "Rename Directory Error"
 msgstr "디렉터리 이름 바꾸기 오류"
 
-#: ../src/browser.cc:4170
+#: ../src/browser.cc:4169
 msgid "Directory renamed"
 msgstr "디렉터리 이름을 바꿨습니다"
 
-#: ../src/browser.cc:4317 ../src/browser.cc:4392
+#: ../src/browser.cc:4316 ../src/browser.cc:4391
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "‘%s’ 명령을 실행했습니다"
@@ -3518,42 +3592,42 @@ msgstr "서버에서 잘못된 응답을 반환했습니다"
 msgid "More results to load…"
 msgstr "불러올 결과 더 보기…"
 
-#: ../src/cddb_dialog.cc:2123
+#: ../src/cddb_dialog.cc:2124
 msgid "The number of CDDB results does not match the number of selected files"
 msgstr "CDDB 결과 갯수가 선택한 파일 갯수와 일치하지 않습니다"
 
-#: ../src/cddb_dialog.cc:2129
+#: ../src/cddb_dialog.cc:2130
 msgid "Write Tag from CDDB"
 msgstr "CDDB에서 태그 기록"
 
-#: ../src/cddb_dialog.cc:2444
+#: ../src/cddb_dialog.cc:2445
 msgid "Ready to search"
 msgstr "검색 준비"
 
-#: ../src/cddb_dialog.cc:2599
+#: ../src/cddb_dialog.cc:2600
 #, c-format
 msgid "No file selected"
 msgstr "선택한 파일이 없습니다"
 
 #. The CD redbook standard defines the maximum number of tracks as 99, any
 #. queries with more than 99 tracks will never return a result.
-#: ../src/cddb_dialog.cc:2608
+#: ../src/cddb_dialog.cc:2609
 #, c-format
 msgid "More than 99 files selected. Cannot send request"
 msgstr "99개 이상의 파일을 선택했습니다. 요청을 보낼 수 없습니다"
 
-#: ../src/cddb_dialog.cc:2614
+#: ../src/cddb_dialog.cc:2615
 #, c-format
 msgid "One file selected"
 msgid_plural "%u files selected"
 msgstr[0] "%u개 파일 선택"
 
-#: ../src/cddb_dialog.cc:2741
+#: ../src/cddb_dialog.cc:2742
 #, c-format
 msgid "Sending request (disc ID: %s, #tracks: %u, Disc length: %u)…"
 msgstr "요청을 보내는 중(디스크 ID: %s, 트랙 수: %u, 디스크 재생 시간: %u)…"
 
-#: ../src/cddb_dialog.cc:2862
+#: ../src/cddb_dialog.cc:2863
 #, c-format
 msgid "DiscID ‘%s’ gave one matching album"
 msgid_plural "DiscID ‘%s’ gave %u matching albums"
@@ -4020,28 +4094,28 @@ msgstr "이 줄 위로 이동"
 msgid "Move this line down"
 msgstr "이 줄 아래로 이동"
 
-#: ../src/mask.cc:198
+#: ../src/mask.cc:201
 msgid "Incomplete placeholder at end of mask."
 msgstr ""
 
-#: ../src/mask.cc:200
+#: ../src/mask.cc:203
 #, c-format
 msgid "Invalid placeholder '%%%c'."
 msgstr ""
 
-#: ../src/mask.cc:204
+#: ../src/mask.cc:207
 msgid "Opening brace '{' without closing brace '}'."
 msgstr ""
 
-#: ../src/mask.cc:206
+#: ../src/mask.cc:209
 msgid "Closing brace '}' without opening brace '{'."
 msgstr ""
 
-#: ../src/misc.cc:175
+#: ../src/misc.cc:226
 msgid "You must type a program name"
 msgstr "프로그램 이름을 입력하십시오"
 
-#: ../src/misc.cc:176
+#: ../src/misc.cc:227
 msgid "Program Name Error"
 msgstr "프로그램 이름 오류"
 
@@ -4149,7 +4223,7 @@ msgstr "픽셀"
 msgid "Type"
 msgstr "형식"
 
-#: ../src/picture.c:478 ../src/tags/id3_tag.cc:1326 ../src/tags/vcedit.c:530
+#: ../src/picture.c:478 ../src/tags/id3_tag.cc:1282 ../src/tags/vcedit.c:530
 #, c-format
 msgid "Input truncated or empty"
 msgstr "입력 데이터가 잘렸거나 비었습니다"
@@ -4172,11 +4246,11 @@ msgstr "‘%s’ 파일에 재생 목록을 기록했습니다"
 msgid "Invalid scanner mask"
 msgstr "잘못된 검색기 마스크"
 
-#: ../src/preferences_dialog.cc:809
+#: ../src/preferences_dialog.cc:783
 msgid "The selected default path is invalid"
 msgstr "선택한 기본 경로가 잘못되었습니다"
 
-#: ../src/preferences_dialog.cc:811
+#: ../src/preferences_dialog.cc:785
 #, c-format
 msgid ""
 "Path: ‘%s’\n"
@@ -4185,63 +4259,63 @@ msgstr ""
 "경로: ‘%s’\n"
 "오류: %s"
 
-#: ../src/preferences_dialog.cc:815
+#: ../src/preferences_dialog.cc:789
 msgid "Invalid Path Error"
 msgstr "잘못된 경로 오류"
 
-#: ../src/scan_dialog.cc:394
+#: ../src/scan_dialog.cc:366
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "‘%s’ 파일의 CRC 값을 계산할 수 없습니다"
 
-#: ../src/scan_dialog.cc:409
+#: ../src/scan_dialog.cc:381
 msgid "Tag successfully scanned"
 msgstr "태그를 성공적으로 검색했습니다"
 
-#: ../src/scan_dialog.cc:412
+#: ../src/scan_dialog.cc:384
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "‘%s’ 태그를 성공적으로 검색했습니다"
 
-#: ../src/scan_dialog.cc:455
+#: ../src/scan_dialog.cc:427
 #, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "‘%s’ 파일 이름에 ‘%s’ 확장자가 없습니다"
 
-#: ../src/scan_dialog.cc:547 ../src/scan_dialog.cc:578
+#: ../src/scan_dialog.cc:519 ../src/scan_dialog.cc:550
 #, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "‘%s’ 구분 문자가 ‘%s’에 없습니다"
 
-#: ../src/scan_dialog.cc:806
+#: ../src/scan_dialog.cc:778
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr "‘%s’ 파일 이름을 시스템 파일 이름 인코딩으로 변환할 수 없습니다"
 
-#: ../src/scan_dialog.cc:832
+#: ../src/scan_dialog.cc:804
 msgid "New filename successfully scanned"
 msgstr "새 파일 이름을 성공적으로 검색했습니다"
 
-#: ../src/scan_dialog.cc:836
+#: ../src/scan_dialog.cc:808
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "새 ‘%s’ 파일 이름을 성공적으로 검색했습니다"
 
-#: ../src/scan_dialog.cc:1001
+#: ../src/scan_dialog.cc:973
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "‘%s’ 필드를 처리하는 중 오류"
 
-#: ../src/scan_dialog.cc:1717
+#: ../src/scan_dialog.cc:1691
 msgid "New_mask"
 msgstr "새 마스크(_M)"
 
-#: ../src/scan_dialog.cc:2185
+#: ../src/scan_dialog.cc:2159
 #, fuzzy
 msgid "Empty scanner mask."
 msgstr "잘못된 검색기 마스크"
 
-#: ../src/scan_dialog.cc:2258
+#: ../src/scan_dialog.cc:2232
 msgid "All tags have been scanned"
 msgstr "모든 태그를 검색했습니다."
 
@@ -4274,235 +4348,245 @@ msgstr "‘파일 이름 바꾸기’ 기본 마스크 불러오는 중…"
 msgid "Ready to start"
 msgstr "시작 준비"
 
-#: ../src/tag_area.cc:190
+#: ../src/tag_area.cc:191
 #, c-format
 msgid "Selected files tagged with title ‘%s’"
 msgstr "선택한 파일을 ‘%s’ 제목으로 태그했습니다"
 
-#: ../src/tag_area.cc:190
+#: ../src/tag_area.cc:191
 msgid "Removed title from selected files"
 msgstr "선택한 파일에서 제목을 제거했습니다"
 
-#: ../src/tag_area.cc:195
+#: ../src/tag_area.cc:196
+#, fuzzy, c-format
+msgid "Selected files tagged with version ‘%s’"
+msgstr "선택한 파일을 ‘%s’ 연도로 태그했습니다"
+
+#: ../src/tag_area.cc:196
+#, fuzzy
+msgid "Removed version from selected files"
+msgstr "선택한 파일에서 연도를 제거했습니다"
+
+#: ../src/tag_area.cc:201
 #, fuzzy, c-format
 msgid "Selected files tagged with subtitle ‘%s’"
 msgstr "선택한 파일을 ‘%s’ 제목으로 태그했습니다"
 
-#: ../src/tag_area.cc:195
+#: ../src/tag_area.cc:201
 #, fuzzy
 msgid "Removed subtitle from selected files"
 msgstr "선택한 파일에서 제목을 제거했습니다"
 
-#: ../src/tag_area.cc:200
+#: ../src/tag_area.cc:206
 #, c-format
 msgid "Selected files tagged with artist ‘%s’"
 msgstr "선택한 파일을 ‘%s’ 음악가 이름으로 태그했습니다."
 
-#: ../src/tag_area.cc:200
+#: ../src/tag_area.cc:206
 msgid "Removed artist from selected files"
 msgstr "선택한 파일에서 음악가 이름을 제거했습니다"
 
-#: ../src/tag_area.cc:205
+#: ../src/tag_area.cc:211
 #, c-format
 msgid "Selected files tagged with album artist ‘%s’"
 msgstr "선택한 파일을 ‘%s’ 앨범 음악가 이름으로 태그했습니다"
 
-#: ../src/tag_area.cc:205
+#: ../src/tag_area.cc:211
 msgid "Removed album artist from selected files"
 msgstr "선택한 파일에서 앨범 음악가 이름을 제거했습니다"
 
-#: ../src/tag_area.cc:210
+#: ../src/tag_area.cc:216
 #, c-format
 msgid "Selected files tagged with album ‘%s’"
 msgstr "선택한 파일을 ‘%s’ 앨범 이름으로 태그했습니다"
 
-#: ../src/tag_area.cc:210
+#: ../src/tag_area.cc:216
 msgid "Removed album name from selected files"
 msgstr "선택한 파일에서 앨범 이름을 제거했습니다"
 
-#: ../src/tag_area.cc:215
+#: ../src/tag_area.cc:221
 #, fuzzy, c-format
 msgid "Selected files tagged with disc subtitle ‘%s’"
 msgstr "선택한 파일을 ‘%s’ 제목으로 태그했습니다"
 
-#: ../src/tag_area.cc:215
+#: ../src/tag_area.cc:221
 #, fuzzy
 msgid "Removed disc subtitle from selected files"
 msgstr "선택한 파일에서 디스크 번호를 제거했습니다"
 
-#: ../src/tag_area.cc:252
+#: ../src/tag_area.cc:257
 #, c-format
 msgid "Selected files tagged with disc number ‘%s/%s’"
 msgstr "선택한 파일을 ‘%s/%s’ 디스크 번호로 태그했습니다."
 
-#: ../src/tag_area.cc:259
+#: ../src/tag_area.cc:264
 #, c-format
 msgid "Selected files tagged with disc number like ‘xx’"
 msgstr "선택한 파일을 ‘xx’ 형식의 디스크 번호로 태그했습니다"
 
-#: ../src/tag_area.cc:264
+#: ../src/tag_area.cc:269
 msgid "Removed disc number from selected files"
 msgstr "선택한 파일에서 디스크 번호를 제거했습니다"
 
-#: ../src/tag_area.cc:272
+#: ../src/tag_area.cc:277
 #, c-format
 msgid "Selected files tagged with year ‘%s’"
 msgstr "선택한 파일을 ‘%s’ 연도로 태그했습니다"
 
-#: ../src/tag_area.cc:272
+#: ../src/tag_area.cc:277
 msgid "Removed year from selected files"
 msgstr "선택한 파일에서 연도를 제거했습니다"
 
-#: ../src/tag_area.cc:277
+#: ../src/tag_area.cc:282
 #, fuzzy, c-format
 msgid "Selected files tagged with release year ‘%s’"
 msgstr "선택한 파일을 ‘%s’ 연도로 태그했습니다"
 
-#: ../src/tag_area.cc:277
+#: ../src/tag_area.cc:282
 #, fuzzy
 msgid "Removed release year from selected files"
 msgstr "선택한 파일에서 연도를 제거했습니다"
 
-#: ../src/tag_area.cc:306 ../src/tag_area.cc:411
+#: ../src/tag_area.cc:310 ../src/tag_area.cc:417
 #, c-format
 msgid "Selected files tagged with track like ‘xx/%s’"
 msgstr "선택한 파일을 ‘xx/%s’ 형식의 트랙 정보로 태그했습니다"
 
-#: ../src/tag_area.cc:310
+#: ../src/tag_area.cc:314
 #, c-format
 msgid "Selected files tagged with track like ‘xx’"
 msgstr "선택한 파일을 ‘xx’ 형식의 트랙 정보로 태그했습니다"
 
-#: ../src/tag_area.cc:315 ../src/tag_area.cc:416
+#: ../src/tag_area.cc:319 ../src/tag_area.cc:422
 msgid "Removed track number from selected files"
 msgstr "선택한 파일에서 트랙 번호를 제거했습니다"
 
 #. msg = g_strdup_printf(_("All %d tracks numbered sequentially."), ETCore->ETFileSelectionList_Length);
-#: ../src/tag_area.cc:374
+#: ../src/tag_area.cc:379
 #, c-format
 msgid "Selected tracks numbered sequentially"
 msgstr "선택한 트랙을 순서대로 번호를 매겼습니다"
 
-#: ../src/tag_area.cc:424
+#: ../src/tag_area.cc:430
 #, c-format
 msgid "Selected files tagged with genre ‘%s’"
 msgstr "선택한 파일을 ‘%s’ 장르로 태그했습니다"
 
-#: ../src/tag_area.cc:424
+#: ../src/tag_area.cc:430
 msgid "Removed genre from selected files"
 msgstr "선택한 파일에서 장르를 제거했습니다"
 
-#: ../src/tag_area.cc:429
+#: ../src/tag_area.cc:435
 #, c-format
 msgid "Selected files tagged with comment ‘%s’"
 msgstr "선택한 파일을 ‘%s’ 설명으로 태그했습니다"
 
-#: ../src/tag_area.cc:429
+#: ../src/tag_area.cc:435
 msgid "Removed comment from selected files"
 msgstr "선택한 파일에서 설명을 제거했습니다"
 
-#: ../src/tag_area.cc:434
+#: ../src/tag_area.cc:440
 #, c-format
 msgid "Selected files tagged with composer ‘%s’"
 msgstr "선택한 파일을 ‘%s’ 작곡가 이름으로 태그했습니다"
 
-#: ../src/tag_area.cc:434
+#: ../src/tag_area.cc:440
 msgid "Removed composer from selected files"
 msgstr "선택한 파일에서 작곡가 이름을 제거했습니다"
 
-#: ../src/tag_area.cc:439
+#: ../src/tag_area.cc:445
 #, c-format
 msgid "Selected files tagged with original artist ‘%s’"
 msgstr "선택한 파일을 ‘%s’ 원작자 이름으로 태그했습니다"
 
-#: ../src/tag_area.cc:439
+#: ../src/tag_area.cc:445
 msgid "Removed original artist from selected files"
 msgstr "선택한 파일에서 원작자 이름을 제거했습니다"
 
-#: ../src/tag_area.cc:444
+#: ../src/tag_area.cc:450
 #, fuzzy, c-format
 msgid "Selected files tagged with original year ‘%s’"
 msgstr "선택한 파일을 ‘%s’ 원작자 이름으로 태그했습니다"
 
-#: ../src/tag_area.cc:444
+#: ../src/tag_area.cc:450
 #, fuzzy
 msgid "Removed original year from selected files"
 msgstr "선택한 파일에서 원작자 이름을 제거했습니다"
 
-#: ../src/tag_area.cc:449
+#: ../src/tag_area.cc:455
 #, c-format
 msgid "Selected files tagged with copyright ‘%s’"
 msgstr "선택한 파일을 ‘%s’ 저작권 정보로 태그했습니다"
 
-#: ../src/tag_area.cc:449
+#: ../src/tag_area.cc:455
 msgid "Removed copyright from selected files"
 msgstr "선택한 파일에서 저작권 정보를 제거했습니다"
 
-#: ../src/tag_area.cc:454
+#: ../src/tag_area.cc:460
 #, c-format
 msgid "Selected files tagged with URL ‘%s’"
 msgstr "선택한 파일을 ‘%s’ URL로 태그했습니다"
 
-#: ../src/tag_area.cc:454
+#: ../src/tag_area.cc:460
 msgid "Removed URL from selected files"
 msgstr "선택한 파일에서 URL을 제거했습니다"
 
-#: ../src/tag_area.cc:459
+#: ../src/tag_area.cc:465
 #, c-format
 msgid "Selected files tagged with encoder name ‘%s’"
 msgstr "선택한 ‘%s’ 파일을 인코더 이름으로 태그했습니다"
 
-#: ../src/tag_area.cc:459
+#: ../src/tag_area.cc:465
 msgid "Removed encoder name from selected files"
 msgstr "선택한 파일에서 인코더 이름을 제거했습니다"
 
-#: ../src/tag_area.cc:494
+#: ../src/tag_area.cc:499
 msgid "Selected files tagged with images"
 msgstr "선택한 파일을 이미지로 태그했습니다"
 
-#: ../src/tag_area.cc:498
+#: ../src/tag_area.cc:503
 msgid "Removed images from selected files"
 msgstr "선택한 파일에서 이미지를 제거했습니다"
 
 #. Menu items
-#: ../src/tag_area.cc:664
+#: ../src/tag_area.cc:669
 msgid "Tag selected files with this field"
 msgstr "이 내용으로 선택 파일에 태그"
 
-#: ../src/tag_area.cc:694
+#: ../src/tag_area.cc:697
 msgid "All uppercase"
 msgstr "모두 대문자로"
 
-#: ../src/tag_area.cc:700
+#: ../src/tag_area.cc:703
 msgid "All lowercase"
 msgstr "모두 소문자로"
 
-#: ../src/tag_area.cc:706
+#: ../src/tag_area.cc:709
 msgid "First letter uppercase"
 msgstr "첫번째 문자를 대문자로"
 
-#: ../src/tag_area.cc:712
+#: ../src/tag_area.cc:715
 msgid "First letter uppercase of each word"
 msgstr "각 단어의 첫번째 문자를 대문자로"
 
-#: ../src/tag_area.cc:728
+#: ../src/tag_area.cc:730
 msgid "Insert space before uppercase letter"
 msgstr "대문자 앞에 공백 문자 삽입"
 
-#: ../src/tag_area.cc:734
+#: ../src/tag_area.cc:736
 msgid "Remove duplicate spaces or underscores"
 msgstr "중복 공백 문자 또는 밑줄 문자 제거"
 
-#: ../src/tag_area.cc:740
+#: ../src/tag_area.cc:742
 msgid "Remove all text"
 msgstr "모든 텍스트 제거"
 
-#: ../src/tag_area.cc:1098 ../src/tag_area.cc:1191
+#: ../src/tag_area.cc:1102 ../src/tag_area.cc:1195
 #, c-format
 msgid "Error parsing image data ‘%s’"
 msgstr "‘%s’ 그림 데이터 해석 중 오류"
 
-#: ../src/tag_area.cc:1173
+#: ../src/tag_area.cc:1177
 msgid ""
 "Cannot display the image because not enough data has been read to determine "
 "how to create the image buffer"
@@ -4510,97 +4594,97 @@ msgstr ""
 "그림 버퍼를 만들 방법을 결정할 충분한 데이터를 읽지 못하여 그림을 표시할 수 "
 "없습니다"
 
-#: ../src/tag_area.cc:1180
+#: ../src/tag_area.cc:1184
 msgid "Cannot display the image"
 msgstr "그림을 표시할 수 없음"
 
-#: ../src/tag_area.cc:1182
+#: ../src/tag_area.cc:1186
 msgid ""
 "Not enough data has been read to determine how to create the image buffer."
 msgstr "그림 버퍼를 만들 방법을 결정할 충분한 데이터를 불러오지 못했습니다."
 
-#: ../src/tag_area.cc:1184
+#: ../src/tag_area.cc:1188
 msgid "Load Image File"
 msgstr "그림 파일 불러오기"
 
-#: ../src/tag_area.cc:1229 ../src/tag_area.cc:1254
+#: ../src/tag_area.cc:1233 ../src/tag_area.cc:1258
 #, c-format
 msgid "Image file not loaded ‘%s’"
 msgstr "‘%s’ 그림 파일을 불러오지 않았습니다"
 
-#: ../src/tag_area.cc:1246
+#: ../src/tag_area.cc:1250
 #, c-format
 msgid "Cannot open file ‘%s’"
 msgstr "‘%s’ 파일을 열 수 없습니다"
 
-#: ../src/tag_area.cc:1250
+#: ../src/tag_area.cc:1254
 msgid "Image File Error"
 msgstr "그림 파일 오류"
 
-#: ../src/tag_area.cc:1261
+#: ../src/tag_area.cc:1265
 msgid "Image file loaded"
 msgstr "그림 파일을 불러왔습니다"
 
-#: ../src/tag_area.cc:1344
+#: ../src/tag_area.cc:1348
 msgid "Add Images"
 msgstr "그림 추가"
 
-#: ../src/tag_area.cc:1354 ../src/tag_area.cc:1681
+#: ../src/tag_area.cc:1358 ../src/tag_area.cc:1685
 msgid "All Files"
 msgstr "모든 파일"
 
-#: ../src/tag_area.cc:1361 ../src/tag_area.cc:1688
+#: ../src/tag_area.cc:1365 ../src/tag_area.cc:1692
 msgid "PNG and JPEG"
 msgstr "PNG 및 JPEG"
 
-#: ../src/tag_area.cc:1478
+#: ../src/tag_area.cc:1482
 #, c-format
 msgid "Image Properties %d/%d"
 msgstr "그림 속성 %d/%d"
 
-#: ../src/tag_area.cc:1667
+#: ../src/tag_area.cc:1671
 #, c-format
 msgid "Save Image %d/%d"
 msgstr "그림 저장 %d/%d"
 
-#: ../src/tag_area.cc:1747
+#: ../src/tag_area.cc:1751
 #, c-format
 msgid "Image file not saved ‘%s’"
 msgstr "‘%s’ 그림 파일을 저장하지 않았습니다"
 
-#: ../src/tag_area.cc:1993
+#: ../src/tag_area.cc:1999
 msgid "Tag selected files with this genre"
 msgstr "이 장르로 선택 파일에 태그"
 
-#: ../src/tag_area.cc:2504
+#: ../src/tag_area.cc:2456
 msgid "ID3 Tag"
 msgstr "ID3 태그"
 
-#: ../src/tag_area.cc:2509
+#: ../src/tag_area.cc:2461
 msgid "Ogg Vorbis Tag"
 msgstr "Ogg Vorbis 태그"
 
-#: ../src/tag_area.cc:2514
+#: ../src/tag_area.cc:2466
 msgid "FLAC Vorbis Tag"
 msgstr "FLAC Vorbis 태그"
 
-#: ../src/tag_area.cc:2518
+#: ../src/tag_area.cc:2470
 msgid "APE Tag"
 msgstr "APE 태그"
 
-#: ../src/tag_area.cc:2522
+#: ../src/tag_area.cc:2474
 msgid "MP4/M4A/AAC Tag"
 msgstr "MP4/M4A/AAC 태그"
 
-#: ../src/tag_area.cc:2527
+#: ../src/tag_area.cc:2479
 msgid "Wavpack Tag"
 msgstr "Wavpack 태그"
 
-#: ../src/tag_area.cc:2532
+#: ../src/tag_area.cc:2484
 msgid "Opus Tag"
 msgstr "Opus 태그"
 
-#: ../src/tag_area.cc:2656
+#: ../src/tag_area.cc:2610
 #, c-format
 msgid "Images (%u)"
 msgstr "그림(%u)"
@@ -4613,7 +4697,7 @@ msgstr "그림(%u)"
 msgid "Error while opening file: %s"
 msgstr "파일을 여는 중 오류: %s"
 
-#: ../src/tags/ape_tag.cc:402
+#: ../src/tags/ape_tag.cc:282
 msgid "Failed to write APE tag"
 msgstr "APE 태그 기록에 실패했습니다"
 
@@ -4635,120 +4719,120 @@ msgstr "FLAC 파일"
 msgid "Channels:"
 msgstr "채널:"
 
-#: ../src/tags/flac_tag.cc:671 ../src/tags/flac_tag.cc:704
-#: ../src/tags/flac_tag.cc:718
+#: ../src/tags/flac_tag.cc:675 ../src/tags/flac_tag.cc:708
+#: ../src/tags/flac_tag.cc:722
 #, c-format
 msgid "Error while opening file ‘%s’ as FLAC: %s"
 msgstr "‘%s’ 파일을 FLAC 형식으로 여는 중 오류: %s"
 
-#: ../src/tags/flac_tag.cc:950 ../src/tags/flac_tag.cc:962
-#: ../src/tags/flac_tag.cc:982
+#: ../src/tags/flac_tag.cc:946 ../src/tags/flac_tag.cc:958
+#: ../src/tags/flac_tag.cc:978
 #, c-format
 msgid "Failed to write comments to file ‘%s’: %s"
 msgstr "‘%s’ 파일의 설명 기록에 실패했습니다: %s"
 
-#: ../src/tags/id3_tag.cc:212
+#: ../src/tags/id3_tag.cc:168
 msgid "Corrupted file"
 msgstr "깨진 파일"
 
-#: ../src/tags/id3_tag.cc:431
+#: ../src/tags/id3_tag.cc:387
 #, c-format
 msgid "Removed tag of ‘%s’"
 msgstr "'%s'의 태그를 제거했습니다"
 
-#: ../src/tags/id3_tag.cc:438 ../src/tags/id3_tag.cc:522
+#: ../src/tags/id3_tag.cc:394 ../src/tags/id3_tag.cc:478
 #, c-format
 msgid "Error while removing ID3v1 tag of ‘%s’: %s"
 msgstr "‘%s’의 ID3v1 태그 제거 중 오류: %s"
 
-#: ../src/tags/id3_tag.cc:447 ../src/tags/id3_tag.cc:485
+#: ../src/tags/id3_tag.cc:403 ../src/tags/id3_tag.cc:441
 #, c-format
 msgid "Error while removing ID3v2 tag of ‘%s’: %s"
 msgstr "‘%s’의 ID3v2 태그 제거 중 오류: %s"
 
-#: ../src/tags/id3_tag.cc:473
+#: ../src/tags/id3_tag.cc:429
 #, c-format
 msgid "Error while updating ID3v2 tag of ‘%s’: %s"
 msgstr "‘%s’의 ID3v2 태그 업데이트 중 오류: %s"
 
-#: ../src/tags/id3_tag.cc:510
+#: ../src/tags/id3_tag.cc:466
 #, c-format
 msgid "Error while updating ID3v1 tag of ‘%s’: %s"
 msgstr "‘%s’의 ID3v1 태그를 업데이트하는 중 오류(%s)"
 
-#: ../src/tags/id3_tag.cc:556
+#: ../src/tags/id3_tag.cc:512
 msgid "Buggy id3lib"
 msgstr "문제 있는 id3lib"
 
-#: ../src/tags/id3_tag.cc:577
+#: ../src/tags/id3_tag.cc:533
 msgid "No error reported"
 msgstr "보고된 오류가 없습니다"
 
-#: ../src/tags/id3_tag.cc:579
+#: ../src/tags/id3_tag.cc:535
 msgid "No available memory"
 msgstr "메모리 공간이 부족합니다"
 
-#: ../src/tags/id3_tag.cc:581
+#: ../src/tags/id3_tag.cc:537
 msgid "No data to parse"
 msgstr "해석할 데이터가 없습니다"
 
-#: ../src/tags/id3_tag.cc:583
+#: ../src/tags/id3_tag.cc:539
 msgid "Improperly formatted data"
 msgstr "알맞지 않은 형식의 데이터입니다"
 
-#: ../src/tags/id3_tag.cc:585
+#: ../src/tags/id3_tag.cc:541
 msgid "No buffer to write to"
 msgstr "기록할 버퍼가 없습니다"
 
-#: ../src/tags/id3_tag.cc:587
+#: ../src/tags/id3_tag.cc:543
 msgid "Buffer is too small"
 msgstr "버퍼가 너무 작습니다"
 
-#: ../src/tags/id3_tag.cc:589
+#: ../src/tags/id3_tag.cc:545
 msgid "Invalid frame ID"
 msgstr "잘못된 프레임 ID"
 
-#: ../src/tags/id3_tag.cc:591
+#: ../src/tags/id3_tag.cc:547
 msgid "Requested field not found"
 msgstr "요청한 내용이 없습니다"
 
-#: ../src/tags/id3_tag.cc:593
+#: ../src/tags/id3_tag.cc:549
 msgid "Unknown field type"
 msgstr "알 수 없는 필드 형식입니다"
 
-#: ../src/tags/id3_tag.cc:595
+#: ../src/tags/id3_tag.cc:551
 msgid "Tag is already attached to a file"
 msgstr "이미 파일에 태그를 붙였습니다"
 
-#: ../src/tags/id3_tag.cc:597
+#: ../src/tags/id3_tag.cc:553
 msgid "Invalid tag version"
 msgstr "잘못된 태그 버전"
 
-#: ../src/tags/id3_tag.cc:599
+#: ../src/tags/id3_tag.cc:555
 msgid "No file to parse"
 msgstr "해석할 파일이 없습니다"
 
-#: ../src/tags/id3_tag.cc:601
+#: ../src/tags/id3_tag.cc:557
 msgid "Attempting to write to a read-only file"
 msgstr "읽기 전용 파일에 기록을 시도합니다"
 
-#: ../src/tags/id3_tag.cc:603
+#: ../src/tags/id3_tag.cc:559
 msgid "Error in compression/uncompression"
 msgstr "압축/압축 해제중 오류"
 
-#: ../src/tags/id3_tag.cc:605
+#: ../src/tags/id3_tag.cc:561
 msgid "Unknown error message"
 msgstr "알 수 없는 오류 메시지"
 
-#: ../src/tags/id3_tag.cc:1364
+#: ../src/tags/id3_tag.cc:1320
 msgid "Error while creating temporary file"
 msgstr "임시 파일을 만드는 중 오류"
 
 #: ../src/tags/id3v24_tag.cc:135 ../src/tags/id3v24_tag.cc:190
 #: ../src/tags/id3v24_tag.cc:228 ../src/tags/id3v24_tag.cc:238
-#: ../src/tags/id3v24_tag.cc:247 ../src/tags/id3v24_tag.cc:1012
-#: ../src/tags/id3v24_tag.cc:1020 ../src/tags/id3v24_tag.cc:1027
-#: ../src/tags/id3v24_tag.cc:1053 ../src/tags/id3v24_tag.cc:1093
+#: ../src/tags/id3v24_tag.cc:247 ../src/tags/id3v24_tag.cc:1011
+#: ../src/tags/id3v24_tag.cc:1019 ../src/tags/id3v24_tag.cc:1026
+#: ../src/tags/id3v24_tag.cc:1052 ../src/tags/id3v24_tag.cc:1092
 #: ../src/tags/mp4_tag.cc:102 ../src/tags/ogg_header.c:277
 msgid "Error reading tags from file"
 msgstr "파일에서 태그를 읽는 중 오류"
@@ -4763,7 +4847,7 @@ msgid "Profile:"
 msgstr "프로파일:"
 
 #: ../src/tags/mp4_header.cc:68 ../src/tags/mp4_tag.cc:93
-#: ../src/tags/mp4_tag.cc:333
+#: ../src/tags/mp4_tag.cc:332
 msgid "MP4 format invalid"
 msgstr "잘못된 MP4 형식"
 
@@ -4780,13 +4864,13 @@ msgstr "MP4/AAC 파일"
 msgid "~%d kb/s"
 msgstr "~%d kb/s"
 
-#: ../src/tags/mp4_tag.cc:310 ../src/tags/mp4_tag.cc:326
-#: ../src/tags/mp4_tag.cc:332
+#: ../src/tags/mp4_tag.cc:309 ../src/tags/mp4_tag.cc:325
+#: ../src/tags/mp4_tag.cc:331
 #, c-format
 msgid "Error while opening file ‘%s’: %s"
 msgstr "‘%s’ 파일을 여는 중 오류: %s"
 
-#: ../src/tags/mp4_tag.cc:343
+#: ../src/tags/mp4_tag.cc:342
 #, c-format
 msgid "Error reading tags from file ‘%s’"
 msgstr "‘%s’ 파일 태그를 읽는 중 오류"
@@ -4925,7 +5009,3 @@ msgstr "Wavpack 파일"
 #~ "comments"
 #~ msgstr ""
 #~ "Ogg 주석에서 “ - “ 구분 문자를 중심으로 원 저작자 필드를 나눌 지 여부"
-
-#, fuzzy
-#~ msgid "Original year:"
-#~ msgstr "원작자"
