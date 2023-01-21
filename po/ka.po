@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: easytag\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-01 12:31+0100\n"
-"PO-Revision-Date: 2022-06-25 19:06+0200\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/easytag/issues\n"
+"POT-Creation-Date: 2022-09-28 21:38+0000\n"
+"PO-Revision-Date: 2022-11-16 18:54+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <(nothng)>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.2\n"
 
 #. Name and summary taken from the desktop file.
 #: ../data/org.gnome.EasyTAG.appdata.xml.in.h:2
@@ -27,7 +27,7 @@ msgstr "EasyTAG"
 #: ../data/org.gnome.EasyTAG.appdata.xml.in.h:3
 #: ../data/org.gnome.EasyTAG.desktop.in.h:3
 msgid "Edit audio file metadata"
-msgstr ""
+msgstr "აუდიო ფაილის მეტამონაცემების ჩასწორება"
 
 #: ../data/org.gnome.EasyTAG.appdata.xml.in.h:4
 msgid ""
@@ -49,17 +49,17 @@ msgstr ""
 
 #: ../data/org.gnome.EasyTAG.desktop.in.h:2
 msgid "Audio File Metadata Editor"
-msgstr ""
+msgstr "აუდიო ფაილების მეტამონაცემების რედაქტორი"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: ../data/org.gnome.EasyTAG.desktop.in.h:5
 msgid "mp3;tag;audio;music;"
-msgstr ""
+msgstr "mp3;tag;audio;music;"
 
 #: ../data/easytag-nautilus.metainfo.xml.in.h:1
 #: ../nautilus-extension/nautilus-easytag.c:245
 msgid "Open with EasyTAG"
-msgstr ""
+msgstr "EasyTAG-ით გახსნა"
 
 #: ../data/easytag-nautilus.metainfo.xml.in.h:2
 msgid "Open directories and audio files with EasyTAG using the context menu"
@@ -67,7 +67,7 @@ msgstr ""
 
 #: ../data/browser.ui.h:1
 msgid "Choose a directory to show in the browser"
-msgstr ""
+msgstr "ბრაუზერში საჩვენებელი საქაღალდე"
 
 #: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3495
 #: ../src/tag_area.cc:1349
@@ -223,7 +223,7 @@ msgstr "სემპლის სიხშირე:"
 
 #: ../data/browser_dialogs.ui.h:1
 msgid "Browse Directory With"
-msgstr ""
+msgstr "საქაღალდის გახსნა პროგრამით"
 
 #: ../data/browser_dialogs.ui.h:2
 msgid "Run Program"
@@ -250,7 +250,7 @@ msgstr "გაშვება"
 
 #: ../data/browser_dialogs.ui.h:7
 msgid "Open Files With"
-msgstr ""
+msgstr "ფაილების გახსნა პროგრამით"
 
 #: ../data/browser_dialogs.ui.h:8
 msgid ""
@@ -260,7 +260,7 @@ msgstr ""
 #. Only directories changed
 #: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:109 ../src/easytag.c:565
 msgid "Rename Directory"
-msgstr ""
+msgstr "საქაღალდისთვის სახელის გადარქმევა"
 
 #. Translators: Used when renaming a directory to a literal name (entered in a text field) rather than using a name generated from a mask.
 #: ../data/browser_dialogs.ui.h:11
@@ -269,7 +269,7 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:12 ../data/playlist_dialog.ui.h:3
 msgid "Use mask:"
-msgstr ""
+msgstr "ნიღბის გამოყენება:"
 
 #: ../data/browser_dialogs.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:170
 msgid "Whether to use a mask when renaming directories"
@@ -283,7 +283,7 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:15
 msgid "Rename directory preview"
-msgstr ""
+msgstr "საქაღალდის მინიატურის სახელის გადარქმევა"
 
 #: ../data/browser_dialogs.ui.h:16
 msgid "_Rename"
@@ -291,7 +291,7 @@ msgstr "_გადარქმევა"
 
 #: ../data/cddb_dialog.ui.h:1 ../data/toolbar.ui.h:28
 msgid "CDDB Search"
-msgstr ""
+msgstr "CDDB ძებნა"
 
 #: ../data/cddb_dialog.ui.h:2
 msgid "Search"
@@ -299,7 +299,7 @@ msgstr "ძებნა"
 
 #: ../data/cddb_dialog.ui.h:3
 msgid "Enter the words to search (separated by a space or ‘+’)"
-msgstr ""
+msgstr "შეიყვანეთ მოსაძებნი სიტყვა (განცალკევებული გამოტოვებით ან '+')"
 
 #: ../data/cddb_dialog.ui.h:4
 msgid "_Search"
@@ -320,7 +320,7 @@ msgstr "შეჩერება"
 
 #: ../data/cddb_dialog.ui.h:8
 msgid "Stop the search"
-msgstr ""
+msgstr "ძებნის შეჩერება"
 
 #: ../data/cddb_dialog.ui.h:9
 msgid "Manual Search Options"
@@ -418,11 +418,11 @@ msgstr "ხაზების მონიშვნის ინვერსი�
 
 #: ../data/cddb_dialog.ui.h:36
 msgid "Unselect all lines"
-msgstr ""
+msgstr "მონიშვნის ყველა ხაზზე მოხსნა"
 
 #: ../data/cddb_dialog.ui.h:37 ../data/menus.ui.h:24
 msgid "Fill Tags"
-msgstr ""
+msgstr "ჭდეების შევსება"
 
 #: ../data/cddb_dialog.ui.h:41
 msgid "Track Number"
@@ -430,7 +430,7 @@ msgstr "აუდიობილიკის ნომერი"
 
 #: ../data/cddb_dialog.ui.h:42
 msgid "Number of Tracks"
-msgstr ""
+msgstr "ტრეკების რაოდენობა"
 
 #: ../data/cddb_dialog.ui.h:44 ../data/load_files_dialog.ui.h:14
 msgid "Run the current scanner for each file"
@@ -464,7 +464,7 @@ msgstr "_გადატარება"
 
 #: ../data/cddb_dialog.ui.h:50
 msgid "Load the selected lines or all lines (if no lines are selected)"
-msgstr ""
+msgstr "მონიშნული ან ყველა ხაზის ჩატვირთვა"
 
 #. Default values are MPEG data.
 #: ../data/file_area.ui.h:1 ../src/application_window.cc:2189
@@ -526,7 +526,7 @@ msgstr "ჟურნალი"
 
 #: ../data/load_files_dialog.ui.h:1
 msgid "Load Filenames From a Text File"
-msgstr ""
+msgstr "ფაილის სახელების ტექსტური ფაილიდან ჩატვირთვა"
 
 #: ../data/load_files_dialog.ui.h:2
 msgid "File:"
@@ -534,15 +534,15 @@ msgstr "ფაილი:"
 
 #: ../data/load_files_dialog.ui.h:3
 msgid "Choose a Text File"
-msgstr ""
+msgstr "აირჩიეთ ტექსტური ფაილი"
 
 #: ../data/load_files_dialog.ui.h:4
 msgid "_Load"
-msgstr ""
+msgstr "_ჩატვირთვა"
 
 #: ../data/load_files_dialog.ui.h:5
 msgid "Content of Text File"
-msgstr ""
+msgstr "ტექსტური ფაილის შემცველობა"
 
 #: ../data/load_files_dialog.ui.h:6
 msgid "Insert a blank line before the selected line"
@@ -550,20 +550,20 @@ msgstr ""
 
 #: ../data/load_files_dialog.ui.h:7
 msgid "Delete the selected line"
-msgstr ""
+msgstr "მონიშნული ხაზის წაშლა"
 
 #: ../data/load_files_dialog.ui.h:8 ../src/load_files_dialog.cc:753
 #: ../src/load_files_dialog.cc:856
 msgid "Delete all blank lines"
-msgstr ""
+msgstr "ყველა ცარიელი ხაზის წაშლა"
 
 #: ../data/load_files_dialog.ui.h:9
 msgid "Move the selected line up"
-msgstr ""
+msgstr "მონიშნული ხაზის მაღლა ატანა"
 
 #: ../data/load_files_dialog.ui.h:10
 msgid "Move the selected line down"
-msgstr ""
+msgstr "მონიშნული ხაზის დაბლა ჩამოტანა"
 
 #: ../data/load_files_dialog.ui.h:11 ../src/load_files_dialog.cc:771
 #: ../src/load_files_dialog.cc:874
@@ -572,11 +572,11 @@ msgstr "თავიდან ჩატვირთვა"
 
 #: ../data/load_files_dialog.ui.h:12
 msgid "List of Files"
-msgstr ""
+msgstr "ფაილების სია"
 
 #: ../data/load_files_dialog.ui.h:13
 msgid "Selected line:"
-msgstr ""
+msgstr "მონიშნული ხაზი:"
 
 #: ../data/load_files_dialog.ui.h:15
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:119
@@ -599,19 +599,19 @@ msgstr "გასვ_ლა"
 
 #: ../data/menus.ui.h:4
 msgid "_File"
-msgstr ""
+msgstr "_ფაილი"
 
 #: ../data/menus.ui.h:5
 msgid "Open Files With…"
-msgstr ""
+msgstr "ფაილების გახსნა პროგრამით…"
 
 #: ../data/menus.ui.h:6
 msgid "Run Audio Player"
-msgstr ""
+msgstr "მუსიკის დამკვრელის გაშვება"
 
 #: ../data/menus.ui.h:7 ../data/toolbar.ui.h:23
 msgid "Invert File Selection"
-msgstr ""
+msgstr "ფაილების მონიშვნის ინვერსია"
 
 #: ../data/menus.ui.h:8
 msgid "Delete Files"
@@ -619,19 +619,19 @@ msgstr "ფაილების წაშლა"
 
 #: ../data/menus.ui.h:9
 msgid "Undo for File"
-msgstr ""
+msgstr "ფაილისთვის გაუქმება"
 
 #: ../data/menus.ui.h:10
 msgid "Redo for File"
-msgstr ""
+msgstr "ფალისთვის დაბრუნება"
 
 #: ../data/menus.ui.h:11 ../data/toolbar.ui.h:17
 msgid "_Save Files"
-msgstr ""
+msgstr "ფაილების _შენახვა"
 
 #: ../data/menus.ui.h:12
 msgid "_Force Save Files"
-msgstr ""
+msgstr "ფაილების _ნაძალადევი შენახვა"
 
 #: ../data/menus.ui.h:13
 msgid "_Edit"
@@ -647,7 +647,7 @@ msgstr "ყველას მონიშვნა"
 
 #: ../data/menus.ui.h:16
 msgid "Unselect All"
-msgstr ""
+msgstr "მონიშვნის ყველაფერზე მოხსნა"
 
 #: ../data/menus.ui.h:17
 msgid "Undo"
@@ -659,11 +659,11 @@ msgstr "გამეორება"
 
 #: ../data/menus.ui.h:19 ../data/toolbar.ui.h:11
 msgid "_Remove Tags"
-msgstr ""
+msgstr "ჭდეების _წაშლა"
 
 #: ../data/menus.ui.h:20
 msgid "_Preferences"
-msgstr ""
+msgstr "გამართვა"
 
 #: ../data/menus.ui.h:21
 msgid "_View"
@@ -671,47 +671,47 @@ msgstr "_ხედი"
 
 #: ../data/menus.ui.h:22
 msgid "Show Scanner"
-msgstr ""
+msgstr "სკანერის ჩვენება"
 
 #: ../data/menus.ui.h:23
 msgid "Scanner Mode"
-msgstr ""
+msgstr "სკანერის რეჟიმი"
 
 #: ../data/menus.ui.h:25
 msgid "Rename Files and Directories"
-msgstr ""
+msgstr "ფაილებისა და დირექტორების გადარქმევა"
 
 #: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:122
 msgid "Process Fields"
-msgstr ""
+msgstr "ველების დამუშავება"
 
 #: ../data/menus.ui.h:27 ../data/toolbar.ui.h:19
 msgid "Directory Tree"
-msgstr ""
+msgstr "საქაღალდეების ხე"
 
 #: ../data/menus.ui.h:28 ../data/toolbar.ui.h:21
 msgid "Artists and Albums"
-msgstr ""
+msgstr "შემსრულებლები და ალბომები"
 
 #: ../data/menus.ui.h:29
 msgid "Sort List by Tag"
-msgstr ""
+msgstr "სიის ჭდეების მიხედვით დალაგება"
 
 #: ../data/menus.ui.h:30
 msgid "Ascending by track number"
-msgstr ""
+msgstr "აღმავალი ტრეკის ნომრით"
 
 #: ../data/menus.ui.h:31
 msgid "Descending by track number"
-msgstr ""
+msgstr "დაღმავალი ბილიკის ნომრით"
 
 #: ../data/menus.ui.h:32
 msgid "Ascending by title"
-msgstr ""
+msgstr "აღმავალი სათაურით"
 
 #: ../data/menus.ui.h:33
 msgid "Descending by title"
-msgstr ""
+msgstr "დაღმავალი სათაურით"
 
 #: ../data/menus.ui.h:34
 #, fuzzy
@@ -725,27 +725,27 @@ msgstr "ორიგინალი შემსრულებელი"
 
 #: ../data/menus.ui.h:36
 msgid "Ascending by artist"
-msgstr ""
+msgstr "აღმავალი შემსრულებლით"
 
 #: ../data/menus.ui.h:37
 msgid "Descending by artist"
-msgstr ""
+msgstr "დაღმავალი შემსრულებლით"
 
 #: ../data/menus.ui.h:38
 msgid "Ascending by album artist"
-msgstr ""
+msgstr "აღმავალი ალბომის შემსრულებლით"
 
 #: ../data/menus.ui.h:39
 msgid "Descending by album artist"
-msgstr ""
+msgstr "დაღმავალი ალბომის შემსრულებლით"
 
 #: ../data/menus.ui.h:40
 msgid "Ascending by album"
-msgstr ""
+msgstr "აღმავალი ალბომით"
 
 #: ../data/menus.ui.h:41
 msgid "Descending by album"
-msgstr ""
+msgstr "დაღმავალი ალბომით"
 
 #: ../data/menus.ui.h:42
 #, fuzzy
@@ -759,11 +759,11 @@ msgstr "ორიგინალი შემსრულებელი"
 
 #: ../data/menus.ui.h:44
 msgid "Ascending by year"
-msgstr ""
+msgstr "აღმავალი წლით"
 
 #: ../data/menus.ui.h:45
 msgid "Descending by year"
-msgstr ""
+msgstr "დაღმავალი წლით"
 
 #: ../data/menus.ui.h:46
 #, fuzzy
@@ -777,35 +777,35 @@ msgstr "ორიგინალი შემსრულებელი"
 
 #: ../data/menus.ui.h:48
 msgid "Ascending by genre"
-msgstr ""
+msgstr "აღმავალი ჟანრით"
 
 #: ../data/menus.ui.h:49
 msgid "Descending by genre"
-msgstr ""
+msgstr "დაღმავალი ჟანრით"
 
 #: ../data/menus.ui.h:50
 msgid "Ascending by comment"
-msgstr ""
+msgstr "აღმავალი კომენტარით"
 
 #: ../data/menus.ui.h:51
 msgid "Descending by comment"
-msgstr ""
+msgstr "დაღმავალი კომენტარით"
 
 #: ../data/menus.ui.h:52
 msgid "Ascending by composer"
-msgstr ""
+msgstr "აღმავალი კომპოზიტორით"
 
 #: ../data/menus.ui.h:53
 msgid "Descending by composer"
-msgstr ""
+msgstr "დაღმავალი კომპოზიტორით"
 
 #: ../data/menus.ui.h:54
 msgid "Ascending by original artist"
-msgstr ""
+msgstr "აღმავალი ორიგინალური შემსრულებლით"
 
 #: ../data/menus.ui.h:55
 msgid "Descending by original artist"
-msgstr ""
+msgstr "დაღმავალი ორიგინალური შემსრულებლით"
 
 #: ../data/menus.ui.h:56
 #, fuzzy
@@ -818,31 +818,31 @@ msgstr ""
 
 #: ../data/menus.ui.h:58
 msgid "Ascending by copyright"
-msgstr ""
+msgstr "აღმავალი საავტორო უფლებებით"
 
 #: ../data/menus.ui.h:59
 msgid "Descending by copyright"
-msgstr ""
+msgstr "დაღმავალი საავტორო უფლებებით"
 
 #: ../data/menus.ui.h:60
 msgid "Ascending by URL"
-msgstr ""
+msgstr "აღმავალი ბმულით"
 
 #: ../data/menus.ui.h:61
 msgid "Descending by URL"
-msgstr ""
+msgstr "დაღმავალი ბმულით"
 
 #: ../data/menus.ui.h:62
 msgid "Ascending by encoder name"
-msgstr ""
+msgstr "აღმავალი ეკონდერის სახელით"
 
 #: ../data/menus.ui.h:63
 msgid "Descending by encoder name"
-msgstr ""
+msgstr "დაღმავალი ენკოდერის სახელით"
 
 #: ../data/menus.ui.h:64
 msgid "Sort List by Property"
-msgstr ""
+msgstr "სიის თვისების მიხედვით დალაგება"
 
 #: ../data/menus.ui.h:65
 #, fuzzy
@@ -856,111 +856,111 @@ msgstr "ორიგინალი შემსრულებელი"
 
 #: ../data/menus.ui.h:67
 msgid "Ascending by filename"
-msgstr ""
+msgstr "აღმავალი ფაილი სახელით"
 
 #: ../data/menus.ui.h:68
 msgid "Descending by filename"
-msgstr ""
+msgstr "დაღმავალი ფაილის სახელით"
 
 #: ../data/menus.ui.h:69
 msgid "Ascending by creation date"
-msgstr ""
+msgstr "აღმავალი შექმნის თარიღით"
 
 #: ../data/menus.ui.h:70
 msgid "Descending by creation date"
-msgstr ""
+msgstr "დაღმავალი შექმნის თარიღით"
 
 #: ../data/menus.ui.h:71
 msgid "Ascending by file type"
-msgstr ""
+msgstr "აღმავალი ფაილის ტიპით"
 
 #: ../data/menus.ui.h:72
 msgid "Descending by file type"
-msgstr ""
+msgstr "დაღმავალი ფაილის ტიპით"
 
 #: ../data/menus.ui.h:73
 msgid "Ascending by file size"
-msgstr ""
+msgstr "აღმავალი ფაილის ზომით"
 
 #: ../data/menus.ui.h:74
 msgid "Descending by file size"
-msgstr ""
+msgstr "დაღმავალი ფაილის ზომით"
 
 #: ../data/menus.ui.h:75
 msgid "Ascending by duration"
-msgstr ""
+msgstr "აღმავალი ხანგრძლივობით"
 
 #: ../data/menus.ui.h:76
 msgid "Descending by duration"
-msgstr ""
+msgstr "დაღმავალი ხანგრძლივობით"
 
 #: ../data/menus.ui.h:77
 msgid "Ascending by bit rate"
-msgstr ""
+msgstr "აღმავალი ბიტური სიჩქარით"
 
 #: ../data/menus.ui.h:78
 msgid "Descending by bit rate"
-msgstr ""
+msgstr "დაღმავალი ბიტური სიჩქარით"
 
 #: ../data/menus.ui.h:79
 msgid "Ascending by sample rate"
-msgstr ""
+msgstr "აღამავალი სემპლის სიხშირით"
 
 #: ../data/menus.ui.h:80
 msgid "Descending by sample rate"
-msgstr ""
+msgstr "დაღმავალი სემპლის სიხშირით"
 
 #: ../data/menus.ui.h:81
 msgid "Collapse Tree"
-msgstr ""
+msgstr "ხის ჩაკეცვა"
 
 #: ../data/menus.ui.h:82
 msgid "Reload Tree"
-msgstr ""
+msgstr "ხის თავიდან ჩატვირთვა"
 
 #: ../data/menus.ui.h:83
 msgid "Reload Directory"
-msgstr ""
+msgstr "საქაღალდის თავიდან ჩატვირთვა"
 
 #: ../data/menus.ui.h:84
 msgid "Show Hidden Directories"
-msgstr ""
+msgstr "დამალული საქაღალდეების ჩვენება"
 
 #: ../data/menus.ui.h:85
 msgid "_Browser"
-msgstr ""
+msgstr "_ბრაუზერი"
 
 #: ../data/menus.ui.h:86
 msgid "Set _Current Path as Default"
-msgstr ""
+msgstr "_მიმდინარე ბილიკის, როგორც ნაგულისხმევის, დაყენება"
 
 #: ../data/menus.ui.h:87
 msgid "Rename Directory…"
-msgstr ""
+msgstr "საქაღალდისთვის სახელის გადარქმევა…"
 
 #: ../data/menus.ui.h:88
 msgid "Browse Directory With…"
-msgstr ""
+msgstr "საქაღალდის გახსნა პროგრამით…"
 
 #: ../data/menus.ui.h:89
 msgid "Browse _Subdirectories"
-msgstr ""
+msgstr "_ქვესაქაღალდეების დათვალიერება"
 
 #: ../data/menus.ui.h:90
 msgid "_Miscellaneous"
-msgstr ""
+msgstr "_სხვადასხვა"
 
 #: ../data/menus.ui.h:91
 msgid "CDD_B Search…"
-msgstr ""
+msgstr "CDD_B ძებნა…"
 
 #: ../data/menus.ui.h:92
 msgid "Load Filenames From a Text File…"
-msgstr ""
+msgstr "ფაილის სახელების ტექსტური ფაილიდან ჩატვირთვა…"
 
 #: ../data/menus.ui.h:93 ../data/toolbar.ui.h:29
 msgid "Generate Playlist…"
-msgstr ""
+msgstr "დასაკრავი სიის გენერაცია…"
 
 #: ../data/menus.ui.h:94
 msgid "_Go"
@@ -968,63 +968,63 @@ msgstr "გადასვლა"
 
 #: ../data/menus.ui.h:95
 msgid "_Home Directory"
-msgstr ""
+msgstr "_საწყისი საქაღალდე"
 
 #: ../data/menus.ui.h:96
 msgid "Desktop Directory"
-msgstr ""
+msgstr "სამუშაო მაგიდის საქაღალდე"
 
 #: ../data/menus.ui.h:97
 msgid "Documents Directory"
-msgstr ""
+msgstr "დოკუმენტების საქაღალდე"
 
 #: ../data/menus.ui.h:98
 msgid "Downloads Directory"
-msgstr ""
+msgstr "გადმოწერების საქაღალდე"
 
 #: ../data/menus.ui.h:99
 msgid "Music Directory"
-msgstr ""
+msgstr "მუსიკის საქაღალდე"
 
 #: ../data/menus.ui.h:100
 msgid "_Parent Directory"
-msgstr ""
+msgstr "_მშობელი საქაღალდე"
 
 #: ../data/menus.ui.h:101
 msgid "_Default Directory"
-msgstr ""
+msgstr "_ნაგულისხმები საქაღალდე"
 
 #: ../data/menus.ui.h:102 ../data/toolbar.ui.h:1
 msgid "_First File"
-msgstr ""
+msgstr "_პირველი ფაილი"
 
 #: ../data/menus.ui.h:103
 msgid "Previous File"
-msgstr ""
+msgstr "წინა ფაილი"
 
 #: ../data/menus.ui.h:104 ../data/toolbar.ui.h:5
 msgid "_Next File"
-msgstr ""
+msgstr "_შემდეგი ფაილი"
 
 #: ../data/menus.ui.h:105 ../data/toolbar.ui.h:7
 msgid "_Last File"
-msgstr ""
+msgstr "_წინა ფაილი"
 
 #: ../data/menus.ui.h:106
 msgid "Home Directory"
-msgstr ""
+msgstr "საწყისი საქაღალდე"
 
 #: ../data/menus.ui.h:107
 msgid "Default Directory"
-msgstr ""
+msgstr "ნაგულისხმები საქაღალდე"
 
 #: ../data/menus.ui.h:108
 msgid "Set Current Path as Default"
-msgstr ""
+msgstr "მიმდინარე ბილიკის, როგორც ნაგულისხმევის, დაყენება"
 
 #: ../data/menus.ui.h:110
 msgid "Browse Subdirectories"
-msgstr ""
+msgstr "ქვესაქაღალდეების დათვალიერება"
 
 #: ../data/menus.ui.h:111
 msgid "Invert Selection"
@@ -1032,11 +1032,11 @@ msgstr "მონიშვნის ინვერსია"
 
 #: ../data/menus.ui.h:112
 msgid "CDDB Search Files…"
-msgstr ""
+msgstr "CDDB ძებნა…"
 
 #: ../data/menus.ui.h:113
 msgid "Find…"
-msgstr ""
+msgstr "ძიება…"
 
 #: ../data/menus.ui.h:114
 msgid "Clear Log"
@@ -1044,19 +1044,19 @@ msgstr "ჟურნალის გასუფთავება"
 
 #: ../data/playlist_dialog.ui.h:1
 msgid "Generate Playlist"
-msgstr ""
+msgstr "დასაკრავი სიის გენერაცია"
 
 #: ../data/playlist_dialog.ui.h:4
 msgid "Use directory name"
-msgstr ""
+msgstr "საქაღალდის სახელის გამოყენება"
 
 #: ../data/playlist_dialog.ui.h:5
 msgid "Options"
-msgstr ""
+msgstr "პარამეტრები"
 
 #: ../data/playlist_dialog.ui.h:6
 msgid "Include only the selected files"
-msgstr ""
+msgstr "მხოლოდ მონიშნული ფაილების ჩასმა"
 
 #: ../data/playlist_dialog.ui.h:7 ../data/org.gnome.EasyTAG.gschema.xml.h:146
 msgid ""
@@ -1109,7 +1109,7 @@ msgstr ""
 #: ../src/easytag.c:472 ../src/easytag.c:600 ../src/easytag.c:607
 #: ../src/tag_area.cc:1674
 msgid "_Save"
-msgstr ""
+msgstr "_შენახვა"
 
 #: ../data/preferences_dialog.ui.h:1
 msgid "Preferences"
@@ -1121,7 +1121,7 @@ msgstr "Browser-ი"
 
 #: ../data/preferences_dialog.ui.h:3
 msgid "Default Directory:"
-msgstr ""
+msgstr "ნაგულისხმები საქაღალდე:"
 
 #: ../data/preferences_dialog.ui.h:4 ../data/org.gnome.EasyTAG.gschema.xml.h:4
 msgid "The default path to search for music files"
@@ -1161,7 +1161,7 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:11
 msgid "Search hidden directories"
-msgstr ""
+msgstr "დამალული საქაღალდეების ძებნა"
 
 #: ../data/preferences_dialog.ui.h:12 ../data/org.gnome.EasyTAG.gschema.xml.h:8
 msgid ""
@@ -1185,7 +1185,7 @@ msgstr ""
 #: ../data/preferences_dialog.ui.h:41
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:49
 msgid "Show the log"
-msgstr ""
+msgstr "ჟურნალის ჩვენება"
 
 #: ../data/preferences_dialog.ui.h:42
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:50
@@ -1214,11 +1214,11 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:47
 msgid "Red color"
-msgstr ""
+msgstr "წითელი ფერი"
 
 #: ../data/preferences_dialog.ui.h:48
 msgid "Bold style"
-msgstr ""
+msgstr "სქელის სტილი"
 
 #: ../data/preferences_dialog.ui.h:49
 msgid "Interface"
@@ -1226,7 +1226,7 @@ msgstr "ინტერფეისი"
 
 #: ../data/preferences_dialog.ui.h:50
 msgid "File Settings"
-msgstr ""
+msgstr "ფაილის პარამეტრები"
 
 #: ../data/preferences_dialog.ui.h:51
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:35
@@ -1253,7 +1253,7 @@ msgstr ""
 #. Translators: a section header in the Files tab of the preferences dialog.
 #: ../data/preferences_dialog.ui.h:56
 msgid "Filenames"
-msgstr ""
+msgstr "ფაილის სახელები"
 
 #: ../data/preferences_dialog.ui.h:57
 msgid "Replace illegal characters when renaming:"
@@ -1298,7 +1298,7 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:66
 msgid "Lower case"
-msgstr ""
+msgstr "ქვედა რეგისტრი"
 
 #: ../data/preferences_dialog.ui.h:67
 msgid "For example, the extension will be converted to ‘.mp3’"
@@ -1306,7 +1306,7 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:68
 msgid "Upper case"
-msgstr ""
+msgstr "მაღალი რეგისტრი"
 
 #: ../data/preferences_dialog.ui.h:69
 msgid "For example, the extension will be converted to ‘.MP3’"
@@ -1318,11 +1318,11 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:71
 msgid "Filename Encoding"
-msgstr ""
+msgstr "ფაილის სახელი კოდირება"
 
 #: ../data/preferences_dialog.ui.h:72
 msgid "Try another character encoding"
-msgstr ""
+msgstr "სცადეთ სიმბოლოების სხვა კოდრება"
 
 #: ../data/preferences_dialog.ui.h:73
 msgid ""
@@ -1357,7 +1357,7 @@ msgstr "ფაილები"
 
 #: ../data/preferences_dialog.ui.h:79
 msgid "Automatically complete date field"
-msgstr ""
+msgstr "თარიღის ველის ავტომატური შევსება"
 
 #: ../data/preferences_dialog.ui.h:80
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:84
@@ -1405,7 +1405,7 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:89
 msgid "Splitting"
-msgstr ""
+msgstr "გაყოფა"
 
 #: ../data/preferences_dialog.ui.h:90
 msgid "Delimiter for split"
@@ -1456,7 +1456,7 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:101
 msgid "Original artist"
-msgstr ""
+msgstr "ორიგინალი შემსრულებელი"
 
 #: ../data/preferences_dialog.ui.h:102
 msgid "Whether to split original artist fields in Ogg comments"
@@ -1507,11 +1507,11 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:112
 msgid "ID3v2"
-msgstr ""
+msgstr "ID3v2"
 
 #: ../data/preferences_dialog.ui.h:113
 msgid "Write ID3v2 tag"
-msgstr ""
+msgstr "ID3v2 ჭდის ჩაწერა"
 
 #: ../data/preferences_dialog.ui.h:114
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:64
@@ -1531,7 +1531,7 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:119
 msgid "Character encoding:"
-msgstr ""
+msgstr "სიმბოლოების კოდირება:"
 
 #: ../data/preferences_dialog.ui.h:120
 msgid "Unicode"
@@ -1554,7 +1554,7 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:125
 msgid "Report error"
-msgstr ""
+msgstr "შეცდომის ანგარიშის გაგზავნა"
 
 #: ../data/preferences_dialog.ui.h:126
 msgid ""
@@ -1583,7 +1583,7 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:131
 msgid "Use CRC-32"
-msgstr ""
+msgstr "CRC-32-ის გამოყენება"
 
 #: ../data/preferences_dialog.ui.h:132
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:72
@@ -1614,7 +1614,7 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:137
 msgid "ID3v1"
-msgstr ""
+msgstr "ID3v1"
 
 #: ../data/preferences_dialog.ui.h:138
 msgid "Write ID3v1 tag"
@@ -1631,11 +1631,11 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:141
 msgid "ID3 Tags"
-msgstr ""
+msgstr "ID3 ჭდეები"
 
 #: ../data/preferences_dialog.ui.h:142
 msgid "Character Conversion"
-msgstr ""
+msgstr "სიმბოლოების გადაყვანა"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
 #: ../data/preferences_dialog.ui.h:144
@@ -1737,7 +1737,7 @@ msgstr "პორტი:"
 
 #: ../data/preferences_dialog.ui.h:168
 msgid "CGI Path:"
-msgstr ""
+msgstr "CGI ბილიკი:"
 
 #: ../data/preferences_dialog.ui.h:169
 msgid "Manual Search Server"
@@ -1745,7 +1745,7 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:170
 msgid "Results List"
-msgstr ""
+msgstr "შედეგების სია"
 
 #: ../data/preferences_dialog.ui.h:171
 msgid ""
@@ -1767,7 +1767,7 @@ msgstr ""
 
 #: ../data/preferences_dialog.ui.h:175
 msgid "CDDB"
-msgstr ""
+msgstr "CDDB"
 
 #: ../data/preferences_dialog.ui.h:176
 msgid "Confirmation"
@@ -1894,105 +1894,110 @@ msgstr ""
 msgid "Legend"
 msgstr "შინაარსი"
 
-#: ../data/scan_dialog.ui.h:14
-#, no-c-format
-msgid "%t: title"
-msgstr ""
-
-#: ../data/scan_dialog.ui.h:16
-#, no-c-format
-msgid "%a: artist"
-msgstr ""
-
-#: ../data/scan_dialog.ui.h:18
-#, no-c-format
-msgid "%y: year"
-msgstr ""
-
-#: ../data/scan_dialog.ui.h:20
-#, no-c-format
-msgid "%n: track number"
-msgstr ""
-
-#: ../data/scan_dialog.ui.h:22
-#, no-c-format
-msgid "%d: disc number"
-msgstr ""
-
-#: ../data/scan_dialog.ui.h:24
-#, no-c-format
-msgid "%T: album"
-msgstr ""
-
-#: ../data/scan_dialog.ui.h:26
-#, fuzzy, no-c-format
-msgid "%A: album artist"
-msgstr "ალბომის შემსრულებელი:"
-
 #: ../data/scan_dialog.ui.h:28
 #, fuzzy, no-c-format
 msgid "%Y: release year"
 msgstr "ორიგინალი შემსრულებელი"
-
-#: ../data/scan_dialog.ui.h:30
-#, no-c-format
-msgid "%N: number of tracks"
-msgstr ""
-
-#: ../data/scan_dialog.ui.h:32
-#, no-c-format
-msgid "%D: number of discs"
-msgstr ""
 
 #: ../data/scan_dialog.ui.h:34
 #, no-c-format
 msgid "%s: subtitle"
 msgstr ""
 
+#: ../data/scan_dialog.ui.h:16
+#, no-c-format
+msgid "%a: artist"
+msgstr "%a: შემსრულებელი"
+
+#: ../data/scan_dialog.ui.h:26
+#, no-c-format
+msgid "%A: album artist"
+msgstr "%A: ალბომის შემსრულებელი"
+
+#: ../data/scan_dialog.ui.h:24
+#, no-c-format
+msgid "%T: album"
+msgstr "%T: ალბომი"
+
+#: ../data/scan_dialog.ui.h:42
+#, no-c-format
+msgid "%c: comment"
+msgstr "%c: კომენტარი"
+
+#: ../data/scan_dialog.ui.h:46
+#, no-c-format
+msgid "%p: composer"
+msgstr "%p: კომპოზიტორი"
+
+#: ../data/scan_dialog.ui.h:48
+#, no-c-format
+msgid "%r: copyright"
+msgstr "%r: საავტორო უფლებები"
+
+#: ../data/scan_dialog.ui.h:22
+#, no-c-format
+msgid "%d: disc number"
+msgstr "%d: დისკის ნომერი"
+
+#: ../data/scan_dialog.ui.h:52
+#, no-c-format
+msgid "%e: encoded by"
+msgstr "%e: კოდირების ავტორი"
+
+#: ../data/scan_dialog.ui.h:40
+#, no-c-format
+msgid "%g: genre"
+msgstr "%g: ჟანრი"
+
+#: ../data/scan_dialog.ui.h:32
+#, no-c-format
+msgid "%i: ignored"
+msgstr "%i: იგნორირებული"
+
+#: ../data/scan_dialog.ui.h:30
+#, no-c-format
+msgid "%N: number of tracks"
+msgstr "%N: ტრეკების რაოდენობა"
+
 #: ../data/scan_dialog.ui.h:36
 #, no-c-format
 msgid "%o: original artist"
-msgstr ""
+msgstr "%o: ორიგინალი შემსრულებელი"
 
 #: ../data/scan_dialog.ui.h:38
 #, fuzzy, no-c-format
 msgid "%w: original year"
 msgstr "ორიგინალი შემსრულებელი"
 
-#: ../data/scan_dialog.ui.h:40
+#: ../data/scan_dialog.ui.h:20
 #, no-c-format
-msgid "%g: genre"
-msgstr ""
+msgid "%n: track number"
+msgstr "%n: ტრეკის ნომერი"
 
-#: ../data/scan_dialog.ui.h:42
+#: ../data/scan_dialog.ui.h:14
 #, no-c-format
-msgid "%c: comment"
-msgstr ""
+msgid "%t: title"
+msgstr "%t: სათაური"
+
+#: ../data/scan_dialog.ui.h:50
+#, no-c-format
+msgid "%u: URL"
+msgstr "%u: URL"
 
 #: ../data/scan_dialog.ui.h:44
 #, fuzzy, no-c-format
 msgid "%S: disc subtitle"
 msgstr "ალბომის შემსრულებელი:"
 
-#: ../data/scan_dialog.ui.h:46
+#: ../data/scan_dialog.ui.h:32
 #, no-c-format
-msgid "%p: composer"
-msgstr ""
+msgid "%D: number of discs"
+msgstr "%D: დისკების რაოდენობა"
 
-#: ../data/scan_dialog.ui.h:48
+#: ../data/scan_dialog.ui.h:18
 #, no-c-format
-msgid "%r: copyright"
-msgstr ""
-
-#: ../data/scan_dialog.ui.h:50
-#, no-c-format
-msgid "%u: URL"
-msgstr ""
-
-#: ../data/scan_dialog.ui.h:52
-#, no-c-format
-msgid "%e: encoded by"
-msgstr ""
+msgid "%y: year"
+msgstr "%y: წელი"
 
 #: ../data/scan_dialog.ui.h:54
 #, no-c-format
@@ -2005,7 +2010,7 @@ msgstr ""
 
 #: ../data/scan_dialog.ui.h:56
 msgid "Fill Tag"
-msgstr ""
+msgstr "ჭდის შევსება"
 
 #: ../data/scan_dialog.ui.h:57
 msgid "Prefix mask with current directory"
@@ -2021,24 +2026,24 @@ msgstr ""
 
 #: ../data/scan_dialog.ui.h:60
 msgid "Rename file preview"
-msgstr ""
+msgstr "ფაილის გადარქმევის გადახედვა"
 
 #. Only filename changed
 #: ../data/scan_dialog.ui.h:61 ../src/easytag.c:574
 msgid "Rename File"
-msgstr ""
+msgstr "ფაილის გადარქმევა"
 
 #: ../data/scan_dialog.ui.h:62
 msgid "Tag Fields"
-msgstr ""
+msgstr "ჭდის ველები"
 
 #: ../data/scan_dialog.ui.h:64
 msgid "Process filename"
-msgstr ""
+msgstr "ფაილის სახელის დამუშავება"
 
 #: ../data/scan_dialog.ui.h:66
 msgid "Process title field"
-msgstr ""
+msgstr "სათაურის ველის დამუშავება"
 
 #: ../data/scan_dialog.ui.h:68
 msgid "Process subtitle field"
@@ -2046,15 +2051,15 @@ msgstr ""
 
 #: ../data/scan_dialog.ui.h:70
 msgid "Process artist field"
-msgstr ""
+msgstr "შემსრულებლის ველის დამუშავება"
 
 #: ../data/scan_dialog.ui.h:72
 msgid "Process album artist field"
-msgstr ""
+msgstr "ალბომის შემსრულებლის ველის დამუშავება"
 
 #: ../data/scan_dialog.ui.h:74
 msgid "Process album field"
-msgstr ""
+msgstr "ალბომის ველის დამუშავება"
 
 #: ../data/scan_dialog.ui.h:76
 msgid "Process disc subtitle field"
@@ -2062,31 +2067,31 @@ msgstr ""
 
 #: ../data/scan_dialog.ui.h:78
 msgid "Process genre field"
-msgstr ""
+msgstr "ჟანრის ველის დამუშავება"
 
 #: ../data/scan_dialog.ui.h:80
 msgid "Process comment field"
-msgstr ""
+msgstr "კომენტარის ველის დამუშვება"
 
 #: ../data/scan_dialog.ui.h:82
 msgid "Process composer field"
-msgstr ""
+msgstr "კომპოზიტორის ველის დამუშავება"
 
 #: ../data/scan_dialog.ui.h:83
 msgid "Orig. Artist"
-msgstr ""
+msgstr "ორიგ. შემსრულებელი"
 
 #: ../data/scan_dialog.ui.h:84
 msgid "Process original artist field"
-msgstr ""
+msgstr "ორიგინალური შემსრულებლის ველის დამუშავება"
 
 #: ../data/scan_dialog.ui.h:86
 msgid "Process copyright field"
-msgstr ""
+msgstr "საავტორო უფლებების ველის დამუშავება"
 
 #: ../data/scan_dialog.ui.h:88
 msgid "Process URL field"
-msgstr ""
+msgstr "ბმულის ველის დამუშავება"
 
 #: ../data/scan_dialog.ui.h:90
 msgid "Process encoded-by field"
@@ -2094,7 +2099,7 @@ msgstr ""
 
 #: ../data/scan_dialog.ui.h:91
 msgid "Capitalization"
-msgstr ""
+msgstr "კაპიტალიზაცია"
 
 #: ../data/scan_dialog.ui.h:92
 msgid "Capitalize all"
@@ -2205,7 +2210,7 @@ msgstr ""
 
 #: ../data/scan_dialog.ui.h:118
 msgid "Convert:"
-msgstr ""
+msgstr "გადაყვანა:"
 
 #: ../data/scan_dialog.ui.h:119
 msgid "Replace a string by another one. Note that the search is case sensitive"
@@ -2213,11 +2218,11 @@ msgstr ""
 
 #: ../data/scan_dialog.ui.h:120
 msgid "to: "
-msgstr ""
+msgstr "სადამდე: "
 
 #: ../data/scan_dialog.ui.h:121
 msgid "Do not convert"
-msgstr ""
+msgstr "არ გარდაქნა"
 
 #: ../data/scan_dialog.ui.h:123
 msgid "Show / Hide Masks Editor"
@@ -2241,11 +2246,11 @@ msgstr ""
 
 #: ../data/search_dialog.ui.h:1
 msgid "Find Files"
-msgstr ""
+msgstr "ფაილების პოვნა"
 
 #: ../data/search_dialog.ui.h:2
 msgid "Search:"
-msgstr ""
+msgstr "ძებნა:"
 
 #: ../data/search_dialog.ui.h:3
 msgid ""
@@ -2259,17 +2264,17 @@ msgstr "_ძებნა"
 
 #: ../data/search_dialog.ui.h:5
 msgid "In:"
-msgstr ""
+msgstr "რაში:"
 
 #. This option is for the previous
 #: ../data/search_dialog.ui.h:7
 msgid "the Filename"
-msgstr ""
+msgstr "ფაილის სახელში"
 
 #. This option is for the previous
 #: ../data/search_dialog.ui.h:9
 msgid "the Tag"
-msgstr ""
+msgstr "ჭდეში"
 
 #: ../data/search_dialog.ui.h:10
 msgid "Case sensitive"
@@ -2320,6 +2325,9 @@ msgstr ""
 msgid "Album:"
 msgstr "ალბომი:"
 
+msgid "CD:"
+msgstr "CD:"
+
 #: ../data/tag_area.ui.h:11
 msgid "Tag selected files with this album name"
 msgstr ""
@@ -2334,11 +2342,7 @@ msgstr ""
 
 #: ../data/tag_area.ui.h:14
 msgid "Track #:"
-msgstr ""
-
-#: ../data/tag_area.ui.h:15
-msgid "Number selected tracks sequentially. Starts at 01 in each subdirectory"
-msgstr ""
+msgstr "აუდიობილიკის #:"
 
 #: ../data/tag_area.ui.h:16
 msgid ""
@@ -2396,7 +2400,7 @@ msgstr ""
 
 #: ../data/tag_area.ui.h:29
 msgid "Orig. artist:"
-msgstr ""
+msgstr "ორიგ. შემსრულებელი"
 
 #: ../data/tag_area.ui.h:30
 msgid "Tag selected files with this original artist"
@@ -2429,7 +2433,7 @@ msgstr ""
 
 #: ../data/tag_area.ui.h:37
 msgid "Encoded by:"
-msgstr ""
+msgstr "კოდირების ავტორი:"
 
 #: ../data/tag_area.ui.h:38
 msgid "Tag selected files with this encoder name"
@@ -2469,35 +2473,35 @@ msgstr "გამოსახულებები"
 
 #: ../data/toolbar.ui.h:2
 msgid "First file"
-msgstr ""
+msgstr "_პირველი ფაილი"
 
 #: ../data/toolbar.ui.h:3
 msgid "_Previous File"
-msgstr ""
+msgstr "_წინა ფაილი"
 
 #: ../data/toolbar.ui.h:4
 msgid "Previous file"
-msgstr ""
+msgstr "წინა ფაილი"
 
 #: ../data/toolbar.ui.h:6
 msgid "Next file"
-msgstr ""
+msgstr "შემდეგი ფაილი"
 
 #: ../data/toolbar.ui.h:8
 msgid "Last file"
-msgstr ""
+msgstr "ბოლო ფაილი"
 
 #: ../data/toolbar.ui.h:9
 msgid "_Show Scanner"
-msgstr ""
+msgstr "სკანერის _ჩვენება"
 
 #: ../data/toolbar.ui.h:10
 msgid "Show scanner"
-msgstr ""
+msgstr "სკანერის ჩვენება"
 
 #: ../data/toolbar.ui.h:12
 msgid "Remove tags"
-msgstr ""
+msgstr "ჭდეების წაშლა"
 
 #: ../data/toolbar.ui.h:13
 msgid "_Undo"
@@ -2505,15 +2509,15 @@ msgstr "გა_უქმება"
 
 #: ../data/toolbar.ui.h:14
 msgid "Undo for file"
-msgstr ""
+msgstr "ფაილისთვის გაუქმება"
 
 #: ../data/toolbar.ui.h:15
 msgid "R_edo"
-msgstr ""
+msgstr "_დაბრუნება"
 
 #: ../data/toolbar.ui.h:16
 msgid "Redo for file"
-msgstr ""
+msgstr "ფალისთვის დაბრუნება"
 
 #: ../data/toolbar.ui.h:18
 msgid "Save changes to selected files"
@@ -2537,23 +2541,23 @@ msgstr ""
 
 #: ../data/toolbar.ui.h:27
 msgid "CDDB Search…"
-msgstr ""
+msgstr "CDDB ძებნა…"
 
 #: ../data/toolbar.ui.h:30
 msgid "Generate a playlist"
-msgstr ""
+msgstr "დასაკრავი სიის გენერაცია"
 
 #: ../data/toolbar.ui.h:32
 msgid "Stop the current action"
-msgstr ""
+msgstr "მიმდინარე ქმედების გაჩერება"
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:1
 msgid "Load on startup"
-msgstr ""
+msgstr "გაშვებისას ჩატვირთვა"
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:3
 msgid "Default path"
-msgstr ""
+msgstr "ნაგულისხმები ბილიკი"
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:7
 msgid "Show hidden directories while browsing"
@@ -2679,7 +2683,7 @@ msgstr ""
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:55
 msgid "Write ID3v1 tags"
-msgstr ""
+msgstr "ID3v1 ჭდეების ჩაწერა"
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:57
 msgid "The character set for writing ID3v1 tags"
@@ -2705,11 +2709,11 @@ msgstr ""
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:63
 msgid "Write ID3v2 tags"
-msgstr ""
+msgstr "ID3v2 ჭდეების ჩაწერა"
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:65
 msgid "Enable ID3v2.4 support"
-msgstr ""
+msgstr "ID3v2.4-ის მხარდაჭერის ჩართვა"
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:66
 msgid "Whether to write ID3v2.4 tags when ID3v2 support is enabled"
@@ -2809,11 +2813,11 @@ msgstr ""
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:100
 msgid "Overwrite tag field"
-msgstr ""
+msgstr "ჭდის ველის თავზე გადაწერა"
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:102
 msgid "Set the default comment"
-msgstr ""
+msgstr "ნაგულისხმები კომენტარის დაყენება"
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:104
 msgid "Default comment for filling tags"
@@ -2958,7 +2962,7 @@ msgstr ""
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:159
 msgid "Search in filenames"
-msgstr ""
+msgstr "ფაილის სახელებში ძებნა"
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:160
 msgid "Perform the search on filenames"
@@ -2966,7 +2970,7 @@ msgstr ""
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:161
 msgid "Search in tags"
-msgstr ""
+msgstr "ჭდეებში ძებნა"
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:162
 msgid "Perform the search on tags"
@@ -3063,7 +3067,7 @@ msgstr ""
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:185
 msgid "The scan mode"
-msgstr ""
+msgstr "სკანირების რეჟიმი"
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:186
 msgid "Which type of scan to show in the scanner"
@@ -3143,7 +3147,7 @@ msgstr ""
 #: ../src/application.c:334
 #, c-format
 msgid "Website: %s"
-msgstr ""
+msgstr "ვებგვერდი: %s"
 
 #: ../src/application.c:343
 msgid "- Tag and rename audio files"
@@ -3178,7 +3182,7 @@ msgstr "_წაშლა"
 
 #: ../src/application_window.cc:379 ../src/application_window.cc:389
 msgid "Delete File"
-msgstr ""
+msgstr "ფაილის წაშლა"
 
 #: ../src/application_window.cc:416
 #, c-format
@@ -3227,7 +3231,7 @@ msgstr ""
 #, c-format
 msgid "One file"
 msgid_plural "%u files"
-msgstr[0] ""
+msgstr[0] "%u ფაილი"
 
 #. Bitrate
 #: ../src/application_window.cc:2196 ../src/tags/flac_header.c:189
@@ -3237,7 +3241,7 @@ msgstr[0] ""
 #: ../src/tags/wavpack_header.c:144
 #, c-format
 msgid "%d kb/s"
-msgstr ""
+msgstr "%d კბ/წმ"
 
 #. Samplerate
 #: ../src/application_window.cc:2199 ../src/tags/flac_header.c:192
@@ -3252,12 +3256,12 @@ msgstr "%d ჰც"
 #: ../src/application_window.cc:2354 ../src/easytag.c:915
 #, c-format
 msgid "File: ‘%s’"
-msgstr ""
+msgstr "ფაილი: ‘%s’"
 
 #. Quit EasyTAG.
 #: ../src/application_window.cc:2983
 msgid "Normal exit"
-msgstr ""
+msgstr "ნორმალური გასვლა"
 
 #: ../src/application_window.cc:3017 ../src/browser.cc:932
 msgid "Some files have been modified but not saved"
@@ -3290,7 +3294,7 @@ msgstr ""
 
 #: ../src/browser.cc:2276
 msgid "All albums"
-msgstr ""
+msgstr "ყველა ალბომი"
 
 #: ../src/browser.cc:3531
 msgid "Select File"
@@ -3298,7 +3302,7 @@ msgstr "აირჩიეთ ფაილი"
 
 #: ../src/browser.cc:3538
 msgid "Select Directory"
-msgstr ""
+msgstr "აირჩიეთ საქაღალდე"
 
 #: ../src/browser.cc:3830
 #, c-format
@@ -3320,29 +3324,29 @@ msgstr ""
 
 #: ../src/browser.cc:3988
 msgid "Please use another name."
-msgstr ""
+msgstr "აირჩიეთ სხვა სახელი."
 
 #: ../src/browser.cc:4060
 #, c-format
 msgid "The directory name ‘%s’ already exists."
-msgstr ""
+msgstr "საქაღალდე ამ სახელით უკვე არსებობს: '%s'."
 
 #: ../src/browser.cc:4061 ../src/easytag.c:653
 msgid "Rename File Error"
-msgstr ""
+msgstr "ფაილის გადარქმევის შეცდომა"
 
 #: ../src/browser.cc:4100 ../src/browser.cc:4129
 msgid "Rename Directory Error"
-msgstr ""
+msgstr "საქაღალდისთვის სახელის გადარქმევის შეცდომა"
 
 #: ../src/browser.cc:4170
 msgid "Directory renamed"
-msgstr ""
+msgstr "საქაღალდის გადარქმევა წარმატებულია"
 
 #: ../src/browser.cc:4317 ../src/browser.cc:4392
 #, c-format
 msgid "Executed command ‘%s’"
-msgstr ""
+msgstr "შესრულებული ბრძანება \"%s\""
 
 #: ../src/cddb_dialog.cc:286
 #, c-format
@@ -3350,6 +3354,8 @@ msgid ""
 "Album: ‘%s’, artist: ‘%s’, length: ‘%s’, year: ‘%s’, genre: ‘%s’, disc ID: "
 "‘%s’"
 msgstr ""
+"ალბომი: \"%s\", შემსრულებელი: \"%s\", განგრძლივობა: \"%s\", წელი: \"%s\", "
+"ჟანრი: \"%s\", დისკის ID: \"%s\""
 
 #: ../src/cddb_dialog.cc:710
 #, c-format
@@ -3365,12 +3371,12 @@ msgstr ""
 #: ../src/cddb_dialog.cc:790 ../src/cddb_dialog.cc:1345
 #: ../src/cddb_dialog.cc:1633
 msgid "Sending request…"
-msgstr ""
+msgstr "მოთხოვნის გაგზავნა…"
 
 #: ../src/cddb_dialog.cc:834
 #, c-format
 msgid "The server returned a bad response ‘%s’"
-msgstr ""
+msgstr "სერვერის პასუხი '%s' არასწორია"
 
 #. Load the track list of the album
 #: ../src/cddb_dialog.cc:1028
@@ -3382,7 +3388,7 @@ msgstr ""
 #.
 #: ../src/cddb_dialog.cc:1375
 msgid "Receiving data…"
-msgstr ""
+msgstr "მონაცემების მიღება…"
 
 #: ../src/cddb_dialog.cc:1512
 #, c-format
@@ -3407,12 +3413,12 @@ msgstr ""
 
 #: ../src/cddb_dialog.cc:1681
 msgid "The server returned a bad response"
-msgstr ""
+msgstr "სერვერის პასუხი არასწორია"
 
 #: ../src/cddb_dialog.cc:1820
 #, c-format
 msgid "More results to load…"
-msgstr ""
+msgstr "ჩასატვირთად ხელმისაწვდომია მეტი შედეგი…"
 
 #: ../src/cddb_dialog.cc:2123
 msgid "The number of CDDB results does not match the number of selected files"
@@ -3424,7 +3430,7 @@ msgstr ""
 
 #: ../src/cddb_dialog.cc:2444
 msgid "Ready to search"
-msgstr ""
+msgstr "მზად არის მოსაძებნად"
 
 #: ../src/cddb_dialog.cc:2599
 #, c-format
@@ -3442,7 +3448,7 @@ msgstr ""
 #, c-format
 msgid "One file selected"
 msgid_plural "%u files selected"
-msgstr[0] ""
+msgstr[0] "მონიშნულია %u ფაილი"
 
 #: ../src/cddb_dialog.cc:2741
 #, c-format
@@ -3457,152 +3463,152 @@ msgstr[0] ""
 
 #: ../src/charset.c:46
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "არაბული (IBM-864)"
 
 #: ../src/charset.c:47
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "არაბული (ISO-8859-6)"
 
 #: ../src/charset.c:48
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "არაბული (Windows-1256)"
 
 #: ../src/charset.c:49
 msgid "Baltic (ISO-8859-13)"
-msgstr ""
+msgstr "ბალტიკური (ISO-8859-13)"
 
 #: ../src/charset.c:50
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "ბალტიის (ISO-8859-4)"
 
 #: ../src/charset.c:51
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "ბალტიური (Windows-1257)"
 
 #: ../src/charset.c:52
 msgid "Celtic (ISO-8859-14)"
-msgstr ""
+msgstr "კელტური (ISO-8859-14)"
 
 #: ../src/charset.c:53
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "ცენტრალურ-ევროპული (IBM-852)"
 
 #: ../src/charset.c:54
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "ცენტრალურ-ევროპული (ISO-8859-2)"
 
 #: ../src/charset.c:55
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "ცენტრალურ-ევროპული (Windows-1250)"
 
 #: ../src/charset.c:56
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "გამარტივებული ჩინური (GB18030)"
 
 #: ../src/charset.c:57
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "ჩინური გამარტივებული (GB2312)"
 
 #: ../src/charset.c:58
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "ჩინური ტრადიციული (Big5)"
 
 #: ../src/charset.c:59
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "ჩინური ტრადიციული (Big5-HKSCS)"
 
 #: ../src/charset.c:60
 msgid "Cyrillic (IBM-855)"
-msgstr ""
+msgstr "კირილიცა (IBM-855)"
 
 #: ../src/charset.c:61
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "კირილიცა (ISO-8859-5)"
 
 #: ../src/charset.c:62
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "კირილიცა (ISO-IR-111)"
 
 #: ../src/charset.c:63
 msgid "Cyrillic (KOI8-R)"
-msgstr ""
+msgstr "კირილიცა (KOI8-R)"
 
 #: ../src/charset.c:64
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "კირილიცა (Windows-1251)"
 
 #: ../src/charset.c:65
 msgid "Cyrillic/Russian (CP-866)"
-msgstr ""
+msgstr "კირილიცა/რუსული (CP-866)"
 
 #: ../src/charset.c:66
 msgid "Cyrillic/Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "კირილიცა/უკრაინული (KOI8-U)"
 
 #: ../src/charset.c:67
 msgid "English (US-ASCII)"
-msgstr ""
+msgstr "ინგლისური (US-ASCII)"
 
 #: ../src/charset.c:68
 msgid "Greek (ISO-8859-7)"
-msgstr ""
+msgstr "ბერძნული (ISO-8859-7)"
 
 #: ../src/charset.c:69
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "ბერძნული (Windows-1253)"
 
 #: ../src/charset.c:70
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "ივრითი (IBM-862)"
 
 #: ../src/charset.c:71
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "ივრითი (Windows-1255)"
 
 #: ../src/charset.c:72
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "იაპონური (EUC-JP)"
 
 #: ../src/charset.c:73
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "იაპონური (ISO-2022-JP)"
 
 #: ../src/charset.c:74
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "იაპონური (Shift_JIS)"
 
 #: ../src/charset.c:75
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "კორეული (EUC-KR)"
 
 #: ../src/charset.c:76
 msgid "Nordic (ISO-8859-10)"
-msgstr ""
+msgstr "სკანდინავიური (ISO-8859-10)"
 
 #: ../src/charset.c:77
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "სამხრეთ ევროპული (ISO-8859-3)"
 
 #: ../src/charset.c:78
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "ტაილანდური (TIS-620)"
 
 #: ../src/charset.c:79
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "თურქული (IBM-857)"
 
 #: ../src/charset.c:80
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "თურქული (ISO-8859-9)"
 
 #: ../src/charset.c:81
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "თურქული (Windows-1254)"
 
 #. {N_("Unicode (UTF-7)"),                   "UTF-7"         },
 #: ../src/charset.c:83
 msgid "Unicode (UTF-8)"
-msgstr ""
+msgstr "Unicode (UTF-8)"
 
 #. {N_("Unicode (UTF-16BE)"),                "UTF-16BE"      },
 #. {N_("Unicode (UTF-16LE)"),                "UTF-16LE"      },
@@ -3610,31 +3616,31 @@ msgstr ""
 #. {N_("Unicode (UTF-32LE)"),                "UTF-32LE"      },
 #: ../src/charset.c:90
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "ვიეტნამური (VISCII)"
 
 #: ../src/charset.c:91
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "ვიეტნამური (Windows-1258)"
 
 #: ../src/charset.c:92
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "ვიზუალური ივრითი (ISO-8859-8)"
 
 #: ../src/charset.c:93
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "დასავლეთი (IBM-850)"
 
 #: ../src/charset.c:94
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "დასავლეთი (ISO-8859-1)"
 
 #: ../src/charset.c:95
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "დასავლეთი (ISO-8859-15)"
 
 #: ../src/charset.c:96
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "დასავლეთი (Windows-1252)"
 
 #: ../src/charset.c:576
 #, c-format
@@ -3662,11 +3668,11 @@ msgstr ""
 
 #: ../src/easytag.c:299 ../src/easytag.c:320
 msgid "Saving files was stopped"
-msgstr ""
+msgstr "ფაილების შენახვა შეწყდა"
 
 #: ../src/easytag.c:322
 msgid "All files have been saved"
-msgstr ""
+msgstr "ყველა ფაილი შენახულია"
 
 #: ../src/easytag.c:452
 #, c-format
@@ -3675,16 +3681,16 @@ msgstr ""
 
 #: ../src/easytag.c:454
 msgid "Confirm Tag Writing"
-msgstr ""
+msgstr "დაადასტურეთ ჭდის ჩაწერა"
 
 #. Directories and filename changed
 #: ../src/easytag.c:558
 msgid "Rename File and Directory"
-msgstr ""
+msgstr "ფაილის ან საქაღალდის სახელის გადარქმევა"
 
 #: ../src/easytag.c:559
 msgid "File and directory rename confirmation required"
-msgstr ""
+msgstr "საჭიროა ფაილის ან საქაღალდის ფაილის გადარქმევის დადასურება"
 
 #: ../src/easytag.c:560
 #, c-format
@@ -3721,7 +3727,7 @@ msgstr ""
 
 #: ../src/easytag.c:665
 msgid "File(s) not renamed"
-msgstr ""
+msgstr "სახელი არ გადარქმეეულა ფაილებზე"
 
 #: ../src/easytag.c:727
 #, c-format
@@ -3758,7 +3764,7 @@ msgstr ""
 
 #: ../src/easytag.c:788
 msgid "Tag Write Error"
-msgstr ""
+msgstr "ჭდის ჩაწერის შეცდომა"
 
 #: ../src/easytag.c:865 ../src/easytag.c:1100
 #, c-format
@@ -3767,12 +3773,12 @@ msgstr ""
 
 #: ../src/easytag.c:869
 msgid "Directory Read Error"
-msgstr ""
+msgstr "საქაღალდის წაკითხვის შეცდომა"
 
 #. Read the directory recursively
 #: ../src/easytag.c:890
 msgid "Search in progress…"
-msgstr ""
+msgstr "ძიება მიმდინარეობს…"
 
 #: ../src/easytag.c:963
 #, c-format
@@ -3822,7 +3828,7 @@ msgstr ""
 
 #: ../src/file_area.c:283
 msgid "Read-only file"
-msgstr ""
+msgstr "მხოლოდ-კითხვადი ფაილი"
 
 #: ../src/file_list.cc:246
 #, c-format
@@ -3881,7 +3887,7 @@ msgstr ""
 #: ../src/load_files_dialog.cc:275 ../src/setting.cc:329
 #, c-format
 msgid "Cannot open file ‘%s’: %s"
-msgstr ""
+msgstr "ფაილის გახსნის შეცდომა %s: %s"
 
 #: ../src/load_files_dialog.cc:305
 #, c-format
@@ -3890,19 +3896,19 @@ msgstr ""
 
 #: ../src/load_files_dialog.cc:745 ../src/load_files_dialog.cc:848
 msgid "Insert a blank line"
-msgstr ""
+msgstr "ცარიელი ხაზის ჩასმა"
 
 #: ../src/load_files_dialog.cc:749 ../src/load_files_dialog.cc:852
 msgid "Delete this line"
-msgstr ""
+msgstr "ამ ხაზის წაშლა"
 
 #: ../src/load_files_dialog.cc:760 ../src/load_files_dialog.cc:863
 msgid "Move this line up"
-msgstr ""
+msgstr "ამ ხაზის მაღლა ატანა"
 
 #: ../src/load_files_dialog.cc:764 ../src/load_files_dialog.cc:867
 msgid "Move this line down"
-msgstr ""
+msgstr "ამ ხაზის დაბლა ჩამოტანა"
 
 #: ../src/mask.cc:198
 msgid "Incomplete placeholder at end of mask."
@@ -3931,15 +3937,15 @@ msgstr ""
 
 #: ../src/picture.c:174
 msgid "JPEG image"
-msgstr ""
+msgstr "JPEG გამოსახულება"
 
 #: ../src/picture.c:176
 msgid "PNG image"
-msgstr ""
+msgstr "PNG გამოსახულება"
 
 #: ../src/picture.c:178
 msgid "GIF image"
-msgstr ""
+msgstr "GIF გამოსახულება"
 
 #: ../src/picture.c:181
 msgid "Unknown image"
@@ -4693,7 +4699,7 @@ msgstr ""
 #. MPEG, Layer versions
 #: ../src/tags/mpeg_header.c:250
 msgid "MPEG"
-msgstr ""
+msgstr "MPEG"
 
 #: ../src/tags/musepack_header.c:70
 msgid "MusePack File"
