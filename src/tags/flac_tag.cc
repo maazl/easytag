@@ -434,7 +434,8 @@ flac_tag_read_file_tag (GFile *file,
 
             bytes = g_bytes_new (p->data, p->data_length);
         
-            pic = et_picture_new((EtPictureType)p->type, (const gchar *)p->description, 0, 0, bytes);
+            pic = et_picture_new ((EtPictureType)p->type,
+                                  (const gchar *)p->description, 0, 0, bytes);
             g_bytes_unref (bytes);
 
             if (!prev_pic)
