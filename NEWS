@@ -1,8 +1,25 @@
-3.0.0 - 2022-09-25 :
+3.0.0 - 2023-09-23 :
 ====================
 
     * Add support for original year and release year tag
+    * Add support for sub title and media title tag
     * Added column with file path in browser
+    * Option to hide unused fields
+    * Option to hide columns
+    * Option to select all files with some common property (not just album)
+      by doubly click in browser
+    * Use current sort order as base for zebra background
+    * Highlight changes in browser window
+    * Add columns with file information (size, bitrate, duration,...)
+    * Optionally use similar Unicode replacement characters for reserved
+      characters in file names
+    * Support for powerful pattern groups in scanner (see documentation)
+    * Support Ogg version tag
+    * Write comment to COMMENT rather than DESCRIPTION in Ogg files
+    * Allow ISO date values (not just year)
+    * Configurable multi value separator
+
+    * Several fixes
 
 2.4.3 - 2016-12-05 :
 ====================

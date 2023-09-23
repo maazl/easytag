@@ -36,6 +36,7 @@ et_show_about_dialog (GtkWindow *parent)
 
     static const gchar * const authors[] =
     {
+        "Marcel Müller <github@maazl.de>",
         "David King <amigadave@amigadave.com>",
         "Kip Warner <kip@thevertigo.com>",
         "Santtu Lakkala <inz@inz.fi>",
@@ -78,7 +79,8 @@ et_show_about_dialog (GtkWindow *parent)
         NULL
     };
 
-    static const gchar copyright[] = "Copyright © 2012–2016 David King\n"
+    static const gchar copyright[] = "Copyright © 2022–2023 Marcel Müller\n"
+                                     "Copyright © 2012–2016 David King\n"
                                      "Copyright © 2009–2012 Kip Warner\n"
                                      "Copyright © 2000–2008 Jérôme Couderc";
 
