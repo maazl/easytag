@@ -615,6 +615,7 @@ ET_Save_File_Tag_Internal (ET_File *ETFile, File_Tag *FileTag)
     FileTag->copyright = strip_value(FileTagCur->copyright);
     FileTag->url = strip_value(FileTagCur->url);
     FileTag->encoded_by = strip_value(FileTagCur->encoded_by);
+    FileTag->description = strip_value(FileTagCur->description);
 
     /* Picture */
     et_file_tag_set_picture (FileTag, FileTagCur->picture);

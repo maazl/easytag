@@ -79,6 +79,7 @@ typedef struct File_Tag
     gchar *copyright;
     gchar *url;
     gchar *encoded_by;
+    gchar *description;
     EtPicture *picture;
     GList *other;
 
@@ -121,6 +122,7 @@ void et_file_tag_set_orig_year (File_Tag *file_tag, const gchar *year);
 void et_file_tag_set_copyright (File_Tag *file_tag, const gchar *copyright);
 void et_file_tag_set_url (File_Tag *file_tag, const gchar *url);
 void et_file_tag_set_encoded_by (File_Tag *file_tag, const gchar *encoded_by);
+void et_file_tag_set_description (File_Tag *file_tag, const gchar *description);
 void et_file_tag_set_picture (File_Tag *file_tag, const EtPicture *pic);
 
 gboolean et_file_tag_detect_difference (const File_Tag *FileTag1, const File_Tag  *FileTag2);

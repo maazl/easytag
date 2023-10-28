@@ -59,7 +59,6 @@ mp4tag_read_file_tag (GFile *file,
 {
     TagLib::MP4::Tag *tag;
     guint year;
-    TagLib::String str;
 
     g_return_val_if_fail (file != NULL && FileTag != NULL, FALSE);
 
@@ -103,56 +102,26 @@ mp4tag_read_file_tag (GFile *file,
         return FALSE;
     }
 
-    const TagLib::PropertyMap extra_tag = tag->properties ();
+    const TagLib::PropertyMap& extra_tag = tag->properties ();
 
-    /*********
-     * Title *
-     *********/
-    str = tag->title ();
-
-    if (!str.isEmpty ())
-    {
-        et_file_tag_set_title (FileTag, str.toCString (true));
-    }
+    et_file_tag_set_title (FileTag, tag->title().toCString(true));
 
     if (extra_tag.contains ("SUBTITLE"))
-    {
-        const TagLib::StringList sl = extra_tag["SUBTITLE"];
-        FileTag->subtitle = g_strdup (sl.front ().toCString (true));
-    }
+        et_file_tag_set_subtitle(FileTag, extra_tag["SUBTITLE"].front().toCString(true));
 
-    /**********
-     * Artist *
-     **********/
-    str = tag->artist ();
+    et_file_tag_set_artist(FileTag, tag->artist().toCString(true));
 
-    if (!str.isEmpty ())
-    {
-        et_file_tag_set_artist (FileTag, str.toCString (true));
-    }
-
-    /*********
-     * Album *
-     *********/
-    str = tag->album ();
-
-    if (!str.isEmpty ())
-    {
-        et_file_tag_set_album (FileTag, str.toCString (true));
-    }
+    et_file_tag_set_album(FileTag, tag->album().toCString(true));
 
     if (extra_tag.contains ("DISCSUBTITLE"))
-    {
-        const TagLib::StringList sl = extra_tag["DISCSUBTITLE"];
-        FileTag->disc_subtitle = g_strdup (sl.front ().toCString (true));
-    }
+        et_file_tag_set_disc_subtitle(FileTag, extra_tag["DISCSUBTITLE"].front().toCString(true));
 
     /* Disc number. */
     /* Total disc number support in TagLib reads multiple disc numbers and
      * joins them with a "/". */
     if (extra_tag.contains ("DISCNUMBER"))
     {
-        const TagLib::StringList disc_numbers = extra_tag["DISCNUMBER"];
+        const TagLib::StringList& disc_numbers = extra_tag["DISCNUMBER"];
         int offset = disc_numbers.front ().find ("/");
 
         if (offset != -1)
@@ -163,11 +132,7 @@ mp4tag_read_file_tag (GFile *file,
         FileTag->disc_number = et_disc_number_to_string (disc_numbers.front().toCString(true));
     }
 
-    /********
-     * Year *
-     ********/
     year = tag->year ();
-
     if (year != 0)
     {
         FileTag->year = g_strdup_printf ("%u", year);
@@ -178,7 +143,7 @@ mp4tag_read_file_tag (GFile *file,
      *************************/
     if (extra_tag.contains ("TRACKNUMBER"))
     {
-        const TagLib::StringList track_numbers = extra_tag["TRACKNUMBER"];
+        const TagLib::StringList& track_numbers = extra_tag["TRACKNUMBER"];
         int offset = track_numbers.front ().find ("/");
 
         if (offset != -1)
@@ -189,50 +154,18 @@ mp4tag_read_file_tag (GFile *file,
         FileTag->track = et_track_number_to_string (track_numbers.front ().toCString(true));
     }
 
-    /*********
-     * Genre *
-     *********/
-    str = tag->genre ();
+    et_file_tag_set_genre(FileTag, tag->genre().toCString(true));
 
-    if (!str.isEmpty ())
-    {
-        et_file_tag_set_genre (FileTag, str.toCString (true));
-    }
+    et_file_tag_set_comment(FileTag, tag->comment().toCString(true));
 
-    /***********
-     * Comment *
-     ***********/
-    str = tag->comment ();
-
-    if (!str.isEmpty ())
-    {
-        et_file_tag_set_comment (FileTag, str.toCString (true));
-    }
-
-    /**********************
-     * Composer or Writer *
-     **********************/
     if (extra_tag.contains ("COMPOSER"))
-    {
-        const TagLib::StringList composers = extra_tag["COMPOSER"];
-        FileTag->composer = g_strdup (composers.front ().toCString (true));
-    }
+        et_file_tag_set_composer(FileTag, extra_tag["COMPOSER"].front().toCString(true));
 
-    /* Copyright. */
     if (extra_tag.contains ("COPYRIGHT"))
-    {
-        const TagLib::StringList copyrights = extra_tag["COPYRIGHT"];
-        FileTag->copyright = g_strdup (copyrights.front ().toCString (true));
-    }
+        et_file_tag_set_copyright(FileTag, extra_tag["COPYRIGHT"].front().toCString(true));
 
-    /*****************
-     * Encoding Tool *
-     *****************/
     if (extra_tag.contains ("ENCODEDBY"))
-    {
-        const TagLib::StringList encodedbys = extra_tag["ENCODEDBY"];
-        FileTag->encoded_by = g_strdup (encodedbys.front ().toCString (true));
-    }
+        et_file_tag_set_encoded_by(FileTag, extra_tag["ENCODEDBY"].front().toCString(true));
 
     const TagLib::MP4::ItemListMap &extra_items = tag->itemListMap ();
 
@@ -240,16 +173,20 @@ mp4tag_read_file_tag (GFile *file,
 #if (TAGLIB_MAJOR_VERSION == 1) && (TAGLIB_MINOR_VERSION < 10)
     /* No "ALBUMARTIST" support in TagLib until 1.10; use atom directly. */
     if (extra_items.contains ("aART"))
-    {
-        const TagLib::MP4::Item album_artists = extra_items["aART"];
-        FileTag->album_artist = g_strdup (album_artists.toStringList ().front ().toCString (true));
-    }
+        et_file_tag_set_album_artist(FileTag, extra_items["aART"].toStringList().front().toCString(true));
 #else
     if (extra_tag.contains ("ALBUMARTIST"))
-    {
-        const TagLib::StringList album_artists = extra_tag["ALBUMARTIST"];
-        FileTag->album_artist = g_strdup (album_artists.front ().toCString (true));
-    }
+        et_file_tag_set_album_artist(FileTag, extra_tag["ALBUMARTIST"].front().toCString(true));
+#endif
+
+    /* Description */
+#if (TAGLIB_MAJOR_VERSION == 1) && (TAGLIB_MINOR_VERSION < 12)
+    /* No "PODCASTDESC" support in TagLib until 1.12; use atom directly. */
+    if (extra_items.contains ("desc"))
+        et_file_tag_set_description(FileTag, extra_items["desc"].toStringList().front().toCString(true));
+#else
+    if (extra_tag.contains ("PODCASTDESC"))
+        et_file_tag_set_description(FileTag, extra_tag["PODCASTDESC"].front().toCString(true));
 #endif
 
     /***********
@@ -257,8 +194,8 @@ mp4tag_read_file_tag (GFile *file,
      ***********/
     if (extra_items.contains ("covr"))
     {
-        const TagLib::MP4::Item cover = extra_items["covr"];
-        const TagLib::MP4::CoverArtList covers = cover.toCoverArtList ();
+        const TagLib::MP4::Item &cover = extra_items["covr"];
+        const TagLib::MP4::CoverArtList &covers = cover.toCoverArtList ();
         const TagLib::MP4::CoverArt &art = covers.front ();
 
         /* TODO: Use g_bytes_new_with_free_func()? */
@@ -386,16 +323,30 @@ mp4tag_write_file_tag (const ET_File *ETFile,
 #if (TAGLIB_MAJOR_VERSION == 1) && (TAGLIB_MINOR_VERSION < 10)
         /* No "ALBUMARTIST" support in TagLib until 1.10; use atom directly. */
         extra_items.insert ("aART", TagLib::MP4::Item (string));
+    }
+    else
+    {
+        extra_items.erase ("aART");
 #else
         fields.insert ("ALBUMARTIST", string);
 #endif
     }
-#if (TAGLIB_MAJOR_VERSION == 1) && (TAGLIB_MINOR_VERSION < 10)
+
+    /* Description. */
+    if (!et_str_empty (FileTag->description))
+    {
+        TagLib::String string (FileTag->description, TagLib::String::UTF8);
+#if (TAGLIB_MAJOR_VERSION == 1) && (TAGLIB_MINOR_VERSION < 12)
+        /* No "PODCASTDESC" support in TagLib until 1.12; use atom directly. */
+        extra_items.insert ("desc", TagLib::MP4::Item (string));
+    }
     else
     {
-        extra_items.erase ("aART");
-    }
+        extra_items.erase ("desc");
+#else
+        fields.insert ("PODCASTDESC", string);
 #endif
+    }
 
     /***********
      * Picture *

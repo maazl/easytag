@@ -287,6 +287,17 @@ wavpack_tag_read_file_tag (GFile *file,
     memset (field, '\0', MAXLEN);
 
     /*
+     * Description
+     */
+    length = WavpackGetTagItem(wpc, "description", field, MAXLEN);
+
+    if ( length > 0 && FileTag->description == NULL ) {
+        FileTag->description = Try_To_Validate_Utf8_String(field);
+    }
+
+    memset (field, '\0', MAXLEN);
+
+    /*
      * Composer
      */
     length = WavpackGetTagItem(wpc, "composer", field, MAXLEN);
@@ -473,6 +484,8 @@ wavpack_tag_write_file_tag (const ET_File *ETFile,
     if (!et_wavpack_append_or_delete_tag_item (wpc, "genre", FileTag->genre))
         goto err;
     if (!et_wavpack_append_or_delete_tag_item (wpc, "comment", FileTag->comment))
+        goto err;
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "description", FileTag->description))
         goto err;
 
     if (!et_wavpack_append_or_delete_tag_item (wpc, "composer", FileTag->composer))

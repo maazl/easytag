@@ -185,6 +185,10 @@ ape_tag_read_file_tag (GFile *file,
     string = apefrm_getstr (ape_cnt, APE_TAG_FIELD_COMMENT);
     set_string_field (&FileTag->comment, string);
 
+    /* Description */
+    string = apefrm_getstr (ape_cnt, "Description");
+    set_string_field (&FileTag->description, string);
+
     /* Composer */
     string = apefrm_getstr (ape_cnt, APE_TAG_FIELD_COMPOSER);
     set_string_field (&FileTag->composer, string);
@@ -264,6 +268,7 @@ ape_tag_write_file_tag (const ET_File *ETFile,
 
     ape_set(APE_TAG_FIELD_GENRE, FileTag->genre);
     ape_set(APE_TAG_FIELD_COMMENT, FileTag->comment);
+    ape_set("Description", FileTag->description);
 
     ape_set(APE_TAG_FIELD_COMPOSER, FileTag->composer);
     ape_set("Original Artist", FileTag->orig_artist);

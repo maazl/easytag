@@ -83,6 +83,9 @@ typedef struct
     GtkListStore *genre_combo_model;
     GtkListStore *track_combo_model;
 
+    /* Description tab */
+    GtkTextView *description_text;
+
     GtkWidget *images_view;
 
     /* Other for picture. */
@@ -2107,6 +2110,7 @@ et_tag_area_class_init (EtTagAreaClass *klass)
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, encoded_by_entry);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, genre_combo_model);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_combo_model);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, description_text);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, images_view);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, add_image_toolitem);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, apply_image_toolitem);
@@ -2162,7 +2166,7 @@ void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
     switch (type)
     {
     case ID3_TAG:
-        hide |= ET_COLUMN_VERSION;
+        hide |= ET_COLUMN_VERSION | ET_COLUMN_DESCRIPTION;
         if (g_settings_get_boolean (MainSettings, "id3v2-enabled"))
         {
             if (!g_settings_get_boolean (MainSettings, "id3v2-version-4"))
@@ -2190,7 +2194,7 @@ void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
             | ET_COLUMN_DISC_SUBTITLE | ET_COLUMN_TRACK_NUMBER | ET_COLUMN_DISC_NUMBER
             | ET_COLUMN_RELEASE_YEAR | ET_COLUMN_COMPOSER | ET_COLUMN_ORIG_ARTIST
             | ET_COLUMN_ORIG_YEAR | ET_COLUMN_COPYRIGHT | ET_COLUMN_URL
-            | ET_COLUMN_ENCODED_BY | ET_COLUMN_IMAGE;
+            | ET_COLUMN_ENCODED_BY | ET_COLUMN_IMAGE | ET_COLUMN_DESCRIPTION;
         break;
 
     // APEv2 does not support all fields but the data can be stored in unsupported tag names.
@@ -2255,6 +2259,7 @@ void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
     show_hide(ET_COLUMN_URL, priv->url_entry, priv->url_label, nullptr);
     show_hide(ET_COLUMN_ENCODED_BY, priv->encoded_by_entry, priv->encoded_by_label, nullptr);
     show_hide(ET_COLUMN_IMAGE, priv->images_grid, nullptr, nullptr);
+    show_hide(ET_COLUMN_DESCRIPTION, GTK_WIDGET(priv->description_text), nullptr, nullptr);
 }
 
 void
@@ -2387,6 +2392,21 @@ void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 
 	if (gtk_widget_get_visible(priv->encoded_by_entry))
 		store_field(&File_Tag::encoded_by, gtk_entry_get_text(GTK_ENTRY(priv->encoded_by_entry)));
+
+	if (gtk_widget_get_visible(GTK_WIDGET(priv->description_text)))
+	{
+		GtkTextBuffer* buffer = gtk_text_view_get_buffer(priv->description_text);
+		GtkTextIter start, end;
+		gtk_text_buffer_get_start_iter(buffer, &start);
+		gtk_text_buffer_get_end_iter(buffer, &end);
+		g_free(FileTag->description);
+		FileTag->description = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+		g_strstrip(FileTag->description);
+		if (!*FileTag->description)
+		{	g_free(FileTag->description);
+			FileTag->description = nullptr;
+		}
+	}
 
 	/* Picture */
 	if (gtk_widget_get_visible(priv->images_grid))
@@ -2586,6 +2606,21 @@ et_tag_area_display_et_file (EtTagArea *self,
     et_tag_area_set_text_field(FileTag->url, GTK_ENTRY(priv->url_entry));
 
     et_tag_area_set_text_field(FileTag->encoded_by, GTK_ENTRY(priv->encoded_by_entry));
+
+    /* description */
+    {
+      GtkTextBuffer* buffer = gtk_text_view_get_buffer(priv->description_text);
+      if (!et_str_empty(FileTag->description))
+      {
+        gchar *tmp = Try_To_Validate_Utf8_String(FileTag->description);
+        gtk_text_buffer_set_text(buffer, tmp, -1);
+        g_free(tmp);
+      }
+      else
+      {
+        gtk_text_buffer_set_text(buffer, "", 0);
+      }
+    }
 
     /* Show picture */
     PictureEntry_Clear (self);

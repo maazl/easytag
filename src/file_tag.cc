@@ -76,6 +76,7 @@ et_file_tag_free (File_Tag *FileTag)
     g_free(FileTag->copyright);
     g_free(FileTag->url);
     g_free(FileTag->encoded_by);
+    g_free(FileTag->description);
     et_file_tag_set_picture (FileTag, NULL);
     et_file_tag_free_other_field (FileTag);
 
@@ -114,6 +115,7 @@ File_Tag* File_Tag::clone() const
 	et_file_tag_set_copyright(destination, copyright);
 	et_file_tag_set_url(destination, url);
 	et_file_tag_set_encoded_by(destination, encoded_by);
+	et_file_tag_set_description(destination, description);
 	et_file_tag_set_picture(destination, picture);
 
 	GList *new_other = NULL;
@@ -229,6 +231,11 @@ void et_file_tag_set_encoded_by(File_Tag *file_tag, const gchar *encoded_by)
 	file_tag->set_field(&File_Tag::encoded_by, encoded_by);
 }
 
+void et_file_tag_set_description(File_Tag *file_tag, const gchar *description)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->set_field(&File_Tag::description, description);
+}
+
 /*
  * et_file_tag_set_picture:
  * @file_tag: the #File_Tag on which to set the image
@@ -293,7 +300,8 @@ et_file_tag_detect_difference (const File_Tag *FileTag1,
         || et_normalized_strcmp0 (FileTag1->orig_artist, FileTag2->orig_artist) != 0
         || et_normalized_strcmp0 (FileTag1->copyright, FileTag2->copyright) != 0
         || et_normalized_strcmp0 (FileTag1->url, FileTag2->url) != 0
-        || et_normalized_strcmp0 (FileTag1->encoded_by, FileTag2->encoded_by) != 0)
+        || et_normalized_strcmp0 (FileTag1->encoded_by, FileTag2->encoded_by) != 0
+        || et_normalized_strcmp0 (FileTag1->description, FileTag2->description) != 0)
         return TRUE;
 
     /* Picture */

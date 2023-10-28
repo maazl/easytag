@@ -52,7 +52,7 @@
  * Converts an integer to byte array.
  */
 static void
-convert_to_byte_array (guint32 n, guchar *array)
+convert_to_byte_array (gsize n, guchar *array)
 {
     array [0] = (n >> 24) & 0xFF;
     array [1] = (n >> 16) & 0xFF;
@@ -106,33 +106,6 @@ read_guint32_from_byte (guchar *str, gsize start)
     }
 
     return read;
-}
-
-/*
- * set_or_append_field:
- * @field: (inout): pointer to a location in which to store the field value
- * @field_value: (transfer full): the string to store in @field
- *
- * Set @field to @field_value if @field is empty, otherwise append to it.
- * Ownership of @field_value is transferred to this function.
- */
-static void
-set_or_append_field (gchar **field,
-                     gchar *field_value)
-{
-    if (*field == NULL)
-    {
-        *field = field_value;
-    }
-    else
-    {
-        gchar* delimiter = g_settings_get_string(MainSettings, "split-delimiter");
-        gchar *field_tmp = g_strconcat (*field, delimiter, field_value, NULL);
-        g_free(delimiter);
-        g_free (*field);
-        *field = field_tmp;
-        g_free (field_value);
-    }
 }
 
 /*
@@ -248,7 +221,48 @@ values_list_foreach (gpointer data,
 
     if (!et_str_empty (value))
     {
-        set_or_append_field (tag, value);
+      if (*tag == NULL)
+      {
+          *tag = value;
+      }
+      else
+      {
+          gchar* delimiter = g_settings_get_string(MainSettings, "split-delimiter");
+          gchar* field_tmp = g_strconcat(*tag, delimiter, value, NULL);
+          g_free(delimiter);
+          g_free(*tag);
+          *tag = field_tmp;
+          g_free(value);
+      }
+    }
+}
+
+/*
+ * values_list_foreach_desc:
+ * @data: (transfer full): the tag value
+ * @user_data: (inout): a tag location to fill
+ *
+ * Called on each element in a GSList of tag values, to set or append the
+ * string to the tag.
+ */
+static void values_list_foreach_desc (gpointer data, gpointer user_data)
+{
+    gchar *value = (gchar *)data;
+    gchar **tag = (gchar **)user_data;
+
+    if (!et_str_empty (value))
+    {
+      if (*tag == NULL)
+      {
+          *tag = value;
+      }
+      else
+      {
+          gchar *field_tmp = g_strconcat(*tag, "\n", value, NULL);
+          g_free(*tag);
+          *tag = field_tmp;
+          g_free(value);
+      }
     }
 }
 
@@ -271,7 +285,7 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
 
     tags = populate_tag_hash_table (vc);
 
-    auto fetch_field = [&tags](const char* fieldname, gchar** target)
+    auto fetch_field = [tags](const char* fieldname, gchar** target)
     {   GSList *strings = (GSList*)g_hash_table_lookup(tags, fieldname);
         if (strings)
         {   g_slist_foreach(strings, values_list_foreach, target);
@@ -356,26 +370,14 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
     }
 
     fetch_field(ET_VORBIS_COMMENT_FIELD_GENRE, &FileTag->genre);
+    fetch_field(ET_VORBIS_COMMENT_FIELD_COMMENT, &FileTag->comment);
 
-    /* Comment */
-    {
-        GSList *descs = (GSList*)g_hash_table_lookup(tags, ET_VORBIS_COMMENT_FIELD_DESCRIPTION);
-        GSList *comments = (GSList*)g_hash_table_lookup(tags, ET_VORBIS_COMMENT_FIELD_COMMENT);
-
-        if (comments)
-          g_slist_foreach (comments, values_list_foreach, &FileTag->comment);
-        else if (descs)
-        {
-            /* Mark the file as modified, so that comments are written to the
-             * COMMENT field on saving. */
-            FileTag->saved = FALSE;
-            g_slist_foreach (descs, values_list_foreach, &FileTag->comment);
-        }
-
-        g_slist_free (descs);
-        g_slist_free (comments);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_DESCRIPTION);
-        g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_COMMENT);
+    // Description - use newline delimiter
+    strings = (GSList*)g_hash_table_lookup(tags, ET_VORBIS_COMMENT_FIELD_DESCRIPTION);
+    if (strings)
+    { g_slist_foreach(strings, values_list_foreach_desc, &FileTag->description);
+      g_slist_free(strings);
+      g_hash_table_remove(tags, ET_VORBIS_COMMENT_FIELD_DESCRIPTION);
     }
 
     fetch_field(ET_VORBIS_COMMENT_FIELD_COMPOSER, &FileTag->composer);
@@ -789,7 +791,6 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
     vorbis_comment *vc;
     GList *l;
     EtPicture *pic;
-    gchar* title;
 
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -837,6 +838,7 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
 
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_GENRE, FileTag->genre, ET_PROCESS_FIELD_GENRE);
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_COMMENT, FileTag->comment, ET_PROCESS_FIELD_COMMENT);
+    et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_DESCRIPTION, FileTag->description);
 
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_COMPOSER, FileTag->composer, ET_PROCESS_FIELD_COMPOSER);
     et_ogg_set_tag(vc, ET_VORBIS_COMMENT_FIELD_PERFORMER, FileTag->orig_artist, ET_PROCESS_FIELD_ORIGINAL_ARTIST);

@@ -255,7 +255,7 @@ typedef enum
     ET_SORT_MODE_DESCENDING_FILE_SAMPLERATE
 } EtSortMode;
 
-/* Types of sorting. See the GSettings key "sort-mode". */
+/* Types of columns. Also used for GSettings key "sort-mode". */
 typedef enum
 {
     ET_COLUMN_FILEPATH        = 1 << 0,
@@ -285,7 +285,8 @@ typedef enum
     ET_COLUMN_FILE_DURATION   = 1 << 24,
     ET_COLUMN_FILE_BITRATE    = 1 << 25,
     ET_COLUMN_FILE_SAMPLERATE = 1 << 26,
-    ET_COLUMN_IMAGE           = 1 << 27
+    ET_COLUMN_IMAGE           = 1 << 27,
+    ET_COLUMN_DESCRIPTION     = 1 << 30
 } EtColumn;
 
 /* Additional options to be passed to iconv(). */

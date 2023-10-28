@@ -632,6 +632,15 @@
                         <property name="label" translatable="yes">Images</property>
                     </object>
                 </child>
+                <child>
+                    <object class="GtkTextView" id="description_text">
+                    </object>
+                </child>
+                <child type="tab">
+                    <object class="GtkLabel" id="description_label">
+                        <property name="label" translatable="yes">Description</property>
+                    </object>
+                </child>
             </object>
         </child>
     </template>
