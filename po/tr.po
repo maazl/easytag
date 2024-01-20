@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: easytag\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/easytag/issues\n"
-"POT-Creation-Date: 2023-04-03 07:24+0000\n"
-"PO-Revision-Date: 2023-03-06 16:55+0300\n"
+"POT-Creation-Date: 2023-10-25 13:45+0000\n"
+"PO-Revision-Date: 2023-10-26 16:37+0300\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
 "Language: tr\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.4\n"
 "X-POOTLE-MTIME: 1428155469.000000\n"
 
 #. Name and summary taken from the desktop file.
@@ -47,8 +47,8 @@ msgid ""
 "Look up albums in online databases, bulk edit tags, create playlists and "
 "rename a collection of files."
 msgstr ""
-"Çevrimiçi veritabanlarında albümleri arayın, etiketleri topluca düzenleyin, "
-"çalma listeleri oluşturun ve bir grup dosyayı yeniden adlandrın."
+"Çevrim içi veri tabanlarında albümleri arayın, etiketleri topluca "
+"düzenleyin, çalma listeleri oluşturun ve bir grup dosyayı yeniden adlandrın."
 
 #: ../data/org.gnome.EasyTAG.appdata.xml.in.h:6
 msgid ""
@@ -68,7 +68,7 @@ msgid "mp3;tag;audio;music;"
 msgstr "mp3;etiket;ses;müzik;"
 
 #: ../data/easytag-nautilus.metainfo.xml.in.h:1
-#: ../nautilus-extension/nautilus-easytag.c:245
+#: ../nautilus-extension/nautilus-easytag.c:247
 msgid "Open with EasyTAG"
 msgstr "EasyTAG ile Aç"
 
@@ -81,8 +81,8 @@ msgstr ""
 msgid "Choose a directory to show in the browser"
 msgstr "Tarayıcıda göstermek için bir dizin seçin"
 
-#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.cc:3495
-#: ../src/tag_area.cc:1353
+#: ../data/browser.ui.h:2 ../data/browser_dialogs.ui.h:4 ../src/browser.c:3834
+#: ../src/tag_area.c:1524
 msgid "_Open"
 msgstr "_Aç"
 
@@ -91,13 +91,13 @@ msgid "Select a directory to browse"
 msgstr "Gezinmek için dizin seçin"
 
 #. Translators: No files, as in "0 files".
-#: ../data/browser.ui.h:4 ../src/easytag.c:983
+#: ../data/browser.ui.h:4 ../src/easytag.c:978
 msgid "No files"
 msgstr "Dosya yok"
 
-#: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12 ../data/menus.ui.h:90
-#: ../data/preferences_dialog.ui.h:86 ../data/scan_dialog.ui.h:73
-#: ../data/search_dialog.ui.h:15
+#: ../data/browser.ui.h:5 ../data/cddb_dialog.ui.h:12
+#: ../data/preferences_dialog.ui.h:63 ../data/scan_dialog.ui.h:58
+#: ../data/search_dialog.ui.h:14
 msgid "Artist"
 msgstr "Sanatçı"
 
@@ -109,138 +109,77 @@ msgstr "# Albümler"
 msgid "# Files"
 msgstr "# Dosyalar"
 
-#: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13 ../data/menus.ui.h:92
-#: ../data/preferences_dialog.ui.h:88 ../data/scan_dialog.ui.h:77
-#: ../data/search_dialog.ui.h:17
+#: ../data/browser.ui.h:8 ../data/cddb_dialog.ui.h:13
+#: ../data/preferences_dialog.ui.h:65 ../data/scan_dialog.ui.h:62
+#: ../data/search_dialog.ui.h:16
 msgid "Album"
 msgstr "Albüm"
 
-#: ../data/browser.ui.h:9 ../data/menus.ui.h:86 ../data/search_dialog.ui.h:11
-msgid "Path"
-msgstr "Konum"
-
-#: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:38 ../data/menus.ui.h:87
-#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:65
+#: ../data/browser.ui.h:9 ../data/cddb_dialog.ui.h:38
+#: ../data/playlist_dialog.ui.h:2 ../data/scan_dialog.ui.h:54
 #: ../data/search_dialog.ui.h:12
 msgid "Filename"
 msgstr "Dosya adı"
 
-#: ../data/browser.ui.h:11 ../data/cddb_dialog.ui.h:39 ../data/menus.ui.h:88
-#: ../data/preferences_dialog.ui.h:81 ../data/scan_dialog.ui.h:67
+#: ../data/browser.ui.h:10 ../data/cddb_dialog.ui.h:39
+#: ../data/preferences_dialog.ui.h:61 ../data/scan_dialog.ui.h:56
 #: ../data/search_dialog.ui.h:13
 msgid "Title"
 msgstr "Başlık"
 
-#: ../data/browser.ui.h:12 ../data/menus.ui.h:89
-#: ../data/preferences_dialog.ui.h:17 ../data/scan_dialog.ui.h:71
-#: ../data/search_dialog.ui.h:14
-#, fuzzy
-msgid "Subtitle"
-msgstr "Başlık"
-
-#: ../data/browser.ui.h:13 ../data/preferences_dialog.ui.h:83
-#: ../data/scan_dialog.ui.h:69
-#, fuzzy
-msgid "Version"
-msgstr "Sürüm:"
-
-#: ../data/browser.ui.h:14 ../data/menus.ui.h:91
-#: ../data/preferences_dialog.ui.h:18 ../data/scan_dialog.ui.h:75
-#: ../data/search_dialog.ui.h:16
+#: ../data/browser.ui.h:11 ../data/scan_dialog.ui.h:60
+#: ../data/search_dialog.ui.h:15
 msgid "Album Artist"
 msgstr "Albüm Sanatçısı"
 
-#: ../data/browser.ui.h:15 ../data/menus.ui.h:93
-#: ../data/preferences_dialog.ui.h:19 ../data/scan_dialog.ui.h:79
+#: ../data/browser.ui.h:12 ../data/cddb_dialog.ui.h:40
 #: ../data/search_dialog.ui.h:18
-#, fuzzy
-msgid "Disc subtitle"
-msgstr "Başlığa göre azalan"
-
-#: ../data/browser.ui.h:16 ../data/menus.ui.h:97
-#: ../data/preferences_dialog.ui.h:20
-msgid "Disc"
-msgstr "Disk"
-
-#: ../data/browser.ui.h:17 ../data/menus.ui.h:96 ../data/search_dialog.ui.h:21
-msgid "Track"
-msgstr "Parça"
-
-#: ../data/browser.ui.h:18 ../data/cddb_dialog.ui.h:40 ../data/menus.ui.h:94
-#: ../data/search_dialog.ui.h:20
 msgid "Year"
 msgstr "Yıl"
 
-#: ../data/browser.ui.h:19
-#, fuzzy
-msgid "Rel. year"
-msgstr "Asıl sanatçı"
+#: ../data/browser.ui.h:13
+msgid "Disc"
+msgstr "Disk"
 
-#: ../data/browser.ui.h:20 ../data/cddb_dialog.ui.h:43 ../data/menus.ui.h:98
-#: ../data/preferences_dialog.ui.h:91 ../data/scan_dialog.ui.h:81
-#: ../data/search_dialog.ui.h:22
+#: ../data/browser.ui.h:14 ../data/search_dialog.ui.h:19
+msgid "Track"
+msgstr "Parça"
+
+#: ../data/browser.ui.h:15 ../data/cddb_dialog.ui.h:43
+#: ../data/preferences_dialog.ui.h:67 ../data/scan_dialog.ui.h:64
+#: ../data/search_dialog.ui.h:20
 msgid "Genre"
 msgstr "Tür"
 
-#: ../data/browser.ui.h:21 ../data/menus.ui.h:99
-#: ../data/preferences_dialog.ui.h:93 ../data/scan_dialog.ui.h:83
-#: ../data/search_dialog.ui.h:23
+#: ../data/browser.ui.h:16 ../data/preferences_dialog.ui.h:69
+#: ../data/scan_dialog.ui.h:66 ../data/search_dialog.ui.h:21
 msgid "Comment"
 msgstr "Yorum"
 
-#: ../data/browser.ui.h:22 ../data/menus.ui.h:100
-#: ../data/preferences_dialog.ui.h:22 ../data/scan_dialog.ui.h:85
-#: ../data/search_dialog.ui.h:24 ../src/picture.c:213
+#: ../data/browser.ui.h:17 ../data/preferences_dialog.ui.h:71
+#: ../data/scan_dialog.ui.h:68 ../data/search_dialog.ui.h:22
+#: ../src/picture.c:213
 msgid "Composer"
 msgstr "Besteci"
 
-#: ../data/browser.ui.h:23 ../data/menus.ui.h:101
-#: ../data/preferences_dialog.ui.h:23 ../data/search_dialog.ui.h:25
+#: ../data/browser.ui.h:18 ../data/search_dialog.ui.h:23
 msgid "Original Artist"
 msgstr "Asıl Sanatçı"
 
-#: ../data/browser.ui.h:24 ../data/search_dialog.ui.h:26
-#, fuzzy
-msgid "Orig. year"
-msgstr "Asıl sanatçı"
-
-#: ../data/browser.ui.h:25 ../data/menus.ui.h:103
-#: ../data/preferences_dialog.ui.h:25 ../data/scan_dialog.ui.h:89
-#: ../data/search_dialog.ui.h:27
+#: ../data/browser.ui.h:19 ../data/scan_dialog.ui.h:72
+#: ../data/search_dialog.ui.h:24
 msgid "Copyright"
 msgstr "Telif Hakkı"
 
-#: ../data/browser.ui.h:26 ../data/menus.ui.h:104
-#: ../data/preferences_dialog.ui.h:26 ../data/scan_dialog.ui.h:91
-#: ../data/search_dialog.ui.h:28
+#: ../data/browser.ui.h:20 ../data/scan_dialog.ui.h:74
+#: ../data/search_dialog.ui.h:25
 msgid "URL"
 msgstr "Bağlantı"
 
-#: ../data/browser.ui.h:27 ../data/menus.ui.h:105
-#: ../data/preferences_dialog.ui.h:27 ../data/scan_dialog.ui.h:93
-#: ../data/search_dialog.ui.h:29
+#: ../data/browser.ui.h:21 ../data/scan_dialog.ui.h:76
+#: ../data/search_dialog.ui.h:26
 msgid "Encoded By"
 msgstr "Kodlayıcı"
-
-#: ../data/browser.ui.h:28 ../data/menus.ui.h:106 ../data/search_dialog.ui.h:30
-#, fuzzy
-msgid "File size"
-msgstr "Dosyalar"
-
-#: ../data/browser.ui.h:29 ../data/cddb_dialog.ui.h:33 ../data/menus.ui.h:107
-#: ../data/search_dialog.ui.h:31
-msgid "Duration"
-msgstr "Süre"
-
-#: ../data/browser.ui.h:30 ../data/menus.ui.h:108 ../data/search_dialog.ui.h:32
-#, fuzzy
-msgid "Bit rate"
-msgstr "Bit oranı:"
-
-#: ../data/browser.ui.h:31 ../data/menus.ui.h:109 ../data/search_dialog.ui.h:33
-#, fuzzy
-msgid "Samplerate"
-msgstr "Örnek hızı:"
 
 #: ../data/browser_dialogs.ui.h:1
 msgid "Browse Directory With"
@@ -259,13 +198,12 @@ msgstr ""
 "olarak alır"
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
-#: ../src/application_window.cc:380 ../src/application_window.cc:394
-#: ../src/application_window.cc:3032 ../src/browser.cc:937
-#: ../src/browser.cc:3494 ../src/cddb_dialog.cc:2125 ../src/easytag.c:464
-#: ../src/easytag.c:471 ../src/easytag.c:599 ../src/tag_area.cc:1351
-#: ../src/tag_area.cc:1676
+#: ../src/application_window.c:368 ../src/application_window.c:382
+#: ../src/application_window.c:3015 ../src/browser.c:914 ../src/browser.c:3833
+#: ../src/cddb_dialog.c:2139 ../src/easytag.c:464 ../src/easytag.c:471
+#: ../src/easytag.c:596 ../src/tag_area.c:1522 ../src/tag_area.c:1848
 msgid "_Cancel"
-msgstr "_Vazgeç"
+msgstr "İ_ptal"
 
 #: ../data/browser_dialogs.ui.h:6
 msgid "_Execute"
@@ -283,7 +221,7 @@ msgstr ""
 "olarak alacak"
 
 #. Only directories changed
-#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:138 ../src/easytag.c:565
+#: ../data/browser_dialogs.ui.h:9 ../data/menus.ui.h:99 ../src/easytag.c:562
 msgid "Rename Directory"
 msgstr "Dizini Yeniden Adlandır"
 
@@ -296,7 +234,7 @@ msgstr "Tam ad:"
 msgid "Use mask:"
 msgstr "Maske Kullan:"
 
-#: ../data/browser_dialogs.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:172
+#: ../data/browser_dialogs.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:168
 msgid "Whether to use a mask when renaming directories"
 msgstr "Dizinler yeniden adlandırılırken maske kullanılıp kullanılmaması"
 
@@ -310,7 +248,7 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:15
 msgid "Rename directory preview"
-msgstr "Dizin yeniden adlandırma önizlemesix"
+msgstr "Dizin yeniden adlandırma ön izlemesi"
 
 #: ../data/browser_dialogs.ui.h:16
 msgid "_Rename"
@@ -362,7 +300,7 @@ msgstr "Alanları Ara"
 msgid "Track Name"
 msgstr "Parça Adı"
 
-#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:117
+#: ../data/cddb_dialog.ui.h:15 ../data/preferences_dialog.ui.h:91
 #: ../src/picture.c:191
 msgid "Other"
 msgstr "Diğer"
@@ -438,6 +376,10 @@ msgstr ""
 msgid "#"
 msgstr "#"
 
+#: ../data/cddb_dialog.ui.h:33
+msgid "Duration"
+msgstr "Süre"
+
 #: ../data/cddb_dialog.ui.h:34
 msgid "Select all lines"
 msgstr "Tüm satırları seç"
@@ -478,7 +420,7 @@ msgstr ""
 msgid "Match lines with the Levenshtein algorithm"
 msgstr "Satırları Levenshtein algoritmasıyla eşleştir"
 
-#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:169
+#: ../data/cddb_dialog.ui.h:47 ../data/preferences_dialog.ui.h:143
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:24
 msgid "Whether to use the DLM algorithm to match CDDB results to files"
 msgstr ""
@@ -486,13 +428,13 @@ msgstr ""
 "kullanılmaması"
 
 #: ../data/cddb_dialog.ui.h:48 ../data/load_files_dialog.ui.h:16
-#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:186
-#: ../data/scan_dialog.ui.h:130
+#: ../data/playlist_dialog.ui.h:18 ../data/preferences_dialog.ui.h:160
+#: ../data/scan_dialog.ui.h:113 ../data/search_dialog.ui.h:11
 msgid "_Close"
 msgstr "_Kapat"
 
 #: ../data/cddb_dialog.ui.h:49 ../data/load_files_dialog.ui.h:17
-#: ../src/cddb_dialog.cc:2126
+#: ../src/cddb_dialog.c:2140
 msgid "_Apply"
 msgstr "Uygul_a"
 
@@ -502,7 +444,7 @@ msgstr ""
 "Seçilen satırları ya da (hiçbir satır seçilmemişse) bütün satırları yükle"
 
 #. Default values are MPEG data.
-#: ../data/file_area.ui.h:1 ../src/application_window.cc:2206
+#: ../data/file_area.ui.h:1 ../src/application_window.c:2180
 #: ../src/file_area.c:155
 msgid "File"
 msgstr "Dosya"
@@ -555,7 +497,7 @@ msgstr "Açıklama"
 msgid "_Accept"
 msgstr "_Kabul Et"
 
-#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:28
+#: ../data/log_area.ui.h:1 ../data/preferences_dialog.ui.h:15
 msgid "Log"
 msgstr "Günlük"
 
@@ -587,8 +529,8 @@ msgstr "Seçilen satırdan önce boş satır bırak"
 msgid "Delete the selected line"
 msgstr "Seçilen satırı sil"
 
-#: ../data/load_files_dialog.ui.h:8 ../src/load_files_dialog.cc:753
-#: ../src/load_files_dialog.cc:856
+#: ../data/load_files_dialog.ui.h:8 ../src/load_files_dialog.c:750
+#: ../src/load_files_dialog.c:853
 msgid "Delete all blank lines"
 msgstr "Tüm boş satırları sil"
 
@@ -600,8 +542,8 @@ msgstr "Seçilen satırı yukarı taşı"
 msgid "Move the selected line down"
 msgstr "Seçilen satırı aşağı taşı"
 
-#: ../data/load_files_dialog.ui.h:11 ../src/load_files_dialog.cc:771
-#: ../src/load_files_dialog.cc:874
+#: ../data/load_files_dialog.ui.h:11 ../src/load_files_dialog.c:768
+#: ../src/load_files_dialog.c:871
 msgid "Reload"
 msgstr "Yenile"
 
@@ -614,7 +556,7 @@ msgid "Selected line:"
 msgstr "Seçilen satır:"
 
 #: ../data/load_files_dialog.ui.h:15
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:121
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:117
 msgid ""
 "Whether to run the currently selected scanner on filenames loaded from a "
 "text file"
@@ -718,7 +660,7 @@ msgstr "Tarayıcı Kipi"
 msgid "Rename Files and Directories"
 msgstr "Dosya ve Dizinleri Yeniden Adlandır"
 
-#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:126
+#: ../data/menus.ui.h:26 ../data/scan_dialog.ui.h:109
 msgid "Process Fields"
 msgstr "Alanları işle"
 
@@ -735,382 +677,298 @@ msgid "Sort List by Tag"
 msgstr "Etikete Göre Sırala"
 
 #: ../data/menus.ui.h:30
-msgid "Ascending by title"
-msgstr "Başlığa göre artan"
-
-#: ../data/menus.ui.h:31
-msgid "Descending by title"
-msgstr "Başlığa göre azalan"
-
-#: ../data/menus.ui.h:32
-#, fuzzy
-msgid "Ascending by subtitle"
-msgstr "Başlığa göre artan"
-
-#: ../data/menus.ui.h:33
-#, fuzzy
-msgid "Descending by subtitle"
-msgstr "Başlığa göre azalan"
-
-#: ../data/menus.ui.h:34
-#, fuzzy
-msgid "Ascending by version"
-msgstr "Süreye göre artan"
-
-#: ../data/menus.ui.h:35
-#, fuzzy
-msgid "Descending by version"
-msgstr "Süreye göre azalan"
-
-#: ../data/menus.ui.h:36
-msgid "Ascending by artist"
-msgstr "Sanatçıya göre artan"
-
-#: ../data/menus.ui.h:37
-msgid "Descending by artist"
-msgstr "Sanatçıya göre azalan"
-
-#: ../data/menus.ui.h:38
-msgid "Ascending by album artist"
-msgstr "Albüm sanatçısına göre artan"
-
-#: ../data/menus.ui.h:39
-msgid "Descending by album artist"
-msgstr "Albüm sanatçısına göre azalan"
-
-#: ../data/menus.ui.h:40
-msgid "Ascending by album"
-msgstr "Albüme göre artan"
-
-#: ../data/menus.ui.h:41
-msgid "Descending by album"
-msgstr "Albüme göre azalan"
-
-#: ../data/menus.ui.h:42
-#, fuzzy
-msgid "Ascending by disc subtitle"
-msgstr "Başlığa göre artan"
-
-#: ../data/menus.ui.h:43
-#, fuzzy
-msgid "Descending by disc subtitle"
-msgstr "Başlığa göre azalan"
-
-#: ../data/menus.ui.h:44
 msgid "Ascending by track number"
 msgstr "Parça numarasına göre artan"
 
-#: ../data/menus.ui.h:45
+#: ../data/menus.ui.h:31
 msgid "Descending by track number"
 msgstr "Parça numarasına göre azalan"
 
-#: ../data/menus.ui.h:46
-#, fuzzy
-msgid "Ascending by disc number"
-msgstr "Disk numarasına göre artan"
+#: ../data/menus.ui.h:32
+msgid "Ascending by title"
+msgstr "Başlığa göre artan"
 
-#: ../data/menus.ui.h:47
-#, fuzzy
-msgid "Descending by disc number"
-msgstr "Disk numarasına göre azalan"
+#: ../data/menus.ui.h:33
+msgid "Descending by title"
+msgstr "Başlığa göre azalan"
 
-#: ../data/menus.ui.h:48
+#: ../data/menus.ui.h:34
+msgid "Ascending by artist"
+msgstr "Sanatçıya göre artan"
+
+#: ../data/menus.ui.h:35
+msgid "Descending by artist"
+msgstr "Sanatçıya göre azalan"
+
+#: ../data/menus.ui.h:36
+msgid "Ascending by album artist"
+msgstr "Albüm sanatçısına göre artan"
+
+#: ../data/menus.ui.h:37
+msgid "Descending by album artist"
+msgstr "Albüm sanatçısına göre azalan"
+
+#: ../data/menus.ui.h:38
+msgid "Ascending by album"
+msgstr "Albüme göre artan"
+
+#: ../data/menus.ui.h:39
+msgid "Descending by album"
+msgstr "Albüme göre azalan"
+
+#: ../data/menus.ui.h:40
 msgid "Ascending by year"
 msgstr "Yıla göre artan"
 
-#: ../data/menus.ui.h:49
+#: ../data/menus.ui.h:41
 msgid "Descending by year"
 msgstr "Yıla göre azalan"
 
-#: ../data/menus.ui.h:50
-#, fuzzy
-msgid "Ascending by release year"
-msgstr "Yıla göre artan"
-
-#: ../data/menus.ui.h:51
-#, fuzzy
-msgid "Descending by release year"
-msgstr "Yıla göre azalan"
-
-#: ../data/menus.ui.h:52
+#: ../data/menus.ui.h:42
 msgid "Ascending by genre"
 msgstr "Türe göre artan"
 
-#: ../data/menus.ui.h:53
+#: ../data/menus.ui.h:43
 msgid "Descending by genre"
 msgstr "Türe göre azalan"
 
-#: ../data/menus.ui.h:54
+#: ../data/menus.ui.h:44
 msgid "Ascending by comment"
 msgstr "Yoruma göre artan"
 
-#: ../data/menus.ui.h:55
+#: ../data/menus.ui.h:45
 msgid "Descending by comment"
 msgstr "Yoruma göre azalan"
 
-#: ../data/menus.ui.h:56
+#: ../data/menus.ui.h:46
 msgid "Ascending by composer"
 msgstr "Besteciye göre artan"
 
-#: ../data/menus.ui.h:57
+#: ../data/menus.ui.h:47
 msgid "Descending by composer"
 msgstr "Besteciye göre azalan"
 
-#: ../data/menus.ui.h:58
+#: ../data/menus.ui.h:48
 msgid "Ascending by original artist"
 msgstr "Asıl sanatçıya göre artan"
 
-#: ../data/menus.ui.h:59
+#: ../data/menus.ui.h:49
 msgid "Descending by original artist"
 msgstr "Asıl sanatçıya göre azalan"
 
-#: ../data/menus.ui.h:60
-#, fuzzy
-msgid "Ascending by original year"
-msgstr "Asıl sanatçıya göre artan"
-
-#: ../data/menus.ui.h:61
-#, fuzzy
-msgid "Descending by original year"
-msgstr "Asıl sanatçıya göre azalan"
-
-#: ../data/menus.ui.h:62
+#: ../data/menus.ui.h:50
 msgid "Ascending by copyright"
 msgstr "Telif hakkına göre artan"
 
-#: ../data/menus.ui.h:63
+#: ../data/menus.ui.h:51
 msgid "Descending by copyright"
 msgstr "Telif hakkına göre azalan"
 
-#: ../data/menus.ui.h:64
+#: ../data/menus.ui.h:52
 msgid "Ascending by URL"
 msgstr "Bağlantıya göre artan"
 
-#: ../data/menus.ui.h:65
+#: ../data/menus.ui.h:53
 msgid "Descending by URL"
 msgstr "Bağlantıya göre azalan"
 
-#: ../data/menus.ui.h:66
+#: ../data/menus.ui.h:54
 msgid "Ascending by encoder name"
 msgstr "Kodlayıcıya göre artan"
 
-#: ../data/menus.ui.h:67
+#: ../data/menus.ui.h:55
 msgid "Descending by encoder name"
 msgstr "Kodlayıcıya göre azalan"
 
-#: ../data/menus.ui.h:68
+#: ../data/menus.ui.h:56
 msgid "Sort List by Property"
 msgstr "Özelliğe Göre Sırala"
 
-#: ../data/menus.ui.h:69
-#, fuzzy
-msgid "Ascending by file path"
-msgstr "Dosya türüne göre artan"
-
-#: ../data/menus.ui.h:70
-#, fuzzy
-msgid "Descending by file path"
-msgstr "Dosya türüne göre azalan"
-
-#: ../data/menus.ui.h:71
+#: ../data/menus.ui.h:57
 msgid "Ascending by filename"
 msgstr "Dosya adına göre artan"
 
-#: ../data/menus.ui.h:72
+#: ../data/menus.ui.h:58
 msgid "Descending by filename"
 msgstr "Dosya adına göre azalan"
 
-#: ../data/menus.ui.h:73
+#: ../data/menus.ui.h:59
 msgid "Ascending by creation date"
 msgstr "Oluşturma tarihine göre artan"
 
-#: ../data/menus.ui.h:74
+#: ../data/menus.ui.h:60
 msgid "Descending by creation date"
 msgstr "Oluşturma tarihine göre azalan"
 
-#: ../data/menus.ui.h:75
+#: ../data/menus.ui.h:61
 msgid "Ascending by file type"
 msgstr "Dosya türüne göre artan"
 
-#: ../data/menus.ui.h:76
+#: ../data/menus.ui.h:62
 msgid "Descending by file type"
 msgstr "Dosya türüne göre azalan"
 
-#: ../data/menus.ui.h:77
+#: ../data/menus.ui.h:63
 msgid "Ascending by file size"
 msgstr "Dosya boyutuna göre artan"
 
-#: ../data/menus.ui.h:78
+#: ../data/menus.ui.h:64
 msgid "Descending by file size"
 msgstr "Dosya boyutuna göre azalan"
 
-#: ../data/menus.ui.h:79
+#: ../data/menus.ui.h:65
 msgid "Ascending by duration"
 msgstr "Süreye göre artan"
 
-#: ../data/menus.ui.h:80
+#: ../data/menus.ui.h:66
 msgid "Descending by duration"
 msgstr "Süreye göre azalan"
 
-#: ../data/menus.ui.h:81
+#: ../data/menus.ui.h:67
 msgid "Ascending by bit rate"
 msgstr "Bit oranına göre artan"
 
-#: ../data/menus.ui.h:82
+#: ../data/menus.ui.h:68
 msgid "Descending by bit rate"
 msgstr "Bit oranına göre azalan"
 
-#: ../data/menus.ui.h:83
+#: ../data/menus.ui.h:69
 msgid "Ascending by sample rate"
 msgstr "Örnek oranına göre artan"
 
-#: ../data/menus.ui.h:84
+#: ../data/menus.ui.h:70
 msgid "Descending by sample rate"
 msgstr "Örnek oranına göre azalan"
 
-#: ../data/menus.ui.h:85
-msgid "Visible columns"
-msgstr ""
-
-#: ../data/menus.ui.h:95 ../data/preferences_dialog.ui.h:21
-#, fuzzy
-msgid "Release year"
-msgstr "%o: asıl sanatçı"
-
-#: ../data/menus.ui.h:102 ../data/preferences_dialog.ui.h:24
-#, fuzzy
-msgid "Original year"
-msgstr "Asıl sanatçı"
-
-#: ../data/menus.ui.h:110
+#: ../data/menus.ui.h:71
 msgid "Collapse Tree"
 msgstr "Ağacı Daralt"
 
-#: ../data/menus.ui.h:111
+#: ../data/menus.ui.h:72
 msgid "Reload Tree"
 msgstr "Ağacı Yeniden Yükle"
 
-#: ../data/menus.ui.h:112
+#: ../data/menus.ui.h:73
 msgid "Reload Directory"
 msgstr "Dizini Tekrar Yükle"
 
-#: ../data/menus.ui.h:113
+#: ../data/menus.ui.h:74
 msgid "Show Hidden Directories"
 msgstr "Gizli Dosyaları Göster"
 
-#: ../data/menus.ui.h:114
+#: ../data/menus.ui.h:75
 msgid "_Browser"
 msgstr "G_ezgin"
 
-#: ../data/menus.ui.h:115
+#: ../data/menus.ui.h:76
 msgid "Set _Current Path as Default"
 msgstr "Bulunulan Dizini Öntan_ımlı Olarak Ayarla"
 
-#: ../data/menus.ui.h:116
+#: ../data/menus.ui.h:77
 msgid "Rename Directory…"
 msgstr "Dizini Yeniden Adlandır…"
 
-#: ../data/menus.ui.h:117
+#: ../data/menus.ui.h:78
 msgid "Browse Directory With…"
 msgstr "Dizine Birlikte Gözat…"
 
-#: ../data/menus.ui.h:118
+#: ../data/menus.ui.h:79
 msgid "Browse _Subdirectories"
 msgstr "A_lt Dizinleride Tara"
 
-#: ../data/menus.ui.h:119
+#: ../data/menus.ui.h:80
 msgid "_Miscellaneous"
 msgstr "_Çeşitli"
 
-#: ../data/menus.ui.h:120
+#: ../data/menus.ui.h:81
 msgid "CDD_B Search…"
 msgstr "CDD_B Ara…"
 
-#: ../data/menus.ui.h:121
+#: ../data/menus.ui.h:82
 msgid "Load Filenames From a Text File…"
 msgstr "Dosya Adlarını Metin Dosyasından Yükle…"
 
-#: ../data/menus.ui.h:122 ../data/toolbar.ui.h:29
+#: ../data/menus.ui.h:83 ../data/toolbar.ui.h:29
 msgid "Generate Playlist…"
 msgstr "Çalma Listesi Oluştur…"
 
-#: ../data/menus.ui.h:123
+#: ../data/menus.ui.h:84
 msgid "_Go"
 msgstr "G_it"
 
-#: ../data/menus.ui.h:124
+#: ../data/menus.ui.h:85
 msgid "_Home Directory"
 msgstr "_Ev Dizini"
 
-#: ../data/menus.ui.h:125
+#: ../data/menus.ui.h:86
 msgid "Desktop Directory"
 msgstr "Masaüstü Dizini"
 
-#: ../data/menus.ui.h:126
+#: ../data/menus.ui.h:87
 msgid "Documents Directory"
 msgstr "Belgeler Dizini"
 
-#: ../data/menus.ui.h:127
+#: ../data/menus.ui.h:88
 msgid "Downloads Directory"
 msgstr "İndirilenler Dizini"
 
-#: ../data/menus.ui.h:128
+#: ../data/menus.ui.h:89
 msgid "Music Directory"
 msgstr "Müzik Dizini"
 
-#: ../data/menus.ui.h:129
+#: ../data/menus.ui.h:90
 msgid "_Parent Directory"
 msgstr "_Üst Dizin"
 
-#: ../data/menus.ui.h:130
+#: ../data/menus.ui.h:91
 msgid "_Default Directory"
 msgstr "_Öntanımlı Dizin"
 
-#: ../data/menus.ui.h:131 ../data/toolbar.ui.h:1
+#: ../data/menus.ui.h:92 ../data/toolbar.ui.h:1
 msgid "_First File"
 msgstr "_İlk Dosya"
 
-#: ../data/menus.ui.h:132
+#: ../data/menus.ui.h:93
 msgid "Previous File"
 msgstr "Önceki Dosya"
 
-#: ../data/menus.ui.h:133 ../data/toolbar.ui.h:5
+#: ../data/menus.ui.h:94 ../data/toolbar.ui.h:5
 msgid "_Next File"
 msgstr "So_nraki Dosya"
 
-#: ../data/menus.ui.h:134 ../data/toolbar.ui.h:7
+#: ../data/menus.ui.h:95 ../data/toolbar.ui.h:7
 msgid "_Last File"
 msgstr "_Son Dosya"
 
-#: ../data/menus.ui.h:135
+#: ../data/menus.ui.h:96
 msgid "Home Directory"
 msgstr "Ev Dizini"
 
-#: ../data/menus.ui.h:136
+#: ../data/menus.ui.h:97
 msgid "Default Directory"
 msgstr "Öntanımlı Dizin"
 
-#: ../data/menus.ui.h:137
+#: ../data/menus.ui.h:98
 msgid "Set Current Path as Default"
 msgstr "Bulunulan Dizini Öntanımlı Olarak Ayarla"
 
-#: ../data/menus.ui.h:139
+#: ../data/menus.ui.h:100
 msgid "Browse Subdirectories"
 msgstr "Alt Dizinleri Tara"
 
-#: ../data/menus.ui.h:140
+#: ../data/menus.ui.h:101
 msgid "Invert Selection"
 msgstr "Seçimi Tersine Çevir"
 
-#: ../data/menus.ui.h:141
+#: ../data/menus.ui.h:102
 msgid "CDDB Search Files…"
 msgstr "Dosyaları CDDB'de Ara…"
 
-#: ../data/menus.ui.h:142
+#: ../data/menus.ui.h:103
 msgid "Find…"
 msgstr "Bul…"
 
-#: ../data/menus.ui.h:143
+#: ../data/menus.ui.h:104
 msgid "Clear Log"
 msgstr "Sistem Günlüğünü Temizle"
 
@@ -1130,7 +988,7 @@ msgstr "Seçenekler"
 msgid "Include only the selected files"
 msgstr "Sadece seçilen dosyaları içer"
 
-#: ../data/playlist_dialog.ui.h:7 ../data/org.gnome.EasyTAG.gschema.xml.h:148
+#: ../data/playlist_dialog.ui.h:7 ../data/org.gnome.EasyTAG.gschema.xml.h:144
 msgid ""
 "Whether to use only the selected files or all files when creating playlists"
 msgstr ""
@@ -1149,7 +1007,7 @@ msgstr "Çalma listesinde dosyalar için göreceli konum kullan"
 msgid "Create playlist in the parent directory"
 msgstr "Çalma listesini üst dizinde oluştur"
 
-#: ../data/playlist_dialog.ui.h:11 ../data/org.gnome.EasyTAG.gschema.xml.h:152
+#: ../data/playlist_dialog.ui.h:11 ../data/org.gnome.EasyTAG.gschema.xml.h:148
 msgid "Whether to create the playlist in the parent directory"
 msgstr "Üst dizinde çalma listesi oluşturulup oluşturulmaması"
 
@@ -1157,7 +1015,7 @@ msgstr "Üst dizinde çalma listesi oluşturulup oluşturulmaması"
 msgid "Use DOS directory separator"
 msgstr "DOS dizin ayıracını kullan"
 
-#: ../data/playlist_dialog.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:154
+#: ../data/playlist_dialog.ui.h:13 ../data/org.gnome.EasyTAG.gschema.xml.h:150
 msgid ""
 "Whether to use backslash as directory separator when generating playlists"
 msgstr ""
@@ -1180,10 +1038,10 @@ msgstr "Dosya adı kullanarak bilgi yaz"
 msgid "Write information using:"
 msgstr "Şunu kullanarak bilgi yaz:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.cc:3033
-#: ../src/browser.cc:938 ../src/easytag.c:234 ../src/easytag.c:465
-#: ../src/easytag.c:472 ../src/easytag.c:600 ../src/easytag.c:607
-#: ../src/tag_area.cc:1678
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.c:3016
+#: ../src/browser.c:915 ../src/easytag.c:234 ../src/easytag.c:465
+#: ../src/easytag.c:472 ../src/easytag.c:597 ../src/easytag.c:604
+#: ../src/tag_area.c:1850
 msgid "_Save"
 msgstr "_Kaydet"
 
@@ -1261,35 +1119,26 @@ msgstr "Dosyaları büyük küçük harf duyarlı olarak sırala"
 msgid "Whether file sorting is case-sensitive"
 msgstr "Dosya sıralamanın büyük küçük harf duyarlı olup olmaması"
 
-#: ../data/preferences_dialog.ui.h:15
-#, fuzzy
-msgid "Hide fields"
-msgstr "Alanları Seçin:"
-
 #: ../data/preferences_dialog.ui.h:16
-msgid "Hide these fields in the tag area."
-msgstr ""
-
-#: ../data/preferences_dialog.ui.h:29
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:51
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:47
 msgid "Show the log"
 msgstr "Sistem günlüğünü göster"
 
-#: ../data/preferences_dialog.ui.h:30
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:52
+#: ../data/preferences_dialog.ui.h:17
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:48
 msgid "Whether to show the log in the main window"
 msgstr "Ana pencerede sistem günlüğünün gösterilip gösterilmemesi"
 
-#: ../data/preferences_dialog.ui.h:31
+#: ../data/preferences_dialog.ui.h:18
 msgid "General"
 msgstr "Genel"
 
-#: ../data/preferences_dialog.ui.h:32
+#: ../data/preferences_dialog.ui.h:19
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:39
 msgid "Show audio file header summary"
 msgstr "Ses dosyası üst bilgi özetini göster"
 
-#: ../data/preferences_dialog.ui.h:33
+#: ../data/preferences_dialog.ui.h:20
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:40
 msgid ""
 "Whether to show header information, such as bit rate and duration, for audio "
@@ -1298,43 +1147,43 @@ msgstr ""
 "Ses dosyaları için başlık bilgilerinin gösterilip gösterilmemesi, örneğin "
 "bit oranı ve süresi"
 
-#: ../data/preferences_dialog.ui.h:34
+#: ../data/preferences_dialog.ui.h:21
 msgid "Display changed files in list using:"
 msgstr "Listedeki değişmiş dosyaların görünümü:"
 
-#: ../data/preferences_dialog.ui.h:35
+#: ../data/preferences_dialog.ui.h:22
 msgid "Red color"
 msgstr "Kırmızı renkli"
 
-#: ../data/preferences_dialog.ui.h:36
+#: ../data/preferences_dialog.ui.h:23
 msgid "Bold style"
 msgstr "Kalın yazılı"
 
-#: ../data/preferences_dialog.ui.h:37
+#: ../data/preferences_dialog.ui.h:24
 msgid "Interface"
 msgstr " Arayüz"
 
-#: ../data/preferences_dialog.ui.h:38
+#: ../data/preferences_dialog.ui.h:25
 msgid "File Settings"
 msgstr "Dosya Ayarları"
 
-#: ../data/preferences_dialog.ui.h:39
+#: ../data/preferences_dialog.ui.h:26
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:35
 msgid "Preserve modification time when writing files"
 msgstr "Dosyalar yazılırken değiştirilme zamanını koru"
 
-#: ../data/preferences_dialog.ui.h:40
+#: ../data/preferences_dialog.ui.h:27
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:36
 msgid "Whether to preserve the existing modification time when editing files"
 msgstr ""
 "Dosyalar düzenlenirken varolan değiştirilme zamanının korunup korunmaması"
 
-#: ../data/preferences_dialog.ui.h:41
+#: ../data/preferences_dialog.ui.h:28
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:37
 msgid "Update parent directory modification time when writing files"
 msgstr "Dosyaları yazarken üst dizin değiştirilme zamanını güncelle"
 
-#: ../data/preferences_dialog.ui.h:42
+#: ../data/preferences_dialog.ui.h:29
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:38
 msgid ""
 "Whether to update the modification time on the parent directory when editing "
@@ -1344,87 +1193,60 @@ msgstr ""
 "güncellenmemesi"
 
 #. Translators: a section header in the Files tab of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:44
+#: ../data/preferences_dialog.ui.h:31
 msgid "Filenames"
 msgstr "Dosyaadları"
 
-#: ../data/preferences_dialog.ui.h:45
-#, fuzzy
-msgid "Replace illegal characters when renaming:"
+#: ../data/preferences_dialog.ui.h:32
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
+msgid "Replace illegal characters when renaming"
 msgstr "Yeniden adlandırılırken geçersiz karakterleri değiştir"
 
-#: ../data/preferences_dialog.ui.h:46
-#, fuzzy
+#: ../data/preferences_dialog.ui.h:33
 msgid ""
-"Convert characters which cannot be represented in filenames on some "
-"filesystems (‘\\’, ‘/’, ‘:’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’)"
+"Convert characters which cannot be represented in filenames on the FAT32/16 "
+"and Joliet filesystems (‘\\’, ‘:’, ‘;’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’)"
 msgstr ""
 "FAT32/16 ve Joliet dosya sistemlerindeki dosya adlarında gösterilmeyen "
 "karakterleri dönüştür (‘\\’, ‘:’, ‘;’, ‘*’, ‘?’, ‘\"’, ‘<’, ‘>’, ‘|’)"
 
-#: ../data/preferences_dialog.ui.h:47
-msgid "by ASCII characters"
-msgstr ""
-
-#: ../data/preferences_dialog.ui.h:48
-msgid "Use the ASCII characters (‘-’, ‘+’, ‘_’, ‘'’, ‘(’, ‘)’) as replacement."
-msgstr ""
-
-#: ../data/preferences_dialog.ui.h:49
-#, fuzzy
-msgid "by Unicode characters"
-msgstr "Bütün karakterler büyük harf"
-
-#: ../data/preferences_dialog.ui.h:50
-msgid ""
-"Use similar Unicode characters (‘&#8726;’, ‘&#8725;’, ‘&#8758;’, ‘&#8727;’, "
-"‘&#8253;’, ‘&#8221;’, ‘&#8826;’, ‘&#8827;’, ‘&#8739;’) as replacement."
-msgstr ""
-
-#: ../data/preferences_dialog.ui.h:51
-#, fuzzy
-msgid "No change"
-msgstr "Değiştirme"
-
-#: ../data/preferences_dialog.ui.h:52
-msgid "You must manually ensure valid file characters."
-msgstr ""
-
-#: ../data/preferences_dialog.ui.h:53
+#: ../data/preferences_dialog.ui.h:34
 msgid "Convert filename extension to:"
 msgstr "Dosya uzantısını dönüşütür:"
 
-#: ../data/preferences_dialog.ui.h:54
-#, fuzzy
-msgid "Lower case"
+#: ../data/preferences_dialog.ui.h:35
+msgid "Lower Case"
 msgstr "Küçük Harf"
 
-#: ../data/preferences_dialog.ui.h:55
+#: ../data/preferences_dialog.ui.h:36
 msgid "For example, the extension will be converted to ‘.mp3’"
 msgstr "Örneğin; uzantı '.mp3' formatına dönüştürülecektir"
 
-#: ../data/preferences_dialog.ui.h:56
-#, fuzzy
-msgid "Upper case"
+#: ../data/preferences_dialog.ui.h:37
+msgid "Upper Case"
 msgstr "Büyük Harf"
 
-#: ../data/preferences_dialog.ui.h:57
+#: ../data/preferences_dialog.ui.h:38
 msgid "For example, the extension will be converted to ‘.MP3’"
 msgstr "Örneğin; uzantı '.MP3' formatına dönüştürülecektir"
 
-#: ../data/preferences_dialog.ui.h:58
+#: ../data/preferences_dialog.ui.h:39
+msgid "No Change"
+msgstr "Değiştirme"
+
+#: ../data/preferences_dialog.ui.h:40
 msgid "The extension will not be modified"
 msgstr "Uzantı değiştirilemeyecektir"
 
-#: ../data/preferences_dialog.ui.h:59
+#: ../data/preferences_dialog.ui.h:41
 msgid "Filename Encoding"
 msgstr "Dosya adı Kodlaması"
 
-#: ../data/preferences_dialog.ui.h:60
+#: ../data/preferences_dialog.ui.h:42
 msgid "Try another character encoding"
 msgstr "Başka bir karakter kodlaması kullan"
 
-#: ../data/preferences_dialog.ui.h:61
+#: ../data/preferences_dialog.ui.h:43
 msgid ""
 "Try to use the encoding associated with your locale and if this fails, try "
 "the ISO-8859-1 character encoding"
@@ -1432,11 +1254,11 @@ msgstr ""
 "Yerel kodlamanızı kullanmayı deneyin eğer başarısız olursa, ISO-8859-1 "
 "karakter kodlamasını deneyin"
 
-#: ../data/preferences_dialog.ui.h:62
+#: ../data/preferences_dialog.ui.h:44
 msgid "Transliterate characters into the system character encoding"
 msgstr "Sistem karakter kodlamaya karakterleri başka dilde yaz"
 
-#: ../data/preferences_dialog.ui.h:63
+#: ../data/preferences_dialog.ui.h:45
 msgid ""
 "Replace unsupported characters with a similar character from the target "
 "character encoding"
@@ -1444,36 +1266,37 @@ msgstr ""
 "Desteklenmeyen karakterleri hedef karakter kodlamasından benzer karakterle "
 "ile değiştir"
 
-#: ../data/preferences_dialog.ui.h:64
+#: ../data/preferences_dialog.ui.h:46
 msgid ""
 "Use the system character encoding and silently discard unsupported characters"
-msgstr "Sistem karakter kodlaması kullan ve desteklenmeyen karakterleri at"
+msgstr ""
+"Sistem karakter kodlaması kullan ve desteklenmeyen karakterleri gözden çıkar"
 
-#: ../data/preferences_dialog.ui.h:65
+#: ../data/preferences_dialog.ui.h:47
 msgid ""
 "Discard characters which cannot be represented in the target character "
 "encoding"
-msgstr "Hedef karakter kodlamasında olmayan karakterleri at"
+msgstr "Hedef karakter kodlamasında olmayan karakterleri gözden çıkar"
 
-#: ../data/preferences_dialog.ui.h:66
+#: ../data/preferences_dialog.ui.h:48
 msgid "Files"
 msgstr "Dosyalar"
 
-#: ../data/preferences_dialog.ui.h:67
+#: ../data/preferences_dialog.ui.h:49
 msgid "Automatically complete date field"
 msgstr "Tarih alanını otomatik olarak doldurur"
 
-#: ../data/preferences_dialog.ui.h:68
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:86
+#: ../data/preferences_dialog.ui.h:50
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:82
 msgid "Whether to automatically complete the date tag"
 msgstr "Tarih etiketini otomatik tamamlayıp tamamlamaması"
 
-#: ../data/preferences_dialog.ui.h:69
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:91
+#: ../data/preferences_dialog.ui.h:51
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:87
 msgid "Automatically select the type of the image based on its filename"
 msgstr "Kendi dosya adına dayalı görüntü türünü otomatik seç"
 
-#: ../data/preferences_dialog.ui.h:70
+#: ../data/preferences_dialog.ui.h:52
 msgid ""
 "Whether to, when adding cover art, automatically select a type for an image "
 "based on its filename"
@@ -1481,148 +1304,106 @@ msgstr ""
 "Kapak resmi eklenilirken, bir görüntü için kendi dosya adına bağlı bir türün "
 "otomatik seçilip seçilemeyeceği"
 
-#: ../data/preferences_dialog.ui.h:71
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:97
+#: ../data/preferences_dialog.ui.h:53
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:93
 msgid "Preserve the tag field focus"
 msgstr "Etiket alan odağını koru"
 
-#: ../data/preferences_dialog.ui.h:72
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:98
+#: ../data/preferences_dialog.ui.h:54
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:94
 msgid "Whether to preserve focus on the current tag field when switching file"
 msgstr "Dosya değiştirilirken mevcut etiket alan odağının korunup korunmaması"
 
-#: ../data/preferences_dialog.ui.h:73
+#: ../data/preferences_dialog.ui.h:55
 msgid "Pad the number of digits in the disc field to:"
 msgstr "Disk alanındaki basamak numarasını doldur:"
 
-#: ../data/preferences_dialog.ui.h:74
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:88
+#: ../data/preferences_dialog.ui.h:56
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:84
 msgid "Whether the disc number tag field should be padded with leading zeroes"
 msgstr ""
 "Disk numarası etiket alanının başının sıfır ile doldurulmasının gerekip "
 "gerekmemesi"
 
-#: ../data/preferences_dialog.ui.h:75
+#: ../data/preferences_dialog.ui.h:57
 msgid "Pad the number of digits in the track field to:"
 msgstr "Parça alanındaki basamak sayısını doldur:"
 
-#: ../data/preferences_dialog.ui.h:76
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:94
+#: ../data/preferences_dialog.ui.h:58
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:90
 msgid "Whether the track number tag field should be padded with leading zeroes"
 msgstr ""
 "Parça etiket alanının başının sıfır ile doldurulmasının gerekip gerekmemesi"
 
-#: ../data/preferences_dialog.ui.h:77
+#: ../data/preferences_dialog.ui.h:59
 msgid "Splitting"
 msgstr "Bölme"
 
-#: ../data/preferences_dialog.ui.h:78
-msgid "Delimiter for split"
-msgstr ""
-
-#: ../data/preferences_dialog.ui.h:79
+#: ../data/preferences_dialog.ui.h:60
 msgid ""
-"When writing the text is spilt at this delimiter. When reading it is joined "
-"with this delimier."
-msgstr ""
-
-#: ../data/preferences_dialog.ui.h:80
-#, fuzzy
-msgid ""
-"For Vorbis tags, selected fields will be split and saved as separate tags"
+"For Vorbis tags, selected fields will be split at dashes and saved as "
+"separate tags"
 msgstr ""
 "Vorbis etiketleri için seçilen alanlar tire ile bölünüp ayrı etiketler "
 "olarak kaydedilir."
 
-#: ../data/preferences_dialog.ui.h:82
-#, fuzzy
-msgid "Whether to split title fields in Ogg comments"
+#: ../data/preferences_dialog.ui.h:62
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:186
+msgid "Whether to split title fields at a “ - ” separator in Ogg comments"
 msgstr "Ogg yorumlarında başlık alanının “-” ayrıcı ile ayrılıp ayrılmaması"
 
-#: ../data/preferences_dialog.ui.h:84
-#, fuzzy
-msgid "Whether to split version fields in Ogg comments"
-msgstr ""
-"Ogg açıklamalarında tür alanlarının “ - ” ayırıcı ile ayrılıp ayrılmaması"
-
-#: ../data/preferences_dialog.ui.h:85
-#, fuzzy
-msgid "Whether to split subtitle fields in Ogg comments"
-msgstr "Ogg yorumlarında başlık alanının “-” ayrıcı ile ayrılıp ayrılmaması"
-
-#: ../data/preferences_dialog.ui.h:87
-#, fuzzy
-msgid "Whether to split artist fields in Ogg comments"
+#: ../data/preferences_dialog.ui.h:64
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:188
+msgid "Whether to split artist fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Ogg yorumlarında sanatçı alanının “ - ” ayırıcı ile ayrılıp ayrılmaması"
 
-#: ../data/preferences_dialog.ui.h:89
-#, fuzzy
-msgid "Whether to split album fields in Ogg comments"
+#: ../data/preferences_dialog.ui.h:66
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:190
+msgid "Whether to split album fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Ogg yorumlarında albüm alanlarının “ - ” ayırıcı ile ayrılıp ayrılmaması"
 
-#: ../data/preferences_dialog.ui.h:90
-#, fuzzy
-msgid "Whether to split disc subtitle fields in Ogg comments"
-msgstr "Ogg yorumlarında başlık alanının “-” ayrıcı ile ayrılıp ayrılmaması"
+#: ../data/preferences_dialog.ui.h:68
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:192
+msgid "Whether to split genre fields at a “ - ” separator in Ogg comments"
+msgstr "Ogg yorumlarında tür alanlarının “ - ” ayırıcı ile ayrılıp ayrılmaması"
 
-#: ../data/preferences_dialog.ui.h:92
-#, fuzzy
-msgid "Whether to split genre fields in Ogg comments"
-msgstr ""
-"Ogg açıklamalarında tür alanlarının “ - ” ayırıcı ile ayrılıp ayrılmaması"
-
-#: ../data/preferences_dialog.ui.h:94
-#, fuzzy
-msgid "Whether to split comment fields in Ogg comments"
+#: ../data/preferences_dialog.ui.h:70
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:194
+msgid "Whether to split comment fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Ogg yorumlarında yorum alanlarının “ - ” ayrıcı ile ayrılıp ayrılmaması"
 
-#: ../data/preferences_dialog.ui.h:95
-#, fuzzy
-msgid "Whether to split composer fields in Ogg comments"
+#: ../data/preferences_dialog.ui.h:72
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:196
+msgid "Whether to split composer fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Ogg yorumlarında besteci alanlarının “ - ” ayrıcı ile ayrılıp ayrılmaması"
 
-#: ../data/preferences_dialog.ui.h:96
+#: ../data/preferences_dialog.ui.h:73
 msgid "Original artist"
 msgstr "Asıl sanatçı"
 
-#: ../data/preferences_dialog.ui.h:97
-#, fuzzy
-msgid "Whether to split original artist fields in Ogg comments"
+#: ../data/preferences_dialog.ui.h:74
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:198
+msgid ""
+"Whether to split original artist fields at a “ - ” separator in Ogg comments"
 msgstr ""
 "Ogg yorumlarında asıl sanatçı alanlarının “ - ” ayırıcı ile ayrılıp "
 "ayrılmaması"
 
-#: ../data/preferences_dialog.ui.h:98
-#, fuzzy
-msgid "Whether to split URL fields in Ogg comments"
-msgstr "Ogg yorumlarında başlık alanının “-” ayrıcı ile ayrılıp ayrılmaması"
-
-#: ../data/preferences_dialog.ui.h:99
-#, fuzzy
-msgid "Encoded by"
-msgstr "Kodlayıcı:"
-
-#: ../data/preferences_dialog.ui.h:100
-#, fuzzy
-msgid "Whether to split encoded by fields in Ogg comments"
-msgstr ""
-"Ogg açıklamalarında tür alanlarının “ - ” ayırıcı ile ayrılıp ayrılmaması"
-
-#: ../data/preferences_dialog.ui.h:101
+#: ../data/preferences_dialog.ui.h:75
 msgid "Tags"
 msgstr "Etiketler"
 
-#: ../data/preferences_dialog.ui.h:102
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:55
+#: ../data/preferences_dialog.ui.h:76
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:51
 msgid "Strip ID3 tags if all ID3 tags are empty"
 msgstr "Eğer bütün ID3 etiketleri boşsa ID3 etiketlerini ayıkla"
 
-#: ../data/preferences_dialog.ui.h:103
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:56
+#: ../data/preferences_dialog.ui.h:77
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:52
 msgid ""
 "Whether to remove the ID3 tag from the audio file if all the individual tag "
 "fields are empty"
@@ -1630,43 +1411,43 @@ msgstr ""
 "Eğer bütün kişisel etiket alanları boş ise, ses dosyasından ID3 etiketinin "
 "silinip silinmemesi"
 
-#: ../data/preferences_dialog.ui.h:104
+#: ../data/preferences_dialog.ui.h:78
 msgid "Non-standard encoding for reading ID3 tags:"
 msgstr "ID3 etiketlerini okumak için standart olmayan kodlama:"
 
-#: ../data/preferences_dialog.ui.h:105
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:54
+#: ../data/preferences_dialog.ui.h:79
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:50
 msgid "Whether to use a non-standard character encoding when reading ID3 tags"
 msgstr ""
 "ID3 etiketleri okunurken standart olmayan karakter kodlama kullanılıp "
 "kullanılmaması"
 
-#: ../data/preferences_dialog.ui.h:106
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:64
+#: ../data/preferences_dialog.ui.h:80
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:60
 msgid "Choose the character set to be used when reading ID3v1 and ID3v2 tags"
 msgstr ""
 "ID3v1 ve ID3v2 etiketleri okunurken kullanılacak karakter kümesini seçin"
 
-#: ../data/preferences_dialog.ui.h:107
+#: ../data/preferences_dialog.ui.h:81
 msgid "ID3v2"
 msgstr "ID3v2"
 
-#: ../data/preferences_dialog.ui.h:108
+#: ../data/preferences_dialog.ui.h:82
 msgid "Write ID3v2 tag"
 msgstr "ID3v2 etiketi yaz"
 
-#: ../data/preferences_dialog.ui.h:109
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:66
+#: ../data/preferences_dialog.ui.h:83
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:62
 msgid "Whether to write ID3v2 tags when writing ID3 tags into audio files"
 msgstr ""
 "Ses dosyalarına ID3 etiketleri yazılırken ID3v2 etiketlerinin yazılıp "
 "yazılmaması"
 
-#: ../data/preferences_dialog.ui.h:110 ../data/tag_area.ui.h:4
+#: ../data/preferences_dialog.ui.h:84
 msgid "Version:"
 msgstr "Sürüm:"
 
-#: ../data/preferences_dialog.ui.h:111
+#: ../data/preferences_dialog.ui.h:85
 msgid ""
 "Select the ID3v2 tag version to write:\n"
 "• ID3v2.3 is written using id3lib,\n"
@@ -1676,21 +1457,21 @@ msgstr ""
 " • ID3v2.3 id3lib kullanılarak yazılır,\n"
 " • ID3v2.4 libid3tag kullanılarak yazılır (önerilen)"
 
-#: ../data/preferences_dialog.ui.h:114
+#: ../data/preferences_dialog.ui.h:88
 msgid "Character encoding:"
 msgstr "Karakter Kodlama:"
 
-#: ../data/preferences_dialog.ui.h:115
+#: ../data/preferences_dialog.ui.h:89
 msgid "Unicode"
 msgstr "Uluslararası Dil Desteği"
 
-#: ../data/preferences_dialog.ui.h:116
+#: ../data/preferences_dialog.ui.h:90
 msgid ""
 "Choose the Unicode character encoding to be used when writing ID3v2 tags"
 msgstr ""
 "ID3v2 etiketleri yazılırken kullanılacak Unikod karakter kodlamasını seçin"
 
-#: ../data/preferences_dialog.ui.h:118
+#: ../data/preferences_dialog.ui.h:92
 msgid ""
 "Override the standard Unicode character encoding to be used when writing "
 "ID3v2 tags"
@@ -1698,15 +1479,15 @@ msgstr ""
 "ID3v2 etiketleri yazılırken kullanılacak standart unikod karakter "
 "kodlamasının üzerine yaz"
 
-#: ../data/preferences_dialog.ui.h:119
+#: ../data/preferences_dialog.ui.h:93
 msgid "When encoding conversion fails:"
 msgstr "Kodlama dönüştürme başarısız olduğunda:"
 
-#: ../data/preferences_dialog.ui.h:120
+#: ../data/preferences_dialog.ui.h:94
 msgid "Report error"
 msgstr "Hatayı bildir"
 
-#: ../data/preferences_dialog.ui.h:121
+#: ../data/preferences_dialog.ui.h:95
 msgid ""
 "Display an error message when a character cannot be represented in the "
 "target character encoding and keep the original character"
@@ -1714,20 +1495,20 @@ msgstr ""
 "Bir karakter hedef karakter kodlamasında gösterilemiyorsa bir hata iletisi "
 "görüntüle ve özgün karakteri koru"
 
-#: ../data/preferences_dialog.ui.h:122
+#: ../data/preferences_dialog.ui.h:96
 msgid "Transliterate"
 msgstr "Başka dilde yaz"
 
-#: ../data/preferences_dialog.ui.h:123
+#: ../data/preferences_dialog.ui.h:97
 msgid "Discard"
-msgstr "Vazgeç"
+msgstr "Gözden Çıkar"
 
-#: ../data/preferences_dialog.ui.h:124
+#: ../data/preferences_dialog.ui.h:98
 msgid "Automatically convert old ID3v2 tag versions"
 msgstr "Eski ID3v2 etiketleri otomatik dönüştür"
 
-#: ../data/preferences_dialog.ui.h:125
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:70
+#: ../data/preferences_dialog.ui.h:99
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:66
 msgid ""
 "Whether to convert ID3 tags written against old version of the "
 "specification, such as ID3v2.2, to newer ones, such as ID3v2.3 or ID3v2.4"
@@ -1736,34 +1517,34 @@ msgstr ""
 "dönüştürülmemesi, örneğin ID3v2.2 daha yeni olanına yani ID3v2.3 ya da "
 "ID3v2.4"
 
-#: ../data/preferences_dialog.ui.h:126
+#: ../data/preferences_dialog.ui.h:100
 msgid "Use CRC-32"
 msgstr "CRC-32 kullan"
 
-#: ../data/preferences_dialog.ui.h:127
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:74
+#: ../data/preferences_dialog.ui.h:101
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:70
 msgid "Whether to embed a CRC-32 checksum of the audio file data in ID3v2 tags"
 msgstr ""
 "ID3v2 etiketlerindeki ses dosya verisinin CRC-32 sağlamasının karıştırılıp "
 "karıştırılmaması"
 
-#: ../data/preferences_dialog.ui.h:128
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:71
+#: ../data/preferences_dialog.ui.h:102
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:67
 msgid "Compress data in ID3v2 tags"
 msgstr "ID3v2 etiketlerindeki verileri sıkıştır"
 
-#: ../data/preferences_dialog.ui.h:129
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:72
+#: ../data/preferences_dialog.ui.h:103
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:68
 msgid "Whether to compress data in ID3v2 tags"
 msgstr "ID3v2 etiketlerindeki verilerin sıkıştırılıp sıkıştırılmaması"
 
-#: ../data/preferences_dialog.ui.h:130
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:75
+#: ../data/preferences_dialog.ui.h:104
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:71
 msgid "Use text-only genre in ID3v2 tags"
 msgstr "ID3v2 etiketlerindeki sadece metin türünü kullan"
 
-#: ../data/preferences_dialog.ui.h:131
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:76
+#: ../data/preferences_dialog.ui.h:105
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:72
 msgid ""
 "Whether to use only a string, and not the integer-base ID3v1 genre field, "
 "when writing a genre field to ID3v2 tags"
@@ -1771,73 +1552,73 @@ msgstr ""
 "ID3v2 etiketlerine tür alanı yazarken, sayı tabanlı ID3v1 tür alanı değil, "
 "sadece karakter dizisi kullanılıp kullanılmaması"
 
-#: ../data/preferences_dialog.ui.h:132
+#: ../data/preferences_dialog.ui.h:106
 msgid "ID3v1"
 msgstr "ID3v1"
 
-#: ../data/preferences_dialog.ui.h:133
+#: ../data/preferences_dialog.ui.h:107
 msgid "Write ID3v1 tag"
 msgstr "ID3v1 etiketi yaz"
 
-#: ../data/preferences_dialog.ui.h:134
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:58
+#: ../data/preferences_dialog.ui.h:108
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:54
 msgid "Whether to write ID3v1 tags when writing ID3 tags into audio files"
 msgstr ""
 "Ses dosyalarına ID3 etiketleri yazılırken ID3v1 etiketlerinin yazılıp "
 "yazılmaması"
 
-#: ../data/preferences_dialog.ui.h:135
+#: ../data/preferences_dialog.ui.h:109
 msgid "Choose the character set to be used when writing ID3v1 tag"
 msgstr "ID3v1 etiketi yazılırken kullanılacak karakter kümesini seç"
 
-#: ../data/preferences_dialog.ui.h:136
+#: ../data/preferences_dialog.ui.h:110
 msgid "ID3 Tags"
 msgstr "ID3 Etiketleri"
 
-#: ../data/preferences_dialog.ui.h:137
+#: ../data/preferences_dialog.ui.h:111
 msgid "Character Conversion"
 msgstr "Karakter Dönüştürme"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:139
+#: ../data/preferences_dialog.ui.h:113
 msgid "Fill Tag Scanner"
 msgstr "Etiket Tarayıcı Doldur"
 
-#: ../data/preferences_dialog.ui.h:141
+#: ../data/preferences_dialog.ui.h:115
 #, no-c-format
 msgid "Convert underscores and ‘%20’ to spaces"
 msgstr "‘%20’ ve alt çizgileri boşluklara dönüştür"
 
-#: ../data/preferences_dialog.ui.h:143
+#: ../data/preferences_dialog.ui.h:117
 #, no-c-format
 msgid "Convert spaces and ‘%20’ to underscores"
 msgstr "‘%20’ ve boşlukları alt çizgiye dönüştür"
 
-#: ../data/preferences_dialog.ui.h:144
+#: ../data/preferences_dialog.ui.h:118
 msgid "No conversion"
 msgstr "Dönüştürme yok"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:146
+#: ../data/preferences_dialog.ui.h:120
 msgid "Rename File and Directory Scanner"
 msgstr "Dosya ve Dizin Tarayıcıyı yeniden adlandır"
 
-#: ../data/preferences_dialog.ui.h:147 ../data/scan_dialog.ui.h:108
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:137 ../src/tag_area.cc:724
+#: ../data/preferences_dialog.ui.h:121 ../data/scan_dialog.ui.h:91
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:133 ../src/tag_area.c:894
 msgid "Remove spaces"
 msgstr "Boşlukları sil"
 
 #. Translators: a section header in the Scanner section of the preferences dialog.
-#: ../data/preferences_dialog.ui.h:149
+#: ../data/preferences_dialog.ui.h:123
 msgid "Process Fields Scanner"
 msgstr "Alan Tarayıcıyı İşle"
 
-#: ../data/preferences_dialog.ui.h:150
+#: ../data/preferences_dialog.ui.h:124
 msgid "Upper-case the first letters of all words"
 msgstr "Bütün kelimelerin ilk harfleri büyük harf"
 
-#: ../data/preferences_dialog.ui.h:151
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:134
+#: ../data/preferences_dialog.ui.h:125
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:130
 msgid ""
 "Whether to upper-case the first letter of all words, including prepositions "
 "and other short words such as “feat.”, when processing tag fields"
@@ -1845,16 +1626,16 @@ msgstr ""
 "Etiket alanları işlenirken, bütün kelimelerin ilk harflerinin, edatlar ve "
 "diğer kısa kelimeler örneğin “feat.” dahil büyük harf yapılıp yapılmaması"
 
-#: ../data/preferences_dialog.ui.h:152
+#: ../data/preferences_dialog.ui.h:126
 msgid "Fields"
 msgstr "Alanlar"
 
-#: ../data/preferences_dialog.ui.h:153
+#: ../data/preferences_dialog.ui.h:127
 msgid "Overwrite fields when scanning tags"
 msgstr "Etiketleri tararken alanların üzerine yaz"
 
-#: ../data/preferences_dialog.ui.h:154
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:103
+#: ../data/preferences_dialog.ui.h:128
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:99
 msgid ""
 "Whether to overwrite the tag field values when filling tags. Otherwise, only "
 "blank tag fields will be filled"
@@ -1862,12 +1643,12 @@ msgstr ""
 "Etiketler doldurulurken etiket alan değerlerinin üzerine yazılıp "
 "yazılmaması. Aksi halde, sadece boş etiket alanları doldurulacaktır"
 
-#: ../data/preferences_dialog.ui.h:155
+#: ../data/preferences_dialog.ui.h:129
 msgid "Set this text as default comment:"
 msgstr "Öntanımlı yorum olarak bu yazıyı ayarla:"
 
-#: ../data/preferences_dialog.ui.h:156
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:105
+#: ../data/preferences_dialog.ui.h:130
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:101
 msgid ""
 "Whether to set the comment tag field to the provided default value when "
 "filling tags"
@@ -1875,13 +1656,13 @@ msgstr ""
 "Etiket alanları doldurulurken sağlanan öntanımlı değere yorum etiket "
 "alanının ayarlanıp ayarlanmaması"
 
-#: ../data/preferences_dialog.ui.h:157
+#: ../data/preferences_dialog.ui.h:131
 msgid "Use CRC-32 as the default comment (for files with ID3 tags only)"
 msgstr ""
 "Öntanımlı yorum olarak CRC-32 kullan (sadece ID3 etiketli dosyalar için)"
 
-#: ../data/preferences_dialog.ui.h:158
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:109
+#: ../data/preferences_dialog.ui.h:132
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:105
 msgid ""
 "Whether to use the CRC-32 of the audio file data as the default comment, for "
 "files with ID3 tags only"
@@ -1889,40 +1670,40 @@ msgstr ""
 "Sadece ID3 etiketli dosyalar için, öntanımlı yorum olarak CRC-32 ses dosya "
 "verisinin kullanılıp kullanılmaması"
 
-#: ../data/preferences_dialog.ui.h:159
+#: ../data/preferences_dialog.ui.h:133
 msgid "Scanner"
 msgstr "Tarayıcı"
 
-#: ../data/preferences_dialog.ui.h:160
+#: ../data/preferences_dialog.ui.h:134
 msgid "Automatic Search Servers"
 msgstr "Otomatik Arama Sunucuları"
 
-#: ../data/preferences_dialog.ui.h:161
+#: ../data/preferences_dialog.ui.h:135
 msgid "Host:"
 msgstr "Sunucu:"
 
-#: ../data/preferences_dialog.ui.h:162
+#: ../data/preferences_dialog.ui.h:136
 msgid "Port:"
 msgstr "Port:"
 
-#: ../data/preferences_dialog.ui.h:163
+#: ../data/preferences_dialog.ui.h:137
 msgid "CGI Path:"
 msgstr "CGI Konumu:"
 
-#: ../data/preferences_dialog.ui.h:164
+#: ../data/preferences_dialog.ui.h:138
 msgid "Manual Search Server"
 msgstr "Elle Arama Sunucusu"
 
-#: ../data/preferences_dialog.ui.h:165
+#: ../data/preferences_dialog.ui.h:139
 msgid "Results List"
 msgstr "Sonuçlar Listesi:"
 
-#: ../data/preferences_dialog.ui.h:166
+#: ../data/preferences_dialog.ui.h:140
 msgid ""
 "Select corresponding file (according to position or DLM if activated below)"
 msgstr "Uyuşan dosyayı seç (Eğer aşağıda aktifse DLM ya da konuma göre)"
 
-#: ../data/preferences_dialog.ui.h:167
+#: ../data/preferences_dialog.ui.h:141
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:26
 msgid ""
 "Whether to select the file in the file list which matches the position in "
@@ -1931,7 +1712,7 @@ msgstr ""
 "CDDB sonuçlar listesinde konumu eşleşen dosya listesinden dosyanın seçilip "
 "seçilmemesi"
 
-#: ../data/preferences_dialog.ui.h:168
+#: ../data/preferences_dialog.ui.h:142
 msgid ""
 "Use the Levenshtein algorithm (DLM) to match results (using title) with "
 "audio files (using filename)"
@@ -1939,67 +1720,67 @@ msgstr ""
 "Ses dosyaları (dosya adı kullanarak) ile sonuçları (başlık kullanarak) "
 "eşleştirmek için Levenstein algoritması (DLM) kullan"
 
-#: ../data/preferences_dialog.ui.h:170
+#: ../data/preferences_dialog.ui.h:144
 msgid "CDDB"
 msgstr "CDDB"
 
-#: ../data/preferences_dialog.ui.h:171
+#: ../data/preferences_dialog.ui.h:145
 msgid "Confirmation"
 msgstr "Doğrulama"
 
-#: ../data/preferences_dialog.ui.h:172
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:110
+#: ../data/preferences_dialog.ui.h:146
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:106
 msgid "Confirm before writing tags"
 msgstr "Etiket yazma öncesi onayla"
 
-#: ../data/preferences_dialog.ui.h:173
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:111
+#: ../data/preferences_dialog.ui.h:147
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:107
 msgid ""
 "Whether to ask for confirmation from the user before writing tags to audio "
 "files"
 msgstr ""
 "Ses dosyalarına etiket yazma öncesi kullanıcıdan onaylama istenip istenmemesi"
 
-#: ../data/preferences_dialog.ui.h:174
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:112
+#: ../data/preferences_dialog.ui.h:148
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:108
 msgid "Confirm before renaming a file"
 msgstr "Bir dosyayı yeniden adlandırmadan önce onayla"
 
-#: ../data/preferences_dialog.ui.h:175
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:113
+#: ../data/preferences_dialog.ui.h:149
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:109
 msgid "Whether to ask for confirmation from the user before renaming a file"
 msgstr ""
 "Bir dosya yeniden adlandırılmadan önce kullanıcıdan onaylama istenip "
 "istenmemesi"
 
-#: ../data/preferences_dialog.ui.h:176
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:116
+#: ../data/preferences_dialog.ui.h:150
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:112
 msgid "Confirm before deleting a file"
 msgstr "Bir dosya silinmeden önce onayla"
 
-#: ../data/preferences_dialog.ui.h:177
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:117
+#: ../data/preferences_dialog.ui.h:151
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:113
 msgid "Whether to ask for confirmation from the user before deleting a file"
 msgstr "Bir dosya silinmeden önce kullanıcıdan onaylama istenip istenmemesi"
 
-#: ../data/preferences_dialog.ui.h:178
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:114
+#: ../data/preferences_dialog.ui.h:152
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:110
 msgid "Confirm before writing a playlist"
 msgstr "Çalma listesi oluşturulmadan önce onayla"
 
-#: ../data/preferences_dialog.ui.h:179
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:115
+#: ../data/preferences_dialog.ui.h:153
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:111
 msgid "Whether to ask for confirmation from the user before writing a playlist"
 msgstr ""
 "Çalma listesi oluşturulmadan önce kullanıcıdan onaylama istenip istenmemesi"
 
-#: ../data/preferences_dialog.ui.h:180
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:118
+#: ../data/preferences_dialog.ui.h:154
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:114
 msgid "Confirm before losing unsaved changes to files"
 msgstr "Dosyalardaki kaydedilmemiş değişiklikleri kaybetmeden önce onayla"
 
-#: ../data/preferences_dialog.ui.h:181
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:119
+#: ../data/preferences_dialog.ui.h:155
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:115
 msgid ""
 "Whether to ask for confirmation from the user before performing an operation "
 "that would lose unsaved changes on files"
@@ -2007,20 +1788,20 @@ msgstr ""
 "Dosyalar üzerindeki kaydedilmemiş değişiklikleri kaybedebilme ihtimali olan "
 "bir işlem gerçekleştirmeden önce kullanıcıdan onaylama istenip istenmemesi"
 
-#: ../data/preferences_dialog.ui.h:182
+#: ../data/preferences_dialog.ui.h:156
 msgid "Scanner Dialog"
 msgstr "Tarayıcı Penceresi"
 
-#: ../data/preferences_dialog.ui.h:183
+#: ../data/preferences_dialog.ui.h:157
 msgid "Show the scanner dialog on startup"
 msgstr "Başlangıçta tarayıcı penceresini göster"
 
-#: ../data/preferences_dialog.ui.h:184
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:186
+#: ../data/preferences_dialog.ui.h:158
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:182
 msgid "Whether to show the scanner window on application startup"
 msgstr "Uygulama açılışında tarayıcı pencerenin gösterilip gösterilmemesi"
 
-#: ../data/preferences_dialog.ui.h:185
+#: ../data/preferences_dialog.ui.h:159
 msgid "Application"
 msgstr "Uygulama"
 
@@ -2038,7 +1819,7 @@ msgstr ""
 
 #: ../data/scan_dialog.ui.h:3
 msgid "Fill tag preview"
-msgstr "Etiket önizlemesini doldur"
+msgstr "Etiket ön izlemesini doldur"
 
 #: ../data/scan_dialog.ui.h:4
 msgid "Mask Editor"
@@ -2078,127 +1859,98 @@ msgstr "Açıklama Göstergesi"
 
 #: ../data/scan_dialog.ui.h:14
 #, no-c-format
-msgid "%t: title"
-msgstr "%t: başlık"
-
-#: ../data/scan_dialog.ui.h:16
-#, no-c-format
 msgid "%a: artist"
 msgstr "%a: sanatçı"
 
+#: ../data/scan_dialog.ui.h:16
+#, no-c-format
+msgid "%z: album artist"
+msgstr "%z: albüm sanatçısı"
+
 #: ../data/scan_dialog.ui.h:18
 #, no-c-format
-msgid "%y: year"
-msgstr "%y: yıl"
+msgid "%b: album"
+msgstr "%b: albüm"
 
 #: ../data/scan_dialog.ui.h:20
-#, no-c-format
-msgid "%n: track number"
-msgstr "%n: parça numarası"
-
-#: ../data/scan_dialog.ui.h:22
-#, no-c-format
-msgid "%d: disc number"
-msgstr "%d: disk numarası"
-
-#: ../data/scan_dialog.ui.h:24
-#, fuzzy, no-c-format
-msgid "%s: subtitle"
-msgstr "%t: başlık"
-
-#: ../data/scan_dialog.ui.h:26
-#, no-c-format
-msgid "%T: album"
-msgstr "%T: albüm"
-
-#: ../data/scan_dialog.ui.h:28
-#, no-c-format
-msgid "%A: album artist"
-msgstr "%A: albüm sanatçısı"
-
-#: ../data/scan_dialog.ui.h:30
-#, fuzzy, no-c-format
-msgid "%Y: release year"
-msgstr "%o: asıl sanatçı"
-
-#: ../data/scan_dialog.ui.h:32
-#, no-c-format
-msgid "%N: number of tracks"
-msgstr "%N: parça sayısı"
-
-#: ../data/scan_dialog.ui.h:34
-#, no-c-format
-msgid "%D: number of discs"
-msgstr "%D: disk sayısı"
-
-#: ../data/scan_dialog.ui.h:36
-#, fuzzy, no-c-format
-msgid "%S: disc subtitle"
-msgstr "Başlığa göre azalan"
-
-#: ../data/scan_dialog.ui.h:38
-#, fuzzy, no-c-format
-msgid "%v: version"
-msgstr "Dönüştürme yok"
-
-#: ../data/scan_dialog.ui.h:40
-#, no-c-format
-msgid "%o: original artist"
-msgstr "%o: asıl sanatçı"
-
-#: ../data/scan_dialog.ui.h:42
-#, fuzzy, no-c-format
-msgid "%w: original year"
-msgstr "%o: asıl sanatçı"
-
-#: ../data/scan_dialog.ui.h:44
-#, no-c-format
-msgid "%g: genre"
-msgstr "%g: tür"
-
-#: ../data/scan_dialog.ui.h:46
 #, no-c-format
 msgid "%c: comment"
 msgstr "%c: yorum"
 
-#: ../data/scan_dialog.ui.h:48
-#, no-c-format
-msgid "%i: ignored"
-msgstr "%i: ihmal"
-
-#: ../data/scan_dialog.ui.h:50
+#: ../data/scan_dialog.ui.h:22
 #, no-c-format
 msgid "%p: composer"
 msgstr "%p: besteci"
 
-#: ../data/scan_dialog.ui.h:52
+#: ../data/scan_dialog.ui.h:24
 #, no-c-format
 msgid "%r: copyright"
 msgstr "%r: telif hakkı"
 
-#: ../data/scan_dialog.ui.h:54
+#: ../data/scan_dialog.ui.h:26
 #, no-c-format
-msgid "%u: URL"
-msgstr "%u: bağlantı"
+msgid "%d: disc number"
+msgstr "%d: disk numarası"
 
-#: ../data/scan_dialog.ui.h:56
+#: ../data/scan_dialog.ui.h:28
 #, no-c-format
 msgid "%e: encoded by"
 msgstr "%e: kodlayıcı"
 
-#: ../data/scan_dialog.ui.h:57
-msgid "{…|…}: alternatives group"
-msgstr ""
+#: ../data/scan_dialog.ui.h:30
+#, no-c-format
+msgid "%g: genre"
+msgstr "%g: tür"
 
-#: ../data/scan_dialog.ui.h:58
+#: ../data/scan_dialog.ui.h:32
+#, no-c-format
+msgid "%i: ignored"
+msgstr "%i: ihmal"
+
+#: ../data/scan_dialog.ui.h:34
+#, no-c-format
+msgid "%l: number of tracks"
+msgstr "%l: parça sayısı"
+
+#: ../data/scan_dialog.ui.h:36
+#, no-c-format
+msgid "%o: original artist"
+msgstr "%o: asıl sanatçı"
+
+#: ../data/scan_dialog.ui.h:38
+#, no-c-format
+msgid "%n: track number"
+msgstr "%n: parça numarası"
+
+#: ../data/scan_dialog.ui.h:40
+#, no-c-format
+msgid "%t: title"
+msgstr "%t: başlık"
+
+#: ../data/scan_dialog.ui.h:42
+#, no-c-format
+msgid "%u: URL"
+msgstr "%u: bağlantı"
+
+#: ../data/scan_dialog.ui.h:44
+#, no-c-format
+msgid "%x: number of discs"
+msgstr "%x: disk sayısı"
+
+#: ../data/scan_dialog.ui.h:46
+#, no-c-format
+msgid "%y: year"
+msgstr "%y: yıl"
+
+#: ../data/scan_dialog.ui.h:47
 msgid "Fill Tag"
 msgstr "Etiketi Doldur"
 
-#: ../data/scan_dialog.ui.h:59
+#: ../data/scan_dialog.ui.h:48
 msgid "Prefix mask with current directory"
 msgstr "Mevcut dizin ile önek maskesi"
 
-#: ../data/scan_dialog.ui.h:60
+#: ../data/scan_dialog.ui.h:49
 msgid ""
 "Select or type in a mask using codes (see Legend) to parse tag fields. Used "
 "to rename the file.\n"
@@ -2210,127 +1962,112 @@ msgstr ""
 "Dizinleri oluşturmak için ‘/’ karakterini kullanın. İlk karakter ‘/’ olursa, "
 "o kesin konumdur, diğer türlü eski konumuna görecelidir"
 
-#: ../data/scan_dialog.ui.h:62
+#: ../data/scan_dialog.ui.h:51
 msgid "Rename file preview"
-msgstr "Dosya adı değiştirme önizlemesi"
+msgstr "Dosya adı değiştirme ön izlemesi"
 
 #. Only filename changed
-#: ../data/scan_dialog.ui.h:63 ../src/easytag.c:574
+#: ../data/scan_dialog.ui.h:52 ../src/easytag.c:571
 msgid "Rename File"
 msgstr "Dosyayı Yeniden Adlandır"
 
-#: ../data/scan_dialog.ui.h:64
+#: ../data/scan_dialog.ui.h:53
 msgid "Tag Fields"
 msgstr "Etiket Alanları"
 
-#: ../data/scan_dialog.ui.h:66
+#: ../data/scan_dialog.ui.h:55
 msgid "Process filename"
 msgstr "Dosya adı işle"
 
-#: ../data/scan_dialog.ui.h:68
+#: ../data/scan_dialog.ui.h:57
 msgid "Process title field"
 msgstr "Başlık alanını işle"
 
-#: ../data/scan_dialog.ui.h:70
-#, fuzzy
-msgid "Process version field"
-msgstr "Tür alanını işle"
-
-#: ../data/scan_dialog.ui.h:72
-#, fuzzy
-msgid "Process subtitle field"
-msgstr "Başlık alanını işle"
-
-#: ../data/scan_dialog.ui.h:74
+#: ../data/scan_dialog.ui.h:59
 msgid "Process artist field"
 msgstr "Sanatçı alanını işle"
 
-#: ../data/scan_dialog.ui.h:76
+#: ../data/scan_dialog.ui.h:61
 msgid "Process album artist field"
 msgstr "Albüm sanatçısı alanını işle"
 
-#: ../data/scan_dialog.ui.h:78
+#: ../data/scan_dialog.ui.h:63
 msgid "Process album field"
 msgstr "Albüm alanını işle"
 
-#: ../data/scan_dialog.ui.h:80
-#, fuzzy
-msgid "Process disc subtitle field"
-msgstr "Başlık alanını işle"
-
-#: ../data/scan_dialog.ui.h:82
+#: ../data/scan_dialog.ui.h:65
 msgid "Process genre field"
 msgstr "Tür alanını işle"
 
-#: ../data/scan_dialog.ui.h:84
+#: ../data/scan_dialog.ui.h:67
 msgid "Process comment field"
 msgstr "Yorum alanını işle"
 
-#: ../data/scan_dialog.ui.h:86
+#: ../data/scan_dialog.ui.h:69
 msgid "Process composer field"
 msgstr "Besteci alanını işle"
 
-#: ../data/scan_dialog.ui.h:87
+#: ../data/scan_dialog.ui.h:70
 msgid "Orig. Artist"
 msgstr "Asıl Sanatçı"
 
-#: ../data/scan_dialog.ui.h:88
+#: ../data/scan_dialog.ui.h:71
 msgid "Process original artist field"
 msgstr "Asıl Sanatçı alanını işle"
 
-#: ../data/scan_dialog.ui.h:90
+#: ../data/scan_dialog.ui.h:73
 msgid "Process copyright field"
 msgstr "Telif hakkı alanını işle"
 
-#: ../data/scan_dialog.ui.h:92
+#: ../data/scan_dialog.ui.h:75
 msgid "Process URL field"
 msgstr "Bağlantı alanını işle"
 
-#: ../data/scan_dialog.ui.h:94
+#: ../data/scan_dialog.ui.h:77
 msgid "Process encoded-by field"
 msgstr "İşlem alan ile kodlanmış"
 
-#: ../data/scan_dialog.ui.h:95
+#: ../data/scan_dialog.ui.h:78
 msgid "Capitalization"
 msgstr "Büyük Harf Kullanımı"
 
-#: ../data/scan_dialog.ui.h:96
+#: ../data/scan_dialog.ui.h:79
 msgid "Capitalize all"
 msgstr "Tümü Büyük Harf"
 
-#: ../data/scan_dialog.ui.h:97
+#: ../data/scan_dialog.ui.h:80
 msgid ""
 "Whether to upper-case all characters of the tag when processing tag fields"
 msgstr ""
 "Etiket alanları işlenirken etiketin bütün karakterlerinin harflerinin büyük "
 "harf olup olmaması"
 
-#: ../data/scan_dialog.ui.h:98
+#: ../data/scan_dialog.ui.h:81
 msgid "Lowercase all"
 msgstr "Tümü Küçük Harf"
 
-#: ../data/scan_dialog.ui.h:99
+#: ../data/scan_dialog.ui.h:82
 msgid ""
 "Whether to lower-case all characters of the tag when processing tag fields"
 msgstr ""
 "Etiket alanları işlenirlen etiketin bütün karakterlerinin harflerinin küçük "
 "harf olup olmaması"
 
-#: ../data/scan_dialog.ui.h:100
+#: ../data/scan_dialog.ui.h:83
 msgid "Capitalize first letter"
 msgstr "İlk harfi büyüt"
 
-#: ../data/scan_dialog.ui.h:101
+#: ../data/scan_dialog.ui.h:84
 msgid ""
 "Whether to upper-case the first letter of the tag when processing tag fields"
 msgstr ""
 "Etiket alanları işlenirken etiketin ilk harfinin büyük harf olup olmaması"
 
-#: ../data/scan_dialog.ui.h:102
+#: ../data/scan_dialog.ui.h:85
 msgid "Capitalize the first letter of each word"
 msgstr "Her kelimenin ilk harfini büyüt"
 
-#: ../data/scan_dialog.ui.h:103
+#: ../data/scan_dialog.ui.h:86
 msgid ""
 "Whether to upper-case the first letter of each word when processing tag "
 "fields"
@@ -2338,11 +2075,11 @@ msgstr ""
 "Etiket alanları işlenirken her kelimenin ilk harfinin büyük harf yapılıp "
 "yapılmaması"
 
-#: ../data/scan_dialog.ui.h:104
+#: ../data/scan_dialog.ui.h:87
 msgid "Detect Roman numerals"
 msgstr "Roma rakamlarını algıla"
 
-#: ../data/scan_dialog.ui.h:105 ../data/org.gnome.EasyTAG.gschema.xml.h:136
+#: ../data/scan_dialog.ui.h:88 ../data/org.gnome.EasyTAG.gschema.xml.h:132
 msgid ""
 "Whether to detect Roman numerals when applying upper-case conversions while "
 "processing tag fields"
@@ -2350,52 +2087,52 @@ msgstr ""
 "Etiket alanları işlenirken büyük harf dönüşümleri uygulandığında roma "
 "rakamlarının algılanıp algılanmaması"
 
-#: ../data/scan_dialog.ui.h:106
+#: ../data/scan_dialog.ui.h:89
 msgid "Do not change capitalization"
 msgstr "Büyük-küçük harfleri değiştirme"
 
-#: ../data/scan_dialog.ui.h:107
+#: ../data/scan_dialog.ui.h:90
 msgid "Spaces Conversions"
 msgstr "Boşluk Dönüşümleri"
 
-#: ../data/scan_dialog.ui.h:109 ../data/org.gnome.EasyTAG.gschema.xml.h:138
+#: ../data/scan_dialog.ui.h:92 ../data/org.gnome.EasyTAG.gschema.xml.h:134
 msgid "Whether to remove all spaces when processing tag fields"
 msgstr "Etiket alanları işlenirken bütün boşlukların silinip silinmemesi"
 
-#: ../data/scan_dialog.ui.h:110
+#: ../data/scan_dialog.ui.h:93
 msgid "Insert a space before uppercase letters"
 msgstr "Büyük harflerden önce bir boşluk ekle"
 
-#: ../data/scan_dialog.ui.h:111 ../data/org.gnome.EasyTAG.gschema.xml.h:140
+#: ../data/scan_dialog.ui.h:94 ../data/org.gnome.EasyTAG.gschema.xml.h:136
 msgid ""
 "Whether to insert spaces before capital letters when processing tag fields"
 msgstr ""
 "Etiket alanları işlenirken büyük harflerden önce boşluk eklenip eklenmemesi"
 
-#: ../data/scan_dialog.ui.h:112
+#: ../data/scan_dialog.ui.h:95
 msgid "Remove duplicate spaces and underscores"
 msgstr "Çift boşluk ve alt çizgileri sil"
 
-#: ../data/scan_dialog.ui.h:113 ../data/org.gnome.EasyTAG.gschema.xml.h:142
+#: ../data/scan_dialog.ui.h:96 ../data/org.gnome.EasyTAG.gschema.xml.h:138
 msgid ""
 "Whether to remove duplicate spaces and underscores when processing tag fields"
 msgstr ""
 "Etiket alanları işlenirken çift boşluk ve alt çizgilerin silinip silinmemesi"
 
-#: ../data/scan_dialog.ui.h:114
+#: ../data/scan_dialog.ui.h:97
 msgid "Do not change word separators"
 msgstr "Kelime ayraçlarını değiştirme"
 
-#: ../data/scan_dialog.ui.h:115
+#: ../data/scan_dialog.ui.h:98
 msgid "Character Conversions"
 msgstr "Karakter Dönüşümleri"
 
-#: ../data/scan_dialog.ui.h:117 ../src/tag_area.cc:682
+#: ../data/scan_dialog.ui.h:100 ../src/tag_area.c:850
 #, no-c-format
 msgid "Convert ‘_’ and ‘%20’ to spaces"
 msgstr "‘_’ ve ‘%20’ değerlerini boşluğa dönüştür"
 
-#: ../data/scan_dialog.ui.h:119
+#: ../data/scan_dialog.ui.h:102
 #, no-c-format
 msgid ""
 "The underscore character or the string ‘%20’ is replaced by one space. "
@@ -2404,11 +2141,11 @@ msgstr ""
 "‘%20’ metnini ya da altçizgiyi boşluk ile değiştir. Örnek, önce: ‘Bir"
 "%20Giriş_Metni‘, sonra: ‘Bir Giriş Metni’"
 
-#: ../data/scan_dialog.ui.h:120 ../src/tag_area.cc:688
+#: ../data/scan_dialog.ui.h:103 ../src/tag_area.c:856
 msgid "Convert spaces to underscores"
 msgstr "Boşlukları alt çizgiye dönüştür"
 
-#: ../data/scan_dialog.ui.h:121
+#: ../data/scan_dialog.ui.h:104
 msgid ""
 "The space character is replaced by one underscore character. Example, "
 "before: ‘Text In An Entry’, after: ‘Text_In_An_Entry’"
@@ -2416,41 +2153,41 @@ msgstr ""
 "Boşluk karakterini bir alt çizgi ile değiştir. Örnek, önce: ‘Bir Giriş "
 "Metni’, sonra: ‘Bir_Giriş_Metni’"
 
-#: ../data/scan_dialog.ui.h:122
+#: ../data/scan_dialog.ui.h:105
 msgid "Convert:"
 msgstr "Dönüştür:"
 
-#: ../data/scan_dialog.ui.h:123
+#: ../data/scan_dialog.ui.h:106
 msgid "Replace a string by another one. Note that the search is case sensitive"
 msgstr ""
 "Karakter dizisini bir başkasıyla değiştir. Aramanın büyük küçük harf "
 "duyarlılığına dikkat edin"
 
-#: ../data/scan_dialog.ui.h:124
+#: ../data/scan_dialog.ui.h:107
 msgid "to: "
 msgstr "->:"
 
-#: ../data/scan_dialog.ui.h:125
+#: ../data/scan_dialog.ui.h:108
 msgid "Do not convert"
 msgstr "Dönüştürme"
 
-#: ../data/scan_dialog.ui.h:127
+#: ../data/scan_dialog.ui.h:110
 msgid "Show / Hide Masks Editor"
 msgstr "Maske Düzenleyiciyi Göster / Gizle"
 
-#: ../data/scan_dialog.ui.h:128
+#: ../data/scan_dialog.ui.h:111
 msgid "Show / Hide Legend"
 msgstr "Maske Biçimlerini Göster / Gizle"
 
-#: ../data/scan_dialog.ui.h:129
+#: ../data/scan_dialog.ui.h:112
 msgid "Scanner Preferences"
 msgstr "Tarayıcı Tercihleri"
 
-#: ../data/scan_dialog.ui.h:131
+#: ../data/scan_dialog.ui.h:114
 msgid "Scan Files"
 msgstr "Dosyaları Tara"
 
-#: ../data/scan_dialog.ui.h:132
+#: ../data/scan_dialog.ui.h:115
 msgid "Scan selected files"
 msgstr "Seçilen dosyaları tara"
 
@@ -2492,11 +2229,11 @@ msgstr "Etiketlerde"
 msgid "Case sensitive"
 msgstr "Büyük küçük harf duyarlı"
 
-#: ../data/search_dialog.ui.h:19
+#: ../data/search_dialog.ui.h:17
 msgid "CD"
 msgstr "CD"
 
-#: ../data/tag_area.ui.h:1 ../src/tag_area.cc:2507
+#: ../data/tag_area.ui.h:1 ../src/tag_area.c:2991
 msgid "Tag"
 msgstr "Etiket"
 
@@ -2508,64 +2245,55 @@ msgstr "Başlık:"
 msgid "Tag selected files with this title"
 msgstr "Seçilen dosyalara bu başlığı etiketle"
 
-#: ../data/tag_area.ui.h:5
-#, fuzzy
-msgid "Tag selected files with this version"
-msgstr "Seçilen dosyalara bu yılı etiketle"
-
-#: ../data/tag_area.ui.h:6
-#, fuzzy
-msgid "Subtitle:"
-msgstr "Başlık:"
-
-#: ../data/tag_area.ui.h:7
-#, fuzzy
-msgid "Tag selected files with this subtitle"
-msgstr "Seçilen dosyalara bu başlığı etiketle"
-
-#: ../data/tag_area.ui.h:8
+#: ../data/tag_area.ui.h:4
 msgid "Artist:"
 msgstr "Sanatçı:"
 
-#: ../data/tag_area.ui.h:9
+#: ../data/tag_area.ui.h:5
 msgid "Tag selected files with this artist"
 msgstr "Seçilen dosyalara bu sanatçıyı etiketle"
 
-#: ../data/tag_area.ui.h:10
+#: ../data/tag_area.ui.h:6
 msgid "Album artist:"
 msgstr "Albüm Sanatçısı:"
 
-#: ../data/tag_area.ui.h:11
+#: ../data/tag_area.ui.h:7
 msgid "Tag selected files with this album artist"
 msgstr "Seçilen dosyalara bu albüm sanatçısını etiketle"
 
-#: ../data/tag_area.ui.h:12
+#: ../data/tag_area.ui.h:8
 msgid "Album:"
 msgstr "Albüm:"
 
-#: ../data/tag_area.ui.h:13
+#: ../data/tag_area.ui.h:9
 msgid "Tag selected files with this album name"
 msgstr "Seçilen dosyalara bu albümü etiketle"
 
-#: ../data/tag_area.ui.h:14
-#, fuzzy
-msgid "Disc subtitle:"
-msgstr "Başlığa göre azalan"
+#: ../data/tag_area.ui.h:10
+msgid "CD:"
+msgstr "CD:"
 
-#: ../data/tag_area.ui.h:15
-#, fuzzy
-msgid "Tag selected files with this disc subtitle"
+#: ../data/tag_area.ui.h:11
+msgid "Tag selected files with this disc number"
 msgstr "Seçilen dosyalara bu disk numarasını etiketle"
 
-#: ../data/tag_area.ui.h:16
-msgid "Track #:"
-msgstr "Parça #:"
+#: ../data/tag_area.ui.h:12
+msgid "Year:"
+msgstr "Yıl:"
 
-#: ../data/tag_area.ui.h:17
+#: ../data/tag_area.ui.h:13
+msgid "Tag selected files with this year"
+msgstr "Seçilen dosyalara bu yılı etiketle"
+
+#: ../data/tag_area.ui.h:14
 msgid "Number selected tracks sequentially. Starts at 01 in each subdirectory"
 msgstr "Seçilen parça numaraları sıralıdır. Her alt dizin 01'den başlar"
 
-#: ../data/tag_area.ui.h:18
+#: ../data/tag_area.ui.h:15
+msgid "Track #:"
+msgstr "Parça #:"
+
+#: ../data/tag_area.ui.h:16
 msgid ""
 "Set the number of files, in the same directory of the displayed file, to the "
 "selected tracks"
@@ -2575,126 +2303,91 @@ msgstr ""
 "        Dizinleri oluşturmak için ‘/’ karakterini kullanın. İlk karakter ‘/’ "
 "olursa, o kesin konumdur, diğer türlü eski konuma görecelidir"
 
-#: ../data/tag_area.ui.h:19
+#: ../data/tag_area.ui.h:17
 msgid "Tag selected files with this number of tracks"
 msgstr "Seçilen dosyalara bu parça numarasını etiketle"
 
-#: ../data/tag_area.ui.h:20
-msgid "CD:"
-msgstr "CD:"
-
-#: ../data/tag_area.ui.h:21
-msgid "Tag selected files with this disc number"
-msgstr "Seçilen dosyalara bu disk numarasını etiketle"
-
-#: ../data/tag_area.ui.h:22
-msgid "Year:"
-msgstr "Yıl:"
-
-#: ../data/tag_area.ui.h:23
-msgid "Tag selected files with this year"
-msgstr "Seçilen dosyalara bu yılı etiketle"
-
-#: ../data/tag_area.ui.h:24
-msgid "Release year:"
-msgstr ""
-
-#: ../data/tag_area.ui.h:25
-#, fuzzy
-msgid "Tag selected files with this release year"
-msgstr "Seçilen dosyalara bu yılı etiketle"
-
-#: ../data/tag_area.ui.h:26
+#: ../data/tag_area.ui.h:18
 msgid "Genre:"
 msgstr "Tür:"
 
-#: ../data/tag_area.ui.h:27
+#: ../data/tag_area.ui.h:19
 msgid "Comment:"
 msgstr "Yorum:"
 
-#: ../data/tag_area.ui.h:28
+#: ../data/tag_area.ui.h:20
 msgid "Tag selected files with this comment"
 msgstr "Seçilen dosyalara bu yorumu etiketle"
 
-#: ../data/tag_area.ui.h:29
+#: ../data/tag_area.ui.h:21
 msgid "Composer:"
 msgstr "Besteci:"
 
-#: ../data/tag_area.ui.h:30
+#: ../data/tag_area.ui.h:22
 msgid "Tag selected files with this composer"
 msgstr "Seçilen dosyalara bu besteciyi etiketle"
 
-#: ../data/tag_area.ui.h:31
+#: ../data/tag_area.ui.h:23
 msgid "Orig. artist:"
 msgstr "Asıl sanatçı:"
 
-#: ../data/tag_area.ui.h:32
+#: ../data/tag_area.ui.h:24
 msgid "Tag selected files with this original artist"
 msgstr "Seçilen dosyalara bu asıl sanatçıyı etiketle"
 
-#: ../data/tag_area.ui.h:33
-#, fuzzy
-msgid "year:"
-msgstr "Yıl:"
-
-#: ../data/tag_area.ui.h:34
-#, fuzzy
-msgid "Tag selected files with this original year"
-msgstr "Seçilen dosyalara bu asıl sanatçıyı etiketle"
-
-#: ../data/tag_area.ui.h:35
+#: ../data/tag_area.ui.h:25
 msgid "Copyright:"
 msgstr "Telif Hakkı:"
 
-#: ../data/tag_area.ui.h:36
+#: ../data/tag_area.ui.h:26
 msgid "Tag selected files with this copyright"
 msgstr "Seçilen dosyalara bu telif hakkını etiketle"
 
-#: ../data/tag_area.ui.h:37
+#: ../data/tag_area.ui.h:27
 msgid "URL:"
 msgstr "Bağlantı:"
 
-#: ../data/tag_area.ui.h:38
+#: ../data/tag_area.ui.h:28
 msgid "Tag selected files with this URL"
 msgstr "Seçilen dosyalara bu bağlantıyı etiketle"
 
-#: ../data/tag_area.ui.h:39
+#: ../data/tag_area.ui.h:29
 msgid "Encoded by:"
 msgstr "Kodlayıcı:"
 
-#: ../data/tag_area.ui.h:40
+#: ../data/tag_area.ui.h:30
 msgid "Tag selected files with this encoder name"
 msgstr "Seçilen dosyalara bu kodlayıcıyı etiketle"
 
-#: ../data/tag_area.ui.h:41
+#: ../data/tag_area.ui.h:31
 msgid "Common"
 msgstr "Genel"
 
-#: ../data/tag_area.ui.h:42
+#: ../data/tag_area.ui.h:32
 msgid "You can use drag and drop to add an image"
 msgstr "Tut çek bırak yöntemiyle görüntüleri bırakabilirsiniz."
 
-#: ../data/tag_area.ui.h:43
+#: ../data/tag_area.ui.h:33
 msgid "Add images to the tag"
 msgstr "Etikete görüntü ekle"
 
-#: ../data/tag_area.ui.h:44
+#: ../data/tag_area.ui.h:34
 msgid "Remove selected images from the tag"
 msgstr "Seçilen görüntüleri etiketten sil"
 
-#: ../data/tag_area.ui.h:45
+#: ../data/tag_area.ui.h:35
 msgid "Save the selected images to files"
 msgstr "Seçilen görüntüleri dosya olarak kaydet"
 
-#: ../data/tag_area.ui.h:46
+#: ../data/tag_area.ui.h:36
 msgid "Edit image properties"
 msgstr "Görüntü özelliklerini düzenle"
 
-#: ../data/tag_area.ui.h:47
+#: ../data/tag_area.ui.h:37
 msgid "Tag selected files with these images"
 msgstr "Seçilen dosyalara bu görüntüleri etiketle"
 
-#: ../data/tag_area.ui.h:48 ../src/tag_area.cc:2629 ../src/tag_area.cc:2632
+#: ../data/tag_area.ui.h:38 ../src/tag_area.c:3245 ../src/tag_area.c:3248
 msgid "Images"
 msgstr "Görüntüler"
 
@@ -2900,43 +2593,27 @@ msgstr "Dosya listesinde ses dosyalarının nasıl sıralanacağı"
 msgid "Sort files in ascending or descending order for the selected type"
 msgstr "Seçilen tür için dosyaları artan ya da azalan şekilde sırala"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:47
-msgid "Columns in file browser"
-msgstr ""
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:48
-msgid "List of visible columns in the file browser."
-msgstr ""
-
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:49
-msgid "Fields to hide in the tag area"
-msgstr ""
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:50
-msgid "List of hidden input controls when editing a tag."
-msgstr ""
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:53
 msgid "Use a non-standard character encoding when reading ID3 tags"
 msgstr "ID3 etiketleri okunurken standart olmayan karakter kodlama kullan"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:57
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:53
 msgid "Write ID3v1 tags"
 msgstr "ID3v1 etiketleri yaz"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:59
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:55
 msgid "The character set for writing ID3v1 tags"
 msgstr "ID3v1 etiketleri yazmak için karakter kümesi"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:60
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:56
 msgid "Choose the character set to be used when writing ID3v1 tags"
 msgstr "ID3v1 etiketleri yazarken kullanılacak karakter kümesini seç"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:61
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:57
 msgid "Encoding options when writing ID3v1 tags"
 msgstr "ID3v1 etiketleri yazılırken kodlama seçenekleri"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:62
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:58
 msgid ""
 "Additional options to pass to iconv() when converting between encodings when "
 "writing ID3v1 tags"
@@ -2944,66 +2621,66 @@ msgstr ""
 "ID3v1 etiketleri yazılırken kodlamalar arasında dönüştürülürken iconv() "
 "metoduna geçirilecek ek seçenekler"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:63
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:59
 msgid "The character set for reading ID3v1 and ID3v2 tags"
 msgstr "ID3v1 ve ID3v2 etiketlerini okumak için karakter kümesi"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:65
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:61
 msgid "Write ID3v2 tags"
 msgstr "ID3v2 etiketleri yaz"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:67
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:63
 msgid "Enable ID3v2.4 support"
 msgstr "ID3v2.4 desteğini etkinleştir"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:68
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:64
 msgid "Whether to write ID3v2.4 tags when ID3v2 support is enabled"
 msgstr ""
 "ID3v2 desteği etkinleştirildiğinde ID3v2.4 etiketlerinin yazılıp "
 "yazılamayacağı"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:69
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:65
 msgid "Convert old ID3 tag versions to new ones"
 msgstr "Eski ID3 etiket sürümlerini yenisine dönüştür"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:73
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:69
 msgid "Use CRC-32 in ID3v2 tags"
 msgstr "ID3v2 etiketlerinde CRC-32 kullan"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:77
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:73
 msgid "Use Unicode character encoding in ID3v2 tags"
 msgstr "ID3v2 etiketlerinde Unikod karakter kodlama kullan"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:78
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:74
 msgid "Whether to use a Unicode character set when writing ID3v2 tags"
 msgstr ""
 "ID3v2 etiketleri yazılırken Unikod karakter kümesi kullanılıp kullanılmaması"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:79
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:75
 msgid "The Unicode character set for writing ID3v2 tags"
 msgstr "ID3v2 etiketlerini yazmak için Unikod karakter kümesi"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:80
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:76
 msgid "Choose the Unicode character set to be used when writing ID3v2 tags"
 msgstr ""
 "ID3v2 etiketleri yazılırken kullanılacak Unikod karakter kümesini seçin"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:81
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:77
 msgid "The character set for writing ID3v2 tags"
 msgstr "ID3v2 etiketlerini yazmak için karakter kümesi"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:82
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:78
 msgid ""
 "Override the typical Unicode character set to be used when writing ID3v2 tags"
 msgstr ""
 "ID3v2 etiketleri yazılırken kullanılacak tipik Unikod karakter kümesini "
 "geçersiz kıl"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:83
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:79
 msgid "Encoding options when writing ID3v2 tags"
 msgstr "ID3v2 etiketleri yazılırken kodlama seçenekleri"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:84
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:80
 msgid ""
 "Additional options to pass to iconv() when converting between encodings when "
 "writing ID3v2 tags"
@@ -3011,19 +2688,19 @@ msgstr ""
 "ID3v2 etiketleri yazılırken kodlamalar arasında dönüştürülürken iconv() "
 "metoduna geçirilecek ek seçenekler"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:85
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:81
 msgid "Automatically complete the date"
 msgstr "Tarih otomatik olarak doldurulur"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:87
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:83
 msgid "Pad the disc number tag field"
 msgstr "Disk numara etiket alanını doldur"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:89
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:85
 msgid "The length of the disc number field"
 msgstr "Disk numara alanının uzunluğu"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:90
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:86
 msgid ""
 "The length of the disc number field, which controls if the field is padded "
 "with leading zeroes"
@@ -3031,7 +2708,7 @@ msgstr ""
 "Disk numara alanının uzunluğu alanın başı sıfırlar ile doldurularak kontrol "
 "edilir"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:92
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:88
 msgid ""
 "Whether to, when adding cover art, automatically select the type for an "
 "image based on its filename"
@@ -3039,15 +2716,15 @@ msgstr ""
 "Kapak resmi eklenilirken, bir görüntü için kendi dosya adına bağlı bir türün "
 "otomatik seçilip seçilemeyeceği"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:93
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:89
 msgid "Pad the track number tag field"
 msgstr "Parça numarası etiket alanını doldur"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:95
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:91
 msgid "The length of the track number field"
 msgstr "Parça numara alanının uzunluğu"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:96
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:92
 msgid ""
 "The length of the track number field, which controls if the field is padded "
 "with leading zeroes"
@@ -3055,11 +2732,11 @@ msgstr ""
 "Parça numara alanının uzunluğu, alanın başı sıfırlar ile doldurularak "
 "kontrol edilir"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:99
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:95
 msgid "Convert spaces and underscores when filling tag fields"
 msgstr "Etiket alanları doldurulurken boşlukları ve alt çizgileri dönüştür"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:101
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:97
 #, no-c-format
 msgid ""
 "Whether to convert to spaces (and %20) or underscores when filling tag "
@@ -3068,43 +2745,43 @@ msgstr ""
 "Dosya adlarından etiket alanları doldurulurken alt çizgilerin ya da "
 "boşlukların (ve %20) dönüştürülüp dönüştürülmeyeceği"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:102
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:98
 msgid "Overwrite tag field"
 msgstr "Etiket alanlarını geçersiz kıl"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:104
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:100
 msgid "Set the default comment"
 msgstr "Öntanımlı yorum ayarla"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:106
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:102
 msgid "Default comment for filling tags"
 msgstr "Etiketleri doldurmak için öntanımlı yorum"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:107
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:103
 msgid "The default comment to use when filling tags"
 msgstr "Etiketler doldurulurken kullanılacak öntanımlı yorum"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:108
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:104
 msgid "Use the CRC-32 as the default comment"
 msgstr "Öntanımlı yorum olarak CRC-32 kullan"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:120
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:116
 msgid "Run the current scanner when loading filenames from a file"
 msgstr "Bir dosyadan dosya adları yüklenirken mevcut tarayıcıyı çalıştır"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:122
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:118
 msgid "Process these tag fields"
 msgstr "Bu etiket alanlarını işle"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:123
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:119
 msgid "The tag fields to process when using the scanner"
 msgstr "Tarayıcı kullanılırken işlenecek etiket alanları"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:124
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:120
 msgid "Convert tag fields when processing"
 msgstr "İşleme yapılırken etiket alanlarını dönüştür"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:126
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:122
 #, no-c-format
 msgid ""
 "Whether to convert to spaces (and %20), underscores or other characters when "
@@ -3113,11 +2790,11 @@ msgstr ""
 "Etiket alanları işlenirken alt çizgi ve diğer karakterlerin boşluğa (ve %20) "
 "dönüştürülüp dönüştürülmemesi"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:127
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:123
 msgid "Convert characters in tags"
 msgstr "Etiketlerdeki karakterleri dönüştür"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:128
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:124
 msgid ""
 "Whether to convert characters of the tag from one value to another when "
 "processing tag fields"
@@ -3125,11 +2802,11 @@ msgstr ""
 "Etiket alanları işlenirken etiketin karakterlerinin bir değerden diğerine "
 "dönüştürülüp dönüştürülmemesi"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:129
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:125
 msgid "Convert the following characters when processing tag fields"
 msgstr "Etiket alanları işlenirken aşağıdaki karakterleri dönüştür"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:130
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:126
 msgid ""
 "Replace any matched sequence of characters with this string when processing "
 "tag fields"
@@ -3137,74 +2814,74 @@ msgstr ""
 "Etiket alanları işlenirken eşleşen her karakter dizisini bu karakter dizisi "
 "ile değiştir"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:131
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:127
 msgid "Capitalize tag fields when processing"
 msgstr "İşleme yapılırken etiket alanlarını büyük harf yap"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:132
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:128
 msgid "Whether to change the capitalization when processing tag fields"
 msgstr "Etiket alanları işlenirken büyük harf yapılıp yapılmayacağı"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:133
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:129
 msgid "Upper-case prepositions"
 msgstr "Edatlar büyük harf"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:135
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:131
 msgid "Detect roman numerals"
 msgstr "Roma rakamlarını algıla"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:139
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:135
 msgid "Insert spaces before capital letters"
 msgstr "Büyük harflerden önce boşluk ekle"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:141
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:137
 msgid "Remove duplicate spaces"
 msgstr "Çift boşlukları sil"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:143
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:139
 msgid "Playlist filename mask"
 msgstr "Çalma listesi dosya adı maskesi"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:144
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:140
 msgid "The default filename mask to use for a new playlist"
 msgstr "Yeni çalma listesi için kullanılacak öntanımlı dosya adı maskesi"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:145
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:141
 msgid "Use a filename mask when generating a playlist"
 msgstr "Çalma listesi oluşturulurken bir dosya adı maskesi kullan"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:146
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:142
 msgid "Whether to use a filename mask when creating playlists"
 msgstr ""
 "Çalma listesi oluşturulurken dosya adı maskesinin kullanılıp kullanılmaması"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:147
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:143
 msgid "Create playlists with only the selected files"
 msgstr "Sadece seçilen dosyalar ile çalma listeleri oluştur"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:149
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:145
 msgid "Use relative paths when creating playlists"
 msgstr "Çalma listesi oluşturulurken göreceli yolları kullan"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:150
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:146
 msgid "Whether to use relative paths for files when creating playlists"
 msgstr ""
 "Çalma listesi oluşturulurken dosyalar için göreceli yolların kullanılıp "
 "kullanılmaması"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:151
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:147
 msgid "Create the playlist in the parent directory"
 msgstr "Üst dizinde çalma listesi oluştur"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:153
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:149
 msgid "Use DOS separators for playlists"
 msgstr "Çalma listeleri için DOS ayırıcılar kullan"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:155
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:151
 msgid "Content of generated playlists"
 msgstr "Oluşturulmuş çalma listeleri içeriği"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:156
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:152
 msgid ""
 "Write a plain list of files, include extended information from the filename "
 "or extended information using a supplied mask"
@@ -3212,43 +2889,43 @@ msgstr ""
 "Verilen maske kullanılarak ya da dosyadan genişletilmiş bilgi içeren "
 "dosyaların düz listesini yaz"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:157
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:153
 msgid "Playlist default mask"
 msgstr "Çalma listesi öntanımlı maske"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:158
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:154
 msgid "The default mask to use for files in a playlist"
 msgstr "Çalma listesindeki dosyalar için kullanılacak öntanımlı maske"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:159
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:155
 msgid "Search for files case-sensitively"
 msgstr "Büyük küçük harf duyarlı dosyalar için arama"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:160
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:156
 msgid "Whether matches when searching for files are case-sensitive"
 msgstr "Büyük küçük harf duyarlı dosyalar aranırken eşleşip eşleşmemesi"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:161
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:157
 msgid "Search in filenames"
 msgstr "Dosya adlarında ara"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:162
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:158
 msgid "Perform the search on filenames"
 msgstr "Dosya adlarında arama gerçekleştir"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:163
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:159
 msgid "Search in tags"
 msgstr "Etiketlerde ara"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:164
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:160
 msgid "Perform the search on tags"
 msgstr "Etiketlerde arama yap"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:165
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:161
 msgid "Mask for filling tags from filenames"
 msgstr "Dosya adlarından etiket doldurmak için maske"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:166
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:162
 msgid ""
 "The default mask to use when automatically filling tags with information "
 "from filenames"
@@ -3256,41 +2933,41 @@ msgstr ""
 "Etiketler dosya adlarından bilgiler ile otomatik doldurulurken kullanılacak "
 "öntanımlı maske"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:167
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:163
 msgid "Mask for renaming files"
 msgstr "Dosyaları yeniden adlandırmak için maske"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:168
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:164
 msgid "The default mask to use when renaming files"
 msgstr "Dosyalar yeniden adlandırılırken kullanılacak öntanımlı maske"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:169
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:165
 msgid "Mask for renaming directories"
 msgstr "Dizinleri yeniden adlandırmak için maske"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:170
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:166
 msgid "The default mask to use when renaming directories"
 msgstr "Dizinler yeniden adlandırılırken kullanılacak öntanımlı maske"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:171
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:167
 msgid "Use a mask when renaming directories"
 msgstr "Dizinler yeniden adlandırılırken bir maske kullan"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:173
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:169
 msgid "Convert spaces and underscores when renaming files"
 msgstr "Dosyalar yeniden adlandırılırken boşlukları ve alt çizgileri dönüştür"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:174
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:170
 msgid "Whether to convert to spaces or underscores when renaming files"
 msgstr ""
 "Dosyalar yeniden adlandırılırken boşluklar ve alt çizgilerin dönüştürülüp "
 "dönüştürülmemesi"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:175
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:171
 msgid "How to modify filename extensions when renaming"
 msgstr "Yeniden adlandırılırken dosya adı uzantılarının nasıl değiştirileceği"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:176
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:172
 msgid ""
 "Change the file extension to all lower-case, all upper-case or do not change "
 "it"
@@ -3298,11 +2975,11 @@ msgstr ""
 "Dosya uzantılarının tümünü küçük harfe, büyük harfe değiştir ya da "
 "değişiklik yapma"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:177
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:173
 msgid "Encoding options when renaming files"
 msgstr "Dosyalar yeniden adlandırılırken kodlama seçenekleri"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:178
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:174
 msgid ""
 "If the encoding of the filename does not match the filesystem encoding, "
 "choose whether to try another encoding, approximate the filesystem encoding "
@@ -3311,13 +2988,9 @@ msgstr ""
 "Eğer dosya adının kodlaması dosya sistemi kodlaması ile eşleşmezse, başka "
 "bir kodlamayı denemek için seçebilir, başka alfabe ile yazarak dosya "
 "sisteminin kodlamasına benzeştirebilir ya da sorun oluşturan karakterleri "
-"atabilirsiniz"
+"gözden çıkarabilirsiniz"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:179
-msgid "Replace illegal characters when renaming"
-msgstr "Yeniden adlandırılırken geçersiz karakterleri değiştir"
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:180
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:176
 msgid ""
 "Whether to replace illegal characters in a filename when using the rename "
 "function"
@@ -3325,71 +2998,80 @@ msgstr ""
 "Yeniden adlandırma işlevi kullanılırken bir dosya adındaki geçersiz "
 "karakterlerin değiştirilip değiştirilmemesi"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:181
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:177
 msgid "Show the scanner mask editor"
 msgstr "Tarayıcı maske düzenleyicisini göster"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:182
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:178
 msgid "Whether to show the scanner mask editor in the tag scanner"
 msgstr ""
 "Etiket tarayıcıda tarayıcı maske düzenleyicisinin gösterilip gösterilmemesi"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:183
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:179
 msgid "Show the scanner legend"
 msgstr "Tarayıcı açıklamasını göster"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:184
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:180
 msgid "Whether to show the scanner legend in the tag scanner"
 msgstr "Etiket tarayıcıda tarayıcı açıklamasının gösterilip gösterilmemesi"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:185
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:181
 msgid "Show the scanner window on startup"
 msgstr "Tarayıcı penceresini başlangıçta göster"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:187
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:183
 msgid "The scan mode"
 msgstr "Tarama kipi"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:188
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:184
 msgid "Which type of scan to show in the scanner"
 msgstr "Tarayıcıda gösterilecek tarama türünün ne olduğu"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:189
-msgid "Split fields at this separator"
-msgstr ""
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:185
+msgid "Split Ogg title fields"
+msgstr "Ogg başlık alanlarını ayır"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:190
-msgid ""
-"Seperator used when splitting e.g. Ogg fields or joining multiple field "
-"values"
-msgstr ""
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:187
+msgid "Split Ogg artist fields"
+msgstr "Ogg sanatçı alanlarını ayır"
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:189
+msgid "Split Ogg album fields"
+msgstr "Ogg album alanlarını ayır"
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:191
-msgid "Vorbis fields to split"
-msgstr ""
-
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:192
-#, fuzzy
-msgid "Whether to split the selected fields in Ogg comments"
-msgstr "Ogg yorumlarında başlık alanının “-” ayrıcı ile ayrılıp ayrılmaması"
+msgid "Split Ogg genre fields"
+msgstr "Ogg tür alanlarını ayır"
 
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:193
+msgid "Split Ogg comment fields"
+msgstr "Ogg yorum alanlarını ayır"
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:195
+msgid "Split Ogg composer fields"
+msgstr "Ogg besteci alanlarını ayır"
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:197
+msgid "Split Ogg original artist fields"
+msgstr "Ogg asıl sanatçı alanlarını ayır"
+
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:199
 msgid "Page to show in the preferences dialog"
 msgstr "Tercihler penceresinde gösterilecek sayfa"
 
-#: ../data/org.gnome.EasyTAG.gschema.xml.h:194
+#: ../data/org.gnome.EasyTAG.gschema.xml.h:200
 msgid "The page in the notebook of the preferences dialog"
 msgstr "Tercihler penceresinin diz üstü bilgisayardaki sayfası"
 
-#: ../nautilus-extension/nautilus-easytag.c:227
+#: ../nautilus-extension/nautilus-easytag.c:229
 msgid "Open in EasyTAG"
 msgstr "EasyTAG içinde aç"
 
-#: ../nautilus-extension/nautilus-easytag.c:228
+#: ../nautilus-extension/nautilus-easytag.c:230
 msgid "Open the selected directory in EasyTAG"
 msgstr "Seçilen dizini EasyTAG içinde aç"
 
-#: ../nautilus-extension/nautilus-easytag.c:246
+#: ../nautilus-extension/nautilus-easytag.c:248
 msgid "Open the selected files in EasyTAG"
 msgstr "Seçilen dosyaları EasyTAG içinde aç"
 
@@ -3437,7 +3119,7 @@ msgstr "Web sitesi: %s"
 msgid "- Tag and rename audio files"
 msgstr "- Ses dosyalarını etiketle ve adını değiştir"
 
-#: ../src/application.c:429 ../src/file_list.cc:443
+#: ../src/application.c:429 ../src/file_list.c:435
 #, c-format
 msgid "Error while querying information for file ‘%s’: %s"
 msgstr "Dosya ‘%s’ için bilgi sorgulanırken hata: %s"
@@ -3447,78 +3129,77 @@ msgstr "Dosya ‘%s’ için bilgi sorgulanırken hata: %s"
 msgid "Cannot open path ‘%s’"
 msgstr "‘%s’ konumu açılamıyor"
 
-#: ../src/application_window.cc:373 ../src/application_window.cc:391
+#: ../src/application_window.c:361 ../src/application_window.c:379
 #, c-format
 msgid "Do you really want to delete the file ‘%s’?"
 msgstr "‘%s’ dosyasını gerçekten silmek istiyor musunuz?"
 
-#: ../src/application_window.cc:376 ../src/easytag.c:459 ../src/easytag.c:595
+#: ../src/application_window.c:364 ../src/easytag.c:459 ../src/easytag.c:592
 msgid "Repeat action for the remaining files"
 msgstr "Kalan dosyalar için eylemi tekrarla"
 
-#: ../src/application_window.cc:379
+#: ../src/application_window.c:367
 msgid "_Skip"
 msgstr "_Atla"
 
-#: ../src/application_window.cc:381 ../src/application_window.cc:395
+#: ../src/application_window.c:369 ../src/application_window.c:383
 msgid "_Delete"
 msgstr "_Sil"
 
-#: ../src/application_window.cc:383 ../src/application_window.cc:393
+#: ../src/application_window.c:371 ../src/application_window.c:381
 msgid "Delete File"
 msgstr "Dosya Sil"
 
-#: ../src/application_window.cc:420
+#: ../src/application_window.c:408
 #, c-format
 msgid "File ‘%s’ deleted"
 msgstr "‘%s’ dosyası silindi"
 
-#: ../src/application_window.cc:591
+#: ../src/application_window.c:583
 #, c-format
 msgid "Cannot delete file ‘%s’"
 msgstr "Dosya ‘%s’ silinemiyor"
 
-#: ../src/application_window.cc:615
+#: ../src/application_window.c:607
 msgid "Some files were not deleted"
 msgstr "Bazı dosyalar silinemedi"
 
-#: ../src/application_window.cc:617
+#: ../src/application_window.c:609
 msgid "All files have been deleted"
 msgstr "Bütün dosyalar silindi"
 
-#: ../src/application_window.cc:922
+#: ../src/application_window.c:915
 msgid "All tags have been removed"
 msgstr "Bütün etiketler silindi"
 
-#: ../src/application_window.cc:1479 ../src/browser.cc:349
-#: ../src/browser.cc:392 ../src/browser.cc:426 ../src/browser.cc:4324
-#: ../src/browser.cc:4399
+#: ../src/application_window.c:1474 ../src/browser.c:360 ../src/browser.c:403
+#: ../src/browser.c:437 ../src/browser.c:4640 ../src/browser.c:4715
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "‘%s’ programı başlatılamadı"
 
-#: ../src/application_window.cc:2016
+#: ../src/application_window.c:1988
 #, c-format
 msgid "Could not convert filename ‘%s’ to system filename encoding"
 msgstr "‘%s’ dosya adı sistem dosya adı kodlamasına dönüştürülemedi"
 
-#: ../src/application_window.cc:2019
+#: ../src/application_window.c:1991
 msgid "Try setting the environment variable G_FILENAME_ENCODING."
 msgstr "G_FILENAME_ENCODING ortam değişkenini ayarlamayı deneyin."
 
-#: ../src/application_window.cc:2021 ../src/scan_dialog.cc:780
+#: ../src/application_window.c:1993 ../src/scan_dialog.c:846
 msgid "Filename translation"
 msgstr "Dosya adı dönüştürme"
 
 #. And refresh the number of files in this directory
-#: ../src/application_window.cc:2180
+#: ../src/application_window.c:2154
 #, c-format
 msgid "One file"
 msgid_plural "%u files"
 msgstr[0] "%u dosya"
 
 #. Bitrate
-#: ../src/application_window.cc:2213 ../src/tags/flac_header.c:189
+#: ../src/application_window.c:2187 ../src/tags/flac_header.c:189
 #: ../src/tags/monkeyaudio_header.c:76 ../src/tags/mp4_header.cc:144
 #: ../src/tags/mpeg_header.c:274 ../src/tags/musepack_header.c:78
 #: ../src/tags/ogg_header.c:411 ../src/tags/opus_header.c:231
@@ -3528,7 +3209,7 @@ msgid "%d kb/s"
 msgstr "%d kb/s"
 
 #. Samplerate
-#: ../src/application_window.cc:2216 ../src/tags/flac_header.c:192
+#: ../src/application_window.c:2190 ../src/tags/flac_header.c:192
 #: ../src/tags/monkeyaudio_header.c:79 ../src/tags/mp4_header.cc:148
 #: ../src/tags/mpeg_header.c:279 ../src/tags/musepack_header.c:81
 #: ../src/tags/ogg_header.c:414 ../src/tags/opus_header.c:234
@@ -3537,102 +3218,102 @@ msgstr "%d kb/s"
 msgid "%d Hz"
 msgstr "%d Hz"
 
-#: ../src/application_window.cc:2371 ../src/easytag.c:915
+#: ../src/application_window.c:2345 ../src/easytag.c:911
 #, c-format
 msgid "File: ‘%s’"
 msgstr "Dosya: ‘%s’"
 
 #. Quit EasyTAG.
-#: ../src/application_window.cc:2996
+#: ../src/application_window.c:2979
 msgid "Normal exit"
 msgstr "Normal çıkış"
 
-#: ../src/application_window.cc:3030 ../src/browser.cc:932
+#: ../src/application_window.c:3013 ../src/browser.c:909
 msgid "Some files have been modified but not saved"
 msgstr "Bazı dosyalar değiştirildi ama kaydedilmedi"
 
-#: ../src/application_window.cc:3031 ../src/browser.cc:936 ../src/easytag.c:233
-#: ../src/easytag.c:463 ../src/easytag.c:598 ../src/easytag.c:606
+#: ../src/application_window.c:3014 ../src/browser.c:913 ../src/easytag.c:233
+#: ../src/easytag.c:463 ../src/easytag.c:595 ../src/easytag.c:603
 msgid "_Discard"
-msgstr "_Çıkar"
+msgstr "_Gözden Çıkar"
 
-#: ../src/application_window.cc:3037 ../src/easytag.c:239
+#: ../src/application_window.c:3020 ../src/easytag.c:239
 msgid "Quit"
 msgstr "Çıkış"
 
-#: ../src/application_window.cc:3040
+#: ../src/application_window.c:3023
 msgid "Do you want to save them before quitting?"
 msgstr "Çıkmadan önce kaydedilsin mi?"
 
-#: ../src/browser.cc:634
+#: ../src/browser.c:610
 msgid "New default directory selected for browser"
 msgstr "Tarayıcı için yeni öntanımlı dizin seçildi"
 
-#: ../src/browser.cc:935
+#: ../src/browser.c:912
 msgid "Do you want to save them before changing directory?"
 msgstr "Dizini değiştirmeden önce değişiklikleri kaydetmek istiyor musunuz?"
 
-#: ../src/browser.cc:942
+#: ../src/browser.c:919
 msgid "Confirm Directory Change"
 msgstr "Dizin Değişimini Doğrula"
 
-#: ../src/browser.cc:2276
+#: ../src/browser.c:2618
 msgid "All albums"
 msgstr "Bütün albümler"
 
-#: ../src/browser.cc:3531
+#: ../src/browser.c:3870
 msgid "Select File"
 msgstr "Dosya Seç"
 
-#: ../src/browser.cc:3538
+#: ../src/browser.c:3877
 msgid "Select Directory"
 msgstr "Dizin Seç"
 
-#: ../src/browser.cc:3829
+#: ../src/browser.c:4144
 #, c-format
 msgid "Rename the directory ‘%s’ to:"
 msgstr "‘%s’ dizinini şu şekilde yeniden adlandır:"
 
-#: ../src/browser.cc:3965
+#: ../src/browser.c:4280
 msgid "You must type a directory name"
 msgstr "Bir dizin adı yazmalısınız"
 
-#: ../src/browser.cc:3966 ../src/browser.cc:3988
+#: ../src/browser.c:4281 ../src/browser.c:4303
 msgid "Directory Name Error"
 msgstr "Dizin Adı Hatası"
 
-#: ../src/browser.cc:3984
+#: ../src/browser.c:4299
 #, c-format
 msgid "Could not convert ‘%s’ into filename encoding"
 msgstr "‘%s’, dosya adı kodlamasına dönüştürülemedi"
 
-#: ../src/browser.cc:3987
+#: ../src/browser.c:4302
 msgid "Please use another name."
 msgstr "Lütfen başka bir ad kullanın."
 
-#: ../src/browser.cc:4059
+#: ../src/browser.c:4374
 #, c-format
 msgid "The directory name ‘%s’ already exists."
 msgstr "‘%s’ adında bir dizin zaten var."
 
-#: ../src/browser.cc:4060 ../src/easytag.c:653
+#: ../src/browser.c:4375 ../src/easytag.c:650
 msgid "Rename File Error"
 msgstr "Dosya Yeniden Adlandırma Hatası"
 
-#: ../src/browser.cc:4099 ../src/browser.cc:4128
+#: ../src/browser.c:4414 ../src/browser.c:4443
 msgid "Rename Directory Error"
 msgstr "Dizin Yeniden Adlandırma Hatası"
 
-#: ../src/browser.cc:4169
+#: ../src/browser.c:4484
 msgid "Directory renamed"
 msgstr "Dizin yeniden adlandırıldı"
 
-#: ../src/browser.cc:4316 ../src/browser.cc:4391
+#: ../src/browser.c:4632 ../src/browser.c:4707
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "Yürütülen komut ‘%s’"
 
-#: ../src/cddb_dialog.cc:286
+#: ../src/cddb_dialog.c:280
 #, c-format
 msgid ""
 "Album: ‘%s’, artist: ‘%s’, length: ‘%s’, year: ‘%s’, genre: ‘%s’, disc ID: "
@@ -3641,106 +3322,105 @@ msgstr ""
 "Albüm: ‘%s’, sanatçı: ‘%s’, uzunluk: ‘%s’, yıl: ‘%s’, tür: ‘%s’, disk "
 "numarası: ‘%s’"
 
-#: ../src/cddb_dialog.cc:710
+#: ../src/cddb_dialog.c:718
 #, c-format
 msgid "Cannot resolve host: ‘%s’: %s"
 msgstr "Sunucu çözülemiyor: ‘%s’: %s"
 
-#: ../src/cddb_dialog.cc:717
+#: ../src/cddb_dialog.c:725
 #, c-format
 msgid "Cannot connect to host: ‘%s’: %s"
 msgstr "Sunucuya bağlanılamıyor: ‘%s’: %s"
 
 #. Send the request.
-#: ../src/cddb_dialog.cc:790 ../src/cddb_dialog.cc:1345
-#: ../src/cddb_dialog.cc:1633
+#: ../src/cddb_dialog.c:798 ../src/cddb_dialog.c:1353 ../src/cddb_dialog.c:1641
 msgid "Sending request…"
 msgstr "İstek gönderiliyor…"
 
-#: ../src/cddb_dialog.cc:834
+#: ../src/cddb_dialog.c:842
 #, c-format
 msgid "The server returned a bad response ‘%s’"
 msgstr "Sunucu bozuk bir yanıt döndürdü ‘%s’"
 
 #. Load the track list of the album
-#: ../src/cddb_dialog.cc:1028
+#: ../src/cddb_dialog.c:1036
 msgid "Loading album track list…"
 msgstr "Albüm parça listesi yükleniyor…"
 
 #.
 #. * Read the answer
 #.
-#: ../src/cddb_dialog.cc:1375
+#: ../src/cddb_dialog.c:1383
 msgid "Receiving data…"
 msgstr "Veri alınıyor…"
 
-#: ../src/cddb_dialog.cc:1512
+#: ../src/cddb_dialog.c:1520
 #, c-format
 msgid "Sorry, the web-based search is currently not available"
 msgstr "Üzgünüm, Web tabanlı arama henüz desteklenmiyor"
 
-#: ../src/cddb_dialog.cc:1515 ../src/cddb_dialog.cc:1848
+#: ../src/cddb_dialog.c:1523 ../src/cddb_dialog.c:1856
 #, c-format
 msgid "Found one matching album"
 msgid_plural "Found %u matching albums"
 msgstr[0] "%u eşleşen albüm bulundu"
 
-#: ../src/cddb_dialog.cc:1663
+#: ../src/cddb_dialog.c:1671
 #, c-format
 msgid "Receiving data of page %d (album %d/%d)…"
 msgstr "Verinin %d sayfası alınıyor (albüm %d/%d)…"
 
-#: ../src/cddb_dialog.cc:1665
+#: ../src/cddb_dialog.c:1673
 #, c-format
 msgid "Receiving data of page %d…"
 msgstr "Verinin %d sayfası alınıyor…"
 
-#: ../src/cddb_dialog.cc:1681
+#: ../src/cddb_dialog.c:1689
 msgid "The server returned a bad response"
 msgstr "Sunucu bozuk bir yanıt döndürdü"
 
-#: ../src/cddb_dialog.cc:1820
+#: ../src/cddb_dialog.c:1828
 #, c-format
 msgid "More results to load…"
 msgstr "Daha fazla sonuç yükleniyor…"
 
-#: ../src/cddb_dialog.cc:2124
+#: ../src/cddb_dialog.c:2138
 msgid "The number of CDDB results does not match the number of selected files"
 msgstr "CDDB sonuç sayısı seçilen parça sayısıyla eşleşmiyor"
 
-#: ../src/cddb_dialog.cc:2130
+#: ../src/cddb_dialog.c:2144
 msgid "Write Tag from CDDB"
 msgstr "Etiketleri CDDB'den Yaz"
 
-#: ../src/cddb_dialog.cc:2445
+#: ../src/cddb_dialog.c:2459
 msgid "Ready to search"
 msgstr "Aramaya hazır"
 
-#: ../src/cddb_dialog.cc:2600
+#: ../src/cddb_dialog.c:2614
 #, c-format
 msgid "No file selected"
 msgstr "Hiç dosya seçilmedi"
 
 #. The CD redbook standard defines the maximum number of tracks as 99, any
 #. queries with more than 99 tracks will never return a result.
-#: ../src/cddb_dialog.cc:2609
+#: ../src/cddb_dialog.c:2623
 #, c-format
 msgid "More than 99 files selected. Cannot send request"
 msgstr "99 dosyadan fazlası seçildi. İstek gönderilemiyor"
 
-#: ../src/cddb_dialog.cc:2615
+#: ../src/cddb_dialog.c:2629
 #, c-format
 msgid "One file selected"
 msgid_plural "%u files selected"
 msgstr[0] "%u dosya seçildi"
 
-#: ../src/cddb_dialog.cc:2742
+#: ../src/cddb_dialog.c:2756
 #, c-format
 msgid "Sending request (disc ID: %s, #tracks: %u, Disc length: %u)…"
 msgstr ""
 "İstek gönderiliyor (disk kimliği: %s, parça sayısı: %u, Disk uzunluğu: %u)…"
 
-#: ../src/cddb_dialog.cc:2863
+#: ../src/cddb_dialog.c:2877
 #, c-format
 msgid "DiscID ‘%s’ gave one matching album"
 msgid_plural "DiscID ‘%s’ gave %u matching albums"
@@ -3969,63 +3649,63 @@ msgid "Confirm Tag Writing"
 msgstr "Etiket Yazmayı Doğrula"
 
 #. Directories and filename changed
-#: ../src/easytag.c:558
+#: ../src/easytag.c:555
 msgid "Rename File and Directory"
 msgstr "Dosya ve Dizini Yeniden Adlandır"
 
-#: ../src/easytag.c:559
+#: ../src/easytag.c:556
 msgid "File and directory rename confirmation required"
 msgstr "Dosya ve dizin yeniden adlandırma doğrulaması gerekiyor"
 
-#: ../src/easytag.c:560
+#: ../src/easytag.c:557
 #, c-format
 msgid "Do you want to rename the file and directory ‘%s’ to ‘%s’?"
 msgstr ""
 "‘%s’ dosya ve dizin adlarını ‘%s’ olarak yeniden adlandırmak istiyor musunuz?"
 
-#: ../src/easytag.c:566
+#: ../src/easytag.c:563
 msgid "Directory rename confirmation required"
 msgstr "Dizin yeniden adlandırma doğrulaması gerekiyor"
 
-#: ../src/easytag.c:567
+#: ../src/easytag.c:564
 #, c-format
 msgid "Do you want to rename the directory ‘%s’ to ‘%s’?"
 msgstr "‘%s’ dizin adlarını ‘%s’ olarak yeniden adlandırmak ister misiniz?"
 
-#: ../src/easytag.c:575
+#: ../src/easytag.c:572
 msgid "File rename confirmation required"
 msgstr "Dosya yeniden adlandırma doğrulaması gerekiyor"
 
-#: ../src/easytag.c:576
+#: ../src/easytag.c:573
 #, c-format
 msgid "Do you want to rename the file ‘%s’ to ‘%s’?"
 msgstr "‘%s’ dosya adını ‘%s’ olarak yeniden adlandırmak istiyor musunuz?"
 
-#: ../src/easytag.c:646
+#: ../src/easytag.c:643
 #, c-format
 msgid "Cannot rename file ‘%s’ to ‘%s’"
 msgstr "‘%s’ dosyası ‘%s’ olarak yeniden adlandırılamıyor"
 
-#: ../src/easytag.c:660
+#: ../src/easytag.c:657
 #, c-format
 msgid "Cannot rename file ‘%s’ to ‘%s’: %s"
 msgstr "‘%s’ dosyası ‘%s’ olarak yeniden adlandırılamıyor: %s"
 
-#: ../src/easytag.c:665
+#: ../src/easytag.c:662
 msgid "File(s) not renamed"
 msgstr "Dosya(lar) yeniden adlandırılamadı"
 
-#: ../src/easytag.c:727
+#: ../src/easytag.c:724
 #, c-format
 msgid "Writing tag of ‘%s’"
 msgstr "‘%s’ etiketi yazılıyor"
 
-#: ../src/easytag.c:735
+#: ../src/easytag.c:732
 #, c-format
 msgid "Wrote tag of ‘%s’"
 msgstr "‘%s’ etiketi yazıldı"
 
-#: ../src/easytag.c:755
+#: ../src/easytag.c:752
 msgid ""
 "You have tried to save this tag to Unicode but it was detected that your "
 "version of id3lib is buggy"
@@ -4033,7 +3713,7 @@ msgstr ""
 "Etiketi Unicode olarak yazmayı denediniz ama id3lib'in hatalı olduğu tespit "
 "edildi."
 
-#: ../src/easytag.c:760
+#: ../src/easytag.c:757
 #, c-format
 msgid ""
 "If you reload this file, some characters in the tag may not be displayed "
@@ -4051,63 +3731,64 @@ msgstr ""
 "\n"
 "Dosya: %s"
 
-#: ../src/easytag.c:783
+#: ../src/easytag.c:780
 #, c-format
 msgid "Cannot write tag in file ‘%s’"
 msgstr "‘%s’ dosyasında etiket yazılamıyor"
 
-#: ../src/easytag.c:788
+#: ../src/easytag.c:785
 msgid "Tag Write Error"
 msgstr "Etiket Yazma Hatası"
 
-#: ../src/easytag.c:865 ../src/easytag.c:1100
+#: ../src/easytag.c:861 ../src/easytag.c:1095
 #, c-format
 msgid "Cannot read directory ‘%s’"
 msgstr "‘%s’ dizini okunamıyor"
 
-#: ../src/easytag.c:869
+#: ../src/easytag.c:865
 msgid "Directory Read Error"
 msgstr "Dizin Okuma Hatası"
 
 #. Read the directory recursively
-#: ../src/easytag.c:890
+#: ../src/easytag.c:886
+#, c-format
 msgid "Search in progress…"
 msgstr "Arama sürüyor…"
 
-#: ../src/easytag.c:963
+#: ../src/easytag.c:958
 #, c-format
 msgid "Found one file in this directory and subdirectories"
 msgid_plural "Found %u files in this directory and subdirectories"
 msgstr[0] "Bu dizin ve alt dizinlerinde %u dosya bulundu"
 
-#: ../src/easytag.c:970
+#: ../src/easytag.c:965
 #, c-format
 msgid "Found one file in this directory"
 msgid_plural "Found %u files in this directory"
 msgstr[0] "Bu dizinde %u dosya bulundu"
 
-#: ../src/easytag.c:987
+#: ../src/easytag.c:982
 msgid "No file found in this directory and subdirectories"
 msgstr "Bu dizin ve alt dizinlerinde dosya bulunamadı"
 
-#: ../src/easytag.c:989
+#: ../src/easytag.c:984
 msgid "No file found in this directory"
 msgstr "Bu dizinde dosya bulunamadı"
 
-#: ../src/easytag.c:1065
+#: ../src/easytag.c:1060
 #, c-format
 msgid "Error opening directory ‘%s’: %s"
 msgstr "‘%s’ dizini açılırken hata: %s"
 
-#: ../src/easytag.c:1120
+#: ../src/easytag.c:1115
 msgid "Searching for audio files…"
 msgstr "Ses dosyaları aranıyor…"
 
-#: ../src/easytag.c:1121
+#: ../src/easytag.c:1116
 msgid "Searching"
 msgstr "Aranıyor"
 
-#: ../src/easytag.c:1122
+#: ../src/easytag.c:1117
 msgid "_Stop"
 msgstr "_Durdur"
 
@@ -4115,7 +3796,7 @@ msgstr "_Durdur"
 msgid "File not found"
 msgstr "Dosya bulunamadı"
 
-#: ../src/file_area.c:249 ../src/load_files_dialog.cc:235
+#: ../src/file_area.c:249 ../src/load_files_dialog.c:232
 #, c-format
 msgid "Cannot query file information ‘%s’"
 msgstr "‘%s’ dosya bilgisi sorgulanamıyor"
@@ -4124,42 +3805,42 @@ msgstr "‘%s’ dosya bilgisi sorgulanamıyor"
 msgid "Read-only file"
 msgstr "Salt okunur dosya"
 
-#: ../src/file_list.cc:246
+#: ../src/file_list.c:245
 #, c-format
 msgid "Error reading ID3 tag from file ‘%s’: %s"
 msgstr "‘%s’ dosyasında ID3 etiketi okumada hata: %s"
 
-#: ../src/file_list.cc:257
+#: ../src/file_list.c:256
 #, c-format
 msgid "Error reading tag from Ogg file ‘%s’: %s"
 msgstr "Ogg dosyasından ‘%s’ etiket okumada hata: %s"
 
-#: ../src/file_list.cc:268
+#: ../src/file_list.c:267
 #, c-format
 msgid "Error reading tag from FLAC file ‘%s’: %s"
 msgstr "‘%s’ FLAC dosyasından etiket okumada hata: %s"
 
-#: ../src/file_list.cc:278
+#: ../src/file_list.c:277
 #, c-format
 msgid "Error reading APE tag from file ‘%s’: %s"
 msgstr "‘%s’ dosyasında APE etiketi okumada hata: %s"
 
-#: ../src/file_list.cc:288
+#: ../src/file_list.c:287
 #, c-format
 msgid "Error reading tag from MP4 file ‘%s’: %s"
 msgstr "‘%s’ MP4 dosyasından etiket okumada hata: %s"
 
-#: ../src/file_list.cc:299
+#: ../src/file_list.c:298
 #, c-format
 msgid "Error reading tag from WavPack file ‘%s’: %s"
 msgstr "‘%s’ WavPack dosyasından etiket okumada hata: %s"
 
-#: ../src/file_list.cc:310
+#: ../src/file_list.c:309
 #, c-format
 msgid "Error reading tag from Opus file ‘%s’: %s"
 msgstr "‘%s’ Opus dosyasından etiket okumada hata: %s"
 
-#: ../src/file_list.cc:346
+#: ../src/file_list.c:345
 #, c-format
 msgid ""
 "The year value ‘%s’ seems to be invalid in file ‘%s’. The information will "
@@ -4168,68 +3849,42 @@ msgstr ""
 "‘%s’ dosyasındaki ‘%s’ yıl değeri geçersiz gibi görünüyor. Bu bilgi "
 "kaydedilirken kaybolacaktır"
 
-#: ../src/file_list.cc:353
-#, fuzzy, c-format
-msgid ""
-"The original year value ‘%s’ seems to be invalid in file ‘%s’. The "
-"information will be lost when saving"
-msgstr ""
-"‘%s’ dosyasındaki ‘%s’ yıl değeri geçersiz gibi görünüyor. Bu bilgi "
-"kaydedilirken kaybolacaktır"
-
-#: ../src/file_list.cc:510
+#: ../src/file_list.c:501
 #, c-format
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "‘%s’ dosyası için otomatik düzeltme uygulandı"
 
-#: ../src/load_files_dialog.cc:275 ../src/setting.cc:329
+#: ../src/load_files_dialog.c:272 ../src/setting.c:329
 #, c-format
 msgid "Cannot open file ‘%s’: %s"
 msgstr "‘%s’ dosyası açılamıyor: %s"
 
-#: ../src/load_files_dialog.cc:305
+#: ../src/load_files_dialog.c:302
 #, c-format
 msgid "Error reading file ‘%s’"
 msgstr "‘%s’ dosyası okunurken hata oluştu"
 
-#: ../src/load_files_dialog.cc:745 ../src/load_files_dialog.cc:848
+#: ../src/load_files_dialog.c:742 ../src/load_files_dialog.c:845
 msgid "Insert a blank line"
 msgstr "Boş satır ekle"
 
-#: ../src/load_files_dialog.cc:749 ../src/load_files_dialog.cc:852
+#: ../src/load_files_dialog.c:746 ../src/load_files_dialog.c:849
 msgid "Delete this line"
 msgstr "Satırı sil"
 
-#: ../src/load_files_dialog.cc:760 ../src/load_files_dialog.cc:863
+#: ../src/load_files_dialog.c:757 ../src/load_files_dialog.c:860
 msgid "Move this line up"
 msgstr "Satırı yukarı taşı"
 
-#: ../src/load_files_dialog.cc:764 ../src/load_files_dialog.cc:867
+#: ../src/load_files_dialog.c:761 ../src/load_files_dialog.c:864
 msgid "Move this line down"
 msgstr "Satırı aşağı taşı"
 
-#: ../src/mask.cc:201
-msgid "Incomplete placeholder at end of mask."
-msgstr ""
-
-#: ../src/mask.cc:203
-#, c-format
-msgid "Invalid placeholder '%%%c'."
-msgstr ""
-
-#: ../src/mask.cc:207
-msgid "Opening brace '{' without closing brace '}'."
-msgstr ""
-
-#: ../src/mask.cc:209
-msgid "Closing brace '}' without opening brace '{'."
-msgstr ""
-
-#: ../src/misc.cc:226
+#: ../src/misc.c:176
 msgid "You must type a program name"
 msgstr "Bir program adı yazmalısınız."
 
-#: ../src/misc.cc:227
+#: ../src/misc.c:177
 msgid "Program Name Error"
 msgstr "Program Adı Hatası"
 
@@ -4337,7 +3992,7 @@ msgstr "piksel"
 msgid "Type"
 msgstr "Biçim"
 
-#: ../src/picture.c:478 ../src/tags/id3_tag.cc:1282 ../src/tags/vcedit.c:530
+#: ../src/picture.c:478 ../src/tags/id3_tag.c:1515 ../src/tags/vcedit.c:517
 #, c-format
 msgid "Input truncated or empty"
 msgstr "Giriş kesildi veya boş"
@@ -4356,15 +4011,16 @@ msgstr "Çalma Listesi Dosyası Hatası"
 msgid "Wrote playlist file ‘%s’"
 msgstr "‘%s’ çalma listesi dosyasına yazdı"
 
-#: ../src/playlist_dialog.c:625
+#: ../src/playlist_dialog.c:625 ../src/scan_dialog.c:2639
+#: ../src/scan_dialog.c:2702
 msgid "Invalid scanner mask"
 msgstr "Geçersiz tarayıcı maskesi"
 
-#: ../src/preferences_dialog.cc:783
+#: ../src/preferences_dialog.c:864
 msgid "The selected default path is invalid"
 msgstr "Seçilen öntanımlı yol geçersiz"
 
-#: ../src/preferences_dialog.cc:785
+#: ../src/preferences_dialog.c:866
 #, c-format
 msgid ""
 "Path: ‘%s’\n"
@@ -4373,88 +4029,83 @@ msgstr ""
 "Yol: ‘%s’\n"
 "Hata: %s"
 
-#: ../src/preferences_dialog.cc:789
+#: ../src/preferences_dialog.c:870
 msgid "Invalid Path Error"
 msgstr "Geçersiz Konum Hatası"
 
-#: ../src/scan_dialog.cc:366
+#: ../src/scan_dialog.c:432
 #, c-format
 msgid "Cannot calculate CRC value of file ‘%s’"
 msgstr "‘%s’ dosyasının CRC değeri hesaplanamıyor"
 
-#: ../src/scan_dialog.cc:381
+#: ../src/scan_dialog.c:447
 msgid "Tag successfully scanned"
 msgstr "Etiket başarıyla tarandı"
 
-#: ../src/scan_dialog.cc:384
+#: ../src/scan_dialog.c:450
 #, c-format
 msgid "Tag successfully scanned ‘%s’"
 msgstr "Etiket başarıyla tarandı ‘%s’"
 
-#: ../src/scan_dialog.cc:427
+#: ../src/scan_dialog.c:493
 #, c-format
 msgid "The extension ‘%s’ was not found in filename ‘%s’"
 msgstr "‘%s’ uzantısı ‘%s’ dosya adında bulunamadı"
 
-#: ../src/scan_dialog.cc:519 ../src/scan_dialog.cc:550
+#: ../src/scan_dialog.c:585 ../src/scan_dialog.c:616
 #, c-format
 msgid "Cannot find separator ‘%s’ within ‘%s’"
 msgstr "‘%s’ içinde ‘%s’ ayıracı bulunamıyor"
 
-#: ../src/scan_dialog.cc:778
+#: ../src/scan_dialog.c:844
 #, c-format
 msgid "Could not convert filename ‘%s’ into system filename encoding"
 msgstr "‘%s’ dosya adı sistem dosya adı kodlamasına dönüştürülemedi"
 
-#: ../src/scan_dialog.cc:804
+#: ../src/scan_dialog.c:870
 msgid "New filename successfully scanned"
 msgstr "Yeni dosya adı başarıyla tarandı"
 
-#: ../src/scan_dialog.cc:808
+#: ../src/scan_dialog.c:874
 #, c-format
 msgid "New filename successfully scanned ‘%s’"
 msgstr "Yeni dosya adı başarıyla tarandı ‘%s’"
 
-#: ../src/scan_dialog.cc:973
+#: ../src/scan_dialog.c:1243
 #, c-format
 msgid "Error while processing fields ‘%s’"
 msgstr "‘%s’ alanları işlenirken hata"
 
-#: ../src/scan_dialog.cc:1691
+#: ../src/scan_dialog.c:2119
 msgid "New_mask"
 msgstr "Yeni_make"
 
-#: ../src/scan_dialog.cc:2159
-#, fuzzy
-msgid "Empty scanner mask."
-msgstr "Geçersiz tarayıcı maskesi"
-
-#: ../src/scan_dialog.cc:2232
+#: ../src/scan_dialog.c:2769
 msgid "All tags have been scanned"
 msgstr "Bütün etiketler tarandı"
 
-#: ../src/search_dialog.cc:201
+#: ../src/search_dialog.c:636
 #, c-format
 msgid "Found one file"
 msgid_plural "Found %d files"
 msgstr[0] "%d adet dosya bulundu"
 
-#: ../src/search_dialog.cc:278
+#: ../src/search_dialog.c:718
 msgid "Ready to search…"
 msgstr "Aramaya hazır…"
 
-#: ../src/setting.cc:246
+#: ../src/setting.c:246
 #, c-format
 msgid "Cannot write list to file ‘%s’: %s"
 msgstr "‘%s’ dosyasına liste yazılamıyor: %s"
 
 #. Fall back to defaults.
-#: ../src/setting.cc:352
+#: ../src/setting.c:352
 msgid "Loading default ‘Fill Tag’ masks…"
 msgstr "Öntanımlı ‘Etiket Doldur’ maskeleri yükleniyor…"
 
 #. Fall back to defaults.
-#: ../src/setting.cc:382
+#: ../src/setting.c:382
 msgid "Loading default ‘Rename File’ masks…"
 msgstr "Öntanımlı ‘Dosyayı Yeniden Adlandırma’ maskesi yükleniyor…"
 
@@ -4462,245 +4113,195 @@ msgstr "Öntanımlı ‘Dosyayı Yeniden Adlandırma’ maskesi yükleniyor…"
 msgid "Ready to start"
 msgstr "Başlamaya hazır"
 
-#: ../src/tag_area.cc:191
+#: ../src/tag_area.c:169
 #, c-format
 msgid "Selected files tagged with title ‘%s’"
 msgstr "Seçilen dosyalar ‘%s’ başlığı ile etiketlendi"
 
-#: ../src/tag_area.cc:191
+#: ../src/tag_area.c:174
 msgid "Removed title from selected files"
 msgstr "Seçilen dosyalardan başlık silindi"
 
-#: ../src/tag_area.cc:196
-#, fuzzy, c-format
-msgid "Selected files tagged with version ‘%s’"
-msgstr "Seçilen dosyalar ‘%s’ yılı ile etiketlendi"
-
-#: ../src/tag_area.cc:196
-#, fuzzy
-msgid "Removed version from selected files"
-msgstr "Seçilen dosyalardan yıl silindi"
-
-#: ../src/tag_area.cc:201
-#, fuzzy, c-format
-msgid "Selected files tagged with subtitle ‘%s’"
-msgstr "Seçilen dosyalar ‘%s’ başlığı ile etiketlendi"
-
-#: ../src/tag_area.cc:201
-#, fuzzy
-msgid "Removed subtitle from selected files"
-msgstr "Seçilen dosyalardan başlık silindi"
-
-#: ../src/tag_area.cc:206
+#: ../src/tag_area.c:192
 #, c-format
 msgid "Selected files tagged with artist ‘%s’"
 msgstr "Seçilen dosyalar ‘%s’ sanatçısı ile etiketlendi"
 
-#: ../src/tag_area.cc:206
+#: ../src/tag_area.c:197
 msgid "Removed artist from selected files"
 msgstr "Seçilen dosyalardan sanatçı çıkarıldı"
 
-#: ../src/tag_area.cc:211
+#: ../src/tag_area.c:215
 #, c-format
 msgid "Selected files tagged with album artist ‘%s’"
 msgstr "Seçilen dosyalar ‘%s’ albüm sanatçıları ile etiketlendi"
 
-#: ../src/tag_area.cc:211
+#: ../src/tag_area.c:220
 msgid "Removed album artist from selected files"
 msgstr "Seçilen dosyalardan albüm sanatçıları çıkarıldı"
 
-#: ../src/tag_area.cc:216
+#: ../src/tag_area.c:238
 #, c-format
 msgid "Selected files tagged with album ‘%s’"
 msgstr "Seçilen dosyalar ‘%s’ albümü ile etiketlendi."
 
-#: ../src/tag_area.cc:216
+#: ../src/tag_area.c:243
 msgid "Removed album name from selected files"
 msgstr "Seçilen dosyalardan albüm adları silindi"
 
-#: ../src/tag_area.cc:221
-#, fuzzy, c-format
-msgid "Selected files tagged with disc subtitle ‘%s’"
-msgstr "Seçilen dosyalar ‘%s’ başlığı ile etiketlendi"
-
-#: ../src/tag_area.cc:221
-#, fuzzy
-msgid "Removed disc subtitle from selected files"
-msgstr "Seçilen dosyalardan disk numarası silindi"
-
-#: ../src/tag_area.cc:257
+#: ../src/tag_area.c:281
 #, c-format
 msgid "Selected files tagged with disc number ‘%s/%s’"
 msgstr "Seçilen dosyalar disk numarası ‘%s/%s’ ile etiketlendi"
 
-#: ../src/tag_area.cc:264
+#: ../src/tag_area.c:288
 #, c-format
 msgid "Selected files tagged with disc number like ‘xx’"
 msgstr "Seçilen dosyalar ‘xx’ gibi bir disk numarası ile etiketlendi"
 
-#: ../src/tag_area.cc:269
+#: ../src/tag_area.c:293
 msgid "Removed disc number from selected files"
 msgstr "Seçilen dosyalardan disk numarası silindi"
 
-#: ../src/tag_area.cc:277
+#: ../src/tag_area.c:313
 #, c-format
 msgid "Selected files tagged with year ‘%s’"
 msgstr "Seçilen dosyalar ‘%s’ yılı ile etiketlendi"
 
-#: ../src/tag_area.cc:277
+#: ../src/tag_area.c:318
 msgid "Removed year from selected files"
 msgstr "Seçilen dosyalardan yıl silindi"
 
-#: ../src/tag_area.cc:282
-#, fuzzy, c-format
-msgid "Selected files tagged with release year ‘%s’"
-msgstr "Seçilen dosyalar ‘%s’ yılı ile etiketlendi"
-
-#: ../src/tag_area.cc:282
-#, fuzzy
-msgid "Removed release year from selected files"
-msgstr "Seçilen dosyalardan yıl silindi"
-
-#: ../src/tag_area.cc:310 ../src/tag_area.cc:417
+#: ../src/tag_area.c:348 ../src/tag_area.c:453
 #, c-format
 msgid "Selected files tagged with track like ‘xx/%s’"
 msgstr "Seçilen dosyalar ‘xx/%s’ şeklinde parça ile etiketlendi"
 
-#: ../src/tag_area.cc:314
+#: ../src/tag_area.c:352
 #, c-format
 msgid "Selected files tagged with track like ‘xx’"
 msgstr "Seçilen dosyalar ‘xx’ şeklinde parça ile etiketlendi"
 
-#: ../src/tag_area.cc:319 ../src/tag_area.cc:422
+#: ../src/tag_area.c:357 ../src/tag_area.c:458
 msgid "Removed track number from selected files"
 msgstr "Seçilen dosyalardan parça numarasını sil"
 
 #. msg = g_strdup_printf(_("All %d tracks numbered sequentially."), ETCore->ETFileSelectionList_Length);
-#: ../src/tag_area.cc:379
+#: ../src/tag_area.c:416
 #, c-format
 msgid "Selected tracks numbered sequentially"
 msgstr "Seçilen parçalar ardışık olarak numaralandı"
 
-#: ../src/tag_area.cc:430
+#: ../src/tag_area.c:478
 #, c-format
 msgid "Selected files tagged with genre ‘%s’"
 msgstr "Seçilen dosyalar ‘%s’ türü ile etiketlendi"
 
-#: ../src/tag_area.cc:430
+#: ../src/tag_area.c:483
 msgid "Removed genre from selected files"
 msgstr "Seçilen dosyalardan tür silindi"
 
-#: ../src/tag_area.cc:435
+#: ../src/tag_area.c:508
 #, c-format
 msgid "Selected files tagged with comment ‘%s’"
 msgstr "Seçilen dosyalar ‘%s’ yorumuyla etiketlendi"
 
-#: ../src/tag_area.cc:435
+#: ../src/tag_area.c:513
 msgid "Removed comment from selected files"
 msgstr "Seçilen dosyalardan yorum silindi"
 
-#: ../src/tag_area.cc:440
+#: ../src/tag_area.c:531
 #, c-format
 msgid "Selected files tagged with composer ‘%s’"
 msgstr "Seçilen dosyalar ‘%s’ bestecisi ile etiketlendi"
 
-#: ../src/tag_area.cc:440
+#: ../src/tag_area.c:536
 msgid "Removed composer from selected files"
 msgstr "Seçilen dosyalardan besteci silindi"
 
-#: ../src/tag_area.cc:445
+#: ../src/tag_area.c:554
 #, c-format
 msgid "Selected files tagged with original artist ‘%s’"
 msgstr "Seçilen dosyalar ‘%s’ asıl sanatçısı ile etiketlendi"
 
-#: ../src/tag_area.cc:445
+#: ../src/tag_area.c:559
 msgid "Removed original artist from selected files"
 msgstr "Seçilen dosyalardan asıl sanatçı silindi"
 
-#: ../src/tag_area.cc:450
-#, fuzzy, c-format
-msgid "Selected files tagged with original year ‘%s’"
-msgstr "Seçilen dosyalar ‘%s’ asıl sanatçısı ile etiketlendi"
-
-#: ../src/tag_area.cc:450
-#, fuzzy
-msgid "Removed original year from selected files"
-msgstr "Seçilen dosyalardan asıl sanatçı silindi"
-
-#: ../src/tag_area.cc:455
+#: ../src/tag_area.c:577
 #, c-format
 msgid "Selected files tagged with copyright ‘%s’"
 msgstr "Seçilen dosyalar ‘%s’ telif hakkı ile etiketlendi"
 
-#: ../src/tag_area.cc:455
+#: ../src/tag_area.c:582
 msgid "Removed copyright from selected files"
 msgstr "Seçilen dosyalardan telif hakkı silindi"
 
-#: ../src/tag_area.cc:460
+#: ../src/tag_area.c:600
 #, c-format
 msgid "Selected files tagged with URL ‘%s’"
 msgstr "Seçilen dosyalar ‘%s’ adresi ile etiketlendi"
 
-#: ../src/tag_area.cc:460
+#: ../src/tag_area.c:605
 msgid "Removed URL from selected files"
 msgstr "Seçilen dosyalardan adres silindi"
 
-#: ../src/tag_area.cc:465
+#: ../src/tag_area.c:623
 #, c-format
 msgid "Selected files tagged with encoder name ‘%s’"
 msgstr "Seçilen dosyalar ‘%s’ kodlayıcısı ile etiketlendi"
 
-#: ../src/tag_area.cc:465
+#: ../src/tag_area.c:628
 msgid "Removed encoder name from selected files"
 msgstr "Seçilen dosyalardan kodlayıcı silindi"
 
-#: ../src/tag_area.cc:499
+#: ../src/tag_area.c:664
 msgid "Selected files tagged with images"
 msgstr "Seçilen dosyalar görüntülerle ile etiketlendi"
 
-#: ../src/tag_area.cc:503
+#: ../src/tag_area.c:668
 msgid "Removed images from selected files"
 msgstr "Seçilen dosyalardan görüntüler silindi"
 
 #. Menu items
-#: ../src/tag_area.cc:669
+#: ../src/tag_area.c:836
 msgid "Tag selected files with this field"
 msgstr "Seçilen dosyaları bu alanda etiketle"
 
-#: ../src/tag_area.cc:697
+#: ../src/tag_area.c:866
 msgid "All uppercase"
 msgstr "Tümü büyük harf"
 
-#: ../src/tag_area.cc:703
+#: ../src/tag_area.c:872
 msgid "All lowercase"
 msgstr "Tümü küçük harf"
 
-#: ../src/tag_area.cc:709
+#: ../src/tag_area.c:878
 msgid "First letter uppercase"
 msgstr "İlk harf büyük"
 
-#: ../src/tag_area.cc:715
+#: ../src/tag_area.c:884
 msgid "First letter uppercase of each word"
 msgstr "Her kelimenin ilk harfi büyük"
 
-#: ../src/tag_area.cc:730
+#: ../src/tag_area.c:900
 msgid "Insert space before uppercase letter"
 msgstr "Büyük harften önce boşluk ekle"
 
-#: ../src/tag_area.cc:736
+#: ../src/tag_area.c:906
 msgid "Remove duplicate spaces or underscores"
 msgstr "Çift boşluk ve alt çizgileri sil"
 
-#: ../src/tag_area.cc:742
+#: ../src/tag_area.c:912
 msgid "Remove all text"
 msgstr "Tüm metni sil"
 
-#: ../src/tag_area.cc:1102 ../src/tag_area.cc:1195
+#: ../src/tag_area.c:1273 ../src/tag_area.c:1366
 #, c-format
 msgid "Error parsing image data ‘%s’"
 msgstr "‘%s’ görüntü verisini ayrıştırmada hata"
 
-#: ../src/tag_area.cc:1177
+#: ../src/tag_area.c:1348
 msgid ""
 "Cannot display the image because not enough data has been read to determine "
 "how to create the image buffer"
@@ -4708,102 +4309,102 @@ msgstr ""
 "Görüntü gösterilemiyor çünkü görüntü arabelleğinin nasıl oluşturulacağını "
 "belirlemek için yeterli veri okunamadı"
 
-#: ../src/tag_area.cc:1184
+#: ../src/tag_area.c:1355
 msgid "Cannot display the image"
 msgstr "Görüntü gösterilemiyor"
 
-#: ../src/tag_area.cc:1186
+#: ../src/tag_area.c:1357
 msgid ""
 "Not enough data has been read to determine how to create the image buffer."
 msgstr "Görüntü arabelleği belirlemek için yeterli veri yok"
 
-#: ../src/tag_area.cc:1188
+#: ../src/tag_area.c:1359
 msgid "Load Image File"
 msgstr "Görüntü Dosyası Yükle"
 
-#: ../src/tag_area.cc:1233 ../src/tag_area.cc:1258
+#: ../src/tag_area.c:1404 ../src/tag_area.c:1429
 #, c-format
 msgid "Image file not loaded ‘%s’"
 msgstr "‘%s’ görüntü dosyası yüklenemedi"
 
-#: ../src/tag_area.cc:1250
+#: ../src/tag_area.c:1421
 #, c-format
 msgid "Cannot open file ‘%s’"
 msgstr "‘%s’ dosyası açılamıyor"
 
-#: ../src/tag_area.cc:1254
+#: ../src/tag_area.c:1425
 msgid "Image File Error"
 msgstr "Görüntü Dosyası Hatası"
 
-#: ../src/tag_area.cc:1265
+#: ../src/tag_area.c:1436
 msgid "Image file loaded"
 msgstr "Görüntü dosyası yüklendi"
 
-#: ../src/tag_area.cc:1348
+#: ../src/tag_area.c:1519
 msgid "Add Images"
 msgstr "Görüntü ekle"
 
-#: ../src/tag_area.cc:1358 ../src/tag_area.cc:1685
+#: ../src/tag_area.c:1529 ../src/tag_area.c:1857
 msgid "All Files"
 msgstr "Tüm Dosyalar"
 
-#: ../src/tag_area.cc:1365 ../src/tag_area.cc:1692
+#: ../src/tag_area.c:1536 ../src/tag_area.c:1864
 msgid "PNG and JPEG"
 msgstr "PNG ve JPEG"
 
-#: ../src/tag_area.cc:1482
+#: ../src/tag_area.c:1654
 #, c-format
 msgid "Image Properties %d/%d"
 msgstr "Görüntü özellikleri %d/%d"
 
-#: ../src/tag_area.cc:1671
+#: ../src/tag_area.c:1843
 #, c-format
 msgid "Save Image %d/%d"
 msgstr "Görüntüyü Kaydet %d/%d"
 
-#: ../src/tag_area.cc:1751
+#: ../src/tag_area.c:1923
 #, c-format
 msgid "Image file not saved ‘%s’"
 msgstr "Görüntü dosyası ‘%s’ kaydedilmedi"
 
-#: ../src/tag_area.cc:1999
+#: ../src/tag_area.c:2167
 msgid "Tag selected files with this genre"
 msgstr "Seçilen dosyalara bu türü etiketle"
 
-#: ../src/tag_area.cc:2456
+#: ../src/tag_area.c:2940
 msgid "ID3 Tag"
 msgstr "ID3 Etiketi"
 
-#: ../src/tag_area.cc:2461
+#: ../src/tag_area.c:2945
 msgid "Ogg Vorbis Tag"
 msgstr "Ogg Vorbis Etiketi"
 
-#: ../src/tag_area.cc:2466
+#: ../src/tag_area.c:2950
 msgid "FLAC Vorbis Tag"
 msgstr "FLAC Vorbis Etiketi"
 
-#: ../src/tag_area.cc:2470
+#: ../src/tag_area.c:2954
 msgid "APE Tag"
 msgstr "APE Etiketi"
 
-#: ../src/tag_area.cc:2474
+#: ../src/tag_area.c:2958
 msgid "MP4/M4A/AAC Tag"
 msgstr "MP4/M4A/AAC Etiketi"
 
-#: ../src/tag_area.cc:2479
+#: ../src/tag_area.c:2963
 msgid "Wavpack Tag"
 msgstr "Wavpack Etiketi"
 
-#: ../src/tag_area.cc:2484
+#: ../src/tag_area.c:2968
 msgid "Opus Tag"
 msgstr "Opus Etiketi"
 
-#: ../src/tag_area.cc:2610
+#: ../src/tag_area.c:3226
 #, c-format
 msgid "Images (%u)"
 msgstr "Görüntüler (%u)"
 
-#: ../src/tags/ape_tag.cc:90 ../src/tags/mp4_header.cc:58
+#: ../src/tags/ape_tag.c:90 ../src/tags/mp4_header.cc:58
 #: ../src/tags/mp4_header.cc:67 ../src/tags/mp4_tag.cc:73
 #: ../src/tags/mp4_tag.cc:86 ../src/tags/mp4_tag.cc:92
 #: ../src/tags/ogg_header.c:227
@@ -4811,11 +4412,11 @@ msgstr "Görüntüler (%u)"
 msgid "Error while opening file: %s"
 msgstr "Dosya açılırken hata oluştu: %s"
 
-#: ../src/tags/ape_tag.cc:282
+#: ../src/tags/ape_tag.c:372
 msgid "Failed to write APE tag"
 msgstr "APE etiketi yazılamadı"
 
-#: ../src/tags/flac_header.c:85 ../src/tags/flac_tag.cc:224
+#: ../src/tags/flac_header.c:85 ../src/tags/flac_tag.c:225
 msgid "Error opening FLAC file"
 msgstr "FLAC dosyası açılırken hata"
 
@@ -4833,120 +4434,120 @@ msgstr "FLAC Dosyası"
 msgid "Channels:"
 msgstr "Kanallar:"
 
-#: ../src/tags/flac_tag.cc:675 ../src/tags/flac_tag.cc:708
-#: ../src/tags/flac_tag.cc:722
+#: ../src/tags/flac_tag.c:761 ../src/tags/flac_tag.c:794
+#: ../src/tags/flac_tag.c:808
 #, c-format
 msgid "Error while opening file ‘%s’ as FLAC: %s"
 msgstr "‘%s’ dosyası FLAC olarak açılırken hata: %s"
 
-#: ../src/tags/flac_tag.cc:946 ../src/tags/flac_tag.cc:958
-#: ../src/tags/flac_tag.cc:978
+#: ../src/tags/flac_tag.c:1108 ../src/tags/flac_tag.c:1120
+#: ../src/tags/flac_tag.c:1140
 #, c-format
 msgid "Failed to write comments to file ‘%s’: %s"
 msgstr "‘%s’ dosyasına yorum yazılamadı: %s"
 
-#: ../src/tags/id3_tag.cc:168
+#: ../src/tags/id3_tag.c:217
 msgid "Corrupted file"
 msgstr "Bozuk Dosya"
 
-#: ../src/tags/id3_tag.cc:387
+#: ../src/tags/id3_tag.c:635
 #, c-format
 msgid "Removed tag of ‘%s’"
 msgstr "‘%s’ dosyasının etiketi silindi"
 
-#: ../src/tags/id3_tag.cc:394 ../src/tags/id3_tag.cc:478
+#: ../src/tags/id3_tag.c:642 ../src/tags/id3_tag.c:726
 #, c-format
 msgid "Error while removing ID3v1 tag of ‘%s’: %s"
 msgstr "‘%s’ dosyasının ID3v1 etiketi çıkarılırken hata: %s"
 
-#: ../src/tags/id3_tag.cc:403 ../src/tags/id3_tag.cc:441
+#: ../src/tags/id3_tag.c:651 ../src/tags/id3_tag.c:689
 #, c-format
 msgid "Error while removing ID3v2 tag of ‘%s’: %s"
 msgstr "‘%s’ dosyasının ID3v2 etiketi silinirken hata: %s"
 
-#: ../src/tags/id3_tag.cc:429
+#: ../src/tags/id3_tag.c:677
 #, c-format
 msgid "Error while updating ID3v2 tag of ‘%s’: %s"
 msgstr "‘%s’ dosyasının ID3v2 etiketi güncellenirken hata: %s"
 
-#: ../src/tags/id3_tag.cc:466
+#: ../src/tags/id3_tag.c:714
 #, c-format
 msgid "Error while updating ID3v1 tag of ‘%s’: %s"
 msgstr "‘%s’ dosyasının ID3v1 etiketi güncellenirken hata: %s"
 
-#: ../src/tags/id3_tag.cc:512
+#: ../src/tags/id3_tag.c:760
 msgid "Buggy id3lib"
 msgstr "Hatalı id3lib"
 
-#: ../src/tags/id3_tag.cc:533
+#: ../src/tags/id3_tag.c:781
 msgid "No error reported"
 msgstr "Hata iletisi yok"
 
-#: ../src/tags/id3_tag.cc:535
+#: ../src/tags/id3_tag.c:783
 msgid "No available memory"
 msgstr "Erişilebilir hafıza yok"
 
-#: ../src/tags/id3_tag.cc:537
+#: ../src/tags/id3_tag.c:785
 msgid "No data to parse"
 msgstr "Ayrıştırılacak veri yok"
 
-#: ../src/tags/id3_tag.cc:539
+#: ../src/tags/id3_tag.c:787
 msgid "Improperly formatted data"
 msgstr "Yanlış biçimlendirilmiş veri"
 
-#: ../src/tags/id3_tag.cc:541
+#: ../src/tags/id3_tag.c:789
 msgid "No buffer to write to"
 msgstr "Yazmak için tampon yok"
 
-#: ../src/tags/id3_tag.cc:543
+#: ../src/tags/id3_tag.c:791
 msgid "Buffer is too small"
 msgstr "Tampon çok küçük"
 
-#: ../src/tags/id3_tag.cc:545
+#: ../src/tags/id3_tag.c:793
 msgid "Invalid frame ID"
 msgstr "Geçersiz katman ID"
 
-#: ../src/tags/id3_tag.cc:547
+#: ../src/tags/id3_tag.c:795
 msgid "Requested field not found"
 msgstr "İstenen alan bulunamadı"
 
-#: ../src/tags/id3_tag.cc:549
+#: ../src/tags/id3_tag.c:797
 msgid "Unknown field type"
 msgstr "Bilinmeyen alan tipi"
 
-#: ../src/tags/id3_tag.cc:551
+#: ../src/tags/id3_tag.c:799
 msgid "Tag is already attached to a file"
 msgstr "Etiket zaten bir dosyaya eklendi"
 
-#: ../src/tags/id3_tag.cc:553
+#: ../src/tags/id3_tag.c:801
 msgid "Invalid tag version"
 msgstr "Geçersiz etiket sürümü"
 
-#: ../src/tags/id3_tag.cc:555
+#: ../src/tags/id3_tag.c:803
 msgid "No file to parse"
 msgstr "Ayrıştırılacak dosya yok"
 
-#: ../src/tags/id3_tag.cc:557
+#: ../src/tags/id3_tag.c:805
 msgid "Attempting to write to a read-only file"
 msgstr "Salt okunur dosyaya yazmaya çalışıyor"
 
-#: ../src/tags/id3_tag.cc:559
+#: ../src/tags/id3_tag.c:807
 msgid "Error in compression/uncompression"
 msgstr "Sıkıştırmada/açmada hata"
 
-#: ../src/tags/id3_tag.cc:561
+#: ../src/tags/id3_tag.c:809
 msgid "Unknown error message"
 msgstr "Bilinmeyen hata iletisi"
 
-#: ../src/tags/id3_tag.cc:1320
+#: ../src/tags/id3_tag.c:1553
 msgid "Error while creating temporary file"
 msgstr "Geçici dosya oluşturulamadı"
 
-#: ../src/tags/id3v24_tag.cc:135 ../src/tags/id3v24_tag.cc:190
-#: ../src/tags/id3v24_tag.cc:228 ../src/tags/id3v24_tag.cc:238
-#: ../src/tags/id3v24_tag.cc:247 ../src/tags/id3v24_tag.cc:1011
-#: ../src/tags/id3v24_tag.cc:1019 ../src/tags/id3v24_tag.cc:1026
-#: ../src/tags/id3v24_tag.cc:1052 ../src/tags/id3v24_tag.cc:1092
+#: ../src/tags/id3v24_tag.c:135 ../src/tags/id3v24_tag.c:190
+#: ../src/tags/id3v24_tag.c:228 ../src/tags/id3v24_tag.c:238
+#: ../src/tags/id3v24_tag.c:247 ../src/tags/id3v24_tag.c:973
+#: ../src/tags/id3v24_tag.c:981 ../src/tags/id3v24_tag.c:988
+#: ../src/tags/id3v24_tag.c:1014 ../src/tags/id3v24_tag.c:1054
 #: ../src/tags/mp4_tag.cc:102 ../src/tags/ogg_header.c:277
 msgid "Error reading tags from file"
 msgstr "Dosyadan etiketler okunurken hata oluştu"
@@ -4961,7 +4562,7 @@ msgid "Profile:"
 msgstr "Profil:"
 
 #: ../src/tags/mp4_header.cc:68 ../src/tags/mp4_tag.cc:93
-#: ../src/tags/mp4_tag.cc:332
+#: ../src/tags/mp4_tag.cc:321
 msgid "MP4 format invalid"
 msgstr "Geçersiz MP4 biçimi"
 
@@ -4978,13 +4579,13 @@ msgstr "MP4/AAC Dosyası"
 msgid "~%d kb/s"
 msgstr "~%d kb/s"
 
-#: ../src/tags/mp4_tag.cc:309 ../src/tags/mp4_tag.cc:325
-#: ../src/tags/mp4_tag.cc:331
+#: ../src/tags/mp4_tag.cc:298 ../src/tags/mp4_tag.cc:314
+#: ../src/tags/mp4_tag.cc:320
 #, c-format
 msgid "Error while opening file ‘%s’: %s"
 msgstr "‘%s’ dosyası açılırken hata: %s"
 
-#: ../src/tags/mp4_tag.cc:342
+#: ../src/tags/mp4_tag.cc:331
 #, c-format
 msgid "Error reading tags from file ‘%s’"
 msgstr "‘%s’ dosyasından etiketleri okuma hatası"
@@ -5068,1604 +4669,3 @@ msgstr "Opus Dosyası"
 #: ../src/tags/wavpack_header.c:137
 msgid "Wavpack File"
 msgstr "Wavpack Dosyası"
-
-#, fuzzy
-#~ msgid "Album artist"
-#~ msgstr "Albüm Sanatçısı:"
-
-#, fuzzy
-#~ msgid "%S: album subtitle"
-#~ msgstr "%A: albüm sanatçısı"
-
-#~ msgid "Split Ogg title fields"
-#~ msgstr "Ogg başlık alanlarını ayır"
-
-#~ msgid "Split Ogg artist fields"
-#~ msgstr "Ogg sanatçı alanlarını ayır"
-
-#~ msgid "Split Ogg album fields"
-#~ msgstr "Ogg album alanlarını ayır"
-
-#~ msgid "Split Ogg genre fields"
-#~ msgstr "Ogg tür alanlarını ayır"
-
-#~ msgid "Split Ogg comment fields"
-#~ msgstr "Ogg açıklama alanlarını ayır"
-
-#~ msgid "Split Ogg composer fields"
-#~ msgstr "Ogg besteci alanlarını ayır"
-
-#~ msgid "Split Ogg original artist fields"
-#~ msgstr "Ogg asıl sanatçı alanlarını ayır"
-
-#~ msgid "Whether to split title fields at a “ - ” separator in Ogg comments"
-#~ msgstr "Ogg yorumlarında başlık alanının “-” ayrıcı ile ayrılıp ayrılmaması"
-
-#~ msgid "Whether to split artist fields at a “ - ” separator in Ogg comments"
-#~ msgstr ""
-#~ "Ogg yorumlarında sanatçı alanının “ - ” ayırıcı ile ayrılıp ayrılmaması"
-
-#~ msgid "Whether to split album fields at a “ - ” separator in Ogg comments"
-#~ msgstr ""
-#~ "Ogg açıklamalarında albüm alanlarının “ - ” ayırıcı ile ayrılıp "
-#~ "ayrılmaması"
-
-#~ msgid "Whether to split genre fields at a “ - ” separator in Ogg comments"
-#~ msgstr ""
-#~ "Ogg açıklamalarında tür alanlarının “ - ” ayırıcı ile ayrılıp ayrılmaması"
-
-#~ msgid "Whether to split comment fields at a “ - ” separator in Ogg comments"
-#~ msgstr ""
-#~ "Ogg açıklamalarında açıklama alanlarının “ - ” ayrıcı ile ayrılıp "
-#~ "ayrılmaması"
-
-#~ msgid ""
-#~ "Whether to split composer fields at a “ - ” separator in Ogg comments"
-#~ msgstr ""
-#~ "Ogg açıklamalarında besteci alanlarının “ - ” ayrıcı ile ayrılıp "
-#~ "ayrılmaması"
-
-#~ msgid ""
-#~ "Whether to split original artist fields at a “ - ” separator in Ogg "
-#~ "comments"
-#~ msgstr ""
-#~ "Ogg açıklamalarında asıl sanatçı alanlarının “ - ” ayırıcı ile ayrılıp "
-#~ "ayrılmaması"
-
-#~ msgid "Proxy"
-#~ msgstr "Vekil"
-
-#~ msgid "Use a proxy server"
-#~ msgstr "Vekil sunucu kullan"
-
-#~ msgid "Whether to access remote CDDB through a proxy"
-#~ msgstr "Bir vekil yoluyla uzak CDDB erişilip erişilememesi"
-
-#~ msgid "Hostname for a proxy to access remote CDDB"
-#~ msgstr "Uzak CDDB erişimi için vekil sunucu adı"
-
-#~ msgid "Port for a proxy to access remote CDDB"
-#~ msgstr "Uzak CDDB erişimi için vekil bağlantı noktası"
-
-#~ msgid "User:"
-#~ msgstr "Kullanıcı:"
-
-#~ msgid "Username for a proxy to access remote CDDB"
-#~ msgstr "CDDB uzak erişim için vekil kullanıcı adı"
-
-#~ msgid "Password:"
-#~ msgstr "Parola:"
-
-#~ msgid "Password for a proxy to access remote CDDB"
-#~ msgstr "CDDB uzak erişim için vekil parolası"
-
-#~ msgid "Enable proxy for remote CDDB"
-#~ msgstr "Uzak CDDB için vekili etkinleştir"
-
-#~ msgid "CDDB proxy hostname"
-#~ msgstr "CDDB vekil sunucu adı"
-
-#~ msgid "CDDB proxy port"
-#~ msgstr "CDDB vekil sunucu bağlantı noktası"
-
-#~ msgid "CDDB proxy username"
-#~ msgstr "CDDB vekil sunucu kullanıcı adı"
-
-#~ msgid "CDDB proxy password"
-#~ msgstr "CDDB vekil sunucu parolası"
-
-#~ msgid "Lower-case all characters"
-#~ msgstr "Bütün karakterler küçük harf"
-
-#~ msgid "Upper-case the first letter of the tag"
-#~ msgstr "Etiketin ilk harfi büyük harf"
-
-#~ msgid "Upper-case the first letter of each word"
-#~ msgstr "Her kelimenin ilk harfi büyük harf"
-
-#~ msgid "Variable EASYTAGLANG defined, setting locale ‘%s’"
-#~ msgstr "EASYTAGLANG değişkeni tanımlanmış. yerel ayar '%s'"
-
-#~ msgid "Resolving host '%s'…"
-#~ msgstr "Sunucu '%s' çözülüyor…"
-
-#~ msgid "Cannot create a new socket ‘%s’"
-#~ msgstr "Yeni soket ‘%s’ oluşturulamıyor"
-
-#~ msgid "Cannot set options on the newly-created socket"
-#~ msgstr "Yeni oluşturulmuş yuvada seçenekler ayarlanamıyor"
-
-#~ msgid "Connecting to host ‘%s’, port ‘%d’…"
-#~ msgstr "'%s' sunucusuna, '%d' portundan bağlanılıyor…"
-
-#~ msgid "Connected to host ‘%s’"
-#~ msgstr "‘%s’ sunucusuna bağlanıldı"
-
-#~ msgid "Error while writing CDDB results to file ‘%s’"
-#~ msgstr "CDDB sonuçları ‘%s’ dosyasına yazılırken hata"
-
-#~ msgid "Receiving data (%s)…"
-#~ msgstr "Veri alınıyor (%s)…"
-
-#~ msgid "Error when reading CDDB response ‘%s’"
-#~ msgstr "CDDB cevabı okunurken hata ‘%s’"
-
-#~ msgid "Cannot create file ‘%s’: %s"
-#~ msgstr "‘%s’ dosyası oluşturulamıyor: %s"
-
-#~ msgid "Cannot send the request ‘%s’"
-#~ msgstr "İstek ‘%s’ gönderilemiyor"
-
-#~ msgid "The filename ‘%s’ could not be converted into UTF-8: %s"
-#~ msgstr "Dosya adı ‘%s’ UTF-8'e dönüştürülemedi: %s"
-
-#~ msgid ""
-#~ "As the following corrupted file ‘%s’ will cause an error in id3lib, it "
-#~ "will not be processed"
-#~ msgstr ""
-#~ "Aşağıdaki ‘%s’ gibi bozulmuş dosyalar id3lib ile ilgili bir hata verecek, "
-#~ "işlenemeyecektir"
-
-#~ msgid "Error opening Monkey’s Audio file"
-#~ msgstr "Monkey’s ses dosyası açılırken hata"
-
-#~ msgid "Error opening Musepack file"
-#~ msgstr "Musepack dosyası açılırken hata oluştu"
-
-#~ msgid "Track #"
-#~ msgstr "Parça #"
-
-#~ msgid "# Tracks"
-#~ msgstr "# Parçalar"
-
-#~| msgid "Max number of lines:"
-#~ msgid "Maximum number of lines:"
-#~ msgstr "Azami satır sayısı:"
-
-#~ msgid "The maximum number of lines to keep in the log"
-#~ msgstr "Sistem günlüklerinde tutulan azami satır sayısı"
-
-#~| msgid "Confirm writing of playlist"
-#~ msgid "Confirm before quitting the application"
-#~ msgstr "Uygulamadan çıkmadan önce onayla"
-
-#~ msgid ""
-#~ "Whether to ask for confirmation from the user before quitting the "
-#~ "application"
-#~ msgstr "Uygulamadan çıkmadan önce kullanıcıdan onaylama istenip istenmemesi"
-
-#~ msgid "%n: track"
-#~ msgstr "%n: parça numarası"
-
-#~| msgid "Max number of lines:"
-#~ msgid "Number of log lines"
-#~ msgstr "Sistem günlüğü satır sayısı"
-
-#~ msgid "Do you really want to quit?"
-#~ msgstr "Gerçekten çıkmak istiyor musunuz?"
-
-#, fuzzy
-#~| msgid "Can't load file: '%s' (%s)."
-#~ msgid "Cannot load file ‘%s’: %s"
-#~ msgstr "Dosya yüklenemiyor: '%s' (%s)."
-
-#, fuzzy
-#~| msgid "Cannot create or open file '%s' (%s)"
-#~ msgid "Cannot create or open file ‘%s’: %s"
-#~ msgstr "'%s' dosyası oluşturulamıyor veya okunamıyor (%s)"
-
-#, fuzzy
-#~| msgid "Error while writing list file: %s"
-#~ msgid "Error while writing list file ‘%s’"
-#~ msgstr "Dosya listesi yazılırken hata oluştu: %s"
-
-#, fuzzy
-#~| msgid "Migrating configuration from directory '%s' to '%s'"
-#~ msgid "Migrating configuration from directory ‘%s’ to ‘%s’"
-#~ msgstr "Yapılandırma '%s' dizininden '%s' dizinine taşınıyor."
-
-#, fuzzy
-#~| msgid "Failed to migrate configuration file '%s'"
-#~ msgid "Failed to migrate configuration file ‘%s’"
-#~ msgstr "'%s' yapılandırma dosyası taşınamadı"
-
-#, fuzzy
-#~| msgid "Cannot create target directory '%s': %s"
-#~ msgid "Cannot create directory ‘%s’: %s"
-#~ msgstr "'%s' hedef dizini oluşturulamıyor: %s"
-
-#~ msgid "Cannot write tag of file ‘%s’ (a byte was missing)"
-#~ msgid_plural "Cannot write tag of file ‘%s’ (%s bytes were missing)"
-#~ msgstr[0] "'%s' dosyasına etiket yazılamıyor (%s bayt eksik)"
-
-#, fuzzy
-#~| msgid "Cannot save tag of file '%s'"
-#~ msgid "Cannot save tag of file ‘%s’"
-#~ msgstr "'%s' dosyasının etiketi kaydedilemiyor"
-
-#, fuzzy
-#~| msgid "Size error while saving tag of '%s'"
-#~ msgid "Size error while saving tag of ‘%s’"
-#~ msgstr "'%s' etiketi yazılırken boyut hatası oluştu"
-
-#~ msgid ""
-#~ "This program is free software; you can redistribute it and/or modify it "
-#~ "under the terms of the GNU General Public License as published by the "
-#~ "Free Software Foundation; either version 2 of the License, or (at your "
-#~ "option) any later version.\n"
-#~ "\n"
-#~ "This program is distributed in the hope that it will be useful, but "
-#~ "WITHOUT ANY WARRANTY; without even the implied warranty of "
-#~ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General "
-#~ "Public License for more details.\n"
-#~ "\n"
-#~ "You should have received a copy of the GNU General Public License along "
-#~ "with this program. If not, see <http://www.gnu.org/licenses/>."
-#~ msgstr ""
-#~ "Bu program özgür bir yazılımdır, onu Özgür Yazılım Vakfı'nın yayınladığı "
-#~ "GNU Genel Kamu Lisansı'nın 2. sürümü veya (tercihinize bağlı) daha "
-#~ "sonraki sürümleri altında dağıtabilir ve/veya değiştirebilirsiniz.\n"
-#~ "\n"
-#~ "Bu program kullanışlı olması amacıyla dağıtılmıştır, ancak HİÇBİR "
-#~ "GARANTİSİ YOKTUR; hatta SATILABİLİRLİK ya da BİR AMACA HİZMET gibi "
-#~ "garantisi de yoktur. Daha fazla ayrıntı için GNU Genel Kamu Lisansı'na "
-#~ "bakın.\n"
-#~ "\n"
-#~ "Bu yazılımla birlikte GNU Genel Kamu Lisansının bir kopyasına sahip "
-#~ "olmalısınız. Eğer yoksa, <http://www.gnu.org/licenses/> adresine "
-#~ "bakabilirsiniz."
-
-#~ msgid "Error while opening file: '%s' (%s)."
-#~ msgstr "Dosya açılamadı: '%s' (%s)."
-
-#~ msgid "Run a command on the selected files"
-#~ msgstr "Seçilen dosyalar için komut çalıştır"
-
-#~ msgid "Clear the current selection"
-#~ msgstr "Geçerli seçimi temizle"
-
-#~ msgid "Delete files"
-#~ msgstr "Dosyaları sil"
-
-#~ msgid "S_can Files"
-#~ msgstr "Dosyaları _Tara"
-
-#~ msgid "_Undo Last Files Changes"
-#~ msgstr "Son Dosya Değişikliğini _Geri Al"
-
-#~ msgid "Undo last files changes"
-#~ msgstr "Son dosya değişikliklerini geri al"
-
-#~ msgid "R_edo Last Files Changes"
-#~ msgstr "Son Dosya Değişikliğini Yin_ele"
-
-#~ msgid "Redo last files changes"
-#~ msgstr "Son dosya değişikliklerini yinele"
-
-#~ msgid "Force saving files"
-#~ msgstr "Dosyaları kaydetmeye zorla"
-
-#~ msgid "Undo Last Changes"
-#~ msgstr "Son Değişiklikleri Geri Al"
-
-#~ msgid "Undo last changes"
-#~ msgstr "Son değişiklikleri geri al"
-
-#~ msgid "Redo Last Changes"
-#~ msgstr "Son Değişiklikleri Yinele"
-
-#~ msgid "Redo last changes"
-#~ msgstr "Son değişiklikleri yinele"
-
-#~ msgid "Go to home directory"
-#~ msgstr "Ev dizinine git"
-
-#~ msgid "Go to desktop directory"
-#~ msgstr "Masaüstü dizinine git"
-
-#~ msgid "Go to documents directory"
-#~ msgstr "Belgeler dizinine git"
-
-#~ msgid "Go to downloads directory"
-#~ msgstr "İndirilenler dizinine git"
-
-#~ msgid "Go to music directory"
-#~ msgstr "Müzik dizinine git"
-
-#~ msgid "Go to parent directory"
-#~ msgstr "Üst dizine git"
-
-#~ msgid "Go to default directory"
-#~ msgstr "Öntanımlı dizine git"
-
-#~ msgid "Set current path as default"
-#~ msgstr "Bulunulan dizini öntanımlı olarak ayarla"
-
-#~ msgid "Rename directory"
-#~ msgstr "Dizini yeniden adlandır"
-
-#~ msgid "Reload directory"
-#~ msgstr "Dizini tekrar yükle"
-
-#~ msgid "Run a command on the directory"
-#~ msgstr "Dizin için komut çalıştır"
-
-#~ msgid "Reload directory tree"
-#~ msgstr "Dizin a_ğacını yeniden yükle"
-
-#~ msgid "CDDB search"
-#~ msgstr "CDDB ara"
-
-#~ msgid "Load filenames from a text file"
-#~ msgstr "Dosya adlarını metin dosyasından yükle"
-
-#~ msgid "Run audio player"
-#~ msgstr "Müzik çaları çalıştır"
-
-#~ msgid "About"
-#~ msgstr "Hakkında"
-
-#~ msgid "_File Operations"
-#~ msgstr "_Dosya işlemleri"
-
-#~ msgid "S_canner"
-#~ msgstr "_Tarayıcı"
-
-#~ msgid "CDDB search files…"
-#~ msgstr "Dosyaları CDDB'de ara…"
-
-#~ msgid "Tree Browser"
-#~ msgstr "Ağaç Gezgini"
-
-#~ msgid "View by directory tree"
-#~ msgstr "Dizin ağacına göre göster"
-
-#~ msgid "_Fill Tags…"
-#~ msgstr "Etiketleri _Doldur…"
-
-#~ msgid "Fill tags"
-#~ msgstr "Etiketleri doldur"
-
-#~ msgid "Rename files and directories"
-#~ msgstr "Dosya ve dizinleri yeniden adlandır"
-
-#~ msgid "_Process Fields…"
-#~ msgstr "_Alanları İşle…"
-
-#~ msgid "Could not merge UI, error was: %s\n"
-#~ msgstr "UI birleştirilemedi, hata: %s\n"
-
-#~ msgid "Error: Searching for %s, could not find node %s in tree."
-#~ msgstr "Hata: %s aranıyor, ağaçta %s dalı bulunamadı."
-
-#~ msgid "Tree"
-#~ msgstr "Ağaç"
-
-#~ msgid "Select a directory to browse."
-#~ msgstr "Gezinmek için dizin seçin."
-
-#~ msgid "Artist & Album"
-#~ msgstr "Sanatçı & Albüm"
-
-#~ msgid "If activated, it will use masks to rename directory."
-#~ msgstr "Eğer etkinse dizini yeniden adlandırırken maskeyi kullanır."
-
-#~ msgid "Program to run:"
-#~ msgstr "Çalıştırmak için program:"
-
-#~ msgid "The program '%s' cannot be found"
-#~ msgstr "'%s' programı bulunamadı"
-
-#~ msgid "Cannot execute %s (error %d)\n"
-#~ msgstr "%s çalıştırılamıyor (hata %d)\n"
-
-#~ msgid "Cannot fork another process\n"
-#~ msgstr "Başka bir süreç çalıştırılamıyor\n"
-
-#~ msgid "Request CDDB"
-#~ msgstr "CDDB isteği"
-
-#~ msgid "Use local CDDB"
-#~ msgstr "Yerel CDDB kullan"
-
-#~ msgid ""
-#~ "When activating this option, after loading the fields, the current "
-#~ "selected scanner will be ran (the scanner window must be opened)."
-#~ msgstr ""
-#~ "Bu seçeneği etkinleştirirken alanlar yüklendikten sonra şuan seçilen "
-#~ "tarayıcı çalıştırılır (Tarayıcı penceresi açık olmalıdır.)."
-
-#~ msgid "Words:"
-#~ msgstr "Kelimeler:"
-
-#~ msgid "Search In:"
-#~ msgstr "İçinde Ara:"
-
-#~ msgid "All Fields"
-#~ msgstr "Tüm Alanlar"
-
-#~ msgid "All Categories"
-#~ msgstr "Tüm Kategoriler"
-
-#~ msgid "included: funk, soul, rap, pop, industrial, metal, etc."
-#~ msgstr "funk, soul, rap, pop, industrial, metal, vs dahil"
-
-#~ msgid "movies, shows"
-#~ msgstr "videolar, gösteriler"
-
-#~ msgid "others that do not fit in the above categories"
-#~ msgstr "yukarıdaki kategorilere uymayan diğerleri"
-
-#~ msgid "Enter the words to search in the list below"
-#~ msgstr "Liste boyunca aramak için kelime girin"
-
-#~ msgid "Search Next"
-#~ msgstr "Sonrakini Ara"
-
-#~ msgid "Search Previous"
-#~ msgstr "Öncekini Ara"
-
-#~ msgid "Show only red lines (or show all lines) in the 'Artist / Album' list"
-#~ msgstr ""
-#~ "Sanatçı / Albüm listesinde sadece kırmızı satırları (veya tüm satırları) "
-#~ "göster"
-
-#~ msgid "Set Into:"
-#~ msgstr "Uygulanacak Alanlar:"
-
-#~ msgid "All"
-#~ msgstr "Tümü"
-
-#~ msgid ""
-#~ "When activating this option, the Levenshtein algorithm (DLM: Damerau-"
-#~ "Levenshtein Metric) will be used to match the CDDB title against every "
-#~ "filename in the current folder, and to select the best match. This will "
-#~ "be used when selecting the corresponding audio file, or applying CDDB "
-#~ "results, instead of using directly the position order."
-#~ msgstr ""
-#~ "Bu seçeneği etkinleştirince CDDB başlığı dizindeki her dosya adı için "
-#~ "Levenshtein algoritması (DLM: Damerau-Levenshtein Metric) ile "
-#~ "eşleştirmeye çalışır ve en iyi eşleşeni seçer. Doğrudan konum sıralaması "
-#~ "kullanmak yerine uygun ses dosyasını seçmekte ve CDDB sonuçlarını "
-#~ "uygulamakta kullanılır."
-
-#~ msgid "The path for 'Local CD Database' was not defined"
-#~ msgstr "'Yerel CD Veritabanı' konumu belirtilmemiş"
-
-#~ msgid "Enter it in the preferences window before using this search."
-#~ msgstr "Bu aramayı yapmadan önce tercihlerden bu bilgiyi girin."
-
-#~ msgid "Local CD search"
-#~ msgstr "Yerel CD arama"
-
-#~ msgid "Using libid3tag version %s"
-#~ msgstr "libid3tag sürüm %s kullanılıyor"
-
-#~ msgid "Using id3lib version %d.%d.%d"
-#~ msgstr "id3lib sürüm %d.%d.%d kullanılıyor"
-
-#~ msgid "Currently using locale '%s' (and eventually '%s')"
-#~ msgstr "Şuan kullanılan dil '%s' (ve neticede '%s')"
-
-#~ msgid "Frequency:"
-#~ msgstr "Frekans:"
-
-#~ msgid "Select Mode and Mask, and redo the same action"
-#~ msgstr "Türü ve maskeyi seçin, aynı işlemi tekrar uygulayın"
-
-#~ msgid "Files have been partially deleted"
-#~ msgstr "Dosyalar kısmen silindi"
-
-#~ msgid "Tag(s) written"
-#~ msgstr "Etiket(ler) yazıldı"
-
-#~ msgid "Cannot write tag in file '%s' (%s)"
-#~ msgstr "'%s' dosyasına etiket yazılamıyor (%s)"
-
-#~ msgid "Cannot read directory (%s)"
-#~ msgstr "Dizin okunamıyor (%s)"
-
-#~ msgid "Convert ' ' to '_'"
-#~ msgstr "Boşlukları '_' karakterine çevir"
-
-#~ msgid "EasyTAG version %s: Abnormal exit (PID: %d)"
-#~ msgstr "EasyTAG sürüm %s: Olağan dışı çıkış (PID: %d)"
-
-#~ msgid "Received signal '%s' (%d)"
-#~ msgstr "'%s' sinyali alındı (%d)"
-
-#~ msgid ""
-#~ "You have probably found a bug in EasyTAG. Please, file a bug report with "
-#~ "a GDB backtrace ('gdb easytag core' then 'bt' and 'l') and information to "
-#~ "reproduce it at: %s"
-#~ msgstr ""
-#~ "EasyTAG'da bir hata bulundu. Lütfen GDB geri izleme ('gdb easytag core' "
-#~ "sonra 'bt' ve 'l') ile hata kaydedip bilgileri bize gönderin: %s"
-
-#~ msgid "EasyTAG version %s: Abnormal exit (PID: %d)."
-#~ msgstr "EasyTAG sürüm %s: Olağan dışı çıkış (PID: %d)."
-
-#~ msgid "Cannot change the permissions of file '%s' (%s)"
-#~ msgstr "'%s' dosyasının izinleri değiştirilemiyor (%s)"
-
-#~ msgid "Error writing tag type %d to file %s (%s)"
-#~ msgstr "%d tipi etiket %s dosyasına yazılırken hata oluştu (%s)"
-
-#~ msgid "Picture block isn't valid: '%s'"
-#~ msgstr "Görüntü bloğu geçersiz: '%s'"
-
-#~ msgid "Error while reading file: '%s' (%s)"
-#~ msgstr "Dosya okunurken hata oluştu: '%s' (%s)"
-
-#~ msgid "Updated tag of '%s'"
-#~ msgstr "'%s' etiketi güncellendi"
-
-#~ msgid "Error while creating temporary file: '%s'"
-#~ msgstr "Geçici dosya oluşturulamadı: '%s'"
-
-#~ msgid "Error while writing to file: '%s' (%s)"
-#~ msgstr "Dosyaya yazılamadı: '%s' (%s)"
-
-#~ msgid "No audio player defined"
-#~ msgstr "Müzik oynatıcı tanımlanmadı"
-
-#~ msgid "Audio Player Warning"
-#~ msgstr "Müzik Oynatıcı Uyarısı"
-
-#~ msgid "Cannot fork another process"
-#~ msgstr "Başka bir süreç çatallanamıyor"
-
-#~ msgid "Cannot execute %s (%s)"
-#~ msgstr "Çalıştırılamıyor %s (%s)"
-
-#~ msgid "B"
-#~ msgstr "B"
-
-#~ msgid "kB"
-#~ msgstr "kB"
-
-#~ msgid "MB"
-#~ msgstr "MB"
-
-#~ msgid "GB"
-#~ msgstr "GB"
-
-#~ msgid "TB"
-#~ msgstr "TB"
-
-#~ msgid "M3U Playlist Name"
-#~ msgstr "M3U Çalma Listesi Adı"
-
-#~ msgid "Playlist Options"
-#~ msgstr "Çalma Listesi"
-
-#~ msgid ""
-#~ "If activated, only the selected files will be written in the playlist "
-#~ "file. Else, all the files will be written."
-#~ msgstr ""
-#~ "Eğer işaretliyse sadece seçilen dosyalardan çalma listesi oluşturulur. "
-#~ "Değilse tüm dosyalardan oluşturulur."
-
-#~ msgid "If activated, the playlist will be created in the parent directory."
-#~ msgstr "Eğer işaretlenmişse çalma listesini üst dizinde oluşturur."
-
-#~ msgid ""
-#~ "This option replaces the UNIX directory separator '/' into DOS separator "
-#~ "'\\'."
-#~ msgstr "Bu seçenek UNIX dizin ayıracı '/' yerine DOS ayıracı '\\' kullanır."
-
-#~ msgid "Move down the selected line"
-#~ msgstr "Seçilen satırı aşağı taşı"
-
-#~ msgid ""
-#~ "When activating this option, after loading the filenames, the current "
-#~ "selected scanner will be ran (the scanner window must be opened)."
-#~ msgstr ""
-#~ "Bu seçenek işaretlenirse dosya adları yüklendikten sonra seçilen tarayıcı "
-#~ "çalıştırılır (tarayıcı penceresi açık olmalı)."
-
-#~ msgid "Cannot retrieve file info (%s)"
-#~ msgstr "Dosya bilgisi alınamıyor (%s)"
-
-#~ msgid "Can't open file '%s' (%s)"
-#~ msgstr "'%s' dosyası açılamıyor (%s)"
-
-#~ msgid "Move down this line"
-#~ msgstr "Satırı aşağı taşı"
-
-#~ msgid "File contains no audio track: '%s'"
-#~ msgstr "Dosya içeriği ses parçası içermiyor: '%s'"
-
-#~ msgid "Warning: The Ogg Vorbis file '%s' contains an ID3v2 tag."
-#~ msgstr "Uyarı: '%s' Ogg Vorbis dosyası ID3v2 etiketi içeriyor."
-
-#~ msgid "Image Description:"
-#~ msgstr "Görüntü açıklaması:"
-
-#~ msgid "Error with 'loader_close': %s"
-#~ msgstr "'loader_close' ile hata: %s"
-
-#~ msgid "Error with 'loader_write': %s"
-#~ msgstr "'loader_write' ile hata: %s"
-
-#~ msgid "Default directory:"
-#~ msgstr "Öntanımlı dizin:"
-
-#~ msgid ""
-#~ "Specify the directory where your files are located. This path will be "
-#~ "loaded when EasyTAG starts without parameter."
-#~ msgstr ""
-#~ "Dosyalarınızın bulunduğu dizini belirtir. Bu dizin EasyTAG parametresiz "
-#~ "çalıştırıldığında otomatik yüklenir."
-
-#~ msgid ""
-#~ "Automatically search files, when EasyTAG starts, into the default "
-#~ "directory. Note that this path may be overridden by the parameter passed "
-#~ "to easytag (easytag /path_to/mp3_files)."
-#~ msgstr ""
-#~ "EasyTAG başlatıldığında öntanımlı dizindeki dosyaları otomatik arar. Bu "
-#~ "durum programı parametre girerek çalıştırdığınızda geçersiz olabilir "
-#~ "(easytag /mp3_dosyaların/konumu)."
-
-#~ msgid "Search subdirectories"
-#~ msgstr "Alt dizinleride ara"
-
-#~ msgid ""
-#~ "This expands the selected node into the file browser to display the sub-"
-#~ "directories."
-#~ msgstr ""
-#~ "Bu seçenek dizin seçildiğinde ağacın açılıp içindeki dizinleri görünür "
-#~ "kılar."
-
-#~ msgid "Search hidden directories for files (directories starting by a '.')."
-#~ msgstr ""
-#~ "Dosyalar için gizli dizinleri de arar (dizin adı '.' ile başlayanlar)"
-
-#~ msgid "Misc"
-#~ msgstr "Çeşitli"
-
-#~ msgid "Show header information of file"
-#~ msgstr "Dosyanın bilgilerini göster"
-
-#~ msgid ""
-#~ "If activated, information about the file as the bitrate, the time, the "
-#~ "size, will be displayed under the filename entry."
-#~ msgstr ""
-#~ "Eğer işaretlenirse dosyanın bit oranı, süresi, boyutu vb değerler dosya "
-#~ "isminin altında görünür."
-
-#~ msgid "Sorting List Options"
-#~ msgstr "Liste Sıralama Seçenekleri"
-
-#~ msgid "Sort the file list by:"
-#~ msgstr "Sıralama biçimi:"
-
-#~ msgid "Ascending filename"
-#~ msgstr "Dosya adına göre artan"
-
-#~ msgid "Descending filename"
-#~ msgstr "Dosya adına göre azalan"
-
-#~ msgid "Ascending title"
-#~ msgstr "Başlığa göre artan"
-
-#~ msgid "Descending title"
-#~ msgstr "Başlığa göre azalan"
-
-#~ msgid "Ascending artist"
-#~ msgstr "Sanatçıya göre artan"
-
-#~ msgid "Descending artist"
-#~ msgstr "Sanatçıya göre azalan"
-
-#~ msgid "Ascending album artist"
-#~ msgstr "Albüm sanatçısına göre artan"
-
-#~ msgid "Descending album artist"
-#~ msgstr "Albüm sanatçısına göre azalan"
-
-#~ msgid "Ascending album"
-#~ msgstr "Albüme böre artan"
-
-#~ msgid "Descending album"
-#~ msgstr "Albüme göre azalan"
-
-#~ msgid "Ascending year"
-#~ msgstr "Yıla göre artan"
-
-#~ msgid "Descending year"
-#~ msgstr "Yıla göre azalan"
-
-#~ msgid "Descending track number"
-#~ msgstr "Parça numarasına göre azalan"
-
-#~ msgid "Ascending genre"
-#~ msgstr "Türe göre artan"
-
-#~ msgid "Descending genre"
-#~ msgstr "Türe göre azalan"
-
-#~ msgid "Ascending comment"
-#~ msgstr "Yoruma göre artan"
-
-#~ msgid "Descending comment"
-#~ msgstr "Yoruma göre azalan"
-
-#~ msgid "Ascending composer"
-#~ msgstr "Besteciye göre artan"
-
-#~ msgid "Descending composer"
-#~ msgstr "Besteciye göre azalan"
-
-#~ msgid "Ascending original artist"
-#~ msgstr "Asıl sanatçıya göre artan"
-
-#~ msgid "Descending original artist"
-#~ msgstr "Asıl sanatçıya göre azalan"
-
-#~ msgid "Ascending copyright"
-#~ msgstr "Telif hakkında göre artan"
-
-#~ msgid "Descending copyright"
-#~ msgstr "Telif hakkına göre azalan"
-
-#~ msgid "Ascending URL"
-#~ msgstr "Bağlantıya göre artan"
-
-#~ msgid "Descending URL"
-#~ msgstr "Bağlantıya göre azalan"
-
-#~ msgid "Ascending encoded by"
-#~ msgstr "Kodlayıcıya göre artan"
-
-#~ msgid "Descending encoded by"
-#~ msgstr "Kodlayıcıya göre azalan"
-
-#~ msgid "Ascending creation date"
-#~ msgstr "Oluşturma tarihine göre artan"
-
-#~ msgid "Descending creation date"
-#~ msgstr "Oluşturma tarihine göre azalan"
-
-#~ msgid "Select the type of file sorting when loading a directory."
-#~ msgstr "Dizini yüklerken dosya sıralaması biçimini seçin."
-
-#~ msgid "If activated, the sorting of the list will be dependent on the case."
-#~ msgstr "Eğer işaretliyse büyük küçük harfe duyarlı olarak sıralanır."
-
-#~ msgid "File Audio Player"
-#~ msgstr "Dosya Müzik Oynatıcı"
-
-#~ msgid "Player to run:"
-#~ msgstr "Çalıştırmak için oynatıcı"
-
-#~ msgid ""
-#~ "Enter the program used to play the files. Some arguments can be passed "
-#~ "for the program (as 'xmms -p') before to receive files as other arguments."
-#~ msgstr ""
-#~ "Dosyaları oynatmak için program girin. Dosya adından önce parametre "
-#~ "vermek gerekiyor olabilir ('xmmp -p' gibi)."
-
-#~ msgid "If activated, the log view would be visible in the main window."
-#~ msgstr "Eğer işaretlenirse ana pencerede günlük görünümü görünür olur."
-
-#~ msgid "File Options"
-#~ msgstr "Dosya Seçenekleri"
-
-#~ msgid ""
-#~ "Convert illegal characters for FAT32/16 and ISO9660 + Joliet filesystems "
-#~ "('\\', ':', ';', '*', '?', '\"', '<', '>', '|') of the filename to avoid "
-#~ "problem when renaming the file. This is useful when renaming the file "
-#~ "from the tag with the scanner."
-#~ msgstr ""
-#~ "FAT32/16 ve ISO9660 + Joliet dosya sistemi için geçersiz karakterler "
-#~ "değiştirin ('\\', ':', ';', '*', '?', '\"', '<', '>', '|') karakterleri "
-#~ "dosya adlandırırken problem oluştururlar. Bu etiketlerden dosya "
-#~ "isimlediriken kullanışlıdır."
-
-#~ msgid ""
-#~ "Update modification time of the parent directory of the file (recommended "
-#~ "when using Amarok)"
-#~ msgstr ""
-#~ "Dosyanın üst dizininin değiştirilme tarihini güncelle (Amarok kullanırken "
-#~ "gerekli)"
-
-#~ msgid ""
-#~ "The modification time of the parent directory of the file will be updated "
-#~ "when saving tag the file. At the present time it is automatically done "
-#~ "only when renaming a file.\n"
-#~ "This feature is interesting when using applications like Amarok. For "
-#~ "performance reasons, they refresh file information by detecting changes "
-#~ "of the parent directory."
-#~ msgstr ""
-#~ "Dosyanın üst dizininin değiştirme tarihi etiketler dosyaya yazılırken "
-#~ "güncellenir. Aynı zamanda dosyanın ismi değiştirildiğinde otomatik olarak "
-#~ "yapılır.\n"
-#~ "Amarok benzeri uygulamalar kullanıyorsanız ilginizi çekebilir. Bu tip "
-#~ "uygulamalar performans nedeniyle dosya bilgileri güncellenirken üst "
-#~ "dizinin değiştirilme tarihine bakar."
-
-#~ msgid "Character Set for Filename"
-#~ msgstr "Dosya Adı İçin Karakter Seti"
-
-#~ msgid ""
-#~ "Rules to apply if some characters can't be converted to the system "
-#~ "character encoding when writing filename:"
-#~ msgstr ""
-#~ "Bazı nedenlerden dolayı dosya adı yazılırken sistem karakterlerine "
-#~ "dönüştürülemezse yapılacak işlem:"
-
-#~ msgid ""
-#~ "With this option, it will try the conversion to the encoding associated "
-#~ "to your locale (for example: ISO-8859-1 for 'fr', KOI8-R for 'ru', "
-#~ "ISO-8859-2 for 'ro'). If it fails, it will try the character encoding "
-#~ "ISO-8859-1."
-#~ msgstr ""
-#~ "Bu seçenekle sizin yerel dilinize göre kodlamayı deneyecek (örneğin: 'tr' "
-#~ "için ISO-8859-9, 'ru' için KOI8-R gibi). Eğer başarısız olursa ISO-8859-1 "
-#~ "karakter kodlamasını deneyecek."
-
-#~ msgid ""
-#~ "Force using the system character encoding and activate the transliteration"
-#~ msgstr ""
-#~ "Sistem karakter kodlamasına zorla ve başka dil kullanmayı etkinleştir"
-
-#~ msgid ""
-#~ "With this option, when a character cannot be represented in the target "
-#~ "character set, it can be approximated through one or several similarly "
-#~ "looking characters."
-#~ msgstr ""
-#~ "Bu seçenek ile yazılamayan karakterler karaktere en çok benzeyen bir-iki "
-#~ "karaktere dünüştürülür."
-
-#~ msgid "Tag Settings"
-#~ msgstr "Etiket Ayarları"
-
-#~ msgid "Tag Options"
-#~ msgstr "Etiket Seçenekleri"
-
-#~ msgid "Auto completion of date if not complete"
-#~ msgstr "Tarih eksikse otomatik tamamla"
-
-#~ msgid ""
-#~ "Try to complete the year field if you enter only the last numerals of the "
-#~ "date (for instance, if the current year is 2005: 5 => 2005, 4 => 2004, 6 "
-#~ "=> 1996, 95 => 1995…)."
-#~ msgstr ""
-#~ "Tarihin sadece son karakterleri mevcutsa yıl alanın otomatik tamamlamayı "
-#~ "dener (örnek olay, 2005 yılındaysak: 5 => 2005, 4 => 2005, 6 => 1996, 95 "
-#~ "=> 1995…)."
-
-#~ msgid "Write the track field with the following number of digits:"
-#~ msgstr "Parça numarası için kullanılacak basamak sayısı:"
-
-#~ msgid ""
-#~ "If activated, the track field is written using the number '0' as padding "
-#~ "to obtain a number with 'n' digits (for example, with two digits: '05', "
-#~ "'09', '10'…). Else it keeps the 'raw' track value."
-#~ msgstr ""
-#~ "Eğer işaretlenirse parça numarası belirlenen basamağa tamamlanan kadar "
-#~ "başına '0' eklenir. (örnek, 2 basamak: '05', '09', '10'…). "
-#~ "İşaretlenmemişse geçerli parça numarası korunur"
-
-#~ msgid "Write the disc field with the following number of digits:"
-#~ msgstr "Disk kısımını şu kadar rakam kullanarak yaz:"
-
-#~ msgid ""
-#~ "Tag field focus when switching files in list with shortcuts Page Up/Page "
-#~ "Down:"
-#~ msgstr ""
-#~ "Page Up/Down tuşlarıyla listedeki dosyalara arasında geçildiğinde etiket "
-#~ "alanı odağı:"
-
-#~ msgid "Keep focus to the same tag field"
-#~ msgstr "Odağı aynı etikette tut"
-
-#~ msgid "Return focus to the first tag field (i.e. 'Title' field)"
-#~ msgstr "Odağı ilk etiket alanına al (örn. 'Başlık' alanı)"
-
-#~ msgid "ID3 Tag Settings"
-#~ msgstr "ID3 Etiket Ayarları"
-
-#~ msgid "ID3 Tag Rules"
-#~ msgstr "ID3 etiket rolleri"
-
-#~ msgid ""
-#~ "As ID3v2 tags may contain other data than Title, Artist, Album, Year, "
-#~ "Track, Genre or Comment (as an attached image, lyrics…), this option "
-#~ "allows you to strip the whole tag when these seven standard data fields "
-#~ "have been set to blank."
-#~ msgstr ""
-#~ "ID3v2 etiketleri Başlık, Artist, Albüm, Yıl, Parça, Tür ve Yorum'dan "
-#~ "farklı verilerde içerebilir (eklenmiş görüntü ve şarkı sözü gibi), bu "
-#~ "seçenek standart alanlar boşsa diğer verileri de silmenizi sağlayabilir."
-
-#~ msgid ""
-#~ "If activated, an old ID3v2 tag version (as ID3v2.2) will be updated to "
-#~ "the ID3v2.3 version."
-#~ msgstr ""
-#~ "Eğer işaretlenirse eski ID3v2 etiketleri (ID3v2.2 gibi) yeni sürüme "
-#~ "yükseltilir."
-
-#~ msgid "Use Compression"
-#~ msgstr "Sıkıştırma kullan"
-
-#~ msgid "Write Genre in text only"
-#~ msgstr "Türü sadece metin olarak yaz"
-
-#~ msgid ""
-#~ "Don't use ID3v1 number references in genre tag. Enable this if you see "
-#~ "numbers as genre in your music player."
-#~ msgstr ""
-#~ "Tür etiketi için ID3v1 numara referansı kullanma. Eğer müzik "
-#~ "oynatıcınızda tür kısmında numara görüyorsanız etkinleştirin."
-
-#~ msgid ""
-#~ "If activated, an ID3v2.4 tag will be added or updated at the beginning of "
-#~ "the MP3 files. Else it will be stripped."
-#~ msgstr ""
-#~ "Eğer etkinse MP3 dosyasının başına ID3v2.4 etiketi eklenir veya "
-#~ "güncellenir. Değilse bu etiket yazılmaz."
-
-#~ msgid "Charset:"
-#~ msgstr "Karakter seti:"
-
-#~ msgid "Unicode type to use"
-#~ msgstr "Kullanmak için unicode biçimi"
-
-#~ msgid "Character set used to write the tag data in the file."
-#~ msgstr "Dosyaya etiket verilerini yazmak için karakter seti"
-
-#~ msgid "Additional settings for iconv():"
-#~ msgstr "iconv() için ek ayarlar:"
-
-#~ msgid "No"
-#~ msgstr "Hayır"
-
-#~ msgid ""
-#~ "With this option, when a character cannot be represented in the target "
-#~ "character set, it isn't changed. But note that an error message will be "
-#~ "displayed for information."
-#~ msgstr ""
-#~ "Bu seçenekle karakter hedef karakter setine dönüştürülemiyorsa "
-#~ "dönüştürülmez. Ama bu durum sonucu bir hata mesajı gösterilmez."
-
-#~ msgid "//TRANSLIT"
-#~ msgstr "//BaşkaAlfabe"
-
-#~ msgid "//IGNORE"
-#~ msgstr "//İhmal"
-
-#~ msgid ""
-#~ "If activated, an ID3v1 tag will be added or updated at the end of the MP3 "
-#~ "files. Else it will be stripped."
-#~ msgstr ""
-#~ "Eğer etkinse MP3 dosyasının sonuna ID3v1 etiketi eklenir veya "
-#~ "güncellenir. Değilse bu etiket yazılmaz."
-
-#~ msgid "Character set used to write ID3v1 tag data in the file."
-#~ msgstr "Dosyaya ID3v1 etiketlerini yazmak için karakter seti."
-
-#~ msgid "Non-standard:"
-#~ msgstr "Standart dışı:"
-
-#~ msgid ""
-#~ "This character set will be used when reading the tag data, to convert "
-#~ "each string found in an ISO-8859-1 field in the tag (for ID3v2 or/and "
-#~ "ID3v1 tag).\n"
-#~ "\n"
-#~ "For example:\n"
-#~ "  - In previous versions of EasyTAG, you could save UTF-8 strings in an "
-#~ "ISO-8859-1 field. This is not correct. To convert these tags to Unicode: "
-#~ "activate this option and select UTF-8. You must also activate above the "
-#~ "option 'Try to save tags to ISO-8859-1. If it isn't possible then use "
-#~ "UNICODE (recommended)' or 'Always save tags to UNICODE character set'.\n"
-#~ "  - If Unicode was not used, Russian people can select the character set "
-#~ "'Windows-1251' to load tags written under Windows. And 'KOI8-R' to load "
-#~ "tags written under Unix systems."
-#~ msgstr ""
-#~ "Bu karakter seti etiketleri okurken kullanılacak, etiketteki ISO-8859-1 "
-#~ "alanlardaki her metni dönüştürmek için (ID3v2 ve/veya ID3v1 etiketleri "
-#~ "için).\n"
-#~ "\n"
-#~ "Örneğin:\n"
-#~ "  - EasyTAG'in eski sürümlerinde ISO-8859-1 alana UTF-8 ile yazıp "
-#~ "kaydettiniz, Bu doğru değil. Bu etiketleri Unicode'a dönüştürmek için bu "
-#~ "seçeneği etkinleştirin ve UTF-8'i seçin. Eğer bu olmuyorsa 'UNICODE "
-#~ "(gerekli)' veya 'Daima etiketleri UNICODE olarak kaydet' şeklinde "
-#~ "kullanın.\n"
-#~ "  - Eğer Unicode kullanılmamışsa, Ruslar 'Windows-1251' kodlamasını "
-#~ "kullanarak windowsta yazılan etiketleri okuyup yükleyebilirler. Unix "
-#~ "sistemler içinse 'KOI8-R' kodlamasını kullanabilirler."
-
-#~ msgid "Character set used to read tag data in the file."
-#~ msgstr "Dosyadaki etiketleri okumak için karakter seti"
-
-#~ msgid "Convert underscore character '_' and string '%20' to space ' '"
-#~ msgstr "Alt çizgi '_' ve '%20' metinlerini boşluğa ' ' dönüştür"
-
-#~ msgid ""
-#~ "If activated, this conversion will be used when applying a mask from the "
-#~ "scanner for tags."
-#~ msgstr ""
-#~ "Eğer işaretlenirse tarayıcı etiketleri doldururken bu dönüşümleri "
-#~ "kullanır."
-
-#~ msgid "Rename File Scanner - Character Conversion"
-#~ msgstr "Dosya Yeniden Adlandırma Tarayıcısı - Karakter Dönüşümü"
-
-#~ msgid ""
-#~ "If activated, this conversion will be used when applying a mask from the "
-#~ "scanner for filenames."
-#~ msgstr ""
-#~ "Eğer işaretlenirse tarayıcı dosya adlarını doldururken bu dönüşümleri "
-#~ "kullanır."
-
-#~ msgid "Process Fields Scanner - Character Conversion"
-#~ msgstr "Alanları İşleme Tarayıcısı - Karakter Dönüşümü"
-
-#~ msgid ""
-#~ "Don't convert first letter of words like prepositions, articles and words "
-#~ "like feat., when using the scanner 'First letter uppercase of each "
-#~ "word' (for example, you will obtain 'Text in an Entry' instead of 'Text "
-#~ "In An Entry')."
-#~ msgstr ""
-#~ "Tarayıcıyla 'Her kelimenin ilk harfi büyük' kullanırken edat ve 'feat.' "
-#~ "gibi bazı yazıların ilk harfini büyütme (Örneğin 'Leyla İle Mecnun' "
-#~ "yerine 'Leyla ile Mecnun' elde edersiniz.)."
-
-#~ msgid ""
-#~ "Activate this option to open automatically the scanner window when "
-#~ "EasyTAG starts."
-#~ msgstr ""
-#~ "EasyTAG açılırken tarayıcı penceresinin açılması için bu seçeneği "
-#~ "etkinleştirin."
-
-#~ msgid ""
-#~ "If activated, the scanner will replace existing text in fields by the new "
-#~ "one. If deactivated, only blank fields of the tag will be filled."
-#~ msgstr ""
-#~ "Etkinse tarayıcı alandaki mevcut metin yerine yenisini yazar. Etkin "
-#~ "değilse sadece boş alanlar doldurulur."
-
-#~ msgid ""
-#~ "Activate this option if you want to put the following string into the "
-#~ "comment field when using the 'Fill Tag' scanner."
-#~ msgstr ""
-#~ "'Etiketleri Doldur' tarayıcısını kullanırken yorum alanına yandaki metni "
-#~ "eklemek için bu seçeneği etkinleştirin"
-
-#~ msgid ""
-#~ "Calculates the CRC-32 value of the file and writes it into the comment "
-#~ "field when using the 'Fill Tag' scanner."
-#~ msgstr ""
-#~ "'Etiketleri Doldur' tarayıcısını kullanırken dosyanın CRC-32 değerini "
-#~ "hesaplar ve yorum alanına yazar."
-
-#~ msgid "Name:"
-#~ msgstr "İsim:"
-
-#~ msgid "Local CDDB"
-#~ msgstr "Yerel CDDB"
-
-#~ msgid ""
-#~ "Specify the directory where the local CD database is located. The local "
-#~ "CD database contains the eleven following directories 'blues', "
-#~ "'classical', 'country', 'data', 'folk', 'jazz', 'newage', 'reggae', "
-#~ "'rock', 'soundtrack' and 'misc'."
-#~ msgstr ""
-#~ "Yerel CD veritabanının bulunduğu dizini belirtin. Yerel CD veritabanı "
-#~ "'blues', 'classical', 'country', 'data', 'folk', 'jazz', 'newage', "
-#~ "'reggae', 'rock', 'soundtrack' ve 'misc' dizilerini içerir."
-
-#~ msgid "Proxy Settings"
-#~ msgstr "Vekil Ayarları"
-
-#~ msgid "Set active the settings of the proxy server."
-#~ msgstr "Vekil sunucu kullanmak için etkinleştir."
-
-#~ msgid "Name of the proxy server."
-#~ msgstr "Vekil sunucunun adı."
-
-#~ msgid "Port of the proxy server."
-#~ msgstr "Vekil sunucunun portu."
-
-#~ msgid "Name of user for the the proxy server."
-#~ msgstr "Vekil sunucu için kullanıcı adı."
-
-#~ msgid "Password of user for the the proxy server."
-#~ msgstr "Vekil sunucu için kullanıcı parolası."
-
-#~ msgid "Track Name List"
-#~ msgstr "Parça Adı Listesi"
-
-#~ msgid ""
-#~ "If activated, when selecting a line in the list of tracks name, the "
-#~ "corresponding audio file in the main list will be also selected."
-#~ msgstr ""
-#~ "Etkinleştirilmişse parça adı listesinden satır seçerken ana listedeki "
-#~ "eşleşen ses dosyası seçilir."
-
-#~ msgid "Confirm exit from program"
-#~ msgstr "Programdan çıkarken doğrulama iste"
-
-#~ msgid ""
-#~ "If activated, opens a dialog box to ask confirmation before exiting the "
-#~ "program."
-#~ msgstr ""
-#~ "Eğer işaretlenmişse, bir diyalog penceresi açılıp çıkmadan önce doğrulama "
-#~ "sorar."
-
-#~ msgid "Confirm changing directory when there are unsaved changes"
-#~ msgstr ""
-#~ "Kaydedilmemiş değişiklikler varken dizin değiştirmek istenirse doğrulama "
-#~ "iste"
-
-#~ msgid "(Example: %.*d_-_Track_name_1.mp3)"
-#~ msgstr "(Örnek: %.*d_-_Parça_adı_1.mp3)"
-
-#~ msgid "(Example: disc_%.*d_of_10/Track_name_1.mp3)"
-#~ msgstr "(Örnek: disk_%.*d/10_/_Parça_adı_1.mp3)"
-
-#~ msgid "Configuration saved"
-#~ msgstr "Yapılandırma kaydedildi"
-
-#~ msgid "Configuration unchanged"
-#~ msgstr "Yapılandırma değiştirilmedi"
-
-#~ msgid "The audio file player '%s' cannot be found"
-#~ msgstr "'%s' müzik çalar bulunamadı"
-
-#~ msgid "Audio Player Error"
-#~ msgstr "Müzik Çalar Hatası"
-
-#~ msgid "Scanner:"
-#~ msgstr "Tarayıcı:"
-
-#~ msgid "Select the type of scanner to use"
-#~ msgstr "Kullanmak için tarayıcı tipi seçin"
-
-#~ msgid ""
-#~ "The buttons on the right represent the fields which can be processed. "
-#~ "Select those which interest you"
-#~ msgstr ""
-#~ "İşlenebilecek alanlar için sağda düğmeler bulunuyor. İlgilendiklerinizi "
-#~ "işaretleyin"
-
-#~ msgid "F"
-#~ msgstr "D"
-
-#~ msgid "T"
-#~ msgstr "B"
-
-#~ msgid "Ar"
-#~ msgstr "S"
-
-#~ msgid "AA"
-#~ msgstr "AS"
-
-#~ msgid "Al"
-#~ msgstr "A"
-
-#~ msgid "G"
-#~ msgstr "T"
-
-#~ msgid "Cm"
-#~ msgstr "Yo"
-
-#~ msgid "Cp"
-#~ msgstr "Be"
-
-#~ msgid "O"
-#~ msgstr "Sa"
-
-#~ msgid "Cr"
-#~ msgstr "Th"
-
-#~ msgid "U"
-#~ msgstr "Ba"
-
-#~ msgid "E"
-#~ msgstr "K"
-
-#~ msgid "Select/Unselect all"
-#~ msgstr "Tümünü seç/Hiçbirini seçme"
-
-#~ msgid ""
-#~ "Convert all words in all fields to upper case. Example, before: 'Text IN "
-#~ "AN entry', after: 'TEXT IN AN ENTRY'."
-#~ msgstr ""
-#~ "Tüm kelimelerin tüm harflerini büyüt. Örnek, önce: 'Bir güzel Yazı', "
-#~ "sonra: 'BİR GÜZEL YAZI'"
-
-#~ msgid ""
-#~ "Convert all words in all fields to lower case. Example, before: 'TEXT IN "
-#~ "an entry', after: 'text in an entry'."
-#~ msgstr ""
-#~ "Tüm kelimelerdeki harfleri küçült. Örnek, önce: 'BİR Güzel Yazı', sonra: "
-#~ "'bir güzel yazı'"
-
-#~ msgid ""
-#~ "Convert the initial of the first word in all fields to upper case. "
-#~ "Example, before: 'text IN An ENTRY', after: 'Text in an entry'."
-#~ msgstr ""
-#~ "Sadece ilk kelimenin ilk harfini büyüt. Örnek, önce: 'bir Güzel YAZI', "
-#~ "sonra: 'Bir güzel yazı'"
-
-#~ msgid ""
-#~ "Convert the initial of each word in all fields to upper case. Example, "
-#~ "before: 'Text in an ENTRY', after: 'Text In An Entry'."
-#~ msgstr ""
-#~ "Her kelimenin ilk harfini büyüt. Örnek, önce: 'Bir güzel YAZI', sonra: "
-#~ "'Bir Güzel Yazı'"
-
-#~ msgid ""
-#~ "Force to convert to upper case the Roman numerals. Example, before: 'ix. "
-#~ "text in an entry', after: 'IX. Text In An Entry'."
-#~ msgstr ""
-#~ "Romen rakamlarını büyük harfe zorla. Örnek, önce: 'ix. bir güzel yazı', "
-#~ "sonra: 'IX. Bir Güzel Yazı'"
-
-#~ msgid ""
-#~ "All spaces between words are removed. Example, before: 'Text In An "
-#~ "Entry', after: 'TextInAnEntry'."
-#~ msgstr ""
-#~ "Kelime aralarındaki boşluklar silindi. Örnek, önce: 'Bir Güzel Yazı', "
-#~ "sonra 'BirGüzelYazı'"
-
-#~ msgid ""
-#~ "A space is inserted before each upper case letter. Example, before: "
-#~ "'TextInAnEntry', after: 'Text In An Entry'."
-#~ msgstr ""
-#~ "Büyük harflerden önce boşluk oluşturuldu. Örnek, önce: 'BirGüzelYazı', "
-#~ "sonra: 'Bir Güzel Yazı'"
-
-#~ msgid ""
-#~ "Duplicate spaces and underscores are removed. Example, before: "
-#~ "'Text__In__An   Entry', after: 'Text_In_An Entry'."
-#~ msgstr ""
-#~ "Çift boşluk ve alt çizgiler silindi. Örnek, önce: 'Bir   Güzel__Yazı', "
-#~ "sonra 'Bir Güzel_Yazı'"
-
-#~ msgid "Move Up this Mask"
-#~ msgstr "Bu Maskeyi Yukarı Taşı"
-
-#~ msgid "Move Down this Mask"
-#~ msgstr "Bu Maskeyi Aşağı Taşı"
-
-#~ msgid "Duplicate Mask"
-#~ msgstr "Maskeyi Çoğalt"
-
-#~ msgid "Remove Mask"
-#~ msgstr "Maskeyi Sil"
-
-#~ msgid "Copy: No row selected"
-#~ msgstr "Kopyala: Satır seçilmedi"
-
-#~ msgid "Remove: No row selected"
-#~ msgstr "Sil: Satır seçilmesi"
-
-#~ msgid "Move Up: No row selected"
-#~ msgstr "Yukarı Taşı: Satır seçilmedi"
-
-#~ msgid "Move Down: No row selected"
-#~ msgstr "Aşağı Taşı: Satır seçilmedi"
-
-#~ msgid "Error: Cannot write configuration file: %s (%s)"
-#~ msgstr "Hata: Yapılandırma dosyası %s yazılamıyor (%s)"
-
-#~ msgid "Error while writing configuration file: %s"
-#~ msgstr "Yapılandırma dosyası yazılırken hata oluştu: %s"
-
-#~ msgid "Cannot open configuration file '%s' (%s)"
-#~ msgstr "'%s' yapılandırma dosyası açılamıyor (%s)"
-
-#~ msgid "Loading default configuration"
-#~ msgstr "Öntanımlı yapılandırma yükleniyor"
-
-#~ msgid "Loading default 'Rename Directory' masks…"
-#~ msgstr "Öntanımlı 'Dizin Yeniden Adlandırma' maskesi yükleniyor…"
-
-#~ msgid "Error: Cannot create directory '%s' (%s)"
-#~ msgstr "Hata: '%s' dizini oluşturulamıyor (%s)"
-
-#~ msgid "DLL '%s' not already loaded. Try loading it..."
-#~ msgstr "'%s' DLL'si henüz yüklenmedi. Yüklemeye çalışıyor..."
-
-#~ msgid "DLL '%s' could not be loaded"
-#~ msgstr "'%s' DLL'si yüklenemedi"
-
-#~ msgid "This version of '%s' contains '%s'"
-#~ msgstr "Bu sürüm '%s' '%s' içeriyor"
-
-#~ msgid "Function '%s' not found in DLL '%s'"
-#~ msgstr "'%s' işlevi '%s' DLL'de bulunamadı"
-
-#~ msgid "EasyTAG settings directory: '%s'"
-#~ msgstr "EasyTAG ayarlar dizini: '%s'"
-
-#~ msgid "weasytag_init start..."
-#~ msgstr "weasytag_init başladı..."
-
-#~ msgid "GLib version: %u.%u.%u\n"
-#~ msgstr "GLib sürüm: %u.%u.%u\n"
-
-#~ msgid "weasytag_init end..."
-#~ msgstr "weasytag_init bitti..."
-
-#~ msgid "Audio player: '%s'"
-#~ msgstr "Ses Çalıcısı: '%s'"
-
-#~ msgid ""
-#~ "\n"
-#~ "Usage: easytag [option] \n"
-#~ "   or: easytag [directory]\n"
-#~ "\n"
-#~ "Option:\n"
-#~ "-------\n"
-#~ "-h, --help        Display this text and exit.\n"
-#~ "-v, --version     Print basic information and exit.\n"
-#~ "\n"
-#~ "Directory:\n"
-#~ "----------\n"
-#~ "%s/path_to/files  Use an absolute path to load,\n"
-#~ "path_to/files     Use a relative path.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Kullanım: easytag [seçenek]\n"
-#~ "    veya: easytag [dizin]\n"
-#~ "\n"
-#~ "Seçenek:\n"
-#~ "--------\n"
-#~ "-h, --help          Bu yardım metnini göster ve çık.\n"
-#~ "-v, --version       Yazılım sürümünü göster ve çık.\n"
-#~ "\n"
-#~ "Dizin:\n"
-#~ "%s/dosyalara/adres  Kesin adres kullan,\n"
-#~ "dosyalara/adres     Göreceli adres kullan.\n"
-#~ "\n"
-
-#~ msgid "_Collapse tree"
-#~ msgstr "A_ğacı genişlet"
-
-#~ msgid ""
-#~ "Cannot write tag of file '%s' (%d bytes were read but %d bytes were "
-#~ "expected)"
-#~ msgstr ""
-#~ "'%s' dosyasına etiket yazılamıyor (%d bayt okundu ama %d bayt "
-#~ "bekleniyordu)"
-
-#~ msgid "The whole image file could not be read"
-#~ msgstr "Görüntü dosyasının tamamı okunamadı"
-
-#~ msgid "Insert a space before an uppercase letter"
-#~ msgstr "Büyük harflerin önüne boşluk oluştur"
-
-#~ msgid "Remove duplicates of space or underscore"
-#~ msgstr "Çift boşluk ve alt çizgileri sil"
-
-#~ msgid "Save files"
-#~ msgstr "Dosyaları kaydet"
-
-#~ msgid "Unknown parameter or path '%s'\n"
-#~ msgstr "Bilinmeyen parametre veya konum '%s'\n"
-
-#~ msgid "Renaming file '%s'"
-#~ msgstr "'%s' dosyası yeniden adlandırılıyor"
-
-#~ msgid "Cannot rename file '%s' to '%s' (%s)"
-#~ msgstr "'%s' dosyası '%s' olarak yeniden adlandırılamıyor (%s)"
-
-#~ msgid ""
-#~ "Cannot rename file '%s' because the following file already exists: '%s'"
-#~ msgstr ""
-#~ "'%s' dosyası yeniden adlandırılamıyor çünkü '%s' adında dosya mevcut"
-
-#~ msgid "Cannot create target directory '%s'"
-#~ msgstr "'%s' hedef dizini oluşturulamıyor"
-
-#~ msgid "Renamed file '%s' to '%s'"
-#~ msgstr "'%s' dosyası '%s' olarak yeniden adlandırıldı"
-
-#~ msgid "File(s) renamed"
-#~ msgstr "Dosya(lar) yeniden adlandırıldı"
-
-#~ msgid "Cannot remove old directory '%s'"
-#~ msgstr "Eski '%s' dizini silinemiyor"
-
-#~ msgid "Remove Directory Error"
-#~ msgstr "Dizin Silme Hatası"
-
-#~ msgid "Cannot remove old directory '%s': %s"
-#~ msgstr "Eski '%s' dizini silinemiyor: %s"
-
-#~ msgid "Moved file '%s' to '%s'"
-#~ msgstr "'%s' dosyası '%s' şeklinde taşındı"
-
-#~ msgid "File(s) moved"
-#~ msgstr "Dosya(lar) taşındı"
-
-#~ msgid "Cannot remove old directory '%s': (%s)"
-#~ msgstr "Eski '%s' dizini silinemiyor: (%s)"
-
-#~ msgid "Cannot move file '%s' to '%s'"
-#~ msgstr "'%s' dosyası '%s' şeklinde taşınamıyor"
-
-#~ msgid "File Move Error"
-#~ msgstr "Dosya Taşıma Hatası"
-
-#~ msgid "Cannot move file '%s' to '%s': (%s)"
-#~ msgstr "'%s' dosyası '%s' şeklinde taşınamıyor: (%s)"
-
-#~ msgid "File(s) not moved"
-#~ msgstr "Dosya(lar) taşınamadı"
-
-#, fuzzy
-#~| msgid "Error while opening file: '%s' (%s)."
-#~ msgid "Error copying file '%s' to '%s'"
-#~ msgstr "Dosya açılamadı: '%s' (%s)."
-
-#, fuzzy
-#~| msgid "Cannot create or open file '%s' (%s)"
-#~ msgid "Cannot change permissions of file '%s' (%s)"
-#~ msgstr "'%s' dosyası oluşturulamıyor veya okunamıyor (%s)"
-
-#~ msgid "Received signal %s (%d)\a"
-#~ msgstr "%s sinyali alındı (%d)\a"
-
-#~ msgid "Unknown signal"
-#~ msgstr "Bilinmeyen sinyal"
-
-#~ msgid "Playlist file '%s' already exists"
-#~ msgstr "'%s' çalma listesi zaten mevcut"
-
-#~ msgid "Do you want to save the playlist, overwriting the existing file?"
-#~ msgstr "Mevcut dosyanın üzerine yazılmasını ister misiniz?"
-
-#~ msgid "Write ID3 tags in FLAC files (in addition to FLAC tag)"
-#~ msgstr "ID3 etiketlerini FLAC dosyalarına yaz(FLAC etiketine ilave olarak)"
-
-#~ msgid ""
-#~ "If activated, ID3 tags will be also added in the FLAC file (according the "
-#~ "two rules above, plus the FLAC tag). Else ID3 tags will be stripped."
-#~ msgstr ""
-#~ "Eğer işaretlenirse ID3 etiketleri de FLAC dosyasına eklenir. Değilse ID3 "
-#~ "etiketleri eklenmez"
-
-#~ msgid "Input is not an Ogg bitstream."
-#~ msgstr "Giriş Ogg veri akışı değil."
-
-#~ msgid "Error reading first page of Ogg bitstream."
-#~ msgstr "Ogg veri akışının ilk sayfası okunamadı."
-
-#~ msgid "Error reading initial header packet."
-#~ msgstr "İlk başlık paket okunamadı"
-
-#~ msgid "Ogg bitstream contains neither Speex or Vorbis data."
-#~ msgstr "Ogg veri akışı ne Speex ne de Vorbis verisi içermiyor."
-
-#~ msgid "Corrupt secondary header."
-#~ msgstr "Bozuk ikincil başlık"
-
-#~ msgid "Need to save extra headers"
-#~ msgstr "Ek başlıkları kaydetmek gerekiyor"
-
-#~ msgid "EOF before end of Vorbis headers."
-#~ msgstr "Vorbis başlığın bitmeden önce dosya sonu geldi."
-
-#~ msgid "Corrupt or missing data, continuing…"
-#~ msgstr "Bozuk veya eksik veri, devam ediliyor…"
-
-#~ msgid ""
-#~ "Error writing stream to output. Output stream may be corrupted or "
-#~ "truncated."
-#~ msgstr ""
-#~ "Çıkış akışına yazılamıyor. Çıkış akışı bozuk veya kesilmiş olabilir."
-
-#~ msgid "Open files with…"
-#~ msgstr "Dosyaları birlikte aç…"
-
-#~ msgid "Unselect all files"
-#~ msgstr "Hiçbirini seçme"
-
-#~ msgid "Go to _Default Directory"
-#~ msgstr "_Öntanımlı Dizine Git"
-
-#~ msgid "Browse directory with…"
-#~ msgstr "Dizine gözat…"
-
-#~ msgid "_Refresh Tree"
-#~ msgstr "Ağacı _Yenile"
-
-#~ msgid "_Refresh tree"
-#~ msgstr "Ağacı _yenile"
-
-#~ msgid "Find files"
-#~ msgstr "Dosyaları bul"
-
-#~ msgid "CD Data_base Search…"
-#~ msgstr "CD Verita_banı Ara…"
-
-#~ msgid "Write Playlist…"
-#~ msgstr "Çalma Listesini Kaydet…"
-
-#~ msgid "Write playlist"
-#~ msgstr "Çalma listesini kaydet"
-
-#~ msgid "_Settings"
-#~ msgstr "_Ayarlar"
-
-#~ msgid "Artist and Album View"
-#~ msgstr "Sanatçı ve Albüm Görünümü"
-
-#~ msgid "Open File with…"
-#~ msgstr "Dosyayı Birlikte aç…"
-
-#~ msgid "CD Database Search"
-#~ msgstr "CD Veritabanı Ara"
-
-#~ msgid "  STOP the search...  "
-#~ msgstr "  Aramayı durdur...  "
-
-#~ msgid "Edit Masks"
-#~ msgstr "Maskeleri Düzenle"
-
-#~ msgid "Write Playlist"
-#~ msgstr "Çalma Listesi Oluştur"
-
-#~ msgid "Load the filenames from a TXT file"
-#~ msgstr "Dosya adlarını metin dosyasından yükle"
-
-#~ msgid "The following file already exists: '%s'"
-#~ msgstr "'%s' dosyası zaten mevcut"
-
-#~ msgid "Do you want to save anyway, overwriting the file?"
-#~ msgstr "Dosyanın üzerine yazılacak, yinede kaydetmek istiyor musunuz?"
-
-#~ msgid "Image file cannot be saved: %s"
-#~ msgstr "%s görüntü dosyası kaydedilemiyor"
-
-#~ msgid "File Browser"
-#~ msgstr "Dosya Gezgini"
-
-#~ msgid "CD Data Base"
-#~ msgstr "CD Veri Tabanı"
-
-#~ msgid "Local CD Data Base"
-#~ msgstr "Yerel CD Veri Tabanı"
-
-#~ msgid "Apply changes (but don't save) and close this window"
-#~ msgstr "Değişiklikleri uygula (ama kaydetme) ve pencereyi kapat"
-
-#~ msgid "Close this window without saving"
-#~ msgstr "Değişiklikleri kaydetmeden bu pencereyi kapat"
-
-#~ msgid "Save changes and close this window"
-#~ msgstr "Değişiklikleri kaydet ve pencereyi kapat"
-
-#~ msgid "Open scanner window / Scan selected files"
-#~ msgstr "Tarayıcı penceresini aç / Seçilen dosyaları tara"
-
-#~ msgid "Close this window"
-#~ msgstr "Bu pencereyi kapat"
