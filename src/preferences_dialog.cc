@@ -79,6 +79,7 @@ typedef struct
     GtkWidget *tags_disc_check;
     GtkWidget *tags_disc_button;
     GtkWidget *tags_preserve_focus_check;
+    GtkWidget *tags_multiline_comment;
     GtkWidget *split_title_check;
     GtkWidget *split_subtitle_check;
     GtkWidget *split_artist_check;
@@ -87,6 +88,7 @@ typedef struct
     GtkWidget *split_disc_subtitle_check;
     GtkWidget *split_genre_check;
     GtkWidget *split_comment_check;
+    GtkWidget *split_description_check;
     GtkWidget *split_composer_check;
     GtkWidget *split_orig_artist_check;
     GtkWidget *split_url_check;
@@ -451,6 +453,8 @@ create_preferences_dialog (EtPreferencesDialog *self)
     /* Tag field focus */
     bind_boolean("tag-preserve-focus", priv->tags_preserve_focus_check);
 
+    bind_boolean("tag-multiline-comment", priv->tags_multiline_comment);
+
     /* Tag Splitting */
     g_settings_bind (MainSettings, "split-delimiter",
         priv->split_delimiter, "text", G_SETTINGS_BIND_DEFAULT);
@@ -462,6 +466,7 @@ create_preferences_dialog (EtPreferencesDialog *self)
     bind_flags_value("ogg-split-fields", priv->split_disc_subtitle_check);
     bind_flags_value("ogg-split-fields", priv->split_genre_check);
     bind_flags_value("ogg-split-fields", priv->split_comment_check);
+    bind_flags_value("ogg-split-fields", priv->split_description_check);
     bind_flags_value("ogg-split-fields", priv->split_composer_check);
     bind_flags_value("ogg-split-fields", priv->split_orig_artist_check);
     bind_flags_value("ogg-split-fields", priv->split_url_check);
@@ -906,6 +911,7 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, tags_disc_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, tags_disc_button);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, tags_preserve_focus_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, tags_multiline_comment);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_title_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_subtitle_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_artist_check);
@@ -914,6 +920,7 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_disc_subtitle_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_genre_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_comment_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_description_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_composer_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_orig_artist_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_url_check);

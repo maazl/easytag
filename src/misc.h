@@ -24,6 +24,7 @@
 
 #ifdef __cplusplus
 #include <string>
+#include <memory>
 
 template <typename T>
 constexpr inline int sign(T value) { return (value > 0) - (value < 0); }
@@ -35,6 +36,20 @@ constexpr inline t operator&(t l, t r) { return (t)((int)l & (int)r); }
 MAKE_FLAGS_ENUM(GtkDialogFlags)
 MAKE_FLAGS_ENUM(GtkDestDefaults)
 MAKE_FLAGS_ENUM(GSettingsBindFlags)
+
+/// Deleter for GLIB objects
+struct gDeleter
+{	void operator()(gchar* ptr) { g_free(ptr); }
+};
+/// Managed GLIB object
+template <typename T>
+using gObject = std::unique_ptr<T, gDeleter>;
+/// Managed GLIB string
+struct gString : gObject<gchar>
+{	gString() { }
+	explicit gString(gchar* ptr) : std::unique_ptr<gchar, gDeleter>(ptr) { }
+	operator const gchar*() const { return get(); }
+};
 
 // Reference helper to allow array of references
 template <typename T>

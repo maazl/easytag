@@ -159,7 +159,8 @@ typedef enum
     ET_PROCESS_FIELD_ORIGINAL_ARTIST = 1 << 11,
     ET_PROCESS_FIELD_COPYRIGHT       = 1 << 12,
     ET_PROCESS_FIELD_URL             = 1 << 13,
-    ET_PROCESS_FIELD_ENCODED_BY      = 1 << 14
+    ET_PROCESS_FIELD_ENCODED_BY      = 1 << 14,
+    ET_PROCESS_FIELD_DESCRIPTION     = 1 << 15
 } EtProcessField;
 
 typedef enum

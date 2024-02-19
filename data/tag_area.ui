@@ -393,6 +393,7 @@
                             <object class="GtkEntry" id="comment_entry">
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this comment</property>
+                                <signal name="focus-out-event" handler="on_comment_focus_out"/>
                             </object>
                             <packing>
                                 <property name="left-attach">1</property>
@@ -542,44 +543,6 @@
                     <object class="GtkGrid" id="images_grid">
                         <property name="orientation">vertical</property>
                         <child>
-                            <object class="GtkScrolledWindow" id="images_scrolled">
-                                <property name="shadow-type">etched-in</property>
-                                <property name="tooltip-text" translatable="yes">You can use drag and drop to add an image</property>
-                                <child>
-                                    <object class="GtkTreeView" id="images_view">
-                                        <property name="expand">True</property>
-                                        <property name="model">images_model</property>
-                                        <signal name="button-press-event" handler="on_picture_view_button_pressed"/>
-                                        <signal name="drag-data-received" handler="on_picture_view_drag_data"/>
-                                        <signal name="key-press-event" handler="on_picture_view_key_pressed"/>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="images_column">
-                                                <property name="sizing">autosize</property>
-                                                <child>
-                                                    <object class="GtkCellRendererPixbuf" id="images_thumbnail_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="surface">0</attribute>
-                                                    </attributes>
-                                                </child>
-                                                <child>
-                                                    <object class="GtkCellRendererText" id="images_text_renderer"/>
-                                                    <attributes>
-                                                        <attribute name="text">1</attribute>
-                                                    </attributes>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child internal-child="selection">
-                                            <object class="GtkTreeSelection" id="selection">
-                                                <property name="mode">multiple</property>
-                                                <signal name="changed" handler="on_picture_view_selection_changed"/>
-                                            </object>
-                                        </child>
-                                    </object>
-                                </child>
-                            </object>
-                        </child>
-                        <child>
                             <object class="GtkToolbar" id="images_toolbar">
                                 <style>
                                     <class name="inline-toolbar"/>
@@ -625,6 +588,44 @@
                                 </child>
                             </object>
                         </child>
+                        <child>
+                            <object class="GtkScrolledWindow" id="images_scrolled">
+                                <property name="shadow-type">etched-in</property>
+                                <property name="tooltip-text" translatable="yes">You can use drag and drop to add an image</property>
+                                <child>
+                                    <object class="GtkTreeView" id="images_view">
+                                        <property name="expand">True</property>
+                                        <property name="model">images_model</property>
+                                        <signal name="button-press-event" handler="on_picture_view_button_pressed"/>
+                                        <signal name="drag-data-received" handler="on_picture_view_drag_data"/>
+                                        <signal name="key-press-event" handler="on_picture_view_key_pressed"/>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="images_column">
+                                                <property name="sizing">autosize</property>
+                                                <child>
+                                                    <object class="GtkCellRendererPixbuf" id="images_thumbnail_renderer"/>
+                                                    <attributes>
+                                                        <attribute name="surface">0</attribute>
+                                                    </attributes>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="images_text_renderer"/>
+                                                    <attributes>
+                                                        <attribute name="text">1</attribute>
+                                                    </attributes>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child internal-child="selection">
+                                            <object class="GtkTreeSelection" id="selection">
+                                                <property name="mode">multiple</property>
+                                                <signal name="changed" handler="on_picture_view_selection_changed"/>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
                     </object>
                 </child>
                 <child type="tab">
@@ -633,7 +634,47 @@
                     </object>
                 </child>
                 <child>
-                    <object class="GtkTextView" id="description_text">
+                    <object class="GtkGrid" id="comment_grid">
+                        <property name="orientation">vertical</property>
+                        <child>
+                            <object class="GtkToolbar" id="comment_toolbar">
+                                <style>
+                                    <class name="inline-toolbar"/>
+                                </style>
+                                <child>
+                                    <object class="GtkToolButton" id="apply_comment_toolitem">
+                                        <property name="icon-name">insert-text</property>
+                                        <property name="tooltip-text" translatable="yes">Tag selected files with this comment</property>
+                                        <signal name="clicked" handler="on_apply_to_selection"/>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkScrolledWindow" id="comment_scrolled">
+                                <property name="shadow-type">etched-in</property>
+                                <child>
+                                    <object class="GtkTextView" id="comment_text">
+                                        <property name="expand">True</property>
+                                        <signal name="focus-out-event" handler="on_comment_focus_out"/>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+                <child type="tab">
+                    <object class="GtkLabel" id="comment_tab_label">
+                        <property name="label" translatable="yes">Comment</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="description_scrolled">
+                        <property name="shadow-type">etched-in</property>
+                        <child>
+                            <object class="GtkTextView" id="description_text">
+                            </object>
+                        </child>
                     </object>
                 </child>
                 <child type="tab">

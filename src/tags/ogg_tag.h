@@ -28,6 +28,19 @@
 
 #include "vcedit.h"
 #include "et_core.h"
+#include "misc.h"
+
+#ifdef __cplusplus
+#include <unordered_map>
+#include <string>
+
+struct tags_hash : std::unordered_multimap<std::string,gString>
+{	void add_tag(const char* comment, int len);
+	void to_file_tags(File_Tag *FileTag);
+	void to_other_tags(File_Tag *FileTag);
+};
+
+#endif
 
 G_BEGIN_DECLS
 

@@ -27,6 +27,7 @@
 
 #include "flac_private.h"
 #include "flac_tag.h"
+#include "ogg_tag.h"
 #include "vcedit.h"
 #include "et_core.h"
 #include "id3_tag.h"
@@ -35,164 +36,7 @@
 #include "picture.h"
 #include "charset.h"
 
-/*
- * validate_field_utf8:
- * @field_value: the string to validate
- * @field_len: the length of the string
- *
- * Validate a Vorbis comment field to ensure that it is UTF-8. Either return a
- * duplicate of the original (valid) string, or a converted equivalent (of an
- * invalid UTF-8 string).
- *
- * Returns: a valid UTF-8 represenation of @field_value
- */
-static gchar *
-validate_field_utf8 (const gchar *field_value,
-                     gsize field_len)
-{
-    gchar *result;
-
-    if (g_utf8_validate (field_value, field_len, NULL))
-    {
-        result = g_strndup (field_value, field_len);
-    }
-    else
-    {
-        gchar *field_value_tmp = g_strndup (field_value,
-                                            field_len);
-        /* Unnecessarily validates the field again, but this should not be the
-         * common case. */
-        result = Try_To_Validate_Utf8_String (field_value_tmp);
-        g_free (field_value_tmp);
-    }
-
-    return result;
-}
-
-/*
- * populate_tag_hash_table:
- * @vc: a Vorbis comment block from which to read fields
- *
- * Add comments from the supplied @vc block to a newly-allocated hash table.
- * Normalise the field names to upper-case ASCII, taking care to ignore the
- * current locale. Validate the field values are UTF-8 before inserting them in
- * the hash table. Add the values as strings in a GSList.
- *
- * Returns: (transfer full): a newly-allocated hash table of tags
- */
-static GHashTable *
-populate_tag_hash_table (const FLAC__StreamMetadata_VorbisComment *vc)
-{
-    GHashTable *ret;
-    unsigned i;
-
-    /* Free the string lists manually, to avoid having to duplicate them each
-     * time that an existing key is inserted. */
-    ret = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-
-    for (i = 0; i < vc->num_comments; i++)
-    {
-        const FLAC__StreamMetadata_VorbisComment_Entry comment = vc->comments[i];
-        const gchar *separator;
-        gchar *field;
-        gchar *field_up;
-        gchar *value;
-        /* TODO: Use a GPtrArray instead? */
-        GSList *l;
-
-        separator = (const gchar*)memchr (comment.entry, '=', comment.length);
-
-        if (!separator)
-        {
-            g_warning ("Field separator not found when reading FLAC tag: %s",
-                       vc->comments[i].entry);
-            continue;
-        }
-
-        field = g_strndup ((const gchar *)comment.entry,
-                           separator - (const gchar *)comment.entry);
-        field_up = g_ascii_strup (field, -1);
-        g_free (field);
-
-        l = (GSList*)g_hash_table_lookup (ret, field_up);
-
-        /* If the lookup failed, a new list is created. The list takes
-         * ownership of the field value. */
-        value = validate_field_utf8 (separator + 1,
-                                     comment.length - ((separator + 1)
-                                                       - (const gchar *)comment.entry));
-
-        /* Appending is slower, but much easier here (and the lists should be
-         * short). */
-        l = g_slist_append (l, value);
-
-        g_hash_table_insert (ret, field_up, l);
-    }
-
-    return ret;
-}
-
-/*
- * values_list_foreach:
- * @data: (transfer full): the tag value
- * @user_data: (inout): a tag location to fill
- *
- * Called on each element in a GSList of tag values, to set or append the
- * string to the tag.
- */
-static void
-values_list_foreach (gpointer data,
-                     gpointer user_data)
-{
-    gchar *value = (gchar *)data;
-    gchar **tag = (gchar **)user_data;
-
-    if (!et_str_empty (value))
-    {
-      if (*tag == NULL)
-      {
-          *tag = value;
-      }
-      else
-      {
-          gchar* delimiter = g_settings_get_string(MainSettings, "split-delimiter");
-          gchar *field_tmp = g_strconcat(*tag, delimiter, value, NULL);
-          g_free(*tag);
-          g_free(delimiter);
-          *tag = field_tmp;
-          g_free(value);
-      }
-    }
-}
-
-/*
- * values_list_foreach_desc:
- * @data: (transfer full): the tag value
- * @user_data: (inout): a tag location to fill
- *
- * Called on each element in a GSList of tag values, to set or append the
- * string to the tag.
- */
-static void values_list_foreach_desc (gpointer data, gpointer user_data)
-{
-    gchar *value = (gchar *)data;
-    gchar **tag = (gchar **)user_data;
-
-    if (!et_str_empty (value))
-    {
-      if (*tag == NULL)
-      {
-          *tag = value;
-      }
-      else
-      {
-          gchar *field_tmp = g_strconcat(*tag, "\n", value, NULL);
-          g_free(*tag);
-          *tag = field_tmp;
-          g_free(value);
-      }
-    }
-}
+using namespace std;
 
 /*
  * Read tag data from a FLAC file using the level 2 flac interface,
@@ -261,151 +105,20 @@ flac_tag_read_file_tag (GFile *file,
 
         if (block->type == FLAC__METADATA_TYPE_VORBIS_COMMENT)
         {
-            const FLAC__StreamMetadata_VorbisComment *vc;
-            GHashTable *tags;
-            GSList *strings;
-            GHashTableIter tags_iter;
-            gchar *key;
+            tags_hash tags;
+            const FLAC__StreamMetadata_VorbisComment* vc = &block->data.vorbis_comment;
 
             /* Get comments from block. */
-            vc = &block->data.vorbis_comment;
-            tags = populate_tag_hash_table (vc);
-
-            auto fetch_field = [tags](const char* fieldname, gchar** target)
-            {   GSList *strings = (GSList*)g_hash_table_lookup(tags, fieldname);
-                if (strings)
-                {   g_slist_foreach(strings, values_list_foreach, target);
-                    g_slist_free(strings);
-                    g_hash_table_remove(tags, fieldname);
-                }
-            };
-
-            fetch_field(ET_VORBIS_COMMENT_FIELD_TITLE, &FileTag->title);
-            fetch_field(ET_VORBIS_COMMENT_FIELD_VERSION, &FileTag->version);
-            fetch_field(ET_VORBIS_COMMENT_FIELD_SUBTITLE, &FileTag->subtitle);
-            fetch_field(ET_VORBIS_COMMENT_FIELD_ARTIST, &FileTag->artist);
-            fetch_field(ET_VORBIS_COMMENT_FIELD_ALBUM_ARTIST, &FileTag->album_artist);
-            fetch_field(ET_VORBIS_COMMENT_FIELD_ALBUM, &FileTag->album);
-            fetch_field(ET_VORBIS_COMMENT_FIELD_DISC_SUBTITLE, &FileTag->disc_subtitle);
-
-            /* Disc number and total discs. */
-            if ((strings = (GSList*)g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_DISC_TOTAL)))
+            for (int i = 0; i < vc->num_comments; i++)
             {
-                /* Only take values from the first total discs field. */
-                if (!et_str_empty ((const gchar*)strings->data))
-                {
-                    FileTag->disc_total = et_disc_number_to_string((const gchar*)strings->data);
-                }
-
-                g_slist_free_full (strings, g_free);
-                g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_DISC_TOTAL);
+                const FLAC__StreamMetadata_VorbisComment_Entry comment = vc->comments[i];
+                tags.add_tag((const char*)comment.entry, comment.length);
             }
 
-            if ((strings = (GSList*)g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_DISC_NUMBER)))
-            {
-                /* Only take values from the first disc number field. */
-                if (!et_str_empty ((const gchar*)strings->data))
-                {
-                    gchar *separator;
-
-                    separator = strchr((gchar*)strings->data, '/');
-
-                    if (separator && !FileTag->disc_total)
-                    {
-                        FileTag->disc_total = et_disc_number_to_string(separator + 1);
-                        *separator = '\0';
-                    }
-
-                    FileTag->disc_number = et_disc_number_to_string((const gchar*)strings->data);
-                }
-
-                g_slist_free_full (strings, g_free);
-                g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_DISC_NUMBER);
-            }
-
-            /* Track number and total tracks. */
-            if ((strings = (GSList*)g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL)))
-            {
-                /* Only take values from the first total tracks field. */
-                if (!et_str_empty ((const gchar*)strings->data))
-                {
-                    FileTag->track_total = et_track_number_to_string((const gchar*)strings->data);
-                }
-
-                g_slist_free_full (strings, g_free);
-                g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL);
-            }
-
-            if ((strings = (GSList*)g_hash_table_lookup (tags, ET_VORBIS_COMMENT_FIELD_TRACK_NUMBER)))
-            {
-                /* Only take values from the first track number field. */
-                if (!et_str_empty ((const gchar*)strings->data))
-                {
-                    gchar *separator;
-
-                    separator = strchr((gchar*)strings->data, '/');
-
-                    if (separator && !FileTag->track_total)
-                    {
-                        FileTag->track_total = et_track_number_to_string(separator + 1);
-                        *separator = '\0';
-                    }
-
-                    FileTag->track = et_track_number_to_string((const gchar*)strings->data);
-                }
-
-                g_slist_free_full (strings, g_free);
-                g_hash_table_remove (tags, ET_VORBIS_COMMENT_FIELD_TRACK_NUMBER);
-            }
-
-            fetch_field(ET_VORBIS_COMMENT_FIELD_DATE, &FileTag->year);
-            fetch_field(ET_VORBIS_COMMENT_FIELD_RELEASE_DATE, &FileTag->release_year);
-            fetch_field(ET_VORBIS_COMMENT_FIELD_GENRE, &FileTag->genre);
-            fetch_field(ET_VORBIS_COMMENT_FIELD_COMMENT, &FileTag->comment);
-
-            // Description - use newline delimiter
-            strings = (GSList*)g_hash_table_lookup(tags, ET_VORBIS_COMMENT_FIELD_DESCRIPTION);
-            if (strings)
-            { g_slist_foreach(strings, values_list_foreach_desc, &FileTag->description);
-              g_slist_free(strings);
-              g_hash_table_remove(tags, ET_VORBIS_COMMENT_FIELD_DESCRIPTION);
-            }
-
-            fetch_field(ET_VORBIS_COMMENT_FIELD_COMPOSER, &FileTag->composer);
-            fetch_field(ET_VORBIS_COMMENT_FIELD_PERFORMER, &FileTag->orig_artist);
-            fetch_field(ET_VORBIS_COMMENT_FIELD_ORIG_DATE, &FileTag->orig_year);
-            fetch_field(ET_VORBIS_COMMENT_FIELD_COPYRIGHT, &FileTag->copyright);
-            fetch_field(ET_VORBIS_COMMENT_FIELD_CONTACT, &FileTag->url);
-            fetch_field(ET_VORBIS_COMMENT_FIELD_ENCODED_BY, &FileTag->encoded_by);
+            tags.to_file_tags(FileTag);
 
             /* Save unsupported fields. */
-            g_hash_table_iter_init (&tags_iter, tags);
-
-            while (g_hash_table_iter_next (&tags_iter, (gpointer *)&key,
-                                           (gpointer *)&strings))
-            {
-                GSList *l;
-
-                for (l = strings; l != NULL; l = g_slist_next (l))
-                {
-                    FileTag->other = g_list_prepend (FileTag->other,
-                                                     g_strconcat (key,
-                                                                  "=",
-                                                                  l->data,
-                                                                  NULL));
-                }
-
-                g_slist_free_full (strings, g_free);
-                g_hash_table_iter_remove (&tags_iter);
-            }
-
-            if (FileTag->other)
-            {
-                FileTag->other = g_list_reverse (FileTag->other);
-            }
-
-            /* The hash table should now only contain keys. */
-            g_hash_table_unref (tags);
+            tags.to_other_tags(FileTag);
         }
         else if (block->type == FLAC__METADATA_TYPE_PICTURE)
         {
@@ -560,65 +273,6 @@ vc_block_append_single_tag (FLAC__StreamMetadata *vc_block,
 }
 
 /*
- * vc_block_append_multiple_tags:
- * @vc_block: the Vorbis comment block to which tags should be appended
- * @tag_name: the name of the tag
- * @values: the values of the tag
- *
- * Append multiple copies of the supplied @tag_name to @vc_block, splitting
- * @values at "split-delimiter" setting.
- */
-static void
-vc_block_append_multiple_tags (FLAC__StreamMetadata *vc_block,
-                               const gchar *tag_name,
-                               const gchar *values)
-{
-    gchar *delimiter = g_settings_get_string(MainSettings, "split-delimiter");
-    gchar **strings = g_strsplit (values, delimiter, 255);
-    g_free(delimiter);
-    guint i;
-    guint len;
-    
-    for (i = 0, len = g_strv_length (strings); i < len; i++)
-    {
-        if (!et_str_empty (strings[i]))
-        {
-            vc_block_append_single_tag (vc_block, tag_name, strings[i]);
-        }
-    }
-
-    g_strfreev (strings);
-}
-
-/*
- * vc_block_append_tag:
- * @vc_block: the Vorbis comment block to which a tag should be appended
- * @tag_name: the name of the tag, including the trailing '=', or the empty
- *            string (if @value is to be taken as the combination of the tag
- *            name and value)
- * @value: the value of the tag
- * @split: %TRUE to split @value into multiple tags at "split-delimiter" setting,
- *         %FALSE to keep the tag value unchanged
- *
- * Append the supplied @tag_name and @value to @vc_block, optionally splitting
- * @value if @split is %TRUE.
- */
-static void
-vc_block_append_tag (FLAC__StreamMetadata *vc_block,
-                     const gchar *tag_name,
-                     const gchar *value,
-                     EtProcessField field = (EtProcessField)0)
-{
-    if (value)
-    {
-        if (g_settings_get_flags(MainSettings, "ogg-split-fields") & field)
-            vc_block_append_multiple_tags (vc_block, tag_name, value);
-        else
-            vc_block_append_single_tag (vc_block, tag_name, value);
-    }
-}
-
-/*
  * Write Flac tag, using the level 2 flac interface
  */
 gboolean
@@ -765,36 +419,59 @@ flac_tag_write_file_tag (const ET_File *ETFile,
             FLAC__metadata_object_vorbiscomment_set_vendor_string(vc_block, vce_field_vendor_string, /*copy=*/false);
         }
 
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_TITLE, FileTag->title, ET_PROCESS_FIELD_TITLE);
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_VERSION, FileTag->version, ET_PROCESS_FIELD_VERSION);
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_SUBTITLE, FileTag->subtitle, ET_PROCESS_FIELD_SUBTITLE);
+        gString delimiter;
+        auto append_tag = [vc_block, &delimiter](const gchar *tag_name, const gchar *value, gint split = 0)
+        {
+            if (et_str_empty(value))
+                return;
 
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_ARTIST, FileTag->artist, ET_PROCESS_FIELD_ARTIST);
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_ALBUM_ARTIST, FileTag->album_artist, ET_PROCESS_FIELD_ALBUM_ARTIST);
+            if (split && (g_settings_get_flags(MainSettings, "ogg-split-fields") & abs(split)))
+            {   const char* delim = "\n";
+                if (split > 0)
+                {   if (!delimiter)
+                        delimiter.reset(g_settings_get_string(MainSettings, "split-delimiter"));
+                    delim = delimiter;
+                }
 
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_ALBUM, FileTag->album, ET_PROCESS_FIELD_ALBUM);
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_DISC_SUBTITLE, FileTag->disc_subtitle, ET_PROCESS_FIELD_DISC_SUBTITLE);
+                gchar **strings = g_strsplit(value, delim, 255);
+                for (int i = 0; strings[i] != NULL; i++)
+                    vc_block_append_single_tag(vc_block, tag_name, strings[i]);
+                g_strfreev (strings);
+            }
+            else
+                vc_block_append_single_tag(vc_block, tag_name, value);
+        };
 
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_DISC_NUMBER, FileTag->disc_number);
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_DISC_TOTAL, FileTag->disc_total);
+        append_tag(ET_VORBIS_COMMENT_FIELD_TITLE, FileTag->title, ET_PROCESS_FIELD_TITLE);
+        append_tag(ET_VORBIS_COMMENT_FIELD_VERSION, FileTag->version, ET_PROCESS_FIELD_VERSION);
+        append_tag(ET_VORBIS_COMMENT_FIELD_SUBTITLE, FileTag->subtitle, ET_PROCESS_FIELD_SUBTITLE);
 
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_DATE, FileTag->year);
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_RELEASE_DATE, FileTag->release_year);
+        append_tag(ET_VORBIS_COMMENT_FIELD_ARTIST, FileTag->artist, ET_PROCESS_FIELD_ARTIST);
+        append_tag(ET_VORBIS_COMMENT_FIELD_ALBUM_ARTIST, FileTag->album_artist, ET_PROCESS_FIELD_ALBUM_ARTIST);
 
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_TRACK_NUMBER, FileTag->track);
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL, FileTag->track_total);
+        append_tag(ET_VORBIS_COMMENT_FIELD_ALBUM, FileTag->album, ET_PROCESS_FIELD_ALBUM);
+        append_tag(ET_VORBIS_COMMENT_FIELD_DISC_SUBTITLE, FileTag->disc_subtitle, ET_PROCESS_FIELD_DISC_SUBTITLE);
 
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_GENRE, FileTag->genre, ET_PROCESS_FIELD_GENRE);
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_COMMENT, FileTag->comment, ET_PROCESS_FIELD_COMMENT);
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_DESCRIPTION, FileTag->description);
+        append_tag(ET_VORBIS_COMMENT_FIELD_DISC_NUMBER, FileTag->disc_number);
+        append_tag(ET_VORBIS_COMMENT_FIELD_DISC_TOTAL, FileTag->disc_total);
 
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_COMPOSER, FileTag->composer, ET_PROCESS_FIELD_COMPOSER);
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_PERFORMER, FileTag->orig_artist, ET_PROCESS_FIELD_ORIGINAL_ARTIST);
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_ORIG_DATE, FileTag->orig_year);
+        append_tag(ET_VORBIS_COMMENT_FIELD_DATE, FileTag->year);
+        append_tag(ET_VORBIS_COMMENT_FIELD_RELEASE_DATE, FileTag->release_year);
 
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_COPYRIGHT, FileTag->copyright);
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_CONTACT, FileTag->url, ET_PROCESS_FIELD_URL);
-        vc_block_append_tag (vc_block, ET_VORBIS_COMMENT_FIELD_ENCODED_BY, FileTag->encoded_by, ET_PROCESS_FIELD_ENCODED_BY);
+        append_tag(ET_VORBIS_COMMENT_FIELD_TRACK_NUMBER, FileTag->track);
+        append_tag(ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL, FileTag->track_total);
+
+        append_tag(ET_VORBIS_COMMENT_FIELD_GENRE, FileTag->genre, ET_PROCESS_FIELD_GENRE);
+        append_tag(ET_VORBIS_COMMENT_FIELD_COMMENT, FileTag->comment, ET_PROCESS_FIELD_COMMENT * (g_settings_get_boolean(MainSettings, "tag-multiline-comment") ? -1 : 1));
+        append_tag(ET_VORBIS_COMMENT_FIELD_DESCRIPTION, FileTag->description, -ET_PROCESS_FIELD_DESCRIPTION);
+
+        append_tag(ET_VORBIS_COMMENT_FIELD_COMPOSER, FileTag->composer, ET_PROCESS_FIELD_COMPOSER);
+        append_tag(ET_VORBIS_COMMENT_FIELD_PERFORMER, FileTag->orig_artist, ET_PROCESS_FIELD_ORIGINAL_ARTIST);
+        append_tag(ET_VORBIS_COMMENT_FIELD_ORIG_DATE, FileTag->orig_year);
+
+        append_tag(ET_VORBIS_COMMENT_FIELD_COPYRIGHT, FileTag->copyright);
+        append_tag(ET_VORBIS_COMMENT_FIELD_CONTACT, FileTag->url, ET_PROCESS_FIELD_URL);
+        append_tag(ET_VORBIS_COMMENT_FIELD_ENCODED_BY, FileTag->encoded_by, ET_PROCESS_FIELD_ENCODED_BY);
 
         /**************************
          * Set unsupported fields *

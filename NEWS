@@ -5,6 +5,8 @@
     * Add support for sub title and media title tag
     * Add support for long description tag (not supported by ID3V2 tags)
     * Write comment to COMMENT rather than DESCRIPTION in Ogg files
+    * Add support for DESCRIPTION
+    * Allow multi line comments
     * Added column with file path in browser
     * Option to hide unused fields
     * Option to hide columns

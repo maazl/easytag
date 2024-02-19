@@ -554,6 +554,14 @@
                                     </object>
                                 </child>
                                 <child>
+                                    <object class="GtkCheckButton" id="tags_multiline_comment">
+                                        <property name="label" translatable="yes">Edit comment as multi line</property>
+                                        <property name="margin-left">12</property>
+                                        <property name="tooltip-text" translatable="yes">Whether the comment field should be raplaced by a tab with a text area</property>
+                                        <property name="visible">True</property>
+                                    </object>
+                                </child>
+                                <child>
                                     <object class="GtkLabel" id="tags_splitting_label">
                                         <property name="halign">start</property>
                                         <property name="label" translatable="yes">Splitting</property>
@@ -693,14 +701,25 @@
                                             </packing>
                                         </child>
                                         <child>
+                                            <object class="GtkCheckButton" id="split_description_check">
+                                                <property name="label" translatable="yes">Description</property>
+                                                <property name="name">description</property>
+                                                <property name="tooltip-text" translatable="yes">Whether to split description fields in Ogg comments</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left_attach">4</property>
+                                                <property name="top_attach">1</property>
+                                            </packing>
+                                        </child>
+                                        <child>
                                             <object class="GtkCheckButton" id="split_composer_check">
                                                 <property name="label" translatable="yes">Composer</property>
                                                 <property name="name">composer</property>
                                                 <property name="tooltip-text" translatable="yes">Whether to split composer fields in Ogg comments</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">4</property>
-                                                <property name="top_attach">1</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">2</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -710,7 +729,7 @@
                                                 <property name="tooltip-text" translatable="yes">Whether to split original artist fields in Ogg comments</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">0</property>
+                                                <property name="left_attach">1</property>
                                                 <property name="top_attach">2</property>
                                             </packing>
                                         </child>
@@ -721,7 +740,7 @@
                                                 <property name="tooltip-text" translatable="yes">Whether to split URL fields in Ogg comments</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">1</property>
+                                                <property name="left_attach">2</property>
                                                 <property name="top_attach">2</property>
                                             </packing>
                                         </child>
@@ -732,7 +751,7 @@
                                                 <property name="tooltip-text" translatable="yes">Whether to split encoded by fields in Ogg comments</property>
                                             </object>
                                             <packing>
-                                                <property name="left_attach">2</property>
+                                                <property name="left_attach">3</property>
                                                 <property name="top_attach">2</property>
                                             </packing>
                                         </child>

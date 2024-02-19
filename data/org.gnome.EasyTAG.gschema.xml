@@ -326,6 +326,12 @@
       <default>true</default>
     </key>
 
+    <key name="tag-multiline-comment" type="b">
+      <summary>Edit comment as multi line</summary>
+      <description>Whether the comment field should be raplaced by a tab with a text area</description>
+      <default>false</default>
+    </key>
+
     <key name="fill-convert-spaces" enum="org.gnome.EasyTAG.EtConvertSpaces">
       <summary>Convert spaces and underscores when filling tag fields</summary>
       <description>Whether to convert to spaces (and %20) or underscores when filling tag fields from filenames</description>

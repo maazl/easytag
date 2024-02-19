@@ -83,7 +83,12 @@ typedef struct
     GtkListStore *genre_combo_model;
     GtkListStore *track_combo_model;
 
+    /* Comment tab */
+    GtkWidget *comment_grid;
+    GtkTextView *comment_text;
+
     /* Description tab */
+    GtkWidget *description_scrolled;
     GtkTextView *description_text;
 
     GtkWidget *images_view;
@@ -104,6 +109,7 @@ typedef struct
     GtkWidget *track_sequence_button;
     GtkWidget *track_number_button;
     GtkWidget *apply_image_toolitem;
+    GtkWidget *apply_comment_toolitem;
 } EtTagAreaPrivate;
 
 // learn correct return type for et_browser_get_instance_private
@@ -144,12 +150,24 @@ enum /* Columns for list in properties window. */
     PICTURE_TYPE_COLUMN_COUNT
 };
 
-static gchar* apply_field_to_selection(GtkWidget* field, GList *etfilelist,
+static gchar* text_view_get_text(GtkTextView* text_view)
+{
+	GtkTextBuffer* buffer = gtk_text_view_get_buffer(text_view);
+	GtkTextIter start, end;
+	gtk_text_buffer_get_start_iter(buffer, &start);
+	gtk_text_buffer_get_end_iter(buffer, &end);
+	gchar* result = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+	g_strstrip(result);
+	if (*result)
+		return result;
+	g_free(result);
+	return nullptr;
+}
+
+static gchar* apply_field_to_selection(const gchar* string_to_set, GList *etfilelist,
     void (*apply_func)(File_Tag *file_tag, const gchar *value),
     const gchar* nonempty_text, const gchar* empty_text)
 {
-    const gchar *string_to_set = gtk_entry_get_text (GTK_ENTRY(field));
-
     for (GList *l = etfilelist; l != NULL; l = g_list_next (l))
     {
         ET_File *etfile = (ET_File *)l->data;
@@ -162,6 +180,14 @@ static gchar* apply_field_to_selection(GtkWidget* field, GList *etfilelist,
         return g_strdup_printf (nonempty_text, string_to_set);
     else
         return g_strdup (empty_text);
+}
+
+static gchar* apply_field_to_selection(GtkWidget* field, GList *etfilelist,
+    void (*apply_func)(File_Tag *file_tag, const gchar *value),
+    const gchar* nonempty_text, const gchar* empty_text)
+{
+	return apply_field_to_selection(gtk_entry_get_text(GTK_ENTRY(field)),
+		etfilelist, apply_func, nonempty_text, empty_text);
 }
 
 static void
@@ -436,6 +462,13 @@ on_apply_to_selection (GObject *object,
     {
         msg = apply_field_to_selection(priv->comment_entry, etfilelist, &et_file_tag_set_comment,
             _("Selected files tagged with comment ‘%s’"), _("Removed comment from selected files"));
+    }
+    else if (object == G_OBJECT (priv->apply_comment_toolitem))
+    {
+        gchar* text = text_view_get_text(priv->comment_text);
+        msg = apply_field_to_selection(text, etfilelist, &et_file_tag_set_comment,
+            _("Selected files tagged with comment ‘%s’"), _("Removed comment from selected files"));
+        g_free(text);
     }
     else if (object == G_OBJECT (priv->composer_entry))
     {
@@ -1031,6 +1064,29 @@ on_year_entry_activate (GtkEntry *entry,
                         gpointer user_data)
 {
     Parse_Date ((GtkWidget*)entry);
+}
+
+static gboolean on_comment_focus_out(GtkWidget* widget, GdkEventFocus* event, gpointer user_data)
+{
+	EtTagAreaPrivate *priv = et_tag_area_get_instance_private(ET_TAG_AREA(user_data));
+
+	if (gtk_widget_get_visible(priv->comment_grid))
+	{
+		if (widget == GTK_WIDGET(priv->comment_text))
+		{
+			gchar* text = text_view_get_text(priv->comment_text);
+			gtk_entry_set_text(GTK_ENTRY(priv->comment_entry), text);
+			g_free(text);
+		}
+		else if (widget == priv->comment_entry)
+		{
+			const gchar* text = gtk_entry_get_text(GTK_ENTRY(widget));
+			GtkTextBuffer* buffer = gtk_text_view_get_buffer(priv->comment_text);
+			gtk_text_buffer_set_text(buffer, text, -1);
+		}
+	}
+
+	return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -2110,7 +2166,6 @@ et_tag_area_class_init (EtTagAreaClass *klass)
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, encoded_by_entry);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, genre_combo_model);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_combo_model);
-    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, description_text);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, images_view);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, add_image_toolitem);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, apply_image_toolitem);
@@ -2121,7 +2176,13 @@ et_tag_area_class_init (EtTagAreaClass *klass)
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, images_model);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_number_button);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_sequence_button);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, comment_grid);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, comment_text);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, apply_comment_toolitem);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, description_scrolled);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, description_text);
 
+    gtk_widget_class_bind_template_callback (widget_class, on_comment_focus_out);
     gtk_widget_class_bind_template_callback (widget_class, on_picture_add_button_clicked);
     gtk_widget_class_bind_template_callback (widget_class, on_picture_clear_button_clicked);
     gtk_widget_class_bind_template_callback (widget_class, on_picture_save_button_clicked);
@@ -2160,7 +2221,7 @@ void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
 
     EtTagAreaPrivate *priv = et_tag_area_get_instance_private (self);
 
-    guint hide = g_settings_get_flags(MainSettings, "hide-fields");
+    guint hide = g_settings_get_flags(MainSettings, "hide-fields") | ET_COLUMN_FILEPATH;
 
     /* Special controls to display or not! */
     switch (type)
@@ -2225,7 +2286,7 @@ void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
 #endif
     }
 
-    auto show_hide = [hide](EtColumn col, GtkWidget* w1, GtkWidget* w2, GtkWidget* w3)
+    auto show_hide = [hide](guint col, GtkWidget* w1, GtkWidget* w2, GtkWidget* w3)
     {
         if (!(hide & col))
         {
@@ -2259,7 +2320,9 @@ void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
     show_hide(ET_COLUMN_URL, priv->url_entry, priv->url_label, nullptr);
     show_hide(ET_COLUMN_ENCODED_BY, priv->encoded_by_entry, priv->encoded_by_label, nullptr);
     show_hide(ET_COLUMN_IMAGE, priv->images_grid, nullptr, nullptr);
-    show_hide(ET_COLUMN_DESCRIPTION, GTK_WIDGET(priv->description_text), nullptr, nullptr);
+    show_hide(ET_COLUMN_DESCRIPTION, GTK_WIDGET(priv->description_scrolled), nullptr, nullptr);
+    guint multiline = -!g_settings_get_boolean(MainSettings, "tag-multiline-comment");
+    show_hide(multiline, priv->comment_grid, nullptr, nullptr);
 }
 
 void
@@ -2292,6 +2355,10 @@ et_tag_area_clear (EtTagArea *self)
     gtk_entry_set_text (GTK_ENTRY (priv->url_entry), "");
     gtk_entry_set_text (GTK_ENTRY (priv->encoded_by_entry), "");
     PictureEntry_Clear (self);
+    GtkTextBuffer* buffer = gtk_text_view_get_buffer(priv->comment_text);
+    gtk_text_buffer_set_text(buffer, "", 0);
+    buffer = gtk_text_view_get_buffer(priv->description_text);
+    gtk_text_buffer_set_text(buffer, "", 0);
 }
 
 void
@@ -2309,7 +2376,7 @@ et_tag_area_title_grab_focus (EtTagArea *self)
 /*
  * et_tag_area_create_file_tag:
  *
- * Create a new File_Tag structure and poopulate it with values from the UI.
+ * Create a new File_Tag structure and populate it with values from the UI.
  */
 void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 {
@@ -2373,7 +2440,13 @@ void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 
 	store_field(&File_Tag::genre, gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->genre_combo_entry)))));
 
-	store_field(&File_Tag::comment, gtk_entry_get_text(GTK_ENTRY(priv->comment_entry)));
+	if (gtk_widget_get_visible(priv->comment_grid))
+	{
+		g_free(FileTag->comment);
+		FileTag->comment = text_view_get_text(priv->comment_text);
+	}
+	else
+		store_field(&File_Tag::comment, gtk_entry_get_text(GTK_ENTRY(priv->comment_entry)));
 
 	if (gtk_widget_get_visible(priv->composer_entry))
 		store_field(&File_Tag::composer, gtk_entry_get_text(GTK_ENTRY(priv->composer_entry)));
@@ -2395,17 +2468,8 @@ void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 
 	if (gtk_widget_get_visible(GTK_WIDGET(priv->description_text)))
 	{
-		GtkTextBuffer* buffer = gtk_text_view_get_buffer(priv->description_text);
-		GtkTextIter start, end;
-		gtk_text_buffer_get_start_iter(buffer, &start);
-		gtk_text_buffer_get_end_iter(buffer, &end);
 		g_free(FileTag->description);
-		FileTag->description = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-		g_strstrip(FileTag->description);
-		if (!*FileTag->description)
-		{	g_free(FileTag->description);
-			FileTag->description = nullptr;
-		}
+		FileTag->description = text_view_get_text(priv->description_text);
 	}
 
 	/* Picture */
@@ -2594,6 +2658,20 @@ et_tag_area_display_et_file (EtTagArea *self,
     et_tag_area_set_text_field(FileTag->genre, GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->genre_combo_entry))));
 
     et_tag_area_set_text_field(FileTag->comment, GTK_ENTRY(priv->comment_entry));
+    if (gtk_widget_get_visible(priv->comment_grid))
+    {
+      GtkTextBuffer* buffer = gtk_text_view_get_buffer(priv->comment_text);
+      if (!et_str_empty(FileTag->comment))
+      {
+        gchar *tmp = Try_To_Validate_Utf8_String(FileTag->comment);
+        gtk_text_buffer_set_text(buffer, tmp, -1);
+        g_free(tmp);
+      }
+      else
+      {
+        gtk_text_buffer_set_text(buffer, "", 0);
+      }
+    }
 
     et_tag_area_set_text_field(FileTag->composer, GTK_ENTRY(priv->composer_entry));
 
