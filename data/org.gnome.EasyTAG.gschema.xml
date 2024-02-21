@@ -32,6 +32,19 @@
       <default>true</default>
     </key>
 
+    <key name="browse-limit-lines" type="b">
+      <summary>Limit the number of lines in the browser</summary>
+      <description>Restrict the number of line of multi line tags in browser columns</description>
+      <default>true</default>
+    </key>
+
+    <key name="browse-max-lines" type="u">
+      <summary>The maximum number of lines per browser row</summary>
+      <description>The maximum number of lines of multi line tags shown in the browser</description>
+      <default>3</default>
+      <range min="0" max="10" />
+    </key>
+
     <key name="cddb-automatic-search-hostname" type="s">
       <summary>CDDB server hostname for automatic search</summary>
       <description>The CDDB server to use for the automatic search</description>

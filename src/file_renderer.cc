@@ -146,7 +146,21 @@ string FileNameColumnRenderer::RenderText(const ET_File* file, bool original) co
 }
 
 string TagColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	return EmptfIfNull((original ? file->CurTag() : file->Tag())->*Field);
+{	string s = EmptfIfNull((original ? file->CurTag() : file->Tag())->*Field);
+	size_t pos = s.find('\n');
+	if (pos != string::npos && g_settings_get_boolean(MainSettings, "browse-limit-lines"))
+	{	guint count = g_settings_get_uint(MainSettings, "browse-max-lines");
+		while (--count)
+		{	pos = s.find('\n', pos + 1);
+			if (pos == string::npos)
+				goto done;
+		}
+		if (pos && s[pos - 1] == '\r')
+			--pos;
+		s.erase(pos).append("\xE2\x80\xA6"); // UTF-8 ellipsis
+	}
+done:
+	return s;
 }
 
 string TagPartColumnRenderer::RenderText(const ET_File* file, bool original) const

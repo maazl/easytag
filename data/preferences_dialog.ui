@@ -25,6 +25,11 @@
         <property name="step-increment">1.0</property>
         <property name="upper">6.0</property>
     </object>
+    <object class="GtkAdjustment" id="browser_max_lines_adjustment">
+        <property name="lower">1.0</property>
+        <property name="step-increment">1.0</property>
+        <property name="upper">10.0</property>
+    </object>
     <template class="EtPreferencesDialog" parent="GtkDialog">
         <property name="border-width">6</property>
         <property name="destroy-with-parent">True</property>
@@ -115,6 +120,31 @@
                                         <property name="margin-left">12</property>
                                         <property name="tooltip-text" translatable="yes">Whether file sorting is case-sensitive</property>
                                         <property name="visible">True</property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkGrid" id="browser_padding_grid">
+                                        <property name="column-spacing">12</property>
+                                        <property name="margin-left">12</property>
+                                        <child>
+                                            <object class="GtkCheckButton" id="browser_max_lines_check">
+                                                <property name="label" translatable="yes">Restrict the number of lines of multi line tags</property>
+                                                <property name="tooltip-text" translatable="yes">If multi line values are visible in the browser the row height may become quite large. This option effectively limits the row height.</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">0</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkSpinButton" id="browser_max_lines">
+                                                <property name="adjustment">browser_max_lines_adjustment</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">0</property>
+                                            </packing>
+                                        </child>
                                     </object>
                                 </child>
                                 <child>
