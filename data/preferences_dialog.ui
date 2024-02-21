@@ -163,6 +163,12 @@
                                             </object>
                                         </child>
                                         <child>
+                                            <object class="GtkCheckButton" id="hide_fields_description_check">
+                                                <property name="label" translatable="yes">Description</property>
+                                                <property name="name">description</property>
+                                            </object>
+                                        </child>
+                                        <child>
                                             <object class="GtkCheckButton" id="hide_fields_composer_check">
                                                 <property name="label" translatable="yes">Composer</property>
                                                 <property name="name">composer</property>

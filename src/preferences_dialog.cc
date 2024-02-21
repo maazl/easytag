@@ -51,6 +51,7 @@ typedef struct
     GtkWidget *hide_fields_disc_subtitle_check;
     GtkWidget *hide_fields_disc_number_check;
     GtkWidget *hide_fields_release_year_check;
+    GtkWidget *hide_fields_description_check;
     GtkWidget *hide_fields_composer_check;
     GtkWidget *hide_fields_orig_artist_check;
     GtkWidget *hide_fields_orig_year_check;
@@ -384,6 +385,7 @@ create_preferences_dialog (EtPreferencesDialog *self)
     bind_flags_value("hide-fields", priv->hide_fields_disc_subtitle_check);
     bind_flags_value("hide-fields", priv->hide_fields_disc_number_check);
     bind_flags_value("hide-fields", priv->hide_fields_release_year_check);
+    bind_flags_value("hide-fields", priv->hide_fields_description_check);
     bind_flags_value("hide-fields", priv->hide_fields_composer_check);
     bind_flags_value("hide-fields", priv->hide_fields_orig_artist_check);
     bind_flags_value("hide-fields", priv->hide_fields_orig_year_check);
@@ -884,6 +886,7 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_disc_subtitle_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_disc_number_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_release_year_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_description_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_composer_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_orig_artist_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_orig_year_check);
