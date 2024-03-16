@@ -60,6 +60,7 @@ typedef struct
     GtkWidget *hide_fields_copyright_check;
     GtkWidget *hide_fields_url_check;
     GtkWidget *hide_fields_encoded_by_check;
+    GtkWidget *hide_fields_replaygain;
     GtkWidget *log_show_check;
     GtkWidget *header_show_check;
     GtkWidget *list_bold_radio;
@@ -388,7 +389,6 @@ create_preferences_dialog (EtPreferencesDialog *self)
     g_settings_bind (MainSettings, "browse-limit-lines",
         priv->browser_max_lines, "sensitive", G_SETTINGS_BIND_GET);
 
-    bind_flags_value("hide-fields", priv->split_orig_artist_check);
     bind_flags_value("hide-fields", priv->hide_fields_subtitle_check);
     bind_flags_value("hide-fields", priv->hide_fields_album_artist_check);
     bind_flags_value("hide-fields", priv->hide_fields_disc_subtitle_check);
@@ -401,6 +401,11 @@ create_preferences_dialog (EtPreferencesDialog *self)
     bind_flags_value("hide-fields", priv->hide_fields_copyright_check);
     bind_flags_value("hide-fields", priv->hide_fields_url_check);
     bind_flags_value("hide-fields", priv->hide_fields_encoded_by_check);
+    bind_flags_value("hide-fields", priv->hide_fields_replaygain);
+
+#ifndef ENABLE_REPLAYGAIN
+    gtk_widget_hide(priv->hide_fields_replaygain);
+#endif
 
     /* Show / hide log view. */
     bind_boolean("log-show", priv->log_show_check);
@@ -904,6 +909,7 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_copyright_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_url_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_encoded_by_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_replaygain);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, log_show_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, header_show_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, list_bold_radio);

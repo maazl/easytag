@@ -1,11 +1,12 @@
 <interface domain="easytag">
+    <object class="GtkImage" id="replaygain_image">
+        <property name="resource">/org/gnome/EasyTAG/images/replaygain.png</property>
+    </object>
     <object class="GtkImage" id="artist_view_image">
         <property name="resource">/org/gnome/EasyTAG/images/artist-album.png</property>
-        <property name="visible">True</property>
     </object>
     <object class="GtkImage" id="invert_selection_image">
         <property name="resource">/org/gnome/EasyTAG/images/invert-selection.png</property>
-        <property name="visible">True</property>
     </object>
     <object class="GtkToolbar" id="main_toolbar">
         <property name="visible">True</property>
@@ -58,6 +59,15 @@
                 <property name="label" translatable="yes">_Show Scanner</property>
                 <property name="tooltip-text" translatable="yes">Show scanner</property>
                 <property name="visible">True</property>
+            </object>
+        </child>
+        <child>
+            <object class="GtkToolButton" id="replaygain_button">
+                <property name="action-name">win.replaygain</property>
+                <property name="icon-widget">replaygain_image</property>
+                <property name="label" translatable="yes">Calculate Replay_Gain</property>
+                <property name="tooltip-text" translatable="yes">Analyze selected files with ReplayGain and update the tags accordingly</property>
+                <property name="visible">False</property>
             </object>
         </child>
         <child>

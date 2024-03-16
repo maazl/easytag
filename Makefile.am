@@ -10,6 +10,7 @@ AM_DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-mp3 \
 	--enable-mp4 \
 	--enable-nautilus-actions \
+	--enable-replaygain \
 	--enable-speex \
 	--enable-tests \
 	--enable-wavpack
@@ -46,7 +47,7 @@ easytag_SOURCES = \
 	src/charset.c \
 	src/crc32.c \
 	src/dlm.c \
-	src/easytag.c \
+	src/easytag.cc \
 	src/enums.c \
 	src/et_core.c \
 	src/etflagsaction.cc \
@@ -67,6 +68,7 @@ easytag_SOURCES = \
 	src/playlist_dialog.c \
 	src/preferences_dialog.cc \
 	src/progress_bar.c \
+	src/replaygain.cc \
 	src/scan.c \
 	src/scan_dialog.cc \
 	src/search_dialog.cc \
@@ -131,6 +133,7 @@ easytag_headers = \
 	src/playlist_dialog.h \
 	src/preferences_dialog.h \
 	src/progress_bar.h \
+	src/replaygain.h \
 	src/scan.h \
 	src/scan_dialog.h \
 	src/search_dialog.h \
@@ -324,6 +327,7 @@ images = \
 	data/images/mask.png \
 	data/images/musicbrainz.png \
 	data/images/red-lines.png \
+	data/images/replaygain.png \
 	data/images/sequence-track.png \
 	data/images/unselect-all.png
 

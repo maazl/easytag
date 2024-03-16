@@ -189,6 +189,8 @@ mp4tag_read_file_tag (GFile *file,
         et_file_tag_set_description(FileTag, extra_tag["PODCASTDESC"].front().toCString(true));
 #endif
 
+    // TOD support ReplayGain, requires TagLib 2.0
+
     /***********
      * Picture *
      ***********/
@@ -347,6 +349,8 @@ mp4tag_write_file_tag (const ET_File *ETFile,
         fields.insert ("PODCASTDESC", string);
 #endif
     }
+
+    // TOD support ReplayGain, requires TagLib 2.0
 
     /***********
      * Picture *

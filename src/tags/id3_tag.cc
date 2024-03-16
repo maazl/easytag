@@ -90,18 +90,26 @@ et_id3_error_quark (void)
     return g_quark_from_static_string ("et-id3-error-quark");
 }
 
-static bool id3tag_set_text_frame(ID3Tag* id3_tag, ID3_FrameID frame_id, const gchar* value)
+static bool id3tag_set_text_frame(ID3Tag* id3_tag, ID3_FrameID frame_id, const gchar* value, const char* desc = nullptr)
 {
 	// To avoid problem with a corrupted field, we remove it before to create a new one.
 	ID3Frame *id3_frame;
-	while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag, frame_id)) )
-		ID3Tag_RemoveFrame(id3_tag, id3_frame);
+	while (true)
+	{	if (desc)
+			id3_frame = ID3Tag_FindFrameWithASCII(id3_tag, frame_id, ID3FN_DESCRIPTION, desc);
+		else
+			id3_frame = ID3Tag_FindFrameWithID(id3_tag, frame_id);
+		if (!id3_frame)
+			break;
+		ID3Frame_Delete(ID3Tag_RemoveFrame(id3_tag, id3_frame));
+	}
 
 	if (et_str_empty(value))
 		return false;
 
 	id3_frame = ID3Frame_NewID(frame_id);
 	ID3Tag_AttachFrame(id3_tag, id3_frame);
+	if (desc) Id3tag_Set_Field(id3_frame, ID3FN_DESCRIPTION, desc);
 	Id3tag_Set_Field(id3_frame, ID3FN_TEXT, value);
 	return true;
 }
@@ -258,11 +266,16 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
 
     has_data |= id3tag_set_text_frame(id3_tag, ID3FID_ENCODEDBY, FileTag->encoded_by);
 
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_USERTEXT, FileTag->track_gain_str(), "REPLAYGAIN_TRACK_GAIN");
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_USERTEXT, FileTag->track_peak_str(), "REPLAYGAIN_TRACK_PEAK");
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_USERTEXT, FileTag->album_gain_str(), "REPLAYGAIN_ALBUM_GAIN");
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_USERTEXT, FileTag->album_peak_str(), "REPLAYGAIN_ALBUM_PEAK");
+
     /***********
      * Picture *
      ***********/
     while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_PICTURE)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
+        ID3Frame_Delete(ID3Tag_RemoveFrame(id3_tag,id3_frame));
 
     for (pic = FileTag->picture; pic != NULL; pic = pic->next)
     {

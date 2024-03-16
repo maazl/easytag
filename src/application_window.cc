@@ -293,7 +293,7 @@ et_application_window_tag_area_create_file_tag(EtApplicationWindow *self, const 
 
 static gboolean
 et_application_window_tag_area_display_et_file (EtApplicationWindow *self,
-                                                const ET_File *ETFile)
+                                                const ET_File *ETFile, int columns)
 {
     EtApplicationWindowPrivate *priv;
 
@@ -301,7 +301,7 @@ et_application_window_tag_area_display_et_file (EtApplicationWindow *self,
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_tag_area_display_et_file (ET_TAG_AREA (priv->tag_area), ETFile);
+    return et_tag_area_display_et_file (ET_TAG_AREA (priv->tag_area), ETFile, columns);
 }
 
 /* Clear the entries of tag area. */
@@ -500,13 +500,11 @@ on_delete (GSimpleAction *action,
     GList *selfilelist;
     GList *rowreflist = NULL;
     GList *l;
-    gint   progress_bar_index;
+    gint   progress_bar_index = 0;
     gint   saving_answer;
     gint   nb_files_to_delete;
     gint   nb_files_deleted = 0;
     gchar *msg;
-    gchar progress_bar_text[30];
-    double fraction;
     GtkTreeModel *treemodel;
     GtkTreeRowReference *rowref;
     GtkTreeSelection *selection;
@@ -524,13 +522,10 @@ on_delete (GSimpleAction *action,
     nb_files_to_delete = gtk_tree_selection_count_selected_rows (selection);
 
     /* Initialize status bar */
-    et_application_window_progress_set_fraction (self, 0.0);
-    progress_bar_index = 0;
-    g_snprintf(progress_bar_text, 30, "%d/%d", progress_bar_index, nb_files_to_delete);
-    et_application_window_progress_set_text (self, progress_bar_text);
+    et_application_window_progress_set(self, 0, nb_files_to_delete);
 
     /* Set to unsensitive all command buttons (except Quit button) */
-    et_application_window_disable_command_actions (self);
+    et_application_window_disable_command_actions (self, FALSE);
     et_application_window_browser_set_sensitive (self, FALSE);
     et_application_window_tag_area_set_sensitive (self, FALSE);
     et_application_window_file_area_set_sensitive (self, FALSE);
@@ -556,13 +551,9 @@ on_delete (GSimpleAction *action,
         gtk_tree_path_free (path);
 
         et_application_window_display_et_file (self, ETFile);
-        et_application_window_browser_select_file_by_et_file (self, ETFile,
-                                                              FALSE);
-        fraction = (++progress_bar_index) / (double) nb_files_to_delete;
-        et_application_window_progress_set_fraction (self, fraction);
-        g_snprintf (progress_bar_text, 30, "%d/%d", progress_bar_index,
-                    nb_files_to_delete);
-        et_application_window_progress_set_text (self, progress_bar_text);
+        et_application_window_browser_select_file_by_et_file (self, ETFile, FALSE);
+
+        et_application_window_progress_set(self, ++progress_bar_index, nb_files_to_delete);
         /* FIXME: Needed to refresh status bar */
         while (gtk_events_pending ())
         {
@@ -595,7 +586,7 @@ on_delete (GSimpleAction *action,
                 break;
             case -1:
                 /* Stop deleting files + reinit progress bar. */
-                et_application_window_progress_set_fraction (self, 0.0);
+                et_application_window_progress_set(self, 0, 0);
                 /* To update state of command buttons. */
                 et_application_window_update_actions (self);
                 et_application_window_browser_set_sensitive (self, TRUE);
@@ -635,8 +626,7 @@ on_delete (GSimpleAction *action,
     et_application_window_tag_area_set_sensitive (self, TRUE);
     et_application_window_file_area_set_sensitive (self, TRUE);
 
-    et_application_window_progress_set_text (self, "");
-    et_application_window_progress_set_fraction (self, 0.0);
+    et_application_window_progress_set (self, 0, 0);
     et_application_window_status_bar_message (self, msg, TRUE);
     g_free (msg);
 
@@ -714,7 +704,7 @@ on_save (GSimpleAction *action,
          GVariant *variant,
          gpointer user_data)
 {
-    Action_Save_Selected_Files ();
+	Save_Selected_Files_With_Answer (FALSE);
 }
 
 static void
@@ -722,8 +712,15 @@ on_save_force (GSimpleAction *action,
                GVariant *variant,
                gpointer user_data)
 {
-    Action_Force_Saving_Selected_Files ();
+	Save_Selected_Files_With_Answer (TRUE);
 }
+
+#ifdef ENABLE_REPLAYGAIN
+static void on_replaygain (GSimpleAction *action, GVariant *variant, gpointer user_data)
+{
+	ReplayGain_For_Selected_Files();
+}
+#endif
 
 static void
 on_find (GSimpleAction *action,
@@ -879,7 +876,6 @@ on_remove_tags (GSimpleAction *action,
     File_Tag *FileTag;
     gint progress_bar_index;
     gint selectcount;
-    double fraction;
 
     g_return_if_fail (ETCore->ETFileDisplayedList != NULL);
 
@@ -888,10 +884,10 @@ on_remove_tags (GSimpleAction *action,
     et_application_window_update_et_file_from_ui (self);
 
     /* Initialize status bar */
-    et_application_window_progress_set_fraction (self, 0.0);
     etfilelist = et_application_window_browser_get_selected_files (self);
     selectcount = g_list_length (etfilelist);
     progress_bar_index = 0;
+    et_application_window_progress_set(self, 0, selectcount);
 
     for (l = etfilelist; l != NULL; l = g_list_next (l))
     {
@@ -899,13 +895,10 @@ on_remove_tags (GSimpleAction *action,
         FileTag = et_file_tag_new ();
         ET_Manage_Changes_Of_File_Data (etfile, NULL, FileTag);
 
-        fraction = (++progress_bar_index) / (double) selectcount;
-        et_application_window_progress_set_fraction (self, fraction);
+        et_application_window_progress_set(self, ++progress_bar_index, selectcount);
         /* Needed to refresh status bar */
         while (gtk_events_pending ())
-        {
             gtk_main_iteration ();
-        }
     }
 
     g_list_free (etfilelist);
@@ -917,10 +910,8 @@ on_remove_tags (GSimpleAction *action,
     et_application_window_display_et_file (self, ETCore->ETFileDisplayed);
     et_application_window_update_actions (self);
 
-    et_application_window_progress_set_fraction (self, 0.0);
-    et_application_window_status_bar_message (self,
-                                              _("All tags have been removed"),
-                                              TRUE);
+    et_application_window_progress_set(self, 0, 0);
+    et_application_window_status_bar_message (self, _("All tags have been removed"), TRUE);
 }
 
 static void
@@ -1537,6 +1528,9 @@ static const GActionEntry actions[] =
     { "show-cddb", on_show_cddb },
     { "show-load-filenames", on_show_load_filenames },
     { "show-playlist", on_show_playlist },
+#ifdef ENABLE_REPLAYGAIN
+    { "replaygain", on_replaygain },
+#endif
     /* Go menu. */
     { "go-home", on_go_home },
     { "go-desktop", on_go_desktop },
@@ -1675,6 +1669,10 @@ et_application_window_init (EtApplicationWindow *self)
         builder = gtk_builder_new_from_resource ("/org/gnome/EasyTAG/toolbar.ui");
 
         toolbar = GTK_WIDGET (gtk_builder_get_object (builder, "main_toolbar"));
+#ifdef ENABLE_REPLAYGAIN
+        gtk_widget_set_visible(GTK_WIDGET (gtk_builder_get_object (builder, "replaygain_button")), TRUE);
+#endif
+
         gtk_box_pack_start (GTK_BOX (main_vbox), toolbar, FALSE, FALSE, 0);
 
         g_object_unref (builder);
@@ -1727,6 +1725,7 @@ et_application_window_init (EtApplicationWindow *self)
 
     /* Progress bar */
     priv->progress_bar = et_progress_bar_new ();
+    gtk_widget_hide(priv->progress_bar);
     gtk_box_pack_end (GTK_BOX (hbox), priv->progress_bar, FALSE, FALSE, 0);
 
     gtk_widget_show_all (GTK_WIDGET (main_vbox));
@@ -1777,31 +1776,19 @@ et_application_window_scan_dialog_update_previews (EtApplicationWindow *self)
     }
 }
 
-void
-et_application_window_progress_set_fraction (EtApplicationWindow *self,
-                                             gdouble fraction)
+void et_application_window_progress_set(EtApplicationWindow *self, gint current, gint total)
 {
-    EtApplicationWindowPrivate *priv;
+	g_return_if_fail(ET_APPLICATION_WINDOW(self));
+	EtApplicationWindowPrivate *priv = et_application_window_get_instance_private(self);
+	GtkProgressBar* progress_bar = GTK_PROGRESS_BAR(priv->progress_bar);
 
-    g_return_if_fail (ET_APPLICATION_WINDOW (self));
-
-    priv = et_application_window_get_instance_private (self);
-
-    gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (priv->progress_bar),
-                                   fraction);
-}
-
-void
-et_application_window_progress_set_text (EtApplicationWindow *self,
-                                         const gchar *text)
-{
-    EtApplicationWindowPrivate *priv;
-
-    g_return_if_fail (ET_APPLICATION_WINDOW (self));
-
-    priv = et_application_window_get_instance_private (self);
-
-    gtk_progress_bar_set_text (GTK_PROGRESS_BAR (priv->progress_bar), text);
+	double fraction = (double)current/total;
+	if (fraction >= 0) // valid progress
+	{	gtk_progress_bar_set_fraction(progress_bar, fraction);
+		gtk_progress_bar_set_text(progress_bar, strprintf("%d/%d", current, total).c_str());
+		gtk_widget_show(priv->progress_bar);
+	} else
+		gtk_widget_hide(priv->progress_bar);
 }
 
 void
@@ -2241,7 +2228,7 @@ et_header_fields_new_from_unknown (const ET_File *ETFile)
  */
 void
 et_application_window_display_et_file (EtApplicationWindow *self,
-                                       ET_File *ETFile)
+                                       ET_File *ETFile, int columns)
 {
     const ET_File_Description *description;
     const gchar *cur_filename_utf8;
@@ -2265,7 +2252,7 @@ et_application_window_display_et_file (EtApplicationWindow *self,
     et_application_window_display_file_name (self, ETFile);
 
     /* Display tag data */
-    et_application_window_tag_area_display_et_file (self, ETFile);
+    et_application_window_tag_area_display_et_file (self, ETFile, columns);
 
     /* Display controls in tag area */
     et_application_window_tag_area_display_controls (self, ETFile);
@@ -2538,21 +2525,17 @@ set_action_state (EtApplicationWindow *self,
     g_simple_action_set_enabled (action, enabled);
 }
 
-/* et_application_window_disable_command_actions:
- * Disable buttons when saving files (do not disable Quit button).
- */
 void
-et_application_window_disable_command_actions (EtApplicationWindow *self)
+et_application_window_disable_command_actions (EtApplicationWindow *self, gboolean allowStop)
 {
-    GtkDialog *dialog;
-
-    dialog = GTK_DIALOG (et_application_window_get_scan_dialog (self));
+    GtkDialog *dialog = GTK_DIALOG (et_application_window_get_scan_dialog (self));
 
     /* Scanner Window */
     if (dialog)
-    {
         gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, FALSE);
-    }
+
+    /* Tool bar buttons (the others are covered by the menu) */
+    set_action_state (self, "stop", allowStop);
 
     /* "File" menu commands */
     set_action_state (self, "open-with", FALSE);
@@ -2569,22 +2552,19 @@ et_application_window_disable_command_actions (EtApplicationWindow *self)
     set_action_state (self, "save-force", FALSE);
     set_action_state (self, "undo-last-changes", FALSE);
     set_action_state (self, "redo-last-changes", FALSE);
+    set_action_state (self, "replaygain", FALSE);
 
     /* FIXME: "Scanner" menu commands */
     /*set_action_state (self, "scan-mode", FALSE);*/
 }
 
-
-/* et_application_window_update_actions:
- * Set to sensitive/unsensitive the state of each button into
- * the commands area and menu items in function of state of the "main list".
- */
 void
 et_application_window_update_actions (EtApplicationWindow *self)
 {
-    GtkDialog *dialog;
+    GtkDialog *dialog = GTK_DIALOG (et_application_window_get_scan_dialog (self));
 
-    dialog = GTK_DIALOG (et_application_window_get_scan_dialog (self));
+    /* Tool bar buttons (the others are covered by the menu) */
+    set_action_state (self, "stop", FALSE);
 
     if (!ETCore->ETFileDisplayedList)
     {
@@ -2594,15 +2574,9 @@ et_application_window_update_actions (EtApplicationWindow *self)
         et_application_window_file_area_set_sensitive (self, FALSE);
         et_application_window_tag_area_set_sensitive (self, FALSE);
 
-        /* Tool bar buttons (the others are covered by the menu) */
-        set_action_state (self, "stop", FALSE);
-
         /* Scanner Window */
         if (dialog)
-        {
-            gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY,
-                                               FALSE);
-        }
+            gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, FALSE);
 
         /* Menu commands */
         set_action_state (self, "open-with", FALSE);
@@ -2624,6 +2598,7 @@ et_application_window_update_actions (EtApplicationWindow *self)
         set_action_state (self, "show-load-filenames", FALSE);
         set_action_state (self, "show-playlist", FALSE);
         set_action_state (self, "run-player", FALSE);
+        set_action_state (self, "replaygain", FALSE);
         /* FIXME set_action_state (self, "scan-mode", FALSE);*/
         set_action_state (self, "file-artist-view", FALSE);
 
@@ -2638,15 +2613,9 @@ et_application_window_update_actions (EtApplicationWindow *self)
         et_application_window_file_area_set_sensitive (self, TRUE);
         et_application_window_tag_area_set_sensitive (self, TRUE);
 
-        /* Tool bar buttons */
-        set_action_state (self, "stop", FALSE);
-
         /* Scanner Window */
         if (dialog)
-        {
-            gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY,
-                                               TRUE);
-        }
+            gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, TRUE);
 
         /* Commands into menu */
         set_action_state (self, "open-with", TRUE);
@@ -2658,6 +2627,7 @@ et_application_window_update_actions (EtApplicationWindow *self)
         set_action_state (self, "show-load-filenames", TRUE);
         set_action_state (self, "show-playlist", TRUE);
         set_action_state (self, "run-player", TRUE);
+        set_action_state (self, "replaygain", TRUE);
         /* FIXME set_action_state (self, "scan-mode", TRUE); */
         set_action_state (self, "file-artist-view", TRUE);
 

@@ -72,8 +72,6 @@ wavpack_tag_read_file_tag (GFile *file,
     WavpackContext *wpc;
     gchar message[80];
     gchar field[MAXLEN] = { 0, };
-    gchar *field2;
-    guint length;
     const int open_flags = OPEN_TAGS;
 
     g_return_val_if_fail (file != NULL && FileTag != NULL, FALSE);
@@ -110,256 +108,64 @@ wavpack_tag_read_file_tag (GFile *file,
         return FALSE;
     }
 
-    /*
-     * Title
-     */
-    length = WavpackGetTagItem(wpc, "title", field, MAXLEN);
+    auto set_field = [wpc, &field](const char* tag, gchar*& target)
+    {   int length = WavpackGetTagItem(wpc, tag, field, MAXLEN);
+        if (length > 0 && target == NULL)
+            target = Try_To_Validate_Utf8_String(field);
+    };
 
-    if ( length > 0 && FileTag->title == NULL ) {
-        FileTag->title = Try_To_Validate_Utf8_String(field);
-    }
+    set_field("title", FileTag->title);
+    set_field("version", FileTag->version);
+    set_field("subtitle", FileTag->subtitle);
+    set_field("artist", FileTag->artist);
 
-    memset (field, '\0', MAXLEN);
-
-    length = WavpackGetTagItem(wpc, "version", field, MAXLEN);
-
-    if ( length > 0 && FileTag->version == NULL ) {
-        FileTag->version = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    length = WavpackGetTagItem(wpc, "subtitle", field, MAXLEN);
-
-    if ( length > 0 && FileTag->subtitle == NULL ) {
-        FileTag->subtitle = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    /*
-     * Artist
-     */
-    length = WavpackGetTagItem(wpc, "artist", field, MAXLEN);
-
-    if ( length > 0 && FileTag->artist == NULL) {
-        FileTag->artist = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    /* Album artist. */
-    length = WavpackGetTagItem (wpc, "album artist", field, MAXLEN);
-
-    if (length > 0 && FileTag->album_artist == NULL)
-    {
-        FileTag->album_artist = Try_To_Validate_Utf8_String (field);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    /*
-     * Album
-     */
-    length = WavpackGetTagItem(wpc, "album", field, MAXLEN);
-
-    if ( length > 0 && FileTag->album == NULL ) {
-        FileTag->album = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    length = WavpackGetTagItem(wpc, "discsubtitle", field, MAXLEN);
-
-    if ( length > 0 && FileTag->disc_subtitle == NULL ) {
-        FileTag->disc_subtitle = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
+    set_field("album artist", FileTag->album_artist);
+    set_field("album", FileTag->album);
+    set_field("discsubtitle", FileTag->disc_subtitle);
 
     /*
      * Discnumber + Disctotal.
      */
-    length = WavpackGetTagItem (wpc, "part", field, MAXLEN);
-    field2 = strchr (field, '/');
-
-    /* Need to cut off the total tracks if present */
-    if (field2)
-    {
-        *field2 = 0;
-        field2++;
+    if (FileTag->disc_number == NULL)
+    {   gchar* value = nullptr;
+        set_field("part", value);
+        FileTag->disc_and_total(value);
+        g_free(value);
     }
 
-    if (field2 && FileTag->disc_total == NULL)
-    {
-        gchar *tmp;
-
-        tmp = Try_To_Validate_Utf8_String (field2);
-        FileTag->disc_total = et_disc_number_to_string (tmp);
-        g_free (tmp);
-    }
-
-    if (length > 0 && FileTag->disc_number == NULL)
-    {
-        gchar *tmp;
-
-        tmp = Try_To_Validate_Utf8_String (field);
-        FileTag->disc_number = et_disc_number_to_string (tmp);
-        g_free (tmp);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    /*
-     * Year
-     */
-    length = WavpackGetTagItem(wpc, "year", field, MAXLEN);
-
-    if ( length > 0 && FileTag->year == NULL ) {
-        FileTag->year = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    /*
-     * Release year
-     */
-    length = WavpackGetTagItem(wpc, "release year", field, MAXLEN);
-
-    if ( length > 0 && FileTag->release_year == NULL ) {
-        FileTag->release_year = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
+    set_field("year", FileTag->year);
+    set_field("release year", FileTag->release_year);
 
     /*
      * Tracknumber + tracktotal
      */
-    length = WavpackGetTagItem(wpc, "track", field, MAXLEN);
-    field2 = strchr (field, '/');
-
-    /* Need to cut off the total tracks if present */
-    if (field2) {
-        *field2 = 0;
-        field2++;
+    if (FileTag->track == NULL)
+    {   gchar* value = nullptr;
+        set_field("track", value);
+        FileTag->track_and_total(value);
+        g_free(value);
     }
 
-    if (field2 && FileTag->track_total == NULL)
-    {
-        gchar *tmp;
+    set_field("genre", FileTag->genre);
+    set_field("comment", FileTag->comment);
+    set_field("description", FileTag->description);
+    set_field("composer", FileTag->composer);
+    set_field("original artist", FileTag->orig_artist);
+    set_field("original year", FileTag->orig_year);
 
-        tmp = Try_To_Validate_Utf8_String (field2);
-        FileTag->track_total = et_track_number_to_string (tmp);
-        g_free (tmp);
-    }
+    set_field("copyright", FileTag->copyright);
+    set_field("copyright url", FileTag->url);
+    set_field("encoded by", FileTag->encoded_by);
 
-    if (length > 0 && FileTag->track == NULL)
-    {
-        gchar *tmp;
+    auto set_float = [wpc, &field, FileTag](const char*tag, void (File_Tag::*func)(const char*))
+    {   if (WavpackGetTagItem(wpc, tag, field, MAXLEN) > 0)
+            (FileTag->*func)(field);
+    };
 
-        tmp = Try_To_Validate_Utf8_String (field);
-        FileTag->track = et_track_number_to_string (tmp);
-        g_free (tmp);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    /*
-     * Genre
-     */
-    length = WavpackGetTagItem(wpc, "genre", field, MAXLEN);
-
-    if ( length > 0 && FileTag->genre == NULL ) {
-        FileTag->genre = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    /*
-     * Comment
-     */
-    length = WavpackGetTagItem(wpc, "comment", field, MAXLEN);
-
-    if ( length > 0 && FileTag->comment == NULL ) {
-        FileTag->comment = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    /*
-     * Description
-     */
-    length = WavpackGetTagItem(wpc, "description", field, MAXLEN);
-
-    if ( length > 0 && FileTag->description == NULL ) {
-        FileTag->description = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    /*
-     * Composer
-     */
-    length = WavpackGetTagItem(wpc, "composer", field, MAXLEN);
-
-    if ( length > 0 && FileTag->composer == NULL ) {
-        FileTag->composer = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    /*
-     * Original artist
-     */
-    length = WavpackGetTagItem(wpc, "original artist", field, MAXLEN);
-
-    if ( length > 0 && FileTag->orig_artist == NULL ) {
-        FileTag->orig_artist  = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    /*
-     * Original year
-     */
-    length = WavpackGetTagItem(wpc, "original year", field, MAXLEN);
-
-    if ( length > 0 && FileTag->orig_year == NULL ) {
-        FileTag->orig_year = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    /*
-     * Copyright
-     */
-    length = WavpackGetTagItem(wpc, "copyright", field, MAXLEN);
-
-    if ( length > 0 && FileTag->copyright == NULL ) {
-        FileTag->copyright = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    /*
-     * URL
-     */
-    length = WavpackGetTagItem(wpc, "copyright url", field, MAXLEN);
-
-    if ( length > 0 && FileTag->url == NULL ) {
-        FileTag->url = Try_To_Validate_Utf8_String(field);
-    }
-
-    memset (field, '\0', MAXLEN);
-
-    /*
-     * Encoded by
-     */
-    length = WavpackGetTagItem(wpc, "encoded by", field, MAXLEN);
-
-    if ( length > 0 && FileTag->encoded_by == NULL ) {
-        FileTag->encoded_by = Try_To_Validate_Utf8_String(field);
-    }
+    set_float("replaygain_track_gain", &File_Tag::track_gain_str);
+    set_float("replaygain_track_peak", &File_Tag::track_peak_str);
+    set_float("replaygain_album_gain", &File_Tag::album_gain_str);
+    set_float("replaygain_album_peak", &File_Tag::album_peak_str);
 
     WavpackCloseFile(wpc);
 
@@ -500,6 +306,15 @@ wavpack_tag_write_file_tag (const ET_File *ETFile,
     if (!et_wavpack_append_or_delete_tag_item (wpc, "copyright url", FileTag->url))
         goto err;
     if (!et_wavpack_append_or_delete_tag_item (wpc, "encoded by", FileTag->encoded_by))
+        goto err;
+
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "replaygain_track_gain", FileTag->track_gain_str()))
+        goto err;
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "replaygain_track_peak", FileTag->track_peak_str()))
+        goto err;
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "replaygain_album_gain", FileTag->album_gain_str()))
+        goto err;
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "replaygain_album_peak", FileTag->album_peak_str()))
         goto err;
 
     if (WavpackWriteTag (wpc) == 0)

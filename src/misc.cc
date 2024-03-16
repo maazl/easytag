@@ -25,6 +25,7 @@
 #include <glib/gstdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <stdarg.h>
 
 #include "easytag.h"
 #include "id3_tag.h"
@@ -35,6 +36,18 @@
 #ifdef G_OS_WIN32
 #include <windows.h>
 #endif /* G_OS_WIN32 */
+
+std::string strprintf(const char* format, ...)
+{	va_list va;
+	va_start(va, format);
+	size_t size = std::vsnprintf(nullptr, 0, format, va);
+	va_end(va);
+	std::string buf(size, 0);
+	va_start(va, format);
+	std::vsnprintf(&buf[0], size + 1, format, va);
+	va_end(va);
+	return buf;
+}
 
 /*
  * Add the 'string' passed in parameter to the list store
@@ -632,18 +645,4 @@ et_normalized_strcasecmp0 (const gchar *str1,
     g_free (casefolded2);
 
     return result;
-}
-
-/*
- * et_str_empty:
- * @str: string to test for emptiness
- *
- * Test if @str is empty, in other words either %NULL or the empty string.
- *
- * Returns: %TRUE is @str is either %NULL or "", %FALSE otherwise
- */
-gboolean
-et_str_empty (const gchar *str)
-{
-    return !str || !str[0];
 }

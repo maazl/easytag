@@ -27,6 +27,7 @@
         <file preprocess='to-pixdata'>images/mask.png</file>
         <file preprocess='to-pixdata'>images/musicbrainz.png</file>
         <file preprocess='to-pixdata'>images/red-lines.png</file>
+        <file preprocess='to-pixdata'>images/replaygain.png</file>
         <file preprocess='to-pixdata'>images/sequence-track.png</file>
         <file preprocess='to-pixdata'>images/unselect-all.png</file>
     </gresource>

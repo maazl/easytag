@@ -156,58 +156,14 @@ flac_tag_read_file_tag (GFile *file,
 #ifdef ENABLE_MP3
     /* If no FLAC vorbis tag found : we try to get the ID3 tag if it exists
      * (but it will be deleted when rewriting the tag) */
-    if ( FileTag->title       == NULL
-      && FileTag->version     == NULL
-      && FileTag->subtitle    == NULL
-      && FileTag->artist      == NULL
-      && FileTag->album_artist == NULL
-      && FileTag->album       == NULL
-      && FileTag->disc_subtitle == NULL
-      && FileTag->disc_number == NULL
-      && FileTag->disc_total  == NULL
-      && FileTag->year        == NULL
-      && FileTag->release_year == NULL
-      && FileTag->track       == NULL
-      && FileTag->track_total == NULL
-      && FileTag->genre       == NULL
-      && FileTag->comment     == NULL
-      && FileTag->composer    == NULL
-      && FileTag->orig_artist == NULL
-      && FileTag->orig_year   == NULL
-      && FileTag->copyright   == NULL
-      && FileTag->url         == NULL
-      && FileTag->encoded_by  == NULL
-      && FileTag->picture     == NULL)
+    if (FileTag->empty())
     {
         id3tag_read_file_tag (file, FileTag, NULL);
 
         // If an ID3 tag has been found (and no FLAC tag), we mark the file as
         // unsaved to rewrite a flac tag.
-        if ( FileTag->title       != NULL
-          || FileTag->version     != NULL
-          || FileTag->subtitle    != NULL
-          || FileTag->artist      != NULL
-          || FileTag->album_artist != NULL
-          || FileTag->album       != NULL
-          || FileTag->disc_subtitle != NULL
-          || FileTag->disc_number != NULL
-          || FileTag->disc_total  != NULL
-          || FileTag->year        != NULL
-          || FileTag->release_year != NULL
-          || FileTag->track       != NULL
-          || FileTag->track_total != NULL
-          || FileTag->genre       != NULL
-          || FileTag->comment     != NULL
-          || FileTag->composer    != NULL
-          || FileTag->orig_artist != NULL
-          || FileTag->orig_year   != NULL
-          || FileTag->copyright   != NULL
-          || FileTag->url         != NULL
-          || FileTag->encoded_by  != NULL
-          || FileTag->picture     != NULL)
-        {
+        if (!FileTag->empty())
             FileTag->saved = FALSE;
-        }
     }
 #endif
 
@@ -472,6 +428,11 @@ flac_tag_write_file_tag (const ET_File *ETFile,
         append_tag(ET_VORBIS_COMMENT_FIELD_COPYRIGHT, FileTag->copyright);
         append_tag(ET_VORBIS_COMMENT_FIELD_CONTACT, FileTag->url, ET_PROCESS_FIELD_URL);
         append_tag(ET_VORBIS_COMMENT_FIELD_ENCODED_BY, FileTag->encoded_by, ET_PROCESS_FIELD_ENCODED_BY);
+
+        append_tag(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_TRACK_GAIN, FileTag->track_gain_str());
+        append_tag(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_TRACK_PEAK, FileTag->track_peak_str());
+        append_tag(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_ALBUM_GAIN, FileTag->album_gain_str());
+        append_tag(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_ALBUM_PEAK, FileTag->album_peak_str());
 
         /**************************
          * Set unsupported fields *

@@ -166,6 +166,9 @@ AC_ARG_ENABLE([mp4],
 AC_ARG_ENABLE([wavpack],
               [AS_HELP_STRING([--disable-wavpack], [Disable support for Wavpack files (default=auto)])])
 
+AC_ARG_ENABLE([replaygain],
+              [AS_HELP_STRING([--disable-replaygain], [Disable support for ReplayGain analysis (default=auto)])])
+
 AC_ARG_ENABLE([cddb],
               [AS_HELP_STRING([--disable-cddb], [Disable CDDB support (default=auto)])])
 AC_ARG_ENABLE([nautilus_actions],
@@ -324,6 +327,20 @@ AS_IF([test "x$have_wavpack" != "xno"],
              [AC_MSG_ERROR([Wavpack support requested but required dependencies ($WAVPACK_DEPS) not found])])])
 
 dnl ################################################
+dnl # ReplayGain (libav)
+dnl ################################################
+REPLAYGAIN_DEPS="libavutil >= 56 libavcodec >= 58 libavformat >= 58 libswresample >= 3.5"
+AS_IF([test "x$enable_replaygain" != "xno"],
+      [PKG_CHECK_EXISTS([$REPLAYGAIN_DEPS], [have_replaygain=yes], [have_replaygain=no])],
+      [have_replaygain=no])
+
+AS_IF([test "x$have_replaygain" != "xno"],
+      [AC_DEFINE([ENABLE_REPLAYGAIN], [], [Define for ReplayGain analysis support])],
+      [REPLAYGAIN_DEPS=""
+       AS_IF([test "x$enable_replaygain" = "xyes"],
+             [AC_MSG_ERROR([ReplayGain support requested but required dependencies ($REPLAYGAIN_DEPS) not found])])])
+
+dnl ################################################
 dnl # CDDB (libsoup)
 dnl ################################################
 CDDB_DEPS="libsoup-2.4 >= 2.42"
@@ -364,7 +381,7 @@ AC_SUBST([GTK_DEPRECATION_FLAGS],
          ["-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_3_14 -DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_3_14"])
 AC_SUBST([SOUP_DEPRECATION_FLAGS],
          ["-DSOUP_VERSION_MIN_REQUIRED=SOUP_VERSION_2_42 -DSOUP_VERSION_MAX_ALLOWED=SOUP_VERSION_2_42"])
-PKG_CHECK_MODULES([EASYTAG], [$CDDB_DEPS $GIO_DEPS $GTK_DEPS $OPUS_DEPS $OGG_DEPS $SPEEX_DEPS $FLAC_DEPS $ID3TAG_DEPS $TAGLIB_DEPS $WAVPACK_DEPS])
+PKG_CHECK_MODULES([EASYTAG], [$CDDB_DEPS $GIO_DEPS $GTK_DEPS $OPUS_DEPS $OGG_DEPS $SPEEX_DEPS $FLAC_DEPS $ID3TAG_DEPS $TAGLIB_DEPS $WAVPACK_DEPS $REPLAYGAIN_DEPS])
 
 dnl Set warning flags
 AX_COMPILER_FLAGS()
@@ -400,6 +417,7 @@ echo Ogg Opus file support ...: $have_opus
 echo FLAC file support .......: $have_flac
 echo MP4 file support ........: $have_taglib
 echo WavPack support .........: $have_wavpack
+echo ReplayGain support ......: $have_replaygain
 echo NLS/gettext .............: $USE_NLS
 echo Nautilus actions ........: $have_libnautilus_extension
 echo Tests during make check .: $testing_utilities

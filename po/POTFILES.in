@@ -23,7 +23,7 @@ src/application_window.cc
 src/browser.cc
 src/cddb_dialog.cc
 src/charset.c
-src/easytag.c
+src/easytag.cc
 src/et_core.c
 src/file_area.c
 src/file_list.cc

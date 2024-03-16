@@ -424,7 +424,7 @@ gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1,
 	case ET_SORT_MODE_DESCENDING_FILE_SAMPLERATE:
 		return CmpRev<CmpInfoInt<&ET_File_Info::samplerate>>;
 	default:
-		g_assert_not_reached ();
+		return nullptr;
 	}
 }
 
@@ -616,6 +616,11 @@ ET_Save_File_Tag_Internal (ET_File *ETFile, File_Tag *FileTag)
     FileTag->url = strip_value(FileTagCur->url);
     FileTag->encoded_by = strip_value(FileTagCur->encoded_by);
     FileTag->description = strip_value(FileTagCur->description);
+
+    FileTag->track_gain = FileTagCur->track_gain;
+    FileTag->track_peak = FileTagCur->track_peak;
+    FileTag->album_gain = FileTagCur->album_gain;
+    FileTag->album_peak = FileTagCur->album_peak;
 
     /* Picture */
     et_file_tag_set_picture (FileTag, FileTagCur->picture);

@@ -2177,8 +2177,6 @@ et_scan_dialog_scan_selected_files (EtScanDialog *self)
     EtApplicationWindow *window;
     guint progress_bar_index = 0;
     guint selectcount;
-    gchar progress_bar_text[30];
-    double fraction;
     GList *selfilelist = NULL;
     GList *l;
 
@@ -2188,15 +2186,12 @@ et_scan_dialog_scan_selected_files (EtScanDialog *self)
     et_application_window_update_et_file_from_ui (window);
 
     /* Initialize status bar */
-    et_application_window_progress_set_fraction (window, 0.0);
     selfilelist = et_application_window_browser_get_selected_files (window);
     selectcount = g_list_length (selfilelist);
-    g_snprintf (progress_bar_text, 30, "%u/%u", progress_bar_index,
-                selectcount);
-    et_application_window_progress_set_text (window, progress_bar_text);
+    et_application_window_progress_set(window, 0, selectcount);
 
     /* Set to unsensitive all command buttons (except Quit button) */
-    et_application_window_disable_command_actions (window);
+    et_application_window_disable_command_actions (window, FALSE);
 
     for (l = selfilelist; l != NULL; l = g_list_next (l))
     {
@@ -2205,11 +2200,7 @@ et_scan_dialog_scan_selected_files (EtScanDialog *self)
         /* Run the current scanner. */
         Scan_Select_Mode_And_Run_Scanner (self, etfile);
 
-        fraction = (++progress_bar_index) / (double) selectcount;
-        et_application_window_progress_set_fraction (window, fraction);
-        g_snprintf(progress_bar_text, 30, "%d/%d", progress_bar_index, selectcount);
-        et_application_window_progress_set_text (window, progress_bar_text);
-
+        et_application_window_progress_set(window, ++progress_bar_index, selectcount);
         /* Needed to refresh status bar */
         while (gtk_events_pending())
             gtk_main_iteration();
@@ -2226,8 +2217,7 @@ et_scan_dialog_scan_selected_files (EtScanDialog *self)
     /* To update state of command buttons */
     et_application_window_update_actions (window);
 
-    et_application_window_progress_set_text (window, "");
-    et_application_window_progress_set_fraction (window, 0.0);
+    et_application_window_progress_set(window, 0, 0);
     et_application_window_status_bar_message (window,
                                               _("All tags have been scanned"),
                                               TRUE);

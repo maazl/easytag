@@ -542,6 +542,16 @@
                                                 </child>
                                             </object>
                                         </child>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="replaygain_column">
+                                                <property name="clickable">False</property>
+                                                <property name="resizable">True</property>
+                                                <property name="title" translatable="yes">ReplayGain</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="replaygain_renderer"/>
+                                                </child>
+                                            </object>
+                                        </child>
                                         <child internal-child="selection">
                                             <object class="GtkTreeSelection" id="files_selection">
                                                 <property name="mode">multiple</property>

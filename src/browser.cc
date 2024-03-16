@@ -2752,6 +2752,8 @@ on_file_tree_button_press_event (GtkWidget *widget,
         if (!enum_value)
             return GDK_EVENT_PROPAGATE;
         auto cmp = ET_Get_Comp_Func_Sort_File((EtSortMode)enum_value->value);
+        if (!cmp)
+            return GDK_EVENT_PROPAGATE;
 
         /* Search and select files of the property. */
         EtBrowserPrivate* priv = et_browser_get_instance_private(self);
@@ -3559,7 +3561,9 @@ static void set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkT
 	auto renderer = (const FileColumnRenderer*)data;
 	string text = renderer->RenderText(file);
 	bool saved = et_file_check_saved(file);
-	bool changed = !saved && renderer->Column < ET_SORT_MODE_ASCENDING_CREATION_DATE && text != renderer->RenderText(file, true);
+	bool changed = !saved
+		&& (renderer->Column < ET_SORT_MODE_ASCENDING_CREATION_DATE || renderer->Column >= ET_SORT_MODE_ASCENDING_REPLAYGAIN)
+		&& text != renderer->RenderText(file, true);
 	if (changed && text.length() == 0)
 		text = "\xe2\x90\xa0"; // ␠ Symbol for Space
 	FileColumnRenderer::SetText(GTK_CELL_RENDERER_TEXT(cell),

@@ -37,8 +37,11 @@
 #include "scan_dialog.h"
 #include "et_core.h"
 #include "charset.h"
+#include "replaygain.h"
 
 #include "win32/win32dep.h"
+
+using namespace std;
 
 static GtkWidget *QuitRecursionWindow = NULL;
 
@@ -59,7 +62,6 @@ static gint SF_ButtonPressed_Rename_File;
 static gboolean Write_File_Tag (ET_File *ETFile, gboolean hide_msgbox);
 static gint Save_File (ET_File *ETFile, gboolean multiple_files,
                        gboolean force_saving_files);
-static gint Save_Selected_Files_With_Answer (gboolean force_saving_files);
 static gint Save_List_Of_Files (GList *etfilelist,
                                 gboolean force_saving_files);
 
@@ -70,19 +72,6 @@ static void Open_Quit_Recursion_Function_Window (void);
 static void Destroy_Quit_Recursion_Function_Window (void);
 static void et_on_quit_recursion_response (GtkDialog *dialog, gint response_id,
                                            gpointer user_data);
-
-/*
- * Action when Save button is pressed
- */
-void Action_Save_Selected_Files (void)
-{
-    Save_Selected_Files_With_Answer(FALSE);
-}
-
-void Action_Force_Saving_Selected_Files (void)
-{
-    Save_Selected_Files_With_Answer(TRUE);
-}
 
 
 /*
@@ -100,7 +89,7 @@ gint Save_All_Files_With_Answer (gboolean force_saving_files)
 /*
  * Will save only the selected files in the file list
  */
-static gint
+gint
 Save_Selected_Files_With_Answer (gboolean force_saving_files)
 {
     gint toreturn;
@@ -127,12 +116,10 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
     gint       nb_files_to_save;
     gint       nb_files_changed_by_ext_program;
     gchar     *msg;
-    gchar      progress_bar_text[30];
     GList *l;
     ET_File   *etfile_save_position = NULL;
     File_Tag  *FileTag;
     File_Name *FileNameNew;
-    double     fraction;
     GAction *action;
     GVariant *variant;
     GtkWidget *widget_focused;
@@ -193,13 +180,11 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
     }
 
     /* Initialize status bar */
-    et_application_window_progress_set_fraction (window, 0.0);
     progress_bar_index = 0;
-    g_snprintf(progress_bar_text, 30, "%d/%d", progress_bar_index, nb_files_to_save);
-    et_application_window_progress_set_text (window, progress_bar_text);
+    et_application_window_progress_set(window, 0, nb_files_to_save);
 
     /* Set to unsensitive all command buttons (except Quit button) */
-    et_application_window_disable_command_actions (window);
+    et_application_window_disable_command_actions (window, FALSE);
     et_application_window_browser_set_sensitive (window, FALSE);
     et_application_window_tag_area_set_sensitive (window, FALSE);
     et_application_window_file_area_set_sensitive (window, FALSE);
@@ -259,8 +244,8 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
     for (l = etfilelist; l != NULL && !Main_Stop_Button_Pressed;
          l = g_list_next (l))
     {
-        FileTag = ((ET_File *)l->data)->FileTag->data;
-        FileNameNew = ((ET_File *)l->data)->FileNameNew->data;
+        FileTag = (File_Tag*)((ET_File *)l->data)->FileTag->data;
+        FileNameNew = (File_Name*)((ET_File *)l->data)->FileNameNew->data;
 
         /* We process only the files changed and not saved, or we force to save all
          * files if force_saving_files==TRUE */
@@ -275,12 +260,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
                                                                                 FALSE,
                                                                                 currentPath);
 
-            fraction = (++progress_bar_index) / (double) nb_files_to_save;
-            et_application_window_progress_set_fraction (window, fraction);
-            g_snprintf(progress_bar_text, 30, "%d/%d", progress_bar_index, nb_files_to_save);
-            et_application_window_progress_set_text (window,
-                                                     progress_bar_text);
-
+            et_application_window_progress_set(window, ++progress_bar_index, nb_files_to_save);
             /* Needed to refresh status bar */
             while (gtk_events_pending())
                 gtk_main_iteration();
@@ -293,11 +273,8 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
             if (saving_answer == -1)
             {
                 /* Stop saving files + reinit progress bar */
-                et_application_window_progress_set_text (window, "");
-                et_application_window_progress_set_fraction (window, 0.0);
-                et_application_window_status_bar_message (window,
-                                                          _("Saving files was stopped"),
-                                                          TRUE);
+                et_application_window_progress_set (window, 0, 0);
+                et_application_window_status_bar_message (window, _("Saving files was stopped"), TRUE);
                 /* To update state of command buttons */
                 et_application_window_update_actions (window);
                 et_application_window_browser_set_sensitive (window, TRUE);
@@ -353,8 +330,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
     /* Give again focus to the first entry, else the focus is passed to another */
     gtk_widget_grab_focus(GTK_WIDGET(widget_focused));
 
-    et_application_window_progress_set_text (window, "");
-    et_application_window_progress_set_fraction (window, 0.0);
+    et_application_window_progress_set(window, 0, 0);
     et_application_window_status_bar_message (window, msg, TRUE);
     g_free(msg);
     et_application_window_browser_refresh_list (window);
@@ -388,8 +364,8 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
 
     /* Save the current displayed data */
     //ET_Save_File_Data_From_UI((ET_File *)ETFileList->data); // Not needed, because it was done before
-    FileTag     = ETFile->FileTag->data;
-    FileNameNew = ETFile->FileNameNew->data;
+    FileTag     = (File_Tag*)ETFile->FileTag->data;
+    FileNameNew = (File_Name*)ETFile->FileNameNew->data;
 
     /*
      * Check if file was changed by an external program
@@ -798,6 +774,87 @@ Write_File_Tag (ET_File *ETFile, gboolean hide_msgbox)
     return FALSE;
 }
 
+#ifdef ENABLE_REPLAYGAIN
+void ReplayGain_For_Selected_Files (void)
+{
+	EtApplicationWindow* const window = ET_APPLICATION_WINDOW(MainWindow);
+	GList *etfilelist = et_application_window_browser_get_selected_files(window);
+
+	int selectcount = g_list_length(etfilelist);
+	if (!selectcount)
+		return;
+
+  et_application_window_disable_command_actions(window, TRUE);
+	et_application_window_progress_set(window, 0, selectcount);
+	/* Needed to refresh status bar */
+	while (gtk_events_pending())
+		gtk_main_iteration();
+
+  ReplayGainAnalyzer analyzer;
+
+	int done = 0;
+	bool error = false;
+	for (GList* l = etfilelist; l; l = g_list_next(l))
+	{
+		ET_File* ETFile = (ET_File*)l->data;
+		File_Tag* file_tag  = (File_Tag*)ETFile->FileTag->data;
+		const File_Name* file_name = (File_Name*)ETFile->FileNameCur->data;
+
+		string err = analyzer.AnalyzeFile(file_name->value);
+		if (!err.empty())
+		{	Log_Print(LOG_ERROR, _("Failed to analyze file '%s': %s"), file_name->value_utf8, err.c_str());
+			error = 1;
+		} else
+		{	file_tag = file_tag->clone();
+			et_file_tag_set_track_gain(file_tag, analyzer.GetLastResult().Gain(), analyzer.GetLastResult().Peak());
+			ET_Manage_Changes_Of_File_Data(ETFile, nullptr, file_tag);
+			Log_Print(LOG_OK, _("ReplayGain of file '%s' is %.1f dB, peak %.2f"), file_name->value_utf8, file_tag->track_gain, file_tag->track_peak);
+
+			if (ETCore->ETFileDisplayed == ETFile)
+				et_application_window_display_et_file(window, ETFile, ET_COLUMN_REPLAYGAIN);
+			et_application_window_browser_refresh_file_in_list(window, ETFile);
+		}
+
+		et_application_window_progress_set(window, ++done, selectcount);
+		/* Needed to refresh status bar */
+		while (gtk_events_pending())
+			gtk_main_iteration();
+
+		if (Main_Stop_Button_Pressed)
+		{	et_application_window_status_bar_message (window, _("ReplayGain calculation stopped"), TRUE);
+			goto end;
+		}
+	}
+
+	if (error)
+	{	Log_Print(LOG_WARNING, _("Skip album gain because of previous errors."));
+		goto end;
+	}
+	if (done < 2)
+		goto end; // album gain requires at least 2 files
+
+	// apply album gain
+	{	float album_gain = analyzer.GetAggregatedResult().Gain();
+		float album_peak = analyzer.GetAggregatedResult().Peak();
+		for (GList* l = etfilelist; l; l = g_list_next(l))
+		{	ET_File* ETFile = (ET_File*)l->data;
+			File_Tag* file_tag = ((File_Tag*)ETFile->FileTag->data)->clone();;
+			et_file_tag_set_album_gain(file_tag, album_gain, album_peak);
+			ET_Manage_Changes_Of_File_Data(ETFile, nullptr, file_tag);
+
+			if (ETCore->ETFileDisplayed == ETFile)
+				et_application_window_display_et_file(window, ETFile, ET_COLUMN_REPLAYGAIN);
+		}
+		Log_Print(LOG_OK, _("ReplayGain of album is %.1f dB, peak %.2f"), album_gain, album_peak);
+		et_application_window_browser_refresh_list(window);
+	}
+
+end:
+	et_application_window_progress_set(window, 0, 0);
+	et_application_window_update_actions(window);
+}
+#endif
+
 /*
  * Scans the specified directory: and load files into a list.
  * If the path doesn't exist, we free the previous loaded list of files.
@@ -813,9 +870,7 @@ Read_Directory (const gchar *path_real)
     GFileEnumerator *dir_enumerator;
     GError *error = NULL;
     gchar *msg;
-    gchar  progress_bar_text[30];
     guint  nbrfile = 0;
-    double fraction;
     GList *FileList = NULL;
     GList *l;
     gint   progress_bar_index = 0;
@@ -900,15 +955,13 @@ Read_Directory (const gchar *path_real)
 
     nbrfile = g_list_length(FileList);
 
-    et_application_window_progress_set_fraction (window, 0.0);
-    g_snprintf (progress_bar_text, 30, "%d/%u", 0, nbrfile);
-    et_application_window_progress_set_text (window, progress_bar_text);
+    et_application_window_progress_set (window, 0, nbrfile);
 
     // Load the supported files (Extension recognized)
     for (l = FileList; l != NULL && !Main_Stop_Button_Pressed;
          l = g_list_next (l))
     {
-        GFile *file = l->data;
+        GFile *file = (GFile*)l->data;
         gchar *filename_real = g_file_get_path (file);
         gchar *display_path = g_filename_display_name (filename_real);
 
@@ -921,18 +974,14 @@ Read_Directory (const gchar *path_real)
         ETCore->ETFileList = et_file_list_add (ETCore->ETFileList, file, root_path);
 
         /* Update the progress bar. */
-        fraction = (++progress_bar_index) / (double) nbrfile;
-        et_application_window_progress_set_fraction (window, fraction);
-        g_snprintf (progress_bar_text, 30, "%d/%u", progress_bar_index,
-                    nbrfile);
-        et_application_window_progress_set_text (window, progress_bar_text);
+        et_application_window_progress_set(window, ++progress_bar_index, nbrfile);
         while (gtk_events_pending())
             gtk_main_iteration();
     }
 
     g_list_free_full (FileList, g_object_unref);
     et_file_name_free(root_path);
-    et_application_window_progress_set_text (window, "");
+    et_application_window_progress_set(window, 0, 0);
 
     /* Close window to quit recursion */
     Destroy_Quit_Recursion_Function_Window();
@@ -994,7 +1043,6 @@ Read_Directory (const gchar *path_real)
 
     et_application_window_browser_set_sensitive (window, TRUE);
 
-    et_application_window_progress_set_fraction (window, 0.0);
     et_application_window_status_bar_message (window, msg, FALSE);
     g_free (msg);
     et_application_window_set_normal_cursor (window);

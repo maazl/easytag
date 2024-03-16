@@ -32,9 +32,12 @@
 #include "picture.h"
 #include "scan.h"
 #include "scan_dialog.h"
+#include "replaygain.h"
 
 #include <unordered_set>
 #include <functional>
+#include <cmath>
+#include <ctype.h>
 using namespace std;
 
 typedef struct
@@ -79,6 +82,16 @@ typedef struct
     GtkWidget *url_entry;
     GtkWidget *encoded_by_label;
     GtkWidget *encoded_by_entry;
+    GtkWidget *track_gain_label;
+    GtkWidget *track_gain_entry;
+    GtkWidget *track_gain_unit;
+    GtkWidget *track_peak_label;
+    GtkWidget *track_peak_entry;
+    GtkWidget *album_gain_label;
+    GtkWidget *album_gain_entry;
+    GtkWidget *album_gain_unit;
+    GtkWidget *album_peak_label;
+    GtkWidget *album_peak_entry;
 
     GtkListStore *genre_combo_model;
     GtkListStore *track_combo_model;
@@ -996,6 +1009,30 @@ Insert_Only_Digit (GtkEditable *editable,
     gtk_editable_insert_text(editable, result, j, position);
     g_signal_handlers_unblock_by_func(G_OBJECT(editable),(gpointer)Insert_Only_Digit,data);
     g_free(result);
+}
+
+/*
+ * To insert only valid numbers in an entry.
+ */
+static void Insert_Only_Number(GtkEditable *editable, const gchar *inserted_text, gint length, gint *position, gpointer data)
+{
+	string newtext = gtk_entry_get_text(GTK_ENTRY(editable));
+	newtext.insert(*position, inserted_text);
+	while (true)
+	{	if (!newtext.size())
+			return;
+		if (!isspace(newtext.back()))
+			break;
+	}
+	while (isspace(newtext.front()))
+		newtext.erase(0, 1);
+	if (newtext.front() == '-')
+		newtext.erase(0, 1);
+	newtext.insert(0, "0");
+	size_t n;
+	sscanf(newtext.c_str(), "%*f%zn", &n);
+	if (n != newtext.size())
+		g_signal_stop_emission_by_name(G_OBJECT(editable),"insert_text");
 }
 
 /*
@@ -2089,6 +2126,10 @@ create_tag_area (EtTagArea *self)
     focus_chain = g_list_prepend (focus_chain, priv->copyright_entry);
     focus_chain = g_list_prepend (focus_chain, priv->url_entry);
     focus_chain = g_list_prepend (focus_chain, priv->encoded_by_entry);
+    focus_chain = g_list_prepend (focus_chain, priv->track_gain_entry);
+    focus_chain = g_list_prepend (focus_chain, priv->track_peak_entry);
+    focus_chain = g_list_prepend (focus_chain, priv->album_gain_entry);
+    focus_chain = g_list_prepend (focus_chain, priv->album_peak_entry);
     /* More efficient than using g_list_append(), which must traverse the
      * whole list. */
     focus_chain = g_list_reverse (focus_chain);
@@ -2166,6 +2207,16 @@ et_tag_area_class_init (EtTagAreaClass *klass)
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, encoded_by_entry);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, genre_combo_model);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_combo_model);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_gain_label);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_gain_entry);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_gain_unit);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_peak_label);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_peak_entry);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, album_gain_label);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, album_gain_entry);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, album_gain_unit);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, album_peak_label);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, album_peak_entry);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, images_view);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, add_image_toolitem);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, apply_image_toolitem);
@@ -2195,6 +2246,7 @@ et_tag_area_class_init (EtTagAreaClass *klass)
     gtk_widget_class_bind_template_callback (widget_class, on_year_entry_activate);
     gtk_widget_class_bind_template_callback (widget_class, on_year_entry_focus_out_event);
     gtk_widget_class_bind_template_callback (widget_class, Insert_Only_Digit);
+    gtk_widget_class_bind_template_callback (widget_class, Insert_Only_Number);
 }
 
 /*
@@ -2222,6 +2274,9 @@ void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
     EtTagAreaPrivate *priv = et_tag_area_get_instance_private (self);
 
     guint hide = g_settings_get_flags(MainSettings, "hide-fields") | ET_COLUMN_FILEPATH;
+#ifndef ENABLE_REPLAYGAIN
+    hide |= ET_COLUMN_REPLAYGAIN;
+#endif
 
     /* Special controls to display or not! */
     switch (type)
@@ -2288,22 +2343,12 @@ void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
 
     auto show_hide = [hide](guint col, GtkWidget* w1, GtkWidget* w2, GtkWidget* w3)
     {
-        if (!(hide & col))
-        {
-            gtk_widget_show(w1);
-            if (w2)
-                gtk_widget_show(w2);
-            if (w3)
-                gtk_widget_show(w3);
-        }
-        else
-        {
-            gtk_widget_hide(w1);
-            if (w2)
-                gtk_widget_hide(w2);
-            if (w3)
-                gtk_widget_hide(w3);
-        }
+        gboolean show = !(hide & col);
+        gtk_widget_set_visible(w1, show);
+        if (w2)
+            gtk_widget_set_visible(w2, show);
+        if (w3)
+            gtk_widget_set_visible(w3, show);
     };
 
     show_hide(ET_COLUMN_VERSION, priv->version_entry, priv->version_label, nullptr);
@@ -2319,6 +2364,17 @@ void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
     show_hide(ET_COLUMN_COPYRIGHT, priv->copyright_entry, priv->copyright_label, nullptr);
     show_hide(ET_COLUMN_URL, priv->url_entry, priv->url_label, nullptr);
     show_hide(ET_COLUMN_ENCODED_BY, priv->encoded_by_entry, priv->encoded_by_label, nullptr);
+    gboolean show = !(hide & ET_COLUMN_REPLAYGAIN);
+    gtk_widget_set_visible(priv->track_gain_label, show);
+    gtk_widget_set_visible(priv->track_gain_entry, show);
+    gtk_widget_set_visible(priv->track_gain_unit, show);
+    gtk_widget_set_visible(priv->track_peak_label, show);
+    gtk_widget_set_visible(priv->track_peak_entry, show);
+    gtk_widget_set_visible(priv->album_gain_label, show);
+    gtk_widget_set_visible(priv->album_gain_entry, show);
+    gtk_widget_set_visible(priv->album_gain_unit, show);
+    gtk_widget_set_visible(priv->album_peak_label, show);
+    gtk_widget_set_visible(priv->album_peak_entry, show);
     show_hide(ET_COLUMN_IMAGE, priv->images_grid, nullptr, nullptr);
     show_hide(ET_COLUMN_DESCRIPTION, GTK_WIDGET(priv->description_scrolled), nullptr, nullptr);
     guint multiline = -!g_settings_get_boolean(MainSettings, "tag-multiline-comment");
@@ -2354,6 +2410,10 @@ et_tag_area_clear (EtTagArea *self)
     gtk_entry_set_text (GTK_ENTRY (priv->copyright_entry), "");
     gtk_entry_set_text (GTK_ENTRY (priv->url_entry), "");
     gtk_entry_set_text (GTK_ENTRY (priv->encoded_by_entry), "");
+    gtk_entry_set_text (GTK_ENTRY (priv->track_gain_entry), "");
+    gtk_entry_set_text (GTK_ENTRY (priv->track_peak_entry), "");
+    gtk_entry_set_text (GTK_ENTRY (priv->album_gain_entry), "");
+    gtk_entry_set_text (GTK_ENTRY (priv->album_peak_entry), "");
     PictureEntry_Clear (self);
     GtkTextBuffer* buffer = gtk_text_view_get_buffer(priv->comment_text);
     gtk_text_buffer_set_text(buffer, "", 0);
@@ -2466,6 +2526,28 @@ void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 	if (gtk_widget_get_visible(priv->encoded_by_entry))
 		store_field(&File_Tag::encoded_by, gtk_entry_get_text(GTK_ENTRY(priv->encoded_by_entry)));
 
+	auto fetch_float = [](GtkWidget* entry, float& target, float delta)
+	{	const gchar* text = gtk_entry_get_text(GTK_ENTRY(entry));
+		if (et_str_empty(text))
+		{	target = numeric_limits<float>::quiet_NaN();
+			return;
+		}
+		float f = target;
+		sscanf(gtk_entry_get_text(GTK_ENTRY(entry)), "%f", &f);
+		// avoid pointless changes of insignificant fractional digits
+		if (fabs(f - target) >= delta)
+			target = f;
+	};
+
+	if (gtk_widget_get_visible(priv->track_gain_entry))
+		fetch_float(priv->track_gain_entry, FileTag->track_gain, File_Tag::gain_epsilon);
+	if (gtk_widget_get_visible(priv->track_peak_entry))
+		fetch_float(priv->track_peak_entry, FileTag->track_peak, File_Tag::peak_epsilon);
+	if (gtk_widget_get_visible(priv->album_gain_entry))
+		fetch_float(priv->album_gain_entry, FileTag->album_gain, File_Tag::gain_epsilon);
+	if (gtk_widget_get_visible(priv->album_peak_entry))
+		fetch_float(priv->album_peak_entry, FileTag->album_peak, File_Tag::peak_epsilon);
+
 	if (gtk_widget_get_visible(GTK_WIDGET(priv->description_text)))
 	{
 		g_free(FileTag->description);
@@ -2515,8 +2597,7 @@ static void et_tag_area_set_text_field(const gchar* value, GtkEntry* entry)
 }
 
 gboolean
-et_tag_area_display_et_file (EtTagArea *self,
-                             const ET_File *ETFile)
+et_tag_area_display_et_file (EtTagArea *self, const ET_File *ETFile, int columns)
 {
     EtTagAreaPrivate *priv;
     const File_Tag *FileTag;
@@ -2607,85 +2688,104 @@ et_tag_area_display_et_file (EtTagArea *self,
         return TRUE;
     }
 
-    et_tag_area_set_text_field(FileTag->title, GTK_ENTRY(priv->title_entry));
-
-    et_tag_area_set_text_field(FileTag->version, GTK_ENTRY(priv->version_entry));
-
-    et_tag_area_set_text_field(FileTag->subtitle, GTK_ENTRY(priv->subtitle_entry));
-
-    et_tag_area_set_text_field(FileTag->artist, GTK_ENTRY(priv->artist_entry));
-
-    et_tag_area_set_text_field(FileTag->album_artist, GTK_ENTRY(priv->album_artist_entry));
-
-    et_tag_area_set_text_field(FileTag->album, GTK_ENTRY(priv->album_entry));
-
-    et_tag_area_set_text_field(FileTag->disc_subtitle, GTK_ENTRY(priv->disc_subtitle_entry));
+    if (columns & ET_COLUMN_TITLE)
+    	et_tag_area_set_text_field(FileTag->title, GTK_ENTRY(priv->title_entry));
+    if (columns & ET_COLUMN_VERSION)
+    	et_tag_area_set_text_field(FileTag->version, GTK_ENTRY(priv->version_entry));
+    if (columns & ET_COLUMN_SUBTITLE)
+    	et_tag_area_set_text_field(FileTag->subtitle, GTK_ENTRY(priv->subtitle_entry));
+    if (columns & ET_COLUMN_ARTIST)
+    	et_tag_area_set_text_field(FileTag->artist, GTK_ENTRY(priv->artist_entry));
+    if (columns & ET_COLUMN_ALBUM_ARTIST)
+    	et_tag_area_set_text_field(FileTag->album_artist, GTK_ENTRY(priv->album_artist_entry));
+    if (columns & ET_COLUMN_ALBUM)
+    	et_tag_area_set_text_field(FileTag->album, GTK_ENTRY(priv->album_entry));
+    if (columns & ET_COLUMN_DISC_SUBTITLE)
+    	et_tag_area_set_text_field(FileTag->disc_subtitle, GTK_ENTRY(priv->disc_subtitle_entry));
 
     /* Show disc number and number of discs. */
-    if (FileTag->disc_number)
-    {
-        gchar *tmp;
-
-        if (FileTag->disc_total)
+    if (columns & ET_COLUMN_DISC_NUMBER)
+        if (FileTag->disc_number)
         {
-            gchar *total;
+            gchar *tmp;
 
-            total = g_strconcat(FileTag->disc_number, "/", FileTag->disc_total, NULL);
-            tmp = Try_To_Validate_Utf8_String (total);
-            g_free (total);
+            if (FileTag->disc_total)
+            {
+                gchar *total;
+
+                total = g_strconcat(FileTag->disc_number, "/", FileTag->disc_total, NULL);
+                tmp = Try_To_Validate_Utf8_String (total);
+                g_free (total);
+            }
+            else
+            {
+                tmp = Try_To_Validate_Utf8_String (FileTag->disc_number);
+            }
+
+            gtk_entry_set_text (GTK_ENTRY (priv->disc_number_entry), tmp);
+            g_free (tmp);
         }
         else
         {
-            tmp = Try_To_Validate_Utf8_String (FileTag->disc_number);
+            gtk_entry_set_text (GTK_ENTRY (priv->disc_number_entry), "");
         }
 
-        gtk_entry_set_text (GTK_ENTRY (priv->disc_number_entry), tmp);
-        g_free (tmp);
+    if (columns & ET_COLUMN_YEAR)
+    	et_tag_area_set_text_field(FileTag->year, GTK_ENTRY(priv->year_entry));
+    if (columns & ET_COLUMN_RELEASE_YEAR)
+    	et_tag_area_set_text_field(FileTag->release_year, GTK_ENTRY(priv->release_year_entry));
+    if (columns & ET_COLUMN_TRACK_NUMBER)
+    {	et_tag_area_set_text_field(FileTag->track, GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->track_combo_entry))));
+    	et_tag_area_set_text_field(FileTag->track_total, GTK_ENTRY(priv->track_total_entry));
     }
-    else
-    {
-        gtk_entry_set_text (GTK_ENTRY (priv->disc_number_entry), "");
+    if (columns & ET_COLUMN_GENRE)
+    	et_tag_area_set_text_field(FileTag->genre, GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->genre_combo_entry))));
+    if (columns & ET_COLUMN_COMMENT)
+    {	et_tag_area_set_text_field(FileTag->comment, GTK_ENTRY(priv->comment_entry));
+    	if (gtk_widget_get_visible(priv->comment_grid))
+    	{
+    		GtkTextBuffer* buffer = gtk_text_view_get_buffer(priv->comment_text);
+    		if (!et_str_empty(FileTag->comment))
+    		{
+    			gchar *tmp = Try_To_Validate_Utf8_String(FileTag->comment);
+    			gtk_text_buffer_set_text(buffer, tmp, -1);
+    			g_free(tmp);
+    		}
+    		else
+    		{
+    			gtk_text_buffer_set_text(buffer, "", 0);
+    		}
+    	}
+    }
+    if (columns & ET_COLUMN_COMPOSER)
+    	et_tag_area_set_text_field(FileTag->composer, GTK_ENTRY(priv->composer_entry));
+    if (columns & ET_COLUMN_ORIG_ARTIST)
+    	et_tag_area_set_text_field(FileTag->orig_artist, GTK_ENTRY(priv->orig_artist_entry));
+    if (columns & ET_COLUMN_ORIG_YEAR)
+    	et_tag_area_set_text_field(FileTag->orig_year, GTK_ENTRY(priv->orig_year_entry));
+    if (columns & ET_COLUMN_COPYRIGHT)
+    	et_tag_area_set_text_field(FileTag->copyright, GTK_ENTRY(priv->copyright_entry));
+    if (columns & ET_COLUMN_URL)
+    	et_tag_area_set_text_field(FileTag->url, GTK_ENTRY(priv->url_entry));
+    if (columns & ET_COLUMN_ENCODED_BY)
+    	et_tag_area_set_text_field(FileTag->encoded_by, GTK_ENTRY(priv->encoded_by_entry));
+
+    if (columns & ET_COLUMN_REPLAYGAIN)
+    {	char buf[20];
+    	auto set_float = [&buf](GtkWidget* entry, float value, int fractionals)
+    	{	if (isnan(value))
+    			*buf = 0;
+    		else
+    			snprintf(buf, sizeof(buf), "%.*f", fractionals, value);
+    		gtk_entry_set_text(GTK_ENTRY(entry), buf);
+    	};
+    	set_float(priv->track_gain_entry, FileTag->track_gain, 1);
+    	set_float(priv->track_peak_entry, FileTag->track_peak, 2);
+    	set_float(priv->album_gain_entry, FileTag->album_gain, 1);
+    	set_float(priv->album_peak_entry, FileTag->album_peak, 2);
     }
 
-    et_tag_area_set_text_field(FileTag->year, GTK_ENTRY(priv->year_entry));
-
-    et_tag_area_set_text_field(FileTag->release_year, GTK_ENTRY(priv->release_year_entry));
-
-    et_tag_area_set_text_field(FileTag->track, GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->track_combo_entry))));
-
-    et_tag_area_set_text_field(FileTag->track_total, GTK_ENTRY(priv->track_total_entry));
-
-    et_tag_area_set_text_field(FileTag->genre, GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->genre_combo_entry))));
-
-    et_tag_area_set_text_field(FileTag->comment, GTK_ENTRY(priv->comment_entry));
-    if (gtk_widget_get_visible(priv->comment_grid))
-    {
-      GtkTextBuffer* buffer = gtk_text_view_get_buffer(priv->comment_text);
-      if (!et_str_empty(FileTag->comment))
-      {
-        gchar *tmp = Try_To_Validate_Utf8_String(FileTag->comment);
-        gtk_text_buffer_set_text(buffer, tmp, -1);
-        g_free(tmp);
-      }
-      else
-      {
-        gtk_text_buffer_set_text(buffer, "", 0);
-      }
-    }
-
-    et_tag_area_set_text_field(FileTag->composer, GTK_ENTRY(priv->composer_entry));
-
-    et_tag_area_set_text_field(FileTag->orig_artist, GTK_ENTRY(priv->orig_artist_entry));
-
-    et_tag_area_set_text_field(FileTag->orig_year, GTK_ENTRY(priv->orig_year_entry));
-
-    et_tag_area_set_text_field(FileTag->copyright, GTK_ENTRY(priv->copyright_entry));
-
-    et_tag_area_set_text_field(FileTag->url, GTK_ENTRY(priv->url_entry));
-
-    et_tag_area_set_text_field(FileTag->encoded_by, GTK_ENTRY(priv->encoded_by_entry));
-
-    /* description */
+    if (columns & ET_COLUMN_DESCRIPTION)
     {
       GtkTextBuffer* buffer = gtk_text_view_get_buffer(priv->description_text);
       if (!et_str_empty(FileTag->description))
@@ -2700,49 +2800,33 @@ et_tag_area_display_et_file (EtTagArea *self,
       }
     }
 
-    /* Show picture */
-    PictureEntry_Clear (self);
+    if (columns & ET_COLUMN_IMAGE)
+    {	/* Show picture */
+			PictureEntry_Clear (self);
 
-    if (FileTag && FileTag->picture)
-    {
-        EtPicture *pic;
-        guint    nbr_pic = 0;
-        GtkWidget *page;
-        gchar *string;
+			GtkWidget* page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (priv->tag_notebook), 1);
+			if (FileTag && FileTag->picture)
+			{
+				EtPicture *pic;
+				guint    nbr_pic = 0;
+				gchar *string;
 
-        PictureEntry_Update (self, FileTag->picture, FALSE);
+				PictureEntry_Update (self, FileTag->picture, FALSE);
 
-        // Count the number of items
-        for (pic = FileTag->picture; pic != NULL; pic = pic->next)
-        {
-            nbr_pic++;
-        }
+				// Count the number of items
+				for (pic = FileTag->picture; pic != NULL; pic = pic->next)
+					nbr_pic++;
 
-        /* Get page "Images" of the notebook. */
-        page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (priv->tag_notebook), 1);
-        string = g_strdup_printf (_("Images (%u)"), nbr_pic);
-        /* Update the notebook tab. */
-        gtk_notebook_set_tab_label_text (GTK_NOTEBOOK (priv->tag_notebook), page,
-                                         string);
-        /* Update the notebook menu. */
-        gtk_notebook_set_menu_label_text (GTK_NOTEBOOK (priv->tag_notebook), page,
-                                          string);
-        g_free (string);
-
-    }
-    else
-    {
-        GtkWidget *page;
-
-        /* Get page "Images" of the notebook. */
-        page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (priv->tag_notebook),
-                                          1);
-        /* Update the notebook tab. */
-        gtk_notebook_set_tab_label_text (GTK_NOTEBOOK (priv->tag_notebook),
-                                         page, _("Images"));
-        /* Update the notebook menu. */
-        gtk_notebook_set_menu_label_text (GTK_NOTEBOOK (priv->tag_notebook),
-                                          page, _("Images"));
+				string = g_strdup_printf (_("Images (%u)"), nbr_pic);
+				gtk_notebook_set_tab_label_text (GTK_NOTEBOOK (priv->tag_notebook), page, string);
+				gtk_notebook_set_menu_label_text (GTK_NOTEBOOK (priv->tag_notebook), page, string);
+				g_free (string);
+			}
+			else
+			{
+				gtk_notebook_set_tab_label_text (GTK_NOTEBOOK (priv->tag_notebook), page, _("Images"));
+				gtk_notebook_set_menu_label_text (GTK_NOTEBOOK (priv->tag_notebook), page, _("Images"));
+			}
     }
 
     return TRUE;

@@ -37,6 +37,7 @@
 /* for mkstemp. */
 #include "win32/win32dep.h"
 
+#include <cmath>
 using namespace std;
 
 
@@ -242,6 +243,20 @@ void tags_hash::to_file_tags(File_Tag *FileTag)
 	fetch_field(ET_VORBIS_COMMENT_FIELD_COPYRIGHT, FileTag->copyright);
 	fetch_field(ET_VORBIS_COMMENT_FIELD_CONTACT, FileTag->url);
 	fetch_field(ET_VORBIS_COMMENT_FIELD_ENCODED_BY, FileTag->encoded_by);
+
+	auto fetch_float = [this](const char* fieldname) -> float
+	{	auto it = find(fieldname);
+		if (it == end())
+			return numeric_limits<float>::quiet_NaN();
+		float f = File_Tag::parse_float(it->second);
+		erase(it);
+		return f;
+	};
+
+	FileTag->track_gain = fetch_float(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_TRACK_GAIN);
+	FileTag->track_peak = fetch_float(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_TRACK_PEAK);
+	FileTag->album_gain = fetch_float(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_ALBUM_GAIN);
+	FileTag->album_peak = fetch_float(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_ALBUM_PEAK);
 }
 
 void tags_hash::to_other_tags(File_Tag *FileTag)
@@ -630,7 +645,12 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
     et_ogg_set_tag(ET_VORBIS_COMMENT_FIELD_COPYRIGHT, FileTag->copyright);
     et_ogg_set_tag(ET_VORBIS_COMMENT_FIELD_CONTACT, FileTag->url, ET_PROCESS_FIELD_URL);
     et_ogg_set_tag(ET_VORBIS_COMMENT_FIELD_ENCODED_BY, FileTag->encoded_by, ET_PROCESS_FIELD_ENCODED_BY);
-    
+
+    et_ogg_set_tag(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_TRACK_GAIN, FileTag->track_gain_str());
+    et_ogg_set_tag(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_TRACK_PEAK, FileTag->track_peak_str());
+    et_ogg_set_tag(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_ALBUM_GAIN, FileTag->album_gain_str());
+    et_ogg_set_tag(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_ALBUM_PEAK, FileTag->album_peak_str());
+
     /***********
      * Picture *
      ***********/

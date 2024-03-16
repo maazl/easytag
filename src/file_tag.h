@@ -82,16 +82,42 @@ typedef struct File_Tag
     gchar *description;
     EtPicture *picture;
     GList *other;
+    float track_gain;
+    float track_peak;
+    float album_gain;
+    float album_peak;
 
 #ifdef __cplusplus
-    std::string track_and_total() const;
-    std::string disc_and_total() const;
+    /// Consider ReplayGain changes of less than that as insignificant.
+    static constexpr float gain_epsilon = .05f;
+    /// Consider ReplayGain peak changes of less than that as insignificant.
+    static constexpr float peak_epsilon = .005f;
+
+    bool empty() const;
 
     File_Tag* clone() const;
     gchar* set_field(gchar* File_Tag::*field, const gchar* value)
     {	g_free(this->*field);
     	return this->*field = et_str_empty(value) ? nullptr : g_strdup(value);
     }
+
+    std::string track_and_total() const;
+    std::string disc_and_total() const;
+    void track_and_total(const char* value);
+    void disc_and_total(const char* value);
+
+    // locale invariant format for ReplayGain values
+    static small_str<8> format_float(const char* fmt, float value);
+    static float parse_float(const char* fmt);
+
+    small_str<8> track_gain_str() const { return format_float("%.1f dB", track_gain); }
+    small_str<8> track_peak_str() const { return format_float("%.2f", track_peak); }
+    small_str<8> album_gain_str() const { return format_float("%.1f dB", album_gain); }
+    small_str<8> album_peak_str() const { return format_float("%.2f", album_peak); }
+    void track_gain_str(const char* value) { track_gain = parse_float(value); }
+    void track_peak_str(const char* value) { track_peak = parse_float(value); }
+    void album_gain_str(const char* value) { album_gain = parse_float(value); }
+    void album_peak_str(const char* value) { album_peak = parse_float(value); }
 
 #endif
 } File_Tag;
@@ -124,6 +150,8 @@ void et_file_tag_set_url (File_Tag *file_tag, const gchar *url);
 void et_file_tag_set_encoded_by (File_Tag *file_tag, const gchar *encoded_by);
 void et_file_tag_set_description (File_Tag *file_tag, const gchar *description);
 void et_file_tag_set_picture (File_Tag *file_tag, const EtPicture *pic);
+void et_file_tag_set_track_gain (File_Tag *file_tag, float gain, float peek);
+void et_file_tag_set_album_gain (File_Tag *file_tag, float gain, float peek);
 
 gboolean et_file_tag_detect_difference (const File_Tag *FileTag1, const File_Tag  *FileTag2);
 

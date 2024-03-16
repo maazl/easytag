@@ -23,6 +23,7 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
+#include <cmath>
 using namespace std;
 
 namespace
@@ -79,6 +80,15 @@ protected:
 public:
 	TagPartColumnRenderer(EtSortMode col, gchar* File_Tag::* const field1, gchar* File_Tag::* const field2)
 	:	TagColumnRenderer(col, field1), Field2(field2) {}
+};
+
+class TagReplaygainRenderer : public FileColumnRenderer
+{
+protected:
+	virtual string RenderText(const ET_File* file, bool original) const;
+public:
+	TagReplaygainRenderer(EtSortMode col)
+	: FileColumnRenderer(col) {}
 };
 
 class FileSizeColumnRenderer : public FileColumnRenderer
@@ -140,6 +150,7 @@ const FileDurationColumnRenderer R_FileDuration(ET_SORT_MODE_ASCENDING_FILE_DURA
 const FileInfoIntColumnRenderer
 	R_Bitrate(ET_SORT_MODE_ASCENDING_FILE_BITRATE, &ET_File_Info::bitrate),
 	R_Samplerate(ET_SORT_MODE_ASCENDING_FILE_SAMPLERATE, &ET_File_Info::samplerate);
+const TagReplaygainRenderer R_Replaygain(ET_SORT_MODE_ASCENDING_REPLAYGAIN);
 
 string FileNameColumnRenderer::RenderText(const ET_File* file, bool original) const
 {	return EmptfIfNull((original ? file->CurFileName() : file->FileName())->*Field);
@@ -219,7 +230,28 @@ string FileInfoIntColumnRenderer::RenderText(const ET_File* file, bool original)
 	return to_string(value);
 }
 
+string TagReplaygainRenderer::RenderText(const ET_File* file, bool original) const
+{	const File_Tag* tag = original ? file->CurTag() : file->Tag();
+	char buf[40];
+	char* dp = buf;
+	if (isfinite(tag->track_gain))
+		dp += sprintf(dp, "%.1f dB ", tag->track_gain);
+	if (isfinite(tag->track_peak))
+		dp += sprintf(dp, "(%.2f) ", tag->track_peak);
+	if (isfinite(tag->album_gain) || isfinite(tag->album_peak))
+	{	*dp++ = '[';
+		if (isfinite(tag->album_gain))
+			dp += sprintf(dp, "%.1f dB ", tag->album_gain);
+		if (isfinite(tag->album_peak))
+			dp += sprintf(dp, "(%.2f) ", tag->album_peak);
+		dp[-1] = ']';
+	} else if (dp != buf && dp[-1] == ' ')
+		--dp;
+	*dp = '\0';
+	return buf;
 }
+
+} // namespace
 
 const FileColumnRenderer* FileColumnRenderer::Get_Renderer(const gchar* column_id)
 {

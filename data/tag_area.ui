@@ -532,6 +532,112 @@
                                 <property name="width">9</property>
                             </packing>
                         </child>
+                        <child>
+                            <object class="GtkLabel" id="track_gain_label">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">Track gain:</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">16</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkEntry" id="track_gain_entry">
+                                <property name="width-chars">5</property>
+                                <signal name="insert_text" handler="Insert_Only_Number"/>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">16</property>
+                                <property name="width">2</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkLabel" id="track_gain_unit">
+                                <property name="halign">start</property>
+                                <property name="label">dB</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">3</property>
+                                <property name="top-attach">16</property>
+                                <property name="width">3</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkLabel" id="track_peak_label">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">Track peak:</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">6</property>
+                                <property name="top-attach">16</property>
+                                <property name="width">3</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkEntry" id="track_peak_entry">
+                                <property name="width-chars">5</property>
+                                <signal name="insert_text" handler="Insert_Only_Number"/>
+                            </object>
+                            <packing>
+                                <property name="left-attach">9</property>
+                                <property name="top-attach">16</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkLabel" id="album_gain_label">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">Album gain:</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">17</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkEntry" id="album_gain_entry">
+                                <property name="width-chars">5</property>
+                                <signal name="insert_text" handler="Insert_Only_Number"/>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">17</property>
+                                <property name="width">2</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkLabel" id="album_gain_unit">
+                                <property name="halign">start</property>
+                                <property name="label">dB</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">3</property>
+                                <property name="top-attach">17</property>
+                                <property name="width">3</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkLabel" id="album_peak_label">
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">Album peak:</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">6</property>
+                                <property name="top-attach">17</property>
+                                <property name="width">3</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkEntry" id="album_peak_entry">
+                                <property name="width-chars">5</property>
+                                <signal name="insert_text" handler="Insert_Only_Number"/>
+                            </object>
+                            <packing>
+                                <property name="left-attach">9</property>
+                                <property name="top-attach">17</property>
+                            </packing>
+                        </child>
                     </object>
                 </child>
                 <child type="tab">

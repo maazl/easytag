@@ -138,7 +138,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkSpinButton" id="browser_max_lines">
-                                                <property name="adjustment">browser_max_lines_adjustment</property>
+                                                <property name="adjustment">browser_max_lines_adjustment</property>3
                                             </object>
                                             <packing>
                                                 <property name="left_attach">1</property>
@@ -197,6 +197,10 @@
                                                 <property name="label" translatable="yes">Description</property>
                                                 <property name="name">description</property>
                                             </object>
+                                            <packing>
+                                                <property name="top_attach">1</property>
+                                                <property name="left_attach">0</property>
+                                            </packing>
                                         </child>
                                         <child>
                                             <object class="GtkCheckButton" id="hide_fields_composer_check">
@@ -205,7 +209,7 @@
                                             </object>
                                             <packing>
                                                 <property name="top_attach">1</property>
-                                                <property name="left_attach">0</property>
+                                                <property name="left_attach">1</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -215,7 +219,7 @@
                                             </object>
                                             <packing>
                                                 <property name="top_attach">1</property>
-                                                <property name="left_attach">1</property>
+                                                <property name="left_attach">2</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -225,7 +229,7 @@
                                             </object>
                                             <packing>
                                                 <property name="top_attach">1</property>
-                                                <property name="left_attach">2</property>
+                                                <property name="left_attach">3</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -235,7 +239,7 @@
                                             </object>
                                             <packing>
                                                 <property name="top_attach">1</property>
-                                                <property name="left_attach">3</property>
+                                                <property name="left_attach">4</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -244,8 +248,8 @@
                                                 <property name="name">url</property>
                                             </object>
                                             <packing>
-                                                <property name="top_attach">1</property>
-                                                <property name="left_attach">4</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="left_attach">0</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -254,8 +258,18 @@
                                                 <property name="name">encoded-by</property>
                                             </object>
                                             <packing>
-                                                <property name="top_attach">1</property>
-                                                <property name="left_attach">5	</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="left_attach">1</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkCheckButton" id="hide_fields_replaygain">
+                                                <property name="label" translatable="yes">ReplayGain</property>
+                                                <property name="name">replaygain</property>
+                                            </object>
+                                            <packing>
+                                                <property name="top_attach">2</property>
+                                                <property name="left_attach">2</property>
                                             </packing>
                                         </child>
                                     </object>

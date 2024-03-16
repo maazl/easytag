@@ -184,7 +184,7 @@
     <key name="hide-fields" flags="org.gnome.EasyTAG.EtColumn">
       <summary>Fields to hide in the tag area</summary>
       <description>List of hidden input controls when editing a tag.</description>
-      <default>[]</default>
+      <default>['replaygain']</default>
     </key>
 
     <key name="log-show" type="b">

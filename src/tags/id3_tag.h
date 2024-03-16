@@ -28,6 +28,9 @@ G_BEGIN_DECLS
 #define ID3_INVALID_GENRE 255
 #define ID3V1_TAG_SIZE 128
 
+/* obsolete encoded by tag as TXXX frame. */
+#define EASYTAG_STRING_ENCODEDBY "Encoded by - "
+
 /*
  * Error domain and codes for errors while reading/writing ID3 tags.
  */

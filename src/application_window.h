@@ -53,8 +53,12 @@ void et_application_window_file_area_set_file_fields (EtApplicationWindow *self,
 void et_application_window_file_area_set_header_fields (EtApplicationWindow *self, EtFileHeaderFields *fields);
 void et_application_window_file_area_clear (EtApplicationWindow *self);
 void et_application_window_file_area_set_sensitive (EtApplicationWindow *self, gboolean sensitive);
-void et_application_window_disable_command_actions (EtApplicationWindow *self);
+/** Disable buttons when saving files (do not disable Quit button). */
+void et_application_window_disable_command_actions (EtApplicationWindow *self, gboolean allowStop);
+/** Set to sensitive/unsensitive the state of each button into
+ * the commands area and menu items in function of state of the "main list". */
 void et_application_window_update_actions (EtApplicationWindow *self);
+
 void et_application_window_set_busy_cursor (EtApplicationWindow *self);
 void et_application_window_set_normal_cursor (EtApplicationWindow *self);
 void et_application_window_tag_area_display_controls (EtApplicationWindow *self, const ET_File *ETFile);
@@ -81,7 +85,9 @@ GtkTreeSelection * et_application_window_browser_get_selection (EtApplicationWin
 GtkTreeViewColumn *et_application_window_browser_get_column_for_sort_mode (EtApplicationWindow *self, EtSortMode sort_mode);
 void et_application_window_browser_select_file_by_iter_string (EtApplicationWindow *self, const gchar *iter_string, gboolean select);
 void et_application_window_update_et_file_from_ui (EtApplicationWindow *self);
-void et_application_window_display_et_file (EtApplicationWindow *self, ET_File *ETFile);
+#ifdef __cplusplus
+void et_application_window_display_et_file (EtApplicationWindow *self, ET_File *ETFile, int columns = ~0);
+#endif
 void et_application_window_browser_select_file_by_et_file (EtApplicationWindow *self, const ET_File *file, gboolean select);
 GtkTreePath * et_application_window_browser_select_file_by_et_file2 (EtApplicationWindow *self, const ET_File *file, gboolean select, GtkTreePath *start_path);
 ET_File * et_application_window_browser_select_file_by_dlm (EtApplicationWindow *self, const gchar *string, gboolean select);
@@ -89,8 +95,12 @@ void et_application_window_browser_unselect_all (EtApplicationWindow *self);
 void et_application_window_browser_refresh_list (EtApplicationWindow *self);
 void et_application_window_browser_refresh_file_in_list (EtApplicationWindow *self, const ET_File *file);
 void et_application_window_scan_dialog_update_previews (EtApplicationWindow *self);
-void et_application_window_progress_set_fraction (EtApplicationWindow *self, gdouble fraction);
-void et_application_window_progress_set_text (EtApplicationWindow *self, const gchar *text);
+/** Set progress bar value.
+ * @param current current progress
+ * @param total total prograss (for 100%)
+ * @details If current/total is non not a number the progress bar becomes inactive,
+ * e.g. if you pass -1 for total. */
+void et_application_window_progress_set (EtApplicationWindow *self, gint current, gint total);
 void et_application_window_status_bar_message (EtApplicationWindow *self, const gchar *message, gboolean with_timer);
 void et_application_window_quit (EtApplicationWindow *self);
 

@@ -25,6 +25,18 @@
 #ifdef __cplusplus
 #include <string>
 #include <memory>
+#include <array>
+
+template <std::size_t S>
+struct small_str : public std::array<char,S>
+{	operator const char*() const { return this->data(); }
+};
+
+std::string strprintf(const char* format, ...)
+#ifdef __GNUC__
+__attribute__ ((format(printf, 1, 2)))
+#endif
+;
 
 template <typename T>
 constexpr inline int sign(T value) { return (value > 0) - (value < 0); }
@@ -50,6 +62,20 @@ struct gString : gObject<gchar>
 	explicit gString(gchar* ptr) : std::unique_ptr<gchar, gDeleter>(ptr) { }
 	operator const gchar*() const { return get(); }
 };
+
+/** create unique pointer with explicit deleter
+ * @tparam T pointer target type
+ * @tparam D deleter type
+ * @param ptr
+ * @param deleter
+ * @return the unique pointer
+ * @example This function can be used to create managed objects for C APIs.
+ * @code auto s = make_unique(g_strdup(...), g_free);
+ */
+template <typename T, typename D>
+std::unique_ptr<T, D> make_unique(T* ptr, D deleter)
+{	return std::unique_ptr<T, D>(ptr, deleter);
+}
 
 // Reference helper to allow array of references
 template <typename T>
@@ -92,7 +118,15 @@ gboolean et_rename_file (const gchar *old_filename, const gchar *new_filename, G
 guint et_undo_key_new (void);
 gint et_normalized_strcmp0 (const gchar *str1, const gchar *str2);
 gint et_normalized_strcasecmp0 (const gchar *str1, const gchar *str2);
-gboolean et_str_empty (const gchar *str);
+/*
+ * et_str_empty:
+ * @str: string to test for emptiness
+ *
+ * Test if @str is empty, in other words either %NULL or the empty string.
+ *
+ * Returns: %TRUE is @str is either %NULL or "", %FALSE otherwise
+ */
+inline gboolean et_str_empty (const gchar *str) { return !str || !str[0]; }
 
 G_END_DECLS
 

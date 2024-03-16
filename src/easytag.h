@@ -45,11 +45,14 @@ extern gboolean ReadingDirectory;
 /**************
  * Prototypes *
  **************/
-void Action_Save_Selected_Files         (void);
-void Action_Force_Saving_Selected_Files (void);
-gint Save_All_Files_With_Answer         (gboolean force_saving_files);
+gint Save_Selected_Files_With_Answer (gboolean force_saving_files);
+gint Save_All_Files_With_Answer      (gboolean force_saving_files);
 
-void Action_Main_Stop_Button_Pressed    (void);
+#ifdef ENABLE_REPLAYGAIN
+void ReplayGain_For_Selected_Files (void);
+#endif
+
+void Action_Main_Stop_Button_Pressed (void);
 
 gboolean Read_Directory (const gchar *path);
 

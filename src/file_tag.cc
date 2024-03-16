@@ -20,6 +20,10 @@
 
 #include "misc.h"
 
+#include <limits>
+#include <cmath>
+#include <string>
+
 using namespace std;
 
 /*
@@ -32,6 +36,7 @@ et_file_tag_new (void)
 
     file_tag = g_slice_new0 (File_Tag);
     file_tag->key = et_undo_key_new ();
+    file_tag->track_gain = file_tag->track_peak = file_tag->album_gain = file_tag->album_peak = numeric_limits<float>::quiet_NaN();
 
     return file_tag;
 }
@@ -83,6 +88,68 @@ et_file_tag_free (File_Tag *FileTag)
     g_slice_free (File_Tag, FileTag);
 }
 
+small_str<8> File_Tag::format_float(const char* fmt, float value)
+{	small_str<8> ret;
+	if (isfinite(value))
+	{	snprintf(ret.data(), 8, fmt, value);
+		char* dot = strchr(ret.data(), ','); // work around for locale problems
+		if (dot) *dot = '.';
+	}
+	return ret;
+}
+
+float File_Tag::parse_float(const char* value)
+{	// ugly work around for locale problems
+	while (isspace(*value)) ++value;
+	int sign = 1;
+	if (*value == '-')
+	{	sign = -1;
+		++value;
+	}
+	int i, n = -1;
+	if (et_str_empty(value) || sscanf(value, "%d.%n", &i, &n) < 1)
+		return numeric_limits<float>::quiet_NaN();
+	double ret = i;
+	if (n > 0)
+	{	value += n;
+		double exp = .1;
+		while (isdigit(*value))
+		{	ret += exp * (*value++ - '0');
+			exp /= 10;
+		}
+	}
+	return ret * sign;
+}
+
+bool File_Tag::empty() const
+{	return !title
+	  && !version
+	  && !subtitle
+	  && !artist
+	  && !album_artist
+	  && !album
+	  && !disc_subtitle
+	  && !disc_number
+	  && !disc_total
+	  && !year
+	  && !release_year
+	  && !track
+	  && !track_total
+	  && !genre
+	  && !comment
+	  && !composer
+	  && !orig_artist
+	  && !orig_year
+	  && !copyright
+	  && !url
+	  && !encoded_by
+	  && !picture
+	  && !isfinite(track_gain)
+	  && !isfinite(track_peak)
+	  && !isfinite(album_gain)
+	  && !isfinite(album_peak);
+}
+
 /*
  * Copy data of the File_Tag structure (of ETFile) to the FileTag item.
  * Reallocate data if not null.
@@ -117,6 +184,8 @@ File_Tag* File_Tag::clone() const
 	et_file_tag_set_encoded_by(destination, encoded_by);
 	et_file_tag_set_description(destination, description);
 	et_file_tag_set_picture(destination, picture);
+	et_file_tag_set_track_gain(destination, track_gain, track_peak);
+	et_file_tag_set_album_gain(destination, album_gain, album_peak);
 
 	GList *new_other = NULL;
 	for (GList* l = other; l != NULL; l = g_list_next(l))
@@ -262,6 +331,18 @@ et_file_tag_set_picture (File_Tag *file_tag,
     }
 }
 
+void et_file_tag_set_track_gain(File_Tag *file_tag, float gain, float peek)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->track_gain = gain;
+	file_tag->track_peak = peek;
+}
+
+void et_file_tag_set_album_gain(File_Tag *file_tag, float gain, float peek)
+{	g_return_if_fail (file_tag != NULL);
+	file_tag->album_gain = gain;
+	file_tag->album_peak = peek;
+}
+
 /*
  * Compares two File_Tag items and returns TRUE if there aren't the same.
  * Notes:
@@ -301,7 +382,11 @@ et_file_tag_detect_difference (const File_Tag *FileTag1,
         || et_normalized_strcmp0 (FileTag1->copyright, FileTag2->copyright) != 0
         || et_normalized_strcmp0 (FileTag1->url, FileTag2->url) != 0
         || et_normalized_strcmp0 (FileTag1->encoded_by, FileTag2->encoded_by) != 0
-        || et_normalized_strcmp0 (FileTag1->description, FileTag2->description) != 0)
+        || et_normalized_strcmp0 (FileTag1->description, FileTag2->description) != 0
+        || !(fabs(FileTag1->track_gain - FileTag2->track_gain) < File_Tag::gain_epsilon)
+        || !(fabs(FileTag1->track_peak - FileTag2->track_peak) < File_Tag::peak_epsilon)
+        || !(fabs(FileTag1->album_gain - FileTag2->album_gain) < File_Tag::gain_epsilon)
+        || !(fabs(FileTag1->album_peak - FileTag2->album_peak) < File_Tag::peak_epsilon))
         return TRUE;
 
     /* Picture */
@@ -329,3 +414,38 @@ std::string File_Tag::disc_and_total() const
 		return disc_number;
 	return std::string(disc_number) + '/' + disc_total;
 }
+
+void File_Tag::track_and_total(const char* value)
+{	g_free(track);
+	g_free(track_total);
+	track = track_total = nullptr;
+	if (et_str_empty(value))
+		return;
+
+	/* cut off the total tracks if present */
+	const char *field2 = strchr(value, '/');
+	if (field2)
+	{	track_total = et_disc_number_to_string(field2 + 1);
+		string field1(value, field2 - value);
+		track = et_disc_number_to_string(field1.c_str());
+  } else
+		track = et_disc_number_to_string(value);
+}
+
+void File_Tag::disc_and_total(const char* value)
+{	g_free(disc_number);
+	g_free(disc_total);
+	disc_number = disc_total = nullptr;
+	if (et_str_empty(value))
+		return;
+
+	/* cut off the total discs if present */
+	const char *field2 = strchr(value, '/');
+	if (field2)
+	{	disc_total = et_disc_number_to_string(field2 + 1);
+		string field1(value, field2 - value);
+		disc_number = et_disc_number_to_string(field1.c_str());
+  } else
+  	disc_number = et_disc_number_to_string(value);
+}
+
