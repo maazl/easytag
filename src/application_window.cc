@@ -715,12 +715,12 @@ on_save_force (GSimpleAction *action,
 	Save_Selected_Files_With_Answer (TRUE);
 }
 
-#ifdef ENABLE_REPLAYGAIN
 static void on_replaygain (GSimpleAction *action, GVariant *variant, gpointer user_data)
 {
+#ifdef ENABLE_REPLAYGAIN
 	ReplayGain_For_Selected_Files();
-}
 #endif
+}
 
 static void
 on_find (GSimpleAction *action,
@@ -925,15 +925,10 @@ on_preferences (GSimpleAction *action,
     self = ET_APPLICATION_WINDOW (user_data);
     priv = et_application_window_get_instance_private (self);
 
-    if (priv->preferences_dialog)
-    {
-        gtk_widget_show (priv->preferences_dialog);
-    }
-    else
-    {
+    if (!priv->preferences_dialog)
         priv->preferences_dialog = GTK_WIDGET (et_preferences_dialog_new (GTK_WINDOW (self)));
-        gtk_widget_show_all (priv->preferences_dialog);
-    }
+
+    gtk_widget_show (priv->preferences_dialog);
 }
 
 static void
@@ -1528,9 +1523,7 @@ static const GActionEntry actions[] =
     { "show-cddb", on_show_cddb },
     { "show-load-filenames", on_show_load_filenames },
     { "show-playlist", on_show_playlist },
-#ifdef ENABLE_REPLAYGAIN
     { "replaygain", on_replaygain },
-#endif
     /* Go menu. */
     { "go-home", on_go_home },
     { "go-desktop", on_go_desktop },
@@ -1662,21 +1655,10 @@ et_application_window_init (EtApplicationWindow *self)
     gtk_container_add (GTK_CONTAINER (self), main_vbox);
 
     /* Menu bar and tool bar. */
-    {
-        GtkBuilder *builder;
-        GtkWidget *toolbar;
+    GtkBuilder *builder = gtk_builder_new_from_resource ("/org/gnome/EasyTAG/toolbar.ui");
+    GtkWidget *toolbar = GTK_WIDGET (gtk_builder_get_object (builder, "main_toolbar"));
 
-        builder = gtk_builder_new_from_resource ("/org/gnome/EasyTAG/toolbar.ui");
-
-        toolbar = GTK_WIDGET (gtk_builder_get_object (builder, "main_toolbar"));
-#ifdef ENABLE_REPLAYGAIN
-        gtk_widget_set_visible(GTK_WIDGET (gtk_builder_get_object (builder, "replaygain_button")), TRUE);
-#endif
-
-        gtk_box_pack_start (GTK_BOX (main_vbox), toolbar, FALSE, FALSE, 0);
-
-        g_object_unref (builder);
-    }
+    gtk_box_pack_start (GTK_BOX (main_vbox), toolbar, FALSE, FALSE, 0);
 
     /* The two panes: BrowserArea on the left, FileArea+TagArea on the right */
     priv->hpaned = GTK_PANED(gtk_paned_new (GTK_ORIENTATION_HORIZONTAL));
@@ -1729,6 +1711,11 @@ et_application_window_init (EtApplicationWindow *self)
     gtk_box_pack_end (GTK_BOX (hbox), priv->progress_bar, FALSE, FALSE, 0);
 
     gtk_widget_show_all (GTK_WIDGET (main_vbox));
+
+#ifndef ENABLE_REPLAYGAIN
+    gtk_widget_hide(GTK_WIDGET (gtk_builder_get_object (builder, "replaygain_button")));
+#endif
+    g_object_unref (builder);
 
     /* Bind the setting after the log area has been shown, to avoid
      * force-enabling the visibility on startup. */

@@ -41,6 +41,8 @@
 
 #include "win32/win32dep.h"
 
+#include <vector>
+#include <algorithm>
 using namespace std;
 
 static GtkWidget *QuitRecursionWindow = NULL;
@@ -778,27 +780,77 @@ Write_File_Tag (ET_File *ETFile, gboolean hide_msgbox)
 void ReplayGain_For_Selected_Files (void)
 {
 	EtApplicationWindow* const window = ET_APPLICATION_WINDOW(MainWindow);
-	GList *etfilelist = et_application_window_browser_get_selected_files(window);
+	vector<ET_File*> files;
+	{	GList *etfilelist = et_application_window_browser_get_selected_files(window);
+		for (GList* l = etfilelist; l; l = g_list_next(l))
+			files.emplace_back((ET_File*)l->data);
+		g_list_free(etfilelist);
+	}
 
-	int selectcount = g_list_length(etfilelist);
-	if (!selectcount)
+	if (files.empty())
 		return;
 
-  et_application_window_disable_command_actions(window, TRUE);
-	et_application_window_progress_set(window, 0, selectcount);
+	et_application_window_disable_command_actions(window, TRUE);
+	et_application_window_progress_set(window, 0, files.size());
 	/* Needed to refresh status bar */
 	while (gtk_events_pending())
 		gtk_main_iteration();
 
-  ReplayGainAnalyzer analyzer;
+	gint (*comp)(const ET_File *ETFile1, const ET_File *ETFile2) = nullptr;
+	unsigned level = 1;
+	switch ((EtReplayGainGroupBy)g_settings_get_enum(MainSettings, "replaygain-groupby"))
+	{	EtSortMode mode;
+	case ET_REPLAYGAIN_GROUPBY_DISC:
+		level = 2;
+	case ET_REPLAYGAIN_GROUPBY_ALBUM:
+		mode = ET_SORT_MODE_ASCENDING_ALBUM;
+		goto sort;
+	case ET_REPLAYGAIN_GROUPBY_FILEPATH:
+		mode = ET_SORT_MODE_ASCENDING_FILEPATH;
+	sort:
+		comp = ET_Get_Comp_Func_Sort_File(mode);
+		sort(files.begin(), files.end(), [comp](ET_File* l, ET_File* r){ return comp(l, r) < 0; });
+	default:;
+	}
+
+	ReplayGainAnalyzer analyzer;
 
 	int done = 0;
 	bool error = false;
-	for (GList* l = etfilelist; l; l = g_list_next(l))
+	auto first = files.begin();
+
+	auto finish_album = [&first, &error, &analyzer, window](decltype(first) last)
 	{
-		ET_File* ETFile = (ET_File*)l->data;
-		File_Tag* file_tag  = (File_Tag*)ETFile->FileTag->data;
-		const File_Name* file_name = (File_Name*)ETFile->FileNameCur->data;
+		if (error)
+			return Log_Print(LOG_WARNING, _("Skip album gain because of previous errors."));
+
+		float album_gain = analyzer.GetAggregatedResult().Gain();
+		float album_peak = analyzer.GetAggregatedResult().Peak();
+		for (auto cur = first; cur != last; ++cur)
+		{	ET_File* file = *cur;
+			File_Tag* file_tag = ((File_Tag*)file->FileTag->data)->clone();;
+			et_file_tag_set_album_gain(file_tag, album_gain, album_peak);
+			ET_Manage_Changes_Of_File_Data(file, nullptr, file_tag);
+
+			if (ETCore->ETFileDisplayed == file)
+				et_application_window_display_et_file(window, file, ET_COLUMN_REPLAYGAIN);
+		}
+		Log_Print(LOG_OK, _("ReplayGain of album is %.1f dB, peak %.2f"), album_gain, album_peak);
+		et_application_window_browser_refresh_list(window);
+	};
+
+	for (auto cur = first; cur != files.end(); ++cur)
+	{	ET_File* file = *cur;
+		// Group processing for album gain
+		if (comp && first != cur && (unsigned)(abs(comp(*first, file)) - 1) < level)
+		{	finish_album(cur);
+			analyzer.Reset();
+			error = false;
+			first = cur;
+		}
+
+		File_Tag* file_tag = (File_Tag*)file->FileTag->data;
+		const File_Name* file_name = (File_Name*)file->FileNameCur->data;
 
 		string err = analyzer.AnalyzeFile(file_name->value);
 		if (!err.empty())
@@ -807,15 +859,15 @@ void ReplayGain_For_Selected_Files (void)
 		} else
 		{	file_tag = file_tag->clone();
 			et_file_tag_set_track_gain(file_tag, analyzer.GetLastResult().Gain(), analyzer.GetLastResult().Peak());
-			ET_Manage_Changes_Of_File_Data(ETFile, nullptr, file_tag);
-			Log_Print(LOG_OK, _("ReplayGain of file '%s' is %.1f dB, peak %.2f"), file_name->value_utf8, file_tag->track_gain, file_tag->track_peak);
+			ET_Manage_Changes_Of_File_Data(file, nullptr, file_tag);
+			Log_Print(LOG_OK, _("ReplayGain of file '%s' is %.1f dB, peak %.2f"), file_name->rel_value_utf8, file_tag->track_gain, file_tag->track_peak);
 
-			if (ETCore->ETFileDisplayed == ETFile)
-				et_application_window_display_et_file(window, ETFile, ET_COLUMN_REPLAYGAIN);
-			et_application_window_browser_refresh_file_in_list(window, ETFile);
+			if (ETCore->ETFileDisplayed == file)
+				et_application_window_display_et_file(window, file, ET_COLUMN_REPLAYGAIN);
+			et_application_window_browser_refresh_file_in_list(window, file);
 		}
 
-		et_application_window_progress_set(window, ++done, selectcount);
+		et_application_window_progress_set(window, ++done, files.size());
 		/* Needed to refresh status bar */
 		while (gtk_events_pending())
 			gtk_main_iteration();
@@ -826,28 +878,8 @@ void ReplayGain_For_Selected_Files (void)
 		}
 	}
 
-	if (error)
-	{	Log_Print(LOG_WARNING, _("Skip album gain because of previous errors."));
-		goto end;
-	}
-	if (done < 2)
-		goto end; // album gain requires at least 2 files
-
-	// apply album gain
-	{	float album_gain = analyzer.GetAggregatedResult().Gain();
-		float album_peak = analyzer.GetAggregatedResult().Peak();
-		for (GList* l = etfilelist; l; l = g_list_next(l))
-		{	ET_File* ETFile = (ET_File*)l->data;
-			File_Tag* file_tag = ((File_Tag*)ETFile->FileTag->data)->clone();;
-			et_file_tag_set_album_gain(file_tag, album_gain, album_peak);
-			ET_Manage_Changes_Of_File_Data(ETFile, nullptr, file_tag);
-
-			if (ETCore->ETFileDisplayed == ETFile)
-				et_application_window_display_et_file(window, ETFile, ET_COLUMN_REPLAYGAIN);
-		}
-		Log_Print(LOG_OK, _("ReplayGain of album is %.1f dB, peak %.2f"), album_gain, album_peak);
-		et_application_window_browser_refresh_list(window);
-	}
+	if (files.size() > 1) // album gain requires at least 2 files
+		finish_album(files.end());
 
 end:
 	et_application_window_progress_set(window, 0, 0);

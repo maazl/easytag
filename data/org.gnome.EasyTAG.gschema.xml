@@ -375,6 +375,18 @@
       <default>false</default>
     </key>
 
+    <key name="replaygain-groupby" enum="org.gnome.EasyTAG.EtReplayGainGroupBy">
+      <summary>Grouping for album gain</summary>
+      <description>Files that belong to the same group get the same album gain values</description>
+      <default>'album'</default>
+    </key>
+
+    <key name="replaygain-model" enum="org.gnome.EasyTAG.EtReplayGainModel">
+      <summary>ReplayGain calculation model</summary>
+      <description>Select the technique to use to calculate the ReplayGain values</description>
+      <default>'v15'</default>
+    </key>
+
     <key name="confirm-write-tags" type="b">
       <summary>Confirm before writing tags</summary>
       <description>Whether to ask for confirmation from the user before writing tags to audio files</description>

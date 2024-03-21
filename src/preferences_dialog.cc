@@ -125,6 +125,16 @@ typedef struct
     GtkWidget *id3_read_encoding_check;
     GtkWidget *id3_read_encoding_combo;
     GtkWidget *preferences_notebook;
+#ifdef ENABLE_REPLAYGAIN
+    GtkWidget *replaygain_grid;
+    GtkWidget *replaygain_nogroup_radio;
+    GtkWidget *replaygain_album_radio;
+    GtkWidget *replaygain_disc_radio;
+    GtkWidget *replaygain_filepath_radio;
+    GtkWidget *replaygain_v1_radio;
+    GtkWidget *replaygain_v2_radio;
+    GtkWidget *replaygain_v15_radio;
+#endif
     GtkWidget *scanner_grid;
     GtkWidget *fts_underscore_p20_radio;
     GtkWidget *fts_spaces_radio;
@@ -356,8 +366,9 @@ static void bind_radio(const char* setting, GtkWidget* widget)
  * The window for options
  */
 static void
-create_preferences_dialog (EtPreferencesDialog *self)
+et_preferences_dialog_init (EtPreferencesDialog *self)
 {
+    gtk_widget_init_template (GTK_WIDGET (self));
     EtPreferencesDialogPrivate *priv;
 
     priv = et_preferences_dialog_get_instance_private (self);
@@ -403,8 +414,8 @@ create_preferences_dialog (EtPreferencesDialog *self)
     bind_flags_value("hide-fields", priv->hide_fields_encoded_by_check);
     bind_flags_value("hide-fields", priv->hide_fields_replaygain);
 
-#ifndef ENABLE_REPLAYGAIN
-    gtk_widget_hide(priv->hide_fields_replaygain);
+#ifdef ENABLE_REPLAYGAIN
+    gtk_widget_show(priv->replaygain_grid);
 #endif
 
     /* Show / hide log view. */
@@ -587,6 +598,20 @@ create_preferences_dialog (EtPreferencesDialog *self)
     g_settings_bind (MainSettings, "id3-override-read-encoding",
         priv->id3_read_encoding_combo, "sensitive", G_SETTINGS_BIND_GET);
     notify_id3_settings_active (NULL, NULL, self);
+
+    /*
+     * ReplayGain
+     */
+#ifdef ENABLE_REPLAYGAIN
+    bind_radio("replaygain-groupby", priv->replaygain_nogroup_radio);
+    bind_radio("replaygain-groupby", priv->replaygain_album_radio);
+    bind_radio("replaygain-groupby", priv->replaygain_disc_radio);
+    bind_radio("replaygain-groupby", priv->replaygain_filepath_radio);
+
+    bind_radio("replaygain-model", priv->replaygain_v1_radio);
+    bind_radio("replaygain-model", priv->replaygain_v2_radio);
+    bind_radio("replaygain-model", priv->replaygain_v15_radio);
+#endif
 
     /*
      * Scanner
@@ -877,13 +902,6 @@ et_preferences_on_response (GtkDialog *dialog, gint response_id,
 }
 
 static void
-et_preferences_dialog_init (EtPreferencesDialog *self)
-{
-    gtk_widget_init_template (GTK_WIDGET (self));
-    create_preferences_dialog (self);
-}
-
-static void
 et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
 {
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -971,6 +989,16 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v1_ignore_radio);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_read_encoding_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_read_encoding_combo);
+#ifdef ENABLE_REPLAYGAIN
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, replaygain_grid);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, replaygain_nogroup_radio);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, replaygain_album_radio);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, replaygain_disc_radio);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, replaygain_filepath_radio);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, replaygain_v1_radio);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, replaygain_v2_radio);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, replaygain_v15_radio);
+#endif
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, preferences_notebook);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, scanner_grid);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, fts_underscore_p20_radio);
@@ -1024,8 +1052,7 @@ et_preferences_dialog_new (GtkWindow *parent)
 
     if (settings)
     {
-        g_object_get (settings, "gtk-dialogs-use-header", &use_header_bar,
-                      NULL);
+        g_object_get (settings, "gtk-dialogs-use-header", &use_header_bar, NULL);
     }
 
     return (EtPreferencesDialog*)g_object_new (ET_TYPE_PREFERENCES_DIALOG, "transient-for", parent,

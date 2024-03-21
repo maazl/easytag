@@ -20,7 +20,9 @@
 #ifdef ENABLE_REPLAYGAIN
 
 #include "misc.h"
+#include "setting.h"
 
+#include <vector>
 #include <memory>
 #include <cmath>
 #include <limits>
@@ -79,20 +81,24 @@ void ReplayGain::Feed(const float*const* data, int samples)
 
 /** ReplayGain version 1 */
 class ReplayGain1 : public ReplayGain
-{	static constexpr int Bins4dB = 30;
+{protected:
+	static constexpr int Bins4dB = 30;
 	static constexpr int dBRange = 60;
 	static constexpr float PinkRef = -25.5;
 	struct Channel
 	{	// RMS calculation
 		double Sum = 0;
-		float Gain = 1;
 		// filter ring buffers
-		int Xi = 0;
-		int Yi = 0;
-		int Zi = 0;
+		bool Xi = 0;
+		signed char YZi = 0;
 		float X[2] = {0};
 		double Y[16] = {0};
 		double Z[16] = {0};
+		float Gain = 1;
+		float Feed(const float* data, int count);
+	private:
+		float y(signed char i) { return Y[(YZi + i) & 15]; }
+		float z(signed char i) { return Z[(YZi + i) & 15]; }
 	};
 	unique_ptr<Channel[]> ChannelBuf;
 	int BlockCount = 0;
@@ -102,13 +108,13 @@ protected:
 	virtual void Feed(int channel, const float* data, int count);
 	virtual void ProcessBlock();
 public:
-	ReplayGain1();
+	ReplayGain1(int blockSize = SampleRate * 50 / 1000);
 	virtual void Setup(uint64_t channel_layout);
 	virtual float Gain() const;
 	virtual void operator+=(const Result& r);
 };
 
-ReplayGain1::ReplayGain1() : ReplayGain(SampleRate * 50 / 1000)
+ReplayGain1::ReplayGain1(int blockSize) : ReplayGain(blockSize)
 {	memset(Bins, 0, sizeof(Bins));
 }
 
@@ -129,30 +135,26 @@ void ReplayGain1::Setup(uint64_t channel_layout)
 }
 
 void ReplayGain1::Feed(int channel, const float* x, int count)
-{	Channel& ch = ChannelBuf[channel];
-	register int Xi = ch.Xi;
-	int Yi = ch.Yi;
-	int Zi = ch.Zi;
-	register float* X = ch.X;
-	double* Y = ch.Y;
-	double* Z = ch.Z;
-	auto y = [&Yi,Y](int i) -> double& { return Y[(Yi+i)&15]; };
-	auto z = [&Zi,Z](unsigned i) -> double& { return Z[(Zi+i)&15]; };
-	double Sum = ch.Sum;
+{	float max = ChannelBuf[channel].Feed(x, count);
+	if (max > Maximum)
+		Maximum = max;
+}
 
+float ReplayGain1::Channel::Feed(const float* x, int count)
+{	float max = 0;
 	while (count--)
 	{	// Peak
 		float in = *x++;
 		double res;
-		if (in > Maximum)
-			Maximum = in;
+		if (in > max)
+			max = in;
 		// Butterworth filter
-		y(0) = (X[Xi] + in) * 0.98621192462708
+		Y[YZi] = (X[Xi] + in) * 0.98621192462708
 		    + X[!Xi] * -1.97242384925416
 		    + y(-2) * -0.97261396931306
 		    + y(-1) * 1.97223372919527;
 		X[Xi] = in;
-		Xi = !Xi;
+		Xi ^= true;
 		// Yule filter
 		res = y(-10) * 0.00288463683916
 		    + y(-9) * 0.00012025322027
@@ -164,7 +166,7 @@ void ReplayGain1::Feed(int channel, const float* x, int count)
 		    + y(-3) * -0.00009291677959
 		    + y(-2) * -0.00123395316851
 		    + y(-1) * -0.02160367184185
-		    + y(0) * 0.03857599435200
+		    + Y[YZi] * 0.03857599435200
 		    + z(-10) * -0.13919314567432
 		    + z(-9) * 0.86984376593551
 		    + z(-8) * -2.75465861874613
@@ -175,16 +177,12 @@ void ReplayGain1::Feed(int channel, const float* x, int count)
 		    + z(-3) * 11.34170355132042
 		    + z(-2) * -7.81501653005538
 		    + z(-1) * 3.84664617118067;
-		z(0) = res;
+		Z[YZi] = res;
 		// RMS calculation
 		Sum += res * res;
-		++Yi;
-		++Zi;
+		++YZi &= 15;
 	}
-	ch.Xi = Xi;
-	ch.Yi = Yi & 15;
-	ch.Zi = Zi & 15;
-	ch.Sum = Sum;
+	return max;
 }
 
 void ReplayGain1::ProcessBlock()
@@ -231,8 +229,160 @@ void ReplayGain1::operator+=(const Result& right)
 		*dp++ += v;
 }
 
+/** ReplayGain version 1.5 hybrid */
+class ReplayGain15 : public ReplayGain1
+{	double Sums[3] = {0};
+protected:
+	virtual void ProcessBlock();
+public:
+	ReplayGain15() : ReplayGain1(SampleRate * 100 / 1000) {}
+};
+
+void ReplayGain15::ProcessBlock()
+{	double sum = 0;
+	for (Channel* cp = ChannelBuf.get(), *cpe = cp + Channels; cp != cpe; ++cp)
+	{	sum += cp->Sum * cp->Gain;
+		cp->Sum = 0;
+	}
+
+	double sum4 = Sums[2];
+		sum4 += Sums[2] = Sums[1];
+		sum4 += Sums[1] = Sums[0];
+		sum4 += Sums[0] = sum;
+
+	if (!Sums[2])
+		return; // not yet 4 buffers processed
+
+	++BlockCount;
+	long bin = lround(Bins4dB * (10 * log10(sum4 / (BlockSize << 2)) - PinkRef + dBRange/2.f));
+	if (bin < 0)
+		bin = 0;
+	else if (bin >= dBRange * Bins4dB)
+		bin = dBRange * Bins4dB - 1;
+	++Bins[bin];
+}
+
+/** ReplayGain version 2 */
+class ReplayGain2 : public ReplayGain
+{	static constexpr int BlockSize = SampleRate * 400 / 1000;
+	struct Channel
+	{	// RMS calculation
+		float Gain = 1;
+		// filter ring buffers
+		int XYi = 0;
+		double X[2] = {0};
+		double Y[2] = {0};
+	};
+	double Zsum[4] = {0};
+	unique_ptr<Channel[]> ChannelBuf;
+	double Ljsum = 0;
+	vector<float> Lj;
+protected:
+	virtual void Feed(int channel, const float* data, int count);
+	virtual void ProcessBlock();
+public:
+	ReplayGain2() : ReplayGain(BlockSize / 4), Lj(100) {}
+	virtual void Setup(uint64_t channel_layout);
+	virtual float Gain() const;
+	virtual void operator+=(const Result& r);
+};
+
+void ReplayGain2::Setup(uint64_t channel_layout)
+{	Channels = 0;
+	vector<float> gain;
+	gain.reserve(10);
+	for (uint64_t ch = 1; ch; ch <<= 1)
+		if (channel_layout & ch)
+		{	if (ch & (AV_CH_FRONT_LEFT|AV_CH_FRONT_RIGHT|AV_CH_FRONT_CENTER|AV_CH_FRONT_LEFT_OF_CENTER|AV_CH_FRONT_RIGHT_OF_CENTER))
+				gain.emplace_back(1);
+			else if (ch & (AV_CH_LOW_FREQUENCY|AV_CH_LOW_FREQUENCY_2))
+				gain.emplace_back(0);
+			else
+				gain.emplace_back(M_SQRT2);
+			++Channels;
+		}
+
+	ChannelBuf.reset(new Channel[Channels]);
+	for (int ch = 0; ch < Channels; ++ch)
+		ChannelBuf[ch].Gain = gain[ch];
+}
+
+void ReplayGain2::Feed(int channel, const float* data, int count)
+{	g_assert(channel < Channels);
+	register Channel& ch = ChannelBuf[channel];
+	if (!ch.Gain)
+		return;
+	register int i = ch.XYi;
+	while (count--)
+	{	float in = *data++;
+		if (in > Maximum)
+			Maximum = in;
+		// Highpass
+		register double tmp = in
+			+ 1.99004745483398 * ch.X[i]
+			- 0.99007225036621 * ch.X[!i];
+		register double acc = tmp - 2 * ch.X[i] + ch.X[!i];
+		ch.X[!i] = tmp;
+		// Head filter
+		tmp = acc
+			+ 1.69065929318241 * ch.Y[i]
+			- 0.73248077421585 * ch.Y[!i];
+		acc = 1.53512485958697 * tmp
+			- 2.69169618940638 * ch.Y[i]
+			+ 1.19839281085285 * ch.Y[!i];
+		ch.Y[!i] = tmp;
+		// RMS
+		Zsum[0] += acc * acc * ch.Gain;
+		i = !i;
+	}
+	ch.XYi = i;
+}
+
+void ReplayGain2::ProcessBlock()
+{	double sum = Zsum[3];
+	sum += Zsum[3] = Zsum[2];
+	sum += Zsum[2] = Zsum[1];
+	sum += Zsum[1] = Zsum[0];
+	Zsum[0] = 0;
+
+	if (Zsum[3])
+	{	float lj = 10 * log10(sum / BlockSize) - .691;
+		if (lj > -70) // > Γa
+		{	Lj.emplace_back(lj);
+			Ljsum += lj;
+		}
+	}
+}
+
+float ReplayGain2::Gain() const
+{	size_t count = Lj.size();
+	double ljsum = Ljsum;
+	float gr = ljsum / count - 10;
+	for (float lj : Lj)
+		if (lj <= gr)
+		{	ljsum -= lj;
+			--count;
+		}
+	return -18 - ljsum / count;
+}
+
+void ReplayGain2::operator+=(const Result& right)
+{	const ReplayGain2& rg = dynamic_cast<const ReplayGain2&>(right);
+	Ljsum += rg.Ljsum;
+	Lj.insert(Lj.end(), rg.Lj.begin(), rg.Lj.end());
+}
+
 static ReplayGain* Factory()
-{	return new ReplayGain1();
+{	switch (g_settings_get_enum(MainSettings, "replaygain-model"))
+	{case ET_REPLAYGAIN_MODEL_V1:
+		return new ReplayGain1();
+	 case ET_REPLAYGAIN_MODEL_V2:
+		return new ReplayGain2();
+	 case ET_REPLAYGAIN_MODEL_V15:
+		return new ReplayGain15();
+	 default:
+		g_assert_not_reached();
+	}
 }
 
 string ReplayGainAnalyzer::AnalyzeFile(const char* fileName)

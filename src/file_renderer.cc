@@ -235,7 +235,7 @@ string TagReplaygainRenderer::RenderText(const ET_File* file, bool original) con
 	char buf[40];
 	char* dp = buf;
 	if (isfinite(tag->track_gain))
-		dp += sprintf(dp, "%.1f dB ", tag->track_gain);
+		dp += sprintf(dp, "% .1f dB ", tag->track_gain);
 	if (isfinite(tag->track_peak))
 		dp += sprintf(dp, "(%.2f) ", tag->track_peak);
 	if (isfinite(tag->album_gain) || isfinite(tag->album_peak))

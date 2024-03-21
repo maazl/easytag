@@ -301,6 +301,23 @@ typedef enum
     ET_TAG_ENCODING_IGNORE
 } EtTagEncoding;
 
+/* ReplayGain calculation model */
+typedef enum
+{
+	ET_REPLAYGAIN_MODEL_V1,
+	ET_REPLAYGAIN_MODEL_V2,
+	ET_REPLAYGAIN_MODEL_V15,
+} EtReplayGainModel;
+
+/* ReplayGain grouping for album gain */
+typedef enum
+{
+	ET_REPLAYGAIN_GROUPBY_NONE,
+	ET_REPLAYGAIN_GROUPBY_ALBUM,
+	ET_REPLAYGAIN_GROUPBY_DISC,
+	ET_REPLAYGAIN_GROUPBY_FILEPATH
+} EtReplayGainGroupBy;
+
 /*
  * Config variables
  */

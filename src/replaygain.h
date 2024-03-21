@@ -51,6 +51,9 @@ public:
 
 	/** Retrieve the current aggregated result (for album gain). */
 	const Result& GetAggregatedResult() const { return *Aggregated; }
+
+	/** Reset state of the analyzer, i.e. discard results. */
+	void Reset() { Last.reset(); Aggregated.reset(); }
 };
 
 #endif

@@ -2274,9 +2274,6 @@ void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
     EtTagAreaPrivate *priv = et_tag_area_get_instance_private (self);
 
     guint hide = g_settings_get_flags(MainSettings, "hide-fields") | ET_COLUMN_FILEPATH;
-#ifndef ENABLE_REPLAYGAIN
-    hide |= ET_COLUMN_REPLAYGAIN;
-#endif
 
     /* Special controls to display or not! */
     switch (type)
@@ -2410,10 +2407,6 @@ et_tag_area_clear (EtTagArea *self)
     gtk_entry_set_text (GTK_ENTRY (priv->copyright_entry), "");
     gtk_entry_set_text (GTK_ENTRY (priv->url_entry), "");
     gtk_entry_set_text (GTK_ENTRY (priv->encoded_by_entry), "");
-    gtk_entry_set_text (GTK_ENTRY (priv->track_gain_entry), "");
-    gtk_entry_set_text (GTK_ENTRY (priv->track_peak_entry), "");
-    gtk_entry_set_text (GTK_ENTRY (priv->album_gain_entry), "");
-    gtk_entry_set_text (GTK_ENTRY (priv->album_peak_entry), "");
     PictureEntry_Clear (self);
     GtkTextBuffer* buffer = gtk_text_view_get_buffer(priv->comment_text);
     gtk_text_buffer_set_text(buffer, "", 0);
