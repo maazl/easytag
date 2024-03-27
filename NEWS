@@ -1,7 +1,7 @@
 3.0.0 - 2024-03-16 :
 ====================
 
-    * Add support for RelpayGain including calculation
+    * Add support for RelpayGain tags including calculation
     * Add support for original year and release year tag
     * Add support for sub title and media title tag
     * Add support for long description tag (not supported by ID3V2 tags)

@@ -1,0 +1,136 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="guide" style="task"
+      id="replaygain">
+
+  <info>
+    <link type="guide" xref="index#main" group="#first"/>
+    <revision pkgversion="3.0.0" date="2024-03-24" status="review"/>
+
+    <credit type="author">
+      <name>Marcel Müller</name>
+    </credit>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <desc>Calculate ReplayGain information</desc>
+
+  </info>
+
+  <title><gui>ReplayGain</gui> information</title>
+
+  <p><link href="https://en.wikipedia.org/wiki/ReplayGain">ReplayGain</link>
+  is a psychoacoustic model to equalize the loudness of different tracks
+  during playback.</p>
+
+  <p>EasyTAG supports the calculation of ReplayGain information for all
+  supported file formats except for MP4 audio. (see restrictions)
+  You may also edit the replay gain values manually.
+  However, this is not recommended.</p>
+
+<section id="grouping">
+  <title>Grouping for album gain</title>
+
+  <p>To avoid changes of the relative loudness while playing a complete album
+  ReplayGain supports track level and album level values.
+  For calculation of latter all files that belong to the same album
+  are analyzed as one large block. <em>It is essential to select all files
+  of an album at once in order to get this working.</em></p>
+
+  <p>EasyTAG uses the album title tag by default to group the files to analyze
+  into albums. But you may chose another grouping mode in the preferences dialog.</p>
+
+  <terms>
+    <item>
+      <title><gui>Group by album</gui></title>
+      <p>Only files with the same album title tag are analyzed together.
+      If an album consists of multiple media all media will be analyzed together
+      and get the same album gain value. This is the default.</p>
+    </item>
+    <item>
+      <title><gui>Group by album and disc</gui></title>
+      <p>The album title and the disc number is used to identify tracks
+      that belong to the same album. If the tracks have no disc number tag
+      the behavior is the same than <gui>Group by album</gui>.</p>
+    </item>
+    <item>
+      <title><gui>Group by file path</gui></title>
+      <p>Files that are in the same directory are analyzed together
+      for the album gain. No tags are used during analysis.</p>
+    </item>
+    <item>
+      <title><gui>No grouping</gui></title>
+      <p>All selected files are considered to belong to the same album.
+      Use this mode if you want to do the grouping of the files manually.</p>
+    </item>
+  </terms>
+
+</section>
+
+<section id="claculation-mode">
+  <title><gui>ReplayGain version</gui></title>
+
+  <p>EasyTAG supports different versions of ReplayGain:</p>
+
+  <terms>
+    <item>
+      <title><link href="https://wiki.hydrogenaud.io/index.php?title=ReplayGain_1.0_specification">ReplayGain version 1.0</link></title>
+      <p>This is the original standard by David Robinson in 2001.
+      It models the equal-loudness contour of the human ear quite accurately.
+      The drawback is the caclulation time required for analysis. Furthermore
+      there is no specification how to handle multi channel audio.
+      EasyTAG enhaces the standard slightly to support multiple channels.</p>
+    </item>
+    <item>
+      <title><link href="https://wiki.hydrogenaud.io/index.php?title=ReplayGain_2.0_specification">ReplayGain version 2.0</link></title>
+      <p>This version, also known as international standard ITU-R BS.1770.3
+      or EBU-128, is a simplified model that is much faster to calculate.
+      It is used e.g. by broadcasting services.
+      The newer standard also covers multi channel audio.</p>
+    </item>
+    <item>
+      <title><gui>Hybrid</gui> of version 1 and 2</title>
+      <p>EasyTAG also supports a 3rd, even more sophisticated model.
+      It combines the best of two worlds, i.e. the larger and overlapping
+      time blocks and the multi channel handling of ReplayGain 2.0 with the
+      more accurate equal-loudness contour of ReplayGain 1.0. The latter
+      is significantly less sensitive to inaudible high frequency noise in
+      some recordings. Calculation time is similar to version 1.0.</p>
+    </item>
+  </terms>
+
+  <p>Since the ReplayGain calculation is always an approximation
+  the result is sesitive to rounding differences. So when comaring
+  to the results of other applications like mp3gain you may observe
+  differences in the order of 0.1&#xa0;dB. Given that 1&#xa0;dB is roughly
+  the smallest audibly loudness deifference you can saflely ignore them.</p>
+
+</section>
+
+<section id="restrictions">
+  <title>Restrictions</title>
+
+  <list>
+    <item>
+      <p>EasyTAG cannot modify the gain fields in the sideinfo blocks
+      of MPEG audio files like tools like mp3gain can do. It is a tag editor
+      not a bit stream processor. Only the ReplayGain tags are updated to let
+      the player software adjust the loudness.</p>
+    </item>
+    <item>
+      <p><em>MP4 files are currently not supported.</em> The TagLib library
+      used to manipulate the atoms in the Quicktime container needs to be
+      of version 2.0 or above. Unfortunately almost all distributions
+      currently ship with an older version of the library.</p>
+    </item>
+    <item>
+      <p>EasyTag currently support <em>no asyncronuous operation</em>,
+      i.e. the UI gets blocked during time-consuming operations.
+      This causes the application to be quite unresponsive during
+      calculation of ReplayGain.</p>
+    </item>
+  </list>
+
+</section>
+
+</page>

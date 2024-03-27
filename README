@@ -28,6 +28,7 @@ Currently EasyTAG supports the following:
   fields (using masks)
 * ability to rename files and directories from the tag (using masks) or by
   loading a text file
+* ReplayGain analysis
 * process selected files of the selected directory
 * ability to browse subdirectories
 * recursion for tagging, removing, renaming, saving…
@@ -49,7 +50,7 @@ Currently EasyTAG supports the following:
 * Brazilian Portuguese, Bulgarian, Chinese, Czech, Danish, Dutch, French,
   German, Greek, Hungarian, Italian, Japanese, Polish, Romanian, Russian,
   Spanish, Swedish and Ukrainian translation languages
-* written in C and uses GTK+ 3 for the GUI
+* written in C/C++ and uses GTK+ 3 for the GUI
 
 
 Installation

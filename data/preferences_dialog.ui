@@ -1233,17 +1233,7 @@
 									</object>
 								</child>
 								<child>
-									<object class="GtkRadioButton" id="replaygain_nogroup_radio">
-										<property name="name">none</property>
-										<property name="label" translatable="yes">No grouping</property>
-										<property name="tooltip-text" translatable="yes">All selected files are considered to belong to the same album and receive the same album gain</property>
-										<property name="margin-left">12</property>
-										<property name="visible">True</property>
-									</object>
-								</child>
-								<child>
 									<object class="GtkRadioButton" id="replaygain_album_radio">
-										<property name="group">replaygain_nogroup_radio</property>
 										<property name="name">album</property>
 										<property name="label" translatable="yes">Group by album</property>
 										<property name="tooltip-text" translatable="yes">All files with the same album tag receive a common album gain</property>
@@ -1253,7 +1243,7 @@
 								</child>
 								<child>
 									<object class="GtkRadioButton" id="replaygain_disc_radio">
-										<property name="group">replaygain_nogroup_radio</property>
+										<property name="group">replaygain_album_radio</property>
 										<property name="name">disc</property>
 										<property name="label" translatable="yes">Group by album and disc</property>
 										<property name="tooltip-text" translatable="yes">All files with the same album and same disc number tag receive a common album gain</property>
@@ -1263,10 +1253,20 @@
 								</child>
 								<child>
 									<object class="GtkRadioButton" id="replaygain_filepath_radio">
-										<property name="group">replaygain_nogroup_radio</property>
+										<property name="group">replaygain_album_radio</property>
 										<property name="name">filepath</property>
 										<property name="label" translatable="yes">Group by file path</property>
 										<property name="tooltip-text" translatable="yes">All files in the same directory receive a common album gain</property>
+										<property name="margin-left">12</property>
+										<property name="visible">True</property>
+									</object>
+								</child>
+								<child>
+									<object class="GtkRadioButton" id="replaygain_nogroup_radio">
+										<property name="group">replaygain_album_radio</property>
+										<property name="name">none</property>
+										<property name="label" translatable="yes">No grouping</property>
+										<property name="tooltip-text" translatable="yes">All selected files are considered to belong to the same album and receive the same album gain</property>
 										<property name="margin-left">12</property>
 										<property name="visible">True</property>
 									</object>

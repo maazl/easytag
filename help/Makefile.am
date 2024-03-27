@@ -17,6 +17,7 @@ HELP_FILES = \
 	playlist-generate.page \
 	problems-id3.page \
 	problems-ogg-split.page \
+	replaygain.page \
 	scanner.page \
 	starting.page \
 	tag-capitalization.page \

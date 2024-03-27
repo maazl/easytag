@@ -30,7 +30,7 @@ configure
 /easytag-win32-installer.nsi
 /easytag.exe
 /help/*/*.mo
-/help/*/*.page
+/help/??*/*.page
 /help/*/*.stamp
 /help/*/legal.xml
 !/help/C
