@@ -26,6 +26,7 @@
 #include <string>
 #include <memory>
 #include <array>
+#include <type_traits>
 
 template <std::size_t S>
 struct small_str : public std::array<char,S>
@@ -61,6 +62,34 @@ struct gString : gObject<gchar>
 {	gString() { }
 	explicit gString(gchar* ptr) : std::unique_ptr<gchar, gDeleter>(ptr) { }
 	operator const gchar*() const { return get(); }
+};
+
+/// Strongly typed GList entry
+/// @tparam T Must be a pointer like type.
+/// @remarks Binary compatible to GList, use reinterpret cast.
+template <typename T>
+struct gList
+{	T data;
+	gList<T> *next;
+	gList<T> *prev;
+};
+/// Strongly typed GList pointer
+/// @tparam T Must be a pointer like type.
+/// @remarks Binary compatible to GList*, use reinterpret cast.
+template <typename T>
+class gListP
+{	gList<T>* ptr;
+public:
+	gListP(gList<T>* p) : ptr(p) {}
+	explicit gListP(GList* p) : ptr((gList<T>*)p) {}
+	explicit gListP(T t) : ptr((gList<T>*)g_list_append(nullptr, t)) {}
+	gListP<T>& operator =(gList<T>* p) { ptr = p; return *this; }
+	operator GList*() { return (GList*)ptr; }
+	gList<T>* operator ->() const { return ptr; }
+	gListP<T> append(T t) { return gListP<T>(g_list_append(this, t)); }
+	template<typename U, typename std::enable_if<std::is_convertible<T, U>::value, bool>::type = true>
+	gListP<T> insert_sorted(T t, gint (*cmp)(U a, U b))
+	{ return gListP<T>(g_list_insert_sorted(*this, t, (GCompareFunc)cmp)); }
 };
 
 /** create unique pointer with explicit deleter
