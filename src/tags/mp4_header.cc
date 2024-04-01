@@ -103,6 +103,8 @@ et_mp4_header_read_file_info (GFile *file,
 
     ETFileInfo->variable_bitrate = TRUE;
     ETFileInfo->bitrate = properties->bitrate ();
+    if (ETFileInfo->bitrate == 1)
+        ETFileInfo->bitrate = 0; // avoid unreasonable small bitrates of some files.
     ETFileInfo->samplerate = properties->sampleRate ();
     ETFileInfo->mode = properties->channels ();
     ETFileInfo->duration = properties->length ();
