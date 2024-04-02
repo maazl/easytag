@@ -2332,8 +2332,8 @@ void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
 
 #ifdef ENABLE_MP4
     case MP4_TAG:
-      hide |= ET_COLUMN_VERSION | ET_COLUMN_RELEASE_YEAR | ET_COLUMN_ORIG_ARTIST
-          | ET_COLUMN_ORIG_YEAR | ET_COLUMN_URL;
+        hide |= ET_COLUMN_VERSION | ET_COLUMN_RELEASE_YEAR | ET_COLUMN_ORIG_ARTIST
+          | ET_COLUMN_ORIG_YEAR | ET_COLUMN_URL | ET_COLUMN_REPLAYGAIN;
         break;
 #endif
     }
