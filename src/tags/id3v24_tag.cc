@@ -238,13 +238,18 @@ id3tag_read_file_tag (GFile *gfile,
         return FALSE;
     }
 
-    if ( ((tag = id3_file_tag(file)) == NULL)
-    ||   (tag->nframes == 0))
+    if ((tag = id3_file_tag(file)) == NULL)
     {
         id3_file_close(file);
         g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED, "%s",
                      _("Error reading tags from file"));
         return FALSE;
+    }
+
+    if (tag->nframes == 0) // No ID3 Tag so far => not an error
+    {
+        id3_file_close(file);
+        return TRUE;
     }
 
     gchar* split_delimiter = g_settings_get_string(MainSettings, "split-delimiter");
