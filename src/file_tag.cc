@@ -383,10 +383,10 @@ et_file_tag_detect_difference (const File_Tag *FileTag1,
         || et_normalized_strcmp0 (FileTag1->url, FileTag2->url) != 0
         || et_normalized_strcmp0 (FileTag1->encoded_by, FileTag2->encoded_by) != 0
         || et_normalized_strcmp0 (FileTag1->description, FileTag2->description) != 0
-        || !(fabs(FileTag1->track_gain - FileTag2->track_gain) < File_Tag::gain_epsilon)
-        || !(fabs(FileTag1->track_peak - FileTag2->track_peak) < File_Tag::peak_epsilon)
-        || !(fabs(FileTag1->album_gain - FileTag2->album_gain) < File_Tag::gain_epsilon)
-        || !(fabs(FileTag1->album_peak - FileTag2->album_peak) < File_Tag::peak_epsilon))
+        || fabs(FileTag1->track_gain - FileTag2->track_gain) >= File_Tag::gain_epsilon
+        || fabs(FileTag1->track_peak - FileTag2->track_peak) >= File_Tag::peak_epsilon
+        || fabs(FileTag1->album_gain - FileTag2->album_gain) >= File_Tag::gain_epsilon
+        || fabs(FileTag1->album_peak - FileTag2->album_peak) >= File_Tag::peak_epsilon)
         return TRUE;
 
     /* Picture */
