@@ -184,7 +184,7 @@ static gchar* apply_field_to_selection(const gchar* string_to_set, GList *etfile
     for (GList *l = etfilelist; l != NULL; l = g_list_next (l))
     {
         ET_File *etfile = (ET_File *)l->data;
-        File_Tag *FileTag = etfile->Tag()->clone();
+        File_Tag *FileTag = etfile->FileTag->data->clone();
         apply_func (FileTag, string_to_set);
         ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
     }
@@ -285,7 +285,7 @@ on_apply_to_selection (GObject *object,
         for (l = etfilelist; l != NULL; l = g_list_next (l))
         {
             etfile = (ET_File *)l->data;
-            FileTag = etfile->Tag()->clone();
+            FileTag = etfile->FileTag->data->clone();
             et_file_tag_set_disc_number (FileTag, disc_number ? disc_number
                                                               : string_to_set);
             et_file_tag_set_disc_total (FileTag, string_to_set1);
@@ -332,7 +332,7 @@ on_apply_to_selection (GObject *object,
         for (l = etfilelist; l != NULL; l = g_list_next (l))
         {
             etfile = (ET_File *)l->data;
-            FileTag = etfile->Tag()->clone();
+            FileTag = etfile->FileTag->data->clone();
 
             // We apply the TrackEntry field to all others files only if it is to delete
             // the field (string=""). Else we don't overwrite the track number
@@ -384,7 +384,7 @@ on_apply_to_selection (GObject *object,
         {
             gchar *track_string;
             // To get the path of the file
-            const File_Name *FileNameCur = ((ET_File *)etfilelistfull->data)->FileName();
+            const File_Name *FileNameCur = ((ET_File *)etfilelistfull->data)->FileNameNew->data;
             // The ETFile in the selected file list
             etfile = (ET_File*)etfilelist->data;
 
@@ -401,7 +401,7 @@ on_apply_to_selection (GObject *object,
             // The file is in the selection?
             if ( (ET_File *)etfilelistfull->data == etfile )
             {
-                FileTag = etfile->Tag()->clone();
+                FileTag = etfile->FileTag->data->clone();
                 et_file_tag_set_track_number (FileTag, track_string);
                 ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
 
@@ -432,7 +432,7 @@ on_apply_to_selection (GObject *object,
             gchar *track_string;
 
             etfile        = (ET_File *)l->data;
-            filename_utf8 = ((File_Name *)etfile->FileNameNew->data)->value_utf8;
+            filename_utf8 = etfile->FileNameNew->data->value_utf8;
             path_utf8     = g_path_get_dirname(filename_utf8);
 
             char buf[12];
@@ -447,7 +447,7 @@ on_apply_to_selection (GObject *object,
                 track_total = g_strdup (track_string);
             }
 
-            FileTag = etfile->Tag()->clone();
+            FileTag = etfile->FileTag->data->clone();
             et_file_tag_set_track_total (FileTag, track_string);
             ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
 
@@ -539,7 +539,7 @@ on_apply_to_selection (GObject *object,
         for (l = etfilelist; l != NULL; l = g_list_next (l))
         {
             etfile = (ET_File *)l->data;
-            FileTag = etfile->Tag()->clone();
+            FileTag = etfile->FileTag->data->clone();
             et_file_tag_set_picture (FileTag, res);
             ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
         }
@@ -1485,7 +1485,7 @@ on_picture_add_button_clicked (GObject *object,
                                      FALSE);
 
     /* Starting directory (the same as the current file). */
-    init_dir = g_path_get_dirname (((File_Name *)((GList *)ETCore->ETFileDisplayed->FileNameCur)->data)->value);
+    init_dir = g_path_get_dirname (ETCore->ETFileDisplayed->FileNameCur->data->value);
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (FileSelectionWindow),
                                          init_dir);
     g_free (init_dir);
@@ -2664,17 +2664,15 @@ et_tag_area_display_et_file (EtTagArea *self, const ET_File *ETFile, int columns
         default:
             tag_label = _("Tag");
             /* FIXME: Translatable string. */
-            Log_Print (LOG_ERROR,
-                       "FileTag: Undefined tag type %d for file %s.",
-                       (gint)ETFile->ETFileDescription->TagType,
-                       ((File_Name *)((GList *)ETFile->FileNameCur)->data)->value_utf8);
+            Log_Print (LOG_ERROR, "FileTag: Undefined tag type %d for file %s.",
+                       (gint)ETFile->ETFileDescription->TagType, ETFile->FileNameCur->data->value_utf8);
             break;
     }
     gtk_label_set_text (GTK_LABEL(priv->tag_label), tag_label);
 
     //Tag_Area_Set_Sensitive(TRUE); // Causes displaying problem when saving files
 
-    FileTag = (File_Tag *)(ETFile->FileTag->data);
+    FileTag = ETFile->FileTag->data;
     if (!FileTag)
     {
         et_tag_area_clear(self);

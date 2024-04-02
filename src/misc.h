@@ -75,7 +75,6 @@ struct gList
 };
 /// Strongly typed GList pointer
 /// @tparam T Must be a pointer like type.
-/// @remarks Binary compatible to GList*, use reinterpret cast.
 template <typename T>
 class gListP
 {	gList<T>* ptr;
@@ -84,12 +83,14 @@ public:
 	explicit gListP(GList* p) : ptr((gList<T>*)p) {}
 	explicit gListP(T t) : ptr((gList<T>*)g_list_append(nullptr, t)) {}
 	gListP<T>& operator =(gList<T>* p) { ptr = p; return *this; }
-	operator GList*() { return (GList*)ptr; }
+	operator GList*() const { return (GList*)ptr; }
 	gList<T>* operator ->() const { return ptr; }
-	gListP<T> append(T t) { return gListP<T>(g_list_append(this, t)); }
+	gListP<T> last() const { return gListP<T>(g_list_last(*this)); }
+	gListP<T> append(T t) { return gListP<T>(g_list_append(*this, t)); }
 	template<typename U, typename std::enable_if<std::is_convertible<T, U>::value, bool>::type = true>
 	gListP<T> insert_sorted(T t, gint (*cmp)(U a, U b))
 	{ return gListP<T>(g_list_insert_sorted(*this, t, (GCompareFunc)cmp)); }
+	gListP<T> concat(gListP<T> l) { return gListP<T>(g_list_concat(*this, l)); }
 };
 
 /** create unique pointer with explicit deleter

@@ -310,7 +310,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
     if (!mask) return;
 
     // Create a new File_Tag item
-    FileTag = ETFile->Tag()->clone();
+    FileTag = ETFile->FileTag->data->clone();
 
     // Process this mask with file
     fill_tag_list = Scan_Generate_New_Tag_From_Mask(ETFile,mask);
@@ -351,7 +351,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
 
         if (ETFile->ETFileDescription->TagType == ID3_TAG)
         {
-            file = g_file_new_for_path (((File_Name *)((GList *)ETFile->FileNameNew)->data)->value);
+            file = g_file_new_for_path (ETFile->FileNameNew->data->value);
 
             if (crc32_file_with_ID3_tag (file, &crc32_value, &error))
             {
@@ -380,7 +380,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
     et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
                                               _("Tag successfully scanned"),
                                               TRUE);
-    filename_utf8 = g_path_get_basename( ((File_Name *)ETFile->FileNameNew->data)->value_utf8 );
+    filename_utf8 = g_path_get_basename(ETFile->FileNameNew->data->value_utf8);
     Log_Print (LOG_OK, _("Tag successfully scanned ‘%s’"), filename_utf8);
     g_free(filename_utf8);
 }
@@ -406,7 +406,7 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, gchar *mask)
 
     g_return_val_if_fail (ETFile != NULL && mask != NULL, NULL);
 
-    filename_utf8 = g_strdup(((File_Name *)((GList *)ETFile->FileNameNew)->data)->value_utf8);
+    filename_utf8 = g_strdup(ETFile->FileNameNew->data->value_utf8);
     if (!filename_utf8) return NULL;
 
     // Remove extension of file (if found)
@@ -795,7 +795,7 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
     /* Create a new 'File_Name' item. */
     FileName = et_file_name_new ();
     // Save changes of the 'File_Name' item
-    ET_Set_Filename_File_Name_Item(FileName,ETFile->CurFileName(),filename_new_utf8,NULL);
+    ET_Set_Filename_File_Name_Item(FileName,ETFile->FileNameCur->data, filename_new_utf8, NULL);
 
     ET_Manage_Changes_Of_File_Data(ETFile,FileName,NULL);
     g_free(filename_new_utf8);
@@ -804,7 +804,7 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
                                               _("New filename successfully scanned"),
                                               TRUE);
 
-    filename_new_utf8 = g_path_get_basename(((File_Name *)ETFile->FileNameNew->data)->value_utf8);
+    filename_new_utf8 = g_path_get_basename(ETFile->FileNameNew->data->value_utf8);
     Log_Print (LOG_OK, _("New filename successfully scanned ‘%s’"),
                filename_new_utf8);
     g_free(filename_new_utf8);
@@ -842,7 +842,7 @@ et_scan_generate_new_filename_from_mask (const ET_File *ETFile,
         } else if (strchr(mask,G_DIR_SEPARATOR)!=NULL) // This is '/' on UNIX machines and '\' under Windows
         {
             // Relative path => set beginning of the path
-            const File_Name* file = ETFile->CurFileName();
+            const File_Name* file = ETFile->FileNameCur->data;
             if (file->rel_value_utf8 != file->value_utf8)
                 path_utf8_cur = g_strndup(file->value_utf8, file->rel_value_utf8 - file->value_utf8);
             else
@@ -884,7 +884,7 @@ Scan_Rename_File_Prefix_Path (EtScanDialog *self)
         return;
     }
 
-    filename_utf8_cur = ((File_Name *)ETFile->FileNameCur->data)->value_utf8;
+    filename_utf8_cur = ETFile->FileNameCur->data->value_utf8;
     priv = et_scan_dialog_get_instance_private (self);
 
     // The path to prefix
@@ -1089,8 +1089,8 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
 
     g_return_if_fail (ETFile != NULL);
 
-    st_filename = ETFile->FileName();
-    st_filetag  = ETFile->Tag();
+    st_filename = ETFile->FileNameNew->data;
+    st_filetag  = ETFile->FileTag->data;
     process_fields = g_settings_get_flags (MainSettings, "process-fields");
 
     /* Process the filename */
@@ -1114,7 +1114,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             Scan_Process_Fields_Functions (self, &string);
 
             string_utf8 = et_file_generate_name (ETFile, string);
-            ET_Set_Filename_File_Name_Item(FileName,ETFile->CurFileName(),string_utf8,NULL);
+            ET_Set_Filename_File_Name_Item(FileName, ETFile->FileNameCur->data, string_utf8, NULL);
             g_free(string_utf8);
             g_free(string);
         }

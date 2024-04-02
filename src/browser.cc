@@ -338,7 +338,7 @@ et_browser_run_player_for_album_list (EtBrowser *self)
     for (; l != NULL; l = g_list_next (l))
     {
         ET_File *etfile = (ET_File *)l->data;
-        const gchar *path = ((File_Name *)etfile->FileNameCur->data)->value;
+        const gchar *path = etfile->FileNameCur->data->value;
         file_list = g_list_prepend (file_list, g_file_new_for_path (path));
     }
 
@@ -380,7 +380,7 @@ et_browser_run_player_for_artist_list (EtBrowser *self)
         for (m = (GList*)l->data; m != NULL; m = g_list_next (m))
         {
             ET_File *etfile = (ET_File *)m->data;
-            const gchar *path = ((File_Name *)etfile->FileNameCur->data)->value;
+            const gchar *path = etfile->FileNameCur->data->value;
             file_list = g_list_prepend (file_list, g_file_new_for_path (path));
         }
     }
@@ -415,7 +415,7 @@ et_browser_run_player_for_selection (EtBrowser *self)
     for (l = selfilelist; l != NULL; l = g_list_next (l))
     {
         ET_File *etfile = et_browser_get_et_file_from_path (self, (GtkTreePath*)l->data);
-        const gchar *path = ((File_Name *)etfile->FileNameCur->data)->value;
+        const gchar *path = etfile->FileNameCur->data->value;
         file_list = g_list_prepend (file_list, g_file_new_for_path (path));
     }
 
@@ -1534,8 +1534,8 @@ et_browser_refresh_file_in_list (EtBrowser *self,
     /* When displaying Artist + Album lists => refresh also rows color. */
     if (strcmp (g_variant_get_string (variant, NULL), "artist") == 0)
     {
-        gchar *current_artist = ((File_Tag *)ETFile->FileTag->data)->artist;
-        gchar *current_album  = ((File_Tag *)ETFile->FileTag->data)->album;
+        gchar *current_artist = ETFile->FileTag->data->artist;
+        gchar *current_album  = ETFile->FileTag->data->album;
 
         valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->artist_model),
                                                &selectedIter);
@@ -1858,9 +1858,9 @@ et_browser_select_file_by_dlm (EtBrowser *self,
         {
             gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter,
                                LIST_FILE_POINTER, &current_etfile, -1);
-            gchar *current_title = current_etfile->Tag()->title;
+            gchar *current_title = current_etfile->FileTag->data->title;
 
-            if ((cur = dlm((current_title ? current_title : current_etfile->FileName()->file_value_utf8), string)) > max) // See "dlm.c"
+            if ((cur = dlm((current_title ? current_title : current_etfile->FileNameNew->data->file_value_utf8), string)) > max) // See "dlm.c"
             {
                 max = cur;
                 iter2 = iter;
@@ -2045,7 +2045,7 @@ Browser_Artist_List_Load_Files (EtBrowser *self, ET_File *etfile_to_select)
     g_return_if_fail (priv->artist_view != NULL);
 
     if (etfile_to_select)
-        artist_to_select = ((File_Tag *)etfile_to_select->FileTag->data)->artist;
+        artist_to_select = etfile_to_select->FileTag->data->artist;
 
     et_browser_clear_artist_model (self);
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->artist_view));
@@ -2059,7 +2059,7 @@ Browser_Artist_List_Load_Files (EtBrowser *self, ET_File *etfile_to_select)
         AlbumList = (GList *)l->data;
         etfilelist = (GList *)AlbumList->data;
         etfile     = (ET_File *)etfilelist->data;
-        artistname = ((File_Tag *)etfile->FileTag->data)->artist;
+        artistname = etfile->FileTag->data->artist;
 
         // Third column text : number of files
         for (m = g_list_first (AlbumList); m != NULL; m = g_list_next (m))
@@ -2256,7 +2256,7 @@ Browser_Album_List_Load_Files (EtBrowser *self,
     g_return_if_fail (priv->album_view != NULL);
 
     if (etfile_to_select)
-        album_to_select = ((File_Tag *)etfile_to_select->FileTag->data)->album;
+        album_to_select = etfile_to_select->FileTag->data->album;
 
     et_browser_clear_album_model (self);
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->album_view));
@@ -2293,7 +2293,7 @@ Browser_Album_List_Load_Files (EtBrowser *self,
         // Insert a line for each album
         etfilelist = (GList *)l->data;
         etfile     = (ET_File *)etfilelist->data;
-        albumname  = ((File_Tag *)etfile->FileTag->data)->album;
+        albumname  = etfile->FileTag->data->album;
 
         /* TODO: Make the icon use the symbolic variant. */
         icon = g_themed_icon_new_with_default_fallbacks ("media-optical-cd-audio");
@@ -4366,8 +4366,7 @@ Run_Program_With_Selected_Files (EtBrowser *self)
             gtk_tree_model_get (GTK_TREE_MODEL (priv->file_model), &iter,
                                 LIST_FILE_POINTER, &ETFile, -1);
 
-            args_list = g_list_prepend (args_list,
-                                        ((File_Name *)ETFile->FileNameCur->data)->value);
+            args_list = g_list_prepend (args_list, ETFile->FileNameCur->data->value);
             //args_list = g_list_append(args_list,((File_Name *)ETFile->FileNameCur->data)->value_utf8);
         }
     }

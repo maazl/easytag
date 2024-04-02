@@ -353,8 +353,8 @@ delete_file (ET_File *ETFile, gboolean multiple_files, GError **error)
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
     /* Filename of the file to delete. */
-    cur_filename      = ((File_Name *)(ETFile->FileNameCur)->data)->value;
-    cur_filename_utf8 = ((File_Name *)(ETFile->FileNameCur)->data)->value_utf8;
+    cur_filename      = ETFile->FileNameCur->data->value;
+    cur_filename_utf8 = ETFile->FileNameCur->data->value_utf8;
     basename_utf8 = g_path_get_basename (cur_filename_utf8);
 
     /*
@@ -1440,7 +1440,7 @@ run_audio_player_using_directory (GError **error)
     for (l = ETCore->ETFileList; l != NULL; l = g_list_next (l))
     {
         ET_File *etfile = (ET_File *)l->data;
-        const gchar *path = ((File_Name *)etfile->FileNameCur->data)->value;
+        const gchar *path = etfile->FileNameCur->data->value;
         file_list = g_list_prepend (file_list, g_file_new_for_path (path));
     }
 
@@ -2001,7 +2001,7 @@ et_application_window_update_file_name_from_ui (EtApplicationWindow *self,
     }
 
     /* Get the current path to the file. */
-    dirname = g_path_get_dirname (((File_Name *)ETFile->FileNameNew->data)->value);
+    dirname = g_path_get_dirname (ETFile->FileNameNew->data->value);
 
     /* Convert filename extension (lower or upper). */
     extension = ET_File_Format_File_Extension (ETFile);
@@ -2019,7 +2019,7 @@ et_application_window_update_file_name_from_ui (EtApplicationWindow *self,
     {
         /* Keep the 'last' filename (if a 'blank' filename was entered in the
          * fileentry for example). */
-        filename_new = g_path_get_basename (((File_Name *)ETFile->FileNameNew->data)->value);
+        filename_new = g_path_get_basename (ETFile->FileNameNew->data->value);
     }
 
     g_free (filename);
@@ -2053,7 +2053,7 @@ et_application_window_update_et_file_from_ui (EtApplicationWindow *self)
                       && et_file->FileNameCur->data != NULL);
 
     /* Save the current displayed data */
-    cur_filename_utf8 = ((File_Name *)((GList *)et_file->FileNameCur)->data)->value_utf8;
+    cur_filename_utf8 = et_file->FileNameCur->data->value_utf8;
     description = et_file->ETFileDescription;
 
     /* Save filename and generate undo for filename. */
@@ -2081,7 +2081,7 @@ et_application_window_update_et_file_from_ui (EtApplicationWindow *self)
         case OPUS_TAG:
 #endif
         case APE_TAG:
-            FileTag = et_application_window_tag_area_create_file_tag(self, et_file->Tag());
+            FileTag = et_application_window_tag_area_create_file_tag(self, et_file->FileTag->data);
             break;
 #ifndef ENABLE_MP3
         case ID3_TAG:
@@ -2142,7 +2142,7 @@ et_application_window_display_file_name (EtApplicationWindow *self,
 
     g_return_if_fail (ETFile != NULL);
 
-    new_filename_utf8 = ((File_Name *)((GList *)ETFile->FileNameNew)->data)->value_utf8;
+    new_filename_utf8 = ETFile->FileNameNew->data->value_utf8;
 
     /*
      * Set the path to the file into BrowserEntry (dirbrowser)
@@ -2222,11 +2222,10 @@ et_application_window_display_et_file (EtApplicationWindow *self,
     gchar *msg;
     EtFileHeaderFields *fields;
 
-    g_return_if_fail (ETFile != NULL &&
-                      ((GList *)ETFile->FileNameCur)->data != NULL);
+    g_return_if_fail (ETFile != NULL && ETFile->FileNameCur->data != NULL);
                       /* For the case where ETFile is an "empty" structure. */
 
-    cur_filename_utf8 = ((File_Name *)((GList *)ETFile->FileNameCur)->data)->value_utf8;
+    cur_filename_utf8 = ETFile->FileNameCur->data->value_utf8;
     description = ETFile->ETFileDescription;
 
     /* Save the current displayed file */

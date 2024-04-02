@@ -155,9 +155,9 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
         flag_id3lib_bugged = id3tag_check_if_id3lib_is_buggy (NULL);
     }
 
-    FileTag  = (File_Tag *)ETFile->FileTag->data;
-    filename      = ((File_Name *)ETFile->FileNameCur->data)->value;
-    filename_utf8 = ((File_Name *)ETFile->FileNameCur->data)->value_utf8;
+    FileTag  = ETFile->FileTag->data;
+    filename      = ETFile->FileNameCur->data->value;
+    filename_utf8 = ETFile->FileNameCur->data->value_utf8;
 
     file = g_file_new_for_path (filename);
 
@@ -370,10 +370,10 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
         // Same file...
         FileName_tmp->value      = g_strdup(filename);
         FileName_tmp->value_utf8 = g_strdup(filename_utf8);  // Not necessary to fill 'value_ck'
-        ETFile_tmp->FileNameList = g_list_append(NULL,FileName_tmp);
+        ETFile_tmp->FileNameList = gListP<File_Name*>(FileName_tmp);
         ETFile_tmp->FileNameCur  = ETFile_tmp->FileNameList;
         // With empty tag...
-        ETFile_tmp->FileTagList  = g_list_append(NULL,FileTag_tmp);
+        ETFile_tmp->FileTagList  = gListP<File_Tag*>(FileTag_tmp);
         ETFile_tmp->FileTag      = ETFile_tmp->FileTagList;
         ape_tag_write_file_tag (ETFile_tmp, NULL);
         ET_Free_File_List_Item(ETFile_tmp);

@@ -470,10 +470,10 @@ et_file_list_add (GList *file_list,
     ETFile->ETFileExtension      = ETFileExtension;
     ETFile->FileNameList         =
     ETFile->FileNameCur          =
-    ETFile->FileNameNew          = g_list_append(NULL,FileName);
+    ETFile->FileNameNew          = gListP<File_Name*>(FileName);
     ETFile->FileTagList          =
     ETFile->FileTagCur           =
-    ETFile->FileTag              = g_list_append(NULL,FileTag);
+    ETFile->FileTag              = gListP<File_Tag*>(FileTag);
     ETFile->ETFileInfo           = ETFileInfo;
 
     /* Add the item to the "main list" */
@@ -503,8 +503,8 @@ et_file_list_add (GList *file_list,
     /*
      * Display a message if the file was changed at start
      */
-    FileTag  = (File_Tag *)ETFile->FileTag->data;
-    FileName = (File_Name *)ETFile->FileNameNew->data;
+    FileTag  = ETFile->FileTag->data;
+    FileName = ETFile->FileNameNew->data;
     if ( (FileName && FileName->saved==FALSE) || (FileTag && FileTag->saved==FALSE) )
     {
         Log_Print (LOG_INFO, _("Automatic corrections applied for file ‘%s’"),
@@ -547,8 +547,8 @@ ET_Comp_Func_Sort_Artist_Item_By_Ascending_Artist (const GList *AlbumList1,
         return 1;
     }
 
-    etfile1_artist = ((File_Tag *)etfile1->FileTag->data)->artist;
-    etfile2_artist = ((File_Tag *)etfile2->FileTag->data)->artist;
+    etfile1_artist = etfile1->FileTag->data->artist;
+    etfile2_artist = etfile2->FileTag->data->artist;
 
     if (g_settings_get_boolean (MainSettings, "sort-case-sensitive"))
     {
@@ -582,8 +582,8 @@ ET_Comp_Func_Sort_Album_Item_By_Ascending_Album (const GList *etfilelist1,
         return 1;
     }
 
-    etfile1_album  = ((File_Tag *)etfile1->FileTag->data)->album;
-    etfile2_album  = ((File_Tag *)etfile2->FileTag->data)->album;
+    etfile1_album  = etfile1->FileTag->data->album;
+    etfile2_album  = etfile2->FileTag->data->album;
 
     if (g_settings_get_boolean (MainSettings, "sort-case-sensitive"))
     {
@@ -616,9 +616,9 @@ et_artist_album_list_add_file (gListP<gListP<gListP<ET_File*>>>& file_list, ET_F
     g_return_if_fail (ETFile != NULL);
 
     /* Album value of the ETFile passed in parameter. */
-    ETFile_Album = ((File_Tag *)ETFile->FileTag->data)->album;
+    ETFile_Album = ETFile->FileTag->data->album;
     /* Artist value of the ETFile passed in parameter. */
-    ETFile_Artist = ((File_Tag *)ETFile->FileTag->data)->artist;
+    ETFile_Artist = ETFile->FileTag->data->artist;
 
     for (gListP<gListP<gListP<ET_File*>>> ArtistList = file_list; ArtistList; ArtistList = ArtistList->next)
     {
@@ -626,9 +626,9 @@ et_artist_album_list_add_file (gListP<gListP<gListP<ET_File*>>>& file_list, ET_F
         /* Take the first item, and the first etfile item. */
         if (AlbumList && (etfilelist = AlbumList->data)
             && (etfile = etfilelist->data)
-            && ((File_Tag *)etfile->FileTag->data) != NULL)
+            && etfile->FileTag->data != NULL)
         {
-            etfile_artist = ((File_Tag *)etfile->FileTag->data)->artist;
+            etfile_artist = etfile->FileTag->data->artist;
         }
         else
         {
@@ -644,9 +644,9 @@ et_artist_album_list_add_file (gListP<gListP<gListP<ET_File*>>>& file_list, ET_F
             {
                 if ((etfilelist = AlbumList->data)
                     && (etfile = etfilelist->data)
-                    && ((File_Tag *)etfile->FileTag->data) != NULL)
+                    && etfile->FileTag->data != NULL)
                 {
-                    etfile_album = ((File_Tag *)etfile->FileTag->data)->album;
+                    etfile_album = etfile->FileTag->data->album;
                 }
                 else
                 {
@@ -1205,7 +1205,7 @@ et_file_list_get_n_files_in_path (GList *file_list,
     for (l = g_list_first (file_list); l != NULL; l = g_list_next (l))
     {
         ET_File *ETFile = (ET_File *)l->data;
-        const gchar *cur_filename_utf8 = ((File_Name *)((GList *)ETFile->FileNameCur)->data)->value_utf8;
+        const gchar *cur_filename_utf8 = ETFile->FileNameCur->data->value_utf8;
         gchar *dirname_utf8      = g_path_get_dirname(cur_filename_utf8);
         gchar *dirname_key = g_utf8_collate_key (dirname_utf8, -1);
 

@@ -153,11 +153,11 @@ const FileInfoIntColumnRenderer
 const TagReplaygainRenderer R_Replaygain(ET_SORT_MODE_ASCENDING_REPLAYGAIN);
 
 string FileNameColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	return EmptfIfNull((original ? file->CurFileName() : file->FileName())->*Field);
+{	return EmptfIfNull((original ? file->FileNameCur : file->FileNameNew)->data->*Field);
 }
 
 string TagColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	string s = EmptfIfNull((original ? file->CurTag() : file->Tag())->*Field);
+{	string s = EmptfIfNull((original ? file->FileTagCur : file->FileTag)->data->*Field);
 	size_t pos = s.find('\n');
 	if (pos != string::npos && g_settings_get_boolean(MainSettings, "browse-limit-lines"))
 	{	guint count = g_settings_get_uint(MainSettings, "browse-max-lines");
@@ -175,7 +175,7 @@ done:
 }
 
 string TagPartColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	const File_Tag* tag = original ? file->CurTag() : file->Tag();
+{	const File_Tag* tag = (original ? file->FileTagCur : file->FileTag)->data;
 	string svalue = EmptfIfNull(tag->*Field);
 	const gchar* value2 = EmptfIfNull(tag->*Field2);
 	if (!et_str_empty(value2))
@@ -231,7 +231,7 @@ string FileInfoIntColumnRenderer::RenderText(const ET_File* file, bool original)
 }
 
 string TagReplaygainRenderer::RenderText(const ET_File* file, bool original) const
-{	const File_Tag* tag = original ? file->CurTag() : file->Tag();
+{	const File_Tag* tag = (original ? file->FileTagCur : file->FileTag)->data;
 	char buf[40];
 	char* dp = buf;
 	if (isfinite(tag->track_gain))

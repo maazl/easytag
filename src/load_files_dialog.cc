@@ -133,7 +133,7 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
             // Create a new 'File_Name' item
             FileName = et_file_name_new ();
             // Save changes of the 'File_Name' item
-            ET_Set_Filename_File_Name_Item(FileName, ETFile->CurFileName(), filename_new_utf8,NULL);
+            ET_Set_Filename_File_Name_Item(FileName, ETFile->FileNameCur->data, filename_new_utf8,NULL);
             ET_Manage_Changes_Of_File_Data(ETFile,FileName,NULL);
 
             g_free(filename_new_utf8);
@@ -630,7 +630,7 @@ Load_File_List (EtLoadFilesDialog *self)
     for (l = ETCore->ETFileList; l != NULL; l = g_list_next (l))
     {
         etfile = (ET_File *)l->data;
-        filename_utf8 = g_path_get_basename(((File_Name *)etfile->FileNameNew->data)->value_utf8);
+        filename_utf8 = g_path_get_basename(etfile->FileNameNew->data->value_utf8);
         // Remove the extension ('filename' must be allocated to don't affect the initial value)
         if ((pos=strrchr(filename_utf8,'.'))!=NULL)
             *pos = 0;

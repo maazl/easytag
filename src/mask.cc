@@ -42,7 +42,7 @@ public:
 };
 
 string MaskEvaluator::TagFieldFromMaskCode(gchar code)
-{	const File_Tag *tag = File.Tag();
+{	const File_Tag *tag = File.FileTag->data;
 	gchar* r;
 	size_t maxlen = 0;
 	switch (code)

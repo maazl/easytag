@@ -86,8 +86,8 @@ ET_File_Item_New (void)
  */
 static gint CmpFilepath(const ET_File* ETFile1, const ET_File* ETFile2)
 {
-	const File_Name *file1 = ETFile1->CurFileName();
-	const File_Name *file2 = ETFile2->CurFileName();
+	const File_Name *file1 = ETFile1->FileNameCur->data;
+	const File_Name *file2 = ETFile2->FileNameCur->data;
 	// !!!! : Must be the same rules as "Cddb_Track_List_Sort_Func" to be
 	// able to sort in the same order files in cddb and in the file list.
 	int r = strcmp(file1->path_value_ck, file2->path_value_ck);
@@ -103,7 +103,7 @@ static gint CmpFilename(const ET_File* ETFile1, const ET_File* ETFile2)
 {
 	// !!!! : Must be the same rules as "Cddb_Track_List_Sort_Func" to be
 	// able to sort in the same order files in cddb and in the file list.
-	return sign(strcmp(ETFile1->CurFileName()->file_value_ck, ETFile2->CurFileName()->file_value_ck));
+	return sign(strcmp(ETFile1->FileNameCur->data->file_value_ck, ETFile2->FileNameCur->data->file_value_ck));
 }
 
 /*
@@ -130,8 +130,8 @@ static gint CmpInt(const gchar* val1, const gchar* val2)
  */
 static gint CmpTrackNumber(const ET_File* ETFile1, const ET_File* ETFile2)
 {
-  const File_Tag *file1 = ETFile1->Tag();
-  const File_Tag *file2 = ETFile2->Tag();
+  const File_Tag *file1 = ETFile1->FileTag->data;
+  const File_Tag *file2 = ETFile2->FileTag->data;
 	gint r = CmpInt(file1->track, file2->track);
 	if (r)
 		return r;
@@ -148,8 +148,8 @@ static gint CmpTrackNumber(const ET_File* ETFile1, const ET_File* ETFile2)
  */
 static gint CmpDiscNumber(const ET_File* ETFile1, const ET_File* ETFile2)
 {
-  const File_Tag *file1 = ETFile1->Tag();
-  const File_Tag *file2 = ETFile2->Tag();
+  const File_Tag *file1 = ETFile1->FileTag->data;
+  const File_Tag *file2 = ETFile2->FileTag->data;
 	gint r = CmpInt(file1->disc_number, file2->disc_number);
 	if (r)
 		return r;
@@ -172,7 +172,7 @@ static gint CmpCreationDate(const ET_File* ETFile1, const ET_File* ETFile2)
     guint64 time2 = 0;
 
     /* TODO: Report errors? */
-    file = g_file_new_for_path (ETFile1->CurFileName()->value);
+    file = g_file_new_for_path (ETFile1->FileNameCur->data->value);
     info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_CHANGED,
                               G_FILE_QUERY_INFO_NONE, NULL, NULL);
 
@@ -185,7 +185,7 @@ static gint CmpCreationDate(const ET_File* ETFile1, const ET_File* ETFile2)
         g_object_unref (info);
     }
 
-    file = g_file_new_for_path (ETFile2->CurFileName()->value);
+    file = g_file_new_for_path (ETFile2->FileNameCur->data->value);
     info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_CHANGED,
                               G_FILE_QUERY_INFO_NONE, NULL, NULL);
 
@@ -221,8 +221,8 @@ static gint CmpCreationDate(const ET_File* ETFile1, const ET_File* ETFile2)
 template <gchar* File_Tag::*V, bool CS, bool ST>
 static gint CmpTagString2(const ET_File* file1, const ET_File* file2)
 {
-	const gchar* str1 = file1->Tag()->*V;
-	const gchar* str2 = file2->Tag()->*V;
+	const gchar* str1 = file1->FileTag->data->*V;
+	const gchar* str2 = file2->FileTag->data->*V;
 
 	if (!str2)
 		return !!str1;
@@ -245,7 +245,7 @@ static gint CmpTagString2(const ET_File* file1, const ET_File* file2)
 template <gchar* File_Tag::*V>
 static gint CmpTagInt(const ET_File* file1, const ET_File* file2)
 {
-	gint r = CmpInt(file1->Tag()->*V, file2->Tag()->*V);
+	gint r = CmpInt(file1->FileTag->data->*V, file2->FileTag->data->*V);
 	if (r)
 		return r;
 	// 2nd criterion
@@ -536,10 +536,10 @@ ET_Save_File_Name_Internal (const ET_File *ETFile,
     g_return_val_if_fail (ETFile != NULL && FileName != NULL, FALSE);
 
     // Get the current path to the file
-    dirname = g_path_get_dirname( ((File_Name *)ETFile->FileNameNew->data)->value );
+    dirname = g_path_get_dirname(ETFile->FileNameNew->data->value);
 
     // Get the name of file (and rebuild it with extension with a 'correct' case)
-    filename = g_path_get_basename( ((File_Name *)ETFile->FileNameNew->data)->value );
+    filename = g_path_get_basename(ETFile->FileNameNew->data->value);
 
     // Remove the extension
     if ((pos=strrchr(filename, '.'))!=NULL)
@@ -556,7 +556,7 @@ ET_Save_File_Name_Internal (const ET_File *ETFile,
     g_free(extension);
     g_free(filename);
 
-    success = et_file_name_set_from_components (FileName, ETFile->CurFileName(), filename_new, dirname,
+    success = et_file_name_set_from_components (FileName, ETFile->FileNameCur->data, filename_new, dirname,
         (EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"));
 
     g_free (filename_new);
@@ -645,8 +645,8 @@ ET_Save_File_Tag_To_HD (ET_File *ETFile, GError **error)
     g_return_val_if_fail (ETFile != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    cur_filename = ((File_Name *)(ETFile->FileNameCur)->data)->value;
-    cur_filename_utf8 = ((File_Name *)(ETFile->FileNameCur)->data)->value_utf8;
+    cur_filename = ETFile->FileNameCur->data->value;
+    cur_filename_utf8 = ETFile->FileNameCur->data->value_utf8;
 
     description = ETFile->ETFileDescription;
 
@@ -792,8 +792,7 @@ ET_Manage_Changes_Of_File_Data (ET_File *ETFile,
     if (FileName)
     {
         if (ETFile->FileNameNew
-            && et_file_name_detect_difference ((File_Name *)(ETFile->FileNameNew)->data,
-                                               FileName) == TRUE)
+            && et_file_name_detect_difference (ETFile->FileNameNew->data, FileName) == TRUE)
         {
             ET_Add_File_Name_To_List(ETFile,FileName);
             undo_added |= TRUE;
@@ -809,8 +808,7 @@ ET_Manage_Changes_Of_File_Data (ET_File *ETFile,
     if (FileTag)
     {
         if (ETFile->FileTag
-            && et_file_tag_detect_difference ((File_Tag *)(ETFile->FileTag)->data,
-                                              FileTag) == TRUE)
+            && et_file_tag_detect_difference (ETFile->FileTag->data, FileTag) == TRUE)
         {
             ET_Add_File_Tag_To_List(ETFile,FileTag);
             undo_added |= TRUE;
@@ -840,7 +838,7 @@ ET_Manage_Changes_Of_File_Data (ET_File *ETFile,
 static gboolean
 ET_Add_File_Name_To_List (ET_File *ETFile, File_Name *FileName)
 {
-    GList *cut_list = NULL;
+    gListP<File_Name*> cut_list = NULL;
 
     g_return_val_if_fail (ETFile != NULL && FileName != NULL, FALSE);
 
@@ -856,12 +854,12 @@ ET_Add_File_Name_To_List (ET_File *ETFile, File_Name *FileName)
         cut_list->prev = NULL;
 
     /* Add the new item to the list */
-    ETFile->FileNameList = g_list_append(ETFile->FileNameList,FileName);
+    ETFile->FileNameList = ETFile->FileNameList.append(FileName);
     /* Set the current item to use */
-    ETFile->FileNameNew  = g_list_last(ETFile->FileNameList);
+    ETFile->FileNameNew  = ETFile->FileNameList.last();
     /* Backup list */
     /* FIX ME! Keep only the saved item */
-    ETFile->FileNameListBak = g_list_concat(ETFile->FileNameListBak,cut_list);
+    ETFile->FileNameListBak = ETFile->FileNameListBak.concat(cut_list);
 
     return TRUE;
 }
@@ -872,7 +870,7 @@ ET_Add_File_Name_To_List (ET_File *ETFile, File_Name *FileName)
 static gboolean
 ET_Add_File_Tag_To_List (ET_File *ETFile, File_Tag *FileTag)
 {
-    GList *cut_list = NULL;
+    gListP<File_Tag*> cut_list = NULL;
 
     g_return_val_if_fail (ETFile != NULL && FileTag != NULL, FALSE);
 
@@ -885,11 +883,11 @@ ET_Add_File_Tag_To_List (ET_File *ETFile, File_Tag *FileTag)
         cut_list->prev = NULL;
 
     /* Add the new item to the list */
-    ETFile->FileTagList = g_list_append(ETFile->FileTagList,FileTag);
+    ETFile->FileTagList = ETFile->FileTagList.append(FileTag);
     /* Set the current item to use */
-    ETFile->FileTag     = g_list_last(ETFile->FileTagList);
+    ETFile->FileTag     = ETFile->FileTagList.last();
     /* Backup list */
-    ETFile->FileTagListBak = g_list_concat(ETFile->FileTagListBak,cut_list);
+    ETFile->FileTagListBak = ETFile->FileTagListBak.concat(cut_list);
 
     return TRUE;
 }
@@ -908,11 +906,11 @@ gboolean ET_Undo_File_Data (ET_File *ETFile)
 
     /* Find the valid key */
     if (ETFile->FileNameNew->prev && ETFile->FileNameNew->data)
-        filename_key = ((File_Name *)ETFile->FileNameNew->data)->key;
+        filename_key = ETFile->FileNameNew->data->key;
     else
         filename_key = 0;
     if (ETFile->FileTag->prev && ETFile->FileTag->data)
-        filetag_key = ((File_Tag *)ETFile->FileTag->data)->key;
+        filetag_key = ETFile->FileTag->data->key;
     else
         filetag_key = 0;
     // The key to use
@@ -920,7 +918,7 @@ gboolean ET_Undo_File_Data (ET_File *ETFile)
 
     /* Undo filename */
     if (ETFile->FileNameNew->prev && ETFile->FileNameNew->data
-    && (undo_key==((File_Name *)ETFile->FileNameNew->data)->key))
+    && (undo_key == ETFile->FileNameNew->data->key))
     {
         ETFile->FileNameNew = ETFile->FileNameNew->prev;
         has_filename_undo_data = TRUE; // To indicate that an undo has been applied
@@ -928,7 +926,7 @@ gboolean ET_Undo_File_Data (ET_File *ETFile)
 
     /* Undo tag data */
     if (ETFile->FileTag->prev && ETFile->FileTag->data
-    && (undo_key==((File_Tag *)ETFile->FileTag->data)->key))
+    && (undo_key == ETFile->FileTag->data->key))
     {
         ETFile->FileTag = ETFile->FileTag->prev;
         has_filetag_undo_data  = TRUE;
@@ -969,11 +967,11 @@ gboolean ET_Redo_File_Data (ET_File *ETFile)
 
     /* Find the valid key */
     if (ETFile->FileNameNew->next && ETFile->FileNameNew->next->data)
-        filename_key = ((File_Name *)ETFile->FileNameNew->next->data)->key;
+        filename_key = ETFile->FileNameNew->next->data->key;
     else
         filename_key = (guint)~0; // To have the max value for guint
     if (ETFile->FileTag->next && ETFile->FileTag->next->data)
-        filetag_key = ((File_Tag *)ETFile->FileTag->next->data)->key;
+        filetag_key = ETFile->FileTag->next->data->key;
     else
         filetag_key = (guint)~0; // To have the max value for guint
     // The key to use
@@ -981,7 +979,7 @@ gboolean ET_Redo_File_Data (ET_File *ETFile)
 
     /* Redo filename */
     if (ETFile->FileNameNew->next && ETFile->FileNameNew->next->data
-    && (undo_key==((File_Name *)ETFile->FileNameNew->next->data)->key))
+    && (undo_key == ETFile->FileNameNew->next->data->key))
     {
         ETFile->FileNameNew = ETFile->FileNameNew->next;
         has_filename_redo_data = TRUE; // To indicate that a redo has been applied
@@ -989,7 +987,7 @@ gboolean ET_Redo_File_Data (ET_File *ETFile)
 
     /* Redo tag data */
     if (ETFile->FileTag->next && ETFile->FileTag->next->data
-    && (undo_key==((File_Tag *)ETFile->FileTag->next->data)->key))
+    && (undo_key == ETFile->FileTag->next->data->key))
     {
         ETFile->FileTag = ETFile->FileTag->next;
         has_filetag_redo_data  = TRUE;
@@ -1024,32 +1022,15 @@ ET_File_Data_Has_Redo_Data (const ET_File *ETFile)
 gboolean
 et_file_check_saved (const ET_File *ETFile)
 {
-    const File_Tag *FileTag = NULL;
-    const File_Name *FileNameNew = NULL;
-
     g_return_val_if_fail (ETFile != NULL, TRUE);
 
-    if (ETFile->FileTag)
-    {
-        FileTag = ETFile->Tag();
-    }
-
-    if (ETFile->FileNameNew)
-    {
-        FileNameNew = ETFile->FileName();
-    }
-
     /* Check if the tag has been changed. */
-    if (FileTag && !FileTag->saved)
-    {
+    if (ETFile->FileTag && !ETFile->FileTag->data->saved)
         return FALSE;
-    }
 
     /* Check if name of file has been changed. */
-    if (FileNameNew && !FileNameNew->saved)
-    {
+    if (ETFile->FileNameNew && !ETFile->FileNameNew->data->saved)
         return FALSE;
-    }
 
     /* No changes. */
     return TRUE;
@@ -1072,25 +1053,15 @@ Set_Saved_Value_Of_File_Tag_To_False (File_Tag *FileTag, void *dummy)
 static void
 ET_Mark_File_Tag_As_Saved (ET_File *ETFile)
 {
-    File_Tag *FileTag;
-    GList *FileTagList;
-
-    FileTag     = (File_Tag *)ETFile->FileTag->data;    // The current FileTag, to set to TRUE
-    FileTagList = ETFile->FileTagList;
-    g_list_foreach(FileTagList,(GFunc)Set_Saved_Value_Of_File_Tag_To_False,NULL); // All other FileTag set to FALSE
-    FileTag->saved = TRUE; // The current FileTag set to TRUE
+    g_list_foreach(ETFile->FileTagList, (GFunc)Set_Saved_Value_Of_File_Tag_To_False, NULL); // All other FileTag set to FALSE
+    ETFile->FileTag->data->saved = TRUE; // The current FileTag set to TRUE
 }
 
 
 void ET_Mark_File_Name_As_Saved (ET_File *ETFile)
 {
-    File_Name *FileNameNew;
-    GList *FileNameList;
-
-    FileNameNew  = (File_Name *)ETFile->FileNameNew->data;    // The current FileName, to set to TRUE
-    FileNameList = ETFile->FileNameList;
-    g_list_foreach(FileNameList,(GFunc)Set_Saved_Value_Of_File_Tag_To_False,NULL);
-    FileNameNew->saved = TRUE;
+    g_list_foreach(ETFile->FileNameList, (GFunc)Set_Saved_Value_Of_File_Tag_To_False, NULL);
+    ETFile->FileNameNew->data->saved = TRUE; // The current FileName, to set to TRUE
 }
 
 /*
@@ -1113,7 +1084,7 @@ et_file_generate_name (const ET_File *ETFile,
     g_return_val_if_fail (ETFile && ETFile->FileNameNew->data, NULL);
     g_return_val_if_fail (new_file_name_utf8, NULL);
 
-    if ((dirname_utf8 = g_path_get_dirname (((File_Name *)ETFile->FileNameNew->data)->value_utf8)))
+    if ((dirname_utf8 = g_path_get_dirname (ETFile->FileNameNew->data->value_utf8)))
     {
         gchar *extension;
         gchar *new_file_name_path_utf8;
@@ -1165,7 +1136,7 @@ gchar *et_file_generate_name (ET_File *ETFile, gchar *new_file_name_utf8)
     gchar *dirname;
 
     if (ETFile && ETFile->FileNameNew->data && new_file_name_utf8
-    && (dirname=g_path_get_dirname(((File_Name *)ETFile->FileNameNew->data)->value)) )
+    && (dirname=g_path_get_dirname(ETFile->FileNameNew->data->value)) )
     {
         gchar *extension;
         gchar *new_file_name_path;
