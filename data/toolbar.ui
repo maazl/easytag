@@ -50,6 +50,24 @@
             </object>
         </child>
         <child>
+            <object class="GtkToolButton" id="reload_button">
+                <property name="action-name">win.reload-directory</property>
+                <property name="icon-name">view-refresh</property>
+                <property name="label" translatable="yes">Reload Directory</property>
+                <property name="tooltip-text" translatable="yes">Reload Directory</property>
+                <property name="visible">True</property>
+            </object>
+        </child>
+        <child>
+            <object class="GtkToggleToolButton" id="subdir_button">
+                <property name="action-name">win.browse-subdir</property>
+                <property name="icon-name">go-down</property>
+                <property name="label" translatable="yes">Browse Subdirectories</property>
+                <property name="tooltip-text" translatable="yes">Browse Subdirectories</property>
+                <property name="visible">True</property>
+            </object>
+        </child>
+        <child>
             <object class="GtkSeparatorToolItem" id="separator1"/>
         </child>
         <child>
@@ -64,7 +82,8 @@
         <child>
             <object class="GtkToolButton" id="replaygain_button">
                 <property name="action-name">win.replaygain</property>
-                <property name="icon-widget">replaygain_image</property>
+                <!--property name="icon-widget">replaygain_image</property-->
+                <property name="icon-name">audio-volume-medium</property>
                 <property name="label" translatable="yes">Calculate Replay_Gain</property>
                 <property name="tooltip-text" translatable="yes">Analyze selected files with ReplayGain and update the tags accordingly</property>
                 <property name="visible">False</property>
