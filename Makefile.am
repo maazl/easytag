@@ -518,7 +518,7 @@ tests_test_file_tag_CFLAGS = \
 	$(common_test_cflags)
 
 tests_test_file_tag_SOURCES = \
-	tests/test-file_tag.c \
+	tests/test-file_tag.cc \
 	src/file_tag.cc \
 	src/misc.cc \
 	src/picture.c
