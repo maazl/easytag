@@ -75,7 +75,6 @@ easytag_SOURCES = \
 	src/setting.cc \
 	src/status_bar.c \
 	src/tag_area.cc \
-	src/tags/id3lib/c_wrapper.cpp \
 	src/tags/libapetag/apetaglib.c \
 	src/tags/libapetag/is_tag.c \
 	src/tags/libapetag/info_mac.c \
@@ -88,7 +87,7 @@ easytag_SOURCES = \
 	src/tags/id3_tag.cc \
 	src/tags/id3v24_tag.cc \
 	src/tags/monkeyaudio_header.c \
-	src/tags/mpeg_header.c \
+	src/tags/mpeg_header.cc \
 	src/tags/mp4_tag.cc \
 	src/tags/musepack_header.c \
 	src/tags/ogg_header.c \
@@ -140,7 +139,6 @@ easytag_headers = \
 	src/setting.h \
 	src/status_bar.h \
 	src/tag_area.h \
-	src/tags/id3lib/id3_bugfix.h \
 	src/tags/libapetag/apetaglib.h \
 	src/tags/libapetag/is_tag.h \
 	src/tags/libapetag/info_mac.h \

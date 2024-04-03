@@ -28,9 +28,9 @@
 #include "mpeg_header.h"
 #include "misc.h"
 
-#include <id3.h>
-#include "id3lib/id3_bugfix.h"
+#include <memory>
 
+#include <id3/tag.h>
 
 
 /****************
@@ -70,12 +70,9 @@ et_mpeg_header_read_file_info (GFile *file,
                                ET_File_Info *ETFileInfo,
                                GError **error)
 {
-    GFileInfo *info;
-    gchar *filename;
     /*
      * With id3lib, the header frame couldn't be read if the file contains an ID3v2 tag with an APIC frame
      */
-    ID3Tag *id3_tag = NULL;    /* Tag defined by the id3lib */
     const Mp3_Headerinfo* headerInfo = NULL;
 
     g_return_val_if_fail (file != NULL || ETFileInfo != NULL, FALSE);
@@ -88,54 +85,38 @@ et_mpeg_header_read_file_info (GFile *file,
     }
 
     /* Get size of file */
-    info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE,
-                              G_FILE_QUERY_INFO_NONE, NULL, error);
-
+    auto info = make_unique(g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE, G_FILE_QUERY_INFO_NONE, NULL, error), g_object_unref);
     if (!info)
-    {
         return FALSE;
-    }
 
-    ETFileInfo->size = g_file_info_get_size (info);
-    g_object_unref (info);
+    ETFileInfo->size = g_file_info_get_size(info.get());
 
+  try
+  {
     /* Get data from tag */
-    if ((id3_tag = ID3Tag_New()) == NULL)
-    {
-        g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_NOMEM, "%s",
-                     g_strerror (ENOMEM));
-        g_object_unref (info);
-        return FALSE;
-    }
+    ID3_Tag id3_tag;
 
     /* Link the file to the tag (uses ID3TT_ID3V2 to get header if APIC is present in Tag) */
-    filename = g_file_get_path (file);
+    gString filename(g_file_get_path(file));
 #ifdef G_OS_WIN32
     /* On Windows, id3lib expects filenames to be in the system codepage. */
     {
-        gchar *locale_filename;
-
-        locale_filename = g_win32_locale_filename_from_utf8 (filename);
+        gString locale_filename(g_win32_locale_filename_from_utf8(filename));
 
         if (!locale_filename)
         {
             g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_INVAL, "%s",
                          g_strerror (EINVAL));
-            g_free (filename);
             return FALSE;
         }
 
-        ID3Tag_LinkWithFlags (id3_tag, locale_filename, ID3TT_ID3V2);
-
-        g_free (locale_filename);
+        id3_tag.Link(locale_filename, ID3TT_ID3V2);
     }
 #else
-    ID3Tag_LinkWithFlags (id3_tag, filename, ID3TT_ID3V2);
+    id3_tag.Link(filename, ID3TT_ID3V2);
 #endif
 
-    g_free (filename);
-
-    if ( (headerInfo = ID3Tag_GetMp3HeaderInfo(id3_tag)) )
+    if ( (headerInfo = id3_tag.GetMp3HeaderInfo()) )
     {
         switch (headerInfo->version)
         {
@@ -211,9 +192,11 @@ et_mpeg_header_read_file_info (GFile *file,
         // Duration
         ETFileInfo->duration = headerInfo->time;
     }
-
-    /* Free allocated data */
-    ID3Tag_Delete(id3_tag);
+  } catch (...)
+  { // The C API of ID3lib always handles exceptions with "on error resume next".
+    // Let's improve the situation slightly...
+    return FALSE;
+  }
 
     return TRUE;
 }

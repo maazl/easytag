@@ -36,8 +36,7 @@
 #ifdef ENABLE_MP3
 
 #ifdef ENABLE_ID3LIB
-#include <id3.h>
-#include "id3lib/id3_bugfix.h"
+#include <id3/tag.h>
 #endif
 
 #include <string>
@@ -55,20 +54,17 @@ using namespace std;
 /**************
  * Prototypes *
  **************/
-static gchar *Id3tag_Get_Error_Message (ID3_Err error);
-static void Id3tag_Prepare_ID3v1 (ID3Tag *id3_tag);
+static void Id3tag_Prepare_ID3v1 (ID3_Tag& id3_tag);
 static gchar *Id3tag_Rules_For_ISO_Fields (const gchar *string,
                                            const gchar *from_codeset,
                                            const gchar *to_codeset);
-static gchar *Id3tag_Get_Field (const ID3Frame *id3_frame,
+static gchar *Id3tag_Get_Field (const ID3_Frame& id3_frame,
                                 ID3_FieldID id3_fieldid);
-static ID3_TextEnc Id3tag_Set_Field (const ID3Frame *id3_frame,
+static ID3_TextEnc Id3tag_Set_Field (const ID3_Frame& id3_frame,
                                      ID3_FieldID id3_fieldid,
                                      const gchar *string);
 
-ID3_C_EXPORT size_t ID3Tag_Link_1         (ID3Tag *id3tag, const char *filename);
-ID3_C_EXPORT size_t ID3Field_GetASCII_1   (const ID3Field *field, char *buffer,      size_t maxChars, size_t itemNum);
-ID3_C_EXPORT size_t ID3Field_GetUNICODE_1 (const ID3Field *field, unicode_t *buffer, size_t maxChars, size_t itemNum);
+static size_t ID3Tag_Link_1         (ID3_Tag& id3tag, const char *filename);
 
 static gboolean id3tag_check_if_id3lib_is_buggy (GError **error);
 
@@ -90,27 +86,33 @@ et_id3_error_quark (void)
     return g_quark_from_static_string ("et-id3-error-quark");
 }
 
-static bool id3tag_set_text_frame(ID3Tag* id3_tag, ID3_FrameID frame_id, const gchar* value, const char* desc = nullptr)
+static bool id3tag_set_text_frame(ID3_Tag& id3_tag, ID3_FrameID frame_id, const gchar* value, const char* desc = nullptr)
 {
 	// To avoid problem with a corrupted field, we remove it before to create a new one.
-	ID3Frame *id3_frame;
-	while (true)
+	ID3_Frame *id3_frame, *first = nullptr;
+	while ((id3_frame = id3_tag.Find(frame_id)) != first)
 	{	if (desc)
-			id3_frame = ID3Tag_FindFrameWithASCII(id3_tag, frame_id, ID3FN_DESCRIPTION, desc);
-		else
-			id3_frame = ID3Tag_FindFrameWithID(id3_tag, frame_id);
-		if (!id3_frame)
-			break;
-		ID3Frame_Delete(ID3Tag_RemoveFrame(id3_tag, id3_frame));
+		{	// Find by description cannot deal with different encodings
+			// id3_frame = id3_tag.Find(frame_id, ID3FN_DESCRIPTION, desc);
+			if (!first)
+				first = id3_frame;
+			// check description
+			gString tmp(Id3tag_Get_Field(*id3_frame, ID3FN_DESCRIPTION));
+			if (g_ascii_strcasecmp(desc, tmp))
+				continue; // description does not match => skip
+		}
+
+		delete id3_tag.RemoveFrame(id3_frame);
+		first = nullptr; // RemoveFrame resets the internal cursor
 	}
 
 	if (et_str_empty(value))
 		return false;
 
-	id3_frame = ID3Frame_NewID(frame_id);
-	ID3Tag_AttachFrame(id3_tag, id3_frame);
-	if (desc) Id3tag_Set_Field(id3_frame, ID3FN_DESCRIPTION, desc);
-	Id3tag_Set_Field(id3_frame, ID3FN_TEXT, value);
+	id3_frame = new ID3_Frame(frame_id);
+	id3_tag.AttachFrame(id3_frame);
+	if (desc) Id3tag_Set_Field(*id3_frame, ID3FN_DESCRIPTION, desc);
+	Id3tag_Set_Field(*id3_frame, ID3FN_TEXT, value);
 	return true;
 }
 
@@ -124,13 +126,6 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     const File_Tag *FileTag;
     const gchar *filename;
     const gchar *filename_utf8;
-    gchar    *basename_utf8;
-    GFile *file;
-    ID3Tag   *id3_tag = NULL;
-    ID3_Err   error_strip_id3v1  = ID3E_NoError;
-    ID3_Err   error_strip_id3v2  = ID3E_NoError;
-    ID3_Err   error_update_id3v1 = ID3E_NoError;
-    ID3_Err   error_update_id3v2 = ID3E_NoError;
     gboolean success = TRUE;
     gint number_of_frames;
     gboolean has_data = FALSE;
@@ -138,8 +133,8 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     static gboolean flag_first_check = TRUE;
     static gboolean flag_id3lib_bugged = TRUE;
 
-    ID3Frame *id3_frame;
-    ID3Field *id3_field;
+    ID3_Frame *id3_frame;
+    ID3_Field *id3_field;
     string tmp;
     EtPicture *pic;
 
@@ -159,11 +154,11 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     filename      = ETFile->FileNameCur->data->value;
     filename_utf8 = ETFile->FileNameCur->data->value_utf8;
 
-    file = g_file_new_for_path (filename);
+    auto file = make_unique(g_file_new_for_path(filename), g_object_unref);
 
     /* This is a protection against a bug in id3lib that enters an infinite
      * loop with corrupted MP3 files (files containing only zeroes) */
-    if (!et_id3tag_check_if_file_is_valid (file, error))
+    if (!et_id3tag_check_if_file_is_valid (file.get(), error))
     {
         if (error)
         {
@@ -174,48 +169,37 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
         g_clear_error (error);
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_INVAL, "%s",
                      _("Corrupted file"));
-        g_object_unref (file);
         return FALSE;
     }
 
+  try
+  {
     /* We get again the tag from the file to keep also unused data (by EasyTAG), then
      * we replace the changed data */
-    if ((id3_tag = ID3Tag_New ()) == NULL)
-    {
-        g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_NOMEM, "%s",
-                     g_strerror (ENOMEM));
-        g_object_unref (file);
-        return FALSE;
-    }
+    ID3_Tag id3_tag;
 
 #ifdef G_OS_WIN32
     /* On Windows, id3lib expects filenames to be in the system codepage. */
     {
-        gchar *locale_filename;
-
-        locale_filename = g_win32_locale_filename_from_utf8 (filename);
+        gString locale_filename(g_win32_locale_filename_from_utf8(filename));
 
         if (!locale_filename)
         {
             g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_INVAL, "%s",
                          g_strerror (EINVAL));
-            ID3Tag_Delete (id3_tag);
-            g_object_unref (file);
             return FALSE;
         }
 
-        ID3Tag_Link (id3_tag, locale_filename);
-
-        g_free (locale_filename);
+        id3_tag.Link(locale_filename);
     }
 #else
-    ID3Tag_Link (id3_tag, filename);
+    id3_tag.Link(filename);
 #endif
 
     /* Set padding when tag was changed, for faster writing */
-    ID3Tag_SetPadding(id3_tag,TRUE);
+    id3_tag.SetPadding(TRUE);
 
-    basename_utf8 = g_path_get_basename (filename_utf8);
+    gString basename_utf8(g_path_get_basename (filename_utf8));
 
     has_data |= id3tag_set_text_frame(id3_tag, ID3FID_TITLE, FileTag->title);
 
@@ -274,65 +258,57 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     /***********
      * Picture *
      ***********/
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_PICTURE)) )
-        ID3Frame_Delete(ID3Tag_RemoveFrame(id3_tag,id3_frame));
+    while ( (id3_frame = id3_tag.Find(ID3FID_PICTURE)) )
+        delete id3_tag.RemoveFrame(id3_frame);
 
     for (pic = FileTag->picture; pic != NULL; pic = pic->next)
     {
         Picture_Format format = Picture_Format_From_Data(pic);
 
-        id3_frame = ID3Frame_NewID(ID3FID_PICTURE);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
+        id3_frame = new ID3_Frame(ID3FID_PICTURE);
+        id3_tag.AttachFrame(id3_frame);
 
         switch (format)
         {
             case PICTURE_FORMAT_JPEG:
-                if ((id3_field = ID3Frame_GetField(id3_frame,ID3FN_MIMETYPE)))
-                    ID3Field_SetASCII(id3_field, Picture_Mime_Type_String(format));
-                if ((id3_field = ID3Frame_GetField(id3_frame,ID3FN_IMAGEFORMAT)))
-                    ID3Field_SetASCII(id3_field, "JPG");
+                if ((id3_field = id3_frame->GetField(ID3FN_MIMETYPE)))
+                    id3_field->Set(Picture_Mime_Type_String(format));
+                if ((id3_field = id3_frame->GetField(ID3FN_IMAGEFORMAT)))
+                    id3_field->Set("JPG");
                 break;
 
             case PICTURE_FORMAT_PNG:
-                if ((id3_field = ID3Frame_GetField(id3_frame,ID3FN_MIMETYPE)))
-                    ID3Field_SetASCII(id3_field, Picture_Mime_Type_String(format));
-                if ((id3_field = ID3Frame_GetField(id3_frame,ID3FN_IMAGEFORMAT)))
-                    ID3Field_SetASCII(id3_field, "PNG");
+                if ((id3_field = id3_frame->GetField(ID3FN_MIMETYPE)))
+                    id3_field->Set(Picture_Mime_Type_String(format));
+                if ((id3_field = id3_frame->GetField(ID3FN_IMAGEFORMAT)))
+                    id3_field->Set("PNG");
                 break;
             case PICTURE_FORMAT_GIF:
-                if ((id3_field = ID3Frame_GetField (id3_frame,
-                                                    ID3FN_MIMETYPE)))
-                {
-                    ID3Field_SetASCII (id3_field,
-                                       Picture_Mime_Type_String (format));
-                }
-
-                if ((id3_field = ID3Frame_GetField (id3_frame,
-                                                    ID3FN_IMAGEFORMAT)))
-                {
+                if ((id3_field = id3_frame->GetField(ID3FN_MIMETYPE)))
+                    id3_field->Set(Picture_Mime_Type_String(format));
+                if ((id3_field = id3_frame->GetField(ID3FN_IMAGEFORMAT)))
                     /* I could find no reference for what ID3FN_IMAGEFORMAT
                      * should contain, so this is a guess. */
-                    ID3Field_SetASCII (id3_field, "GIF");
-                }
+                    id3_field->Set("GIF");
                 break;
             case PICTURE_FORMAT_UNKNOWN:
             default:
                 break;
         }
 
-        if ((id3_field = ID3Frame_GetField(id3_frame, ID3FN_PICTURETYPE)))
-            ID3Field_SetINT(id3_field, pic->type);
+        if ((id3_field = id3_frame->GetField(ID3FN_PICTURETYPE)))
+            id3_field->Set(pic->type);
 
         if (pic->description)
-            Id3tag_Set_Field(id3_frame, ID3FN_DESCRIPTION, pic->description);
+            Id3tag_Set_Field(*id3_frame, ID3FN_DESCRIPTION, pic->description);
 
-        if ((id3_field = ID3Frame_GetField(id3_frame,ID3FN_DATA)))
+        if ((id3_field = id3_frame->GetField(ID3FN_DATA)))
         {
             gconstpointer data;
             gsize data_size;
 
             data = g_bytes_get_data (pic->bytes, &data_size);
-            ID3Field_SetBINARY (id3_field, (const uchar*)data, data_size);
+            id3_field->Set((const uchar*)data, data_size);
         }
 
         has_data = TRUE;
@@ -343,18 +319,15 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
      * File length (in milliseconds) *
      *********************************/
     /* Don't write this field, not useful? *
-    while ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_SONGLEN)) )
-        ID3Tag_RemoveFrame(id3_tag,id3_frame);
+    while ( (id3_frame = id3_tag.Find(ID3FID_SONGLEN)) )
+        delete id3_tag.RemoveFrame(id3_frame);
     if (ETFile->ETFileInfo && ((ET_File_Info *)ETFile->ETFileInfo)->duration > 0 )
     {
-        gchar *string;
+        id3_frame = new ID3_Frame(ID3FID_SONGLEN);
+        id3_tag.AttachFrame(id3_frame);
 
-        id3_frame = ID3Frame_NewID(ID3FID_SONGLEN);
-        ID3Tag_AttachFrame(id3_tag,id3_frame);
-
-        string = g_strdup_printf("%d",((ET_File_Info *)ETFile->ETFileInfo)->duration * 1000);
-        Id3tag_Set_Field(id3_frame, ID3FN_TEXT, string);
-        g_free(string);
+        gString string(g_strdup_printf("%d",((ET_File_Info *)ETFile->ETFileInfo)->duration * 1000));
+        Id3tag_Set_Field(*id3_frame, ID3FN_TEXT, string);
         has_data = TRUE;
     }*/
 
@@ -385,77 +358,34 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
      *********************************/
     /* Get the number of frames into the tag, cause if it is
      * equal to 0, id3lib-3.7.12 doesn't update the tag */
-    number_of_frames = ID3Tag_NumFrames(id3_tag);
+    number_of_frames = id3_tag.NumFrames();
 
     /* If all fields (managed in the UI) are empty and option id3-strip-empty
      * is set to TRUE, we strip the ID3v1.x and ID3v2 tags. Else, write ID3v2
      * and/or ID3v1. */
     if (g_settings_get_boolean (MainSettings, "id3-strip-empty") && !has_data)
     {
-        error_strip_id3v1 = ID3Tag_Strip(id3_tag,ID3TT_ID3V1);
-        error_strip_id3v2 = ID3Tag_Strip(id3_tag,ID3TT_ID3V2);
-        /* Check error messages */
-        if (error_strip_id3v1 == ID3E_NoError && error_strip_id3v2 == ID3E_NoError)
-        {
-            g_debug (_("Removed tag of ‘%s’"), basename_utf8);
-        }
-        else
-        {
-            if (error_strip_id3v1 != ID3E_NoError)
-            {
-                g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                             _("Error while removing ID3v1 tag of ‘%s’: %s"),
-                             basename_utf8,
-                             Id3tag_Get_Error_Message (error_strip_id3v1));
-            }
-
-            if (error_strip_id3v2 != ID3E_NoError)
-            {
-                g_clear_error (error);
-                g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                             _("Error while removing ID3v2 tag of ‘%s’: %s"),
-                             basename_utf8,
-                             Id3tag_Get_Error_Message (error_strip_id3v2));
-            }
-
-            success = FALSE;
-        }
-
+        id3_tag.Strip(ID3TT_ID3V1);
+        id3_tag.Strip(ID3TT_ID3V2);
+        g_debug (_("Removed tag of ‘%s’"), basename_utf8.get());
     }
     else
     {
         /* It's better to remove the id3v1 tag before, to synchronize it with the
          * id3v2 tag (else id3lib doesn't do it correctly)
          */
-        error_strip_id3v1 = ID3Tag_Strip(id3_tag,ID3TT_ID3V1);
+        id3_tag.Strip(ID3TT_ID3V1);
 
         /*
          * ID3v2 tag
          */
-        if (g_settings_get_boolean (MainSettings, "id3v2-enabled")
-            && number_of_frames != 0)
+        if (number_of_frames != 0 && g_settings_get_boolean(MainSettings, "id3v2-enabled"))
         {
-            error_update_id3v2 = ID3Tag_UpdateByTagType(id3_tag,ID3TT_ID3V2);
-            if (error_update_id3v2 != ID3E_NoError)
-            {
-                g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                             _("Error while updating ID3v2 tag of ‘%s’: %s"),
-                             basename_utf8,
-                             Id3tag_Get_Error_Message (error_update_id3v2));
-                success = FALSE;
-            }
+            id3_tag.Update(ID3TT_ID3V2);
         }
         else
         {
-            error_strip_id3v2 = ID3Tag_Strip(id3_tag,ID3TT_ID3V2);
-            if (error_strip_id3v2 != ID3E_NoError)
-            {
-                g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                             _("Error while removing ID3v2 tag of ‘%s’: %s"),
-                             basename_utf8,
-                             Id3tag_Get_Error_Message (error_strip_id3v2));
-                success = FALSE;
-            }
+            id3_tag.Strip(ID3TT_ID3V2);
         }
 
         /*
@@ -463,38 +393,24 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
          * Must be set after ID3v2 or ID3Tag_UpdateByTagType cause damage to unicode strings
          */
         // id3lib writes incorrectly the ID3v2 tag if unicode used when writing ID3v1 tag
-        if (g_settings_get_boolean (MainSettings, "id3v1-enabled")
-            && number_of_frames != 0)
+        if (number_of_frames != 0 && g_settings_get_boolean(MainSettings, "id3v1-enabled"))
         {
             // By default id3lib converts id3tag to ISO-8859-1 (single byte character set)
             // Note : converting UTF-16 string (two bytes character set) to ISO-8859-1
             //        remove only the second byte => a strange string appears...
             Id3tag_Prepare_ID3v1(id3_tag);
 
-            error_update_id3v1 = ID3Tag_UpdateByTagType(id3_tag,ID3TT_ID3V1);
-            if (error_update_id3v1 != ID3E_NoError)
-            {
-                g_clear_error (error);
-                g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                             _("Error while updating ID3v1 tag of ‘%s’: %s"),
-                             basename_utf8,
-                             Id3tag_Get_Error_Message (error_update_id3v1));
-                success = FALSE;
-            }
+            id3_tag.Update(ID3TT_ID3V1);
         }else
         {
-            error_strip_id3v1 = ID3Tag_Strip(id3_tag,ID3TT_ID3V1);
-            if (error_strip_id3v1 != ID3E_NoError)
-            {
-                g_clear_error (error);
-                g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                             _("Error while removing ID3v1 tag of ‘%s’: %s"),
-                             basename_utf8,
-                             Id3tag_Get_Error_Message (error_strip_id3v1));
-                success = FALSE;
-            }
+            id3_tag.Strip(ID3TT_ID3V1);
         }
     }
+  } catch (...)
+  { // The C API of ID3lib always handles exceptions with "on error resume next".
+    // Let's improve the situation slightly...
+    return FALSE;
+  }
 
     /* Do a one-time check that the id3lib version is not buggy. */
     if (g_settings_get_boolean (MainSettings, "id3v2-enabled")
@@ -514,7 +430,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
         {
             File_Tag  *FileTag_tmp = et_file_tag_new ();
 
-            if (id3tag_read_file_tag (file, FileTag_tmp, NULL) == TRUE
+            if (id3tag_read_file_tag(file.get(), FileTag_tmp, NULL) == TRUE
                 && et_file_tag_detect_difference (FileTag,
                                                   FileTag_tmp) == TRUE)
             {
@@ -529,53 +445,8 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
         }
     }
 
-    /* Free allocated data */
-    ID3Tag_Delete(id3_tag);
-    g_object_unref (file);
-    g_free(basename_utf8);
-
     return success;
 }
-
-
-gchar *Id3tag_Get_Error_Message(ID3_Err error)
-{
-    switch (error)
-    {
-        case ID3E_NoError:
-            return _("No error reported");
-        case ID3E_NoMemory:
-            return _("No available memory");
-        case ID3E_NoData:
-            return _("No data to parse");
-        case ID3E_BadData:
-            return _("Improperly formatted data");
-        case ID3E_NoBuffer:
-            return _("No buffer to write to");
-        case ID3E_SmallBuffer:
-            return _("Buffer is too small");
-        case ID3E_InvalidFrameID:
-            return _("Invalid frame ID");
-        case ID3E_FieldNotFound:
-            return _("Requested field not found");
-        case ID3E_UnknownFieldType:
-            return _("Unknown field type");
-        case ID3E_TagAlreadyAttached:
-            return _("Tag is already attached to a file");
-        case ID3E_InvalidTagVersion:
-            return _("Invalid tag version");
-        case ID3E_NoFile:
-            return _("No file to parse");
-        case ID3E_ReadOnly:
-            return _("Attempting to write to a read-only file");
-        case ID3E_zlibError:
-            return _("Error in compression/uncompression");
-        default:
-            return _("Unknown error message");
-    }
-
-}
-
 
 
 /*
@@ -585,15 +456,13 @@ gchar *Id3tag_Get_Error_Message(ID3_Err error)
  * fall back to the ID3v1 tags.
  * (Written by Holger Schemel).
  */
-ID3_C_EXPORT size_t ID3Tag_Link_1 (ID3Tag *id3tag, const char *filename)
+static size_t ID3Tag_Link_1 (ID3_Tag& id3tag, const char *filename)
 {
     size_t offset;
 
 #ifdef G_OS_WIN32
     /* On Windows, id3lib expects filenames to be in the system codepage. */
-    gchar *locale_filename;
-
-    locale_filename = g_win32_locale_filename_from_utf8 (filename);
+    gString locale_filename(g_win32_locale_filename_from_utf8(filename));
 
     if (!locale_filename)
     {
@@ -601,154 +470,34 @@ ID3_C_EXPORT size_t ID3Tag_Link_1 (ID3Tag *id3tag, const char *filename)
                  filename);
         return 0;
     }
+
+    filename = locale_filename;
 #endif
 
 #   if (0) // Link the file with the both tags may cause damage to unicode strings
 //#   if ( (ID3LIB_MAJOR >= 3) && (ID3LIB_MINOR >= 8) && (ID3LIB_PATCH >= 1) ) // Same test used in Id3tag_Read_File_Tag to use ID3Tag_HasTagType
         /* No problem of priority, so we link the file with the both tags
          * to manage => ID3Tag_HasTagType works correctly */
-#ifdef G_OS_WIN32
-        offset = ID3Tag_LinkWithFlags (id3tag, locale_filename,
-                                       ID3TT_ID3V1 | ID3TT_ID3V2);
-#else
-        offset = ID3Tag_LinkWithFlags (id3tag, filename,
-                                       ID3TT_ID3V1 | ID3TT_ID3V2);
-#endif
+        offset = id3tag.Link(filename, ID3TT_ID3V1 | ID3TT_ID3V2);
 #   elif ( (ID3LIB_MAJOR >= 3) && (ID3LIB_MINOR >= 8) )
         /* Version 3.8.0pre2 gives priority to tag id3v1 instead of id3v2, so we
          * try to fix it by linking the file with the id3v2 tag first. This bug
          * was fixed in the final version of 3.8.0 but we can't know it... */
         /* First, try to get the ID3v2 tags */
-#ifdef G_OS_WIN32
-        offset = ID3Tag_LinkWithFlags (id3tag, locale_filename, ID3TT_ID3V2);
-#else
-        offset = ID3Tag_LinkWithFlags (id3tag, filename, ID3TT_ID3V2);
-#endif
+        offset = id3tag.Link(filename, ID3TT_ID3V2);
 
         if (offset == 0)
         {
             /* No ID3v2 tags available => try to get the ID3v1 tags */
-#ifdef G_OS_WIN32
-            offset = ID3Tag_LinkWithFlags (id3tag, locale_filename,
-                                           ID3TT_ID3V1);
-#else
-            offset = ID3Tag_LinkWithFlags (id3tag, filename, ID3TT_ID3V1);
-#endif
+            offset = id3tag.Link(filename, ID3TT_ID3V1);
         }
 #   else
         /* Function 'ID3Tag_LinkWithFlags' is not defined up to id3lib-.3.7.13 */
-#ifdef G_OS_WIN32
-        offset = ID3Tag_Link (id3tag, locale_filename);
-#else
-        offset = ID3Tag_Link (id3tag, filename);
-#endif
+        offset = id3tag.Link(filename);
 #   endif
     //g_print("ID3 TAG SIZE: %d\t%s\n",offset,g_path_get_basename(filename));
 
-#ifdef G_OS_WIN32
-    g_free (locale_filename);
-#endif
-
     return offset;
-}
-
-
-/*
- * As the ID3Field_GetASCII function differs with the version of id3lib, we must redefine it.
- */
-ID3_C_EXPORT size_t ID3Field_GetASCII_1(const ID3Field *field, char *buffer, size_t maxChars, size_t itemNum)
-{
-
-    /* Defined by id3lib:   ID3LIB_MAJOR_VERSION, ID3LIB_MINOR_VERSION, ID3LIB_PATCH_VERSION
-     * Defined by autoconf: ID3LIB_MAJOR,         ID3LIB_MINOR,         ID3LIB_PATCH
-     *
-     * <= 3.7.12 : first item num is 1 for ID3Field_GetASCII
-     *  = 3.7.13 : first item num is 0 for ID3Field_GetASCII
-     * >= 3.8.0  : doesn't need item num for ID3Field_GetASCII
-     */
-     //g_print("id3lib version: %d.%d.%d\n",ID3LIB_MAJOR,ID3LIB_MINOR,ID3LIB_PATCH);
-#    if (ID3LIB_MAJOR >= 3)
-         // (>= 3.x.x)
-#        if (ID3LIB_MINOR <= 7)
-             // (3.0.0 to 3.7.x)
-#            if (ID3LIB_PATCH >= 13)
-                 // (>= 3.7.13)
-                 return ID3Field_GetASCII(field,buffer,maxChars,itemNum);
-#            else
-                 return ID3Field_GetASCII(field,buffer,maxChars,itemNum+1);
-#            endif
-#        else
-             // (>= to 3.8.0)
-             //return ID3Field_GetASCII(field,buffer,maxChars);
-             return ID3Field_GetASCIIItem(field,buffer,maxChars,itemNum);
-#        endif
-#    else
-         // Not tested (< 3.x.x)
-         return ID3Field_GetASCII(field,buffer,maxChars,itemNum+1);
-#    endif
-}
-
-
-
-/*
- * As the ID3Field_GetUNICODE function differs with the version of id3lib, we must redefine it.
- */
-ID3_C_EXPORT size_t ID3Field_GetUNICODE_1 (const ID3Field *field, unicode_t *buffer, size_t maxChars, size_t itemNum)
-{
-
-    /* Defined by id3lib:   ID3LIB_MAJOR_VERSION, ID3LIB_MINOR_VERSION, ID3LIB_PATCH_VERSION
-     * Defined by autoconf: ID3LIB_MAJOR,         ID3LIB_MINOR,         ID3LIB_PATCH
-     *
-     * <= 3.7.12 : first item num is 1 for ID3Field_GetUNICODE
-     *  = 3.7.13 : first item num is 0 for ID3Field_GetUNICODE
-     * >= 3.8.0  : doesn't need item num for ID3Field_GetUNICODE
-     */
-     //g_print("id3lib version: %d.%d.%d\n",ID3LIB_MAJOR,ID3LIB_MINOR,ID3LIB_PATCH);
-#    if (ID3LIB_MAJOR >= 3)
-         // (>= 3.x.x)
-#        if (ID3LIB_MINOR <= 7)
-             // (3.0.0 to 3.7.x)
-#            if (ID3LIB_PATCH >= 13)
-                 // (>= 3.7.13)
-                 return ID3Field_GetUNICODE(field,buffer,maxChars,itemNum);
-#            else
-                 return ID3Field_GetUNICODE(field,buffer,maxChars,itemNum+1);
-#            endif
-#        else
-             // (>= to 3.8.0)
-             return ID3Field_GetUNICODE(field,buffer,maxChars);
-             // ID3Field_GetUNICODEItem always return 0 with id3lib3.8.3, it is bug in size_t D3_FieldImpl::Get()
-             //return ID3Field_GetUNICODEItem(field,buffer,maxChars,itemNum);
-#        endif
-#    else
-         // Not tested (< 3.x.x)
-         return ID3Field_GetUNICODE(field,buffer,maxChars,itemNum+1);
-#    endif
-}
-
-
-static gchar* ID3Field_GetASCII_String(const ID3Field *field, size_t& num_chars, size_t itemNum = 0)
-{
-	num_chars = ID3Field_GetASCII_1(field, NULL, 0, itemNum);
-	if (!num_chars)
-		return nullptr;
-	if (num_chars > ID3V2_MAX_STRING_LEN)
-		num_chars = ID3V2_MAX_STRING_LEN;
-	gchar* string = (gchar*)g_malloc0(num_chars + 1);
-	ID3Field_GetASCII_1(field, string, num_chars + 1, itemNum);
-	return string;
-}
-
-static unicode_t* ID3Field_GetUNICODE_String(const ID3Field *field, size_t& num_chars, size_t itemNum = 0)
-{
-	num_chars = ID3Field_GetUNICODE_1(field, NULL, 0, itemNum);
-	if (!num_chars)
-		return nullptr;
-	if (num_chars > ID3V2_MAX_STRING_LEN)
-		num_chars = ID3V2_MAX_STRING_LEN;
-	unicode_t* string = (unicode_t*)g_malloc0(sizeof(unicode_t) * (num_chars + 1));
-	ID3Field_GetUNICODE_1(field, string, num_chars + 1, itemNum);
-	return string;
 }
 
 /*
@@ -775,21 +524,22 @@ static unicode_t* ID3Field_GetUNICODE_String(const ID3Field *field, size_t& num_
  * Read the content (ID3FN_TEXT, ID3FN_URL, ...) of the id3_field of the
  * id3_frame, and convert the string if needed to UTF-8.
  */
-gchar *Id3tag_Get_Field (const ID3Frame *id3_frame, ID3_FieldID id3_fieldid)
+gchar *Id3tag_Get_Field (const ID3_Frame& id3_frame, ID3_FieldID id3_fieldid)
 {
-    ID3Field *id3_field = NULL;
-    ID3Field *id3_field_encoding = NULL;
+    ID3_Field *id3_field = NULL;
+    ID3_Field *id3_field_encoding = NULL;
     size_t num_chars = 0;
-    gchar *string = NULL, *string1 = NULL;
+    const gchar *string;
+    gchar *string1 = NULL;
 
     //g_print("Id3tag_Get_Field - ID3Frame '%s'\n",ID3FrameInfo_ShortName(ID3Frame_GetID(id3_frame)));
 
-    if ( (id3_field = ID3Frame_GetField(id3_frame,id3_fieldid)) )
+    if ( (id3_field = id3_frame.GetField(id3_fieldid)) )
     {
         ID3_TextEnc enc = ID3TE_NONE;
 
         // Data of the field must be a TEXT (ID3FTY_TEXTSTRING)
-        if (ID3Field_GetType(id3_field) != ID3FTY_TEXTSTRING)
+        if (id3_field->GetType() != ID3FTY_TEXTSTRING)
         {
             g_critical ("%s",
                         "Id3tag_Get_Field() must be used only for fields containing text");
@@ -801,11 +551,11 @@ gchar *Id3tag_Get_Field (const ID3Frame *id3_frame, ID3_FieldID id3_fieldid)
          * is ISO-8859-1, it can be read with another single byte encoding.
          */
         // Get encoding from content of file...
-        id3_field_encoding = ID3Frame_GetField(id3_frame,ID3FN_TEXTENC);
+        id3_field_encoding = id3_frame.GetField(ID3FN_TEXTENC);
         if (id3_field_encoding)
-            enc = (ID3_TextEnc)ID3Field_GetINT(id3_field_encoding);
+            enc = (ID3_TextEnc)id3_field_encoding->Get();
         // Else, get encoding from the field
-        //enc = ID3Field_GetEncoding(id3_field);
+        //enc = id3_field->GetEncoding();
 
         if (enc != ID3TE_UTF16 && enc != ID3TE_UTF8) // Encoding is ISO-8859-1?
         {
@@ -833,10 +583,9 @@ gchar *Id3tag_Get_Field (const ID3Frame *id3_frame, ID3_FieldID id3_fieldid)
                 {
                     enc = ID3TE_UTF8;
                 }
-                else if (ID3Field_IsEncodable (id3_field))
+                else if (id3_field->IsEncodable())
                 {
-                    string = ID3Field_GetASCII_String(id3_field, num_chars);
-                    string1 = convert_string (string, charset, "UTF-8", FALSE);
+                    string1 = convert_string(id3_field->GetRawText(), charset, "UTF-8", FALSE);
                     /* Override to a non-standard character encoding. */
                     goto out;
                 }
@@ -844,7 +593,7 @@ gchar *Id3tag_Get_Field (const ID3Frame *id3_frame, ID3_FieldID id3_fieldid)
         }
 
         // Some fields, as URL, aren't encodable, so there were written using ISO characters.
-        if ( !ID3Field_IsEncodable(id3_field) )
+        if (!id3_field->IsEncodable())
         {
             enc = ID3TE_ISO8859_1;
         }
@@ -853,40 +602,37 @@ gchar *Id3tag_Get_Field (const ID3Frame *id3_frame, ID3_FieldID id3_fieldid)
         switch ( enc )
         {
             case ID3TE_ISO8859_1:
-                string = ID3Field_GetASCII_String(id3_field, num_chars);
-                string1 = convert_string(string,"ISO-8859-1","UTF-8",FALSE);
+                string1 = convert_string_1(id3_field->GetRawText(), id3_field->Size(), "ISO-8859-1", "UTF-8", FALSE);
                 break;
 
             case ID3TE_UTF8: // Shouldn't work with id3lib 3.8.3 (supports only ID3v2.3, not ID3v2.4)
-                string = ID3Field_GetASCII_String(id3_field, num_chars);
+                string = id3_field->GetRawText();
+                num_chars = id3_field->Size();
                 //string1 = convert_string(string,"UTF-8","UTF-8",FALSE); // Nothing to do
-                if (g_utf8_validate(string,-1,NULL))
-                    string1 = g_strdup(string);
+                if (g_utf8_validate(string, num_chars, NULL))
+                    string1 = g_strndup(string, num_chars);
                 break;
 
             case ID3TE_UTF16:
                 // Id3lib (3.8.3 at least) always returns Unicode strings in UTF-16BE.
             case ID3TE_UTF16BE:
-                string = (gchar*)ID3Field_GetUNICODE_String(id3_field, num_chars);
                 // "convert_string_1" as we need to pass length for UTF-16
-                string1 = convert_string_1(string,num_chars,"UTF-16BE","UTF-8",FALSE);
+                string1 = convert_string_1((const gchar*)id3_field->GetRawUnicodeText(), id3_field->Size(), "UTF-16BE", "UTF-8", FALSE);
                 break;
 
             case ID3TE_NONE:
             case ID3TE_NUMENCODINGS:
             default:
-                string = ID3Field_GetASCII_String(id3_field, num_chars, 0);
+                string = id3_field->GetRawText();
+                num_chars = id3_field->Size();
 
-                if (g_utf8_validate (string, -1, NULL))
-                {
-                    string1 = g_strdup (string);
-                }
+                if (g_utf8_validate(string, num_chars, NULL))
+                    string1 = g_strndup(string, num_chars);
                 else
                 {
                     GError *error = NULL;
 
-                    string1 = g_locale_to_utf8 (string, -1, NULL, NULL,
-                                                &error);
+                    string1 = g_locale_to_utf8(string, num_chars, NULL, NULL, &error);
 
                     if (string1 == NULL)
                     {
@@ -904,11 +650,11 @@ out:
     /* In case the conversion fails, try character fix. */
     if (num_chars && !string1)
     {
-        gchar *escaped_str = g_strescape(string, NULL);
-        g_debug ("Id3tag_Get_Field: Trying to fix string '%s'…", escaped_str);
-        g_free(escaped_str);
+        std::string truncated(string, num_chars);
+        gString escaped_str(g_strescape(truncated.c_str(), NULL));
+        g_debug ("Id3tag_Get_Field: Trying to fix string '%s'…", escaped_str.get());
 
-        string1 = g_filename_display_name (string);
+        string1 = g_filename_display_name(truncated.c_str());
 
         /* TODO: Set a GError instead. */
         if (!string1)
@@ -916,7 +662,6 @@ out:
             g_warning ("%s", "Error converting ID3 tag field encoding");
         }
     }
-    g_free(string);
 
     return string1;
 }
@@ -940,24 +685,22 @@ out:
  * - [ 1074169 ] Writing ID3v1 tag breaks Unicode string in v2 tags
  *               http://sourceforge.net/tracker/index.php?func=detail&aid=1074169&group_id=979&atid=100979
  *      => don't write id3v1 tag if Unicode is used, up to patch applied
- * - [ 1073951 ] Added missing Field Encoding functions to C wrapper
- *               http://sourceforge.net/tracker/index.php?func=detail&aid=1073951&group_id=979&atid=300979
  */
 ID3_TextEnc
-Id3tag_Set_Field (const ID3Frame *id3_frame,
+Id3tag_Set_Field (const ID3_Frame &id3_frame,
                   ID3_FieldID id3_fieldid,
                   const gchar *string)
 {
-    ID3Field *id3_field = NULL;
-    ID3Field *id3_field_encoding = NULL;
+    ID3_Field *id3_field = NULL;
+    ID3_Field *id3_field_encoding = NULL;
     gchar *string_converted = NULL;
 
-    if ( (id3_field = ID3Frame_GetField(id3_frame,id3_fieldid)) )
+    if ((id3_field = id3_frame.GetField(id3_fieldid)))
     {
         ID3_TextEnc enc = ID3TE_NONE;
 
         // Data of the field must be a TEXT (ID3FTY_TEXTSTRING)
-        if (ID3Field_GetType(id3_field) != ID3FTY_TEXTSTRING)
+        if (id3_field->GetType() != ID3FTY_TEXTSTRING)
         {
             g_critical ("%s",
                         "Id3tag_Set_Field() must be used only for fields containing text");
@@ -1004,14 +747,14 @@ Id3tag_Set_Field (const ID3Frame *id3_frame,
             {
                 enc = ID3TE_UTF8;
             }
-            else if (ID3Field_IsEncodable (id3_field))
+            else if (id3_field->IsEncodable())
             {
                 goto override;
             }
         }
 
         // Some fields, as URL, aren't encodable, so there were written using ISO characters!
-        if ( !ID3Field_IsEncodable(id3_field) )
+        if (!id3_field->IsEncodable())
         {
             enc = ID3TE_ISO8859_1;
         }
@@ -1023,13 +766,13 @@ Id3tag_Set_Field (const ID3Frame *id3_frame,
                 // Write into ISO-8859-1
                 //string_converted = convert_string(string,"UTF-8","ISO-8859-1",TRUE);
                 string_converted = Id3tag_Rules_For_ISO_Fields(string,"UTF-8","ISO-8859-1");
-                ID3Field_SetEncoding(id3_field,ID3TE_ISO8859_1); // Not necessary for ISO-8859-1, but better to precise if field has another encoding...
-                ID3Field_SetASCII(id3_field,string_converted);
+                id3_field->SetEncoding(ID3TE_ISO8859_1); // Not necessary for ISO-8859-1, but better to precise if field has another encoding...
+                id3_field->Set(string_converted);
                 g_free(string_converted);
 
-                id3_field_encoding = ID3Frame_GetField(id3_frame,ID3FN_TEXTENC);
+                id3_field_encoding = id3_frame.GetField(ID3FN_TEXTENC);
                 if (id3_field_encoding)
-                    ID3Field_SetINT(id3_field_encoding,ID3TE_ISO8859_1);
+                    id3_field_encoding->Set(ID3TE_ISO8859_1);
 
                 return ID3TE_ISO8859_1;
                 break;
@@ -1059,13 +802,13 @@ Id3tag_Set_Field (const ID3Frame *id3_frame,
 
                 // id3lib (3.8.3 at least) always takes big-endian input for Unicode
                 // fields, even if the field is set little-endian.
-                ID3Field_SetEncoding(id3_field,ID3TE_UTF16);
-                ID3Field_SetUNICODE(id3_field,(const unicode_t*)string_converted);
+                id3_field->SetEncoding(ID3TE_UTF16);
+                id3_field->Set((const unicode_t*)string_converted);
                 g_free(string_converted);
 
-                id3_field_encoding = ID3Frame_GetField(id3_frame,ID3FN_TEXTENC);
+                id3_field_encoding = id3_frame.GetField(ID3FN_TEXTENC);
                 if (id3_field_encoding)
-                    ID3Field_SetINT(id3_field_encoding,ID3TE_UTF16);
+                    id3_field_encoding->Set(ID3TE_UTF16);
 
                 return ID3TE_UTF16;
                 break;
@@ -1088,13 +831,13 @@ override:
                 string_converted = Id3tag_Rules_For_ISO_Fields (string,
                                                                 "UTF-8",
                                                                 charset);
-                ID3Field_SetEncoding(id3_field,ID3TE_ISO8859_1);
-                ID3Field_SetASCII(id3_field,string_converted);
+                id3_field->SetEncoding(ID3TE_ISO8859_1);
+                id3_field->Set(string_converted);
                 g_free(string_converted);
 
-                id3_field_encoding = ID3Frame_GetField(id3_frame,ID3FN_TEXTENC);
+                id3_field_encoding = id3_frame.GetField(ID3FN_TEXTENC);
                 if (id3_field_encoding)
-                    ID3Field_SetINT(id3_field_encoding,ID3TE_ISO8859_1);
+                    id3_field_encoding->Set(ID3TE_ISO8859_1);
 
                 return ID3TE_NONE;
                 break;
@@ -1111,74 +854,64 @@ override:
  * Note : converting UTF-16 string (two bytes character set) to ISO-8859-1
  *        remove only the second byte => a strange string appears...
  */
-void Id3tag_Prepare_ID3v1 (ID3Tag *id3_tag)
+static void Id3tag_Prepare_ID3v1(ID3_Tag& id3_tag)
 {
-    ID3Frame *frame;
-    ID3Field *id3_field_encoding;
-    ID3Field *id3_field_text;
+    ID3_Frame *frame;
+    ID3_Field *id3_field_encoding;
+    ID3_Field *id3_field_text;
 
-    if ( id3_tag != NULL )
+    gchar *string1, *string_converted;
+
+    unique_ptr<ID3_Tag::Iterator> id3_tag_iterator(id3_tag.CreateIterator());
+    while ( NULL != (frame = id3_tag_iterator->GetNext()) )
     {
-        ID3TagIterator *id3_tag_iterator;
-        size_t num_chars = 0;
-        gchar *string, *string1, *string_converted;
+        ID3_TextEnc enc = ID3TE_ISO8859_1;
+        ID3_FrameID frameid = frame->GetID();
 
-        id3_tag_iterator = ID3Tag_CreateIterator(id3_tag);
-        while ( NULL != (frame = ID3TagIterator_GetNext(id3_tag_iterator)) )
+        if (frameid != ID3FID_TITLE
+        &&  frameid != ID3FID_LEADARTIST
+        &&  frameid != ID3FID_BAND
+        &&  frameid != ID3FID_ALBUM
+        &&  frameid != ID3FID_YEAR
+        &&  frameid != ID3FID_TRACKNUM
+        &&  frameid != ID3FID_CONTENTTYPE
+        &&  frameid != ID3FID_COMMENT)
+            continue;
+
+        id3_field_encoding = frame->GetField(ID3FN_TEXTENC);
+        if (id3_field_encoding != NULL)
+            enc = (ID3_TextEnc)id3_field_encoding->Get();
+        id3_field_text = frame->GetField(ID3FN_TEXT);
+
+        /* The frames in ID3TE_ISO8859_1 are already converted to the selected
+         * single-byte character set if used. So we treat only Unicode frames */
+        if ( (id3_field_text != NULL)
+        &&   (enc != ID3TE_ISO8859_1) )
         {
-            ID3_TextEnc enc = ID3TE_ISO8859_1;
-            ID3_FrameID frameid;
+            gint id3v1_charset;
+            const gchar *charset;
 
-            frameid = ID3Frame_GetID(frame);
+            /* Read UTF-16 frame. */
+            // "convert_string_1" as we need to pass length for UTF-16
+            string1 = convert_string_1((gchar*)id3_field_text->GetRawUnicodeText(), id3_field_text->Size(), "UTF-16BE", "UTF-8", FALSE);
 
-            if (frameid != ID3FID_TITLE
-            &&  frameid != ID3FID_LEADARTIST
-            &&  frameid != ID3FID_BAND
-            &&  frameid != ID3FID_ALBUM
-            &&  frameid != ID3FID_YEAR
-            &&  frameid != ID3FID_TRACKNUM
-            &&  frameid != ID3FID_CONTENTTYPE
-            &&  frameid != ID3FID_COMMENT)
-                continue;
+            id3v1_charset = g_settings_get_enum (MainSettings,
+                                                 "id3v1-charset");
+            charset = et_charset_get_name_from_index (id3v1_charset);
 
-            id3_field_encoding = ID3Frame_GetField(frame, ID3FN_TEXTENC);
-            if (id3_field_encoding != NULL)
-                enc = (ID3_TextEnc)ID3Field_GetINT(id3_field_encoding);
-            id3_field_text = ID3Frame_GetField(frame, ID3FN_TEXT);
+            string_converted = Id3tag_Rules_For_ISO_Fields (string1,
+                                                            "UTF-8",
+                                                            charset);
 
-            /* The frames in ID3TE_ISO8859_1 are already converted to the selected
-             * single-byte character set if used. So we treat only Unicode frames */
-            if ( (id3_field_text != NULL)
-            &&   (enc != ID3TE_ISO8859_1) )
+            if (string_converted)
             {
-                gint id3v1_charset;
-                const gchar *charset;
-
-                /* Read UTF-16 frame. */
-                string = (gchar*)ID3Field_GetUNICODE_String(id3_field_text, num_chars);
-                // "convert_string_1" as we need to pass length for UTF-16
-                string1 = convert_string_1(string,num_chars,"UTF-16BE","UTF-8",FALSE);
-
-                id3v1_charset = g_settings_get_enum (MainSettings,
-                                                     "id3v1-charset");
-                charset = et_charset_get_name_from_index (id3v1_charset);
-
-                string_converted = Id3tag_Rules_For_ISO_Fields (string1,
-                                                                "UTF-8",
-                                                                charset);
-
-                if (string_converted)
-                {
-                    ID3Field_SetEncoding(id3_field_text,ID3TE_ISO8859_1); // Not necessary for ISO-8859-1
-                    ID3Field_SetASCII(id3_field_text,string_converted);
-                    ID3Field_SetINT(id3_field_encoding,ID3TE_ISO8859_1);
-                    g_free(string_converted);
-                }
-                g_free(string);
-                g_free(string1);
+                id3_field_text->SetEncoding(ID3TE_ISO8859_1); // Not necessary for ISO-8859-1
+                id3_field_text->Set(string_converted);
+                id3_field_encoding->Set(ID3TE_ISO8859_1);
+                g_free(string_converted);
             }
+            g_free(string1);
         }
-        ID3TagIterator_Delete(id3_tag_iterator);
     }
 }
 
@@ -1311,10 +1044,9 @@ id3tag_check_if_id3lib_is_buggy (GError **error)
     GOutputStream *ostream = NULL;
     guchar tmp[16] = {0xFF, 0xFB, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-    ID3Tag *id3_tag = NULL;
     gchar *path;
     gchar *result = NULL;
-    ID3Frame *id3_frame;
+    ID3_Frame *id3_frame;
     gboolean use_unicode;
     gsize bytes_written;
     const gchar test_str[] = "\xe5\x92\xbb";
@@ -1362,33 +1094,39 @@ id3tag_check_if_id3lib_is_buggy (GError **error)
                                           "id3v2-enable-unicode");
     g_settings_set_boolean (MainSettings, "id3v2-enable-unicode", TRUE);
 
-    id3_tag = ID3Tag_New();
+  try
+  { ID3_Tag id3_tag;
     path = g_file_get_path (file);
     ID3Tag_Link_1 (id3_tag, path);
 
     // Create a new 'title' field for testing
-    id3_frame = ID3Frame_NewID(ID3FID_TITLE);
-    ID3Tag_AttachFrame(id3_tag,id3_frame);
+    id3_frame = new ID3_Frame(ID3FID_TITLE);
+    id3_tag.AttachFrame(id3_frame);
     /* Test a string that exposes an id3lib bug when converted to UTF-16.
      * http://sourceforge.net/p/id3lib/patches/64/ */
-    Id3tag_Set_Field (id3_frame, ID3FN_TEXT, test_str);
+    Id3tag_Set_Field (*id3_frame, ID3FN_TEXT, test_str);
 
     // Update the tag
-    ID3Tag_UpdateByTagType(id3_tag,ID3TT_ID3V2);
-    ID3Tag_Delete(id3_tag);
+    id3_tag.Update(ID3TT_ID3V2);
+  } catch (...)
+  { // The C API of ID3lib always handles exceptions with "on error resume next".
+  }
 
     g_settings_set_boolean (MainSettings, "id3v2-enable-unicode", use_unicode);
     g_settings_revert (MainSettings);
 
-    id3_tag = ID3Tag_New();
+  try
+  { ID3_Tag id3_tag;
     ID3Tag_Link_1 (id3_tag, path);
     // Read the written field
-    if ( (id3_frame = ID3Tag_FindFrameWithID(id3_tag,ID3FID_TITLE)) )
+    if ( (id3_frame = id3_tag.Find(ID3FID_TITLE)) )
     {
-        result = Id3tag_Get_Field(id3_frame,ID3FN_TEXT);
+        result = Id3tag_Get_Field(*id3_frame, ID3FN_TEXT);
     }
+  } catch (...)
+  { // The C API of ID3lib always handles exceptions with "on error resume next".
+  }
 
-    ID3Tag_Delete(id3_tag);
     g_free (path);
     g_file_delete (file, NULL, NULL);
 
