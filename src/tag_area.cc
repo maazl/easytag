@@ -2528,7 +2528,7 @@ void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 		float f = target;
 		sscanf(gtk_entry_get_text(GTK_ENTRY(entry)), "%f", &f);
 		// avoid pointless changes of insignificant fractional digits
-		if (fabs(f - target) >= delta)
+		if (!(fabs(f - target) < delta))
 			target = f;
 	};
 

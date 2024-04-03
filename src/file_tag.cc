@@ -94,7 +94,8 @@ small_str<8> File_Tag::format_float(const char* fmt, float value)
 	{	snprintf(ret.data(), 8, fmt, value);
 		char* dot = strchr(ret.data(), ','); // work around for locale problems
 		if (dot) *dot = '.';
-	}
+	} else
+		ret[0] = 0;
 	return ret;
 }
 
@@ -343,6 +344,11 @@ void et_file_tag_set_album_gain(File_Tag *file_tag, float gain, float peek)
 	file_tag->album_peak = peek;
 }
 
+static bool floatequals(float f1, float f2, float epsilon)
+{	return isnan(f1) == isnan(f2)
+		&& !(fabs(f1 - f2) >= epsilon);
+}
+
 /*
  * Compares two File_Tag items and returns TRUE if there aren't the same.
  * Notes:
@@ -383,10 +389,10 @@ et_file_tag_detect_difference (const File_Tag *FileTag1,
         || et_normalized_strcmp0 (FileTag1->url, FileTag2->url) != 0
         || et_normalized_strcmp0 (FileTag1->encoded_by, FileTag2->encoded_by) != 0
         || et_normalized_strcmp0 (FileTag1->description, FileTag2->description) != 0
-        || fabs(FileTag1->track_gain - FileTag2->track_gain) >= File_Tag::gain_epsilon
-        || fabs(FileTag1->track_peak - FileTag2->track_peak) >= File_Tag::peak_epsilon
-        || fabs(FileTag1->album_gain - FileTag2->album_gain) >= File_Tag::gain_epsilon
-        || fabs(FileTag1->album_peak - FileTag2->album_peak) >= File_Tag::peak_epsilon)
+        || !floatequals(FileTag1->track_gain, FileTag2->track_gain, File_Tag::gain_epsilon)
+        || !floatequals(FileTag1->track_peak, FileTag2->track_peak, File_Tag::peak_epsilon)
+        || !floatequals(FileTag1->album_gain, FileTag2->album_gain, File_Tag::gain_epsilon)
+        || !floatequals(FileTag1->album_peak, FileTag2->album_peak, File_Tag::peak_epsilon))
         return TRUE;
 
     /* Picture */
