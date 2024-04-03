@@ -107,7 +107,7 @@ static gint CmpFilename(const ET_File* ETFile1, const ET_File* ETFile2)
 }
 
 /*
- * Compare strings that areliekly integers (e.g. track number)
+ * Compare strings that are likely integers (e.g. track number)
  */
 static gint CmpInt(const gchar* val1, const gchar* val2)
 {

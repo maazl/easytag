@@ -424,6 +424,7 @@
                             <object class="GtkLabel" id="orig_artist_label">
                                 <property name="halign">end</property>
                                 <property name="label" translatable="yes">Orig. artist:</property>
+                                <property name="tooltip-text" translatable="yes">Original artist</property>
                             </object>
                             <packing>
                                 <property name="left-attach">0</property>
@@ -445,6 +446,7 @@
                             <object class="GtkLabel" id="orig_year_label">
                                 <property name="halign">end</property>
                                 <property name="label" translatable="yes">year:</property>
+                                <property name="tooltip-text" translatable="yes">Original year</property>
                             </object>
                             <packing>
                                 <property name="left-attach">7</property>
@@ -533,6 +535,7 @@
                             <object class="GtkLabel" id="track_gain_label">
                                 <property name="halign">end</property>
                                 <property name="label" translatable="yes">Track gain:</property>
+                                <property name="tooltip-text" translatable="yes">Gain to apply when playing the single song to equalize loudness.</property>
                                 <property name="visible">True</property>
                             </object>
                             <packing>
@@ -568,6 +571,7 @@
                             <object class="GtkLabel" id="track_peak_label">
                                 <property name="halign">end</property>
                                 <property name="label" translatable="yes">Track peak:</property>
+                                <property name="tooltip-text" translatable="yes">Maximum peak level of the single song relative to full scan range. If the value is above 1.0 the song is overdriven.</property>
                                 <property name="visible">True</property>
                             </object>
                             <packing>
@@ -591,6 +595,7 @@
                             <object class="GtkLabel" id="album_gain_label">
                                 <property name="halign">end</property>
                                 <property name="label" translatable="yes">Album gain:</property>
+                                <property name="tooltip-text" translatable="yes">Gain to apply when playing the the eintire album to equalize loudness.</property>
                                 <property name="visible">True</property>
                             </object>
                             <packing>
@@ -626,6 +631,7 @@
                             <object class="GtkLabel" id="album_peak_label">
                                 <property name="halign">end</property>
                                 <property name="label" translatable="yes">Album peak:</property>
+                                <property name="tooltip-text" translatable="yes">Maximum peak level of the album relative to full scan range. If the value is above 1.0 at least one song of the album is overdriven.</property>
                                 <property name="visible">True</property>
                             </object>
                             <packing>

@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-20 21:50+0100\n"
+"POT-Creation-Date: 2024-04-03 12:59+0200\n"
 "PO-Revision-Date: 2017-02-03 08:39+0100\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
@@ -185,7 +185,7 @@ msgstr "Genre"
 
 #: ../data/browser.ui.h:21 ../data/menus.ui.h:99
 #: ../data/preferences_dialog.ui.h:99 ../data/scan_dialog.ui.h:83
-#: ../data/search_dialog.ui.h:23 ../data/tag_area.ui.h:53
+#: ../data/search_dialog.ui.h:23 ../data/tag_area.ui.h:59
 msgid "Comment"
 msgstr "Kommentar"
 
@@ -262,7 +262,7 @@ msgstr ""
 
 #: ../data/browser_dialogs.ui.h:5 ../data/image_properties_dialog.ui.h:3
 #: ../src/application_window.cc:380 ../src/application_window.cc:394
-#: ../src/application_window.cc:2989 ../src/browser.cc:937
+#: ../src/application_window.cc:2988 ../src/browser.cc:937
 #: ../src/browser.cc:3496 ../src/cddb_dialog.cc:2125 ../src/easytag.cc:442
 #: ../src/easytag.cc:449 ../src/easytag.cc:577 ../src/tag_area.cc:1447
 #: ../src/tag_area.cc:1772
@@ -319,7 +319,7 @@ msgstr "Vorschau der Ordnerumbenennung"
 msgid "_Rename"
 msgstr "_Umbenennen"
 
-#: ../data/cddb_dialog.ui.h:1 ../data/toolbar.ui.h:30
+#: ../data/cddb_dialog.ui.h:1 ../data/toolbar.ui.h:32
 msgid "CDDB Search"
 msgstr "CDDB-Suche"
 
@@ -347,7 +347,7 @@ msgstr ""
 "Die CDDB-Datenbank automatisch mit den ausgewählten Dateien abfragen (die "
 "Reihenfolge ist wichtig)"
 
-#: ../data/cddb_dialog.ui.h:7 ../data/toolbar.ui.h:33
+#: ../data/cddb_dialog.ui.h:7 ../data/toolbar.ui.h:35
 msgid "Stop"
 msgstr "Stop"
 
@@ -553,7 +553,7 @@ msgid "Image Type"
 msgstr "Bildtyp"
 
 #: ../data/image_properties_dialog.ui.h:2 ../data/preferences_dialog.ui.h:24
-#: ../data/tag_area.ui.h:54 ../src/picture.c:305
+#: ../data/tag_area.ui.h:60 ../src/picture.c:305
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -664,7 +664,7 @@ msgstr "Rückgängig für Datei"
 msgid "Redo for File"
 msgstr "Wiederholen für Datei"
 
-#: ../data/menus.ui.h:10 ../data/toolbar.ui.h:19
+#: ../data/menus.ui.h:10 ../data/toolbar.ui.h:21
 msgid "_Save Files"
 msgstr "Dateien _speichern"
 
@@ -676,7 +676,7 @@ msgstr "Speichern von Dateien _erzwingen"
 msgid "_Edit"
 msgstr "_Bearbeiten"
 
-#: ../data/menus.ui.h:13 ../data/toolbar.ui.h:27
+#: ../data/menus.ui.h:13 ../data/toolbar.ui.h:29
 msgid "_Find…"
 msgstr "_Suchen …"
 
@@ -688,7 +688,7 @@ msgstr "Alle auswählen"
 msgid "Unselect All"
 msgstr "Alle abwählen"
 
-#: ../data/menus.ui.h:16 ../data/toolbar.ui.h:25
+#: ../data/menus.ui.h:16 ../data/toolbar.ui.h:27
 msgid "Invert File Selection"
 msgstr "Dateiauswahl umkehren"
 
@@ -700,7 +700,7 @@ msgstr "Rückgängig"
 msgid "Redo"
 msgstr "Wiederholen"
 
-#: ../data/menus.ui.h:19 ../data/toolbar.ui.h:13
+#: ../data/menus.ui.h:19 ../data/toolbar.ui.h:15
 msgid "_Remove Tags"
 msgstr "Metainformationen ent_fernen"
 
@@ -728,11 +728,11 @@ msgstr "Dateien und Ordner umbenennen"
 msgid "Process Fields"
 msgstr "Felder verarbeiten"
 
-#: ../data/menus.ui.h:27 ../data/toolbar.ui.h:21
+#: ../data/menus.ui.h:27 ../data/toolbar.ui.h:23
 msgid "Directory Tree"
 msgstr "Ordnerbaum"
 
-#: ../data/menus.ui.h:28 ../data/toolbar.ui.h:23
+#: ../data/menus.ui.h:28 ../data/toolbar.ui.h:25
 msgid "Artists and Albums"
 msgstr "Künstler und Alben"
 
@@ -969,6 +969,7 @@ msgid "Release year"
 msgstr "Erscheinungsjahr"
 
 #: ../data/menus.ui.h:102 ../data/preferences_dialog.ui.h:27
+#: ../data/tag_area.ui.h:35
 msgid "Original year"
 msgstr "Originaljahr"
 
@@ -980,7 +981,7 @@ msgstr "Baum einklappen"
 msgid "Reload Tree"
 msgstr "Baum neu lesen"
 
-#: ../data/menus.ui.h:113
+#: ../data/menus.ui.h:113 ../data/toolbar.ui.h:9
 msgid "Reload Directory"
 msgstr "Ordner neu einlesen"
 
@@ -1020,7 +1021,7 @@ msgstr "CDD_B-Dateisuche …"
 msgid "Load Filenames From a Text File…"
 msgstr "Dateinamen aus Textdatei laden …"
 
-#: ../data/menus.ui.h:123 ../data/toolbar.ui.h:31
+#: ../data/menus.ui.h:123 ../data/toolbar.ui.h:33
 msgid "Generate Playlist…"
 msgstr "Wiedergabeliste erzeugen …"
 
@@ -1088,7 +1089,7 @@ msgstr "Vorgabeordner"
 msgid "Set Current Path as Default"
 msgstr "Aktuellen Pfad als Vorgabe festlegen"
 
-#: ../data/menus.ui.h:141
+#: ../data/menus.ui.h:141 ../data/toolbar.ui.h:10
 msgid "Browse Subdirectories"
 msgstr "Unterordner durchsuchen"
 
@@ -1174,7 +1175,7 @@ msgstr "Dateinamen beim Schreiben der Informationen verwenden"
 msgid "Write information using:"
 msgstr "Information schreiben mit:"
 
-#: ../data/playlist_dialog.ui.h:19 ../src/application_window.cc:2990
+#: ../data/playlist_dialog.ui.h:19 ../src/application_window.cc:2989
 #: ../src/browser.cc:938 ../src/easytag.cc:221 ../src/easytag.cc:443
 #: ../src/easytag.cc:450 ../src/easytag.cc:578 ../src/easytag.cc:585
 #: ../src/tag_area.cc:1774
@@ -1601,7 +1602,7 @@ msgstr "Legt fest, ob Beschreibungsfelder in Ogg-Kommentaren aufgeteilt werden"
 msgid "Whether to split composer fields in Ogg comments"
 msgstr "Legt fest, ob Komponistenfelder in Ogg-Kommentaren aufgeteilt werden"
 
-#: ../data/preferences_dialog.ui.h:103
+#: ../data/preferences_dialog.ui.h:103 ../data/tag_area.ui.h:32
 msgid "Original artist"
 msgstr "Originalkünstler"
 
@@ -1814,31 +1815,19 @@ msgid "Grouping for album gain"
 msgstr "Gruppierung für Album-Lautstärke"
 
 #: ../data/preferences_dialog.ui.h:145
-msgid "No grouping"
-msgstr "Keine Gruppierung"
-
-#: ../data/preferences_dialog.ui.h:146
-msgid ""
-"All selected files are considered to belong to the same album and receive "
-"the same album gain"
-msgstr ""
-"Alle gewählten Dateien werden als ein Album behandelt und bekommen dieselben "
-"Verstärkungsfaktoren"
-
-#: ../data/preferences_dialog.ui.h:147
 msgid "Group by album"
 msgstr "Gruppierung nach Albumtitel"
 
-#: ../data/preferences_dialog.ui.h:148
+#: ../data/preferences_dialog.ui.h:146
 msgid "All files with the same album tag receive a common album gain"
 msgstr ""
 "Alle Dateien mit demselben Albumtitel bekommen dieselben Verstärkungsfaktoren"
 
-#: ../data/preferences_dialog.ui.h:149
+#: ../data/preferences_dialog.ui.h:147
 msgid "Group by album and disc"
 msgstr "Gruppierung nach Album und Medium"
 
-#: ../data/preferences_dialog.ui.h:150
+#: ../data/preferences_dialog.ui.h:148
 msgid ""
 "All files with the same album and same disc number tag receive a common "
 "album gain"
@@ -1846,14 +1835,26 @@ msgstr ""
 "Alle Dateien mit demselben Albumtitel und derselben Mediennummer bekommen "
 "dieselben Verstärkungsfaktoren"
 
-#: ../data/preferences_dialog.ui.h:151
+#: ../data/preferences_dialog.ui.h:149
 msgid "Group by file path"
 msgstr "Gruppierung nach Dateipfad"
 
-#: ../data/preferences_dialog.ui.h:152
+#: ../data/preferences_dialog.ui.h:150
 msgid "All files in the same directory receive a common album gain"
 msgstr ""
 "Alle Dateien im selben Verzeichnis bekommen dieselben Verstärkungsfaktoren"
+
+#: ../data/preferences_dialog.ui.h:151
+msgid "No grouping"
+msgstr "Keine Gruppierung"
+
+#: ../data/preferences_dialog.ui.h:152
+msgid ""
+"All selected files are considered to belong to the same album and receive "
+"the same album gain"
+msgstr ""
+"Alle gewählten Dateien werden als ein Album behandelt und bekommen dieselben "
+"Verstärkungsfaktoren"
 
 #: ../data/preferences_dialog.ui.h:153
 #: ../data/org.gnome.EasyTAG.gschema.xml.h:118
@@ -2743,87 +2744,109 @@ msgstr "Diesen Komponisten in allen ausgewählten Dateien eintragen"
 msgid "Orig. artist:"
 msgstr "Originalkünstler:"
 
-#: ../data/tag_area.ui.h:32
+#: ../data/tag_area.ui.h:33
 msgid "Tag selected files with this original artist"
 msgstr "Diesen Originalkünstler in allen ausgewählten Dateien eintragen"
 
-#: ../data/tag_area.ui.h:33
+#: ../data/tag_area.ui.h:34
 msgid "year:"
 msgstr "-jahr:"
 
-#: ../data/tag_area.ui.h:34
+#: ../data/tag_area.ui.h:36
 msgid "Tag selected files with this original year"
 msgstr "Dieses Originaljahr in allen ausgewählten Dateien eintragen"
 
-#: ../data/tag_area.ui.h:35
+#: ../data/tag_area.ui.h:37
 msgid "Copyright:"
 msgstr "Copyright:"
 
-#: ../data/tag_area.ui.h:36
+#: ../data/tag_area.ui.h:38
 msgid "Tag selected files with this copyright"
 msgstr "Dieses Copyright in allen ausgewählten Dateien eintragen"
 
-#: ../data/tag_area.ui.h:37
+#: ../data/tag_area.ui.h:39
 msgid "URL:"
 msgstr "URL:"
 
-#: ../data/tag_area.ui.h:38
+#: ../data/tag_area.ui.h:40
 msgid "Tag selected files with this URL"
 msgstr "Diese URL in allen ausgewählten Dateien eintragen"
 
-#: ../data/tag_area.ui.h:39
+#: ../data/tag_area.ui.h:41
 msgid "Encoded by:"
 msgstr "Kodierer:"
 
-#: ../data/tag_area.ui.h:40
+#: ../data/tag_area.ui.h:42
 msgid "Tag selected files with this encoder name"
 msgstr "Diesen Kodierer in allen ausgewählten Dateien eintragen"
 
-#: ../data/tag_area.ui.h:41
+#: ../data/tag_area.ui.h:43
 msgid "Track gain:"
 msgstr "Titel Verstärk.:"
 
-#: ../data/tag_area.ui.h:42
+#: ../data/tag_area.ui.h:44
+msgid "Gain to apply when playing the single song to equalize loudness."
+msgstr "Lautstärkekorrektur bei der Wiedergabe des einzelnen Titels."
+
+#: ../data/tag_area.ui.h:45
 msgid "Track peak:"
 msgstr "Titel Max.:"
 
-#: ../data/tag_area.ui.h:43
+#: ../data/tag_area.ui.h:46
+msgid ""
+"Maximum peak level of the single song relative to full scan range. If the "
+"value is above 1.0 the song is overdriven."
+msgstr "Maximalpegel des einzelnen Titels relativ zur Vollaussteuerung. "
+"Wenn der Wert größer 1.0 ist, ist die Datei übersteuert."
+
+#: ../data/tag_area.ui.h:47
 msgid "Album gain:"
 msgstr "Album Verstärk.:"
 
-#: ../data/tag_area.ui.h:44
+#: ../data/tag_area.ui.h:48
+msgid "Gain to apply when playing the the eintire album to equalize loudness."
+msgstr "Lautstärkekorrektur bei der Wiedergabe des gesamten Albums."
+
+#: ../data/tag_area.ui.h:49
 msgid "Album peak:"
 msgstr "Album Max.:"
 
-#: ../data/tag_area.ui.h:45
+#: ../data/tag_area.ui.h:50
+msgid ""
+"Maximum peak level of the album relative to full scan range. If the value is "
+"above 1.0 at least one song of the album is overdriven."
+msgstr "Maximalpegel des gesamten Albums relativ zur Vollaussteuerung. "
+"Wenn der Wert größer 1.0 ist, ist mindestens ein Titel übersteuert."
+
+#: ../data/tag_area.ui.h:51
 msgid "Common"
 msgstr "Allgemein"
 
-#: ../data/tag_area.ui.h:46
+#: ../data/tag_area.ui.h:52
 msgid "Add images to the tag"
 msgstr "Bilder der Metainfo hinzufügen"
 
-#: ../data/tag_area.ui.h:47
+#: ../data/tag_area.ui.h:53
 msgid "Remove selected images from the tag"
 msgstr "Die gewählten Bilder aus der Metainfo entfernen"
 
-#: ../data/tag_area.ui.h:48
+#: ../data/tag_area.ui.h:54
 msgid "Save the selected images to files"
 msgstr "Ausgewählte Bilder als Dateien speichern"
 
-#: ../data/tag_area.ui.h:49
+#: ../data/tag_area.ui.h:55
 msgid "Edit image properties"
 msgstr "Bildeigenschaften bearbeiten"
 
-#: ../data/tag_area.ui.h:50
+#: ../data/tag_area.ui.h:56
 msgid "Tag selected files with these images"
 msgstr "Diese Bilder in allen ausgewählten Dateien eintragen"
 
-#: ../data/tag_area.ui.h:51
+#: ../data/tag_area.ui.h:57
 msgid "You can use drag and drop to add an image"
 msgstr "Sie können Bilder durch Ziehen und Ablegen hinzufügen"
 
-#: ../data/tag_area.ui.h:52 ../src/tag_area.cc:2820 ../src/tag_area.cc:2821
+#: ../data/tag_area.ui.h:58 ../src/tag_area.cc:2818 ../src/tag_area.cc:2819
 msgid "Images"
 msgstr "Bilder"
 
@@ -2847,71 +2870,71 @@ msgstr "Nächste Datei"
 msgid "Last file"
 msgstr "Letzte Datei"
 
-#: ../data/toolbar.ui.h:9
+#: ../data/toolbar.ui.h:11
 msgid "_Show Scanner"
 msgstr "_Scanner anzeigen"
 
-#: ../data/toolbar.ui.h:10
+#: ../data/toolbar.ui.h:12
 msgid "Show scanner"
 msgstr "Scanner anzeigen"
 
-#: ../data/toolbar.ui.h:11
+#: ../data/toolbar.ui.h:13
 msgid "Calculate Replay_Gain"
 msgstr "Berechne Replay_Gain"
 
-#: ../data/toolbar.ui.h:12
+#: ../data/toolbar.ui.h:14
 msgid "Analyze selected files with ReplayGain and update the tags accordingly"
 msgstr "Analysiere merkierte Dateien mit ReplayGain und aktualisiere Tags"
 
-#: ../data/toolbar.ui.h:14
+#: ../data/toolbar.ui.h:16
 msgid "Remove tags"
 msgstr "Metainformationen entfernen"
 
-#: ../data/toolbar.ui.h:15
+#: ../data/toolbar.ui.h:17
 msgid "_Undo"
 msgstr "_Rückgängig"
 
-#: ../data/toolbar.ui.h:16
+#: ../data/toolbar.ui.h:18
 msgid "Undo for file"
 msgstr "Rückgängig für Datei"
 
-#: ../data/toolbar.ui.h:17
+#: ../data/toolbar.ui.h:19
 msgid "R_edo"
 msgstr "_Wiederholen"
 
-#: ../data/toolbar.ui.h:18
+#: ../data/toolbar.ui.h:20
 msgid "Redo for file"
 msgstr "Wiederholen für Datei"
 
-#: ../data/toolbar.ui.h:20
+#: ../data/toolbar.ui.h:22
 msgid "Save changes to selected files"
 msgstr "Änderungen in die ausgewählten Dateien speichern"
 
-#: ../data/toolbar.ui.h:22
+#: ../data/toolbar.ui.h:24
 msgid "Browse directory tree"
 msgstr "Ordnerbaum durchsuchen"
 
-#: ../data/toolbar.ui.h:24
+#: ../data/toolbar.ui.h:26
 msgid "Browse artists and albums"
 msgstr "Künstler und Alben durchsuchen"
 
-#: ../data/toolbar.ui.h:26
+#: ../data/toolbar.ui.h:28
 msgid "Invert file selection"
 msgstr "Dateiauswahl umkehren"
 
-#: ../data/toolbar.ui.h:28
+#: ../data/toolbar.ui.h:30
 msgid "Search filenames and tags"
 msgstr "Dateinamen und Metainformationen suchen"
 
-#: ../data/toolbar.ui.h:29
+#: ../data/toolbar.ui.h:31
 msgid "CDDB Search…"
 msgstr "CDDB-Suche …"
 
-#: ../data/toolbar.ui.h:32
+#: ../data/toolbar.ui.h:34
 msgid "Generate a playlist"
 msgstr "Eine Wiedergabeliste erzeugen"
 
-#: ../data/toolbar.ui.h:34
+#: ../data/toolbar.ui.h:36
 msgid "Stop the current action"
 msgstr "Aktuellen Befehl abbrechen"
 
@@ -3619,7 +3642,7 @@ msgstr "Webseite: %s"
 msgid "- Tag and rename audio files"
 msgstr "- Metainformationen in Audio-Dateien einfügen und diese umbenennen"
 
-#: ../src/application.c:429 ../src/file_list.cc:443
+#: ../src/application.c:429 ../src/file_list.cc:480
 #, c-format
 msgid "Error while querying information for file ‘%s’: %s"
 msgstr "Fehler beim Abfragen von Informationen für die Datei »%s«: %s"
@@ -3674,7 +3697,7 @@ msgstr "Alle Metainformationen wurden entfernt"
 
 #: ../src/application_window.cc:1465 ../src/browser.cc:349
 #: ../src/browser.cc:392 ../src/browser.cc:426 ../src/browser.cc:4328
-#: ../src/browser.cc:4403
+#: ../src/browser.cc:4402
 #, c-format
 msgid "Failed to launch program ‘%s’"
 msgstr "Starten von Programm »%s« fehlgeschlagen"
@@ -3704,7 +3727,7 @@ msgstr[1] "%u Dateien"
 
 #. Bitrate
 #: ../src/application_window.cc:2187 ../src/tags/flac_header.c:189
-#: ../src/tags/monkeyaudio_header.c:76 ../src/tags/mp4_header.cc:144
+#: ../src/tags/monkeyaudio_header.c:76 ../src/tags/mp4_header.cc:146
 #: ../src/tags/mpeg_header.c:274 ../src/tags/musepack_header.c:78
 #: ../src/tags/ogg_header.c:411 ../src/tags/opus_header.c:231
 #: ../src/tags/wavpack_header.c:144
@@ -3714,7 +3737,7 @@ msgstr "%d kb/s"
 
 #. Samplerate
 #: ../src/application_window.cc:2190 ../src/tags/flac_header.c:192
-#: ../src/tags/monkeyaudio_header.c:79 ../src/tags/mp4_header.cc:148
+#: ../src/tags/monkeyaudio_header.c:79 ../src/tags/mp4_header.cc:150
 #: ../src/tags/mpeg_header.c:279 ../src/tags/musepack_header.c:81
 #: ../src/tags/ogg_header.c:414 ../src/tags/opus_header.c:234
 #: ../src/tags/wavpack_header.c:147
@@ -3722,31 +3745,31 @@ msgstr "%d kb/s"
 msgid "%d Hz"
 msgstr "%d Hz"
 
-#: ../src/application_window.cc:2345 ../src/easytag.cc:1000
+#: ../src/application_window.cc:2344 ../src/easytag.cc:1000
 #, c-format
 msgid "File: ‘%s’"
 msgstr "Datei: »%s«"
 
 #. Quit EasyTAG.
-#: ../src/application_window.cc:2953
+#: ../src/application_window.cc:2952
 msgid "Normal exit"
 msgstr "Normal beenden"
 
-#: ../src/application_window.cc:2987 ../src/browser.cc:932
+#: ../src/application_window.cc:2986 ../src/browser.cc:932
 msgid "Some files have been modified but not saved"
 msgstr "Einige Dateien wurden geändert, aber noch nicht gespeichert"
 
-#: ../src/application_window.cc:2988 ../src/browser.cc:936
+#: ../src/application_window.cc:2987 ../src/browser.cc:936
 #: ../src/easytag.cc:220 ../src/easytag.cc:441 ../src/easytag.cc:576
 #: ../src/easytag.cc:584
 msgid "_Discard"
 msgstr "_Verwerfen"
 
-#: ../src/application_window.cc:2994 ../src/easytag.cc:226
+#: ../src/application_window.cc:2993 ../src/easytag.cc:226
 msgid "Quit"
 msgstr "Beenden"
 
-#: ../src/application_window.cc:2997
+#: ../src/application_window.cc:2996
 msgid "Do you want to save them before quitting?"
 msgstr "Wollen Sie diese vor dem Beenden speichern?"
 
@@ -3813,7 +3836,7 @@ msgstr "Fehler beim Umbenennen des Ordners"
 msgid "Directory renamed"
 msgstr "Ordner umbenannt"
 
-#: ../src/browser.cc:4320 ../src/browser.cc:4395
+#: ../src/browser.cc:4320 ../src/browser.cc:4394
 #, c-format
 msgid "Executed command ‘%s’"
 msgstr "Befehl »%s« ausgeführt"
@@ -4343,48 +4366,48 @@ msgstr "Dateiinformation »%s« kann nicht abgefragt werden"
 msgid "Read-only file"
 msgstr "Datei ist nur lesbar"
 
-#: ../src/file_list.cc:246
+#: ../src/file_list.cc:264
 #, c-format
 msgid "Error reading ID3 tag from file ‘%s’: %s"
 msgstr "Fehler beim Lesen der ID3-Metainfo der Datei »%s«: %s"
 
-#: ../src/file_list.cc:257
+#: ../src/file_list.cc:281
 #, c-format
 msgid "Error reading tag from Ogg file ‘%s’: %s"
 msgstr "Fehler beim Lesen der Metainfo der Ogg-Datei »%s«: %s"
 
-#: ../src/file_list.cc:268
+#: ../src/file_list.cc:293
 #, c-format
 msgid "Error reading tag from FLAC file ‘%s’: %s"
 msgstr "Fehler beim Lesen der Metainfo der FLAC-Datei »%s«: %s"
 
-#: ../src/file_list.cc:278
+#: ../src/file_list.cc:304
 #, c-format
 msgid "Error reading APE tag from file ‘%s’: %s"
 msgstr "Fehler beim Lesen der APE-Metainfo der Datei »%s«: %s"
 
-#: ../src/file_list.cc:288
+#: ../src/file_list.cc:315
 #, c-format
 msgid "Error reading tag from MP4 file ‘%s’: %s"
 msgstr "Fehler beim Lesen der Metainfo der MP4-Datei »%s«: %s"
 
-#: ../src/file_list.cc:299
+#: ../src/file_list.cc:327
 #, c-format
 msgid "Error reading tag from WavPack file ‘%s’: %s"
 msgstr "Fehler beim Lesen der Metainfo der WavPack-Datei »%s«: %s"
 
-#: ../src/file_list.cc:310
+#: ../src/file_list.cc:339
 #, c-format
 msgid "Error reading tag from Opus file ‘%s’: %s"
 msgstr "Fehler beim Lesen der Metainfo der Opus-Datei »%s«: %s"
 
-#: ../src/file_list.cc:346
+#: ../src/file_list.cc:376
 #, c-format
 msgid "The year value ‘%s’ seems to be invalid in file ‘%s’."
 msgstr ""
 "Der Wert »%s« für das Jahr scheint für die Datei »%s« ungültig zu sein."
 
-#: ../src/file_list.cc:353
+#: ../src/file_list.cc:383
 #, c-format
 msgid "The release year value ‘%s’ seems to be invalid in file ‘%s’."
 msgstr ""
@@ -4398,7 +4421,7 @@ msgstr ""
 "Der Wert »%s« für das Originaljahr scheint für die Datei »%s« ungültig zu "
 "sein."
 
-#: ../src/file_list.cc:510
+#: ../src/file_list.cc:547
 #, c-format
 msgid "Automatic corrections applied for file ‘%s’"
 msgstr "Automatische Korrekturen wurden für die Datei »%s« angewendet"
@@ -5019,7 +5042,7 @@ msgstr "Wavpack-Metainfo"
 msgid "Opus Tag"
 msgstr "Opus-Metainfo"
 
-#: ../src/tag_area.cc:2813
+#: ../src/tag_area.cc:2811
 #, c-format
 msgid "Images (%u)"
 msgstr "Bilder (%u)"
@@ -5048,7 +5071,7 @@ msgstr "FLAC-Datei"
 #. Mode
 #. mpeg4ip library seems to always return -1
 #. Mode
-#: ../src/tags/flac_header.c:195 ../src/tags/mp4_header.cc:152
+#: ../src/tags/flac_header.c:195 ../src/tags/mp4_header.cc:154
 #: ../src/tags/ogg_header.c:417 ../src/tags/opus_header.c:237
 #: ../src/tags/wavpack_header.c:150
 msgid "Channels:"
@@ -5165,9 +5188,9 @@ msgstr "Fehler beim Erstellen der temporären Datei"
 
 #: ../src/tags/id3v24_tag.cc:134 ../src/tags/id3v24_tag.cc:189
 #: ../src/tags/id3v24_tag.cc:227 ../src/tags/id3v24_tag.cc:237
-#: ../src/tags/id3v24_tag.cc:246 ../src/tags/id3v24_tag.cc:887
-#: ../src/tags/id3v24_tag.cc:895 ../src/tags/id3v24_tag.cc:902
-#: ../src/tags/id3v24_tag.cc:928 ../src/tags/id3v24_tag.cc:968
+#: ../src/tags/id3v24_tag.cc:245 ../src/tags/id3v24_tag.cc:892
+#: ../src/tags/id3v24_tag.cc:900 ../src/tags/id3v24_tag.cc:907
+#: ../src/tags/id3v24_tag.cc:933 ../src/tags/id3v24_tag.cc:973
 #: ../src/tags/mp4_tag.cc:101 ../src/tags/ogg_header.c:277
 msgid "Error reading tags from file"
 msgstr "Fehler beim Lesen der Metainformationen der Datei"
@@ -5190,11 +5213,11 @@ msgstr "MP4-Format ungültig"
 msgid "Error reading properties from file"
 msgstr "Fehler beim Lesen der Eigenschaften der Datei"
 
-#: ../src/tags/mp4_header.cc:131
+#: ../src/tags/mp4_header.cc:133
 msgid "MP4/AAC File"
 msgstr "MP4/AAC-Datei"
 
-#: ../src/tags/mp4_header.cc:140 ../src/tags/mpeg_header.c:270
+#: ../src/tags/mp4_header.cc:142 ../src/tags/mpeg_header.c:270
 #, c-format
 msgid "~%d kb/s"
 msgstr "~%d kb/s"
