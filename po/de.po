@@ -4380,21 +4380,23 @@ msgstr "Fehler beim Lesen der Metainfo der Opus-Datei »%s«: %s"
 
 #: ../src/file_list.cc:346
 #, c-format
-msgid ""
-"The year value ‘%s’ seems to be invalid in file ‘%s’. The information will "
-"be lost when saving"
+msgid "The year value ‘%s’ seems to be invalid in file ‘%s’."
 msgstr ""
-"Der Wert »%s« für das Jahr scheint für die Datei »%s« ungültig zu sein. "
-"Diese Information wird beim Speichern verloren gehen"
+"Der Wert »%s« für das Jahr scheint für die Datei »%s« ungültig zu sein."
 
 #: ../src/file_list.cc:353
 #, c-format
-msgid ""
-"The original year value ‘%s’ seems to be invalid in file ‘%s’. The "
-"information will be lost when saving"
+msgid "The release year value ‘%s’ seems to be invalid in file ‘%s’."
+msgstr ""
+"Der Wert »%s« für das Erscheinungsjahr scheint für die Datei »%s« ungültig "
+"zu sein."
+
+#: ../src/file_list.cc:390
+#, c-format
+msgid "The original year value ‘%s’ seems to be invalid in file ‘%s’."
 msgstr ""
 "Der Wert »%s« für das Originaljahr scheint für die Datei »%s« ungültig zu "
-"sein. Diese Information wird beim Speichern verloren gehen"
+"sein."
 
 #: ../src/file_list.cc:510
 #, c-format

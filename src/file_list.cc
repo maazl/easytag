@@ -188,6 +188,23 @@ et_core_read_file_info (GFile *file,
     return TRUE;
 }
 
+/** Check whether time stamp valid for the current format.
+ * @param value Tag value
+ * @param max_fields Maximum number of fields, i.e. 1111-22-33T44:55:66.
+ * If the value is negative arbitrary additional content is allowed after the last field.
+ * @return true: valid
+ */
+static gboolean
+et_check_date(const char* value, int max_fields)
+{
+	File_Tag::time t = File_Tag::parse_datetime(value);
+	if (!t.invalid)
+		return t.field_count <= abs(max_fields);
+	if (max_fields >= 0)
+		return false;
+	return t.field_count <= -max_fields;
+}
+
 /*
  * et_file_list_add:
  * Add a file to the "main" list. And get all information of the file.
@@ -212,6 +229,7 @@ et_file_list_add (GList *file_list,
     gchar *filename;
     const gchar *display_path;
     GError *error = NULL;
+    int max_date_fields = -6;
     gboolean success;
 
     g_return_val_if_fail (file != NULL, file_list);
@@ -247,6 +265,12 @@ et_file_list_add (GList *file_list,
                            display_path, error->message);
                 g_clear_error (&error);
             }
+            if (!g_settings_get_boolean (MainSettings, "id3v2-enabled"))
+                max_date_fields = 1;
+            else if (!g_settings_get_boolean (MainSettings, "id3v2-version-4"))
+                max_date_fields = 3;
+            else
+                max_date_fields = 6;
             break;
 #endif
 #ifdef ENABLE_OGG
@@ -258,6 +282,7 @@ et_file_list_add (GList *file_list,
                            display_path, error->message);
                 g_clear_error (&error);
             }
+            max_date_fields = -3; // From field 3 arbitrary strings are allowed
             break;
 #endif
 #ifdef ENABLE_FLAC
@@ -269,6 +294,7 @@ et_file_list_add (GList *file_list,
                            display_path, error->message);
                 g_clear_error (&error);
             }
+            max_date_fields = -3; // From field 3 arbitrary strings are allowed
             break;
 #endif
         case APE_TAG:
@@ -279,6 +305,7 @@ et_file_list_add (GList *file_list,
                            display_path, error->message);
                 g_clear_error (&error);
             }
+            max_date_fields = -3; // From field 3 arbitrary strings are allowed
             break;
 #ifdef ENABLE_MP4
         case MP4_TAG:
@@ -289,6 +316,7 @@ et_file_list_add (GList *file_list,
                            display_path, error->message);
                 g_clear_error (&error);
             }
+            max_date_fields = 1; // Year only
             break;
 #endif
 #ifdef ENABLE_WAVPACK
@@ -300,7 +328,8 @@ et_file_list_add (GList *file_list,
                            display_path, error->message);
                 g_clear_error (&error);
             }
-        break;
+            max_date_fields = -3; // From field 3 arbitrary strings are allowed
+            break;
 #endif
 #ifdef ENABLE_OPUS
         case OPUS_TAG:
@@ -311,6 +340,7 @@ et_file_list_add (GList *file_list,
                            display_path, error->message);
                 g_clear_error (&error);
             }
+            max_date_fields = -3; // From field 3 arbitrary strings are allowed
             break;
 #endif
 #ifndef ENABLE_MP3
@@ -340,17 +370,24 @@ et_file_list_add (GList *file_list,
             break;
     }
 
-    if (FileTag->year && g_utf8_strlen (FileTag->year, -1) > 4)
+    if (!et_check_date(FileTag->year, max_date_fields))
     {
         Log_Print (LOG_WARNING,
-                   _("The year value ‘%s’ seems to be invalid in file ‘%s’. The information will be lost when saving"),
+                   _("The year value ‘%s’ seems to be invalid in file ‘%s’."),
                    FileTag->year, display_path);
     }
 
-    if (FileTag->orig_year && g_utf8_strlen (FileTag->orig_year, -1) > 4)
+    if (!et_check_date(FileTag->release_year, max_date_fields))
     {
         Log_Print (LOG_WARNING,
-                   _("The original year value ‘%s’ seems to be invalid in file ‘%s’. The information will be lost when saving"),
+                   _("The release year value ‘%s’ seems to be invalid in file ‘%s’."),
+                   FileTag->release_year, display_path);
+    }
+
+    if (!et_check_date(FileTag->orig_year, max_date_fields))
+    {
+        Log_Print (LOG_WARNING,
+                   _("The original year value ‘%s’ seems to be invalid in file ‘%s’."),
                    FileTag->orig_year, display_path);
     }
 

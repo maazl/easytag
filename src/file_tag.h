@@ -26,6 +26,7 @@
 
 #ifdef __cplusplus
 #include <string>
+#include <ctime>
 #endif
 
 /*
@@ -100,6 +101,14 @@ typedef struct File_Tag
     {	g_free(this->*field);
     	return this->*field = et_str_empty(value) ? nullptr : g_strdup(value);
     }
+
+    /// Parse ISO date time
+    struct time : tm
+    { int field_count; ///< Number of fields parsed, <= 0 in case of an error
+      bool invalid;
+      time() : tm{ 0, 0, 0, 1, 0, 0 }, field_count(0), invalid(false) {}
+    };
+    static time parse_datetime(const char* value);
 
     std::string track_and_total() const;
     std::string disc_and_total() const;

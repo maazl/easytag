@@ -399,6 +399,61 @@ et_file_tag_detect_difference (const File_Tag *FileTag1,
     return FALSE; /* No changes */
 }
 
+File_Tag::time File_Tag::parse_datetime(const char* value)
+{	time ret;
+	int n;
+	if (!value)
+		return ret;
+
+	if (sscanf(value, "%4u%n", &ret.tm_year, &n) != 1)
+		goto fail;
+	ret.tm_year -= 1900;
+	ret.field_count = 1;
+	value += n;
+	if (!*value)
+		return ret;
+
+	if (sscanf(value, "%*1[-:/]%2u%n", &ret.tm_mon, &n) != 1)
+		goto fail;
+	ret.tm_mon -= 1;
+	ret.field_count = 2;
+	value += n;
+	if (!*value)
+		return ret;
+
+	if (sscanf(value, "%*1[-:/]%2u%n", &ret.tm_mday, &n) != 1)
+		goto fail;
+	ret.field_count = 3;
+	value += n;
+	if (!*value)
+		return ret;
+
+	if (sscanf(value, "%*1[ T]%2u%n", &ret.tm_hour, &n) != 1)
+		goto fail;
+	ret.field_count = 4;
+	value += n;
+	if (!*value)
+		return ret;
+
+	if (sscanf(value, "%*1[:-]%2u%n", &ret.tm_min, &n) != 1)
+		goto fail;
+	ret.field_count = 5;
+	value += n;
+	if (!*value)
+		return ret;
+
+	if (sscanf(value, "%*1[:-]%2u%n", &ret.tm_sec, &n) != 1)
+		goto fail;
+	ret.field_count = 6;
+	value += n;
+	if (!*value)
+		return ret;
+
+fail:
+	ret.invalid = true;
+	return ret;
+}
+
 std::string File_Tag::track_and_total() const
 {	if (et_str_empty(track))
 		return std::string();
