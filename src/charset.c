@@ -438,7 +438,7 @@ convert_string_1 (const gchar *string, gssize length, const gchar *from_codeset,
         {
             return g_strdup(string);
         }
-    }else
+    } else if (g_ascii_strncasecmp(to_codeset, "UTF-16", 6) == 0) // patch with reallocation only required for wide char output
     {
         // Patch from Alexey Illarionov:
         //    g_convert returns null-terminated string only with one \0 at the
