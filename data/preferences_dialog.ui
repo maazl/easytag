@@ -1026,6 +1026,7 @@
 										<child>
 											<object class="GtkBox" id="id3_v2_iconv_box">
 												<property name="spacing">12</property>
+												<property name="visible">True</property>
 												<child>
 													<object class="GtkRadioButton" id="id3_v2_none_radio">
 														<property name="label" translatable="yes">Report error</property>
@@ -1036,7 +1037,7 @@
 												</child>
 												<child>
 													<object class="GtkRadioButton" id="id3_v2_transliterate_radio">
-														<property name="group">id3_v1_none_radio</property>
+														<property name="group">id3_v2_none_radio</property>
 														<property name="label" translatable="yes">Transliterate</property>
 														<property name="name">transliterate</property>
 														<property name="tooltip-text" translatable="yes">Replace unsupported characters with a similar character from the target character encoding</property>
@@ -1045,7 +1046,7 @@
 												</child>
 												<child>
 													<object class="GtkRadioButton" id="id3_v2_ignore_radio">
-														<property name="group">id3_v1_none_radio</property>
+														<property name="group">id3_v2_none_radio</property>
 														<property name="label" translatable="yes">Discard</property>
 														<property name="name">ignore</property>
 														<property name="tooltip-text" translatable="yes">Discard characters which cannot be represented in the target character encoding</property>
@@ -1173,6 +1174,7 @@
 										<child>
 											<object class="GtkBox" id="id3_v1_iconv_box">
 												<property name="spacing">12</property>
+												<property name="visible">True</property>
 												<child>
 													<object class="GtkRadioButton" id="id3_v1_none_radio">
 														<property name="label" translatable="yes">Report error</property>
@@ -1203,7 +1205,6 @@
 											<packing>
 												<property name="left_attach">1</property>
 												<property name="top_attach">1</property>
-												<property name="width">2</property>
 											</packing>
 										</child>
 									</object>
