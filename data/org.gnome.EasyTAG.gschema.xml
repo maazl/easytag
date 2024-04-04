@@ -217,6 +217,12 @@
       <default>'iso-8859-1'</default>
     </key>
 
+    <key name="id3v1-auto-add-remove" type="b">
+      <summary>Automatically add or remove ID3v1 tag</summary>
+      <description>Automatically add missing ID3v1 tags or remove them if they are disabled</description>
+      <default>true</default>
+    </key>
+
     <key name="id3v1-encoding-option" enum="org.gnome.EasyTAG.EtTagEncoding">
       <summary>Encoding options when writing ID3v1 tags</summary>
       <description>Additional options to pass to iconv() when converting between encodings when writing ID3v1 tags</description>

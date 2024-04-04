@@ -1126,19 +1126,33 @@
 									</object>
 								</child>
 								<child>
-									<object class="GtkCheckButton" id="id3_v1_check">
-										<property name="label" translatable="yes">Write ID3v1 tag</property>
-										<property name="margin-left">12</property>
-										<property name="tooltip-text" translatable="yes">Whether to write ID3v1 tags when writing ID3 tags into audio files</property>
-										<property name="visible">True</property>
-									</object>
-								</child>
-								<child>
-									<object class="GtkGrid" id="id3_v1_encoding_grid">
+									<object class="GtkGrid" id="id3_v1_grid">
 										<property name="column-spacing">12</property>
 										<property name="margin-left">12</property>
 										<property name="row-spacing">6</property>
 										<property name="visible">True</property>
+										<child>
+											<object class="GtkCheckButton" id="id3_v1_check">
+												<property name="label" translatable="yes">Write ID3v1 tag</property>
+												<property name="tooltip-text" translatable="yes">Whether to write ID3v1 tags when writing ID3 tags into audio files</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">0</property>
+												<property name="top_attach">0</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="id3_v1_auto_add_remove">
+												<property name="label" translatable="yes">Automatically add or remove ID3v1 tag</property>
+												<property name="tooltip-text" translatable="yes">Automatically add missing ID3v1 tags or remove them if they are disabled</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">1</property>
+												<property name="top_attach">0</property>
+											</packing>
+										</child>
 										<child>
 											<object class="GtkLabel" id="id3_v1_encoding_label">
 												<property name="halign">start</property>
@@ -1147,7 +1161,7 @@
 											</object>
 											<packing>
 												<property name="left_attach">0</property>
-												<property name="top_attach">0</property>
+												<property name="top_attach">1</property>
 											</packing>
 										</child>
 										<child>
@@ -1157,7 +1171,7 @@
 											</object>
 											<packing>
 												<property name="left_attach">1</property>
-												<property name="top_attach">0</property>
+												<property name="top_attach">1</property>
 											</packing>
 										</child>
 										<child>
@@ -1168,7 +1182,7 @@
 											</object>
 											<packing>
 												<property name="left_attach">0</property>
-												<property name="top_attach">1</property>
+												<property name="top_attach">2</property>
 											</packing>
 										</child>
 										<child>
@@ -1204,7 +1218,7 @@
 											</object>
 											<packing>
 												<property name="left_attach">1</property>
-												<property name="top_attach">1</property>
+												<property name="top_attach">2</property>
 											</packing>
 										</child>
 									</object>

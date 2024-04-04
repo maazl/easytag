@@ -117,8 +117,11 @@ typedef struct
     GtkWidget *id3_v2_transliterate_radio;
     GtkWidget *id3_v2_ignore_radio;
     GtkWidget *id3_v1_check;
-    GtkWidget *id3_v1_encoding_grid;
+    GtkWidget *id3_v1_auto_add_remove;
+    GtkWidget *id3_v1_encoding_label;
     GtkWidget *id3_v1_encoding_combo;
+    GtkWidget *id3_v1_iconv_label;
+    GtkWidget *id3_v1_iconv_box;
     GtkWidget *id3_v1_none_radio;
     GtkWidget *id3_v1_transliterate_radio;
     GtkWidget *id3_v1_ignore_radio;
@@ -569,6 +572,7 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
     bind_boolean("id3v1-enabled", priv->id3_v1_check);
     g_signal_connect (priv->id3_v1_check, "notify::active",
                       G_CALLBACK (notify_id3_settings_active), self);
+    bind_boolean("id3v1-auto-add-remove", priv->id3_v1_auto_add_remove);
 
     /* Id3V1 writing character set */
     Charset_Populate_Combobox (GTK_COMBO_BOX (priv->id3_v1_encoding_combo),
@@ -768,7 +772,10 @@ notify_id3_settings_active (GObject *object,
 
     active = g_settings_get_boolean (MainSettings, "id3v1-enabled");
 
-    gtk_widget_set_sensitive (priv->id3_v1_encoding_grid, active);
+    gtk_widget_set_sensitive (priv->id3_v1_encoding_label, active);
+    gtk_widget_set_sensitive (priv->id3_v1_encoding_combo, active);
+    gtk_widget_set_sensitive (priv->id3_v1_iconv_label, active);
+    gtk_widget_set_sensitive (priv->id3_v1_iconv_box, active);
 }
 
 /*
@@ -982,8 +989,11 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v2_transliterate_radio);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v2_ignore_radio);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v1_check);
-    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v1_encoding_grid);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v1_auto_add_remove);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v1_encoding_label);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v1_encoding_combo);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v1_iconv_label);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v1_iconv_box);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v1_none_radio);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v1_transliterate_radio);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, id3_v1_ignore_radio);

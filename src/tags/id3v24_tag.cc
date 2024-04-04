@@ -93,7 +93,6 @@ id3tag_read_file_tag (GFile *gfile,
     GInputStream *istream;
     gsize bytes_read;
     GSeekable *seekable;
-    gchar *filename;
     int fd;
     struct id3_file *file;
     struct id3_tag *tag;
@@ -191,44 +190,23 @@ id3tag_read_file_tag (GFile *gfile,
     }
 
     /* Go to the beginning of ID3v1 tag. */
-    if (g_seekable_seek (seekable, -ID3V1_TAG_SIZE, G_SEEK_END, NULL, error)
-    && (string1)
-        && g_input_stream_read_all (istream, string1, 3, &bytes_read, NULL,
-                                    NULL /* Ignore errors. */)
-        && bytes_read == 3
-    && (string1[0] == 'T')
-    && (string1[1] == 'A')
-    && (string1[2] == 'G')
-       )
-    {
-        /* ID3v1 tag found! */
-        if (!g_settings_get_boolean (MainSettings, "id3v1-enabled"))
-        {
-            update = 1;
-        }
-    }else
-    {
-        /* ID3v1 tag not found! */
-        if (g_settings_get_boolean (MainSettings, "id3v1-enabled"))
-        {
-            update = 1;
-        }
-    }
+    if (g_settings_get_boolean(MainSettings, "id3v1-auto-add-remove")
+        && (( g_seekable_seek(seekable, -ID3V1_TAG_SIZE, G_SEEK_END, NULL, error)
+            && g_input_stream_read_all(istream, string1, 3, &bytes_read, NULL, NULL /* Ignore errors. */)
+            && bytes_read == 3
+            && (string1[0] == 'T') && (string1[1] == 'A') && (string1[2] == 'G') )
+          ^ g_settings_get_boolean(MainSettings, "id3v1-enabled") ))
+        update = 1;
 
     g_free (string1);
     g_object_unref (istream);
 
-    filename = g_file_get_path (gfile);
-
-    if ((fd = g_open (filename, O_RDONLY, 0)) == -1)
+    if ((fd = g_open (gString(g_file_get_path(gfile)), O_RDONLY, 0)) == -1)
     {
-        g_free (filename);
         g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED, "%s",
                      _("Error reading tags from file"));
         return FALSE;
     }
-
-    g_free (filename);
 
     /* The fd ownership is transferred to id3tag. */
     if ((file = id3_file_fdopen (fd, ID3_FILE_MODE_READONLY)) == NULL)
