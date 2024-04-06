@@ -97,9 +97,18 @@ typedef struct File_Tag
     bool empty() const;
 
     File_Tag* clone() const;
+    /// Set field value
     gchar* set_field(gchar* File_Tag::*field, const gchar* value)
     {	g_free(this->*field);
     	return this->*field = et_str_empty(value) ? nullptr : g_strdup(value);
+    }
+    /// Set field value and take ownership of value
+    gchar* emplace_field(gchar* File_Tag::*field, gchar* value)
+    {	g_free(this->*field);
+    	if (!et_str_empty(value))
+    		return this->*field = value;
+    	g_free(value);
+    	return this->*field = nullptr;
     }
 
     /// Parse ISO date time

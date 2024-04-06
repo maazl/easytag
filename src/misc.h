@@ -62,6 +62,7 @@ struct gString : gObject<gchar>
 {	gString() { }
 	explicit gString(gchar* ptr) : std::unique_ptr<gchar, gDeleter>(ptr) { }
 	operator const gchar*() const { return get(); }
+	gString& operator=(gchar* ptr) { reset(ptr); return *this; }
 };
 
 /// Strongly typed GList entry
