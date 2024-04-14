@@ -24,7 +24,7 @@
   during playback.</p>
 
   <p>EasyTAG supports the calculation of ReplayGain information for all
-  supported file formats except for MP4 audio. (see restrictions)
+  supported file formats except for MP4 audio (see restrictions).
   You may also edit the replay gain values manually.
   However, this is not recommended.</p>
 
@@ -100,10 +100,10 @@
   </terms>
 
   <p>Since the ReplayGain calculation is always an approximation
-  the result is sesitive to rounding differences. So when comaring
+  the result is sensitive to rounding differences. So when comaring
   to the results of other applications like mp3gain you may observe
   differences in the order of 0.1&#xa0;dB. Given that 1&#xa0;dB is roughly
-  the smallest audibly loudness deifference you can saflely ignore them.</p>
+  the smallest audible loudness deifference you can saflely ignore them.</p>
 
 </section>
 
