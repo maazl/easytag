@@ -48,7 +48,7 @@ src/tags/id3v24_tag.cc
 src/tags/monkeyaudio_header.c
 src/tags/mp4_header.cc
 src/tags/mp4_tag.cc
-src/tags/mpeg_header.c
+src/tags/mpeg_header.cc
 src/tags/musepack_header.c
 src/tags/ogg_header.c
 src/tags/ogg_tag.cc
