@@ -1015,34 +1015,28 @@ Scan_Process_Fields_Functions (EtScanDialog *self,
         Scan_Process_Fields_Keep_One_Space (*string);
     }
 
-    if (g_settings_get_boolean (MainSettings, "process-uppercase-all"))
+    switch (g_settings_get_enum(MainSettings, "process-capitalize"))
     {
         gchar *res;
+    case ET_PROCESS_CAPITALIZE_ALL_UP:
         res = Scan_Process_Fields_All_Uppercase (*string);
         g_free (*string);
         *string = res;
-    }
+        break;
 
-    if (g_settings_get_boolean (MainSettings, "process-lowercase-all"))
-    {
-        gchar *res;
+    case ET_PROCESS_CAPITALIZE_ALL_DOWN:
         res = Scan_Process_Fields_All_Downcase (*string);
         g_free (*string);
         *string = res;
-    }
+        break;
 
-    if (g_settings_get_boolean (MainSettings,
-                                "process-uppercase-first-letter"))
-    {
-        gchar *res;
+    case ET_PROCESS_CAPITALIZE_FIRST_LETTER_UP:
         res = Scan_Process_Fields_Letter_Uppercase (*string);
         g_free (*string);
         *string = res;
-    }
+        break;
 
-    if (g_settings_get_boolean (MainSettings,
-                                "process-uppercase-first-letters"))
-    {
+    case ET_PROCESS_CAPITALIZE_FIRST_WORDS_UP:
         gboolean uppercase_preps;
         gboolean handle_roman;
 
