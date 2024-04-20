@@ -21,6 +21,9 @@
 #include "tag_area.h"
 
 #include <glib/gi18n.h>
+#ifdef ENABLE_MP4
+#include <taglib/taglib.h>
+#endif
 
 #include "application_window.h"
 #include "charset.h"
@@ -2332,8 +2335,12 @@ void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
 
 #ifdef ENABLE_MP4
     case MP4_TAG:
+#if TAGLIB_MAJOR_VERSION >= 2
+        hide |= ET_COLUMN_VERSION | ET_COLUMN_ORIG_ARTIST | ET_COLUMN_ORIG_YEAR | ET_COLUMN_URL;
+#else
         hide |= ET_COLUMN_VERSION | ET_COLUMN_RELEASE_YEAR | ET_COLUMN_ORIG_ARTIST
           | ET_COLUMN_ORIG_YEAR | ET_COLUMN_URL | ET_COLUMN_REPLAYGAIN;
+#endif
         break;
 #endif
     }

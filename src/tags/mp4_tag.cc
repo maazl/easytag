@@ -39,13 +39,39 @@
 #ifdef G_OS_WIN32
 #undef NOMINMAX /* Warning in TagLib headers, fixed in git. */
 #endif /* G_OS_WIN32 */
-#include <mp4file.h>
-#include <mp4tag.h>
+#include <taglib/mp4file.h>
+#include <taglib/mp4tag.h>
 #pragma GCC diagnostic pop
-#include <tpropertymap.h>
+#include <taglib/tpropertymap.h>
+
+#include <limits>
+using namespace std;
+using namespace TagLib;
 
 /* Include mp4_header.cc directly. */
 #include "mp4_header.cc"
+
+#if TAGLIB_MAJOR_VERSION >= 2
+#include <taglib/mp4itemfactory.h>
+#include <taglib/tmap.h>
+
+/// Add support for ReplayGain tags
+static class CustomItemFactory : public MP4::ItemFactory
+{
+protected:
+	virtual Map<ByteVector, String> namePropertyMap() const;
+} ItemFactory;
+
+Map<ByteVector, String> CustomItemFactory::namePropertyMap() const
+{
+	auto map = MP4::ItemFactory::namePropertyMap();
+	map.insert("----:com.apple.iTunes:replaygain_track_gain", "REPLAYGAIN_TRACK_GAIN");
+	map.insert("----:com.apple.iTunes:replaygain_track_peak", "REPLAYGAIN_TRACK_PEAK");
+	map.insert("----:com.apple.iTunes:replaygain_album_gain", "REPLAYGAIN_ALBUM_GAIN");
+	map.insert("----:com.apple.iTunes:replaygain_album_peak", "REPLAYGAIN_ALBUM_PEAK");
+	return map;
+}
+#endif
 
 /*
  * Mp4_Tag_Read_File_Tag:
@@ -57,7 +83,7 @@ mp4tag_read_file_tag (GFile *file,
                       File_Tag *FileTag,
                       GError **error)
 {
-    TagLib::MP4::Tag *tag;
+    MP4::Tag *tag;
     guint year;
 
     g_return_val_if_fail (file != NULL && FileTag != NULL, FALSE);
@@ -73,7 +99,11 @@ mp4tag_read_file_tag (GFile *file,
         return FALSE;
     }
 
-    TagLib::MP4::File mp4file (&stream);
+#if TAGLIB_MAJOR_VERSION >= 2
+    MP4::File mp4file(&stream, true, MP4::Properties::Average, &ItemFactory);
+#else
+    MP4::File mp4file(&stream);
+#endif
 
     if (!mp4file.isOpen ())
     {
@@ -102,82 +132,40 @@ mp4tag_read_file_tag (GFile *file,
         return FALSE;
     }
 
-    const TagLib::PropertyMap& extra_tag = tag->properties ();
+    const PropertyMap& extra_tag = tag->properties ();
 
-    et_file_tag_set_title (FileTag, tag->title().toCString(true));
+    auto fetch_property = [&extra_tag](const char* property) -> const char*
+    {   auto it = extra_tag.find(property);
+        if (it == extra_tag.end())
+            return nullptr;
+        return it->second.front().toCString(true);
+    };
 
-    if (extra_tag.contains ("SUBTITLE"))
-        et_file_tag_set_subtitle(FileTag, extra_tag["SUBTITLE"].front().toCString(true));
-
+    et_file_tag_set_title(FileTag, tag->title().toCString(true));
+    et_file_tag_set_subtitle(FileTag, fetch_property("SUBTITLE"));
     et_file_tag_set_artist(FileTag, tag->artist().toCString(true));
 
     et_file_tag_set_album(FileTag, tag->album().toCString(true));
-
-    if (extra_tag.contains ("DISCSUBTITLE"))
-        et_file_tag_set_disc_subtitle(FileTag, extra_tag["DISCSUBTITLE"].front().toCString(true));
+    et_file_tag_set_disc_subtitle(FileTag, fetch_property("DISCSUBTITLE"));
+    et_file_tag_set_album_artist(FileTag, fetch_property("ALBUMARTIST"));
 
     /* Disc number. */
     /* Total disc number support in TagLib reads multiple disc numbers and
      * joins them with a "/". */
-    if (extra_tag.contains ("DISCNUMBER"))
-    {
-        const TagLib::StringList& disc_numbers = extra_tag["DISCNUMBER"];
-        int offset = disc_numbers.front ().find ("/");
-
-        if (offset != -1)
-        {
-            FileTag->disc_total = et_disc_number_to_string (disc_numbers.front().substr(offset + 1).toCString(true));
-        }
-
-        FileTag->disc_number = et_disc_number_to_string (disc_numbers.front().toCString(true));
-    }
+    FileTag->disc_and_total(fetch_property("DISCNUMBER"));
+    FileTag->track_and_total(fetch_property("TRACKNUMBER"));
 
     year = tag->year ();
     if (year != 0)
-    {
         FileTag->year = g_strdup_printf ("%u", year);
-    }
-
-    /*************************
-     * Track and Total Track *
-     *************************/
-    if (extra_tag.contains ("TRACKNUMBER"))
-    {
-        const TagLib::StringList& track_numbers = extra_tag["TRACKNUMBER"];
-        int offset = track_numbers.front ().find ("/");
-
-        if (offset != -1)
-        {
-            FileTag->track_total = et_track_number_to_string (track_numbers.front ().substr (offset + 1).toCString(true));
-        }
-
-        FileTag->track = et_track_number_to_string (track_numbers.front ().toCString(true));
-    }
+#if TAGLIB_MAJOR_VERSION >= 2
+    et_file_tag_set_release_year(FileTag, fetch_property("RELEASEDATE"));
+#endif
 
     et_file_tag_set_genre(FileTag, tag->genre().toCString(true));
-
     et_file_tag_set_comment(FileTag, tag->comment().toCString(true));
 
-    if (extra_tag.contains ("COMPOSER"))
-        et_file_tag_set_composer(FileTag, extra_tag["COMPOSER"].front().toCString(true));
-
-    if (extra_tag.contains ("COPYRIGHT"))
-        et_file_tag_set_copyright(FileTag, extra_tag["COPYRIGHT"].front().toCString(true));
-
-    if (extra_tag.contains ("ENCODEDBY"))
-        et_file_tag_set_encoded_by(FileTag, extra_tag["ENCODEDBY"].front().toCString(true));
-
-    const TagLib::MP4::ItemListMap &extra_items = tag->itemListMap ();
-
-    /* Album Artist */
-#if (TAGLIB_MAJOR_VERSION == 1) && (TAGLIB_MINOR_VERSION < 10)
-    /* No "ALBUMARTIST" support in TagLib until 1.10; use atom directly. */
-    if (extra_items.contains ("aART"))
-        et_file_tag_set_album_artist(FileTag, extra_items["aART"].toStringList().front().toCString(true));
-#else
-    if (extra_tag.contains ("ALBUMARTIST"))
-        et_file_tag_set_album_artist(FileTag, extra_tag["ALBUMARTIST"].front().toCString(true));
-#endif
+    const MP4::ItemMap &extra_items = tag->itemMap ();
 
     /* Description */
 #if (TAGLIB_MAJOR_VERSION == 1) && (TAGLIB_MINOR_VERSION < 12)
@@ -185,20 +173,38 @@ mp4tag_read_file_tag (GFile *file,
     if (extra_items.contains ("desc"))
         et_file_tag_set_description(FileTag, extra_items["desc"].toStringList().front().toCString(true));
 #else
-    if (extra_tag.contains ("PODCASTDESC"))
-        et_file_tag_set_description(FileTag, extra_tag["PODCASTDESC"].front().toCString(true));
+    et_file_tag_set_description(FileTag, fetch_property("PODCASTDESC"));
 #endif
 
-    // TOD support ReplayGain, requires TagLib 2.0
+    et_file_tag_set_composer(FileTag, fetch_property("COMPOSER"));
+    et_file_tag_set_copyright(FileTag, fetch_property("COPYRIGHT"));
+    et_file_tag_set_encoded_by(FileTag, fetch_property("ENCODEDBY"));
+
+#if TAGLIB_MAJOR_VERSION >= 2
+    /**************
+     * ReplayGain *
+     **************/
+    FileTag->track_gain_str(fetch_property("REPLAYGAIN_TRACK_GAIN"));
+    FileTag->track_peak_str(fetch_property("REPLAYGAIN_TRACK_PEAK"));
+    FileTag->album_gain_str(fetch_property("REPLAYGAIN_ALBUM_GAIN"));
+    FileTag->album_peak_str(fetch_property("REPLAYGAIN_ALBUM_PEAK"));
+
+    for (auto kv : extra_tag)
+    {
+        const char* k = kv.first.toCString(false);
+        const char* v = kv.second.front().toCString(true);
+        printf("%s -> %s\n", k, v);
+    }
+#endif
 
     /***********
      * Picture *
      ***********/
     if (extra_items.contains ("covr"))
     {
-        const TagLib::MP4::Item &cover = extra_items["covr"];
-        const TagLib::MP4::CoverArtList &covers = cover.toCoverArtList ();
-        const TagLib::MP4::CoverArt &art = covers.front ();
+        const MP4::Item &cover = extra_items["covr"];
+        const MP4::CoverArtList &covers = cover.toCoverArtList ();
+        const MP4::CoverArt &art = covers.front ();
 
         /* TODO: Use g_bytes_new_with_free_func()? */
         GBytes *bytes = g_bytes_new (art.data ().data (), art.data ().size ());
@@ -229,7 +235,7 @@ mp4tag_write_file_tag (const ET_File *ETFile,
     const File_Tag *FileTag;
     const gchar *filename;
     const gchar *filename_utf8;
-    TagLib::MP4::Tag *tag;
+    MP4::Tag *tag;
 
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
 
@@ -250,7 +256,11 @@ mp4tag_write_file_tag (const ET_File *ETFile,
         return FALSE;
     }
 
-    TagLib::MP4::File mp4file (&stream);
+#if TAGLIB_MAJOR_VERSION >= 2
+    MP4::File mp4file(&stream, true, MP4::Properties::Average, &ItemFactory);
+#else
+    MP4::File mp4file(&stream);
+#endif
 
     g_object_unref (file);
 
@@ -282,65 +292,44 @@ mp4tag_write_file_tag (const ET_File *ETFile,
         return FALSE;
     }
 
-    TagLib::PropertyMap fields;
+    PropertyMap fields;
 
     auto add_field = [&fields](const gchar* value, const char* propertyname)
     {
         if (!et_str_empty(value))
-            fields.insert(propertyname, TagLib::String(value, TagLib::String::UTF8));
+            fields.insert(propertyname, String(value, String::UTF8));
     };
 
     add_field(FileTag->title, "TITLE");
-
     add_field(FileTag->subtitle, "SUBTITLE");
-
     add_field(FileTag->artist, "ARTIST");
 
     add_field(FileTag->album, "ALBUM");
-
     add_field(FileTag->disc_subtitle, "DISCSUBTITLE");
-
     add_field(FileTag->disc_and_total().c_str(), "DISCNUMBER");
+  	add_field(FileTag->album_artist, "ALBUMARTIST");
 
     add_field(FileTag->year, "DATE");
+
+#if TAGLIB_MAJOR_VERSION >= 2
+    add_field(FileTag->release_year, "RELEASEDATE");
+#endif
 
     add_field(FileTag->track_and_total().c_str(), "TRACKNUMBER");
 
     add_field(FileTag->genre, "GENRE");
-
     add_field(FileTag->comment, "COMMENT");
-
     add_field(FileTag->composer, "COMPOSER");
-
     add_field(FileTag->copyright, "COPYRIGHT");
-
     add_field(FileTag->encoded_by, "ENCODEDBY");
-
-    TagLib::MP4::ItemListMap &extra_items = tag->itemListMap ();
-
-    /* Album artist. */
-    if (!et_str_empty (FileTag->album_artist))
-    {
-        TagLib::String string (FileTag->album_artist, TagLib::String::UTF8);
-#if (TAGLIB_MAJOR_VERSION == 1) && (TAGLIB_MINOR_VERSION < 10)
-        /* No "ALBUMARTIST" support in TagLib until 1.10; use atom directly. */
-        extra_items.insert ("aART", TagLib::MP4::Item (string));
-    }
-    else
-    {
-        extra_items.erase ("aART");
-#else
-        fields.insert ("ALBUMARTIST", string);
-#endif
-    }
 
     /* Description. */
     if (!et_str_empty (FileTag->description))
     {
-        TagLib::String string (FileTag->description, TagLib::String::UTF8);
+        String string (FileTag->description, String::UTF8);
 #if (TAGLIB_MAJOR_VERSION == 1) && (TAGLIB_MINOR_VERSION < 12)
         /* No "PODCASTDESC" support in TagLib until 1.12; use atom directly. */
-        extra_items.insert ("desc", TagLib::MP4::Item (string));
+        extra_items.insert ("desc", MP4::Item (string));
     }
     else
     {
@@ -350,7 +339,15 @@ mp4tag_write_file_tag (const ET_File *ETFile,
 #endif
     }
 
-    // TOD support ReplayGain, requires TagLib 2.0
+#if TAGLIB_MAJOR_VERSION >= 2
+    /**************
+     * ReplayGain *
+     **************/
+    add_field(FileTag->track_gain_str(), "REPLAYGAIN_TRACK_GAIN");
+    add_field(FileTag->track_peak_str(), "REPLAYGAIN_TRACK_PEAK");
+    add_field(FileTag->album_gain_str(), "REPLAYGAIN_ALBUM_GAIN");
+    add_field(FileTag->album_peak_str(), "REPLAYGAIN_ALBUM_PEAK");
+#endif
 
     /***********
      * Picture *
@@ -358,7 +355,7 @@ mp4tag_write_file_tag (const ET_File *ETFile,
     if (FileTag->picture)
     {
         Picture_Format pf;
-        TagLib::MP4::CoverArt::Format f;
+        MP4::CoverArt::Format f;
         gconstpointer data;
         gsize data_size;
 
@@ -367,31 +364,31 @@ mp4tag_write_file_tag (const ET_File *ETFile,
         switch (pf)
         {
             case PICTURE_FORMAT_JPEG:
-                f = TagLib::MP4::CoverArt::JPEG;
+                f = MP4::CoverArt::JPEG;
                 break;
             case PICTURE_FORMAT_PNG:
-                f = TagLib::MP4::CoverArt::PNG;
+                f = MP4::CoverArt::PNG;
                 break;
             case PICTURE_FORMAT_GIF:
-                f = TagLib::MP4::CoverArt::GIF;
+                f = MP4::CoverArt::GIF;
                 break;
             case PICTURE_FORMAT_UNKNOWN:
             default:
                 g_critical ("Unknown format");
-                f = TagLib::MP4::CoverArt::JPEG;
+                f = MP4::CoverArt::JPEG;
                 break;
         }
 
         data = g_bytes_get_data (FileTag->picture->bytes, &data_size);
-        TagLib::MP4::CoverArt art (f, TagLib::ByteVector((char *)data,
+        MP4::CoverArt art (f, ByteVector((char *)data,
                                                          data_size));
 
-        extra_items.insert ("covr",
-                            TagLib::MP4::Item (TagLib::MP4::CoverArtList ().append (art)));
+        tag->setItem("covr",
+                            MP4::Item (MP4::CoverArtList ().append (art)));
     }
     else
     {
-        extra_items.erase ("covr");
+        tag->removeItem("covr");
     }
 
     tag->setProperties (fields);

@@ -67,7 +67,7 @@ Installation
 * libnautilus-extension (https://wiki.gnome.org/Apps/Nautilus) (if not deactivated by ./configure --disable-nautilus-actions')
 * libsoup (https://wiki.gnome.org/Projects/libsoup) (if not deactivated for './configure --disable-cddb')
 * opus and opusfile (https://www.opus-codec.org/) (if not deactivated by './configure --disable-opus')
-* taglib (https://taglib.org/) (if not deactivated by './configure --disable-mp4')
+* taglib >= 1.10 (https://taglib.org/) recommended >= 2.0 (if not deactivated by './configure --disable-mp4')
 * wavpack (https://www.wavpack.com/) (if not deactivated by './configure --disable-wavpack')
 * libavutil >= 56, libavcodec >= 58, libavformat >= 58, libswresample >= 3.5 (https://ffmpeg.org/documentation.html) (required for ReplayGain analysis if not deactivated by ./configure --disabble-replaygain)
 * yelp (https://wiki.gnome.org/Apps/Yelp) is required at runtime for showing the user help

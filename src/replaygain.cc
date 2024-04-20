@@ -246,9 +246,9 @@ void ReplayGain15::ProcessBlock()
 	}
 
 	double sum4 = Sums[2];
-		sum4 += Sums[2] = Sums[1];
-		sum4 += Sums[1] = Sums[0];
-		sum4 += Sums[0] = sum;
+	sum4 += Sums[2] = Sums[1];
+	sum4 += Sums[1] = Sums[0];
+	sum4 += Sums[0] = sum;
 
 	if (!Sums[2])
 		return; // not yet 4 buffers processed

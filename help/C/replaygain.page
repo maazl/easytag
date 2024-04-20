@@ -24,8 +24,7 @@
   during playback.</p>
 
   <p>EasyTAG supports the calculation of ReplayGain information for all
-  supported file formats except for MP4 audio (see restrictions).
-  You may also edit the replay gain values manually.
+  supported file formats. You may also edit the replay gain values manually.
   However, this is not recommended.</p>
 
 <section id="grouping">
@@ -118,10 +117,13 @@
       the player software adjust the loudness.</p>
     </item>
     <item>
-      <p><em>MP4 files are currently not supported.</em> The TagLib library
-      used to manipulate the atoms in the Quicktime container needs to be
-      of version 2.0 or above. Unfortunately almost all distributions
-      currently ship with an older version of the library.</p>
+      <p><em>MP4 files require Taglib library version 2.0 or above.</em>
+      Older versions cannot access the ReplayGain tags.</p>
+    </item>
+    <item>
+      ReplayGain tags in MP4 files are stored in iTunes format only
+      rather than an embedded ID3V2 tag as recommended by the ReplayGain
+      specification at hydrogenaudio. This is supported most widely.
     </item>
     <item>
       <p>EasyTag currently support <em>no asyncronuous operation</em>,

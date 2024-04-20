@@ -100,7 +100,9 @@ small_str<8> File_Tag::format_float(const char* fmt, float value)
 }
 
 float File_Tag::parse_float(const char* value)
-{	// ugly work around for locale problems
+{	if (et_str_empty(value))
+		return numeric_limits<float>::quiet_NaN();
+	// ugly work around for locale problems
 	while (isspace(*value)) ++value;
 	int sign = 1;
 	if (*value == '-')
@@ -108,7 +110,7 @@ float File_Tag::parse_float(const char* value)
 		++value;
 	}
 	int i, n = -1;
-	if (et_str_empty(value) || sscanf(value, "%d.%n", &i, &n) < 1)
+	if (!*value || sscanf(value, "%d.%n", &i, &n) < 1)
 		return numeric_limits<float>::quiet_NaN();
 	double ret = i;
 	if (n > 0)

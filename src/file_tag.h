@@ -126,7 +126,7 @@ typedef struct File_Tag
 
     // locale invariant format for ReplayGain values
     static small_str<8> format_float(const char* fmt, float value);
-    static float parse_float(const char* fmt);
+    static float parse_float(const char* value);
 
     small_str<8> track_gain_str() const { return format_float("%.1f dB", track_gain); }
     small_str<8> track_peak_str() const { return format_float("%.2f", track_peak); }
