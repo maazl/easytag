@@ -309,11 +309,11 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
         if (string1)
         {   if (g_ascii_strncasecmp(string1, "REPLAYGAIN_TRACK_GAIN\n", sizeof("REPLAYGAIN_TRACK_GAIN\n") -1) == 0)
                 FileTag->track_gain_str(string1 + sizeof("REPLAYGAIN_TRACK_GAIN\n") -1);
-            if (g_ascii_strncasecmp(string1, "REPLAYGAIN_TRACK_PEAK\n", sizeof("REPLAYGAIN_TRACK_PEAK\n") -1) == 0)
+            else if (g_ascii_strncasecmp(string1, "REPLAYGAIN_TRACK_PEAK\n", sizeof("REPLAYGAIN_TRACK_PEAK\n") -1) == 0)
                 FileTag->track_peak_str(string1 + sizeof("REPLAYGAIN_TRACK_PEAK\n") -1);
-            if (g_ascii_strncasecmp(string1, "REPLAYGAIN_ALBUM_GAIN\n", sizeof("REPLAYGAIN_ALBUM_GAIN\n") -1) == 0)
+            else if (g_ascii_strncasecmp(string1, "REPLAYGAIN_ALBUM_GAIN\n", sizeof("REPLAYGAIN_ALBUM_GAIN\n") -1) == 0)
                 FileTag->album_gain_str(string1 + sizeof("REPLAYGAIN_ALBUM_GAIN\n") -1);
-            if (g_ascii_strncasecmp(string1, "REPLAYGAIN_ALBUM_PEAK\n", sizeof("REPLAYGAIN_ALBUM_PEAK\n") -1) == 0)
+            else if (g_ascii_strncasecmp(string1, "REPLAYGAIN_ALBUM_PEAK\n", sizeof("REPLAYGAIN_ALBUM_PEAK\n") -1) == 0)
                 FileTag->album_peak_str(string1 + sizeof("REPLAYGAIN_ALBUM_PEAK\n") -1);
             else if (!FileTag->encoded_by // Do nothing if already read...
                 && g_ascii_strncasecmp(string1, EASYTAG_STRING_ENCODEDBY, sizeof(EASYTAG_STRING_ENCODEDBY) -1) == 0
@@ -752,7 +752,7 @@ libid3tag_Get_Frame_Str (const struct id3_frame *frame,
             }
 
             default:
-                break;
+                continue;
         }
 
         if (!et_str_empty (tmpstr) && g_utf8_validate (tmpstr, -1, NULL))
@@ -1026,10 +1026,10 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
         /***************
          * Replaygain *
          ***************/
-        etag_set_txxxtag(FileTag->track_gain_str().c_str(), "REPLAYGAIN_TRACK_GAIN", ID3_FIELD_TYPE_LATIN1, v2tag, &strip_tags);
-        etag_set_txxxtag(FileTag->track_peak_str().c_str(), "REPLAYGAIN_TRACK_PEAK", ID3_FIELD_TYPE_LATIN1, v2tag, &strip_tags);
-        etag_set_txxxtag(FileTag->album_gain_str().c_str(), "REPLAYGAIN_ALBUM_GAIN", ID3_FIELD_TYPE_LATIN1, v2tag, &strip_tags);
-        etag_set_txxxtag(FileTag->album_peak_str().c_str(), "REPLAYGAIN_ALBUM_PEAK", ID3_FIELD_TYPE_LATIN1, v2tag, &strip_tags);
+        etag_set_txxxtag(FileTag->track_gain_str().c_str(), "REPLAYGAIN_TRACK_GAIN", ID3_FIELD_TYPE_STRING, v2tag, &strip_tags);
+        etag_set_txxxtag(FileTag->track_peak_str().c_str(), "REPLAYGAIN_TRACK_PEAK", ID3_FIELD_TYPE_STRING, v2tag, &strip_tags);
+        etag_set_txxxtag(FileTag->album_gain_str().c_str(), "REPLAYGAIN_ALBUM_GAIN", ID3_FIELD_TYPE_STRING, v2tag, &strip_tags);
+        etag_set_txxxtag(FileTag->album_peak_str().c_str(), "REPLAYGAIN_ALBUM_PEAK", ID3_FIELD_TYPE_STRING, v2tag, &strip_tags);
 
         /***********
          * Picture *
