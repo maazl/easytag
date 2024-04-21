@@ -188,13 +188,6 @@ mp4tag_read_file_tag (GFile *file,
     FileTag->track_peak_str(fetch_property("REPLAYGAIN_TRACK_PEAK"));
     FileTag->album_gain_str(fetch_property("REPLAYGAIN_ALBUM_GAIN"));
     FileTag->album_peak_str(fetch_property("REPLAYGAIN_ALBUM_PEAK"));
-
-    for (auto kv : extra_tag)
-    {
-        const char* k = kv.first.toCString(false);
-        const char* v = kv.second.front().toCString(true);
-        printf("%s -> %s\n", k, v);
-    }
 #endif
 
     /***********
