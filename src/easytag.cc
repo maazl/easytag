@@ -830,7 +830,8 @@ void ReplayGain_For_Selected_Files (void)
 		for (auto cur = first; cur != last; ++cur)
 		{	ET_File* file = *cur;
 			File_Tag* file_tag = ((File_Tag*)file->FileTag->data)->clone();;
-			et_file_tag_set_album_gain(file_tag, album_gain, album_peak);
+			file_tag->album_gain = album_gain;
+			file_tag->album_peak = album_peak;
 			ET_Manage_Changes_Of_File_Data(file, nullptr, file_tag);
 
 			if (ETCore->ETFileDisplayed == file)
@@ -859,7 +860,8 @@ void ReplayGain_For_Selected_Files (void)
 			error = 1;
 		} else
 		{	file_tag = file_tag->clone();
-			et_file_tag_set_track_gain(file_tag, analyzer.GetLastResult().Gain(), analyzer.GetLastResult().Peak());
+			file_tag->track_gain = analyzer.GetLastResult().Gain();
+			file_tag->track_peak = analyzer.GetLastResult().Peak();
 			ET_Manage_Changes_Of_File_Data(file, nullptr, file_tag);
 			Log_Print(LOG_OK, _("ReplayGain of file '%s' is %.1f dB, peak %.2f"), file_name->rel_value_utf8, file_tag->track_gain, file_tag->track_peak);
 

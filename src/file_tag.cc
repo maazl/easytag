@@ -187,8 +187,10 @@ File_Tag* File_Tag::clone() const
 	et_file_tag_set_encoded_by(destination, encoded_by);
 	et_file_tag_set_description(destination, description);
 	et_file_tag_set_picture(destination, picture);
-	et_file_tag_set_track_gain(destination, track_gain, track_peak);
-	et_file_tag_set_album_gain(destination, album_gain, album_peak);
+	destination->track_gain = track_gain;
+	destination->track_peak = track_peak;
+	destination->album_gain = album_gain;
+	destination->album_peak = album_peak;
 
 	GList *new_other = NULL;
 	for (GList* l = other; l != NULL; l = g_list_next(l))

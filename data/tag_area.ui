@@ -547,6 +547,8 @@
                             <object class="GtkEntry" id="track_gain_entry">
                                 <property name="width-chars">5</property>
                                 <signal name="insert_text" handler="Insert_Only_Number"/>
+                                <property name="secondary-icon-name">insert-text</property>
+                                <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this track gain</property>
                                 <property name="visible">True</property>
                             </object>
                             <packing>
@@ -584,6 +586,8 @@
                             <object class="GtkEntry" id="track_peak_entry">
                                 <property name="width-chars">5</property>
                                 <signal name="insert_text" handler="Insert_Only_Number"/>
+                                <property name="secondary-icon-name">insert-text</property>
+                                <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this track peak level</property>
                                 <property name="visible">True</property>
                             </object>
                             <packing>
@@ -607,6 +611,8 @@
                             <object class="GtkEntry" id="album_gain_entry">
                                 <property name="width-chars">5</property>
                                 <signal name="insert_text" handler="Insert_Only_Number"/>
+                                <property name="secondary-icon-name">insert-text</property>
+                                <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this album gain</property>
                                 <property name="visible">True</property>
                             </object>
                             <packing>
@@ -644,6 +650,8 @@
                             <object class="GtkEntry" id="album_peak_entry">
                                 <property name="width-chars">5</property>
                                 <signal name="insert_text" handler="Insert_Only_Number"/>
+                                <property name="secondary-icon-name">insert-text</property>
+                                <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this album peak level</property>
                                 <property name="visible">True</property>
                             </object>
                             <packing>

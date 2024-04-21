@@ -516,6 +516,30 @@ on_apply_to_selection (GObject *object,
         msg = apply_field_to_selection(priv->encoded_by_entry, etfilelist, &et_file_tag_set_encoded_by,
             _("Selected files tagged with encoder name ‘%s’"), _("Removed encoder name from selected files"));
     }
+    else if (object == G_OBJECT (priv->track_gain_entry))
+    {
+        msg = apply_field_to_selection(priv->track_gain_entry, etfilelist,
+            [](File_Tag *file_tag, const gchar *value) { file_tag->track_gain_str(value); },
+            _("Selected files tagged with track gain ‘%s’"), _("Removed track gain from selected files"));
+    }
+    else if (object == G_OBJECT (priv->track_peak_entry))
+    {
+        msg = apply_field_to_selection(priv->track_peak_entry, etfilelist,
+            [](File_Tag *file_tag, const gchar *value) { file_tag->track_peak_str(value); },
+            _("Selected files tagged with track peak level ‘%s’"), _("Removed track peak level from selected files"));
+    }
+    else if (object == G_OBJECT (priv->album_gain_entry))
+    {
+        msg = apply_field_to_selection(priv->album_gain_entry, etfilelist,
+            [](File_Tag *file_tag, const gchar *value) { file_tag->album_gain_str(value); },
+            _("Selected files tagged with album gain ‘%s’"), _("Removed album gain from selected files"));
+    }
+    else if (object == G_OBJECT (priv->album_peak_entry))
+    {
+        msg = apply_field_to_selection(priv->album_peak_entry, etfilelist,
+            [](File_Tag *file_tag, const gchar *value) { file_tag->album_peak_str(value); },
+            _("Selected files tagged with album peak level ‘%s’"), _("Removed album peak level from selected files"));
+    }
     else if (object == G_OBJECT (priv->apply_image_toolitem))
     {
         EtPicture *res = NULL, *pic, *prev_pic = NULL;
@@ -710,9 +734,7 @@ on_apply_to_selection_menu_item (GObject *entry,
  * Displayed when pressing the right mouse button and contains functions to process ths strings.
  */
 void
-on_entry_populate_popup (GtkEntry *entry,
-                         GtkWidget *menu,
-                         EtTagArea *self)
+on_entry_populate_popup (GtkEntry *entry, GtkWidget *menu, EtTagArea *self)
 {
     GtkWidget *menu_item;
     GtkWidget *label;
@@ -800,6 +822,29 @@ on_entry_populate_popup (GtkEntry *entry,
     gtk_widget_show_all (menu);
 }
 
+/** Reduced context menu for numeric fields. */
+static void
+on_entry_populate_popup2 (GtkEntry *entry,
+                         GtkWidget *menu,
+                         EtTagArea *self)
+{
+    GtkWidget *menu_item;
+    GtkWidget *label;
+
+    /* Menu items */
+    menu_item = gtk_menu_item_new_with_label (_("Tag selected files with this field"));
+    label = gtk_bin_get_child (GTK_BIN (menu_item));
+    gtk_accel_label_set_accel (GTK_ACCEL_LABEL (label), GDK_KEY_Return,
+                               GDK_CONTROL_MASK);
+    g_object_set_data (G_OBJECT (menu_item), "tag-area", self);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+    g_signal_connect_swapped (menu_item, "activate",
+                              G_CALLBACK (on_apply_to_selection_menu_item),
+                              G_OBJECT (entry));
+
+    gtk_widget_show_all (menu);
+}
+
 /*
  * et_tag_field_on_key_press_event:
  * @entry: the tag entry field on which the event was generated
@@ -842,8 +887,7 @@ et_tag_field_on_key_press_event (GtkEntry *entry, GdkEventKey *event,
  * of @entry to appropriate handlers for tag entry fields.
  */
 static void
-et_tag_field_connect_signals (GtkEntry *entry,
-                              EtTagArea *self)
+et_tag_field_connect_signals (GtkEntry *entry, EtTagArea *self, bool numeric = false)
 {
     g_signal_connect_after (entry, "key-press-event",
                             G_CALLBACK (et_tag_field_on_key_press_event),
@@ -852,7 +896,7 @@ et_tag_field_connect_signals (GtkEntry *entry,
                       G_CALLBACK (on_entry_icon_release),
                       self);
     g_signal_connect (entry, "populate-popup",
-                      G_CALLBACK (on_entry_populate_popup), self);
+                      G_CALLBACK (numeric ? on_entry_populate_popup2 : on_entry_populate_popup), self);
 }
 
 /*
@@ -2059,7 +2103,7 @@ create_tag_area (EtTagArea *self)
     et_tag_field_connect_signals (GTK_ENTRY (priv->album_entry), self);
     et_tag_field_connect_signals (GTK_ENTRY (priv->disc_subtitle_entry), self);
     /* FIXME should allow to type only something like : 1/3. */
-    et_tag_field_connect_signals (GTK_ENTRY (priv->disc_number_entry), self);
+    et_tag_field_connect_signals (GTK_ENTRY (priv->disc_number_entry), self, true);
     /* Year */
     et_tag_field_connect_signals (GTK_ENTRY (priv->year_entry), self);
     et_tag_field_connect_signals (GTK_ENTRY (priv->release_year_entry), self);
@@ -2072,7 +2116,7 @@ create_tag_area (EtTagArea *self)
     g_signal_connect (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->track_combo_entry))),
                       "insert-text", G_CALLBACK (Insert_Only_Digit), NULL);
 
-    et_tag_field_connect_signals (GTK_ENTRY (priv->track_total_entry), self);
+    et_tag_field_connect_signals (GTK_ENTRY (priv->track_total_entry), self, true);
 
     /* Genre */
     completion = gtk_entry_completion_new ();
@@ -2106,6 +2150,11 @@ create_tag_area (EtTagArea *self)
     et_tag_field_connect_signals (GTK_ENTRY (priv->copyright_entry), self);
     et_tag_field_connect_signals (GTK_ENTRY (priv->url_entry), self);
     et_tag_field_connect_signals (GTK_ENTRY (priv->encoded_by_entry), self);
+
+    et_tag_field_connect_signals (GTK_ENTRY (priv->track_gain_entry), self, true);
+    et_tag_field_connect_signals (GTK_ENTRY (priv->track_peak_entry), self, true);
+    et_tag_field_connect_signals (GTK_ENTRY (priv->album_gain_entry), self, true);
+    et_tag_field_connect_signals (GTK_ENTRY (priv->album_peak_entry), self, true);
 
     /* Set focus chain. */
     /* TODO: Use focus-chain GtkBuilder element in GTK+ 3.16. */
