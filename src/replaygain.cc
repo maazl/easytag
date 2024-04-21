@@ -398,7 +398,7 @@ string ReplayGainAnalyzer::AnalyzeFile(const char* fileName)
 	int rc = avformat_open_input(&pformat, fileName, nullptr, nullptr);
 	if (rc)
 		return string(_("Could not open file: ")) + avstrerr(rc);
-	auto format = make_unique(pformat, avformat_free_context);
+	auto format = make_unique(pformat, [](AVFormatContext* ptr) { avformat_close_input(&ptr); });
 	rc = avformat_find_stream_info(format.get(), nullptr);
 	if (rc < 0)
 		return string(_("Could not retrieve stream info from file: ")) + avstrerr(rc);
@@ -415,8 +415,7 @@ found_stream:
 
 	// find & open codec
 	AVCodec* decoder = avcodec_find_decoder(stream->codecpar->codec_id);
-	auto codec = make_unique(avcodec_alloc_context3(avcodec_find_decoder(stream->codecpar->codec_id)),
-		[](AVCodecContext* ptr) {	avcodec_free_context(&ptr); });
+	auto codec = make_unique(avcodec_alloc_context3(decoder), [](AVCodecContext* ptr) { avcodec_free_context(&ptr); });
 	rc = avcodec_parameters_to_context(codec.get(), stream->codecpar);
 	if (rc != 0)
 		return string("Failed to set codec parameters: ") + avstrerr(rc);
@@ -442,8 +441,6 @@ found_stream:
 	acc->Setup(codec->channel_layout);
 
 	// prepare to read data
-	AVPacket packet;
-	av_init_packet(&packet);
 	auto frame = make_unique(av_frame_alloc(), [](AVFrame* ptr) { av_frame_free(&ptr); });
 
 	float* buffer[codec->channels];
@@ -451,10 +448,12 @@ found_stream:
 	auto buffer_ptr = make_unique((float*)nullptr, [](float* ptr) { av_freep(&ptr); });
 
 	// iterate through frames
+	AVPacket packet{0};
 	bool done = false;
 	int count;
 	do
 	{	rc = av_read_frame(format.get(), &packet);
+		auto managed_packet = make_unique(&packet, av_packet_unref);
 		if (rc == 0)
 		{	if (packet.stream_index != stream->index)
 				continue; // skip non audio
