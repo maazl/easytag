@@ -233,6 +233,7 @@ void ReplayGain1::operator+=(const Result& right)
 class ReplayGain15 : public ReplayGain1
 {	double Sums[3] = {0};
 protected:
+	static constexpr float PinkRef = -26.5;
 	virtual void ProcessBlock();
 public:
 	ReplayGain15() : ReplayGain1(SampleRate * 100 / 1000) {}
