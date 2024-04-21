@@ -790,6 +790,7 @@ void ReplayGain_For_Selected_Files (void)
 	if (files.empty())
 		return;
 
+	Main_Stop_Button_Pressed = FALSE;
 	et_application_window_disable_command_actions(window, TRUE);
 	et_application_window_progress_set(window, 0, files.size());
 	/* Needed to refresh status bar */
