@@ -192,7 +192,8 @@ id3tag_read_file_tag (GFile *gfile,
                 FileTag->saved = FALSE;
         }
 #else
-        update = (ID3_TAG_VERSION_MAJOR(version) < 4);
+        if (ID3_TAG_VERSION_MAJOR(version) >= 4)
+            FileTag->saved = FALSE;
 #endif
     }
 
@@ -211,7 +212,7 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
         return false;
 
     int i, j;
-    bool update;
+    bool update = false;
 
     gchar* split_delimiter = g_settings_get_string(MainSettings, "split-delimiter");
 
@@ -457,7 +458,7 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
 
     g_free(split_delimiter);
 
-    return TRUE;
+    return update;
 }
 
 
