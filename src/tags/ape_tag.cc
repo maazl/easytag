@@ -192,10 +192,10 @@ ape_tag_write_file_tag (const ET_File *ETFile,
     ape_set(APE_TAG_FIELD_RELATED_URL, FileTag->url);
     ape_set("Encoded By", FileTag->encoded_by);
 
-    ape_set("REPLAYGAIN_TRACK_GAIN", FileTag->track_gain_str());
-    ape_set("REPLAYGAIN_TRACK_PEAK", FileTag->track_peak_str());
-    ape_set("REPLAYGAIN_ALBUM_GAIN", FileTag->album_gain_str());
-    ape_set("REPLAYGAIN_ALBUM_PEAK", FileTag->album_peak_str());
+    ape_set("REPLAYGAIN_TRACK_GAIN", FileTag->track_gain_str().c_str());
+    ape_set("REPLAYGAIN_TRACK_PEAK", FileTag->track_peak_str().c_str());
+    ape_set("REPLAYGAIN_ALBUM_GAIN", FileTag->album_gain_str().c_str());
+    ape_set("REPLAYGAIN_ALBUM_PEAK", FileTag->album_peak_str().c_str());
 
     /* reread all tag-type again  excl. changed frames by apefrm_remove() */
     if (apetag_save (filename_in, ape_mem, APE_TAG_V2 + SAVE_NEW_OLD_APE_TAG)

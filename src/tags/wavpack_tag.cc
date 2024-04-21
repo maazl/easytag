@@ -308,13 +308,13 @@ wavpack_tag_write_file_tag (const ET_File *ETFile,
     if (!et_wavpack_append_or_delete_tag_item (wpc, "encoded by", FileTag->encoded_by))
         goto err;
 
-    if (!et_wavpack_append_or_delete_tag_item (wpc, "replaygain_track_gain", FileTag->track_gain_str()))
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "replaygain_track_gain", FileTag->track_gain_str().c_str()))
         goto err;
-    if (!et_wavpack_append_or_delete_tag_item (wpc, "replaygain_track_peak", FileTag->track_peak_str()))
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "replaygain_track_peak", FileTag->track_peak_str().c_str()))
         goto err;
-    if (!et_wavpack_append_or_delete_tag_item (wpc, "replaygain_album_gain", FileTag->album_gain_str()))
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "replaygain_album_gain", FileTag->album_gain_str().c_str()))
         goto err;
-    if (!et_wavpack_append_or_delete_tag_item (wpc, "replaygain_album_peak", FileTag->album_peak_str()))
+    if (!et_wavpack_append_or_delete_tag_item (wpc, "replaygain_album_peak", FileTag->album_peak_str().c_str()))
         goto err;
 
     if (WavpackWriteTag (wpc) == 0)

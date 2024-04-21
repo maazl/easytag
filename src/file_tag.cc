@@ -88,14 +88,14 @@ et_file_tag_free (File_Tag *FileTag)
     g_slice_free (File_Tag, FileTag);
 }
 
-small_str<8> File_Tag::format_float(const char* fmt, float value)
-{	small_str<8> ret;
+string File_Tag::format_float(const char* fmt, float value)
+{	string ret(12, '\0');
 	if (isfinite(value))
-	{	snprintf(ret.data(), 8, fmt, value);
-		char* dot = strchr(ret.data(), ','); // work around for locale problems
-		if (dot) *dot = '.';
-	} else
-		ret[0] = 0;
+	{	int len = snprintf(&ret[0], ret.size(), fmt, value);
+		if (len < ret.size()) ret.resize(len);
+		auto dot = ret.find(','); // work around for locale problems
+		if (dot != string::npos) ret[dot] = '.';
+	}
 	return ret;
 }
 

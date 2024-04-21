@@ -336,10 +336,10 @@ mp4tag_write_file_tag (const ET_File *ETFile,
     /**************
      * ReplayGain *
      **************/
-    add_field(FileTag->track_gain_str(), "REPLAYGAIN_TRACK_GAIN");
-    add_field(FileTag->track_peak_str(), "REPLAYGAIN_TRACK_PEAK");
-    add_field(FileTag->album_gain_str(), "REPLAYGAIN_ALBUM_GAIN");
-    add_field(FileTag->album_peak_str(), "REPLAYGAIN_ALBUM_PEAK");
+    add_field(FileTag->track_gain_str().c_str(), "REPLAYGAIN_TRACK_GAIN");
+    add_field(FileTag->track_peak_str().c_str(), "REPLAYGAIN_TRACK_PEAK");
+    add_field(FileTag->album_gain_str().c_str(), "REPLAYGAIN_ALBUM_GAIN");
+    add_field(FileTag->album_peak_str().c_str(), "REPLAYGAIN_ALBUM_PEAK");
 #endif
 
     /***********

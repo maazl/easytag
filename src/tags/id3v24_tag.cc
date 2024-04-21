@@ -1026,10 +1026,10 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
         /***************
          * Replaygain *
          ***************/
-        etag_set_txxxtag(FileTag->track_gain_str(), "REPLAYGAIN_TRACK_GAIN", ID3_FIELD_TYPE_LATIN1, v2tag, &strip_tags);
-        etag_set_txxxtag(FileTag->track_peak_str(), "REPLAYGAIN_TRACK_PEAK", ID3_FIELD_TYPE_LATIN1, v2tag, &strip_tags);
-        etag_set_txxxtag(FileTag->album_gain_str(), "REPLAYGAIN_ALBUM_GAIN", ID3_FIELD_TYPE_LATIN1, v2tag, &strip_tags);
-        etag_set_txxxtag(FileTag->album_peak_str(), "REPLAYGAIN_ALBUM_PEAK", ID3_FIELD_TYPE_LATIN1, v2tag, &strip_tags);
+        etag_set_txxxtag(FileTag->track_gain_str().c_str(), "REPLAYGAIN_TRACK_GAIN", ID3_FIELD_TYPE_LATIN1, v2tag, &strip_tags);
+        etag_set_txxxtag(FileTag->track_peak_str().c_str(), "REPLAYGAIN_TRACK_PEAK", ID3_FIELD_TYPE_LATIN1, v2tag, &strip_tags);
+        etag_set_txxxtag(FileTag->album_gain_str().c_str(), "REPLAYGAIN_ALBUM_GAIN", ID3_FIELD_TYPE_LATIN1, v2tag, &strip_tags);
+        etag_set_txxxtag(FileTag->album_peak_str().c_str(), "REPLAYGAIN_ALBUM_PEAK", ID3_FIELD_TYPE_LATIN1, v2tag, &strip_tags);
 
         /***********
          * Picture *

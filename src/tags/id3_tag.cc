@@ -250,10 +250,10 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
 
     has_data |= id3tag_set_text_frame(id3_tag, ID3FID_ENCODEDBY, FileTag->encoded_by);
 
-    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_USERTEXT, FileTag->track_gain_str(), "REPLAYGAIN_TRACK_GAIN");
-    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_USERTEXT, FileTag->track_peak_str(), "REPLAYGAIN_TRACK_PEAK");
-    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_USERTEXT, FileTag->album_gain_str(), "REPLAYGAIN_ALBUM_GAIN");
-    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_USERTEXT, FileTag->album_peak_str(), "REPLAYGAIN_ALBUM_PEAK");
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_USERTEXT, FileTag->track_gain_str().c_str(), "REPLAYGAIN_TRACK_GAIN");
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_USERTEXT, FileTag->track_peak_str().c_str(), "REPLAYGAIN_TRACK_PEAK");
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_USERTEXT, FileTag->album_gain_str().c_str(), "REPLAYGAIN_ALBUM_GAIN");
+    has_data |= id3tag_set_text_frame(id3_tag, ID3FID_USERTEXT, FileTag->album_peak_str().c_str(), "REPLAYGAIN_ALBUM_PEAK");
 
     /***********
      * Picture *

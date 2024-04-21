@@ -28,11 +28,6 @@
 #include <array>
 #include <type_traits>
 
-template <std::size_t S>
-struct small_str : public std::array<char,S>
-{	operator const char*() const { return this->data(); }
-};
-
 std::string strprintf(const char* format, ...)
 #ifdef __GNUC__
 __attribute__ ((format(printf, 1, 2)))

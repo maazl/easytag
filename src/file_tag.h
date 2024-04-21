@@ -125,13 +125,13 @@ typedef struct File_Tag
     void disc_and_total(const char* value);
 
     // locale invariant format for ReplayGain values
-    static small_str<8> format_float(const char* fmt, float value);
+    static std::string format_float(const char* fmt, float value);
     static float parse_float(const char* value);
 
-    small_str<8> track_gain_str() const { return format_float("%.1f dB", track_gain); }
-    small_str<8> track_peak_str() const { return format_float("%.2f", track_peak); }
-    small_str<8> album_gain_str() const { return format_float("%.1f dB", album_gain); }
-    small_str<8> album_peak_str() const { return format_float("%.2f", album_peak); }
+    std::string track_gain_str() const { return format_float("%.1f dB", track_gain); }
+    std::string track_peak_str() const { return format_float("%.2f", track_peak); }
+    std::string album_gain_str() const { return format_float("%.1f dB", album_gain); }
+    std::string album_peak_str() const { return format_float("%.2f", album_peak); }
     void track_gain_str(const char* value) { track_gain = parse_float(value); }
     void track_peak_str(const char* value) { track_peak = parse_float(value); }
     void album_gain_str(const char* value) { album_gain = parse_float(value); }
