@@ -91,7 +91,7 @@ et_file_tag_free (File_Tag *FileTag)
 string File_Tag::format_float(const char* fmt, float value)
 {	string ret(12, '\0');
 	if (isfinite(value))
-	{	int len = snprintf(&ret[0], ret.size(), fmt, value);
+	{	unsigned len = snprintf(&ret[0], ret.size(), fmt, value);
 		if (len < ret.size()) ret.resize(len);
 		auto dot = ret.find(','); // work around for locale problems
 		if (dot != string::npos) ret[dot] = '.';
@@ -110,7 +110,7 @@ float File_Tag::parse_float(const char* value)
 		++value;
 	}
 	int i, n = -1;
-	if (!*value || sscanf(value, "%d.%n", &i, &n) < 1)
+	if (!*value || sscanf(value, "%d%*[.,]%n", &i, &n) < 1)
 		return numeric_limits<float>::quiet_NaN();
 	double ret = i;
 	if (n > 0)
@@ -334,18 +334,6 @@ et_file_tag_set_picture (File_Tag *file_tag,
     {
         file_tag->picture = et_picture_copy_all (pic);
     }
-}
-
-void et_file_tag_set_track_gain(File_Tag *file_tag, float gain, float peek)
-{	g_return_if_fail (file_tag != NULL);
-	file_tag->track_gain = gain;
-	file_tag->track_peak = peek;
-}
-
-void et_file_tag_set_album_gain(File_Tag *file_tag, float gain, float peek)
-{	g_return_if_fail (file_tag != NULL);
-	file_tag->album_gain = gain;
-	file_tag->album_peak = peek;
 }
 
 static bool floatequals(float f1, float f2, float epsilon)
