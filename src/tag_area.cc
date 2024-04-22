@@ -2549,12 +2549,10 @@ void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 
 	store_field(&File_Tag::genre, gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->genre_combo_entry)))));
 
-	if (gtk_widget_get_visible(priv->comment_grid))
-	{
-		g_free(FileTag->comment);
+	if (gtk_notebook_get_current_page(GTK_NOTEBOOK(priv->tag_notebook)) == 2)
+	{	g_free(FileTag->comment);
 		FileTag->comment = text_view_get_text(priv->comment_text);
-	}
-	else
+	} else
 		store_field(&File_Tag::comment, gtk_entry_get_text(GTK_ENTRY(priv->comment_entry)));
 
 	if (gtk_widget_get_visible(priv->composer_entry))
