@@ -414,7 +414,7 @@ string ReplayGainAnalyzer::AnalyzeFile(const char* fileName)
 found_stream:
 
 	// find & open codec
-	AVCodec* decoder = avcodec_find_decoder(stream->codecpar->codec_id);
+	const AVCodec* decoder = avcodec_find_decoder(stream->codecpar->codec_id);
 	auto codec = make_unique(avcodec_alloc_context3(decoder), [](AVCodecContext* ptr) { avcodec_free_context(&ptr); });
 	rc = avcodec_parameters_to_context(codec.get(), stream->codecpar);
 	if (rc != 0)
