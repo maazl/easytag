@@ -38,6 +38,7 @@
 #include "win32/win32dep.h"
 
 #include <cmath>
+#include <limits>
 using namespace std;
 
 
