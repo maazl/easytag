@@ -24,13 +24,31 @@
 
 #include "core_types.h"
 #include "file_description.h"
-#include "file_info.h"
 #include "file_name.h"
 #include "file_tag.h"
 #include "setting.h"
 #ifdef __cplusplus
 #include "misc.h"
 #endif
+
+/*
+ * Structure containing informations of the header of file
+ * Nota: This struct was copied from an "MP3 structure", and will change later.
+ */
+typedef struct
+{
+    gint version;               /* Version of bitstream (mpeg version for mp3, encoder version for ogg) */
+    gint mpeg25;                /* Version is MPEG 2.5? */
+    gsize layer; /* "MP3 data" */
+    gint bitrate;               /* Bitrate (kb/s) */
+    gboolean variable_bitrate;  /* Is a VBR file? */
+    gint samplerate;            /* Samplerate (Hz) */
+    gint mode;                  /* Stereo, ... or channels for ogg */
+    goffset size;               /* The size of file (in bytes) */
+    gint duration;              /* The duration of file (in seconds) */
+    gchar *mpc_profile;         /* MPC data */
+    gchar *mpc_version;         /* MPC data : encoder version  (also for Speex) */
+} ET_File_Info;
 
 /*
  * Description of each item of the ETFileList list
@@ -45,7 +63,7 @@ typedef struct
 
     const ET_File_Description *ETFileDescription;
     gchar               *ETFileExtension;   /* Real extension of the file (keeping the case) (should be placed in ETFileDescription?) */
-    ET_File_Info        *ETFileInfo;        /* Header infos: bitrate, duration, ... */
+    ET_File_Info        ETFileInfo;        /* Header infos: bitrate, duration, ... */
 
     #ifdef __cplusplus
     gListP<File_Name*> FileNameCur;      /* Points to item of FileNameList that represents the current value of filename state (i.e. file on hard disk) */

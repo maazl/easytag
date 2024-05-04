@@ -2642,7 +2642,7 @@ et_cddb_dialog_search_from_selection (EtCDDBDialog *self)
             g_string_append_printf (query_string, "%u", total_frames);
         }
 
-        secs = etfile->ETFileInfo->duration;
+        secs = etfile->ETFileInfo.duration;
         total_frames += secs * 75;
         disc_length  += secs;
 

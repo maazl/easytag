@@ -221,7 +221,6 @@ et_file_list_add (GList *file_list,
     ET_File      *ETFile;
     File_Name    *FileName;
     File_Tag     *FileTag;
-    ET_File_Info *ETFileInfo;
     gchar        *ETFileExtension;
     guint         ETFileKey;
     guint         undo_key;
@@ -391,53 +390,52 @@ et_file_list_add (GList *file_list,
                    FileTag->orig_year, display_path);
     }
 
-    /* Fill the ET_File_Info structure */
-    ETFileInfo = et_file_info_new ();
+    /* Attach all data to this ETFile item */
+    ETFile = ET_File_Item_New();
 
+    /* Fill the ET_File_Info structure */
     switch (description->FileType)
     {
 #if defined ENABLE_MP3 && defined ENABLE_ID3LIB
         case MP3_FILE:
         case MP2_FILE:
-            success = et_mpeg_header_read_file_info (file, ETFileInfo, &error);
+            success = et_mpeg_header_read_file_info (file, &ETFile->ETFileInfo, &error);
             break;
 #endif
 #ifdef ENABLE_OGG
         case OGG_FILE:
-            success = et_ogg_header_read_file_info (file, ETFileInfo, &error);
+            success = et_ogg_header_read_file_info (file, &ETFile->ETFileInfo, &error);
             break;
 #endif
 #ifdef ENABLE_SPEEX
         case SPEEX_FILE:
-            success = et_speex_header_read_file_info (file, ETFileInfo,
-                                                      &error);
+            success = et_speex_header_read_file_info (file, &ETFile->ETFileInfo, &error);
             break;
 #endif
 #ifdef ENABLE_FLAC
         case FLAC_FILE:
-            success = et_flac_header_read_file_info (file, ETFileInfo, &error);
+            success = et_flac_header_read_file_info (file, &ETFile->ETFileInfo, &error);
             break;
 #endif
         case MPC_FILE:
-            success = et_mpc_header_read_file_info (file, ETFileInfo, &error);
+            success = et_mpc_header_read_file_info (file, &ETFile->ETFileInfo, &error);
             break;
         case MAC_FILE:
-            success = et_mac_header_read_file_info (file, ETFileInfo, &error);
+            success = et_mac_header_read_file_info (file, &ETFile->ETFileInfo, &error);
             break;
 #ifdef ENABLE_WAVPACK
         case WAVPACK_FILE:
-            success = et_wavpack_header_read_file_info (file, ETFileInfo,
-                                                        &error);
+            success = et_wavpack_header_read_file_info (file, &ETFile->ETFileInfo, &error);
             break;
 #endif
 #ifdef ENABLE_MP4
         case MP4_FILE:
-            success = et_mp4_header_read_file_info (file, ETFileInfo, &error);
+            success = et_mp4_header_read_file_info (file, &ETFile->ETFileInfo, &error);
             break;
 #endif
 #ifdef ENABLE_OPUS
         case OPUS_FILE:
-            success = et_opus_read_file_info (file, ETFileInfo, &error);
+            success = et_opus_read_file_info (file, &ETFile->ETFileInfo, &error);
             break;
 #endif
         case OFR_FILE:
@@ -470,7 +468,7 @@ et_file_list_add (GList *file_list,
                        "ETFileInfo: Undefined file type (%d) for file %s",
                        (gint)description->FileType, display_path);
             /* To get at least the file size. */
-            success = et_core_read_file_info (file, ETFileInfo, &error);
+            success = et_core_read_file_info (file, &ETFile->ETFileInfo, &error);
             break;
     }
 
@@ -486,9 +484,6 @@ et_file_list_add (GList *file_list,
      * before saving */
     fileinfo = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_MODIFIED,
                                   G_FILE_QUERY_INFO_NONE, NULL, NULL);
-
-    /* Attach all data defined above to this ETFile item */
-    ETFile = ET_File_Item_New();
 
     if (fileinfo)
     {
@@ -511,7 +506,6 @@ et_file_list_add (GList *file_list,
     ETFile->FileTagList          =
     ETFile->FileTagCur           =
     ETFile->FileTag              = gListP<File_Tag*>(FileTag);
-    ETFile->ETFileInfo           = ETFileInfo;
 
     /* Add the item to the "main list" */
     result = g_list_append (file_list, ETFile);
@@ -833,8 +827,8 @@ ET_Remove_File_From_File_List (ET_File *ETFile)
     GList *ETFileDisplayedList = NULL; // Item containing the ETFile to delete... (in ETCore->ETFileDisplayedList)
 
     // Remove infos of the file
-    ETCore->ETFileDisplayedList_TotalSize     -= ((ET_File_Info *)ETFile->ETFileInfo)->size;
-    ETCore->ETFileDisplayedList_TotalDuration -= ((ET_File_Info *)ETFile->ETFileInfo)->duration;
+    ETCore->ETFileDisplayedList_TotalSize     -= ETFile->ETFileInfo.size;
+    ETCore->ETFileDisplayedList_TotalDuration -= ETFile->ETFileInfo.duration;
 
     // Find the ETFileList containing the ETFile item
     ETFileDisplayedList = g_list_find(g_list_first(ETCore->ETFileDisplayedList),ETFile);
@@ -1004,8 +998,8 @@ et_displayed_file_list_set (GList *ETFileList)
     // Get size and duration of files in the list
     for (l = ETCore->ETFileDisplayedList; l != NULL; l = g_list_next (l))
     {
-        ETCore->ETFileDisplayedList_TotalSize += ((ET_File_Info *)((ET_File *)l->data)->ETFileInfo)->size;
-        ETCore->ETFileDisplayedList_TotalDuration += ((ET_File_Info *)((ET_File *)l->data)->ETFileInfo)->duration;
+        ETCore->ETFileDisplayedList_TotalSize += ((ET_File *)l->data)->ETFileInfo.size;
+        ETCore->ETFileDisplayedList_TotalDuration += ((ET_File *)l->data)->ETFileInfo.duration;
     }
 
     /* Sort the file list. */

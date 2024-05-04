@@ -186,9 +186,7 @@ string TagPartColumnRenderer::RenderText(const ET_File* file, bool original) con
 }
 
 string FileSizeColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	if (!file->ETFileInfo)
-		return string();
-	goffset size = file->ETFileInfo->size;
+{	goffset size = file->ETFileInfo.size;
 	if (!size)
 		return string();
 	char buf[20];
@@ -206,9 +204,7 @@ string FileSizeColumnRenderer::RenderText(const ET_File* file, bool original) co
 }
 
 string FileDurationColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	if (!file->ETFileInfo)
-		return string();
-	gint duration = file->ETFileInfo->duration;
+{	gint duration = file->ETFileInfo.duration;
 	if (!duration)
 		return string();
 	char buf[20];
@@ -222,9 +218,7 @@ string FileDurationColumnRenderer::RenderText(const ET_File* file, bool original
 }
 
 string FileInfoIntColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	if (!file->ETFileInfo)
-		return string();
-	gint value = file->ETFileInfo->*Field;
+{	gint value = file->ETFileInfo.*Field;
 	if (!value)
 		return string();
 	return to_string(value);

@@ -54,7 +54,6 @@ easytag_SOURCES = \
 	src/file.cc \
 	src/file_area.c \
 	src/file_description.cc \
-	src/file_info.c \
 	src/file_list.cc \
 	src/file_name.cc \
 	src/file_renderer.cc \
@@ -119,7 +118,6 @@ easytag_headers = \
 	src/file.h \
 	src/file_area.h \
 	src/file_description.h \
-	src/file_info.h \
 	src/file_list.h \
 	src/file_name.h \
 	src/file_renderer.h \
@@ -452,7 +450,6 @@ check_PROGRAMS = \
 	tests/test-dlm \
 	tests/test-genres \
 	tests/test-file_description \
-	tests/test-file_info \
 	tests/test-file_tag \
 	tests/test-misc \
 	tests/test-picture \
@@ -490,7 +487,7 @@ tests_test_file_description_CFLAGS = \
 
 tests_test_file_description_SOURCES = \
 	tests/test-file_description.c \
-	src/file_description.c
+	src/file_description.cc
 
 tests_test_file_description_LDADD = \
 	$(EASYTAG_LIBS)

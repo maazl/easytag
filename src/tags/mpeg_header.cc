@@ -213,7 +213,7 @@ et_mpeg_header_display_file_info_to_ui (const ET_File *ETFile)
     gchar *size1 = NULL;
     gsize ln_num = G_N_ELEMENTS (layer_names);
 
-    info = ETFile->ETFileInfo;
+    info = &ETFile->ETFileInfo;
     fields = g_slice_new (EtFileHeaderFields);
 
     if (ETFile->ETFileDescription->FileType == MP3_FILE)

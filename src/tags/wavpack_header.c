@@ -131,7 +131,7 @@ et_wavpack_header_display_file_info_to_ui (const ET_File *ETFile)
     gchar *size = NULL;
     gchar *size1 = NULL;
 
-    info = ETFile->ETFileInfo;
+    info = &ETFile->ETFileInfo;
     fields = g_slice_new (EtFileHeaderFields);
 
     fields->description = _("Wavpack File");

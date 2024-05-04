@@ -2174,7 +2174,7 @@ et_header_fields_new_from_unknown (const ET_File *ETFile)
     gchar *size  = NULL;
     gchar *size1 = NULL;
 
-    info = ETFile->ETFileInfo;
+    info = &ETFile->ETFileInfo;
     fields = g_slice_new (EtFileHeaderFields);
 
     fields->description = _("File");

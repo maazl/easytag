@@ -271,12 +271,9 @@ static gint CmpFileType(const ET_File* ETFile1, const ET_File* ETFile2)
  */
 static gint CmpFileSize(const ET_File* ETFile1, const ET_File* ETFile2)
 {
-	if ( !ETFile1->ETFileInfo ) return -1;
-	if ( !ETFile2->ETFileInfo ) return 1;
-
 	// Second criterion
-	if (ETFile1->ETFileInfo->size != ETFile2->ETFileInfo->size)
-		return sign((gint64)ETFile1->ETFileInfo->size - ETFile2->ETFileInfo->size);
+	if (ETFile1->ETFileInfo.size != ETFile2->ETFileInfo.size)
+		return sign((gint64)ETFile1->ETFileInfo.size - ETFile2->ETFileInfo.size);
 	// Second criterion
 	return 2 * CmpFilepath(ETFile1,ETFile2);
 }
@@ -287,11 +284,8 @@ static gint CmpFileSize(const ET_File* ETFile1, const ET_File* ETFile2)
 template <gint ET_File_Info::*V>
 static gint CmpInfoInt(const ET_File* ETFile1, const ET_File* ETFile2)
 {
-	if ( !ETFile1->ETFileInfo ) return -1;
-	if ( !ETFile2->ETFileInfo ) return 1;
-
-	if (ETFile1->ETFileInfo->*V != ETFile2->ETFileInfo->*V)
-		return sign(ETFile1->ETFileInfo->*V - ETFile2->ETFileInfo->*V);
+	if (ETFile1->ETFileInfo.*V != ETFile2->ETFileInfo.*V)
+		return sign(ETFile1->ETFileInfo.*V - ETFile2->ETFileInfo.*V);
 	// Second criterion
 	return 2 * CmpFilepath(ETFile1,ETFile2);
 }
@@ -458,12 +452,11 @@ ET_Free_File_List_Item (ET_File *ETFile)
             ET_Free_File_Tag_List (ETFile->FileTagListBak);
         }
         /* Frees infos of ETFileInfo */
-        if (ETFile->ETFileInfo)
-        {
-            et_file_info_free (ETFile->ETFileInfo);
-        }
+        g_free(ETFile->ETFileInfo.mpc_profile);
+        g_free(ETFile->ETFileInfo.mpc_version);
 
         g_free(ETFile->ETFileExtension);
+
         g_slice_free (ET_File, ETFile);
     }
 }
