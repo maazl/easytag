@@ -51,7 +51,11 @@ typedef struct
     GtkWidget *duration_value_label;
 } EtFileAreaPrivate;
 
+// learn correct return type for et_file_area_get_instance_private
+#define et_file_area_get_instance_private et_file_area_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtFileArea, et_file_area, GTK_TYPE_BIN)
+#undef et_file_area_get_instance_private
+#define et_file_area_get_instance_private(x) (EtFileAreaPrivate*)et_file_area_get_instance_private_(x)
 
 static void
 on_file_show_header_changed (EtFileArea *self,
@@ -135,7 +139,7 @@ et_file_area_class_init (EtFileAreaClass *klass)
 GtkWidget *
 et_file_area_new (void)
 {
-    return g_object_new (ET_TYPE_FILE_AREA, NULL);
+    return (GtkWidget*)g_object_new (ET_TYPE_FILE_AREA, NULL);
 }
 
 void

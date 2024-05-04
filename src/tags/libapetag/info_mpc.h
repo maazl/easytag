@@ -22,6 +22,8 @@
 
 #include <gio/gio.h>
 
+G_BEGIN_DECLS
+
 /** \file info_mpc.h 
     \brief Get information from MusePack file.
 
@@ -89,5 +91,7 @@ typedef struct
     \retval 2 not musepack audio file
 */
 gboolean info_mpc_read (GFile *file, StreamInfoMpc *Info, GError **error);
+
+G_END_DECLS
 
 #endif /* INFO_MPC_H */

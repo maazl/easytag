@@ -22,6 +22,8 @@
 
 #include <gio/gio.h>
 
+G_BEGIN_DECLS
+
 /** \file info_mac.h 
     \brief Get information from MonkeyAudio file.
 
@@ -80,5 +82,7 @@ typedef struct
 } StreamInfoMac;
 
 gboolean info_mac_read (GFile *file, StreamInfoMac *stream_info, GError **error);
+
+G_END_DECLS
 
 #endif /* INFO_MAC_H */

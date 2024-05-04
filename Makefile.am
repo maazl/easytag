@@ -52,7 +52,7 @@ easytag_SOURCES = \
 	src/et_core.c \
 	src/etflagsaction.cc \
 	src/file.cc \
-	src/file_area.c \
+	src/file_area.cc \
 	src/file_description.cc \
 	src/file_list.cc \
 	src/file_name.cc \
@@ -79,22 +79,22 @@ easytag_SOURCES = \
 	src/tags/libapetag/info_mac.c \
 	src/tags/libapetag/info_mpc.c \
 	src/tags/ape_tag.cc \
-	src/tags/flac_header.c \
+	src/tags/flac_header.cc \
 	src/tags/flac_private.c \
 	src/tags/flac_tag.cc \
 	src/tags/gio_wrapper.cc \
 	src/tags/id3_tag.cc \
 	src/tags/id3v24_tag.cc \
-	src/tags/monkeyaudio_header.c \
+	src/tags/monkeyaudio_header.cc \
 	src/tags/mpeg_header.cc \
 	src/tags/mp4_tag.cc \
-	src/tags/musepack_header.c \
-	src/tags/ogg_header.c \
+	src/tags/musepack_header.cc \
+	src/tags/ogg_header.cc \
 	src/tags/ogg_tag.cc \
-	src/tags/opus_header.c \
-	src/tags/opus_tag.c \
+	src/tags/opus_header.cc \
+	src/tags/opus_tag.cc \
 	src/tags/vcedit.c \
-	src/tags/wavpack_header.c \
+	src/tags/wavpack_header.cc \
 	src/tags/wavpack_private.c \
 	src/tags/wavpack_tag.cc \
 	src/win32/win32dep.c
