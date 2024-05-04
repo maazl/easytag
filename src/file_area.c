@@ -172,7 +172,7 @@ et_file_area_clear (EtFileArea *self)
 
 void
 et_file_area_set_header_fields (EtFileArea *self,
-                                EtFileHeaderFields *fields)
+                                const EtFileHeaderFields *fields)
 {
     EtFileAreaPrivate *priv;
 

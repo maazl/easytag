@@ -125,7 +125,7 @@ EtFileHeaderFields *
 et_wavpack_header_display_file_info_to_ui (const ET_File *ETFile)
 {
     EtFileHeaderFields *fields;
-    ET_File_Info *info;
+    const ET_File_Info *info;
     gchar *time = NULL;
     gchar *time1 = NULL;
     gchar *size = NULL;

@@ -46,7 +46,7 @@ struct _EtFileAreaClass
 GType et_file_area_get_type (void);
 GtkWidget * et_file_area_new (void);
 void et_file_area_clear (EtFileArea *self);
-void et_file_area_set_header_fields (EtFileArea *self, EtFileHeaderFields *fields);
+void et_file_area_set_header_fields (EtFileArea *self, const EtFileHeaderFields *fields);
 void et_file_area_set_file_fields (EtFileArea *self, const ET_File *ETFile);
 const gchar * et_file_area_get_filename (EtFileArea *self);
 

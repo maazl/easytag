@@ -53,7 +53,7 @@ easytag_SOURCES = \
 	src/etflagsaction.cc \
 	src/file.cc \
 	src/file_area.c \
-	src/file_description.c \
+	src/file_description.cc \
 	src/file_info.c \
 	src/file_list.cc \
 	src/file_name.cc \
@@ -493,19 +493,6 @@ tests_test_file_description_SOURCES = \
 	src/file_description.c
 
 tests_test_file_description_LDADD = \
-	$(EASYTAG_LIBS)
-
-tests_test_file_info_CPPFLAGS = \
-	$(common_test_cppflags)
-
-tests_test_file_info_CFLAGS = \
-	$(common_test_cflags)
-
-tests_test_file_info_SOURCES = \
-	tests/test-file_info.c \
-	src/file_info.c
-
-tests_test_file_info_LDADD = \
 	$(EASYTAG_LIBS)
 
 tests_test_file_tag_CPPFLAGS = \

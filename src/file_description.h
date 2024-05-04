@@ -35,14 +35,6 @@ typedef struct
     ET_Tag_Type  TagType;     /* Type of tag (ex: ID3) */
 } ET_File_Description;
 
-/*
- * Description of supported files
- */
-extern const ET_File_Description ETFileDescription[];
-
-/* Calculate the last index of the previous tab */
-extern const gsize ET_FILE_DESCRIPTION_SIZE;
-
 const gchar * ET_Get_File_Extension (const gchar *filename);
 const ET_File_Description * ET_Get_File_Description (const gchar *filename);
 gboolean et_file_is_supported (const gchar *filename);

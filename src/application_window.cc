@@ -2168,7 +2168,7 @@ static EtFileHeaderFields *
 et_header_fields_new_from_unknown (const ET_File *ETFile)
 {
     EtFileHeaderFields *fields;
-    ET_File_Info *info;
+    const ET_File_Info *info;
     gchar *time  = NULL;
     gchar *time1 = NULL;
     gchar *size  = NULL;
@@ -2207,6 +2207,19 @@ et_header_fields_new_from_unknown (const ET_File *ETFile)
     g_free (time1);
 
     return fields;
+}
+
+static void
+et_application_window_file_area_set_header_fields (EtApplicationWindow *self,
+                                                   const EtFileHeaderFields *fields)
+{
+    EtApplicationWindowPrivate *priv;
+
+    g_return_if_fail (ET_APPLICATION_WINDOW (self));
+
+    priv = et_application_window_get_instance_private (self);
+
+    et_file_area_set_header_fields (ET_FILE_AREA (priv->file_area), fields);
 }
 
 /*
@@ -2457,19 +2470,6 @@ et_application_window_file_area_set_file_fields (EtApplicationWindow *self,
     priv = et_application_window_get_instance_private (self);
 
     et_file_area_set_file_fields (ET_FILE_AREA (priv->file_area), ETFile);
-}
-
-void
-et_application_window_file_area_set_header_fields (EtApplicationWindow *self,
-                                                   EtFileHeaderFields *fields)
-{
-    EtApplicationWindowPrivate *priv;
-
-    g_return_if_fail (ET_APPLICATION_WINDOW (self));
-
-    priv = et_application_window_get_instance_private (self);
-
-    et_file_area_set_header_fields (ET_FILE_AREA (priv->file_area), fields);
 }
 
 /*

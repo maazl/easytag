@@ -410,24 +410,12 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, gchar *mask)
     if (!filename_utf8) return NULL;
 
     // Remove extension of file (if found)
-    tmp = strrchr(filename_utf8,'.');
-    for (i = 0; i <= ET_FILE_DESCRIPTION_SIZE; i++)
-    {
-        if ( strcasecmp(tmp,ETFileDescription[i].Extension)==0 )
-        {
-            *tmp = 0; //strrchr(source,'.') = 0;
-            break;
-        }
-    }
-
-    if (i==ET_FILE_DESCRIPTION_SIZE)
-    {
-        gchar *tmp1 = g_path_get_basename(filename_utf8);
-        Log_Print (LOG_ERROR,
-                   _("The extension ‘%s’ was not found in filename ‘%s’"), tmp,
-                   tmp1);
-        g_free(tmp1);
-    }
+    const ET_File_Description* desc = ET_Get_File_Description(filename_utf8);
+    if (desc->FileType != UNKNOWN_FILE)
+        filename_utf8[strlen(filename_utf8) - strlen(desc->Extension)] = 0; //strrchr(source,'.') = 0;
+    else
+        Log_Print(LOG_ERROR, _("The extension ‘%s’ was not found in filename ‘%s’"),
+            ET_Get_File_Extension(filename_utf8), gString(g_path_get_basename(filename_utf8)).get());
 
     /* Replace characters into mask and filename before parsing. */
     convert_mode = (EtConvertSpaces)g_settings_get_enum (MainSettings, "fill-convert-spaces");
