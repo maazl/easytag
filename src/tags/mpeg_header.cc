@@ -202,97 +202,36 @@ et_mpeg_header_read_file_info (GFile *file,
 }
 
 /* For displaying header information in the main window. */
-EtFileHeaderFields *
-et_mpeg_header_display_file_info_to_ui (const ET_File *ETFile)
+void
+et_mpeg_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile)
 {
-    EtFileHeaderFields *fields;
-    const ET_File_Info *info;
-    gchar *time = NULL;
-    gchar *time1 = NULL;
-    gchar *size = NULL;
-    gchar *size1 = NULL;
+    const ET_File_Info *info = &ETFile->ETFileInfo;
     gsize ln_num = G_N_ELEMENTS (layer_names);
 
-    info = &ETFile->ETFileInfo;
-    fields = g_slice_new (EtFileHeaderFields);
-
     if (ETFile->ETFileDescription->FileType == MP3_FILE)
-    {
         fields->description = _("MP3 File");
-    }
     else if (ETFile->ETFileDescription->FileType == MP2_FILE)
-    {
         fields->description = _("MP2 File");
-    }
     else
-    {
         g_assert_not_reached ();
-    }
 
     /* MPEG, Layer versions */
     fields->version_label = _("MPEG");
 
     if (info->mpeg25)
     {
-        fields->version = g_strdup_printf ("2.5, Layer %s",
-                                           (info->layer >= 1
-                                            && info->layer <= ln_num)
-                                           ? layer_names[info->layer - 1] : "?");
+        fields->version = strprintf("2.5, Layer %s",
+            info->layer >= 1 && info->layer <= ln_num ? layer_names[info->layer - 1] : "?");
     }
     else
     {
-        fields->version = g_strdup_printf ("%d, Layer %s", info->version,
-                                           (info->layer >= 1
-                                            && info->layer <= ln_num)
-                                           ? layer_names[info->layer - 1] : "?");
+        fields->version = strprintf("%d, Layer %s", info->version,
+            info->layer >= 1 && info->layer <= ln_num ? layer_names[info->layer - 1] : "?");
     }
-
-    /* Bitrate */
-    if (info->variable_bitrate)
-    {
-        fields->bitrate = g_strdup_printf (_("~%d kb/s"), info->bitrate);
-    }
-    else
-    {
-        fields->bitrate = g_strdup_printf (_("%d kb/s"), info->bitrate);
-    }
-
-
-    /* Samplerate */
-    fields->samplerate = g_strdup_printf (_("%d Hz"), info->samplerate);
 
     /* Mode */
     fields->mode_label = _("Mode:");
     fields->mode = _(channel_mode_name (info->mode));
-
-    /* Size */
-    size = g_format_size (info->size);
-    size1 = g_format_size (ETCore->ETFileDisplayedList_TotalSize);
-    fields->size = g_strdup_printf ("%s (%s)", size, size1);
-    g_free (size);
-    g_free (size1);
-
-    /* Duration */
-    time = Convert_Duration (info->duration);
-    time1 = Convert_Duration (ETCore->ETFileDisplayedList_TotalDuration);
-    fields->duration = g_strdup_printf ("%s (%s)", time, time1);
-    g_free (time);
-    g_free (time1);
-
-    return fields;
-}
-
-void
-et_mpeg_file_header_fields_free (EtFileHeaderFields *fields)
-{
-    g_return_if_fail (fields != NULL);
-
-    g_free (fields->version);
-    g_free (fields->bitrate);
-    g_free (fields->samplerate);
-    g_free (fields->size);
-    g_free (fields->duration);
-    g_slice_free (EtFileHeaderFields, fields);
 }
 
 #endif /* defined ENABLE_MP3 && defined ENABLE_ID3LIB */

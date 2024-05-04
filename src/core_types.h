@@ -70,6 +70,12 @@ typedef enum
     UNKNOWN_TAG
 } ET_Tag_Type;
 
+G_END_DECLS
+
+#ifdef __cplusplus
+
+#include <string>
+
 /*
  * EtFileHeaderFields:
  * @description: a description of the file type, such as MP3 File
@@ -88,17 +94,16 @@ typedef enum
 typedef struct
 {
     /*< public >*/
-    gchar *description;
-    gchar *version_label;
-    gchar *version;
-    gchar *bitrate;
-    gchar *samplerate;
-    gchar *mode_label;
-    gchar *mode;
-    gchar *size;
-    gchar *duration;
+    std::string description;
+    std::string version_label;
+    std::string version;
+    std::string bitrate;
+    std::string samplerate;
+    std::string mode_label;
+    std::string mode;
+    std::string size;
+    std::string duration;
 } EtFileHeaderFields;
-
-G_END_DECLS
+#endif
 
 #endif /* ET_TYPES_H_ */

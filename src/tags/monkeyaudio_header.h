@@ -26,8 +26,7 @@
 G_BEGIN_DECLS
 
 gboolean et_mac_header_read_file_info (GFile *file, ET_File_Info *ETFileInfo, GError **error);
-EtFileHeaderFields * et_mac_header_display_file_info_to_ui (const ET_File *ETFile);
-void et_mac_file_header_fields_free (EtFileHeaderFields *fields);
+void et_mac_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
 
 G_END_DECLS
 

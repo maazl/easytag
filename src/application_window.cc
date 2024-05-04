@@ -2121,18 +2121,6 @@ et_application_window_update_et_file_from_ui (EtApplicationWindow *self)
 }
 
 static void
-et_file_header_fields_free (EtFileHeaderFields *fields)
-{
-    g_free (fields->version);
-    g_free (fields->bitrate);
-    g_free (fields->samplerate);
-    g_free (fields->mode);
-    g_free (fields->size);
-    g_free (fields->duration);
-    g_slice_free (EtFileHeaderFields, fields);
-}
-
-static void
 et_application_window_display_file_name (EtApplicationWindow *self,
                                          const ET_File *ETFile)
 {
@@ -2164,49 +2152,31 @@ et_application_window_display_file_name (EtApplicationWindow *self,
 /*
  * "Default" way to display File Info to the user interface.
  */
-static EtFileHeaderFields *
-et_header_fields_new_from_unknown (const ET_File *ETFile)
+static void
+et_header_fields_new_default (EtFileHeaderFields *fields, const ET_File *ETFile)
 {
-    EtFileHeaderFields *fields;
-    const ET_File_Info *info;
-    gchar *time  = NULL;
-    gchar *time1 = NULL;
-    gchar *size  = NULL;
-    gchar *size1 = NULL;
-
-    info = &ETFile->ETFileInfo;
-    fields = g_slice_new (EtFileHeaderFields);
+    const ET_File_Info *info = &ETFile->ETFileInfo;
 
     fields->description = _("File");
 
-    /* MPEG, Layer versions */
-    fields->version = g_strdup_printf ("%d, Layer %" G_GSIZE_FORMAT,
-                                       info->version, info->layer);
-
     /* Bitrate */
-    fields->bitrate = g_strdup_printf (_("%d kb/s"), info->bitrate);
+    fields->bitrate = strprintf(info->variable_bitrate ? _("~%d kb/s") : _("%d kb/s"), info->bitrate);
 
     /* Samplerate */
-    fields->samplerate = g_strdup_printf (_("%d Hz"), info->samplerate);
+    fields->samplerate = strprintf(_("%d Hz"), info->samplerate);
 
     /* Mode */
-    fields->mode = g_strdup_printf ("%d", info->mode);
+    fields->mode = strprintf("%d", info->mode);
 
     /* Size */
-    size = g_format_size (info->size);
-    size1 = g_format_size (ETCore->ETFileDisplayedList_TotalSize);
-    fields->size = g_strdup_printf ("%s (%s)", size, size1);
-    g_free (size);
-    g_free (size1);
+    fields->size = strprintf("%s (%s)",
+        gString(g_format_size(info->size)).get(),
+        gString(g_format_size(ETCore->ETFileDisplayedList_TotalSize)).get());
 
     /* Duration */
-    time = Convert_Duration (info->duration);
-    time1 = Convert_Duration (ETCore->ETFileDisplayedList_TotalDuration);
-    fields->duration = g_strdup_printf ("%s (%s)", time, time1);
-    g_free (time);
-    g_free (time1);
-
-    return fields;
+    fields->duration = strprintf("%s (%s)",
+        Convert_Duration(info->duration).c_str(),
+        Convert_Duration(ETCore->ETFileDisplayedList_TotalDuration).c_str());
 }
 
 static void
@@ -2233,7 +2203,7 @@ et_application_window_display_et_file (EtApplicationWindow *self,
     const ET_File_Description *description;
     const gchar *cur_filename_utf8;
     gchar *msg;
-    EtFileHeaderFields *fields;
+    EtFileHeaderFields fields;
 
     g_return_if_fail (ETFile != NULL && ETFile->FileNameCur->data != NULL);
                       /* For the case where ETFile is an "empty" structure. */
@@ -2257,66 +2227,50 @@ et_application_window_display_et_file (EtApplicationWindow *self,
     et_application_window_tag_area_display_controls (self, ETFile);
 
     /* Display file data, header data and file type */
+    et_header_fields_new_default(&fields, ETFile); // some defaults...
+
     switch (description->FileType)
     {
 #if defined ENABLE_MP3 && defined ENABLE_ID3LIB
         case MP3_FILE:
         case MP2_FILE:
-            fields = et_mpeg_header_display_file_info_to_ui (ETFile);
-            et_application_window_file_area_set_header_fields (self, fields);
-            et_mpeg_file_header_fields_free (fields);
+            et_mpeg_header_display_file_info_to_ui (&fields, ETFile);
             break;
 #endif
 #ifdef ENABLE_OGG
         case OGG_FILE:
-            fields = et_ogg_header_display_file_info_to_ui (ETFile);
-            et_application_window_file_area_set_header_fields (self, fields);
-            et_ogg_file_header_fields_free (fields);
+            et_ogg_header_display_file_info_to_ui (&fields, ETFile);
             break;
 #endif
 #ifdef ENABLE_SPEEX
         case SPEEX_FILE:
-            fields = et_ogg_header_display_file_info_to_ui (ETFile);
-            et_application_window_file_area_set_header_fields (self, fields);
-            et_ogg_file_header_fields_free (fields);
+            et_ogg_header_display_file_info_to_ui (&fields, ETFile);
             break;
 #endif
 #ifdef ENABLE_FLAC
         case FLAC_FILE:
-            fields = et_flac_header_display_file_info_to_ui (ETFile);
-            et_application_window_file_area_set_header_fields (self, fields);
-            et_flac_file_header_fields_free (fields);
+            et_flac_header_display_file_info_to_ui (&fields, ETFile);
             break;
 #endif
         case MPC_FILE:
-            fields = et_mpc_header_display_file_info_to_ui (ETFile);
-            et_application_window_file_area_set_header_fields (self, fields);
-            et_mpc_file_header_fields_free (fields);
+            et_mpc_header_display_file_info_to_ui (&fields, ETFile);
             break;
         case MAC_FILE:
-            fields = et_mac_header_display_file_info_to_ui (ETFile);
-            et_application_window_file_area_set_header_fields (self, fields);
-            et_mac_file_header_fields_free (fields);
+            et_mac_header_display_file_info_to_ui (&fields, ETFile);
             break;
 #ifdef ENABLE_MP4
         case MP4_FILE:
-            fields = et_mp4_header_display_file_info_to_ui (ETFile);
-            et_application_window_file_area_set_header_fields (self, fields);
-            et_mp4_file_header_fields_free (fields);
+            et_mp4_header_display_file_info_to_ui (&fields, ETFile);
             break;
 #endif
 #ifdef ENABLE_WAVPACK
         case WAVPACK_FILE:
-            fields = et_wavpack_header_display_file_info_to_ui (ETFile);
-            et_application_window_file_area_set_header_fields (self, fields);
-            et_wavpack_file_header_fields_free (fields);
+            et_wavpack_header_display_file_info_to_ui (&fields, ETFile);
             break;
 #endif
 #ifdef ENABLE_OPUS
         case OPUS_FILE:
-            fields = et_opus_header_display_file_info_to_ui (ETFile);
-            et_application_window_file_area_set_header_fields (self, fields);
-            et_opus_file_header_fields_free (fields);
+            et_opus_header_display_file_info_to_ui (&fields, ETFile);
             break;
 #endif
         case OFR_FILE:
@@ -2345,14 +2299,13 @@ et_application_window_display_et_file (EtApplicationWindow *self,
         case UNKNOWN_FILE:
         default:
             /* Default displaying. */
-            fields = et_header_fields_new_from_unknown (ETFile);
-            et_application_window_file_area_set_header_fields (self, fields);
-            et_file_header_fields_free (fields);
             Log_Print (LOG_ERROR,
                        "ETFileInfo: Undefined file type %d for file %s.",
                        (gint)description->FileType, cur_filename_utf8);
             break;
     }
+
+    et_application_window_file_area_set_header_fields(self, &fields);
 
     msg = g_strdup_printf (_("File: ‘%s’"), cur_filename_utf8);
     et_application_window_status_bar_message (self, msg, FALSE);

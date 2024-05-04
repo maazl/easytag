@@ -271,7 +271,6 @@ show_album_info (EtCDDBDialog *self, GtkTreeSelection *selection)
 {
     EtCDDBDialogPrivate *priv;
     CddbAlbum *cddbalbum = NULL;
-    gchar *msg, *duration_str;
     GtkTreeIter row;
     priv = et_cddb_dialog_get_instance_private (self);
 
@@ -282,8 +281,7 @@ show_album_info (EtCDDBDialog *self, GtkTreeSelection *selection)
     if (!cddbalbum)
         return;
 
-    duration_str = Convert_Duration((gulong)cddbalbum->duration);
-    msg = g_strdup_printf(_("Album: ‘%s’, "
+    string msg = strprintf(_("Album: ‘%s’, "
                             "artist: ‘%s’, "
                             "length: ‘%s’, "
                             "year: ‘%s’, "
@@ -291,13 +289,11 @@ show_album_info (EtCDDBDialog *self, GtkTreeSelection *selection)
                             "disc ID: ‘%s’"),
                             cddbalbum->album ? cddbalbum->album : "",
                             cddbalbum->artist ? cddbalbum->artist : "",
-                            duration_str,
+                            Convert_Duration((gulong)cddbalbum->duration).c_str(),
                             cddbalbum->year ? cddbalbum->year : "",
                             cddbalbum->genre ? cddbalbum->genre : "",
                             cddbalbum->id ? cddbalbum->id : "");
-    gtk_statusbar_push(GTK_STATUSBAR(priv->status_bar), priv->status_bar_context, msg);
-    g_free(msg);
-    g_free(duration_str);
+    gtk_statusbar_push(GTK_STATUSBAR(priv->status_bar), priv->status_bar_context, msg.c_str());
 }
 
 /*
@@ -534,10 +530,7 @@ Cddb_Load_Track_Album_List (EtCDDBDialog *self, GList *track_list)
 
         for (l = g_list_first (track_list); l != NULL; l = g_list_next (l))
         {
-            gchar *row_text;
             CddbTrackAlbum *cddbtrackalbum = (CddbTrackAlbum*)l->data;
-
-            row_text = Convert_Duration ((gulong)cddbtrackalbum->duration);
 
             /* Load the row in the list. */
             gtk_list_store_insert_with_values (priv->track_list_model, NULL,
@@ -547,12 +540,10 @@ Cddb_Load_Track_Album_List (EtCDDBDialog *self, GList *track_list)
                                                CDDB_TRACK_LIST_NAME,
                                                cddbtrackalbum->track_name,
                                                CDDB_TRACK_LIST_TIME,
-                                               row_text,
+                                               Convert_Duration((gulong)cddbtrackalbum->duration).c_str(),
                                                CDDB_TRACK_LIST_DATA,
                                                cddbtrackalbum,
                                                -1);
-
-            g_free (row_text);
         }
 
         update_apply_button_sensitivity (self);

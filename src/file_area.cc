@@ -147,31 +147,20 @@ et_file_area_clear (EtFileArea *self)
 {
     EtFileAreaPrivate *priv;
     EtFileHeaderFields fields;
-    gchar *empty_str;
 
     g_return_if_fail (ET_FILE_AREA (self));
 
     priv = et_file_area_get_instance_private (self);
 
-    empty_str = g_strdup ("");
-
     /* Default values are MPEG data. */
     fields.description = _("File");
     fields.version_label = _("Encoder:");
-    fields.version =  empty_str;
-    fields.bitrate = empty_str;
-    fields.samplerate = empty_str;
     fields.mode_label = _("Mode:");
-    fields.mode = empty_str;
-    fields.size = empty_str;
-    fields.duration = empty_str;
 
     et_file_area_set_header_fields (self, &fields);
 
-    gtk_entry_set_text (GTK_ENTRY (priv->name_entry), empty_str);
+    gtk_entry_set_text (GTK_ENTRY (priv->name_entry), "");
     gtk_label_set_text (GTK_LABEL (priv->index_label), "0/0:");
-
-    g_free (empty_str);
 }
 
 void
@@ -185,20 +174,15 @@ et_file_area_set_header_fields (EtFileArea *self,
 
     priv = et_file_area_get_instance_private (self);
 
-    gtk_label_set_text (GTK_LABEL (priv->file_label), fields->description);
-    gtk_label_set_text (GTK_LABEL (priv->version_label),
-                        fields->version_label);
-    gtk_label_set_text (GTK_LABEL (priv->version_value_label),
-                        fields->version);
-    gtk_label_set_text (GTK_LABEL (priv->bitrate_value_label),
-                        fields->bitrate);
-    gtk_label_set_text (GTK_LABEL (priv->samplerate_value_label),
-                        fields->samplerate);
-    gtk_label_set_text (GTK_LABEL (priv->mode_label), fields->mode_label);
-    gtk_label_set_text (GTK_LABEL (priv->mode_value_label), fields->mode);
-    gtk_label_set_text (GTK_LABEL (priv->size_value_label), fields->size);
-    gtk_label_set_text (GTK_LABEL (priv->duration_value_label),
-                        fields->duration);
+    gtk_label_set_text (GTK_LABEL (priv->file_label), fields->description.c_str());
+    gtk_label_set_text (GTK_LABEL (priv->version_label), fields->version_label.c_str());
+    gtk_label_set_text (GTK_LABEL (priv->version_value_label), fields->version.c_str());
+    gtk_label_set_text (GTK_LABEL (priv->bitrate_value_label), fields->bitrate.c_str());
+    gtk_label_set_text (GTK_LABEL (priv->samplerate_value_label), fields->samplerate.c_str());
+    gtk_label_set_text (GTK_LABEL (priv->mode_label), fields->mode_label.c_str());
+    gtk_label_set_text (GTK_LABEL (priv->mode_value_label), fields->mode.c_str());
+    gtk_label_set_text (GTK_LABEL (priv->size_value_label), fields->size.c_str());
+    gtk_label_set_text (GTK_LABEL (priv->duration_value_label), fields->duration.c_str());
 }
 
 /* Toggle visibility of the small status icon if filename is read-only or not

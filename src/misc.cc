@@ -37,14 +37,16 @@
 #include <windows.h>
 #endif /* G_OS_WIN32 */
 
-std::string strprintf(const char* format, ...)
+using namespace std;
+
+string strprintf(const char* format, ...)
 {	va_list va;
 	va_start(va, format);
 	size_t size = std::vsnprintf(nullptr, 0, format, va);
 	va_end(va);
-	std::string buf(size, 0);
+	string buf(size, 0);
 	va_start(va, format);
-	std::vsnprintf(&buf[0], size + 1, format, va);
+	vsnprintf(&buf[0], size + 1, format, va);
 	va_end(va);
 	return buf;
 }
@@ -371,32 +373,19 @@ et_run_audio_player (GList *files,
  * Convert a series of seconds into a readable duration
  * Remember to free the string that is returned
  */
-gchar *Convert_Duration (gulong duration)
+string Convert_Duration (gulong duration)
 {
-    guint hour=0;
-    guint minute=0;
-    guint second=0;
-    gchar *data = NULL;
-
     if (duration == 0)
-    {
-        return g_strdup_printf ("%u:%.2u", minute, second);
-    }
+        return "0:00";
 
-    hour   = duration/3600;
-    minute = (duration%3600)/60;
-    second = (duration%3600)%60;
+    unsigned hour = duration/3600;
+    unsigned minute = (duration%3600)/60;
+    unsigned second = (duration%3600)%60;
 
     if (hour)
-    {
-        data = g_strdup_printf ("%u:%.2u:%.2u", hour, minute, second);
-    }
-    else
-    {
-        data = g_strdup_printf ("%u:%.2u", minute, second);
-    }
+        return strprintf("%u:%.2u:%.2u", hour, minute, second);
 
-    return data;
+    return strprintf("%u:%.2u", minute, second);
 }
 
 static gchar* pad_number(const gchar* number, const gchar* flag, const gchar* length)

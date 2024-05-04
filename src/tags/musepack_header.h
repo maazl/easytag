@@ -26,8 +26,7 @@
 G_BEGIN_DECLS
 
 gboolean et_mpc_header_read_file_info (GFile *file, ET_File_Info *ETFileInfo, GError **error);
-EtFileHeaderFields * et_mpc_header_display_file_info_to_ui (const ET_File *ETFile);
-void et_mpc_file_header_fields_free (EtFileHeaderFields *fields);
+void et_mpc_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
 
 G_END_DECLS
 

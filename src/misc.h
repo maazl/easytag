@@ -110,6 +110,8 @@ struct reference
 	constexpr operator T&() const { return Ref; }
 };
 
+std::string Convert_Duration(gulong duration);
+
 #endif
 
 G_BEGIN_DECLS
@@ -122,8 +124,6 @@ gboolean Add_String_To_Combo_List(GtkListStore *liststore, const gchar *string);
 gboolean et_variant_string_array_contains(GVariant* variant, const char* value);
 GVariant* et_variant_string_array_toggle(GVariant* variant, const char* value);
 GVariant* et_variant_string_array_set(GVariant* variant, const char* value, gboolean set);
-
-gchar *Convert_Duration (gulong duration);
 
 gboolean et_run_audio_player (GList *files, GError **error);
 gboolean et_run_program (const gchar *program_name, GList *args_list, GError **error);
