@@ -119,6 +119,15 @@ public:
 	:	FileColumnRenderer(col), Field(field) {}
 };
 
+class BitrateColumnRenderer : FileInfoIntColumnRenderer
+{
+protected:
+	virtual string RenderText(const ET_File* file, bool original) const;
+public:
+	BitrateColumnRenderer(EtSortMode col)
+	:	FileInfoIntColumnRenderer(col, &ET_File_Info::bitrate) {}
+};
+
 // Static renderer instances
 const FileNameColumnRenderer
 	R_Path(ET_SORT_MODE_ASCENDING_FILEPATH, &File_Name::path_value_utf8),
@@ -147,8 +156,8 @@ const TagColumnRenderer
 	R_EncodedBy(ET_SORT_MODE_ASCENDING_ENCODED_BY, &File_Tag::encoded_by);
 const FileSizeColumnRenderer R_FileSize(ET_SORT_MODE_ASCENDING_FILE_SIZE);
 const FileDurationColumnRenderer R_FileDuration(ET_SORT_MODE_ASCENDING_FILE_DURATION);
+const BitrateColumnRenderer	R_Bitrate(ET_SORT_MODE_ASCENDING_FILE_BITRATE);
 const FileInfoIntColumnRenderer
-	R_Bitrate(ET_SORT_MODE_ASCENDING_FILE_BITRATE, &ET_File_Info::bitrate),
 	R_Samplerate(ET_SORT_MODE_ASCENDING_FILE_SAMPLERATE, &ET_File_Info::samplerate);
 const TagReplaygainRenderer R_Replaygain(ET_SORT_MODE_ASCENDING_REPLAYGAIN);
 
@@ -222,6 +231,13 @@ string FileInfoIntColumnRenderer::RenderText(const ET_File* file, bool original)
 	if (!value)
 		return string();
 	return to_string(value);
+}
+
+string BitrateColumnRenderer::RenderText(const ET_File* file, bool original) const
+{	string ret = FileInfoIntColumnRenderer::RenderText(file, original);
+	if (file->ETFileInfo.variable_bitrate)
+		ret.insert(0, 1, '~');
+	return ret;
 }
 
 string TagReplaygainRenderer::RenderText(const ET_File* file, bool original) const
