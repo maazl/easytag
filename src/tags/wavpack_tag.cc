@@ -59,10 +59,7 @@
 /*
  * Read tag data from a Wavpack file.
  */
-gboolean
-wavpack_tag_read_file_tag (GFile *file,
-                           File_Tag *FileTag,
-                           GError **error)
+gboolean wavpack_read_file (GFile *file, ET_File *ETFile, GError **error)
 {
     WavpackStreamReader reader = { wavpack_read_bytes, wavpack_get_pos,
                                    wavpack_set_pos_abs, wavpack_set_pos_rel,
@@ -74,7 +71,7 @@ wavpack_tag_read_file_tag (GFile *file,
     gchar field[MAXLEN] = { 0, };
     const int open_flags = OPEN_TAGS;
 
-    g_return_val_if_fail (file != NULL && FileTag != NULL, FALSE);
+    g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
     state.error = NULL;
@@ -107,6 +104,18 @@ wavpack_tag_read_file_tag (GFile *file,
         g_object_unref (state.istream);
         return FALSE;
     }
+
+    ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
+    ETFileInfo->version     = WavpackGetVersion(wpc);
+    /* .wvc correction file not counted */
+    ETFileInfo->bitrate     = WavpackGetAverageBitrate(wpc, 0)/1000;
+    ETFileInfo->samplerate  = WavpackGetSampleRate(wpc);
+    ETFileInfo->mode        = WavpackGetNumChannels(wpc);
+    ETFileInfo->layer       = WavpackGetChannelMask (wpc);
+    ETFileInfo->size        = WavpackGetFileSize(wpc);
+    ETFileInfo->duration    = WavpackGetNumSamples(wpc)/ETFileInfo->samplerate;
+
+    File_Tag* FileTag = ETFile->FileTag->data;
 
     auto set_field = [wpc, &field](const char* tag, gchar*& target)
     {   int length = WavpackGetTagItem(wpc, tag, field, MAXLEN);
@@ -331,6 +340,51 @@ err:
                  WavpackGetErrorMessage (wpc));
     WavpackCloseFile (wpc);
     return FALSE;
+}
+
+/*
+ * et_wavpack_channel_mask_to_string:
+ * @channels: total number of channels
+ * @mask: Microsoft channel mask
+ *
+ * Formats a number of channels and a channel mask into a string, suitable for
+ * display to the user.
+ *
+ * Returns: the formatted channel information
+ */
+static std::string
+et_wavpack_channel_mask_to_string (gint channels,
+                                   gint mask)
+{
+    gboolean lfe;
+
+    /* Low frequency effects channel is bit 3. */
+    lfe = mask & (1 << 3);
+
+    if (lfe)
+    {
+        return strprintf("%d.1", channels - 1);
+    }
+    else
+    {
+        return strprintf("%d", channels);
+    }
+}
+
+void
+et_wavpack_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile)
+{
+    const ET_File_Info *info = &ETFile->ETFileInfo;
+
+    fields->description = _("Wavpack File");
+
+    /* Encoder version */
+    fields->version_label = _("Encoder:");
+    fields->version = strprintf("%d", info->version);
+
+    /* Mode */
+    fields->mode_label = _("Channels:");
+    fields->mode = et_wavpack_channel_mask_to_string(info->mode, info->layer);
 }
 
 #endif /* ENABLE_WAVPACK */

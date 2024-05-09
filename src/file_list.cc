@@ -33,32 +33,24 @@
 #include "easytag.h"
 #include "log.h"
 #include "misc.h"
-#include "mpeg_header.h"
-#include "monkeyaudio_header.h"
-#include "musepack_header.h"
 #include "picture.h"
 #include "ape_tag.h"
 #ifdef ENABLE_MP3
 #include "id3_tag.h"
 #endif
 #ifdef ENABLE_OGG
-#include "ogg_header.h"
 #include "ogg_tag.h"
 #endif
 #ifdef ENABLE_FLAC
-#include "flac_header.h"
 #include "flac_tag.h"
 #endif
 #ifdef ENABLE_MP4
-#include "mp4_header.h"
 #include "mp4_tag.h"
 #endif
 #ifdef ENABLE_WAVPACK
-#include "wavpack_header.h"
 #include "wavpack_tag.h"
 #endif
 #ifdef ENABLE_OPUS
-#include "opus_header.h"
 #include "opus_tag.h"
 #endif
 
@@ -145,49 +137,6 @@ ET_File_Key_New (void)
     return ++ETFileKey;
 }
 
-/*
- * et_core_read_file_info:
- * @file: a file from which to read information
- * @ETFileInfo: (out caller-allocates): a file information structure
- * @error: a #GError to provide information on erros, or %NULL to ignore
- *
- * Fille @ETFileInfo with information about the file. Currently, this only
- * fills the file size.
- *
- * Returns: %TRUE on success, %FALSE otherwise
- */
-static gboolean
-et_core_read_file_info (GFile *file,
-                        ET_File_Info *ETFileInfo,
-                        GError **error)
-{
-    GFileInfo *info;
-
-    g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-    g_return_val_if_fail (file != NULL && ETFileInfo != NULL, FALSE);
-
-    info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE,
-                              G_FILE_QUERY_INFO_NONE, NULL, error);
-
-    if (!info)
-    {
-        g_assert (error == NULL || *error != NULL);
-        return FALSE;
-    }
-
-    ETFileInfo->version    = 0;
-    ETFileInfo->bitrate    = 0;
-    ETFileInfo->samplerate = 0;
-    ETFileInfo->mode       = 0;
-    ETFileInfo->size = g_file_info_get_size (info);
-    ETFileInfo->duration   = 0;
-
-    g_assert (error == NULL || *error == NULL);
-    g_object_unref (info);
-
-    return TRUE;
-}
-
 /** Check whether time stamp valid for the current format.
  * @param value Tag value
  * @param max_fields Maximum number of fields, i.e. 1111-22-33T44:55:66.
@@ -216,48 +165,49 @@ et_file_list_add (GList *file_list,
                   GFile *file,
                   const File_Name *root)
 {
+    g_return_val_if_fail (file != NULL, file_list);
+
     GList *result;
-    const ET_File_Description *description;
-    ET_File      *ETFile;
-    File_Name    *FileName;
-    File_Tag     *FileTag;
-    gchar        *ETFileExtension;
-    guint         ETFileKey;
     guint         undo_key;
     GFileInfo *fileinfo;
-    gchar *filename;
+
     const gchar *display_path;
     GError *error = NULL;
     int max_date_fields = -6;
-    gboolean success;
-
-    g_return_val_if_fail (file != NULL, file_list);
-
-    /* Primary Key for this file */
-    ETFileKey = ET_File_Key_New();
 
     /* Get description of the file */
-    filename = g_file_get_path (file);
-    description = ET_Get_File_Description (filename);
+    gchar* filename = g_file_get_path (file);
 
-    /* Get real extension of the file (keeping the case) */
-    ETFileExtension = g_strdup(ET_Get_File_Extension(filename));
+    /* Attach all data to this ETFile item */
+    ET_File* ETFile = ET_File_Item_New();
+    File_Name* FileName = et_file_name_new ();
+    File_Tag* FileTag = et_file_tag_new ();
+
+    ETFile->IndexKey             = 0; // Will be renumered after...
+    ETFile->ETFileKey            = ET_File_Key_New();
+    ETFile->ETFileDescription    = ET_Get_File_Description (filename);
+    ETFile->ETFileExtension      = g_strdup(ET_Get_File_Extension(filename));
+    ETFile->FileNameList         =
+    ETFile->FileNameCur          =
+    ETFile->FileNameNew          = gListP<File_Name*>(FileName);
+    ETFile->FileTagList          =
+    ETFile->FileTagCur           =
+    ETFile->FileTag              = gListP<File_Tag*>(FileTag);
 
     /* Fill the File_Name structure for FileNameList */
-    FileName = et_file_name_new ();
     FileName->saved      = TRUE;    /* The file hasn't been changed, so it's saved */
     ET_Set_Filename_File_Name_Item (FileName, root, NULL, filename);
     display_path = FileName->value_utf8;
 
     /* Fill the File_Tag structure for FileTagList */
-    FileTag = et_file_tag_new ();
     FileTag->saved = TRUE;    /* The file hasn't been changed, so it's saved */
 
-    switch (description->TagType)
+    switch (ETFile->ETFileDescription->FileType)
     {
 #ifdef ENABLE_MP3
-        case ID3_TAG:
-            if (!id3tag_read_file_tag (file, FileTag, &error))
+        case MP2_FILE:
+        case MP3_FILE:
+            if (!id3_read_file (file, ETFile, &error))
             {
                 Log_Print (LOG_ERROR,
                            _("Error reading ID3 tag from file ‘%s’: %s"),
@@ -273,8 +223,20 @@ et_file_list_add (GList *file_list,
             break;
 #endif
 #ifdef ENABLE_OGG
-        case OGG_TAG:
-            if (!ogg_tag_read_file_tag (file, FileTag, &error))
+        case OGG_FILE:
+            if (!ogg_read_file(file, ETFile, &error))
+            {
+                Log_Print (LOG_ERROR,
+                           _("Error reading tag from Ogg file ‘%s’: %s"),
+                           display_path, error->message);
+                g_clear_error (&error);
+            }
+            max_date_fields = -3; // From field 3 arbitrary strings are allowed
+            break;
+#endif
+#ifdef ENABLE_SPEEX
+        case SPEEX_FILE:
+            if (!speex_read_file(file, ETFile, &error))
             {
                 Log_Print (LOG_ERROR,
                            _("Error reading tag from Ogg file ‘%s’: %s"),
@@ -285,8 +247,8 @@ et_file_list_add (GList *file_list,
             break;
 #endif
 #ifdef ENABLE_FLAC
-        case FLAC_TAG:
-            if (!flac_tag_read_file_tag (file, FileTag, &error))
+        case FLAC_FILE:
+            if (!flac_read_file(file, ETFile, &error))
             {
                 Log_Print (LOG_ERROR,
                            _("Error reading tag from FLAC file ‘%s’: %s"),
@@ -296,8 +258,18 @@ et_file_list_add (GList *file_list,
             max_date_fields = -3; // From field 3 arbitrary strings are allowed
             break;
 #endif
-        case APE_TAG:
-            if (!ape_tag_read_file_tag (file, FileTag, &error))
+        case MPC_FILE:
+          if (!mpc_read_file(file, ETFile, &error))
+          {
+              Log_Print (LOG_ERROR,
+                         _("Error reading APE tag from file ‘%s’: %s"),
+                         display_path, error->message);
+              g_clear_error (&error);
+          }
+          max_date_fields = -3; // From field 3 arbitrary strings are allowed
+          break;
+        case MAC_FILE:
+            if (!mac_read_file(file, ETFile, &error))
             {
                 Log_Print (LOG_ERROR,
                            _("Error reading APE tag from file ‘%s’: %s"),
@@ -307,8 +279,8 @@ et_file_list_add (GList *file_list,
             max_date_fields = -3; // From field 3 arbitrary strings are allowed
             break;
 #ifdef ENABLE_MP4
-        case MP4_TAG:
-            if (!mp4tag_read_file_tag (file, FileTag, &error))
+        case MP4_FILE:
+            if (!mp4_read_file(file, ETFile, &error))
             {
                 Log_Print (LOG_ERROR,
                            _("Error reading tag from MP4 file ‘%s’: %s"),
@@ -319,8 +291,8 @@ et_file_list_add (GList *file_list,
             break;
 #endif
 #ifdef ENABLE_WAVPACK
-        case WAVPACK_TAG:
-            if (!wavpack_tag_read_file_tag (file, FileTag, &error))
+        case WAVPACK_FILE:
+            if (!wavpack_read_file(file, ETFile, &error))
             {
                 Log_Print (LOG_ERROR,
                            _("Error reading tag from WavPack file ‘%s’: %s"),
@@ -331,8 +303,8 @@ et_file_list_add (GList *file_list,
             break;
 #endif
 #ifdef ENABLE_OPUS
-        case OPUS_TAG:
-            if (!et_opus_tag_read_file_tag (file, FileTag, &error))
+        case OPUS_FILE:
+            if (!opus_read_file(file, ETFile, &error))
             {
                 Log_Print (LOG_ERROR,
                            _("Error reading tag from Opus file ‘%s’: %s"),
@@ -342,30 +314,11 @@ et_file_list_add (GList *file_list,
             max_date_fields = -3; // From field 3 arbitrary strings are allowed
             break;
 #endif
-#ifndef ENABLE_MP3
-        case ID3_TAG:
-#endif
-#ifndef ENABLE_OGG
-        case OGG_TAG:
-#endif
-#ifndef ENABLE_FLAC
-        case FLAC_TAG:
-#endif
-#ifndef ENABLE_MP4
-        case MP4_TAG:
-#endif
-#ifndef ENABLE_WAVPACK
-        case WAVPACK_TAG:
-#endif
-#ifndef ENABLE_OPUS
-        case OPUS_TAG:
-#endif
-        case UNKNOWN_TAG:
         default:
             /* FIXME: Translatable string. */
             Log_Print (LOG_ERROR,
                        "FileTag: Undefined tag type (%d) for file %s",
-                       (gint)description->TagType, display_path);
+                       (gint)ETFile->ETFileDescription->TagType, display_path);
             break;
     }
 
@@ -390,95 +343,13 @@ et_file_list_add (GList *file_list,
                    FileTag->orig_year, display_path);
     }
 
-    /* Attach all data to this ETFile item */
-    ETFile = ET_File_Item_New();
-
-    /* Fill the ET_File_Info structure */
-    switch (description->FileType)
-    {
-#if defined ENABLE_MP3 && defined ENABLE_ID3LIB
-        case MP3_FILE:
-        case MP2_FILE:
-            success = et_mpeg_header_read_file_info (file, &ETFile->ETFileInfo, &error);
-            break;
-#endif
-#ifdef ENABLE_OGG
-        case OGG_FILE:
-            success = et_ogg_header_read_file_info (file, &ETFile->ETFileInfo, &error);
-            break;
-#endif
-#ifdef ENABLE_SPEEX
-        case SPEEX_FILE:
-            success = et_speex_header_read_file_info (file, &ETFile->ETFileInfo, &error);
-            break;
-#endif
-#ifdef ENABLE_FLAC
-        case FLAC_FILE:
-            success = et_flac_header_read_file_info (file, &ETFile->ETFileInfo, &error);
-            break;
-#endif
-        case MPC_FILE:
-            success = et_mpc_header_read_file_info (file, &ETFile->ETFileInfo, &error);
-            break;
-        case MAC_FILE:
-            success = et_mac_header_read_file_info (file, &ETFile->ETFileInfo, &error);
-            break;
-#ifdef ENABLE_WAVPACK
-        case WAVPACK_FILE:
-            success = et_wavpack_header_read_file_info (file, &ETFile->ETFileInfo, &error);
-            break;
-#endif
-#ifdef ENABLE_MP4
-        case MP4_FILE:
-            success = et_mp4_header_read_file_info (file, &ETFile->ETFileInfo, &error);
-            break;
-#endif
-#ifdef ENABLE_OPUS
-        case OPUS_FILE:
-            success = et_opus_read_file_info (file, &ETFile->ETFileInfo, &error);
-            break;
-#endif
-        case OFR_FILE:
-#if !defined ENABLE_MP3 && !defined ENABLE_ID3LIB
-        case MP3_FILE:
-        case MP2_FILE:
-#endif
-#ifndef ENABLE_OGG
-        case OGG_FILE:
-#endif
-#ifndef ENABLE_SPEEX
-        case SPEEX_FILE:
-#endif
-#ifndef ENABLE_FLAC
-        case FLAC_FILE:
-#endif
-#ifndef ENABLE_MP4
-        case MP4_FILE:
-#endif
-#ifndef ENABLE_WAVPACK
-        case WAVPACK_FILE:
-#endif
-#ifndef ENABLE_OPUS
-        case OPUS_FILE:
-#endif
-        case UNKNOWN_FILE:
-        default:
-            /* FIXME: Translatable string. */
-            Log_Print (LOG_ERROR,
-                       "ETFileInfo: Undefined file type (%d) for file %s",
-                       (gint)description->FileType, display_path);
-            /* To get at least the file size. */
-            success = et_core_read_file_info (file, &ETFile->ETFileInfo, &error);
-            break;
-    }
-
-    if (!success)
+    /*if (!success)
     {
         Log_Print (LOG_ERROR,
                    _("Error while querying information for file ‘%s’: %s"),
                    display_path, error->message);
         g_error_free (error);
-    }
+    }*/
 
     /* Store the modification time of the file to check if the file was changed
      * before saving */
@@ -495,17 +366,6 @@ et_file_list_add (GList *file_list,
     {
         ETFile->FileModificationTime = 0;
     }
-
-    ETFile->IndexKey             = 0; // Will be renumered after...
-    ETFile->ETFileKey            = ETFileKey;
-    ETFile->ETFileDescription    = description;
-    ETFile->ETFileExtension      = ETFileExtension;
-    ETFile->FileNameList         =
-    ETFile->FileNameCur          =
-    ETFile->FileNameNew          = gListP<File_Name*>(FileName);
-    ETFile->FileTagList          =
-    ETFile->FileTagCur           =
-    ETFile->FileTag              = gListP<File_Tag*>(FileTag);
 
     /* Add the item to the "main list" */
     result = g_list_append (file_list, ETFile);

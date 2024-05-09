@@ -29,7 +29,6 @@
 #include "setting.h"
 #ifdef __cplusplus
 #include "misc.h"
-#endif
 
 /*
  * Structure containing informations of the header of file
@@ -38,7 +37,6 @@
 typedef struct
 {
     gint version;               /* Version of bitstream (mpeg version for mp3, encoder version for ogg) */
-    gint mpeg25;                /* Version is MPEG 2.5? */
     gsize layer; /* "MP3 data" */
     gint bitrate;               /* Bitrate (kb/s) */
     gboolean variable_bitrate;  /* Is a VBR file? */
@@ -65,7 +63,6 @@ typedef struct
     gchar               *ETFileExtension;   /* Real extension of the file (keeping the case) (should be placed in ETFileDescription?) */
     ET_File_Info        ETFileInfo;        /* Header infos: bitrate, duration, ... */
 
-    #ifdef __cplusplus
     gListP<File_Name*> FileNameCur;      /* Points to item of FileNameList that represents the current value of filename state (i.e. file on hard disk) */
     gListP<File_Name*> FileNameNew;      /* Points to item of FileNameList that represents the new value of filename state */
     gListP<File_Name*> FileNameList;     /* Contains the history of changes about the filename. */
@@ -75,20 +72,13 @@ typedef struct
     gListP<File_Tag*> FileTag;           /* Points to the new item used of FileTagList */
     gListP<File_Tag*> FileTagList;       /* Contains the history of changes about file tag data */
     gListP<File_Tag*> FileTagListBak;    /* Contains items of FileTagList removed by 'undo' procedure but have data currently saved */
-    #else
-    GList *FileNameCur;       /* Points to item of FileNameList that represents the current value of filename state (i.e. file on hard disk) */
-    GList *FileNameNew;       /* Points to item of FileNameList that represents the new value of filename state */
-    GList *FileNameList;      /* Contains the history of changes about the filename. */
-    GList *FileNameListBak;   /* Contains items of FileNameList removed by 'undo' procedure but have data currently saved (for example, when you save your last changes, make some 'undo', then make new changes) */
-
-    GList *FileTagCur;        /* Points to the current item used of FileTagList */
-    GList *FileTag;           /* Points to the new item used of FileTagList */
-    GList *FileTagList;       /* Contains the history of changes about file tag data */
-    GList *FileTagListBak;    /* Contains items of FileTagList removed by 'undo' procedure but have data currently saved */
-    #endif
 
     gboolean activate_bg_color; // For browser list: alternating background due to sub directory change.
 } ET_File;
+
+#else
+typedef struct ET_File ET_File;
+#endif
 
 /*
  * Description of each item of the ETHistoryFileList list

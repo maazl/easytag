@@ -19,6 +19,9 @@
  */
 
 #include "crc32.h"
+
+#ifdef ENABLE_MP3
+
 #include "id3_tag.h"
 
 #define BUFFERSIZE 16384   /* (16k) buffer size for reading from the file */
@@ -256,3 +259,5 @@ error:
     nr = -1;
     goto out;
 }
+
+#endif

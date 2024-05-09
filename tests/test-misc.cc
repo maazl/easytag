@@ -26,9 +26,6 @@ GSettings *MainSettings;
 static void
 misc_convert_duration (void)
 {
-    gsize i;
-    gchar *time;
-
     static const struct
     {
         const gulong seconds;
@@ -45,11 +42,10 @@ misc_convert_duration (void)
         /* TODO: Add more tests. */
     };
 
-    for (i = 0; i < G_N_ELEMENTS (times); i++)
+    for (gsize i = 0; i < G_N_ELEMENTS (times); i++)
     {
-        time = Convert_Duration (times[i].seconds);
-        g_assert_cmpstr (time, ==, times[i].result);
-        g_free (time);
+        std::string time = Convert_Duration (times[i].seconds);
+        g_assert_cmpstr (time.c_str(), ==, times[i].result);
     }
 }
 

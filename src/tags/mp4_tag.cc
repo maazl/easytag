@@ -25,7 +25,6 @@
 
 #include <glib/gi18n.h>
 
-#include "mp4_header.h"
 #include "mp4_tag.h"
 #include "picture.h"
 #include "misc.h"
@@ -47,9 +46,6 @@
 #include <limits>
 using namespace std;
 using namespace TagLib;
-
-/* Include mp4_header.cc directly. */
-#include "mp4_header.cc"
 
 #if TAGLIB_MAJOR_VERSION >= 2
 #include <taglib/mp4itemfactory.h>
@@ -78,15 +74,11 @@ Map<ByteVector, String> CustomItemFactory::namePropertyMap() const
  *
  * Read tag data into an Mp4 file.
  */
-gboolean
-mp4tag_read_file_tag (GFile *file,
-                      File_Tag *FileTag,
-                      GError **error)
+gboolean mp4_read_file(GFile *file, ET_File *ETFile, GError **error)
 {
-    MP4::Tag *tag;
     guint year;
 
-    g_return_val_if_fail (file != NULL && FileTag != NULL, FALSE);
+    g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
 
     /* Get data from tag. */
     GIO_InputStream stream (file);
@@ -125,7 +117,50 @@ mp4tag_read_file_tag (GFile *file,
         return FALSE;
     }
 
-    if (!(tag = mp4file.tag ()))
+
+    /* ET_File_Info header data */
+
+    const TagLib::MP4::Properties* properties = mp4file.audioProperties ();
+    if (properties == NULL)
+    {
+        g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "%s",
+                     _("Error reading properties from file"));
+        return FALSE;
+    }
+
+    ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
+
+    /* Get format/subformat */
+    ETFileInfo->mpc_version = g_strdup ("MPEG");
+
+    switch (properties->codec ())
+    {
+    case TagLib::MP4::Properties::AAC:
+        ETFileInfo->mpc_profile = g_strdup ("4, AAC");
+        break;
+    case TagLib::MP4::Properties::ALAC:
+        ETFileInfo->mpc_profile = g_strdup ("4, ALAC");
+        break;
+    default:
+        ETFileInfo->mpc_profile = g_strdup ("4, Unknown");
+    };
+
+    ETFileInfo->version = 4;
+    ETFileInfo->layer = 14;
+
+    ETFileInfo->variable_bitrate = TRUE;
+    ETFileInfo->bitrate = properties->bitrate ();
+    if (ETFileInfo->bitrate == 1)
+        ETFileInfo->bitrate = 0; // avoid unreasonable small bitrates of some files.
+    ETFileInfo->samplerate = properties->sampleRate ();
+    ETFileInfo->mode = properties->channels ();
+    ETFileInfo->duration = properties->lengthInSeconds();
+
+
+    /* tag metadata */
+
+    MP4::Tag *tag = mp4file.tag();
+    if (!tag)
     {
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "%s",
                      _("Error reading tags from file"));
@@ -140,6 +175,8 @@ mp4tag_read_file_tag (GFile *file,
             return nullptr;
         return it->second.front().toCString(true);
     };
+
+    File_Tag* FileTag = ETFile->FileTag->data;
 
     et_file_tag_set_title(FileTag, tag->title().toCString(true));
     et_file_tag_set_subtitle(FileTag, fetch_property("SUBTITLE"));
@@ -387,6 +424,38 @@ mp4tag_write_file_tag (const ET_File *ETFile,
     tag->setProperties (fields);
 
     return mp4file.save();
+}
+
+/*
+ * et_mp4_header_display_file_info_to_ui:
+ *
+ * Display header info in the main window
+ */
+void
+et_mp4_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile)
+{
+    const ET_File_Info *info = &ETFile->ETFileInfo;
+
+    fields->description = _("MP4/AAC File");
+
+    /* MPEG, Layer versions */
+    if (info->mpc_version)
+        fields->version_label = info->mpc_version;
+    if (info->mpc_profile)
+        fields->version = info->mpc_profile;
+
+    /* Mode */
+    /* mpeg4ip library seems to always return -1 */
+    fields->mode_label = _("Channels:");
+
+    if (info->mode == -1)
+    {
+        fields->mode = "Unknown";
+    }
+    else
+    {
+        fields->mode = strprintf("%d", info->mode);
+    }
 }
 
 #endif /* ENABLE_MP4 */

@@ -28,9 +28,22 @@
 #include <vorbis/codec.h>
 
 #include "vcedit.h"
-#include "ogg_header.h"
+#include "ogg_tag.h"
 
 #define CHUNKSIZE 4096
+
+/*
+ * et_ogg_error_quark:
+ *
+ * To get EtOGGError domain.
+ *
+ * Returns: GQuark for EtOGGError domain
+ */
+GQuark
+et_ogg_error_quark (void)
+{
+    return g_quark_from_static_string ("et-ogg-error-quark");
+}
 
 struct _EtOggState
 {
@@ -209,7 +222,7 @@ _commentheader_out (EtOggState *state,
 
     oggpack_write (&opb, 1, 1);
 
-    op->packet = malloc (oggpack_bytes (&opb));
+    op->packet = (unsigned char*)malloc (oggpack_bytes (&opb));
     memcpy (op->packet, opb.buffer, oggpack_bytes (&opb));
 
     op->bytes = oggpack_bytes (&opb);
@@ -230,16 +243,16 @@ static gint64
 _blocksize (EtOggState *s,
             ogg_packet *p)
 {
-    glong this = vorbis_packet_blocksize (s->vi, p);
-    gint64 ret = (this + s->prevW) / 4;
+    glong that = vorbis_packet_blocksize (s->vi, p);
+    gint64 ret = (that + s->prevW) / 4;
 
     if (!s->prevW)
     {
-        s->prevW = this;
+        s->prevW = that;
         return 0;
     }
 
-    s->prevW = this;
+    s->prevW = that;
     return ret;
 }
 
@@ -342,7 +355,7 @@ _speex_unpack_comment (vorbis_comment *vc,
         goto err_out;
     }
 
-    vc->vendor = _ogg_calloc (vendorlen + 1, 1);
+    vc->vendor = (char*)_ogg_calloc (vendorlen + 1, 1);
     _v_readstring (opb, vc->vendor, vendorlen);
 
     vc->comments = oggpack_read (opb, 32);
@@ -352,9 +365,9 @@ _speex_unpack_comment (vorbis_comment *vc,
         goto err_out;
     }
 
-    vc->user_comments = _ogg_calloc (vc->comments + 1,
+    vc->user_comments = (char**)_ogg_calloc (vc->comments + 1,
                                      sizeof (*vc->user_comments));
-    vc->comment_lengths = _ogg_calloc (vc->comments + 1,
+    vc->comment_lengths = (int*)_ogg_calloc (vc->comments + 1,
                                        sizeof (*vc->comment_lengths));
 
     for (i = 0; i < vc->comments; i++)
@@ -367,7 +380,7 @@ _speex_unpack_comment (vorbis_comment *vc,
         }
 
         vc->comment_lengths[i] = len;
-        vc->user_comments[i] = _ogg_calloc (len + 1, 1);
+        vc->user_comments[i] = (char*)_ogg_calloc (len + 1, 1);
         _v_readstring (opb, vc->user_comments[i], len);
     }
 
@@ -565,7 +578,7 @@ vcedit_open (EtOggState *state,
     /* Save the main header first, it seems speex_packet_to_header() munges
      * it. */
     state->mainlen = header_main.bytes;
-    state->mainbuf = g_memdup (header_main.packet, header_main.bytes);
+    state->mainbuf = (guchar*)g_memdup (header_main.packet, header_main.bytes);
 
     state->oggtype = vcedit_supported_stream (&og, error);
 
@@ -687,8 +700,7 @@ vcedit_open (EtOggState *state,
                                     break;
                                 case 2:
                                     state->booklen = header->bytes;
-                                    state->bookbuf = g_memdup (header->packet,
-                                                               header->bytes);
+                                    state->bookbuf = (guchar*)g_memdup (header->packet, header->bytes);
                                     break;
                                 default:
                                     g_assert_not_reached ();
@@ -849,7 +861,7 @@ vcedit_write (EtOggState *state,
     }
 
     size = (gsize)(g_file_info_get_size (fileinfo));
-    buf = g_malloc (size);
+    buf = (gchar*)g_malloc (size);
     ostream = g_memory_output_stream_new (buf, size, g_realloc, g_free);
     g_object_unref (fileinfo);
 
@@ -1168,7 +1180,7 @@ vcedit_write (EtOggState *state,
 
     g_assert (error == NULL || *error == NULL);
 
-    buf = g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (ostream));
+    buf = (gchar*)g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (ostream));
     size = g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (ostream));
 
     /* At least on Windows, writing to a file with an open-for-reading stream

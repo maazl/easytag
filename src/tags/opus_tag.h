@@ -20,11 +20,43 @@
 #define ET_OPUS_TAG_H_
 
 #include <glib.h>
-#include "et_core.h"
+#include "file.h"
 
 G_BEGIN_DECLS
 
-gboolean et_opus_tag_read_file_tag (GFile *file, File_Tag *FileTag, GError **error);
+/*
+ * EtOpusError:
+ * @ET_OPUS_ERROR_READ: Error reading file
+ * @ET_OPUS_ERROR_FAULT: Memory allocation failure or internal library error
+ * @ET_OPUS_ERROR_IMPL: Stream used an unimplemented feature
+ * @ET_OPUS_ERROR_INVAL: seek () succeeded on this source but tell () didn't
+ * @ET_OPUS_ERROR_NOTFORMAT: No logical stream found in a link
+ * @ET_OPUS_ERROR_BADHEADER: Corrputed header packet
+ * @ET_OPUS_ERROR_VERSION: ID header contained an unrecognized version number
+ * @ET_OPUS_ERROR_BADLINK: Corrupted link found
+ * @ET_OPUS_ERROR_BADTIMESTAMP: First/last timestamp in a link failed checks
+ *
+ * Errors that can occur when reading Opus files.
+ */
+typedef enum
+{
+    ET_OPUS_ERROR_READ,
+    ET_OPUS_ERROR_FAULT,
+    ET_OPUS_ERROR_IMPL,
+    ET_OPUS_ERROR_INVAL,
+    ET_OPUS_ERROR_NOTFORMAT,
+    ET_OPUS_ERROR_BADHEADER,
+    ET_OPUS_ERROR_VERSION,
+    ET_OPUS_ERROR_BADLINK,
+    ET_OPUS_ERROR_BADTIMESTAMP,
+} EtOpusError;
+
+GQuark et_opus_error_quark (void);
+
+#define ET_OPUS_ERROR et_opus_error_quark ()
+
+gboolean opus_read_file(GFile *file, ET_File* ETFile, GError **error);
+void et_opus_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
 
 G_END_DECLS
 

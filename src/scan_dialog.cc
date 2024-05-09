@@ -339,6 +339,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
         g_free (default_comment);
     }
 
+#ifdef ENABLE_MP3
     /* Set CRC-32 value as default comment (for files with ID3 tag only). */
     if (g_settings_get_boolean (MainSettings, "fill-crc32-comment")
         && (g_settings_get_boolean (MainSettings, "fill-overwrite-tag-fields")
@@ -371,7 +372,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
             g_object_unref (file);
         }
     }
-
+#endif
 
     // Save changes of the 'File_Tag' item
     ET_Manage_Changes_Of_File_Data(ETFile,NULL,FileTag);
@@ -394,7 +395,7 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, gchar *mask)
     gchar *buf;
     gchar *separator;
     gchar *string;
-    gsize len, i, loop=0;
+    gsize len, loop=0;
     gchar **mask_splitted;
     gchar **file_splitted;
     guint mask_splitted_number;

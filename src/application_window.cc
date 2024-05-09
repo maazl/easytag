@@ -30,22 +30,23 @@
 #include "file_area.h"
 #include "file_list.h"
 #ifdef ENABLE_FLAC
-#include "flac_header.h"
+#include "flac_tag.h"
 #endif
 #include "load_files_dialog.h"
 #include "log.h"
 #include "misc.h"
 #ifdef ENABLE_MP4
-#include "mp4_header.h"
+#include "mp4_tag.h"
 #endif
-#include "mpeg_header.h"
-#include "monkeyaudio_header.h"
-#include "musepack_header.h"
+#ifdef ENABLE_MP3
+#include "id3_tag.h"
+#endif
+#include "ape_tag.h"
 #ifdef ENABLE_OGG
-#include "ogg_header.h"
+#include "ogg_tag.h"
 #endif
 #ifdef ENABLE_OPUS
-#include "opus_header.h"
+#include "opus_tag.h"
 #endif
 #include "picture.h"
 #include "playlist_dialog.h"
@@ -58,7 +59,7 @@
 #include "status_bar.h"
 #include "tag_area.h"
 #ifdef ENABLE_WAVPACK
-#include "wavpack_header.h"
+#include "wavpack_tag.h"
 #endif
 
 typedef struct

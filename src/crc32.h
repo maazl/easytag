@@ -21,6 +21,10 @@
 #ifndef ET_CRC32_H_
 #define ET_CRC32_H_
 
+#include "config.h"
+
+#ifdef ENABLE_MP3
+
 #include <glib.h>
 #include <gio/gio.h>
 
@@ -30,4 +34,5 @@ gboolean crc32_file_with_ID3_tag (GFile *file, guint32 *crc32, GError **err);
 
 G_END_DECLS
 
+#endif
 #endif /* ET_CRC32_H_ */

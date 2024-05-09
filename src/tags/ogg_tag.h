@@ -20,15 +20,15 @@
 #ifndef ET_OGG_TAG_H_
 #define ET_OGG_TAG_H_
 
+#ifdef ENABLE_OGG
+
 #include "config.h"
 
 #include <glib.h>
+#include <vorbis/vorbisfile.h>
 
-#ifdef ENABLE_OGG
-
-#include "vcedit.h"
-#include "et_core.h"
-#include "misc.h"
+#include "../file.h"
+#include "../misc.h"
 
 #ifdef __cplusplus
 #include <unordered_map>
@@ -44,11 +44,56 @@ struct tags_hash : std::unordered_multimap<std::string,gString>
 
 G_BEGIN_DECLS
 
-gboolean ogg_tag_read_file_tag (GFile *file, File_Tag *FileTag, GError **error);
+/*
+ * EtOGGError:
+ * @ET_OGG_ERROR_BOS: beginning of stream not found
+ * @ET_OGG_ERROR_EOS: reached end of logical bitstream
+ * @ET_OGG_ERROR_EOF: reached end of file
+ * @ET_OGG_ERROR_SN: page and state's serial number are unequal
+ * @ET_OGG_ERROR_TRUNC: input truncated or empty
+ * @ET_OGG_ERROR_NOTOGG: input is not ogg bitstream
+ * @ET_OGG_ERROR_PAGE: cannot read first page of ogg bitstream
+ * @ET_OGG_ERROR_HEADER: error reading initial header packet
+ * @ET_OGG_ERROR_INVALID: ogg bitstream doesnot contains Speex or Vorbis data
+ * @ET_OGG_ERROR_CORRUPT: corrupt secondary header
+ * @ET_OGG_ERROR_EXTRA: need to save extra headers
+ * @ET_OGG_ERROR_VORBIS: eof before end of Vorbis headers
+ * @ET_OGG_ERROR_FAILED: corrupt or missing data
+ * @ET_OGG_ERROR_OUTPUT: error writing stream to output
+ *
+ * Errors that can occur when reading OGG files.
+ */
+typedef enum
+{
+    ET_OGG_ERROR_BOS,
+    ET_OGG_ERROR_EOS,
+    ET_OGG_ERROR_EOF,
+    ET_OGG_ERROR_SN,
+    ET_OGG_ERROR_TRUNC,
+    ET_OGG_ERROR_NOTOGG,
+    ET_OGG_ERROR_PAGE,
+    ET_OGG_ERROR_HEADER,
+    ET_OGG_ERROR_INVALID,
+    ET_OGG_ERROR_CORRUPT,
+    ET_OGG_ERROR_EXTRA,
+    ET_OGG_ERROR_VORBIS,
+    ET_OGG_ERROR_FAILED,
+    ET_OGG_ERROR_OUTPUT
+} EtOGGError;
+
+GQuark et_ogg_error_quark (void);
+
+#define ET_OGG_ERROR et_ogg_error_quark ()
+
+gboolean ogg_read_file (GFile *file, ET_File *ETFile, GError **error);
 gboolean ogg_tag_write_file_tag (const ET_File *ETFile, GError **error);
 
 void et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, File_Tag *FileTag);
 void et_add_vorbis_comments_from_file_tags (vorbis_comment *vc, File_Tag *FileTag);
+
+void et_ogg_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
+
+gboolean speex_read_file(GFile *file, ET_File *ETFile, GError **error);
 
 G_END_DECLS
 

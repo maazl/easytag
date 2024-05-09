@@ -46,13 +46,18 @@ typedef struct
     GtkWidget *content_mask_entry;
 } EtPlaylistDialogPrivate;
 
+// learn correct return type
+#define et_playlist_dialog_get_instance_private et_playlist_dialog_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtPlaylistDialog, et_playlist_dialog, GTK_TYPE_DIALOG)
+#undef et_playlist_dialog_get_instance_private
+#define et_playlist_dialog_get_instance_private(x) (EtPlaylistDialogPrivate*)et_playlist_dialog_get_instance_private_(x)
+
 
 /*
  * Function to replace UNIX ForwardSlash with a DOS BackSlash
  */
 static void
-convert_forwardslash_to_backslash (const gchar *string)
+convert_forwardslash_to_backslash (gchar *string)
 {
     gchar *tmp;
 
@@ -98,7 +103,7 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
     basedir = g_file_get_path (parent);
     g_object_unref (parent);
 
-    playlist_content = g_settings_get_enum (MainSettings, "playlist-content");
+    playlist_content = (EtPlaylistContent)g_settings_get_enum (MainSettings, "playlist-content");
 
     /* 1) First line of the file (if playlist content is not set to "write only
      * list of files") */
@@ -447,8 +452,7 @@ write_button_clicked (EtPlaylistDialog *self)
         g_free (temp);
 
         /* Replace Characters (with scanner). */
-        convert_mode = g_settings_get_enum (MainSettings,
-                                            "rename-convert-spaces");
+        convert_mode = (EtConvertSpaces)g_settings_get_enum(MainSettings, "rename-convert-spaces");
 
         switch (convert_mode)
         {
@@ -771,6 +775,6 @@ et_playlist_dialog_new (GtkWindow *parent)
                       NULL);
     }
 
-    return g_object_new (ET_TYPE_PLAYLIST_DIALOG, "transient-for", parent,
-                         "use-header-bar", use_header_bar, NULL);
+    return (EtPlaylistDialog*)g_object_new (ET_TYPE_PLAYLIST_DIALOG,
+        "transient-for", parent, "use-header-bar", use_header_bar, NULL);
 }

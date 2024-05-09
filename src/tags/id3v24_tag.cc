@@ -42,6 +42,7 @@
 #include "win32/win32dep.h"
 
 #include <id3tag.h>
+#include <id3/globals.h>
 #include "genres.h"
 
 #include <string>
@@ -62,9 +63,12 @@ enum {
     EASYTAG_ID3_FIELD_LANGUAGE      = 0x0040
 };
 
+#define PEEK_MPEG_DATA_LEN 2048
+
 /**************
  * Prototypes *
  **************/
+static void   get_audio_frame_header    (ET_File_Info* info, const id3_byte_t* data, int len);
 static bool   etag_guess_byteorder      (const id3_ucs4_t *ustr, gchar **ret);
 static bool   etag_ucs42gchar           (const id3_ucs4_t *usrc, unsigned is_latin, unsigned is_utf16, gchar **res);
 static bool   libid3tag_Get_Frame_Str   (const struct id3_frame *frame, unsigned etag_field_type, const gchar* split_delimiter, gString& retstr);
@@ -88,26 +92,34 @@ static gboolean etag_write_tags (const gchar *filename, struct id3_tag const *v1
  * Returns TRUE on success, else FALSE.
  * If a tag entry exists (ex: title), we allocate memory, else value stays to NULL
  */
-gboolean
-id3tag_read_file_tag (GFile *gfile,
-                      File_Tag *FileTag,
-                      GError **error)
+gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
 {
-    g_return_val_if_fail (gfile != NULL && FileTag != NULL, FALSE);
+    g_return_val_if_fail (gfile != NULL && ETFile != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+    File_Tag *FileTag = ETFile->FileTag->data;
+    ET_File_Info* info = &ETFile->ETFileInfo;
+
+    /* Get size of file */
+    {   auto fi = make_unique(g_file_query_info(gfile, G_FILE_ATTRIBUTE_STANDARD_SIZE, G_FILE_QUERY_INFO_NONE, NULL, error), g_object_unref);
+        if (!fi)
+            return FALSE;
+        info->size = g_file_info_get_size(fi.get());
+    }
 
     auto istream = make_unique(G_INPUT_STREAM(g_file_read(gfile, NULL, error)), g_object_unref);
     if (!istream)
         return FALSE; // cannot open
 
-    vector<id3_byte_t> string1(ID3_TAG_QUERYSIZE + ID3V1_TAG_SIZE);
+    vector<id3_byte_t> string1(PEEK_MPEG_DATA_LEN);
     gsize bytes_read;
+    goffset tagbytes = 0;
 
     /* Check if the file has an ID3v2 tag or/and an ID3v1 tags.
      * 1) ID3v2 tag. */
-    if (!g_input_stream_read_all(istream.get(), string1.data(), ID3_TAG_QUERYSIZE, &bytes_read, NULL, error))
+    if (!g_input_stream_read_all(istream.get(), string1.data(), string1.size(), &bytes_read, NULL, error))
         return FALSE;
-    else if (bytes_read != ID3_TAG_QUERYSIZE)
+    else if (bytes_read < ID3_TAG_QUERYSIZE)
         return g_set_error(error, G_IO_ERROR, G_IO_ERROR_PARTIAL_INPUT, "%s", _("Error reading tags from file")), FALSE;
 
     auto v2tag = make_unique((id3_tag*)nullptr, id3_tag_delete);
@@ -116,14 +128,30 @@ id3tag_read_file_tag (GFile *gfile,
     if (tagsize > ID3_TAG_QUERYSIZE)
     {   /* ID3v2 tag found at the beginning => read */
         if (tagsize > (long)string1.size())
-            string1.resize(tagsize);
-        if (!g_input_stream_read_all(istream.get(), &string1[ID3_TAG_QUERYSIZE], tagsize - ID3_TAG_QUERYSIZE, &bytes_read, NULL, error))
-            return FALSE;
-        if (bytes_read != (gsize)(tagsize - ID3_TAG_QUERYSIZE))
-            return g_set_error(error, G_IO_ERROR, G_IO_ERROR_PARTIAL_INPUT, "%s", _("Error reading tags from file")), FALSE;
+        {   string1.resize(tagsize);
+            if (!g_input_stream_read_all(istream.get(), &string1[PEEK_MPEG_DATA_LEN], tagsize - PEEK_MPEG_DATA_LEN, &bytes_read, NULL, error))
+                return FALSE;
+            if (bytes_read != (gsize)(tagsize - PEEK_MPEG_DATA_LEN))
+                return g_set_error(error, G_IO_ERROR, G_IO_ERROR_PARTIAL_INPUT, "%s", _("Error reading tags from file")), FALSE;
+        }
         v2tag.reset(id3_tag_parse(string1.data(), tagsize));
         if (!v2tag)
             return g_set_error(error, G_IO_ERROR, G_IO_ERROR_FAILED, "%s", _("Error reading tags from file")), FALSE;
+        tagbytes += tagsize;
+    }
+
+    // skip for cross call by flac_tag
+    if (ETFile->ETFileDescription->TagType == ID3_TAG)
+    {   /* after the tag the MP3 data should start
+         * => read the first audio frame header */
+        if (tagsize >= PEEK_MPEG_DATA_LEN)
+            tagsize = PEEK_MPEG_DATA_LEN;
+        else
+            memmove(string1.data(), string1.data() + tagsize, PEEK_MPEG_DATA_LEN - tagsize);
+        if (!g_input_stream_read_all(istream.get(), string1.data() + PEEK_MPEG_DATA_LEN - tagsize, tagsize, &bytes_read, NULL, error))
+            return FALSE;
+        bytes_read += PEEK_MPEG_DATA_LEN - tagsize;
+        get_audio_frame_header(info, string1.data(), bytes_read);
     }
 
     auto v2etag = make_unique((id3_tag*)nullptr, id3_tag_delete);
@@ -142,6 +170,8 @@ id3tag_read_file_tag (GFile *gfile,
 
         /* check for V1 tag */
         v1tag.reset(id3_tag_parse(&string1[ID3_TAG_QUERYSIZE], ID3V1_TAG_SIZE));
+        if (v1tag)
+            tagsize += ID3V1_TAG_SIZE;
 
         /* check for V2 tag */
         long v2read = v1tag ? 0 : ID3V1_TAG_SIZE;
@@ -163,7 +193,17 @@ id3tag_read_file_tag (GFile *gfile,
             v2tag.reset(id3_tag_parse(string1.data(), tagsize));
             if (!v2tag)
                 return g_set_error(error, G_IO_ERROR, G_IO_ERROR_FAILED, "%s", _("Error reading tags from file")), FALSE;
+            tagbytes -= tagsize;
         }
+    }
+
+    // post processing of stream length and bit rate
+    if (info->variable_bitrate)
+    {   if (info->duration > 0)
+            info->bitrate = (info->size - tagbytes) / info->duration / 125;
+    } else
+    {   if (info->duration <= 0 && info->bitrate)
+            info->duration = (info->size - tagbytes) / info->bitrate / 125;
     }
 
     if (!v2tag) // treat V2 tag at the end like tag at start
@@ -471,6 +511,77 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
     g_free(split_delimiter);
 
     return update;
+}
+
+static uint32_t read32u(const id3_byte_t* data)
+{
+	return (((((data[0] << 8) | data[1]) << 8) | data[2]) << 8) | data[3];
+}
+
+static void get_audio_frame_header(ET_File_Info* info, const id3_byte_t* data, int len)
+{
+	if (len < 4)
+		return;
+
+	static const uint8_t brx[2][2][16] =
+	{	{	{ 0, 4, 6, 7, 8, 10, 12, 14, 16, 20, 24, 28, 32, 40, 48, 0 } // V1L2
+		,	{ 0, 4, 5, 6, 7,  8, 10, 12, 14, 16, 20, 24, 28, 32, 40, 0 } // V1L3
+		},
+		{	{ 0, 4, 6, 7, 8, 10, 12, 14, 16, 18, 20, 22, 24, 28, 32, 0 } // V2L1
+		,	{ 0, 1, 2, 3, 4,  5,  6,  7,  8, 10, 12, 14, 16, 18, 20, 0 } // V2L23
+	}	};
+	static const int srx[3] = { 44100, 48000, 32000 };
+	static const uint8_t xingoff[3] = { 9+1, 17+4, 32+4 };
+
+	// sync
+	const id3_byte_t* sp = data;
+	const id3_byte_t* spe = sp + len - 3;
+	for (; sp != spe; ++sp)
+	{	if (sp[0] != 0xff || sp[1] < 0xe0)
+			continue;
+
+		uint8_t version = (sp[1] >> 3) & 3;
+		uint8_t layer = (sp[1] >> 1) & 3;
+		uint8_t bitrate = (sp[2] >> 4) & 15;
+		uint8_t srate = (sp[2] >> 2) & 3;
+		uint8_t mode = (sp[3] >> 6) & 3;
+		if (version == 1 || layer == 0 || bitrate == 15 || srate == 3
+			|| (layer == 2 && (mode == 3 ? bitrate > 10 : bitrate < 6 && (bitrate & 3))))
+			continue;
+
+		info->version = !version ? 3 : 4 - version; // 3 := MPEG 2.5, low sampling rates
+		info->layer = 4 - layer;
+		if (version == 3 && layer == 3) // V1L1
+			info->bitrate = bitrate << 5;
+		else
+			info->bitrate = (version & 1 ? brx[0][layer & 1] : brx[1][layer < 3])[bitrate] << 3;
+		info->samplerate = srx[srate] / (4 - version);
+		info->mode = mode;
+
+		// detect Xing header
+		sp += xingoff[(version & 1) + (mode != 3)];
+		if (sp >= spe)
+			return;
+		if (sp[0] == 'X' && sp[1] == 'i' && sp[2] == 'n' && sp[3] == 'g')
+			info->variable_bitrate = TRUE;
+		else if (!(sp[0] == 'I' && sp[1] == 'n' && sp[2] == 'f' && sp[3] == 'o'))
+			return;
+		sp += 4;
+
+		if (sp >= spe)
+			return;
+		uint32_t flags = read32u(sp);
+		sp += 4;
+
+		if (sp >= spe || !(flags & 1))
+			return;
+		uint32_t frames = read32u(sp);
+
+		uint32_t framesamp = layer == 3 ? 384 : layer == 1 && version != 3 ? 576 : 1152;
+		info->duration = (gint)((uint64_t)frames * framesamp / info->samplerate);
+
+		return;
+	}
 }
 
 

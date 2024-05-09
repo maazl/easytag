@@ -104,6 +104,11 @@ typedef struct
     std::string size;
     std::string duration;
 } EtFileHeaderFields;
+
+#else
+
+typedef struct EtFileHeaderFields EtFileHeaderFields;
+
 #endif
 
 #endif /* ET_TYPES_H_ */

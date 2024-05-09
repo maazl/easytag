@@ -21,12 +21,13 @@
 #define ET_WAVPACK_TAG_H_
 
 #include <glib.h>
-#include "et_core.h"
+#include "../file.h"
 
 G_BEGIN_DECLS
 
-gboolean wavpack_tag_read_file_tag (GFile *file, File_Tag *FileTag, GError **error);
+gboolean wavpack_read_file (GFile *file, ET_File *ETFile, GError **error);
 gboolean wavpack_tag_write_file_tag (const ET_File *ETFile, GError **error);
+void et_wavpack_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
 
 G_END_DECLS
 

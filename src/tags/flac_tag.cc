@@ -36,6 +36,8 @@
 #include "picture.h"
 #include "charset.h"
 
+#include <memory>
+
 using namespace std;
 
 /*
@@ -43,26 +45,20 @@ using namespace std;
  * Note:
  *  - if field is found but contains no info (strlen(str)==0), we don't read it
  */
-gboolean
-flac_tag_read_file_tag (GFile *file,
-                        File_Tag *FileTag,
-                        GError **error)
+gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error)
 {
-    FLAC__Metadata_Chain *chain;
     EtFlacReadState state;
     FLAC__IOCallbacks callbacks = { et_flac_read_func,
                                     NULL, /* Do not set a write callback. */
                                     et_flac_seek_func, et_flac_tell_func,
                                     et_flac_eof_func,
                                     et_flac_read_close_func };
-    FLAC__Metadata_Iterator *iter;
-
     EtPicture *prev_pic = NULL;
 
-    g_return_val_if_fail (file != NULL && FileTag != NULL, FALSE);
+    g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    chain = FLAC__metadata_chain_new ();
+    auto chain = make_unique(FLAC__metadata_chain_new(), FLAC__metadata_chain_delete);
 
     if (chain == NULL)
     {
@@ -71,11 +67,12 @@ flac_tag_read_file_tag (GFile *file,
         return FALSE;
     }
 
+    state.eof = FALSE;
     state.error = NULL;
     state.istream = g_file_read (file, NULL, &state.error);
     state.seekable = G_SEEKABLE (state.istream);
 
-    if (!FLAC__metadata_chain_read_with_callbacks (chain, &state, callbacks))
+    if (!FLAC__metadata_chain_read_with_callbacks(chain.get(), &state, callbacks))
     {
         /* TODO: Provide a dedicated error enum corresponding to status. */
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "%s",
@@ -85,7 +82,7 @@ flac_tag_read_file_tag (GFile *file,
         return FALSE;
     }
 
-    iter = FLAC__metadata_iterator_new ();
+    auto iter = make_unique(FLAC__metadata_iterator_new(), FLAC__metadata_iterator_delete);
 
     if (iter == NULL)
     {
@@ -95,13 +92,17 @@ flac_tag_read_file_tag (GFile *file,
         return FALSE;
     }
 
-    FLAC__metadata_iterator_init (iter, chain);
+    File_Tag* FileTag = ETFile->FileTag->data;
+    ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
 
-    while (FLAC__metadata_iterator_next (iter))
+    FLAC__metadata_iterator_init(iter.get(), chain.get());
+    uint32_t metadata_len = 0;
+    do
     {
         FLAC__StreamMetadata *block;
 
-        block = FLAC__metadata_iterator_get_block (iter);
+        block = FLAC__metadata_iterator_get_block(iter.get());
+        metadata_len += block->length;
 
         if (block->type == FLAC__METADATA_TYPE_VORBIS_COMMENT)
         {
@@ -147,18 +148,59 @@ flac_tag_read_file_tag (GFile *file,
 
             prev_pic = pic;
         }
+        else if (block->type == FLAC__METADATA_TYPE_STREAMINFO)
+        {
+            /* header info */
+            const FLAC__StreamMetadata_StreamInfo *stream_info = &block->data.stream_info;
+            if (stream_info->sample_rate == 0)
+            {
+                gchar *filename;
+
+                /* This is invalid according to the FLAC specification, but
+                 * such files have been observed in the wild. */
+                ETFileInfo->duration = 0;
+
+                filename = g_file_get_path (file);
+                g_debug ("Invalid FLAC sample rate of 0: %s", filename);
+                g_free (filename);
+            }
+            else
+            {
+                ETFileInfo->duration = stream_info->total_samples / stream_info->sample_rate;
+            }
+
+            ETFileInfo->mode = stream_info->channels;
+            ETFileInfo->samplerate = stream_info->sample_rate;
+            ETFileInfo->version = 0; /* Not defined in FLAC file. */
+        }
+    } while (FLAC__metadata_iterator_next(iter.get()));
+
+    iter.reset();
+    chain.reset();
+    et_flac_read_close_func (&state);
+    /* End of decoding FLAC file */
+
+    GFileInfo *info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE,
+                              G_FILE_QUERY_INFO_NONE, NULL, NULL);
+    if (info)
+    {
+        ETFileInfo->size = g_file_info_get_size (info);
+        g_object_unref (info);
     }
 
-    FLAC__metadata_iterator_delete (iter);
-    FLAC__metadata_chain_delete (chain);
-    et_flac_read_close_func (&state);
+    if (ETFileInfo->duration > 0 && ETFileInfo->size > 0)
+    {
+        /* Ignore metadata blocks, and use the remainder to calculate the
+         * average bitrate (including format overhead). */
+        ETFileInfo->bitrate = (ETFileInfo->size - metadata_len) / ETFileInfo->duration / (1000/8);
+    }
 
 #ifdef ENABLE_MP3
     /* If no FLAC vorbis tag found : we try to get the ID3 tag if it exists
      * (but it will be deleted when rewriting the tag) */
     if (FileTag->empty())
     {
-        id3tag_read_file_tag (file, FileTag, NULL);
+        id3_read_file(file, ETFile, NULL);
 
         // If an ID3 tag has been found (and no FLAC tag), we mark the file as
         // unsaved to rewrite a flac tag.
@@ -631,5 +673,19 @@ flac_tag_write_file_tag (const ET_File *ETFile,
     return TRUE;
 }
 
+void
+et_flac_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile)
+{
+    const ET_File_Info *info = &ETFile->ETFileInfo;
+
+    fields->description = _("FLAC File");
+
+    /* Nothing to display */
+    fields->version_label = _("Encoder:");
+    fields->version = "flac";
+
+    /* Mode */
+    fields->mode_label = _("Channels:");
+}
 
 #endif /* ENABLE_FLAC */

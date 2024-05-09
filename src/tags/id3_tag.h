@@ -20,8 +20,11 @@
 #ifndef ET_ID3TAG_H_
 #define ET_ID3TAG_H_
 
+#include "../config.h"
+#ifdef ENABLE_MP3
+
 #include <glib.h>
-#include "et_core.h"
+#include "../file.h"
 
 G_BEGIN_DECLS
 
@@ -49,9 +52,10 @@ typedef enum
     ET_ID3_ERROR_BUGGY_ID3LIB
 } EtID3Error;
 
-gboolean id3tag_read_file_tag (GFile *file, File_Tag *FileTag, GError **error);
+gboolean id3_read_file (GFile *file, ET_File *ETFile, GError **error);
 gboolean id3tag_write_file_v24tag (const ET_File *ETFile, GError **error);
 gboolean id3tag_write_file_tag (const ET_File *ETFile, GError **error);
+void et_mpeg_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
 
 const gchar * Id3tag_Genre_To_String (unsigned char genre_code);
 guchar Id3tag_String_To_Genre (const gchar *genre);
@@ -60,4 +64,5 @@ gboolean et_id3tag_check_if_file_is_valid (GFile *file, GError **error);
 
 G_END_DECLS
 
+#endif
 #endif /* ET_ID3TAG_H_ */

@@ -64,7 +64,7 @@ easytag_SOURCES = \
 	src/mask.cc \
 	src/misc.cc \
 	src/picture.c \
-	src/playlist_dialog.c \
+	src/playlist_dialog.cc \
 	src/preferences_dialog.cc \
 	src/progress_bar.c \
 	src/replaygain.cc \
@@ -79,22 +79,15 @@ easytag_SOURCES = \
 	src/tags/libapetag/info_mac.c \
 	src/tags/libapetag/info_mpc.c \
 	src/tags/ape_tag.cc \
-	src/tags/flac_header.cc \
 	src/tags/flac_private.c \
 	src/tags/flac_tag.cc \
 	src/tags/gio_wrapper.cc \
 	src/tags/id3_tag.cc \
 	src/tags/id3v24_tag.cc \
-	src/tags/monkeyaudio_header.cc \
-	src/tags/mpeg_header.cc \
 	src/tags/mp4_tag.cc \
-	src/tags/musepack_header.cc \
-	src/tags/ogg_header.cc \
 	src/tags/ogg_tag.cc \
-	src/tags/opus_header.cc \
 	src/tags/opus_tag.cc \
-	src/tags/vcedit.c \
-	src/tags/wavpack_header.cc \
+	src/tags/vcedit.cc \
 	src/tags/wavpack_private.c \
 	src/tags/wavpack_tag.cc \
 	src/win32/win32dep.c
@@ -142,22 +135,14 @@ easytag_headers = \
 	src/tags/libapetag/info_mac.h \
 	src/tags/libapetag/info_mpc.h \
 	src/tags/ape_tag.h \
-	src/tags/flac_header.h \
 	src/tags/flac_private.h \
 	src/tags/flac_tag.h \
 	src/tags/gio_wrapper.h \
 	src/tags/id3_tag.h \
-	src/tags/monkeyaudio_header.h \
-	src/tags/mpeg_header.h \
-	src/tags/mp4_header.h \
 	src/tags/mp4_tag.h \
-	src/tags/musepack_header.h \
-	src/tags/ogg_header.h \
 	src/tags/ogg_tag.h \
-	src/tags/opus_header.h \
 	src/tags/opus_tag.h \
 	src/tags/vcedit.h \
-	src/tags/wavpack_header.h \
 	src/tags/wavpack_private.h \
 	src/tags/wavpack_tag.h \
 	src/win32/win32dep.h
@@ -385,7 +370,7 @@ dist_noinst_DATA = \
 	src/tags/libapetag/README.apetag \
 	src/tags/libapetag/id3v2_read.c \
 	src/tags/libapetag/id3v2_read.h \
-	src/tags/mp4_header.cc \
+	src/tags/mp4_tag.cc \
 	src/win32/easytag.manifest \
 	src/win32/resource.h \
 	data/icons/win32/easytag.ico \
@@ -528,7 +513,7 @@ tests_test_misc_CFLAGS = \
 	$(common_test_cflags)
 
 tests_test_misc_SOURCES = \
-	tests/test-misc.c \
+	tests/test-misc.cc \
 	src/misc.cc
 
 tests_test_misc_LDADD = \

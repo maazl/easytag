@@ -428,9 +428,12 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
             && g_settings_get_boolean (MainSettings,
                                        "id3v2-enable-unicode"))
         {
-            File_Tag  *FileTag_tmp = et_file_tag_new ();
+            ET_File   *ETFile_tmp    = ET_File_Item_New();
+            File_Tag  *FileTag_tmp   = et_file_tag_new ();
+            ETFile_tmp->FileTagList  = gListP<File_Tag*>(FileTag_tmp);
+            ETFile_tmp->FileTag      = ETFile_tmp->FileTagList;
 
-            if (id3tag_read_file_tag(file.get(), FileTag_tmp, NULL) == TRUE
+            if (id3_read_file(file.get(), ETFile_tmp, NULL) == TRUE
                 && et_file_tag_detect_difference (FileTag,
                                                   FileTag_tmp) == TRUE)
             {
@@ -442,6 +445,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
             }
 
             et_file_tag_free (FileTag_tmp);
+            ET_Free_File_List_Item(ETFile_tmp);
         }
     }
 
@@ -1094,9 +1098,10 @@ id3tag_check_if_id3lib_is_buggy (GError **error)
                                           "id3v2-enable-unicode");
     g_settings_set_boolean (MainSettings, "id3v2-enable-unicode", TRUE);
 
+    path = g_file_get_path (file);
+
   try
   { ID3_Tag id3_tag;
-    path = g_file_get_path (file);
     ID3Tag_Link_1 (id3_tag, path);
 
     // Create a new 'title' field for testing
@@ -1167,6 +1172,50 @@ id3tag_write_file_tag (const ET_File *ETFile,
 #else
     return id3tag_write_file_v24tag (ETFile, error);
 #endif /* !ENABLE_ID3LIB */
+}
+
+static const gchar *
+channel_mode_name (int mode)
+{
+    static const gchar * const channel_mode[] =
+    {
+        N_("Stereo"),
+        N_("Joint stereo"),
+        N_("Dual channel"),
+        N_("Single channel")
+    };
+
+    if (mode < 0 || mode > 3)
+    {
+        return "";
+    }
+
+    return _(channel_mode[mode]);
+}
+
+/* For displaying header information in the main window. */
+void
+et_mpeg_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile)
+{
+    const ET_File_Info *info = &ETFile->ETFileInfo;
+
+    if (ETFile->ETFileDescription->FileType == MP3_FILE)
+        fields->description = _("MP3 File");
+    else if (ETFile->ETFileDescription->FileType == MP2_FILE)
+        fields->description = _("MP2 File");
+    else
+        g_assert_not_reached ();
+
+    /* MPEG, Layer versions */
+    fields->version_label = _("MPEG");
+
+    fields->version = info->version == 3 ? "2.5" : to_string(info->version);
+    fields->version += ", Layer ";
+    fields->version += info->layer >= 1 && info->layer <= 3 ? "III" + (3-info->layer) : "?";
+
+    /* Mode */
+    fields->mode_label = _("Mode:");
+    fields->mode = _(channel_mode_name (info->mode));
 }
 
 #endif /* ENABLE_MP3 */

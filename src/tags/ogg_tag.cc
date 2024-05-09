@@ -25,20 +25,22 @@
 #include <stdlib.h>
 #include <string.h>
 #include <vorbis/codec.h>
+#include <vorbis/vorbisfile.h>
 
 #include "ogg_tag.h"
 #include "vcedit.h"
-#include "et_core.h"
 #include "misc.h"
 #include "picture.h"
 #include "setting.h"
 #include "charset.h"
+#include "log.h"
 
 /* for mkstemp. */
 #include "win32/win32dep.h"
 
 #include <cmath>
 #include <limits>
+#include <memory>
 using namespace std;
 
 
@@ -47,6 +49,360 @@ using namespace std;
  ***************/
 
 #define VERSION_EXTRACTOR " +\\[([^\\[\\]]+)\\]$"
+
+/*
+ * EtOggHeaderState:
+ * @file: the Ogg file which is currently being parsed
+ * @istream: an input stream for the current Ogg file
+ * @error: either the most recent error, or %NULL
+ *
+ * The current state of the Ogg parser, for passing between the callbacks used
+ * in ov_open_callbacks().
+ */
+typedef struct
+{
+    GFile *file;
+    GInputStream *istream;
+    GError *error;
+} EtOggHeaderState;
+
+/*
+ * et_ogg_read_func:
+ * @ptr: the buffer to fill with data
+ * @size: the size of individual reads
+ * @nmemb: the number of members to read
+ * @datasource: the Ogg parser state
+ *
+ * Read a number of bytes from the Ogg file.
+ *
+ * Returns: the number of bytes read from the stream. Returns 0 on end-of-file.
+ * Sets errno and returns 0 on error
+ */
+static size_t
+et_ogg_read_func (void *ptr, size_t size, size_t nmemb, void *datasource)
+{
+    EtOggHeaderState *state = (EtOggHeaderState *)datasource;
+    gssize bytes_read;
+
+    bytes_read = g_input_stream_read (state->istream, ptr, size * nmemb, NULL,
+                                      &state->error);
+
+    if (bytes_read == -1)
+    {
+        /* FIXME: Convert state->error to errno. */
+        errno = EIO;
+        return 0;
+    }
+    else
+    {
+        return bytes_read;
+    }
+}
+
+/*
+ * et_ogg_seek_func:
+ * @datasource: the Ogg parser state
+ * @offset: the number of bytes to seek
+ * @whence: either %SEEK_SET, %SEEK_CUR or %SEEK_END
+ *
+ * Seek in the currently-open Ogg file.
+ *
+ * Returns: 0 on success, -1 and sets errno on error
+ */
+static int
+et_ogg_seek_func (void *datasource, ogg_int64_t offset, int whence)
+{
+    EtOggHeaderState *state = (EtOggHeaderState *)datasource;
+    GSeekType seektype;
+
+    if (!g_seekable_can_seek (G_SEEKABLE (state->istream)))
+    {
+        return -1;
+    }
+    else
+    {
+        switch (whence)
+        {
+            case SEEK_SET:
+                seektype = G_SEEK_SET;
+                break;
+            case SEEK_CUR:
+                seektype = G_SEEK_CUR;
+                break;
+            case SEEK_END:
+                seektype = G_SEEK_END;
+                break;
+            default:
+                errno = EINVAL;
+                return -1;
+        }
+
+        if (g_seekable_seek (G_SEEKABLE (state->istream), offset, seektype,
+                             NULL, &state->error))
+        {
+            return 0;
+        }
+        else
+        {
+            errno = EBADF;
+            return -1;
+        }
+    }
+}
+
+/*
+ * et_ogg_close_func:
+ * @datasource: the Ogg parser state
+ *
+ * Close the Ogg stream and invalidate the parser state given by @datasource.
+ * Be sure to check the error field before invaidating the state.
+ *
+ * Returns: 0
+ */
+static int
+et_ogg_close_func (void *datasource)
+{
+    EtOggHeaderState *state = (EtOggHeaderState *)datasource;
+
+    g_clear_object (&state->istream);
+    g_clear_error (&state->error);
+
+    return 0;
+}
+
+/*
+ * et_ogg_tell_func:
+ * @datasource: the Ogg parser state
+ *
+ * Tell the current position of the stream from the beginning of the Ogg file.
+ *
+ * Returns: the current position in the Ogg file
+ */
+static long
+et_ogg_tell_func (void *datasource)
+{
+    EtOggHeaderState *state = (EtOggHeaderState *)datasource;
+
+    return g_seekable_tell (G_SEEKABLE (state->istream));
+}
+
+/*
+ * Read data into an Ogg Vorbis file.
+ * Note:
+ *  - if field is found but contains no info (strlen(str)==0), we don't read it
+ */
+gboolean ogg_read_file(GFile *file, ET_File *ETFile, GError **error)
+{
+    OggVorbis_File vf;
+    gint res;
+    ov_callbacks callbacks = { et_ogg_read_func, et_ogg_seek_func,
+                               et_ogg_close_func, et_ogg_tell_func };
+
+    g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
+    g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+    GFileInfo* info = g_file_query_info(file, G_FILE_ATTRIBUTE_STANDARD_SIZE, G_FILE_QUERY_INFO_NONE, NULL, error);
+    if (!info)
+        return FALSE;
+
+    ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
+    ETFileInfo->size = g_file_info_get_size (info);
+    g_object_unref (info);
+
+    EtOggHeaderState state;
+    state.file = file;
+    state.error = NULL;
+    state.istream = G_INPUT_STREAM (g_file_read (state.file, NULL,
+                                                 &state.error));
+
+    if (!state.istream)
+    {
+        g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                     _("Error while opening file: %s"), state.error->message);
+        return FALSE;
+    }
+
+    /* Check for an unsupported ID3v2 tag. */
+    guchar tmp_id3[10];
+
+    if (g_input_stream_read (state.istream, tmp_id3, sizeof(tmp_id3), NULL, error) == sizeof(tmp_id3))
+    {
+        goffset start = 0;
+
+        /* Calculate ID3v2 length. */
+        if (tmp_id3[0] == 'I' && tmp_id3[1] == 'D' && tmp_id3[2] == '3'
+            && tmp_id3[3] < 0xFF)
+        {
+            /* ID3v2 tag skipper $49 44 33 yy yy xx zz zz zz zz [zz size]. */
+            /* Size is 6-9 position */
+            gchar *path = g_file_get_path (file);
+            Log_Print (LOG_WARNING, _("Ogg file '%s' contains an unsupported ID3v2 tag."), path);
+            g_free (path);
+
+            start = (tmp_id3[9] | (tmp_id3[8] | (tmp_id3[7] | (tmp_id3[6] << 7) << 7) << 7)) + sizeof(tmp_id3);
+
+            /* Mark the file as modified, so that the ID3 tag is removed
+             * upon saving. */
+            ETFile->FileTag->data->saved = FALSE;
+        }
+
+        if (!g_seekable_seek (G_SEEKABLE(state.istream), start, G_SEEK_SET, NULL, error))
+        {
+            g_object_unref (state.istream);
+            return FALSE;
+        }
+    }
+
+    if ((res = ov_open_callbacks (&state, &vf, NULL, 0, callbacks)) == 0)
+    {
+        vorbis_info* vi = ov_info(&vf, 0);
+        if (vi)
+        {
+            ETFileInfo->version    = vi->version;         // Vorbis encoder version used to create this bitstream.
+            ETFileInfo->mode       = vi->channels;        // Number of channels in bitstream.
+            ETFileInfo->samplerate = vi->rate;            // (Hz) Sampling rate of the bitstream.
+            ETFileInfo->bitrate    = vi->bitrate_nominal/1000; // (b/s) Specifies the average bitrate for a VBR bitstream.
+            ETFileInfo->variable_bitrate = vi->bitrate_nominal != vi->bitrate_lower || vi->bitrate_nominal != vi->bitrate_upper;;
+        }
+        else
+        {
+            g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "%s",
+                         _("The specified bitstream does not exist or the "
+                         "file has been initialized improperly"));
+            et_ogg_close_func (&state);
+            return FALSE;
+        }
+
+        ETFileInfo->duration = ov_time_total(&vf, -1); // (s) Total time.
+
+        et_add_file_tags_from_vorbis_comments(ov_comment(&vf, 0), ETFile->FileTag->data);
+
+        ov_clear(&vf); // This close also the file
+    }else
+    {
+        /* On error. */
+        if (state.error)
+        {
+            gchar *message;
+
+            switch (res)
+            {
+                case OV_EREAD:
+                    message = _("Read from media returned an error");
+                    break;
+                case OV_ENOTVORBIS:
+                    message = _("Bitstream is not Vorbis data");
+                    break;
+                case OV_EVERSION:
+                    message = _("Vorbis version mismatch");
+                    break;
+                case OV_EBADHEADER:
+                    message = _("Invalid Vorbis bitstream header");
+                    break;
+                case OV_EFAULT:
+                    message = _("Internal logic fault, indicates a bug or heap/stack corruption");
+                    break;
+                default:
+                    message = _("Error reading tags from file");
+                    break;
+            }
+
+            g_set_error (error, state.error->domain, state.error->code,
+                         "%s", message);
+            et_ogg_close_func (&state);
+            return FALSE;
+        }
+
+        et_ogg_close_func (&state);
+    }
+
+    return TRUE;
+}
+
+
+#ifdef ENABLE_SPEEX
+
+gboolean speex_read_file(GFile *file, ET_File *ETFile, GError **error)
+{
+    EtOggState *state;
+    const SpeexHeader *si;
+    GFileInfo *info;
+    GError *tmp_error = NULL;
+
+    g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
+    g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+    state = vcedit_new_state();    // Allocate memory for 'state'
+
+    if (!vcedit_open (state, file, &tmp_error))
+    {
+        g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                     _("Failed to open file as Vorbis: %s"),
+                     tmp_error->message);
+        g_error_free (tmp_error);
+        vcedit_clear (state);
+        return FALSE;
+    }
+
+    info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE,
+                              G_FILE_QUERY_INFO_NONE, NULL, error);
+    if (!info)
+        return FALSE;
+
+    ET_File_Info *ETFileInfo = &ETFile->ETFileInfo;
+
+    ETFileInfo->size = g_file_info_get_size (info);
+    g_object_unref (info);
+
+    /* Get Speex information. */
+    if ((si = vcedit_speex_header (state)) != NULL)
+    {
+        ETFileInfo->mpc_version = g_strdup(si->speex_version);
+        ETFileInfo->mode        = si->nb_channels;        // Number of channels in bitstream.
+        ETFileInfo->samplerate  = si->rate;               // (Hz) Sampling rate of the bitstream.
+        ETFileInfo->bitrate     = si->bitrate/1000; // (b/s) Specifies the bitrate
+
+        //if (bitrate > 0)
+        //    ETFileInfo->duration = filesize*8/bitrate/1000; // FIXME : Approximation!! Needs to remove tag size!
+        //else
+        ETFileInfo->duration    = 0;//ov_time_total(&vf,-1); // (s) Total time.
+
+        //g_print("play time: %ld s\n",(long)ov_time_total(&vf,-1));
+        //g_print("serialnumber: %ld\n",(long)ov_serialnumber(&vf,-1));
+        //g_print("compressed length: %ld bytes\n",(long)(ov_raw_total(&vf,-1)));
+    }
+
+    et_add_file_tags_from_vorbis_comments(vcedit_comments(state), ETFile->FileTag->data);
+
+    vcedit_clear(state);
+    return TRUE;
+}
+#endif
+
+void
+et_ogg_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile)
+{
+    const ET_File_Info *info = &ETFile->ETFileInfo;
+
+    if (ETFile->ETFileDescription->FileType == OGG_FILE)
+        fields->description = _("Ogg Vorbis File");
+    else if (ETFile->ETFileDescription->FileType == SPEEX_FILE)
+        fields->description = _("Speex File");
+    else
+        g_assert_not_reached ();
+
+    /* Encoder version */
+    fields->version_label = _("Encoder:");
+
+    if (!info->mpc_version)
+        fields->version = strprintf("%d", info->version);
+    else
+        fields->version = info->mpc_version;
+
+    /* Mode */
+    fields->mode_label = _("Channels:");
+    fields->mode = strprintf("%d", info->mode);
+}
 
 /*
  * convert_to_byte_array:
@@ -279,6 +635,9 @@ void
 et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
                                        File_Tag *FileTag)
 {
+	if (!vc)
+		return;
+
 	tags_hash tags;
 
 	for (int i = 0; i < vc->comments; i++)
@@ -455,105 +814,6 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
 
 	/* Save unsupported fields. */
 	tags.to_other_tags(FileTag);
-}
-
-/*
- * Read tag data into an Ogg Vorbis file.
- * Note:
- *  - if field is found but contains no info (strlen(str)==0), we don't read it
- */
-gboolean
-ogg_tag_read_file_tag (GFile *file,
-                       File_Tag *FileTag,
-                       GError **error)
-{
-    GFileInputStream *istream;
-    EtOggState *state;
-
-    g_return_val_if_fail (file != NULL && FileTag != NULL, FALSE);
-    g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
-    istream = g_file_read (file, NULL, error);
-
-    if (!istream)
-    {
-        g_assert (error == NULL || *error != NULL);
-        return FALSE;
-    }
-
-    {
-    /* Check for an unsupported ID3v2 tag. */
-    guchar tmp_id3[4];
-
-    if (g_input_stream_read (G_INPUT_STREAM (istream), tmp_id3, 4, NULL,
-                             error) == 4)
-    {
-        /* Calculate ID3v2 length. */
-        if (tmp_id3[0] == 'I' && tmp_id3[1] == 'D' && tmp_id3[2] == '3'
-            && tmp_id3[3] < 0xFF)
-        {
-            /* ID3v2 tag skipper $49 44 33 yy yy xx zz zz zz zz [zz size]. */
-            /* Size is 6-9 position */
-            if (!g_seekable_seek (G_SEEKABLE (istream), 2, G_SEEK_CUR,
-                                  NULL, error))
-            {
-                goto err;
-            }
-
-            if (g_input_stream_read (G_INPUT_STREAM (istream), tmp_id3, 4,
-                                     NULL, error) == 4)
-            {
-                gchar *path;
-
-                path = g_file_get_path (file);
-                g_debug ("Ogg file '%s' contains an ID3v2 tag", path);
-                g_free (path);
-
-                /* Mark the file as modified, so that the ID3 tag is removed
-                 * upon saving. */
-                FileTag->saved = FALSE;
-            }
-        }
-    }
-
-    if (error && *error != NULL)
-    {
-        goto err;
-    }
-
-    }
-
-    g_assert (error == NULL || *error == NULL);
-
-    g_object_unref (istream);
-
-    state = vcedit_new_state();    // Allocate memory for 'state'
-
-    if (!vcedit_open (state, file, error))
-    {
-        g_assert (error == NULL || *error != NULL);
-        vcedit_clear(state);
-        return FALSE;
-    }
-
-    g_assert (error == NULL || *error == NULL);
-
-    /* Get data from tag */
-    /*{
-        gint i; 
-        for (i=0;i<vc->comments;i++) 
-            g_print("%s -> Ogg vc:'%s'\n",g_path_get_basename(filename),vc->user_comments[i]);
-    }*/
-
-    et_add_file_tags_from_vorbis_comments (vcedit_comments(state), FileTag);
-    vcedit_clear(state);
-
-    return TRUE;
-
-err:
-    g_assert (error == NULL || *error != NULL);
-    g_object_unref (istream);
-    return FALSE;
 }
 
 gboolean

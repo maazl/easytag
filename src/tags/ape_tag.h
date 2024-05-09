@@ -21,12 +21,15 @@
 #ifndef ET_APE_TAG_H_
 #define ET_APE_TAG_H_
 
-#include "et_core.h"
+#include "../file.h"
 
 G_BEGIN_DECLS
 
-gboolean ape_tag_read_file_tag (GFile *file, File_Tag *FileTag, GError **error);
+gboolean mac_read_file(GFile *file, ET_File *ETFile, GError **error);
+gboolean mpc_read_file(GFile *file, ET_File *ETFile, GError **error);
 gboolean ape_tag_write_file_tag (const ET_File *ETFile, GError **error);
+void et_mac_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
+void et_mpc_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
 
 G_END_DECLS
 
