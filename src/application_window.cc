@@ -2171,7 +2171,7 @@ et_header_fields_new_default (EtFileHeaderFields *fields, const ET_File *ETFile)
 
     /* Size */
     fields->size = strprintf("%s (%s)",
-        gString(g_format_size(info->size)).get(),
+        gString(g_format_size(ETFile->FileSize)).get(),
         gString(g_format_size(ETCore->ETFileDisplayedList_TotalSize)).get());
 
     /* Duration */

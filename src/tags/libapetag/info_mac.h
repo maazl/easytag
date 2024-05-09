@@ -21,67 +21,11 @@
 #define INFO_MAC_H
 
 #include <gio/gio.h>
+#include "../../file.h"
 
 G_BEGIN_DECLS
 
-/** \file info_mac.h 
-    \brief Get information from MonkeyAudio file.
-
-    Usage:
-    \code
-    StreamInfoMac Info;
-    
-    if (info_mac_read(fn, &Info)) {
-        printf("File \"%s\" not found or is read protected!\n", fn);
-        return;
-    }
-    printf("%",Info.fields...);
-    \endcode
-*/
-
-/** 
-    \name Compression level
-*/
-/*\{*/
-#define COMPRESSION_LEVEL_FAST        1000 /**< fast */
-#define COMPRESSION_LEVEL_NORMAL      2000 /**< optimal average time/compression ratio */
-#define COMPRESSION_LEVEL_HIGH        3000 /**< higher compression ratio */
-#define COMPRESSION_LEVEL_EXTRA_HIGH  4000 /**< very slowly */
-#define COMPRESSION_LEVEL_INSANE      5000 /**< ??? */
-/*\}*/
-
-/**    All information from mac file
- *    \struct StreamInfoMac 
-**/
-typedef struct 
-{
-    unsigned int ByteLength;        /**< file length - tags size */
-    unsigned int FileSize;          /**< real file size */
-    int          SampleFreq;        /**< sample frequency */
-    unsigned int Channels;          /**< number of chanels */
-    int          Duration;          /**< duratiom in ms */
-    
-    unsigned int Version;           /**< version of current file */
-    unsigned int Bitrate;           /**< bitrate of current file (bps) */
-    unsigned int Compresion;        /**< compresion profile */
-    unsigned int Flags;             /**< flags */
-    
-    unsigned int Frames;            /**< number of frames */
-    unsigned int SamplesPerFrame;   /**< samples per frame */
-    unsigned int Samples;           /**< number of samples */
-    unsigned int BitsPerSample;     /**< bits per sample */
-    unsigned int UncompresedSize;   /**< uncomprese size of file */
-    float        CompresionRatio;   /**< compresion ratio */
-    
-    unsigned int PeakLevel;         /**< peak level */
-    float        PeakRatio;         /**< peak ratio */
-    
-    const char  *CompresionName;    /**< compresion profile as string */
-    
-    unsigned int EncoderVersion;    /**< version of encoder used */
-} StreamInfoMac;
-
-gboolean info_mac_read (GFile *file, StreamInfoMac *stream_info, GError **error);
+gboolean info_mac_read (GFile *file, ET_File *ETFile, GError **error);
 
 G_END_DECLS
 

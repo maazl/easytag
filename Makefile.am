@@ -76,8 +76,8 @@ easytag_SOURCES = \
 	src/tag_area.cc \
 	src/tags/libapetag/apetaglib.c \
 	src/tags/libapetag/is_tag.c \
-	src/tags/libapetag/info_mac.c \
-	src/tags/libapetag/info_mpc.c \
+	src/tags/libapetag/info_mac.cc \
+	src/tags/libapetag/info_mpc.cc \
 	src/tags/ape_tag.cc \
 	src/tags/flac_private.c \
 	src/tags/flac_tag.cc \

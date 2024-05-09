@@ -21,76 +21,11 @@
 #define INFO_MPC_H
 
 #include <gio/gio.h>
+#include "../../file.h"
 
 G_BEGIN_DECLS
 
-/** \file info_mpc.h 
-    \brief Get information from MusePack file.
-
-    Usage:
-    \code
-    StreamInfoMpc Info;
-    
-    if (info_mpc_read(fn, &Info)) {
-        printf("File \"%s\" not found or is read protected!\n", fn);
-        return;
-    }
-    printf("%",Info.fields);
-    \endcode
-*/
-
-
-/**    All information from mpc file
- *    \struct StreamInfoMpc
-**/
-typedef struct
-{
-    unsigned int   ByteLength;       /**< file length - tags size */
-    unsigned int   FileSize;         /**< real file size */
-    int            SampleFreq;       /**< Sample frequency */
-    unsigned int   Channels;         /**< channels =2 */
-    int            Duration;         /**< duratiom in ms */
-    
-    unsigned int   StreamVersion;    /**< Streamversion of current file */
-    unsigned int   Bitrate;          /**< bitrate of current file (bps) */
-    unsigned int   Frames;           /**< number of frames contained */
-    unsigned int   MS;               /**< Mid/Side Stereo (0: off, 1: on) */
-    unsigned int   Profile;          /**< quality profile */
-    unsigned int   MaxBand;          /**< maximum band-index used (0...31) */
-    unsigned int   IS;               /**< Intensity Stereo (0: off, 1: on) */
-    unsigned int   BlockSize;        /**< only needed for SV4...SV6 -> not supported */
-    
-    const char    *ProfileName;      /**< Profile name */
-    unsigned int   EncoderVersion;   /**< version of encoder used */
-    char           Encoder[256];     /**< Encoder Version in string */
-    
-    // ReplayGain related data
-    short          GainTitle;        /**< Gain Title */
-    short          GainAlbum;        /**< Gain Album */
-    unsigned short PeakAlbum;        /**< Peak value of Album */
-    unsigned short PeakTitle;        /**< Peak value of Title */
-    unsigned short EstPeakTitle;     /**< Estimated Peak value of Title */
-    
-    // true gapless stuff
-    unsigned int   IsTrueGapless;    /**< is true gapless used? */
-    unsigned int   LastFrameSamples; /**< number of valid samples within last frame */
-} StreamInfoMpc;
-
-/** \def StreamInfo  is only for compatible before 0.4alpha4 
-    \deprecated removed in 0.5
-*/
-#define StreamInfo StreamInfoMpc
-
-/**
-    Read all mpc info from filename 
-
-    \param fn File name 
-    \param Info StreamInfoMpc Structure for all information
-    \retval 0 ok
-    \retval 1 file not found or write protected
-    \retval 2 not musepack audio file
-*/
-gboolean info_mpc_read (GFile *file, StreamInfoMpc *Info, GError **error);
+gboolean info_mpc_read (GFile *file, ET_File *ETFile, GError **error);
 
 G_END_DECLS
 

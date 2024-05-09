@@ -272,8 +272,8 @@ static gint CmpFileType(const ET_File* ETFile1, const ET_File* ETFile2)
 static gint CmpFileSize(const ET_File* ETFile1, const ET_File* ETFile2)
 {
 	// Second criterion
-	if (ETFile1->ETFileInfo.size != ETFile2->ETFileInfo.size)
-		return sign((gint64)ETFile1->ETFileInfo.size - ETFile2->ETFileInfo.size);
+	if (ETFile1->FileSize != ETFile2->FileSize)
+		return sign((gint64)ETFile1->FileSize - ETFile2->FileSize);
 	// Second criterion
 	return 2 * CmpFilepath(ETFile1,ETFile2);
 }

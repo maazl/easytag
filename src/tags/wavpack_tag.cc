@@ -112,7 +112,6 @@ gboolean wavpack_read_file (GFile *file, ET_File *ETFile, GError **error)
     ETFileInfo->samplerate  = WavpackGetSampleRate(wpc);
     ETFileInfo->mode        = WavpackGetNumChannels(wpc);
     ETFileInfo->layer       = WavpackGetChannelMask (wpc);
-    ETFileInfo->size        = WavpackGetFileSize(wpc);
     ETFileInfo->duration    = WavpackGetNumSamples(wpc)/ETFileInfo->samplerate;
 
     File_Tag* FileTag = ETFile->FileTag->data;

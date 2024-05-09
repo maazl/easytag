@@ -67,25 +67,14 @@ profile_stringify (unsigned int profile)
 */
 gboolean
 info_mpc_read (GFile *file,
-               StreamInfoMpc *stream_info,
+               ET_File *ETFile,
                GError **error)
 {
-    GFileInfo *info;
     GFileInputStream *istream;
     guint32 header_buffer[MPC_HEADER_LENGTH];
     gsize bytes_read;
     gsize id3_size;
-    
-    info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE,
-                              G_FILE_QUERY_INFO_NONE, NULL, error);
-
-    if (!info)
-    {
-        return FALSE;
-    }
-
-    stream_info->FileSize = g_file_info_get_size (info);
-    g_object_unref (info);
+    guint64 byteLength;
 
     {
         gchar *path;
@@ -108,12 +97,8 @@ info_mpc_read (GFile *file,
          * or GFile. */
         id3_size = is_id3v2 (fp);
 
-        fseek (fp, 0, SEEK_END);
-        stream_info->FileSize = ftell (fp);
-
         /* Stream size. */
-        stream_info->ByteLength = stream_info->FileSize - is_id3v1 (fp)
-                                  - is_ape (fp) - id3_size;
+        byteLength = ETFile->FileSize - is_id3v1(fp) - is_ape(fp) - id3_size;
 
         fclose (fp);
     }
@@ -152,24 +137,28 @@ info_mpc_read (GFile *file,
         return FALSE;
     }
     
-    stream_info->StreamVersion = header_buffer[0] >> 24;
+    ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
 
-    if (stream_info->StreamVersion >= 7)
+    ETFileInfo->version = header_buffer[0] >> 24;
+    unsigned profile;
+    unsigned long frames;
+
+    if (ETFileInfo->version >= 7)
     {
         const long samplefreqs[4] = { 44100, 48000, 37800, 32000 };
         
         // read the file-header (SV7 and above)
-        stream_info->Bitrate = 0;
-        stream_info->Frames = header_buffer[1];
-        stream_info->SampleFreq = samplefreqs[(header_buffer[2] >> 16) & 0x0003];
-        stream_info->MaxBand = (header_buffer[2] >> 24) & 0x003F;
-        stream_info->MS = (header_buffer[2] >> 30) & 0x0001;
-        stream_info->Profile = (header_buffer[2] << 8) >> 28;
-        stream_info->IS = (header_buffer[2] >> 31) & 0x0001;
-        stream_info->BlockSize = 1;
+        frames = header_buffer[1];
+        ETFileInfo->samplerate = samplefreqs[(header_buffer[2] >> 16) & 0x0003];
+        //stream_info->MaxBand = (header_buffer[2] >> 24) & 0x003F;
+        //stream_info->MS = (header_buffer[2] >> 30) & 0x0001;
+        profile = (header_buffer[2] << 8) >> 28;
+        //stream_info->IS = (header_buffer[2] >> 31) & 0x0001;
+        //stream_info->BlockSize = 1;
         
-        stream_info->EncoderVersion = (header_buffer[6] >> 24) & 0x00FF;
-        stream_info->Channels = 2;
+        unsigned encoderVersion = (header_buffer[6] >> 24) & 0x00FF;
+        ETFileInfo->mode = 2; // channels
+        /* currently ignored by EasyTag...
         // gain
         stream_info->EstPeakTitle = header_buffer[2] & 0xFFFF;    // read the ReplayGain data
         stream_info->GainTitle = (header_buffer[3] >> 16) & 0xFFFF;
@@ -178,71 +167,53 @@ info_mpc_read (GFile *file,
         stream_info->PeakAlbum = header_buffer[4] & 0xFFFF;
         // gaples
         stream_info->IsTrueGapless = (header_buffer[5] >> 31) & 0x0001;    // true gapless: used?
-        stream_info->LastFrameSamples = (header_buffer[5] >> 20) & 0x07FF;    // true gapless: valid samples for last frame
+        stream_info->LastFrameSamples = (header_buffer[5] >> 20) & 0x07FF;    // true gapless: valid samples for last frame*/
         
-        if (stream_info->EncoderVersion == 0)
+        if (encoderVersion == 0)
         {
-            sprintf (stream_info->Encoder, "<= 1.05"); // Buschmann 1.7.x, Klemm <= 1.05
+            ETFileInfo->mpc_version = g_strdup("<= 1.05"); // Buschmann 1.7.x, Klemm <= 1.05
         }
         else
         {
-            switch (stream_info->EncoderVersion % 10)
+            switch (encoderVersion % 10)
             {
             case 0:
-                sprintf (stream_info->Encoder, "%u.%u",
-                         stream_info->EncoderVersion / 100,
-                         stream_info->EncoderVersion / 10 % 10);
+                ETFileInfo->mpc_version = g_strdup_printf("%u.%u",
+                    encoderVersion / 100, encoderVersion / 10 % 10);
                 break;
             case 2:
             case 4:
             case 6:
             case 8:
-                sprintf (stream_info->Encoder, "%u.%02u Beta",
-                         stream_info->EncoderVersion / 100,
-                         stream_info->EncoderVersion % 100);
+                ETFileInfo->mpc_version = g_strdup_printf("%u.%02u Beta",
+                    encoderVersion / 100, encoderVersion % 100);
                 break;
             default:
-                sprintf (stream_info->Encoder, "%u.%02u Alpha",
-                         stream_info->EncoderVersion / 100,
-                         stream_info->EncoderVersion % 100);
+                ETFileInfo->mpc_version = g_strdup_printf("%u.%02u Alpha",
+                    encoderVersion / 100, encoderVersion % 100);
                 break;
             }
         }
         // estimation, exact value needs too much time
-        stream_info->Bitrate = (long) (stream_info->ByteLength) * 8. * stream_info->SampleFreq / (1152 * stream_info->Frames - 576);
-        
+        ETFileInfo->bitrate = byteLength * ETFileInfo->samplerate / (1152 * frames - 576) / 125;
     }
     else
     {
         // read the file-header (SV6 and below)
-        stream_info->Bitrate = ((header_buffer[0] >> 23) & 0x01FF) * 1000;    // read the file-header (SV6 and below)
-        stream_info->MS = (header_buffer[0] >> 21) & 0x0001;
-        stream_info->IS = (header_buffer[0] >> 22) & 0x0001;
-        stream_info->StreamVersion = (header_buffer[0] >> 11) & 0x03FF;
-        stream_info->MaxBand = (header_buffer[0] >> 6) & 0x001F;
-        stream_info->BlockSize = (header_buffer[0]) & 0x003F;
+        ETFileInfo->bitrate = (header_buffer[0] >> 23) & 0x01FF;
+        //stream_info->MS = (header_buffer[0] >> 21) & 0x0001;
+        //stream_info->IS = (header_buffer[0] >> 22) & 0x0001;
+        ETFileInfo->version = (header_buffer[0] >> 11) & 0x03FF;
+        //stream_info->MaxBand = (header_buffer[0] >> 6) & 0x001F;
+        //stream_info->BlockSize = (header_buffer[0]) & 0x003F;
         
-        stream_info->Profile = 0;
-        //gain
-        stream_info->GainTitle = 0;    // not supported
-        stream_info->PeakTitle = 0;
-        stream_info->GainAlbum = 0;
-        stream_info->PeakAlbum = 0;
-        //gaples
-        stream_info->LastFrameSamples = 0;
-        stream_info->IsTrueGapless = 0;
+        profile = 0;
         
-        if (stream_info->StreamVersion >= 5)
-        {
-            stream_info->Frames = header_buffer[1];    // 32 bit
-        }
+        if (ETFileInfo->version >= 5)
+            frames = header_buffer[1];    // 32 bit
         else
-        {
-            stream_info->Frames = (header_buffer[1] >> 16);    // 16 bit
-        }
-        
-        stream_info->EncoderVersion = 0;
-        stream_info->Encoder[0] = '\0';
+            frames = header_buffer[1] >> 16;    // 16 bit
+
 #if 0
         if (Info->StreamVersion == 7)
             return ERROR_CODE_SV7BETA;    // are there any unsupported parameters used?
@@ -253,19 +224,16 @@ info_mpc_read (GFile *file,
         if (Info->BlockSize != 1)
             return ERROR_CODE_BLOCKSIZE;
 #endif
-        if (stream_info->StreamVersion < 6)    // Bugfix: last frame was invalid for up to SV5
-        {
-            stream_info->Frames -= 1;
-        }
+        if (ETFileInfo->version < 6)    // Bugfix: last frame was invalid for up to SV5
+            frames -= 1;
         
-        stream_info->SampleFreq = 44100;    // AB: used by all files up to SV7
-        stream_info->Channels = 2;
+        ETFileInfo->samplerate = 44100;    // AB: used by all files up to SV7
+        ETFileInfo->mode = 2; // channels
     }
     
-    stream_info->ProfileName = profile_stringify (stream_info->Profile);
+    ETFileInfo->mpc_profile = g_strdup(profile_stringify(profile));
     
-    stream_info->Duration = (int) (stream_info->Frames * 1152
-                                   / (stream_info->SampleFreq / 1000.0));
+    ETFileInfo->duration = (int)(frames * 1152 / ETFileInfo->samplerate);
 
     return TRUE;
 }

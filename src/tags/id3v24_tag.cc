@@ -100,13 +100,6 @@ gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
     File_Tag *FileTag = ETFile->FileTag->data;
     ET_File_Info* info = &ETFile->ETFileInfo;
 
-    /* Get size of file */
-    {   auto fi = make_unique(g_file_query_info(gfile, G_FILE_ATTRIBUTE_STANDARD_SIZE, G_FILE_QUERY_INFO_NONE, NULL, error), g_object_unref);
-        if (!fi)
-            return FALSE;
-        info->size = g_file_info_get_size(fi.get());
-    }
-
     auto istream = make_unique(G_INPUT_STREAM(g_file_read(gfile, NULL, error)), g_object_unref);
     if (!istream)
         return FALSE; // cannot open
@@ -200,10 +193,10 @@ gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
     // post processing of stream length and bit rate
     if (info->variable_bitrate)
     {   if (info->duration > 0)
-            info->bitrate = (info->size - tagbytes) / info->duration / 125;
+            info->bitrate = (ETFile->FileSize - tagbytes) / info->duration / 125;
     } else
     {   if (info->duration <= 0 && info->bitrate)
-            info->duration = (info->size - tagbytes) / info->bitrate / 125;
+            info->duration = (ETFile->FileSize - tagbytes) / info->bitrate / 125;
     }
 
     if (!v2tag) // treat V2 tag at the end like tag at start

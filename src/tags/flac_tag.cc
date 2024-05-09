@@ -180,19 +180,11 @@ gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error)
     et_flac_read_close_func (&state);
     /* End of decoding FLAC file */
 
-    GFileInfo *info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE,
-                              G_FILE_QUERY_INFO_NONE, NULL, NULL);
-    if (info)
-    {
-        ETFileInfo->size = g_file_info_get_size (info);
-        g_object_unref (info);
-    }
-
-    if (ETFileInfo->duration > 0 && ETFileInfo->size > 0)
+    if (ETFileInfo->duration > 0 && ETFile->FileSize > 0)
     {
         /* Ignore metadata blocks, and use the remainder to calculate the
          * average bitrate (including format overhead). */
-        ETFileInfo->bitrate = (ETFileInfo->size - metadata_len) / ETFileInfo->duration / (1000/8);
+        ETFileInfo->bitrate = (ETFile->FileSize - metadata_len) / ETFileInfo->duration / (1000/8);
     }
 
 #ifdef ENABLE_MP3
@@ -676,8 +668,6 @@ flac_tag_write_file_tag (const ET_File *ETFile,
 void
 et_flac_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile)
 {
-    const ET_File_Info *info = &ETFile->ETFileInfo;
-
     fields->description = _("FLAC File");
 
     /* Nothing to display */

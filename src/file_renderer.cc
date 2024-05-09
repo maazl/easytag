@@ -195,7 +195,7 @@ string TagPartColumnRenderer::RenderText(const ET_File* file, bool original) con
 }
 
 string FileSizeColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	goffset size = file->ETFileInfo.size;
+{	goffset size = file->FileSize;
 	if (!size)
 		return string();
 	char buf[20];

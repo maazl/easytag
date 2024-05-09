@@ -201,13 +201,7 @@ gboolean ogg_read_file(GFile *file, ET_File *ETFile, GError **error)
     g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    GFileInfo* info = g_file_query_info(file, G_FILE_ATTRIBUTE_STANDARD_SIZE, G_FILE_QUERY_INFO_NONE, NULL, error);
-    if (!info)
-        return FALSE;
-
     ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
-    ETFileInfo->size = g_file_info_get_size (info);
-    g_object_unref (info);
 
     EtOggHeaderState state;
     state.file = file;
@@ -326,7 +320,6 @@ gboolean speex_read_file(GFile *file, ET_File *ETFile, GError **error)
 {
     EtOggState *state;
     const SpeexHeader *si;
-    GFileInfo *info;
     GError *tmp_error = NULL;
 
     g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
@@ -344,15 +337,7 @@ gboolean speex_read_file(GFile *file, ET_File *ETFile, GError **error)
         return FALSE;
     }
 
-    info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE,
-                              G_FILE_QUERY_INFO_NONE, NULL, error);
-    if (!info)
-        return FALSE;
-
     ET_File_Info *ETFileInfo = &ETFile->ETFileInfo;
-
-    ETFileInfo->size = g_file_info_get_size (info);
-    g_object_unref (info);
 
     /* Get Speex information. */
     if ((si = vcedit_speex_header (state)) != NULL)

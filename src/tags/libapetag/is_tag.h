@@ -20,6 +20,10 @@
 #ifndef _IS_TAG_H
 #define _IS_TAG_H
 
+#include <gio/gio.h>
+
+G_BEGIN_DECLS
+
 /** \file is_tag.h 
     \brief Function for check if tag is avilable 
 
@@ -33,5 +37,7 @@ int is_id3v2 (FILE * fp);
 int is_ape (FILE * fp);
 
 int is_ape_ver (FILE * fp);
+
+G_END_DECLS
 
 #endif /* _IS_TAG_H */

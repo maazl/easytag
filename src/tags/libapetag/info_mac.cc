@@ -34,6 +34,17 @@
 
 #define MAC_FORMAT_HEADER_LENGTH 16
 
+/**
+    \name Compression level
+*/
+/*\{*/
+#define COMPRESSION_LEVEL_FAST        1000 /**< fast */
+#define COMPRESSION_LEVEL_NORMAL      2000 /**< optimal average time/compression ratio */
+#define COMPRESSION_LEVEL_HIGH        3000 /**< higher compression ratio */
+#define COMPRESSION_LEVEL_EXTRA_HIGH  4000 /**< very slowly */
+#define COMPRESSION_LEVEL_INSANE      5000 /**< ??? */
+/*\}*/
+
 struct macHeader {
     char             id[4];               // should equal 'MAC '
     unsigned short   ver;                 // version number * 1000 (3.81 = 3810)
@@ -50,12 +61,6 @@ struct macHeader {
 };
     
 
-// local prototypes
-static int 
-monkey_samples_per_frame(unsigned int versionid, unsigned int compressionlevel);
-static const char *
-monkey_stringify(unsigned int profile);
-
 static const char *
 monkey_stringify(unsigned int profile)
 {
@@ -63,9 +68,9 @@ monkey_stringify(unsigned int profile)
         static const char *Names[] = {
                 na, "Fast", "Normal", "High", "Extra-High", "Insane"
         };
-        unsigned int profile2 = profile/1000;
+        profile /= 1000;
 
-        return (profile2 >= sizeof (Names) / sizeof (*Names)) ? na : Names[(profile2)];
+        return (profile >= sizeof (Names) / sizeof (*Names)) ? na : Names[profile];
 }
 
 
@@ -82,7 +87,7 @@ monkey_samples_per_frame(unsigned int versionid, unsigned int compressionlevel)
         return 9216;
     }
 }    
-    
+
 /*
  * info_mac_read:
  * @file: file from which to read a header
@@ -95,10 +100,9 @@ monkey_samples_per_frame(unsigned int versionid, unsigned int compressionlevel)
 */
 gboolean
 info_mac_read (GFile *file,
-               StreamInfoMac *stream_info,
+               ET_File *ETFile,
                GError **error)
 {
-    GFileInfo *info;
     GFileInputStream *istream;
     guint8 header_buffer[MAC_FORMAT_HEADER_LENGTH];
     gsize bytes_read;
@@ -106,17 +110,6 @@ info_mac_read (GFile *file,
     struct macHeader *header;
     
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
-    info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE,
-                              G_FILE_QUERY_INFO_NONE, NULL, error);
-
-    if (!info)
-    {
-        return FALSE;
-    }
-
-    stream_info->FileSize = g_file_info_get_size (info);
-    g_object_unref (info);
 
     istream = g_file_read (file, NULL, error);
 
@@ -170,47 +163,28 @@ info_mac_read (GFile *file,
         return FALSE; // no monkeyAudio file
     }
     
+    // TODO: this is likely to fail sadly on little endian platform
     header = (struct macHeader *) header_buffer;
     
-    stream_info->Version = stream_info->EncoderVersion = header->ver;
-    stream_info->Channels = header->channels;
-    stream_info->SampleFreq = header->sampleRate;
-    stream_info->Flags = header->formatFlags;
-    stream_info->SamplesPerFrame = monkey_samples_per_frame(header->ver, header->compLevel);
-    stream_info->BitsPerSample = (header->formatFlags & MAC_FORMAT_FLAG_8_BIT)
-                                  ? 8 : ((header->formatFlags & MAC_FORMAT_FLAG_24_BIT) ? 24 : 16);
+    ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
+    ETFileInfo->version = header->ver;
+    ETFileInfo->mode = header->channels;
+    ETFileInfo->samplerate = header->sampleRate;
+    int samplesPerFrame = monkey_samples_per_frame(header->ver, header->compLevel);
+    int bytesPerSample = header->formatFlags & MAC_FORMAT_FLAG_8_BIT
+        ? 1 : header->formatFlags & MAC_FORMAT_FLAG_24_BIT ? 3 : 2;
     
-    stream_info->PeakLevel = header->peakLevel;
-//    Info->PeakRatio       = Info->PakLevel / pow(2, Info->bitsPerSample - 1);
-    stream_info->Frames = header->totalFrames;
-    stream_info->Samples = (stream_info->Frames - 1)
-                           * stream_info->SamplesPerFrame
-                           + header->finalFrameBlocks;
+    long long samples = (long long)(header->totalFrames - 1) * samplesPerFrame + header->finalFrameBlocks;
+    ETFileInfo->duration = header->sampleRate > 0 ? samples / header->sampleRate : 0;
     
-    stream_info->Duration = stream_info -> SampleFreq > 0 ?
-                            ((float)stream_info->Samples
-                             / stream_info->SampleFreq) * 1000 : 0;
+    ETFileInfo->mpc_profile = g_strdup(monkey_stringify(header->compLevel));
     
-    stream_info->Compresion = header->compLevel;
-    stream_info->CompresionName = monkey_stringify (stream_info->Compresion);
+    long long uncompresedSize = samples * header->channels * bytesPerSample;
+    float compresionRatio = uncompresedSize > 0
+        ? (ETFile->FileSize - header->headerBytesWAV) / (float)uncompresedSize : 0.;
     
-    stream_info->UncompresedSize = stream_info->Samples
-                                   * stream_info->Channels
-                                   * (stream_info->BitsPerSample / 8);
-    
-    stream_info->CompresionRatio = (stream_info->UncompresedSize
-                                    + header->headerBytesWAV) > 0
-                                    ? stream_info->FileSize
-                                      / (float) (stream_info->UncompresedSize
-                                                 + header->headerBytesWAV) : 0.;
-    
-    stream_info->Bitrate = stream_info->Duration > 0
-                           ? (((stream_info->Samples * stream_info->Channels
-                                * stream_info->BitsPerSample)
-                               / (float) stream_info->Duration)
-                              * stream_info->CompresionRatio) * 1000 : 0;
-    
-    stream_info->PeakRatio = stream_info->ByteLength = 0;
+    ETFileInfo->bitrate = ETFileInfo->duration > 0
+        ? samples * header->channels * bytesPerSample / (float)ETFileInfo->duration * compresionRatio / 125 : 0;
 
     return TRUE;
 }

@@ -137,23 +137,8 @@ gboolean mac_read_file(GFile *file, ET_File *ETFile, GError **error)
 	g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	if (!ape_tag_read_file_tag(file, ETFile->FileTag->data, error))
-		return FALSE;
-
-	StreamInfoMac Info;
-	if (!info_mac_read (file, &Info, error))
-		return FALSE;
-
-	ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
-	ETFileInfo->mpc_profile   = g_strdup(Info.CompresionName);
-	ETFileInfo->version       = Info.Version;
-	ETFileInfo->bitrate       = Info.Bitrate/1000;
-	ETFileInfo->samplerate    = Info.SampleFreq;
-	ETFileInfo->mode          = Info.Channels;
-	ETFileInfo->size          = Info.FileSize;
-	ETFileInfo->duration      = Info.Duration/1000;
-
-	return TRUE;
+	return ape_tag_read_file_tag(file, ETFile->FileTag->data, error)
+		&& info_mac_read(file, ETFile, error);
 }
 
 gboolean mpc_read_file(GFile *file, ET_File *ETFile, GError **error)
@@ -161,24 +146,8 @@ gboolean mpc_read_file(GFile *file, ET_File *ETFile, GError **error)
 	g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	if (!ape_tag_read_file_tag(file, ETFile->FileTag->data, error))
-		return FALSE;
-
-	StreamInfoMpc Info;
-	if (!info_mpc_read (file, &Info, error))
-		return FALSE;
-
-	ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
-	ETFileInfo->mpc_profile = g_strdup(Info.ProfileName);
-	ETFileInfo->version     = Info.StreamVersion;
-	ETFileInfo->bitrate     = Info.Bitrate/1000;
-	ETFileInfo->samplerate  = Info.SampleFreq;
-	ETFileInfo->mode        = Info.Channels;
-	ETFileInfo->size        = Info.FileSize;
-	ETFileInfo->duration    = Info.Duration/1000;
-	ETFileInfo->mpc_version = g_strdup_printf("%s",Info.Encoder);
-
-	return TRUE;
+	return ape_tag_read_file_tag(file, ETFile->FileTag->data, error)
+		&& info_mpc_read (file, ETFile, error);
 }
 
 

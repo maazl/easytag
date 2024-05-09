@@ -176,7 +176,7 @@ et_file_list_add (GList *file_list,
     int max_date_fields = -6;
 
     /* Get description of the file */
-    gchar* filename = g_file_get_path (file);
+    gString filename(g_file_get_path(file));
 
     /* Attach all data to this ETFile item */
     ET_File* ETFile = ET_File_Item_New();
@@ -201,6 +201,24 @@ et_file_list_add (GList *file_list,
 
     /* Fill the File_Tag structure for FileTagList */
     FileTag->saved = TRUE;    /* The file hasn't been changed, so it's saved */
+
+    /* Store the size and the modification time of the file
+     * to check if the file was changed before saving */
+    fileinfo = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE "," G_FILE_ATTRIBUTE_TIME_MODIFIED,
+                                  G_FILE_QUERY_INFO_NONE, NULL, &error);
+    if (fileinfo)
+    {
+        ETFile->FileSize = g_file_info_get_attribute_uint64 (fileinfo, G_FILE_ATTRIBUTE_STANDARD_SIZE);
+        ETFile->FileModificationTime = g_file_info_get_attribute_uint64 (fileinfo, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+        g_object_unref (fileinfo);
+    } else
+    {   Log_Print (LOG_ERROR,
+            _("Error while querying information for file ‘%s’: %s"), display_path, error->message);
+        g_clear_error(&error);
+        // bypass handler if we did not even get the file size.
+        ETFile->ETFileDescription = ET_Get_File_Description(nullptr);
+        goto fail;
+    }
 
     switch (ETFile->ETFileDescription->FileType)
     {
@@ -351,22 +369,7 @@ et_file_list_add (GList *file_list,
         g_error_free (error);
     }*/
 
-    /* Store the modification time of the file to check if the file was changed
-     * before saving */
-    fileinfo = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_MODIFIED,
-                                  G_FILE_QUERY_INFO_NONE, NULL, NULL);
-
-    if (fileinfo)
-    {
-        ETFile->FileModificationTime = g_file_info_get_attribute_uint64 (fileinfo,
-                                                                         G_FILE_ATTRIBUTE_TIME_MODIFIED);
-        g_object_unref (fileinfo);
-    }
-    else
-    {
-        ETFile->FileModificationTime = 0;
-    }
-
+fail:
     /* Add the item to the "main list" */
     result = g_list_append (file_list, ETFile);
 
@@ -406,8 +409,6 @@ et_file_list_add (GList *file_list,
     //ET_Add_File_To_Artist_Album_File_List(ETFile);
 
     //ET_Debug_Print_File_List(ETCore->ETFileList,__FILE__,__LINE__,__FUNCTION__);
-
-    g_free (filename);
 
     return result;
 }
@@ -687,7 +688,7 @@ ET_Remove_File_From_File_List (ET_File *ETFile)
     GList *ETFileDisplayedList = NULL; // Item containing the ETFile to delete... (in ETCore->ETFileDisplayedList)
 
     // Remove infos of the file
-    ETCore->ETFileDisplayedList_TotalSize     -= ETFile->ETFileInfo.size;
+    ETCore->ETFileDisplayedList_TotalSize     -= ETFile->FileSize;
     ETCore->ETFileDisplayedList_TotalDuration -= ETFile->ETFileInfo.duration;
 
     // Find the ETFileList containing the ETFile item
@@ -858,7 +859,7 @@ et_displayed_file_list_set (GList *ETFileList)
     // Get size and duration of files in the list
     for (l = ETCore->ETFileDisplayedList; l != NULL; l = g_list_next (l))
     {
-        ETCore->ETFileDisplayedList_TotalSize += ((ET_File *)l->data)->ETFileInfo.size;
+        ETCore->ETFileDisplayedList_TotalSize += ((ET_File *)l->data)->FileSize;
         ETCore->ETFileDisplayedList_TotalDuration += ((ET_File *)l->data)->ETFileInfo.duration;
     }
 

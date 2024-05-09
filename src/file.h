@@ -42,7 +42,6 @@ typedef struct
     gboolean variable_bitrate;  /* Is a VBR file? */
     gint samplerate;            /* Samplerate (Hz) */
     gint mode;                  /* Stereo, ... or channels for ogg */
-    goffset size;               /* The size of file (in bytes) */
     gint duration;              /* The duration of file (in seconds) */
     gchar *mpc_profile;         /* MPC data */
     gchar *mpc_version;         /* MPC data : encoder version  (also for Speex) */
@@ -57,6 +56,7 @@ typedef struct
 
     guint ETFileKey;          /* Primary key to identify each item of the list (no longer used?) */
 
+    guint64 FileSize;         ///< File size in bytes
     guint64 FileModificationTime; /* Save modification time of the file */
 
     const ET_File_Description *ETFileDescription;

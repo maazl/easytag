@@ -146,7 +146,6 @@ gboolean opus_read_file(GFile *gfile, ET_File* ETFile, GError **error)
 {
 	  OggOpusFile *file;
     const OpusHead* head;
-    GFileInfo *info;
 
     g_return_val_if_fail (gfile != NULL && ETFile != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -185,15 +184,6 @@ gboolean opus_read_file(GFile *gfile, ET_File* ETFile, GError **error)
     et_add_file_tags_from_vorbis_comments((vorbis_comment *)op_tags(file, 0), ETFile->FileTag->data);
 
     op_free (file);
-
-    info = g_file_query_info (gfile, G_FILE_ATTRIBUTE_STANDARD_SIZE,
-                              G_FILE_QUERY_INFO_NONE, NULL, NULL);
-
-    if G_LIKELY(info)
-    {
-        ETFileInfo->size = g_file_info_get_size (info);
-        g_object_unref (info);
-    }
 
     g_assert (error == NULL || *error == NULL);
     return TRUE;
