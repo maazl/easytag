@@ -51,6 +51,27 @@ using namespace TagLib;
 #include <taglib/mp4itemfactory.h>
 #include <taglib/tmap.h>
 
+
+// registration
+const struct QuickTime_Description : ET_File_Description
+{	QuickTime_Description(const char* extension, const char* description)
+	{	Extension = extension;
+		FileType = description;
+		TagType = _("MP4/QuickTime Tag");
+		read_file = mp4_read_file;
+		write_file_tag = mp4tag_write_file_tag;
+		display_file_info_to_ui = et_mp4_header_display_file_info_to_ui;
+		unsupported_fields = mp4tag_unsupported_fields;
+		support_multiple_pictures = [](const ET_File*) { return false; };
+	}
+}
+MP4_Description(".mp4", _("MPEG4 File")),
+M4A_Description(".m4a", _("MPEG4 File")),
+M4P_Description(".m4p", _("MPEG4 File")),
+M4V_Description(".m4v", _("MPEG4 File")),
+AAC_Description(".aac", _("AAC File")); // TODO .aac is typically ADTS rather than MPEG4
+
+
 /// Add support for ReplayGain tags
 static class CustomItemFactory : public MP4::ItemFactory
 {
@@ -249,6 +270,9 @@ gboolean mp4_read_file(GFile *file, ET_File *ETFile, GError **error)
         et_file_tag_set_picture (FileTag, NULL);
     }
 
+    // validate date fields
+    ETFile->check_dates(1, false); // Year only
+
     return TRUE;
 }
 
@@ -436,8 +460,6 @@ et_mp4_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File
 {
     const ET_File_Info *info = &ETFile->ETFileInfo;
 
-    fields->description = _("MP4/AAC File");
-
     /* MPEG, Layer versions */
     if (info->mpc_version)
         fields->version_label = info->mpc_version;
@@ -456,6 +478,16 @@ et_mp4_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File
     {
         fields->mode = strprintf("%d", info->mode);
     }
+}
+
+unsigned mp4tag_unsupported_fields(const ET_File* file)
+{
+#if TAGLIB_MAJOR_VERSION >= 2
+	return ET_COLUMN_VERSION | ET_COLUMN_ORIG_ARTIST | ET_COLUMN_ORIG_YEAR | ET_COLUMN_URL;
+#else
+	return ET_COLUMN_VERSION | ET_COLUMN_RELEASE_YEAR | ET_COLUMN_ORIG_ARTIST
+		| ET_COLUMN_ORIG_YEAR | ET_COLUMN_URL | ET_COLUMN_REPLAYGAIN;
+#endif
 }
 
 #endif /* ENABLE_MP4 */

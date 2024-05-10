@@ -43,6 +43,26 @@
 #include <memory>
 using namespace std;
 
+// registration
+struct Ogg_Description : ET_File_Description
+{	Ogg_Description(const char* extension, const char* description, gboolean (*read_file)(GFile* gfile, ET_File* FileTag, GError** error))
+	{	Extension = extension;
+		FileType = description;
+		TagType = _("Ogg Vorbis Tag");
+		this->read_file = read_file;
+		write_file_tag = ogg_tag_write_file_tag;
+		display_file_info_to_ui = et_ogg_header_display_file_info_to_ui;
+	}
+};
+
+const Ogg_Description
+OGG_Description(".ogg", _("Ogg Vorbis File"), ogg_read_file),
+OGA_Description(".oga", _("Ogg Vorbis File"), ogg_read_file);
+#ifdef ENABLE_SPEEX
+const Ogg_Description
+SPX_Description(".spx", _("Speex File"), speex_read_file);
+#endif
+
 
 /***************
  * Declaration *
@@ -269,7 +289,7 @@ gboolean ogg_read_file(GFile *file, ET_File *ETFile, GError **error)
 
         ETFileInfo->duration = ov_time_total(&vf, -1); // (s) Total time.
 
-        et_add_file_tags_from_vorbis_comments(ov_comment(&vf, 0), ETFile->FileTag->data);
+        et_add_file_tags_from_vorbis_comments(ov_comment(&vf, 0), ETFile);
 
         ov_clear(&vf); // This close also the file
     }else
@@ -357,7 +377,7 @@ gboolean speex_read_file(GFile *file, ET_File *ETFile, GError **error)
         //g_print("compressed length: %ld bytes\n",(long)(ov_raw_total(&vf,-1)));
     }
 
-    et_add_file_tags_from_vorbis_comments(vcedit_comments(state), ETFile->FileTag->data);
+    et_add_file_tags_from_vorbis_comments(vcedit_comments(state), ETFile);
 
     vcedit_clear(state);
     return TRUE;
@@ -368,13 +388,6 @@ void
 et_ogg_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile)
 {
     const ET_File_Info *info = &ETFile->ETFileInfo;
-
-    if (ETFile->ETFileDescription->FileType == OGG_FILE)
-        fields->description = _("Ogg Vorbis File");
-    else if (ETFile->ETFileDescription->FileType == SPEEX_FILE)
-        fields->description = _("Speex File");
-    else
-        g_assert_not_reached ();
 
     /* Encoder version */
     fields->version_label = _("Encoder:");
@@ -617,12 +630,12 @@ void tags_hash::to_other_tags(File_Tag *FileTag)
  * Reads Vorbis comments and copies them to file tag.
  */
 void
-et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
-                                       File_Tag *FileTag)
+et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 {
 	if (!vc)
 		return;
 
+	File_Tag *FileTag = ETFile->FileTag->data;
 	tags_hash tags;
 
 	for (int i = 0; i < vc->comments; i++)
@@ -799,6 +812,9 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc,
 
 	/* Save unsupported fields. */
 	tags.to_other_tags(FileTag);
+
+	// validate date fields
+	ETFile->check_dates(3, true); // From field 3 arbitrary strings are allowed
 }
 
 gboolean

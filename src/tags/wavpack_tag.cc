@@ -35,6 +35,20 @@
 
 #define MAXLEN 1024
 
+
+// registration
+const struct Wavpack_Description : ET_File_Description
+{	Wavpack_Description()
+	{	Extension = ".wv";
+		FileType = _("Wavpack File");
+		TagType = _("Wavpack Tag");
+		read_file = wavpack_read_file;
+		write_file_tag = wavpack_tag_write_file_tag;
+		display_file_info_to_ui = et_wavpack_header_display_file_info_to_ui;
+	}
+}
+WV_Description;
+
 /*
  * For the APEv2 tags, the following field names are officially supported and
  * recommended by WavPack (although there are no restrictions on what field names
@@ -332,6 +346,9 @@ wavpack_tag_write_file_tag (const ET_File *ETFile,
 
     g_object_unref (state.iostream);
 
+    // validate date fields
+    ETFile->check_dates(3, true); // From field 3 arbitrary strings are allowed
+
     return TRUE;
 
 err:
@@ -374,8 +391,6 @@ void
 et_wavpack_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile)
 {
     const ET_File_Info *info = &ETFile->ETFileInfo;
-
-    fields->description = _("Wavpack File");
 
     /* Encoder version */
     fields->version_label = _("Encoder:");

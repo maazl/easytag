@@ -350,7 +350,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
         guint32 crc32_value;
         gchar *buffer;
 
-        if (ETFile->ETFileDescription->TagType == ID3_TAG)
+        if (g_ascii_strcasecmp(ETFile->ETFileExtension, ".mp3"))
         {
             file = g_file_new_for_path (ETFile->FileNameNew->data->value);
 
@@ -412,7 +412,7 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, gchar *mask)
 
     // Remove extension of file (if found)
     const ET_File_Description* desc = ET_Get_File_Description(filename_utf8);
-    if (desc->FileType != UNKNOWN_FILE)
+    if (desc->IsSupported())
         filename_utf8[strlen(filename_utf8) - strlen(desc->Extension)] = 0; //strrchr(source,'.') = 0;
     else
         Log_Print(LOG_ERROR, _("The extension ‘%s’ was not found in filename ‘%s’"),

@@ -118,6 +118,11 @@ typedef struct File_Tag
       time() : tm{ 0, 0, 0, 1, 0, 0 }, field_count(0), invalid(false) {}
     };
     static time parse_datetime(const char* value);
+    /// Check whether time stamp valid for the current format.
+    /// @param value Tag value
+    /// @param max_fields Maximum number of fields, i.e. 1111-22-33T44:55:66.
+    /// @param additional_content Allow arbitrary additional content after the last field.
+    static bool check_date(const char* value, int max_fields, bool additional_content);
 
     std::string track_and_total() const;
     std::string disc_and_total() const;

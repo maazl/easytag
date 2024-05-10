@@ -22,7 +22,6 @@
 
 #include <glib.h>
 
-#include "core_types.h"
 #include "file_description.h"
 #include "file_name.h"
 #include "file_tag.h"
@@ -50,7 +49,7 @@ typedef struct
 /*
  * Description of each item of the ETFileList list
  */
-typedef struct
+struct ET_File
 {
     guint IndexKey;           /* Value used to display the position in the list (and in the BrowserList) - Must be renumered after resorting the list - This value varies when resorting list */
 
@@ -74,7 +73,12 @@ typedef struct
     gListP<File_Tag*> FileTagListBak;    /* Contains items of FileTagList removed by 'undo' procedure but have data currently saved */
 
     gboolean activate_bg_color; // For browser list: alternating background due to sub directory change.
-} ET_File;
+
+    /// Check all time stamp for the current format and create a warning if not.
+    /// @param max_fields Maximum number of fields, i.e. 1111-22-33T44:55:66.
+    /// @param additional_content Allow arbitrary additional content after the last field.
+    void check_dates(int max_fields, bool additional_content) const;
+};
 
 #else
 typedef struct ET_File ET_File;

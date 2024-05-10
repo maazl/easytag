@@ -19,6 +19,7 @@
 #include "file_tag.h"
 
 #include "misc.h"
+#include "log.h"
 
 #include <limits>
 #include <cmath>
@@ -450,6 +451,22 @@ File_Tag::time File_Tag::parse_datetime(const char* value)
 fail:
 	ret.invalid = true;
 	return ret;
+}
+
+/** Check whether time stamp valid for the current format.
+ * @param value Tag value
+ * @param max_fields Maximum number of fields, i.e. 1111-22-33T44:55:66.
+ * @param additional_content Allow arbitrary additional content after the last field.
+ * @return true: valid
+ */
+bool File_Tag::check_date(const char* value, int max_fields, bool additional_content)
+{
+	File_Tag::time t = parse_datetime(value);
+	if (!t.invalid)
+		return t.field_count <= max_fields;
+	if (!additional_content)
+		return false;
+	return t.field_count <= max_fields;
 }
 
 std::string File_Tag::track_and_total() const

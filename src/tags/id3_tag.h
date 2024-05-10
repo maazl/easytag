@@ -24,7 +24,7 @@
 #ifdef ENABLE_MP3
 
 #include <glib.h>
-#include "../file.h"
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
@@ -41,6 +41,9 @@ GQuark et_id3_error_quark (void);
 
 #define ET_ID3_ERROR et_id3_error_quark ()
 
+struct ET_File;
+struct EtFileHeaderFields;
+
 /*
  * EtID3Error:
  * @ET_ID3_ERROR_BUGGY_ID3LIB: Buggy id3lib implementation found
@@ -56,6 +59,7 @@ gboolean id3_read_file (GFile *file, ET_File *ETFile, GError **error);
 gboolean id3tag_write_file_v24tag (const ET_File *ETFile, GError **error);
 gboolean id3tag_write_file_tag (const ET_File *ETFile, GError **error);
 void et_mpeg_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
+unsigned id3tag_unsupported_fields(const ET_File* file);
 
 const gchar * Id3tag_Genre_To_String (unsigned char genre_code);
 guchar Id3tag_String_To_Genre (const gchar *genre);

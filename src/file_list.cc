@@ -34,25 +34,6 @@
 #include "log.h"
 #include "misc.h"
 #include "picture.h"
-#include "ape_tag.h"
-#ifdef ENABLE_MP3
-#include "id3_tag.h"
-#endif
-#ifdef ENABLE_OGG
-#include "ogg_tag.h"
-#endif
-#ifdef ENABLE_FLAC
-#include "flac_tag.h"
-#endif
-#ifdef ENABLE_MP4
-#include "mp4_tag.h"
-#endif
-#ifdef ENABLE_WAVPACK
-#include "wavpack_tag.h"
-#endif
-#ifdef ENABLE_OPUS
-#include "opus_tag.h"
-#endif
 
 /*
  * et_file_list_free:
@@ -220,159 +201,17 @@ et_file_list_add (GList *file_list,
         goto fail;
     }
 
-    switch (ETFile->ETFileDescription->FileType)
+    if (ETFile->ETFileDescription->read_file
+        && !(*ETFile->ETFileDescription->read_file)(file, ETFile, &error))
     {
-#ifdef ENABLE_MP3
-        case MP2_FILE:
-        case MP3_FILE:
-            if (!id3_read_file (file, ETFile, &error))
-            {
-                Log_Print (LOG_ERROR,
-                           _("Error reading ID3 tag from file ‘%s’: %s"),
-                           display_path, error->message);
-                g_clear_error (&error);
-            }
-            if (!g_settings_get_boolean (MainSettings, "id3v2-enabled"))
-                max_date_fields = 1;
-            else if (!g_settings_get_boolean (MainSettings, "id3v2-version-4"))
-                max_date_fields = 3;
-            else
-                max_date_fields = 6;
-            break;
-#endif
-#ifdef ENABLE_OGG
-        case OGG_FILE:
-            if (!ogg_read_file(file, ETFile, &error))
-            {
-                Log_Print (LOG_ERROR,
-                           _("Error reading tag from Ogg file ‘%s’: %s"),
-                           display_path, error->message);
-                g_clear_error (&error);
-            }
-            max_date_fields = -3; // From field 3 arbitrary strings are allowed
-            break;
-#endif
-#ifdef ENABLE_SPEEX
-        case SPEEX_FILE:
-            if (!speex_read_file(file, ETFile, &error))
-            {
-                Log_Print (LOG_ERROR,
-                           _("Error reading tag from Ogg file ‘%s’: %s"),
-                           display_path, error->message);
-                g_clear_error (&error);
-            }
-            max_date_fields = -3; // From field 3 arbitrary strings are allowed
-            break;
-#endif
-#ifdef ENABLE_FLAC
-        case FLAC_FILE:
-            if (!flac_read_file(file, ETFile, &error))
-            {
-                Log_Print (LOG_ERROR,
-                           _("Error reading tag from FLAC file ‘%s’: %s"),
-                           display_path, error->message);
-                g_clear_error (&error);
-            }
-            max_date_fields = -3; // From field 3 arbitrary strings are allowed
-            break;
-#endif
-        case MPC_FILE:
-          if (!mpc_read_file(file, ETFile, &error))
-          {
-              Log_Print (LOG_ERROR,
-                         _("Error reading APE tag from file ‘%s’: %s"),
-                         display_path, error->message);
-              g_clear_error (&error);
-          }
-          max_date_fields = -3; // From field 3 arbitrary strings are allowed
-          break;
-        case MAC_FILE:
-            if (!mac_read_file(file, ETFile, &error))
-            {
-                Log_Print (LOG_ERROR,
-                           _("Error reading APE tag from file ‘%s’: %s"),
-                           display_path, error->message);
-                g_clear_error (&error);
-            }
-            max_date_fields = -3; // From field 3 arbitrary strings are allowed
-            break;
-#ifdef ENABLE_MP4
-        case MP4_FILE:
-            if (!mp4_read_file(file, ETFile, &error))
-            {
-                Log_Print (LOG_ERROR,
-                           _("Error reading tag from MP4 file ‘%s’: %s"),
-                           display_path, error->message);
-                g_clear_error (&error);
-            }
-            max_date_fields = 1; // Year only
-            break;
-#endif
-#ifdef ENABLE_WAVPACK
-        case WAVPACK_FILE:
-            if (!wavpack_read_file(file, ETFile, &error))
-            {
-                Log_Print (LOG_ERROR,
-                           _("Error reading tag from WavPack file ‘%s’: %s"),
-                           display_path, error->message);
-                g_clear_error (&error);
-            }
-            max_date_fields = -3; // From field 3 arbitrary strings are allowed
-            break;
-#endif
-#ifdef ENABLE_OPUS
-        case OPUS_FILE:
-            if (!opus_read_file(file, ETFile, &error))
-            {
-                Log_Print (LOG_ERROR,
-                           _("Error reading tag from Opus file ‘%s’: %s"),
-                           display_path, error->message);
-                g_clear_error (&error);
-            }
-            max_date_fields = -3; // From field 3 arbitrary strings are allowed
-            break;
-#endif
-        default:
-            /* FIXME: Translatable string. */
-            Log_Print (LOG_ERROR,
-                       "FileTag: Undefined tag type (%d) for file %s",
-                       (gint)ETFile->ETFileDescription->TagType, display_path);
-            break;
+        Log_Print (LOG_ERROR, _("Error reading tag from %s ‘%s’: %s"),
+                   ETFile->ETFileDescription->FileType, display_path, error->message);
+        g_clear_error (&error);
     }
-
-    if (!et_check_date(FileTag->year, max_date_fields))
-    {
-        Log_Print (LOG_WARNING,
-                   _("The year value ‘%s’ seems to be invalid in file ‘%s’."),
-                   FileTag->year, display_path);
-    }
-
-    if (!et_check_date(FileTag->release_year, max_date_fields))
-    {
-        Log_Print (LOG_WARNING,
-                   _("The release year value ‘%s’ seems to be invalid in file ‘%s’."),
-                   FileTag->release_year, display_path);
-    }
-
-    if (!et_check_date(FileTag->orig_year, max_date_fields))
-    {
-        Log_Print (LOG_WARNING,
-                   _("The original year value ‘%s’ seems to be invalid in file ‘%s’."),
-                   FileTag->orig_year, display_path);
-    }
-
-    /*if (!success)
-    {
-        Log_Print (LOG_ERROR,
-                   _("Error while querying information for file ‘%s’: %s"),
-                   display_path, error->message);
-        g_error_free (error);
-    }*/
 
 fail:
     /* Add the item to the "main list" */
     result = g_list_append (file_list, ETFile);
-
 
     /*
      * Process the filename and tag to generate undo if needed...

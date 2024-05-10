@@ -152,10 +152,7 @@ et_file_area_clear (EtFileArea *self)
 
     priv = et_file_area_get_instance_private (self);
 
-    /* Default values are MPEG data. */
     fields.description = _("File");
-    fields.version_label = _("Encoder:");
-    fields.mode_label = _("Mode:");
 
     et_file_area_set_header_fields (self, &fields);
 

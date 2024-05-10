@@ -45,7 +45,7 @@ easytag_SOURCES = \
 	src/browser.cc \
 	src/cddb_dialog.cc \
 	src/charset.c \
-	src/crc32.c \
+	src/crc32.cc \
 	src/dlm.c \
 	src/easytag.cc \
 	src/enums.c \
@@ -63,7 +63,7 @@ easytag_SOURCES = \
 	src/main.c \
 	src/mask.cc \
 	src/misc.cc \
-	src/picture.c \
+	src/picture.cc \
 	src/playlist_dialog.cc \
 	src/preferences_dialog.cc \
 	src/progress_bar.c \
@@ -74,8 +74,8 @@ easytag_SOURCES = \
 	src/setting.cc \
 	src/status_bar.c \
 	src/tag_area.cc \
-	src/tags/libapetag/apetaglib.c \
-	src/tags/libapetag/is_tag.c \
+	src/tags/libapetag/apetaglib.cc \
+	src/tags/libapetag/is_tag.cc \
 	src/tags/libapetag/info_mac.cc \
 	src/tags/libapetag/info_mpc.cc \
 	src/tags/ape_tag.cc \
@@ -103,7 +103,6 @@ easytag_headers = \
 	src/cddb_dialog.h \
 	src/charset.h \
 	src/crc32.h \
-	src/core_types.h \
 	src/dlm.h \
 	src/easytag.h \
 	src/et_core.h \

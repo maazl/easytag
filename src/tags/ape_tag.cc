@@ -39,6 +39,47 @@
 #include <limits>
 using namespace std;
 
+
+// registration
+const struct MusePack_Description : ET_File_Description
+{	MusePack_Description(const char* extension)
+	{	Extension = extension;
+		FileType = _("MusePack File");
+		TagType = _("APE Tag");
+		read_file = mpc_read_file;
+		write_file_tag = ape_tag_write_file_tag;
+		display_file_info_to_ui = et_mpc_header_display_file_info_to_ui;
+	}
+}
+MPC_Description(".mpc"),
+MPPlus_Description(".mp+"),
+MPP_Description(".mpp");
+
+const struct MonkeysAudio_Description : ET_File_Description
+{	MonkeysAudio_Description(const char* extension)
+	{	Extension = extension;
+		FileType = _("Monkey's Audio File");
+		TagType = _("APE Tag");
+		read_file = mac_read_file;
+		write_file_tag = ape_tag_write_file_tag;
+		display_file_info_to_ui = et_mac_header_display_file_info_to_ui;
+	}
+}
+APE_Description(".ape"),
+MAC_Description(".mac");
+
+// TODO: seems not to be supported but was listed before too
+const struct OptimFROG_Description : ET_File_Description
+{	OptimFROG_Description(const char* extension)
+	{	Extension = extension;
+		FileType = _("OptimFROG File");
+		TagType = _("APE Tag");
+	}
+}
+OFR_Description(".ofr"),
+OFS_Description(".ofs");
+
+
 /*************
  * Functions *
  *************/
@@ -49,9 +90,10 @@ using namespace std;
  */
 static gboolean
 ape_tag_read_file_tag (GFile *file,
-                       File_Tag *FileTag,
+                       ET_File *ETFile,
                        GError **error)
 {
+    File_Tag* FileTag = ETFile->FileTag->data;
     FILE *fp;
     gchar *filename;
     gchar *string = NULL;
@@ -129,6 +171,9 @@ ape_tag_read_file_tag (GFile *file,
     apetag_free (ape_cnt);
     fclose (fp);
 
+    // validate date fields
+    ETFile->check_dates(3, true); // From field 3 arbitrary strings are allowed
+
     return TRUE;
 }
 
@@ -137,7 +182,7 @@ gboolean mac_read_file(GFile *file, ET_File *ETFile, GError **error)
 	g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	return ape_tag_read_file_tag(file, ETFile->FileTag->data, error)
+	return ape_tag_read_file_tag(file, ETFile, error)
 		&& info_mac_read(file, ETFile, error);
 }
 
@@ -146,7 +191,7 @@ gboolean mpc_read_file(GFile *file, ET_File *ETFile, GError **error)
 	g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	return ape_tag_read_file_tag(file, ETFile->FileTag->data, error)
+	return ape_tag_read_file_tag(file, ETFile, error)
 		&& info_mpc_read (file, ETFile, error);
 }
 
@@ -235,8 +280,6 @@ et_mac_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File
 {
     const ET_File_Info *info = &ETFile->ETFileInfo;
 
-    fields->description = _("Monkey's Audio File");
-
     /* Mode changed to profile name  */
     fields->mode_label = _("Profile:");
     if (info->mpc_profile)
@@ -251,8 +294,6 @@ void
 et_mpc_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile)
 {
     const ET_File_Info *info = &ETFile->ETFileInfo;
-
-    fields->description = _("MusePack File");
 
     /* Mode changed to profile name  */
     fields->mode_label = _("Profile:");

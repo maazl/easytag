@@ -31,26 +31,7 @@
 #include "easytag.h"
 #include "file_tag.h"
 #include "file_list.h"
-#ifdef ENABLE_MP3
-#   include "id3_tag.h"
-#endif
 #include "picture.h"
-#include "ape_tag.h"
-#ifdef ENABLE_OGG
-#include "ogg_tag.h"
-#endif
-#ifdef ENABLE_FLAC
-#include "flac_tag.h"
-#endif
-#ifdef ENABLE_MP4
-#include "mp4_tag.h"
-#endif
-#ifdef ENABLE_WAVPACK
-#include "wavpack_tag.h"
-#endif
-#ifdef ENABLE_OPUS
-#include "opus_tag.h"
-#endif
 #include "browser.h"
 #include "log.h"
 #include "misc.h"
@@ -58,6 +39,27 @@
 #include "charset.h"
 
 #include "win32/win32dep.h"
+
+
+void ET_File::check_dates(int max_fields, bool additional_content) const
+{
+	File_Tag* tag = FileTagCur->data;
+	if (!File_Tag::check_date(tag->year, max_fields, additional_content))
+			Log_Print (LOG_WARNING,
+								 _("The year value ‘%s’ seems to be invalid in file ‘%s’."),
+								 tag->year, FileNameCur->data->value_utf8);
+
+	if (!File_Tag::check_date(tag->release_year, max_fields, additional_content))
+			Log_Print (LOG_WARNING,
+								 _("The release year value ‘%s’ seems to be invalid in file ‘%s’."),
+								 tag->release_year, FileNameCur->data->value_utf8);
+
+	if (!File_Tag::check_date(tag->orig_year, max_fields, additional_content))
+			Log_Print (LOG_WARNING,
+								 _("The original year value ‘%s’ seems to be invalid in file ‘%s’."),
+								 tag->orig_year, FileNameCur->data->value_utf8);
+}
+
 
 static gboolean ET_Free_File_Name_List (GList *FileNameList);
 static gboolean ET_Free_File_Tag_List (GList *FileTagList);
@@ -260,8 +262,9 @@ static gint CmpFileType(const ET_File* ETFile1, const ET_File* ETFile2)
 	if ( !ETFile1->ETFileDescription ) return -1;
 	if ( !ETFile2->ETFileDescription ) return 1;
 
-	if (ETFile1->ETFileDescription->FileType != ETFile2->ETFileDescription->FileType)
-		return sign(ETFile1->ETFileDescription->FileType - ETFile2->ETFileDescription->FileType);
+	int cmp = strcmp(ETFile1->ETFileDescription->Extension, ETFile2->ETFileDescription->Extension);
+	if (cmp)
+		return sign(cmp);
 	// Second criterion
 	return 2 * CmpFilepath(ETFile1,ETFile2);
 }
@@ -648,67 +651,13 @@ ET_Save_File_Tag_To_HD (ET_File *ETFile, GError **error)
     fileinfo = g_file_query_info (file, "time::*", G_FILE_QUERY_INFO_NONE,
                                   NULL, NULL);
 
-    switch (description->TagType)
-    {
-#ifdef ENABLE_MP3
-        case ID3_TAG:
-            state = id3tag_write_file_tag (ETFile, error);
-            break;
-#endif
-#ifdef ENABLE_OGG
-        case OGG_TAG:
-            state = ogg_tag_write_file_tag (ETFile, error);
-            break;
-#endif
-#ifdef ENABLE_FLAC
-        case FLAC_TAG:
-            state = flac_tag_write_file_tag (ETFile, error);
-            break;
-#endif
-        case APE_TAG:
-            state = ape_tag_write_file_tag (ETFile, error);
-            break;
-#ifdef ENABLE_MP4
-        case MP4_TAG:
-            state = mp4tag_write_file_tag (ETFile, error);
-            break;
-#endif
-#ifdef ENABLE_WAVPACK
-        case WAVPACK_TAG:
-            state = wavpack_tag_write_file_tag (ETFile, error);
-            break;
-#endif
-#ifdef ENABLE_OPUS
-        case OPUS_TAG:
-            state = ogg_tag_write_file_tag (ETFile, error);
-            break;
-#endif
-#ifndef ENABLE_MP3
-        case ID3_TAG:
-#endif
-#ifndef ENABLE_OGG
-        case OGG_TAG:
-#endif
-#ifndef ENABLE_FLAC
-        case FLAC_TAG:
-#endif
-#ifndef ENABLE_MP4
-        case MP4_TAG:
-#endif
-#ifndef ENABLE_WAVPACK
-        case WAVPACK_TAG:
-#endif
-#ifndef ENABLE_OPUS
-        case OPUS_TAG:
-#endif
-        case UNKNOWN_TAG:
-        default:
-            Log_Print (LOG_ERROR,
-                       "Saving to HD: Undefined function for tag type '%d' (file %s).",
-                       (gint)description->TagType, cur_filename_utf8);
-            state = FALSE;
-            break;
-    }
+    /* execute write operation */
+    if (description->write_file_tag)
+        state = (*description->write_file_tag)(ETFile, error);
+    else
+        Log_Print (LOG_ERROR,
+                   "Saving unsupported for %s (%s).",
+                   description->FileType, cur_filename_utf8);
 
     /* Update properties for the file. */
     if (fileinfo)

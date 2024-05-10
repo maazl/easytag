@@ -26,13 +26,14 @@ src/charset.c
 src/easytag.cc
 src/et_core.c
 src/file_area.cc
+src/file_description.cc
 src/file_list.cc
 src/file.cc
 src/load_files_dialog.cc
 src/log.c
 src/mask.cc
 src/misc.cc
-src/picture.c
+src/picture.cc
 src/playlist_dialog.cc
 src/preferences_dialog.cc
 src/scan_dialog.cc

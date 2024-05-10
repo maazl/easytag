@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <gio/gio.h>
 #include <vorbis/vorbisfile.h>
 
 #include "../file.h"
@@ -88,7 +89,7 @@ GQuark et_ogg_error_quark (void);
 gboolean ogg_read_file (GFile *file, ET_File *ETFile, GError **error);
 gboolean ogg_tag_write_file_tag (const ET_File *ETFile, GError **error);
 
-void et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, File_Tag *FileTag);
+void et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile);
 void et_add_vorbis_comments_from_file_tags (vorbis_comment *vc, File_Tag *FileTag);
 
 void et_ogg_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);

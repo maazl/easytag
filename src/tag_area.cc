@@ -21,9 +21,6 @@
 #include "tag_area.h"
 
 #include <glib/gi18n.h>
-#ifdef ENABLE_MP4
-#include <taglib/taglib.h>
-#endif
 
 #include "application_window.h"
 #include "charset.h"
@@ -1297,7 +1294,7 @@ PictureEntry_Update (EtTagArea *self,
                                                                 scale_factor,
                                                                 view_window);
                 pic_info = et_picture_format_info (pic,
-                                                   ETCore->ETFileDisplayed->ETFileDescription->TagType);
+                                                   ETCore->ETFileDisplayed);
                 gtk_list_store_insert_with_values (priv->images_model, &iter1,
                                                    G_MAXINT,
                                                    PICTURE_COLUMN_SURFACE,
@@ -1416,37 +1413,19 @@ load_picture_from_file (GFile *file,
         const gchar *description;
 
         // Behaviour following the tag type...
-        switch (ETCore->ETFileDisplayed->ETFileDescription->TagType)
+        if (!ETCore->ETFileDisplayed->ETFileDescription->support_multiple_pictures(ETCore->ETFileDisplayed))
         {
             // Only one picture supported for MP4
-            case MP4_TAG:
-                description = "";
+            description = "";
+            type = ET_PICTURE_TYPE_FRONT_COVER;
+        } else
+        {
+            description = filename_utf8;
+
+            if (g_settings_get_boolean (MainSettings, "tag-image-type-automatic"))
+                type = et_picture_type_from_filename (description);
+            else
                 type = ET_PICTURE_TYPE_FRONT_COVER;
-                break;
-
-            // Other tag types
-            case ID3_TAG:
-            case OGG_TAG:
-            case OPUS_TAG:
-            case APE_TAG:
-            case FLAC_TAG:
-            case WAVPACK_TAG:
-                description = filename_utf8;
-
-                if (g_settings_get_boolean (MainSettings,
-                                            "tag-image-type-automatic"))
-                {
-                    type = et_picture_type_from_filename (description);
-                }
-                else
-                {
-                    type = ET_PICTURE_TYPE_FRONT_COVER;
-                }
-                break;
-
-            case UNKNOWN_TAG:
-            default:
-                g_assert_not_reached ();
         }
 
         pic = et_picture_new (type, description, 0, 0, bytes);
@@ -1516,7 +1495,7 @@ on_picture_add_button_clicked (GObject *object,
                                  filter);
 
     // Behaviour following the tag type...
-    if (ETCore->ETFileDisplayed->ETFileDescription->TagType == MP4_TAG)
+    if (!ETCore->ETFileDisplayed->ETFileDescription->support_multiple_pictures(ETCore->ETFileDisplayed))
     {
         /* Only one file can be selected. */
         gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (FileSelectionWindow),
@@ -1639,7 +1618,7 @@ on_picture_properties_button_clicked (GObject *object,
         g_object_unref (store);
 
         /* Behaviour following the tag type. */
-        if (ETCore->ETFileDisplayed->ETFileDescription->TagType == MP4_TAG)
+        if (!ETCore->ETFileDisplayed->ETFileDescription->support_multiple_pictures(ETCore->ETFileDisplayed))
         {
             /* Load picture type (only Front Cover!). */
             GtkTreeIter itertype;
@@ -1701,7 +1680,7 @@ on_picture_properties_button_clicked (GObject *object,
         }
 
         /* Behaviour following the tag type. */
-        if (ETCore->ETFileDisplayed->ETFileDescription->TagType == MP4_TAG)
+        if (!ETCore->ETFileDisplayed->ETFileDescription->support_multiple_pictures(ETCore->ETFileDisplayed))
         {
             gtk_widget_set_sensitive (GTK_WIDGET (desc), FALSE);
         }
@@ -1742,8 +1721,7 @@ on_picture_properties_button_clicked (GObject *object,
                 pic->description = buffer;
 
                 /* Update value in the PictureEntryView. */
-                pic_info = et_picture_format_info (pic,
-                                                   ETCore->ETFileDisplayed->ETFileDescription->TagType);
+                pic_info = et_picture_format_info (pic, ETCore->ETFileDisplayed);
                 gtk_list_store_set (GTK_LIST_STORE (model), &iter,
                                     PICTURE_COLUMN_TEXT, pic_info,
                                     PICTURE_COLUMN_DATA, pic, -1);
@@ -2320,7 +2298,7 @@ et_tag_area_new (void)
  *
  * Update the visibility of entry fields depending on the type of file.
  */
-void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
+void et_tag_area_update_controls (EtTagArea *self, const ET_File* file)
 {
     g_return_if_fail (ET_TAG_AREA (self));
 
@@ -2329,71 +2307,8 @@ void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type)
     guint hide = g_settings_get_flags(MainSettings, "hide-fields") | ET_COLUMN_FILEPATH;
 
     /* Special controls to display or not! */
-    switch (type)
-    {
-    case ID3_TAG:
-        hide |= ET_COLUMN_VERSION | ET_COLUMN_DESCRIPTION;
-        if (g_settings_get_boolean (MainSettings, "id3v2-enabled"))
-        {
-            if (!g_settings_get_boolean (MainSettings, "id3v2-version-4"))
-                hide |= ET_COLUMN_RELEASE_YEAR;
-            break;
-        }
-        /* ID3v1 : Hide specifics ID3v2 fields if not activated! */
-#ifndef ENABLE_OGG
-    case OGG_TAG:
-#endif
-#ifndef ENABLE_FLAC
-    case FLAC_TAG:
-#endif
-#ifndef ENABLE_MP4
-    case MP4_TAG:
-#endif
-#ifndef ENABLE_WAVPACK
-    case WAVPACK_TAG:
-#endif
-#ifndef ENABLE_OPUS
-    case OPUS_TAG:
-#endif
-    default:
-        hide |= ET_COLUMN_VERSION | ET_COLUMN_SUBTITLE | ET_COLUMN_ALBUM_ARTIST
-            | ET_COLUMN_DISC_SUBTITLE | ET_COLUMN_TRACK_NUMBER | ET_COLUMN_DISC_NUMBER
-            | ET_COLUMN_RELEASE_YEAR | ET_COLUMN_COMPOSER | ET_COLUMN_ORIG_ARTIST
-            | ET_COLUMN_ORIG_YEAR | ET_COLUMN_COPYRIGHT | ET_COLUMN_URL
-            | ET_COLUMN_ENCODED_BY | ET_COLUMN_IMAGE | ET_COLUMN_DESCRIPTION;
-        break;
-
-    // APEv2 does not support all fields but the data can be stored in unsupported tag names.
-#ifdef ENABLE_WAVPACK
-    case WAVPACK_TAG:
-#endif
-    case APE_TAG:
-
-    // Vorbis comments support all tag fields.
-#ifdef ENABLE_OGG
-    case OGG_TAG:
-#endif
-#ifdef ENABLE_FLAC
-    case FLAC_TAG:
-#endif
-#ifdef ENABLE_OPUS
-    case OPUS_TAG:
-#endif
-
-    case UNKNOWN_TAG:
-        break;
-
-#ifdef ENABLE_MP4
-    case MP4_TAG:
-#if TAGLIB_MAJOR_VERSION >= 2
-        hide |= ET_COLUMN_VERSION | ET_COLUMN_ORIG_ARTIST | ET_COLUMN_ORIG_YEAR | ET_COLUMN_URL;
-#else
-        hide |= ET_COLUMN_VERSION | ET_COLUMN_RELEASE_YEAR | ET_COLUMN_ORIG_ARTIST
-          | ET_COLUMN_ORIG_YEAR | ET_COLUMN_URL | ET_COLUMN_REPLAYGAIN;
-#endif
-        break;
-#endif
-    }
+    if (file->ETFileDescription->unsupported_fields)
+        hide |= file->ETFileDescription->unsupported_fields(file);
 
     auto show_hide = [hide](guint col, GtkWidget* w1, GtkWidget* w2, GtkWidget* w3)
     {
@@ -2661,69 +2576,7 @@ et_tag_area_display_et_file (EtTagArea *self, const ET_File *ETFile, int columns
 
     priv = et_tag_area_get_instance_private (self);
 
-    const gchar* tag_label;
-    switch (ETFile->ETFileDescription->TagType)
-    {
-#ifdef ENABLE_MP3
-        case ID3_TAG:
-            tag_label = _("ID3 Tag");
-            break;
-#endif
-#ifdef ENABLE_OGG
-        case OGG_TAG:
-            tag_label = _("Ogg Vorbis Tag");
-            break;
-#endif
-#ifdef ENABLE_FLAC
-        case FLAC_TAG:
-            tag_label = _("FLAC Vorbis Tag");
-            break;
-#endif
-        case APE_TAG:
-            tag_label = _("APE Tag");
-            break;
-#ifdef ENABLE_MP4
-        case MP4_TAG:
-            tag_label = _("MP4/M4A/AAC Tag");
-            break;
-#endif
-#ifdef ENABLE_WAVPACK
-        case WAVPACK_TAG:
-            tag_label = _("Wavpack Tag");
-            break;
-#endif
-#ifdef ENABLE_OPUS
-        case OPUS_TAG:
-            tag_label = _("Opus Tag");
-            break;
-#endif
-#ifndef ENABLE_MP3
-        case ID3_TAG:
-#endif
-#ifndef ENABLE_OGG
-        case OGG_TAG:
-#endif
-#ifndef ENABLE_FLAC
-        case FLAC_TAG:
-#endif
-#ifndef ENABLE_MP4
-        case MP4_TAG:
-#endif
-#ifndef ENABLE_WAVPACK
-        case WAVPACK_TAG:
-#endif
-#ifndef ENABLE_OPUS
-        case OPUS_TAG:
-#endif
-        case UNKNOWN_TAG:
-        default:
-            tag_label = _("Tag");
-            /* FIXME: Translatable string. */
-            Log_Print (LOG_ERROR, "FileTag: Undefined tag type %d for file %s.",
-                       (gint)ETFile->ETFileDescription->TagType, ETFile->FileNameCur->data->value_utf8);
-            break;
-    }
-    gtk_label_set_text (GTK_LABEL(priv->tag_label), tag_label);
+    gtk_label_set_text (GTK_LABEL(priv->tag_label), ETFile->ETFileDescription->TagType);
 
     //Tag_Area_Set_Sensitive(TRUE); // Causes displaying problem when saving files
 

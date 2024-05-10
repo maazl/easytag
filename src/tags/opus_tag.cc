@@ -28,6 +28,21 @@
 #include "charset.h"
 #include "misc.h"
 
+
+// registration
+struct Opus_Description : ET_File_Description
+{	Opus_Description()
+	{	Extension = ".opus";
+		FileType = _("Opus File");
+		TagType = _("Opus Tag");
+		read_file = opus_read_file;
+		write_file_tag = ogg_tag_write_file_tag;
+		display_file_info_to_ui = et_opus_header_display_file_info_to_ui;
+	}
+}
+Opus_Description;
+
+
 /*
  * et_opus_error_quark:
  *
@@ -181,7 +196,7 @@ gboolean opus_read_file(GFile *gfile, ET_File* ETFile, GError **error)
     ETFileInfo->duration = op_pcm_total (file, -1) / 48000;
 
     /* The cast is safe according to the opusfile documentation. */
-    et_add_file_tags_from_vorbis_comments((vorbis_comment *)op_tags(file, 0), ETFile->FileTag->data);
+    et_add_file_tags_from_vorbis_comments((vorbis_comment *)op_tags(file, 0), ETFile);
 
     op_free (file);
 
@@ -202,8 +217,6 @@ void
 et_opus_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile)
 {
     const ET_File_Info *info = &ETFile->ETFileInfo;
-
-    fields->description = _("Opus File");
 
     /* Encoder version */
     fields->version_label = _("Encoder:");

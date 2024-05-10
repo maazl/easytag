@@ -45,7 +45,7 @@ struct _EtTagAreaClass
 
 GType et_tag_area_get_type (void);
 GtkWidget * et_tag_area_new (void);
-void et_tag_area_update_controls (EtTagArea *self, ET_Tag_Type type);
+void et_tag_area_update_controls (EtTagArea *self, const ET_File* file);
 void et_tag_area_clear (EtTagArea *self);
 void et_tag_area_title_grab_focus (EtTagArea *self);
 void et_tag_area_store_file_tag(EtTagArea *self, File_Tag *tag);

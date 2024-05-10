@@ -244,6 +244,8 @@ libapetag_maloc_cont_text (apetag *mem_cnt, unsigned long flags,
     if (value != NULL && value[0] != '\0' && apefrm_getstr (mem_cnt, name) == NULL) {
         while (value[--n] == ' ' || value[n] == '\0' || value[n] == '\n') {
             value[n] = '\0';
+            if (!n)
+                return 0;
         }
         return libapetag_maloc_cont (mem_cnt, flags, sizeName, name, n + 1, value);
     }

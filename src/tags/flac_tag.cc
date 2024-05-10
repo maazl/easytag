@@ -40,6 +40,21 @@
 
 using namespace std;
 
+// registration
+const struct Flac_Description : ET_File_Description
+{	Flac_Description(const char* extension)
+	{	Extension = extension;
+		FileType = _("FLAC File");
+		TagType = _("FLAC Vorbis Tag");
+		read_file = flac_read_file;
+		write_file_tag = flac_tag_write_file_tag;
+		display_file_info_to_ui = et_flac_header_display_file_info_to_ui;
+	}
+}
+FLAC_Description(".flac"),
+FLA_Description(".fla");
+
+
 /*
  * Read tag data from a FLAC file using the level 2 flac interface,
  * Note:
@@ -200,6 +215,9 @@ gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error)
             FileTag->saved = FALSE;
     }
 #endif
+
+    // validate date fields
+    ETFile->check_dates(3, true); // From field 3 arbitrary strings are allowed
 
     return TRUE;
 }
@@ -668,8 +686,6 @@ flac_tag_write_file_tag (const ET_File *ETFile,
 void
 et_flac_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile)
 {
-    fields->description = _("FLAC File");
-
     /* Nothing to display */
     fields->version_label = _("Encoder:");
     fields->version = "flac";

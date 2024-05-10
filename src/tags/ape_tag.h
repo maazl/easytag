@@ -21,7 +21,10 @@
 #ifndef ET_APE_TAG_H_
 #define ET_APE_TAG_H_
 
-#include "../file.h"
+#include <gio/gio.h>
+
+struct ET_File;
+struct EtFileHeaderFields;
 
 G_BEGIN_DECLS
 

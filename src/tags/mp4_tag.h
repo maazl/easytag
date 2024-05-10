@@ -21,13 +21,17 @@
 #ifndef ET_MP4_TAG_H_
 #define ET_MP4_TAG_H_
 
-#include "../file.h"
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
+
+struct ET_File;
+struct EtFileHeaderFields;
 
 gboolean mp4_read_file(GFile *file, ET_File *ETFile, GError **error);
 gboolean mp4tag_write_file_tag (const ET_File *ETFile, GError **error);
 void et_mp4_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
+unsigned mp4tag_unsupported_fields(const ET_File* file);
 
 G_END_DECLS
 

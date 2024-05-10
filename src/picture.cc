@@ -274,8 +274,7 @@ et_picture_detect_difference (const EtPicture *a,
 }
 
 gchar *
-et_picture_format_info (const EtPicture *pic,
-                        ET_Tag_Type tag_type)
+et_picture_format_info (const EtPicture *pic, const ET_File* ETFile)
 {
     const gchar *format, *desc, *type;
     gchar *r, *size_str;
@@ -291,7 +290,7 @@ et_picture_format_info (const EtPicture *pic,
     size_str = g_format_size (g_bytes_get_size (pic->bytes));
 
     /* Behaviour following the tag type. */
-    if (tag_type == MP4_TAG)
+    if (!ETFile->ETFileDescription->support_multiple_pictures(ETFile))
     {
         r = g_strdup_printf ("%s (%s - %d×%d %s)\n%s: %s", format,
                              size_str, pic->width, pic->height,
@@ -438,9 +437,7 @@ et_picture_load_file_data (GFile *file, GError **error)
     }
     else
     {
-        gchar *buffer;
-
-        buffer = g_malloc (size);
+        gchar *buffer = (gchar*)g_malloc (size);
         ostream = g_memory_output_stream_new (buffer, size, g_realloc, g_free);
     }
 

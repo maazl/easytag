@@ -29,25 +29,9 @@
 #include "easytag.h"
 #include "file_area.h"
 #include "file_list.h"
-#ifdef ENABLE_FLAC
-#include "flac_tag.h"
-#endif
 #include "load_files_dialog.h"
 #include "log.h"
 #include "misc.h"
-#ifdef ENABLE_MP4
-#include "mp4_tag.h"
-#endif
-#ifdef ENABLE_MP3
-#include "id3_tag.h"
-#endif
-#include "ape_tag.h"
-#ifdef ENABLE_OGG
-#include "ogg_tag.h"
-#endif
-#ifdef ENABLE_OPUS
-#include "opus_tag.h"
-#endif
 #include "picture.h"
 #include "playlist_dialog.h"
 #include "preferences_dialog.h"
@@ -58,9 +42,6 @@
 #include "setting.h"
 #include "status_bar.h"
 #include "tag_area.h"
-#ifdef ENABLE_WAVPACK
-#include "wavpack_tag.h"
-#endif
 
 typedef struct
 {
@@ -2037,79 +2018,23 @@ et_application_window_update_file_name_from_ui (EtApplicationWindow *self,
 void
 et_application_window_update_et_file_from_ui (EtApplicationWindow *self)
 {
-    const ET_File_Description *description;
     ET_File *et_file;
     File_Name *FileName;
     File_Tag  *FileTag;
-    const gchar *cur_filename_utf8;
 
     if (!ETCore->ETFileDisplayed)
-    {
         return;
-    }
 
     et_file = ETCore->ETFileDisplayed;
 
     g_return_if_fail (et_file != NULL && et_file->FileNameCur != NULL
                       && et_file->FileNameCur->data != NULL);
 
-    /* Save the current displayed data */
-    cur_filename_utf8 = et_file->FileNameCur->data->value_utf8;
-    description = et_file->ETFileDescription;
-
     /* Save filename and generate undo for filename. */
     FileName = et_file_name_new ();
     et_application_window_update_file_name_from_ui (self, et_file, FileName);
 
-    switch (description->TagType)
-    {
-#ifdef ENABLE_MP3
-        case ID3_TAG:
-#endif
-#ifdef ENABLE_OGG
-        case OGG_TAG:
-#endif
-#ifdef ENABLE_FLAC
-        case FLAC_TAG:
-#endif
-#ifdef ENABLE_MP4
-        case MP4_TAG:
-#endif
-#ifdef ENABLE_WAVPACK
-        case WAVPACK_TAG:
-#endif
-#ifdef ENABLE_OPUS
-        case OPUS_TAG:
-#endif
-        case APE_TAG:
-            FileTag = et_application_window_tag_area_create_file_tag(self, et_file->FileTag->data);
-            break;
-#ifndef ENABLE_MP3
-        case ID3_TAG:
-#endif
-#ifndef ENABLE_OGG
-        case OGG_TAG:
-#endif
-#ifndef ENABLE_FLAC
-        case FLAC_TAG:
-#endif
-#ifndef ENABLE_MP4
-        case MP4_TAG:
-#endif
-#ifndef ENABLE_WAVPACK
-        case WAVPACK_TAG:
-#endif
-#ifndef ENABLE_OPUS
-        case OPUS_TAG:
-#endif
-        case UNKNOWN_TAG:
-        default:
-            FileTag = et_file_tag_new ();
-            Log_Print (LOG_ERROR,
-                       "FileTag: Undefined tag type %d for file %s.",
-                       (gint)description->TagType, cur_filename_utf8);
-            break;
-    }
+    FileTag = et_application_window_tag_area_create_file_tag(self, et_file->FileTag->data);
 
     /*
      * Generate undo for the file and the main undo list.
@@ -2158,7 +2083,7 @@ et_header_fields_new_default (EtFileHeaderFields *fields, const ET_File *ETFile)
 {
     const ET_File_Info *info = &ETFile->ETFileInfo;
 
-    fields->description = _("File");
+    fields->description = ETFile->ETFileDescription->FileType;
 
     /* Bitrate */
     fields->bitrate = strprintf(info->variable_bitrate ? _("~%d kb/s") : _("%d kb/s"), info->bitrate);
@@ -2230,81 +2155,8 @@ et_application_window_display_et_file (EtApplicationWindow *self,
     /* Display file data, header data and file type */
     et_header_fields_new_default(&fields, ETFile); // some defaults...
 
-    switch (description->FileType)
-    {
-#if defined ENABLE_MP3 && defined ENABLE_ID3LIB
-        case MP3_FILE:
-        case MP2_FILE:
-            et_mpeg_header_display_file_info_to_ui (&fields, ETFile);
-            break;
-#endif
-#ifdef ENABLE_OGG
-        case OGG_FILE:
-            et_ogg_header_display_file_info_to_ui (&fields, ETFile);
-            break;
-#endif
-#ifdef ENABLE_SPEEX
-        case SPEEX_FILE:
-            et_ogg_header_display_file_info_to_ui (&fields, ETFile);
-            break;
-#endif
-#ifdef ENABLE_FLAC
-        case FLAC_FILE:
-            et_flac_header_display_file_info_to_ui (&fields, ETFile);
-            break;
-#endif
-        case MPC_FILE:
-            et_mpc_header_display_file_info_to_ui (&fields, ETFile);
-            break;
-        case MAC_FILE:
-            et_mac_header_display_file_info_to_ui (&fields, ETFile);
-            break;
-#ifdef ENABLE_MP4
-        case MP4_FILE:
-            et_mp4_header_display_file_info_to_ui (&fields, ETFile);
-            break;
-#endif
-#ifdef ENABLE_WAVPACK
-        case WAVPACK_FILE:
-            et_wavpack_header_display_file_info_to_ui (&fields, ETFile);
-            break;
-#endif
-#ifdef ENABLE_OPUS
-        case OPUS_FILE:
-            et_opus_header_display_file_info_to_ui (&fields, ETFile);
-            break;
-#endif
-        case OFR_FILE:
-#if !defined ENABLE_MP3 && !defined ENABLE_ID3LIB
-        case MP3_FILE:
-        case MP2_FILE:
-#endif
-#ifndef ENABLE_OGG
-        case OGG_FILE:
-#endif
-#ifndef ENABLE_SPEEX
-        case SPEEX_FILE:
-#endif
-#ifndef ENABLE_FLAC
-        case FLAC_FILE:
-#endif
-#ifndef ENABLE_MP4
-        case MP4_FILE:
-#endif
-#ifndef ENABLE_WAVPACK
-        case WAVPACK_FILE:
-#endif
-#ifndef ENABLE_OPUS
-        case OPUS_FILE:
-#endif
-        case UNKNOWN_FILE:
-        default:
-            /* Default displaying. */
-            Log_Print (LOG_ERROR,
-                       "ETFileInfo: Undefined file type %d for file %s.",
-                       (gint)description->FileType, cur_filename_utf8);
-            break;
-    }
+    if (description->display_file_info_to_ui)
+        (*description->display_file_info_to_ui)(&fields, ETFile);
 
     et_application_window_file_area_set_header_fields(self, &fields);
 
@@ -2730,8 +2582,7 @@ et_application_window_tag_area_display_controls (EtApplicationWindow *self,
 {
     g_return_if_fail (ET_APPLICATION_WINDOW (self));
 
-    et_tag_area_update_controls (ET_TAG_AREA(et_application_window_get_instance_private(self)->tag_area),
-        ETFile != NULL && ETFile->ETFileDescription != NULL ? ETFile->ETFileDescription->TagType : UNKNOWN_TAG);
+    et_tag_area_update_controls (ET_TAG_AREA(et_application_window_get_instance_private(self)->tag_area), ETFile);
 }
 
 void

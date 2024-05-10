@@ -50,6 +50,25 @@
 #include <cstring>
 using namespace std;
 
+
+// registration
+struct MPEG_Description : ET_File_Description
+{	MPEG_Description(const char* extension, const char* description)
+	{	Extension = extension;
+		FileType = description;
+		TagType = _("ID3 Tag");
+		read_file = id3_read_file;
+		write_file_tag = id3tag_write_file_tag;
+		display_file_info_to_ui = et_mpeg_header_display_file_info_to_ui;
+		unsupported_fields = id3tag_unsupported_fields;
+	}
+};
+
+const MPEG_Description
+	MP3_Description(".mp3", _("MP3 File")),
+	MP2_Description(".mp2", _("MP2 File"));
+
+
 /****************
  * Declarations *
  ****************/
@@ -134,7 +153,7 @@ gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
     }
 
     // skip for cross call by flac_tag
-    if (ETFile->ETFileDescription->TagType == ID3_TAG)
+    if (ETFile->ETFileDescription == &MP3_Description || ETFile->ETFileDescription == &MP2_Description)
     {   /* after the tag the MP3 data should start
          * => read the first audio frame header */
         if (tagsize >= PEEK_MPEG_DATA_LEN)
@@ -235,6 +254,16 @@ gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
         | apply_tag(FileTag, v2tag.get())
         | apply_tag(FileTag, v2etag.get()))
         FileTag->saved = FALSE;
+
+    // validate date fields
+    int max_date_fields;
+    if (!g_settings_get_boolean (MainSettings, "id3v2-enabled"))
+        max_date_fields = 1;
+    else if (!g_settings_get_boolean (MainSettings, "id3v2-version-4"))
+        max_date_fields = 3;
+    else
+        max_date_fields = 6;
+    ETFile->check_dates(max_date_fields, false);
 
     return TRUE;
 }

@@ -19,8 +19,7 @@
 #ifndef ET_OPUS_TAG_H_
 #define ET_OPUS_TAG_H_
 
-#include <glib.h>
-#include "file.h"
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
@@ -54,6 +53,9 @@ typedef enum
 GQuark et_opus_error_quark (void);
 
 #define ET_OPUS_ERROR et_opus_error_quark ()
+
+struct ET_File;
+struct EtFileHeaderFields;
 
 gboolean opus_read_file(GFile *file, ET_File* ETFile, GError **error);
 void et_opus_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);

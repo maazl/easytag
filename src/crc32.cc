@@ -22,7 +22,7 @@
 
 #ifdef ENABLE_MP3
 
-#include "id3_tag.h"
+#include "tags/id3_tag.h"
 
 #define BUFFERSIZE 16384   /* (16k) buffer size for reading from the file */
 

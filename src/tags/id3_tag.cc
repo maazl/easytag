@@ -1199,13 +1199,6 @@ et_mpeg_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_Fil
 {
     const ET_File_Info *info = &ETFile->ETFileInfo;
 
-    if (ETFile->ETFileDescription->FileType == MP3_FILE)
-        fields->description = _("MP3 File");
-    else if (ETFile->ETFileDescription->FileType == MP2_FILE)
-        fields->description = _("MP2 File");
-    else
-        g_assert_not_reached ();
-
     /* MPEG, Layer versions */
     fields->version_label = _("MPEG");
 
@@ -1216,6 +1209,22 @@ et_mpeg_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_Fil
     /* Mode */
     fields->mode_label = _("Mode:");
     fields->mode = _(channel_mode_name (info->mode));
+}
+
+unsigned id3tag_unsupported_fields(const ET_File* file)
+{
+	unsigned hide = ET_COLUMN_VERSION | ET_COLUMN_DESCRIPTION;
+
+	if (!g_settings_get_boolean (MainSettings, "id3v2-enabled"))
+		hide |= ET_COLUMN_VERSION | ET_COLUMN_SUBTITLE | ET_COLUMN_ALBUM_ARTIST
+			| ET_COLUMN_DISC_SUBTITLE | ET_COLUMN_TRACK_NUMBER | ET_COLUMN_DISC_NUMBER
+			| ET_COLUMN_RELEASE_YEAR | ET_COLUMN_COMPOSER | ET_COLUMN_ORIG_ARTIST
+			| ET_COLUMN_ORIG_YEAR | ET_COLUMN_COPYRIGHT | ET_COLUMN_URL
+			| ET_COLUMN_ENCODED_BY | ET_COLUMN_IMAGE | ET_COLUMN_DESCRIPTION;
+	else if (!g_settings_get_boolean (MainSettings, "id3v2-version-4"))
+		hide |= ET_COLUMN_RELEASE_YEAR;
+
+	return hide;
 }
 
 #endif /* ENABLE_MP3 */
