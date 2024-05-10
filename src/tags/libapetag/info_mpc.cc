@@ -33,6 +33,7 @@
 #include <string.h>
 #include "info_mpc.h"
 #include "is_tag.h"
+#include "misc.h"
 
 #define MPC_HEADER_LENGTH 16
 
@@ -70,7 +71,6 @@ info_mpc_read (GFile *file,
                ET_File *ETFile,
                GError **error)
 {
-    GFileInputStream *istream;
     guint32 header_buffer[MPC_HEADER_LENGTH];
     gsize bytes_read;
     gsize id3_size;
@@ -103,23 +103,16 @@ info_mpc_read (GFile *file,
         fclose (fp);
     }
         
-    istream = g_file_read (file, NULL, error);
-
+    auto istream = make_unique(g_file_read(file, NULL, error), g_object_unref);
     if (!istream)
-    {
         return FALSE;
-    }
 
-    if (!g_seekable_seek (G_SEEKABLE (istream), id3_size, G_SEEK_SET, NULL,
-                          error))
-    {
+    if (!g_seekable_seek(G_SEEKABLE(istream.get()), id3_size, G_SEEK_SET, NULL, error))
         return FALSE;
-    }
 
     /* Read 16 guint32. */
-    if (!g_input_stream_read_all (G_INPUT_STREAM (istream), header_buffer,
-                                  MPC_HEADER_LENGTH * 4, &bytes_read, NULL,
-                                  error))
+    if (!g_input_stream_read_all(G_INPUT_STREAM(istream.get()), header_buffer,
+        MPC_HEADER_LENGTH * 4, &bytes_read, NULL, error))
     {
         g_debug ("Only %" G_GSIZE_FORMAT "bytes out of 16 bytes of data were "
                  "read", bytes_read);
@@ -129,7 +122,7 @@ info_mpc_read (GFile *file,
     /* FIXME: Read 4 bytes, take as a uint32, then byteswap if necessary. (The
      * official Musepack decoder expects the user(!) to request the
      * byteswap.) */
-    if (memcmp (header_buffer, "MP+", 3) != 0)
+    if (memcmp(header_buffer, "MP+", 3) != 0)
     {
         /* TODO: Add specific error domain and message. */
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_INVAL, "%s",

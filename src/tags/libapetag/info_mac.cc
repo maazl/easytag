@@ -103,7 +103,6 @@ info_mac_read (GFile *file,
                ET_File *ETFile,
                GError **error)
 {
-    GFileInputStream *istream;
     guint8 header_buffer[MAC_FORMAT_HEADER_LENGTH];
     gsize bytes_read;
     gsize size_id3;
@@ -111,12 +110,9 @@ info_mac_read (GFile *file,
     
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    istream = g_file_read (file, NULL, error);
-
+    auto istream = make_unique(g_file_read(file, NULL, error), g_object_unref);
     if (!istream)
-    {
         return FALSE;
-    }
 
     /* FIXME: is_id3v2() should accept an istream or a GFile. */
     {
@@ -140,15 +136,11 @@ info_mac_read (GFile *file,
         g_free (path);
     }
 
-    if (!g_seekable_seek (G_SEEKABLE (istream), size_id3, G_SEEK_SET, NULL,
-                          error))
-    {
+    if (!g_seekable_seek(G_SEEKABLE(istream.get()), size_id3, G_SEEK_SET, NULL, error))
         return FALSE;
-    }
 
-    if (!g_input_stream_read_all (G_INPUT_STREAM (istream), header_buffer,
-                                  MAC_FORMAT_HEADER_LENGTH, &bytes_read, NULL,
-                                  error))
+    if (!g_input_stream_read_all(G_INPUT_STREAM(istream.get()), header_buffer,
+        MAC_FORMAT_HEADER_LENGTH, &bytes_read, NULL, error))
     {
         g_debug ("Only %" G_GSIZE_FORMAT " bytes out of 16 bytes of data were "
                  "read", bytes_read);
