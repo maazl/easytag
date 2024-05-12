@@ -37,11 +37,11 @@ typedef struct
 {
     gint version;               /* Version of bitstream (mpeg version for mp3, encoder version for ogg) */
     gsize layer; /* "MP3 data" */
-    gint bitrate;               /* Bitrate (kb/s) */
+    gint bitrate;               /* Bitrate (b/s) */
     gboolean variable_bitrate;  /* Is a VBR file? */
     gint samplerate;            /* Samplerate (Hz) */
     gint mode;                  /* Stereo, ... or channels for ogg */
-    gint duration;              /* The duration of file (in seconds) */
+    double duration;            /* The duration of file (in seconds) */
     gchar *mpc_profile;         /* MPC data */
     gchar *mpc_version;         /* MPC data : encoder version  (also for Speex) */
 } ET_File_Info;

@@ -284,8 +284,8 @@ static gint CmpFileSize(const ET_File* ETFile1, const ET_File* ETFile2)
 /*
  * Comparison function for sorting by ascending file int field.
  */
-template <gint ET_File_Info::*V>
-static gint CmpInfoInt(const ET_File* ETFile1, const ET_File* ETFile2)
+template <typename N, N ET_File_Info::*V>
+static gint CmpInfoNum(const ET_File* ETFile1, const ET_File* ETFile2)
 {
 	if (ETFile1->ETFileInfo.*V != ETFile2->ETFileInfo.*V)
 		return sign(ETFile1->ETFileInfo.*V - ETFile2->ETFileInfo.*V);
@@ -409,17 +409,17 @@ gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1,
 	case ET_SORT_MODE_DESCENDING_FILE_SIZE:
 		return CmpRev<CmpFileSize>;
 	case ET_SORT_MODE_ASCENDING_FILE_DURATION:
-		return CmpInfoInt<&ET_File_Info::duration>;
+		return CmpInfoNum<double,&ET_File_Info::duration>;
 	case ET_SORT_MODE_DESCENDING_FILE_DURATION:
-		return CmpRev<CmpInfoInt<&ET_File_Info::duration>>;
+		return CmpRev<CmpInfoNum<double,&ET_File_Info::duration>>;
 	case ET_SORT_MODE_ASCENDING_FILE_BITRATE:
-		return CmpInfoInt<&ET_File_Info::bitrate>;
+		return CmpInfoNum<gint,&ET_File_Info::bitrate>;
 	case ET_SORT_MODE_DESCENDING_FILE_BITRATE:
-		return CmpRev<CmpInfoInt<&ET_File_Info::bitrate>>;
+		return CmpRev<CmpInfoNum<gint,&ET_File_Info::bitrate>>;
 	case ET_SORT_MODE_ASCENDING_FILE_SAMPLERATE:
-		return CmpInfoInt<&ET_File_Info::samplerate>;
+		return CmpInfoNum<gint,&ET_File_Info::samplerate>;
 	case ET_SORT_MODE_DESCENDING_FILE_SAMPLERATE:
-		return CmpRev<CmpInfoInt<&ET_File_Info::samplerate>>;
+		return CmpRev<CmpInfoNum<gint,&ET_File_Info::samplerate>>;
 	default:
 		return nullptr;
 	}

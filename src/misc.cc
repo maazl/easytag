@@ -37,6 +37,7 @@
 #include <windows.h>
 #endif /* G_OS_WIN32 */
 
+#include <cmath>
 using namespace std;
 
 string strprintf(const char* format, ...)
@@ -373,19 +374,23 @@ et_run_audio_player (GList *files,
  * Convert a series of seconds into a readable duration
  * Remember to free the string that is returned
  */
-string Convert_Duration (gulong duration)
+string Convert_Duration (long long duration)
 {
-    if (duration == 0)
-        return "0:00";
+	if (duration <= 0)
+		return "0:00";
 
-    unsigned hour = duration/3600;
-    unsigned minute = (duration%3600)/60;
-    unsigned second = (duration%3600)%60;
+	unsigned days = (unsigned)(duration / 86400);
+	unsigned second = (unsigned)(duration % 86400);
+	unsigned hour = second / 3600;
+	second = second % 3600;
+	unsigned minute = second / 60;
+	second = second % 60;
 
-    if (hour)
-        return strprintf("%u:%.2u:%.2u", hour, minute, second);
-
-    return strprintf("%u:%.2u", minute, second);
+	if (days)
+		return strprintf("%ud %u:%.2u:%.2u", days, hour, minute, second);
+	if (hour)
+		return strprintf("%u:%.2u:%.2u", hour, minute, second);
+	return strprintf("%u:%.2u", minute, second);
 }
 
 static gchar* pad_number(const gchar* number, const gchar* flag, const gchar* length)

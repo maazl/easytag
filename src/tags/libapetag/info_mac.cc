@@ -25,6 +25,9 @@
 #include "info_mac.h"
 #include "is_tag.h"
 
+#include <cmath>
+using namespace std;
+
 #define MAC_FORMAT_FLAG_8_BIT                 1    // 8-bit wave
 #define MAC_FORMAT_FLAG_CRC                   2    // new CRC32 error detection
 #define MAC_FORMAT_FLAG_HAS_PEAK_LEVEL        4    // u-long Peak_Level after the header
@@ -74,7 +77,7 @@ monkey_stringify(unsigned int profile)
 }
 
 
-static int 
+static unsigned
 monkey_samples_per_frame(unsigned int versionid, unsigned int compressionlevel) 
 {
     if (versionid >= 3950) {
@@ -162,21 +165,21 @@ info_mac_read (GFile *file,
     ETFileInfo->version = header->ver;
     ETFileInfo->mode = header->channels;
     ETFileInfo->samplerate = header->sampleRate;
-    int samplesPerFrame = monkey_samples_per_frame(header->ver, header->compLevel);
-    int bytesPerSample = header->formatFlags & MAC_FORMAT_FLAG_8_BIT
+    unsigned samplesPerFrame = monkey_samples_per_frame(header->ver, header->compLevel);
+    unsigned bytesPerSample = header->formatFlags & MAC_FORMAT_FLAG_8_BIT
         ? 1 : header->formatFlags & MAC_FORMAT_FLAG_24_BIT ? 3 : 2;
     
-    long long samples = (long long)(header->totalFrames - 1) * samplesPerFrame + header->finalFrameBlocks;
-    ETFileInfo->duration = header->sampleRate > 0 ? samples / header->sampleRate : 0;
+    guint64 samples = (guint64)(header->totalFrames - 1) * samplesPerFrame + header->finalFrameBlocks;
+    ETFileInfo->duration = header->sampleRate > 0 ? samples / header->sampleRate : 0.;
     
     ETFileInfo->mpc_profile = g_strdup(monkey_stringify(header->compLevel));
     
-    long long uncompresedSize = samples * header->channels * bytesPerSample;
-    float compresionRatio = uncompresedSize > 0
-        ? (ETFile->FileSize - header->headerBytesWAV) / (float)uncompresedSize : 0.;
+    double uncompresedSize = samples * header->channels * bytesPerSample;
+    double compresionRatio = uncompresedSize > 0
+        ? (ETFile->FileSize - header->headerBytesWAV) / uncompresedSize : 0.;
     
     ETFileInfo->bitrate = ETFileInfo->duration > 0
-        ? samples * header->channels * bytesPerSample / (float)ETFileInfo->duration * compresionRatio / 125 : 0;
+        ? (int)lround(header->channels * bytesPerSample * samples / ETFileInfo->duration * compresionRatio * 8.) : 0.;
 
     return TRUE;
 }

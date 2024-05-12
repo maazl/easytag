@@ -173,7 +173,7 @@ gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error)
 
                 /* This is invalid according to the FLAC specification, but
                  * such files have been observed in the wild. */
-                ETFileInfo->duration = 0;
+                ETFileInfo->duration = 0.;
 
                 filename = g_file_get_path (file);
                 g_debug ("Invalid FLAC sample rate of 0: %s", filename);
@@ -181,7 +181,7 @@ gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error)
             }
             else
             {
-                ETFileInfo->duration = stream_info->total_samples / stream_info->sample_rate;
+                ETFileInfo->duration = (double)stream_info->total_samples / stream_info->sample_rate;
             }
 
             ETFileInfo->mode = stream_info->channels;
@@ -199,7 +199,7 @@ gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error)
     {
         /* Ignore metadata blocks, and use the remainder to calculate the
          * average bitrate (including format overhead). */
-        ETFileInfo->bitrate = (ETFile->FileSize - metadata_len) / ETFileInfo->duration / (1000/8);
+        ETFileInfo->bitrate = (int)lround((ETFile->FileSize - metadata_len) / ETFileInfo->duration * 8.);
     }
 
 #ifdef ENABLE_MP3

@@ -33,6 +33,7 @@
 #include "easytag.h"
 #include "log.h"
 #include "misc.h"
+#include "file.h"
 #include "picture.h"
 
 /*
@@ -675,7 +676,7 @@ et_displayed_file_list_set (GList *ETFileList)
 
     ETCore->ETFileDisplayedList_Length = et_displayed_file_list_length (ETCore->ETFileDisplayedList);
     ETCore->ETFileDisplayedList_TotalSize     = 0;
-    ETCore->ETFileDisplayedList_TotalDuration = 0;
+    ETCore->ETFileDisplayedList_TotalDuration = 0.;
 
     // Get size and duration of files in the list
     for (l = ETCore->ETFileDisplayedList; l != NULL; l = g_list_next (l))

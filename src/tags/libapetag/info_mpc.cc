@@ -35,6 +35,9 @@
 #include "is_tag.h"
 #include "misc.h"
 
+#include <cmath>
+using namespace std;
+
 #define MPC_HEADER_LENGTH 16
 
 /*
@@ -188,12 +191,12 @@ info_mpc_read (GFile *file,
             }
         }
         // estimation, exact value needs too much time
-        ETFileInfo->bitrate = byteLength * ETFileInfo->samplerate / (1152 * frames - 576) / 125;
+        ETFileInfo->bitrate = (int)lround(byteLength * ETFileInfo->samplerate * 8. / (1152 * frames - 576));
     }
     else
     {
         // read the file-header (SV6 and below)
-        ETFileInfo->bitrate = (header_buffer[0] >> 23) & 0x01FF;
+        ETFileInfo->bitrate = (header_buffer[0] >> 23) & 0x01FF * 1000;
         //stream_info->MS = (header_buffer[0] >> 21) & 0x0001;
         //stream_info->IS = (header_buffer[0] >> 22) & 0x0001;
         ETFileInfo->version = (header_buffer[0] >> 11) & 0x03FF;
@@ -226,7 +229,7 @@ info_mpc_read (GFile *file,
     
     ETFileInfo->mpc_profile = g_strdup(profile_stringify(profile));
     
-    ETFileInfo->duration = (int)(frames * 1152 / ETFileInfo->samplerate);
+    ETFileInfo->duration = (double)frames * 1152. / ETFileInfo->samplerate;
 
     return TRUE;
 }

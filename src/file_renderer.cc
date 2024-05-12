@@ -234,7 +234,11 @@ string FileInfoIntColumnRenderer::RenderText(const ET_File* file, bool original)
 }
 
 string BitrateColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	string ret = FileInfoIntColumnRenderer::RenderText(file, original);
+{	string ret;
+	gint value = file->ETFileInfo.*Field;
+	if (!value)
+		return ret;
+	ret = to_string((value + 500) / 1000);
 	if (file->ETFileInfo.variable_bitrate)
 		ret.insert(0, 1, '~');
 	return ret;

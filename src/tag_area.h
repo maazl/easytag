@@ -21,7 +21,7 @@
 
 #include <gtk/gtk.h>
 
-#include "et_core.h"
+#include "file.h"
 
 G_BEGIN_DECLS
 

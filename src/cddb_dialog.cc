@@ -35,7 +35,7 @@
 #include "application_window.h"
 #include "easytag.h"
 #include "enums.h"
-#include "et_core.h"
+#include "file.h"
 #include "browser.h"
 #include "scan_dialog.h"
 #include "log.h"
@@ -45,6 +45,7 @@
 #include "setting.h"
 #include "charset.h"
 
+#include <cmath>
 using namespace std;
 
 typedef struct
@@ -289,7 +290,7 @@ show_album_info (EtCDDBDialog *self, GtkTreeSelection *selection)
                             "disc ID: ‘%s’"),
                             cddbalbum->album ? cddbalbum->album : "",
                             cddbalbum->artist ? cddbalbum->artist : "",
-                            Convert_Duration((gulong)cddbalbum->duration).c_str(),
+                            Convert_Duration((long long)cddbalbum->duration).c_str(),
                             cddbalbum->year ? cddbalbum->year : "",
                             cddbalbum->genre ? cddbalbum->genre : "",
                             cddbalbum->id ? cddbalbum->id : "");
@@ -540,7 +541,7 @@ Cddb_Load_Track_Album_List (EtCDDBDialog *self, GList *track_list)
                                                CDDB_TRACK_LIST_NAME,
                                                cddbtrackalbum->track_name,
                                                CDDB_TRACK_LIST_TIME,
-                                               Convert_Duration((gulong)cddbtrackalbum->duration).c_str(),
+                                               Convert_Duration((long long)cddbtrackalbum->duration).c_str(),
                                                CDDB_TRACK_LIST_DATA,
                                                cddbtrackalbum,
                                                -1);
@@ -2633,7 +2634,7 @@ et_cddb_dialog_search_from_selection (EtCDDBDialog *self)
             g_string_append_printf (query_string, "%u", total_frames);
         }
 
-        secs = etfile->ETFileInfo.duration;
+        secs = lround(etfile->ETFileInfo.duration);
         total_frames += secs * 75;
         disc_length  += secs;
 

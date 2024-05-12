@@ -212,10 +212,10 @@ gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
     // post processing of stream length and bit rate
     if (info->variable_bitrate)
     {   if (info->duration > 0)
-            info->bitrate = (ETFile->FileSize - tagbytes) / info->duration / 125;
+            info->bitrate = (int)lround((ETFile->FileSize - tagbytes) / info->duration * 8.);
     } else
     {   if (info->duration <= 0 && info->bitrate)
-            info->duration = (ETFile->FileSize - tagbytes) / info->bitrate / 125;
+            info->duration = (ETFile->FileSize - tagbytes) * 8. / info->bitrate;
     }
 
     if (!v2tag) // treat V2 tag at the end like tag at start
@@ -574,9 +574,9 @@ static void get_audio_frame_header(ET_File_Info* info, const id3_byte_t* data, i
 		info->version = !version ? 3 : 4 - version; // 3 := MPEG 2.5, low sampling rates
 		info->layer = 4 - layer;
 		if (version == 3 && layer == 3) // V1L1
-			info->bitrate = bitrate << 5;
+			info->bitrate = (bitrate << 5) * 1000;
 		else
-			info->bitrate = (version & 1 ? brx[0][layer & 1] : brx[1][layer < 3])[bitrate] << 3;
+			info->bitrate = (version & 1 ? brx[0][layer & 1] : brx[1][layer < 3])[bitrate] * 8000;
 		info->samplerate = srx[srate] / (4 - version);
 		info->mode = mode;
 
@@ -600,7 +600,7 @@ static void get_audio_frame_header(ET_File_Info* info, const id3_byte_t* data, i
 		uint32_t frames = read32u(sp);
 
 		uint32_t framesamp = layer == 3 ? 384 : layer == 1 && version != 3 ? 576 : 1152;
-		info->duration = (gint)((uint64_t)frames * framesamp / info->samplerate);
+		info->duration = (double)frames * framesamp / info->samplerate;
 
 		return;
 	}

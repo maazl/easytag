@@ -275,8 +275,8 @@ gboolean ogg_read_file(GFile *file, ET_File *ETFile, GError **error)
             ETFileInfo->version    = vi->version;         // Vorbis encoder version used to create this bitstream.
             ETFileInfo->mode       = vi->channels;        // Number of channels in bitstream.
             ETFileInfo->samplerate = vi->rate;            // (Hz) Sampling rate of the bitstream.
-            ETFileInfo->bitrate    = vi->bitrate_nominal/1000; // (b/s) Specifies the average bitrate for a VBR bitstream.
-            ETFileInfo->variable_bitrate = vi->bitrate_nominal != vi->bitrate_lower || vi->bitrate_nominal != vi->bitrate_upper;;
+            ETFileInfo->bitrate    = vi->bitrate_nominal; // (b/s) Specifies the average bitrate for a VBR bitstream.
+            ETFileInfo->variable_bitrate = vi->bitrate_nominal != vi->bitrate_lower || vi->bitrate_nominal != vi->bitrate_upper;
         }
         else
         {
@@ -363,14 +363,14 @@ gboolean speex_read_file(GFile *file, ET_File *ETFile, GError **error)
     if ((si = vcedit_speex_header (state)) != NULL)
     {
         ETFileInfo->mpc_version = g_strdup(si->speex_version);
-        ETFileInfo->mode        = si->nb_channels;        // Number of channels in bitstream.
-        ETFileInfo->samplerate  = si->rate;               // (Hz) Sampling rate of the bitstream.
-        ETFileInfo->bitrate     = si->bitrate/1000; // (b/s) Specifies the bitrate
+        ETFileInfo->mode        = si->nb_channels; // Number of channels in bitstream.
+        ETFileInfo->samplerate  = si->rate;        // (Hz) Sampling rate of the bitstream.
+        ETFileInfo->bitrate     = si->bitrate;     // (b/s) Specifies the bitrate
 
         //if (bitrate > 0)
         //    ETFileInfo->duration = filesize*8/bitrate/1000; // FIXME : Approximation!! Needs to remove tag size!
         //else
-        ETFileInfo->duration    = 0;//ov_time_total(&vf,-1); // (s) Total time.
+        ETFileInfo->duration    = 0.;//ov_time_total(&vf,-1); // (s) Total time.
 
         //g_print("play time: %ld s\n",(long)ov_time_total(&vf,-1));
         //g_print("serialnumber: %ld\n",(long)ov_serialnumber(&vf,-1));

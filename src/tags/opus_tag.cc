@@ -179,7 +179,7 @@ gboolean opus_read_file(GFile *gfile, ET_File* ETFile, GError **error)
     head = op_head (file, -1);
     /* TODO: Read the vendor string from the Vorbis comment? */
     ETFileInfo->version = head->version;
-    ETFileInfo->bitrate = op_bitrate (file, -1) / 1000;
+    ETFileInfo->bitrate = op_bitrate(file, -1);
     ETFileInfo->mode = head->channel_count;
 
     /* All Opus audio is encoded at 48 kHz, but the input sample rate can
@@ -193,7 +193,7 @@ gboolean opus_read_file(GFile *gfile, ET_File* ETFile, GError **error)
         ETFileInfo->samplerate = 48000;
     }
 
-    ETFileInfo->duration = op_pcm_total (file, -1) / 48000;
+    ETFileInfo->duration = (double)op_pcm_total(file, -1) / 48000.;
 
     /* The cast is safe according to the opusfile documentation. */
     et_add_file_tags_from_vorbis_comments((vorbis_comment *)op_tags(file, 0), ETFile);

@@ -2086,7 +2086,7 @@ et_header_fields_new_default (EtFileHeaderFields *fields, const ET_File *ETFile)
     fields->description = ETFile->ETFileDescription->FileType;
 
     /* Bitrate */
-    fields->bitrate = strprintf(info->variable_bitrate ? _("~%d kb/s") : _("%d kb/s"), info->bitrate);
+    fields->bitrate = strprintf(info->variable_bitrate ? _("~%d kb/s") : _("%d kb/s"), (info->bitrate + 500) / 1000);
 
     /* Samplerate */
     fields->samplerate = strprintf(_("%d Hz"), info->samplerate);

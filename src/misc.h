@@ -26,6 +26,7 @@
 #include <string>
 #include <memory>
 #include <array>
+#include <cmath>
 #include <type_traits>
 
 std::string strprintf(const char* format, ...)
@@ -110,7 +111,9 @@ struct reference
 	constexpr operator T&() const { return Ref; }
 };
 
-std::string Convert_Duration(gulong duration);
+std::string Convert_Duration(long long duration);
+inline std::string Convert_Duration(double duration)
+{ return Convert_Duration(llround(duration)); }
 
 #endif
 

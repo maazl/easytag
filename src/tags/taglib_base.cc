@@ -25,6 +25,7 @@
 #include <taglib/audioproperties.h>
 
 #include <string>
+#include <limits>
 using namespace std;
 using namespace TagLib;
 
@@ -61,10 +62,12 @@ gboolean taglib_read_tag(const TagLib::File& tfile, ET_File *ETFile, GError **er
 
 	ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
 
-	ETFileInfo->bitrate = properties->bitrate();
+	ETFileInfo->bitrate = properties->bitrate() * 1000;
 	ETFileInfo->samplerate = properties->sampleRate();
 	ETFileInfo->mode = properties->channels();
 	ETFileInfo->duration = properties->lengthInSeconds();
+	if (ETFileInfo->duration < numeric_limits<int>::max() / 1000.)
+		ETFileInfo->duration = properties->lengthInMilliseconds() / 1000.; // try more precisely
 
 	/* tag metadata */
 	Tag *tag = tfile.tag();
