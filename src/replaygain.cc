@@ -424,6 +424,10 @@ found_stream:
 	if (rc)
 		return strprintf("Failed to open codec for stream #%u: %s", stream->index, avstrerr(rc));
 
+	// some codecs do not set channel layout
+	if (codec->channel_layout == 0)
+		codec->channel_layout = av_get_default_channel_layout(codec->channels);
+
 	// prepare resampler
 	auto swr = make_unique(swr_alloc(), [](SwrContext* ptr) { swr_free(&ptr); });
 	av_opt_set_int(swr.get(), "in_channel_layout", codec->channel_layout, 0);
