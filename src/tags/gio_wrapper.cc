@@ -49,13 +49,13 @@ GIO_InputStream::name () const
 TagLib::ByteVector
 GIO_InputStream::readBlock (ulong len)
 {
-    if (error)
+    if (error || !len)
     {
         return TagLib::ByteVector();
     }
 
     TagLib::ByteVector rv (len, 0);
-    gsize bytes;
+    gsize bytes = 0;
     g_input_stream_read_all (G_INPUT_STREAM (stream), (void *)rv.data (),
                              len, &bytes, NULL, &error);
 
@@ -202,7 +202,7 @@ GIO_IOStream::name () const
 TagLib::ByteVector
 GIO_IOStream::readBlock (ulong len)
 {
-    if (error)
+    if (error || !len)
     {
         return TagLib::ByteVector();
     }
