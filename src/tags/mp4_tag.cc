@@ -31,6 +31,7 @@
 #include "et_core.h"
 #include "charset.h"
 #include "gio_wrapper.h"
+#include "taglib_base.h"
 
 /* Shadow warning in public TagLib headers. */
 #pragma GCC diagnostic push
@@ -97,8 +98,6 @@ Map<ByteVector, String> CustomItemFactory::namePropertyMap() const
  */
 gboolean mp4_read_file(GFile *file, ET_File *ETFile, GError **error)
 {
-    guint year;
-
     g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
 
     /* Get data from tag. */
@@ -138,23 +137,14 @@ gboolean mp4_read_file(GFile *file, ET_File *ETFile, GError **error)
         return FALSE;
     }
 
-
-    /* ET_File_Info header data */
-
-    const TagLib::MP4::Properties* properties = mp4file.audioProperties ();
-    if (properties == NULL)
-    {
-        g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "%s",
-                     _("Error reading properties from file"));
+    // base processing
+    if (!taglib_read_tag(mp4file, ETFile, error))
         return FALSE;
-    }
 
+    // additional info's for MP4
     ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
 
-    /* Get format/subformat */
-    ETFileInfo->mpc_version = g_strdup ("MPEG");
-
-    switch (properties->codec ())
+    switch (mp4file.audioProperties()->codec())
     {
     case TagLib::MP4::Properties::AAC:
         ETFileInfo->mpc_profile = g_strdup ("4, AAC");
@@ -170,58 +160,13 @@ gboolean mp4_read_file(GFile *file, ET_File *ETFile, GError **error)
     ETFileInfo->layer = 14;
 
     ETFileInfo->variable_bitrate = TRUE;
-    ETFileInfo->bitrate = properties->bitrate ();
     if (ETFileInfo->bitrate == 1)
         ETFileInfo->bitrate = 0; // avoid unreasonable small bitrates of some files.
-    ETFileInfo->samplerate = properties->sampleRate ();
-    ETFileInfo->mode = properties->channels ();
-    ETFileInfo->duration = properties->lengthInSeconds();
-
 
     /* tag metadata */
-
     MP4::Tag *tag = mp4file.tag();
-    if (!tag)
-    {
-        g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "%s",
-                     _("Error reading tags from file"));
-        return FALSE;
-    }
-
-    const PropertyMap& extra_tag = tag->properties ();
-
-    auto fetch_property = [&extra_tag](const char* property) -> const char*
-    {   auto it = extra_tag.find(property);
-        if (it == extra_tag.end())
-            return nullptr;
-        return it->second.front().toCString(true);
-    };
 
     File_Tag* FileTag = ETFile->FileTag->data;
-
-    et_file_tag_set_title(FileTag, tag->title().toCString(true));
-    et_file_tag_set_subtitle(FileTag, fetch_property("SUBTITLE"));
-    et_file_tag_set_artist(FileTag, tag->artist().toCString(true));
-
-    et_file_tag_set_album(FileTag, tag->album().toCString(true));
-    et_file_tag_set_disc_subtitle(FileTag, fetch_property("DISCSUBTITLE"));
-    et_file_tag_set_album_artist(FileTag, fetch_property("ALBUMARTIST"));
-
-    /* Disc number. */
-    /* Total disc number support in TagLib reads multiple disc numbers and
-     * joins them with a "/". */
-    FileTag->disc_and_total(fetch_property("DISCNUMBER"));
-    FileTag->track_and_total(fetch_property("TRACKNUMBER"));
-
-    year = tag->year ();
-    if (year != 0)
-        FileTag->year = g_strdup_printf ("%u", year);
-#if TAGLIB_MAJOR_VERSION >= 2
-    et_file_tag_set_release_year(FileTag, fetch_property("RELEASEDATE"));
-#endif
-
-    et_file_tag_set_genre(FileTag, tag->genre().toCString(true));
-    et_file_tag_set_comment(FileTag, tag->comment().toCString(true));
 
     const MP4::ItemMap &extra_items = tag->itemMap ();
 
@@ -230,27 +175,23 @@ gboolean mp4_read_file(GFile *file, ET_File *ETFile, GError **error)
     /* No "PODCASTDESC" support in TagLib until 1.12; use atom directly. */
     if (extra_items.contains ("desc"))
         et_file_tag_set_description(FileTag, extra_items["desc"].toStringList().front().toCString(true));
-#else
-    et_file_tag_set_description(FileTag, fetch_property("PODCASTDESC"));
 #endif
 
-    et_file_tag_set_composer(FileTag, fetch_property("COMPOSER"));
-    et_file_tag_set_copyright(FileTag, fetch_property("COPYRIGHT"));
-    et_file_tag_set_encoded_by(FileTag, fetch_property("ENCODEDBY"));
-
 #if TAGLIB_MAJOR_VERSION >= 2
+    const PropertyMap& fields = tag->properties();
     /**************
      * ReplayGain *
      **************/
-    FileTag->track_gain_str(fetch_property("REPLAYGAIN_TRACK_GAIN"));
-    FileTag->track_peak_str(fetch_property("REPLAYGAIN_TRACK_PEAK"));
-    FileTag->album_gain_str(fetch_property("REPLAYGAIN_ALBUM_GAIN"));
-    FileTag->album_peak_str(fetch_property("REPLAYGAIN_ALBUM_PEAK"));
+    FileTag->track_gain_str(taglib_fetch_property(fields, nullptr, "REPLAYGAIN_TRACK_GAIN").c_str());
+    FileTag->track_peak_str(taglib_fetch_property(fields, nullptr, "REPLAYGAIN_TRACK_PEAK").c_str());
+    FileTag->album_gain_str(taglib_fetch_property(fields, nullptr, "REPLAYGAIN_ALBUM_GAIN").c_str());
+    FileTag->album_peak_str(taglib_fetch_property(fields, nullptr, "REPLAYGAIN_ALBUM_PEAK").c_str());
 #endif
 
     /***********
      * Picture *
      ***********/
+    // TODO: since TagLib 2.0 an API to access pictures is available.
     if (extra_items.contains ("covr"))
     {
         const MP4::Item &cover = extra_items["covr"];
@@ -293,13 +234,14 @@ mp4tag_write_file_tag (const ET_File *ETFile,
 
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
 
-    FileTag = (File_Tag *)ETFile->FileTag->data;
-    filename      = ((File_Name *)ETFile->FileNameCur->data)->value;
-    filename_utf8 = ((File_Name *)ETFile->FileNameCur->data)->value_utf8;
+    FileTag = ETFile->FileTag->data;
+    filename      = ETFile->FileNameCur->data->value;
+    filename_utf8 = ETFile->FileNameCur->data->value_utf8;
 
     /* Open file for writing */
     GFile *file = g_file_new_for_path (filename);
     GIO_IOStream stream (file);
+    g_object_unref (file);
 
     if (!stream.isOpen ())
     {
@@ -311,12 +253,10 @@ mp4tag_write_file_tag (const ET_File *ETFile,
     }
 
 #if TAGLIB_MAJOR_VERSION >= 2
-    MP4::File mp4file(&stream, true, MP4::Properties::Average, &ItemFactory);
+    MP4::File mp4file(&stream, false, MP4::Properties::Average, &ItemFactory);
 #else
-    MP4::File mp4file(&stream);
+    MP4::File mp4file(&stream, false);
 #endif
-
-    g_object_unref (file);
 
     if (!mp4file.isOpen ())
     {
@@ -335,7 +275,6 @@ mp4tag_write_file_tag (const ET_File *ETFile,
                          _("MP4 format invalid"));
         }
 
-
         return FALSE;
     }
 
@@ -346,61 +285,18 @@ mp4tag_write_file_tag (const ET_File *ETFile,
         return FALSE;
     }
 
-    PropertyMap fields;
-
-    auto add_field = [&fields](const gchar* value, const char* propertyname)
-    {
-        if (!et_str_empty(value))
-            fields.insert(propertyname, String(value, String::UTF8));
-    };
-
-    add_field(FileTag->title, "TITLE");
-    add_field(FileTag->subtitle, "SUBTITLE");
-    add_field(FileTag->artist, "ARTIST");
-
-    add_field(FileTag->album, "ALBUM");
-    add_field(FileTag->disc_subtitle, "DISCSUBTITLE");
-    add_field(FileTag->disc_and_total().c_str(), "DISCNUMBER");
-  	add_field(FileTag->album_artist, "ALBUMARTIST");
-
-    add_field(FileTag->year, "DATE");
-
-#if TAGLIB_MAJOR_VERSION >= 2
-    add_field(FileTag->release_year, "RELEASEDATE");
-#endif
-
-    add_field(FileTag->track_and_total().c_str(), "TRACKNUMBER");
-
-    add_field(FileTag->genre, "GENRE");
-    add_field(FileTag->comment, "COMMENT");
-    add_field(FileTag->composer, "COMPOSER");
-    add_field(FileTag->copyright, "COPYRIGHT");
-    add_field(FileTag->encoded_by, "ENCODEDBY");
-
-    /* Description. */
-    if (!et_str_empty (FileTag->description))
-    {
-        String string (FileTag->description, String::UTF8);
-#if (TAGLIB_MAJOR_VERSION == 1) && (TAGLIB_MINOR_VERSION < 12)
-        /* No "PODCASTDESC" support in TagLib until 1.12; use atom directly. */
-        extra_items.insert ("desc", MP4::Item (string));
-    }
-    else
-    {
-        extra_items.erase ("desc");
-#else
-        fields.insert ("PODCASTDESC", string);
-#endif
-    }
+    // main processing in generic base implementation
+    PropertyMap fields = tag->properties();
+    taglib_write_file_tag(fields, ETFile, 0);
 
 #if TAGLIB_MAJOR_VERSION >= 2
     /**************
      * ReplayGain *
      **************/
-    add_field(FileTag->track_gain_str().c_str(), "REPLAYGAIN_TRACK_GAIN");
-    add_field(FileTag->track_peak_str().c_str(), "REPLAYGAIN_TRACK_PEAK");
-    add_field(FileTag->album_gain_str().c_str(), "REPLAYGAIN_ALBUM_GAIN");
-    add_field(FileTag->album_peak_str().c_str(), "REPLAYGAIN_ALBUM_PEAK");
+    taglib_set_property(fields, nullptr, "REPLAYGAIN_TRACK_GAIN", FileTag->track_gain_str().c_str());
+    taglib_set_property(fields, nullptr, "REPLAYGAIN_TRACK_PEAK", FileTag->track_peak_str().c_str());
+    taglib_set_property(fields, nullptr, "REPLAYGAIN_ALBUM_GAIN", FileTag->album_gain_str().c_str());
+    taglib_set_property(fields, nullptr, "REPLAYGAIN_ALBUM_PEAK", FileTag->album_peak_str().c_str());
 #endif
 
     /***********
@@ -461,8 +357,7 @@ et_mp4_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File
     const ET_File_Info *info = &ETFile->ETFileInfo;
 
     /* MPEG, Layer versions */
-    if (info->mpc_version)
-        fields->version_label = info->mpc_version;
+    fields->version_label = "MPEG";
     if (info->mpc_profile)
         fields->version = info->mpc_profile;
 
@@ -471,22 +366,21 @@ et_mp4_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File
     fields->mode_label = _("Channels:");
 
     if (info->mode == -1)
-    {
         fields->mode = "Unknown";
-    }
     else
-    {
         fields->mode = strprintf("%d", info->mode);
-    }
 }
 
 unsigned mp4tag_unsupported_fields(const ET_File* file)
 {
 #if TAGLIB_MAJOR_VERSION >= 2
-	return ET_COLUMN_VERSION | ET_COLUMN_ORIG_ARTIST | ET_COLUMN_ORIG_YEAR | ET_COLUMN_URL;
-#else
+	return ET_COLUMN_VERSION | ET_COLUMN_ORIG_ARTIST | ET_COLUMN_URL; // fields not supported by MP4
+#elif TAGLIB_MAJOR_VERSION == 1 && TAGLIB_MINOR_VERSION < 12
 	return ET_COLUMN_VERSION | ET_COLUMN_RELEASE_YEAR | ET_COLUMN_ORIG_ARTIST
 		| ET_COLUMN_ORIG_YEAR | ET_COLUMN_URL | ET_COLUMN_REPLAYGAIN;
+#else
+	return ET_COLUMN_VERSION | ET_COLUMN_RELEASE_YEAR | ET_COLUMN_ORIG_ARTIST
+		| ET_COLUMN_URL | ET_COLUMN_REPLAYGAIN;
 #endif
 }
 

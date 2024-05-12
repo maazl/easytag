@@ -16,6 +16,7 @@
     * Highlight changes in browser window
     * Add columns with file information (size, bitrate, duration,...)
     * Speed up directory scan significantly
+    * Add ASF/Windows Media support
     * Optionally use similar Unicode replacement characters for reserved
       characters in file names
     * Support for powerful pattern groups in scanner (see documentation)

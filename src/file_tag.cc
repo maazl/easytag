@@ -97,6 +97,7 @@ string File_Tag::format_float(const char* fmt, float value)
 		auto dot = ret.find(','); // work around for locale problems
 		if (dot != string::npos) ret[dot] = '.';
 	}
+	ret.erase(strlen(ret.c_str()));
 	return ret;
 }
 

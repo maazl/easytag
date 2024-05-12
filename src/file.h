@@ -49,7 +49,7 @@ typedef struct
 /*
  * Description of each item of the ETFileList list
  */
-struct ET_File
+typedef struct ET_File
 {
     guint IndexKey;           /* Value used to display the position in the list (and in the BrowserList) - Must be renumered after resorting the list - This value varies when resorting list */
 
@@ -78,7 +78,7 @@ struct ET_File
     /// @param max_fields Maximum number of fields, i.e. 1111-22-33T44:55:66.
     /// @param additional_content Allow arbitrary additional content after the last field.
     void check_dates(int max_fields, bool additional_content) const;
-};
+} ET_File;
 
 #else
 typedef struct ET_File ET_File;

@@ -1,7 +1,5 @@
 /* EasyTAG - Tag editor for audio files
- * Copyright (C) 2012-1014  David King <amigadave@amigadave.com>
- * Copyright (C) 2001-2005  Jerome Couderc <easytag@gmail.com>
- * Copyright (C) 2005  Michael Ihde <mike.ihde@randomwalking.com>
+ * Copyright (C) 2024  Marcel Müller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef ET_MP4_TAG_H_
-#define ET_MP4_TAG_H_
-
-#include "config.h"
-#ifdef ENABLE_MP4
+#ifndef ET_ASF_TAG_H_
+#define ET_ASF_TAG_H_
 
 #include <gio/gio.h>
 
@@ -31,12 +26,11 @@ G_BEGIN_DECLS
 struct ET_File;
 struct EtFileHeaderFields;
 
-gboolean mp4_read_file(GFile *file, ET_File *ETFile, GError **error);
-gboolean mp4tag_write_file_tag (const ET_File *ETFile, GError **error);
-void et_mp4_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
-unsigned mp4tag_unsupported_fields(const ET_File* file);
+gboolean asf_read_file(GFile *file, ET_File *ETFile, GError **error);
+gboolean asftag_write_file_tag(const ET_File *ETFile, GError **error);
+void et_asf_header_display_file_info_to_ui(EtFileHeaderFields *fields, const ET_File *ETFile);
+unsigned asftag_unsupported_fields(const ET_File* file);
 
 G_END_DECLS
 
-#endif
-#endif /* ET_MP4_TAG_H_ */
+#endif /* ET_ASF_TAG_H_ */

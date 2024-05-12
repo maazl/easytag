@@ -166,6 +166,9 @@ AC_ARG_ENABLE([mp4],
 AC_ARG_ENABLE([wavpack],
               [AS_HELP_STRING([--disable-wavpack], [Disable support for Wavpack files (default=auto)])])
 
+AC_ARG_ENABLE([asf],
+              [AS_HELP_STRING([--disable-asf], [Disable support for WMA/ASF files (default=auto)])])
+
 AC_ARG_ENABLE([replaygain],
               [AS_HELP_STRING([--disable-replaygain], [Disable support for ReplayGain analysis (default=auto)])])
 
@@ -302,15 +305,24 @@ dnl # taglib library
 dnl ################################################
 
 TAGLIB_DEPS="taglib >= 1.10"
-AS_IF([test "x$enable_mp4" != "xno"],
+AS_IF([test "x$enable_mp4" != "xno" || test "x$enable_asf" != "xno"],
       [PKG_CHECK_EXISTS([$TAGLIB_DEPS], [have_taglib=yes], [have_taglib=no])],
       [have_taglib=no])
 
+have_taglib_mp4=no
+have_taglib_asf=no
 AS_IF([test "x$have_taglib" != "xno"],
-      [AC_DEFINE([ENABLE_MP4], [], [Define for taglib MP4 support])],
+      [AS_IF([test "x$enable_mp4" != "xno"],
+             [AC_DEFINE([ENABLE_MP4], [], [Define for taglib MP4 support])
+              have_taglib_mp4=yes])
+       AS_IF([test "x$enable_asf" != "xno"],
+             [AC_DEFINE([ENABLE_ASF], [], [Define for taglib WMA/ASF support])
+              have_taglib_asf=yes])],
       [TAGLIB_DEPS=""
        AS_IF([test "x$enable_mp4" = "xyes"],
-             [AC_MSG_ERROR([Taglib MP4 support requested but required dependencies ($TAGLIB_DEPS) not found])])])
+             [AC_MSG_ERROR([Taglib MP4 support requested but required dependencies ($TAGLIB_DEPS) not found])])
+       AS_IF([test "x$enable_asf" = "xyes"],
+             [AC_MSG_ERROR([Taglib WMA/ASF support requested but required dependencies ($TAGLIB_DEPS) not found])])])
 
 dnl ################################################
 dnl # WavPack library
@@ -415,8 +427,9 @@ echo Ogg Vorbis file support .: $have_ogg
 echo Ogg Speex file support ..: $have_speex
 echo Ogg Opus file support ...: $have_opus
 echo FLAC file support .......: $have_flac
-echo MP4 file support ........: $have_taglib
+echo MP4 file support ........: $have_taglib_mp4
 echo WavPack support .........: $have_wavpack
+echo WMA/ASF file support ....: $have_taglib_asf
 echo ReplayGain support ......: $have_replaygain
 echo NLS/gettext .............: $USE_NLS
 echo Nautilus actions ........: $have_libnautilus_extension

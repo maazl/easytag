@@ -10,6 +10,7 @@ AM_DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-mp3 \
 	--enable-mp4 \
 	--enable-nautilus-actions \
+	--enable-asf \
 	--enable-replaygain \
 	--enable-speex \
 	--enable-tests \
@@ -79,6 +80,7 @@ easytag_SOURCES = \
 	src/tags/libapetag/info_mac.cc \
 	src/tags/libapetag/info_mpc.cc \
 	src/tags/ape_tag.cc \
+	src/tags/asf_tag.cc \
 	src/tags/flac_private.c \
 	src/tags/flac_tag.cc \
 	src/tags/gio_wrapper.cc \
@@ -87,6 +89,7 @@ easytag_SOURCES = \
 	src/tags/mp4_tag.cc \
 	src/tags/ogg_tag.cc \
 	src/tags/opus_tag.cc \
+	src/tags/taglib_base.cc \
 	src/tags/vcedit.cc \
 	src/tags/wavpack_private.c \
 	src/tags/wavpack_tag.cc \
@@ -134,6 +137,7 @@ easytag_headers = \
 	src/tags/libapetag/info_mac.h \
 	src/tags/libapetag/info_mpc.h \
 	src/tags/ape_tag.h \
+	src/tags/asf_tag.h \
 	src/tags/flac_private.h \
 	src/tags/flac_tag.h \
 	src/tags/gio_wrapper.h \
@@ -141,6 +145,7 @@ easytag_headers = \
 	src/tags/mp4_tag.h \
 	src/tags/ogg_tag.h \
 	src/tags/opus_tag.h \
+	src/tags/taglib_base.h \
 	src/tags/vcedit.h \
 	src/tags/wavpack_private.h \
 	src/tags/wavpack_tag.h \

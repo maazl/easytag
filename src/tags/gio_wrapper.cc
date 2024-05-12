@@ -1,5 +1,6 @@
 /*
  *  EasyTAG - Tag editor for audio files
+ *  Copyright (C) 2024  Marcel Müller
  *  Copyright (C) 2014  Santtu Lakkala <inz@inz.fi>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -19,7 +20,7 @@
 
 #include "config.h"
 
-#ifdef ENABLE_MP4
+#if defined(ENABLE_MP4) || defined(ENAMBLE_ASF)
 
 #include "gio_wrapper.h"
 
@@ -404,4 +405,4 @@ GIO_IOStream::truncate (long int len)
     g_seekable_truncate (seekable, len, NULL, &error);
 }
 
-#endif /* ENABLE_MP4 */
+#endif /* ENABLE_MP4/ASF */

@@ -42,12 +42,14 @@ src/setting.cc
 src/status_bar.c
 src/tag_area.cc
 src/tags/ape_tag.cc
+src/tags/asf_tag.cc
 src/tags/flac_tag.cc
 src/tags/id3_tag.cc
 src/tags/id3v24_tag.cc
 src/tags/mp4_tag.cc
 src/tags/ogg_tag.cc
 src/tags/opus_tag.cc
+src/tags/taglib_base.cc
 src/tags/vcedit.cc
 src/tags/wavpack_tag.cc
 src/win32/win32dep.c

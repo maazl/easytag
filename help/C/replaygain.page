@@ -126,6 +126,10 @@
       specification at hydrogenaudio. This is supported most widely.
     </item>
     <item>
+      ReplayGain for WMA files uses the native custom tags like Loudgain does
+      rather than some embedded object with Vorbis comments which almost no library can read.
+    </item>
+    <item>
       <p>EasyTag currently support <em>no asyncronuous operation</em>,
       i.e. the UI gets blocked during time-consuming operations.
       This causes the application to be quite unresponsive during
