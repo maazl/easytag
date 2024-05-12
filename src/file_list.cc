@@ -118,23 +118,6 @@ ET_File_Key_New (void)
     return ++ETFileKey;
 }
 
-/** Check whether time stamp valid for the current format.
- * @param value Tag value
- * @param max_fields Maximum number of fields, i.e. 1111-22-33T44:55:66.
- * If the value is negative arbitrary additional content is allowed after the last field.
- * @return true: valid
- */
-static gboolean
-et_check_date(const char* value, int max_fields)
-{
-	File_Tag::time t = File_Tag::parse_datetime(value);
-	if (!t.invalid)
-		return t.field_count <= abs(max_fields);
-	if (max_fields >= 0)
-		return false;
-	return t.field_count <= -max_fields;
-}
-
 /*
  * et_file_list_add:
  * Add a file to the "main" list. And get all information of the file.
@@ -154,7 +137,6 @@ et_file_list_add (GList *file_list,
 
     const gchar *display_path;
     GError *error = NULL;
-    int max_date_fields = -6;
 
     /* Get description of the file */
     gString filename(g_file_get_path(file));
