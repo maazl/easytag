@@ -23,27 +23,85 @@
 
 #include "gio_wrapper.h"
 
-GIO_InputStream::GIO_InputStream (GFile * file_) :
+GIO_Stream::GIO_Stream (GFile * file_) :
     file ((GFile *)g_object_ref (gpointer (file_))),
     filename (g_file_get_uri (file)),
+    seekable (NULL),
     error (NULL)
-{
-    stream = g_file_read (file, NULL, &error);
-}
+{ }
 
-GIO_InputStream::~GIO_InputStream ()
+GIO_Stream::~GIO_Stream ()
 {
-    clear ();
-
-    g_clear_object (&stream);
+    g_clear_error (&error);
+    g_clear_object (&seekable);
     g_free (filename);
     g_object_unref (file);
 }
 
 TagLib::FileName
-GIO_InputStream::name () const
+GIO_Stream::name () const
 {
     return TagLib::FileName (filename);
+}
+
+bool
+GIO_Stream::isOpen () const
+{
+    return !!seekable;
+}
+
+void
+GIO_Stream::clear ()
+{
+    TagLib::IOStream::clear();
+    g_clear_error (&error);
+}
+
+void
+GIO_Stream::seek (long int offset, TagLib::IOStream::Position p)
+{
+    if (error)
+        return;
+
+    GSeekType type;
+
+    switch (p)
+    {
+        case TagLib::IOStream::Beginning:
+            type = G_SEEK_SET;
+            break;
+        case TagLib::IOStream::Current:
+            type = G_SEEK_CUR;
+            break;
+        case TagLib::IOStream::End:
+            type = G_SEEK_END;
+            break;
+        default:
+            // set invalid value to force g_seekable_seek to fail.
+            type = (GSeekType)(G_SEEK_SET|G_SEEK_CUR|G_SEEK_END);
+    }
+
+    g_seekable_seek (seekable, offset, type, NULL, &error);
+}
+
+long int
+GIO_Stream::tell () const
+{
+    return g_seekable_tell (seekable);
+}
+
+const GError *
+GIO_Stream::getError () const
+{
+    return error;
+}
+
+
+GIO_InputStream::GIO_InputStream (GFile * file_)
+:   GIO_Stream (file_)
+{
+    stream = g_file_read (file, NULL, &error);
+    seekable = G_SEEKABLE(stream);
 }
 
 TagLib::ByteVector
@@ -88,57 +146,6 @@ GIO_InputStream::readOnly () const
     return true;
 }
 
-bool
-GIO_InputStream::isOpen () const
-{
-    return !!stream;
-}
-
-void
-GIO_InputStream::seek (long int offset, TagLib::IOStream::Position p)
-{
-    if (error)
-    {
-        return;
-    }
-
-    GSeekType type;
-
-    switch (p)
-    {
-        case TagLib::IOStream::Beginning:
-            type = G_SEEK_SET;
-            break;
-        case TagLib::IOStream::Current:
-            type = G_SEEK_CUR;
-            break;
-        case TagLib::IOStream::End:
-            type = G_SEEK_END;
-            break;
-        default:
-            g_warning ("Unknown seek");
-            return;
-    }
-
-    g_seekable_seek (G_SEEKABLE (stream), offset, type, NULL, &error);
-}
-
-void
-GIO_InputStream::clear ()
-{
-    if (error)
-    {
-        g_error_free(error);
-        error = NULL;
-    }
-}
-
-long int
-GIO_InputStream::tell () const
-{
-    return g_seekable_tell (G_SEEKABLE (stream));
-}
-
 long int
 GIO_InputStream::length ()
 {
@@ -148,9 +155,7 @@ GIO_InputStream::length ()
     }
 
     long int rv = -1;
-    GFileInfo *info = g_file_input_stream_query_info (stream,
-                                                      G_FILE_ATTRIBUTE_STANDARD_SIZE,
-                                                      NULL, &error);
+    GFileInfo *info = g_file_input_stream_query_info (stream, G_FILE_ATTRIBUTE_STANDARD_SIZE, NULL, &error);
     if (info)
     {
         rv = g_file_info_get_size (info);
@@ -166,37 +171,12 @@ GIO_InputStream::truncate (long int len)
     g_warning ("%s", "Trying to truncate read-only file");
 }
 
-GIO_IOStream::GIO_IOStream (GFile *file_) :
-    file ((GFile *)g_object_ref (gpointer (file_))),
-    filename (g_file_get_uri (file_)),
-    error (NULL)
+
+GIO_IOStream::GIO_IOStream (GFile *file_)
+:   GIO_Stream(file_)
 {
     stream = g_file_open_readwrite (file, NULL, &error);
-}
-
-const GError *
-GIO_InputStream::getError () const
-{
-    return error;
-}
-
-GIO_IOStream::~GIO_IOStream ()
-{
-    clear ();
-
-    if (stream)
-    {
-        g_object_unref (stream);
-    }
-
-    g_free (filename);
-    g_object_unref (G_OBJECT (file));
-}
-
-TagLib::FileName
-GIO_IOStream::name () const
-{
-    return TagLib::FileName (filename);
+    seekable = G_SEEKABLE(stream);
 }
 
 TagLib::ByteVector
@@ -210,10 +190,7 @@ GIO_IOStream::readBlock (ulong len)
     gsize bytes = 0;
     TagLib::ByteVector rv (len, 0);
     GInputStream *istream = g_io_stream_get_input_stream (G_IO_STREAM (stream));
-    g_input_stream_read_all (istream,
-                             (void *)rv.data (), len,
-                             &bytes,
-                             NULL, &error);
+    g_input_stream_read_all(istream, (void *)rv.data(), len, &bytes, NULL, &error);
 
     return rv.resize(bytes);
 }
@@ -336,16 +313,18 @@ GIO_IOStream::insert (TagLib::ByteVector const &data,
     g_object_unref (tstr);
     g_object_unref (stream);
     stream = NULL;
+    seekable = NULL;
 
     g_file_move (tmp, file, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error);
 
     if (error)
     {
-            g_object_unref (tmp);
-	    return;
+        g_object_unref (tmp);
+	      return;
     }
 
     stream = g_file_open_readwrite (file, NULL, &error);
+    seekable = G_SEEKABLE(stream);
 
     g_object_unref (tmp);
 }
@@ -393,53 +372,6 @@ GIO_IOStream::readOnly () const
     return !stream;
 }
 
-bool
-GIO_IOStream::isOpen () const
-{
-    return !!stream;
-}
-
-void
-GIO_IOStream::seek (long int offset, TagLib::IOStream::Position p)
-{
-    if (error)
-    {
-        return;
-    }
-
-    GSeekType type;
-
-    switch (p)
-    {
-        case TagLib::IOStream::Beginning:
-            type = G_SEEK_SET;
-            break;
-        case TagLib::IOStream::Current:
-            type = G_SEEK_CUR;
-            break;
-        case TagLib::IOStream::End:
-            type = G_SEEK_END;
-            break;
-        default:
-            g_warning ("%s", "Unknown seek");
-            return;
-    }
-
-    g_seekable_seek (G_SEEKABLE (stream), offset, type, NULL, &error);
-}
-
-void
-GIO_IOStream::clear ()
-{
-    g_clear_error (&error);
-}
-
-long int
-GIO_IOStream::tell () const
-{
-    return g_seekable_tell (G_SEEKABLE (stream));
-}
-
 long int
 GIO_IOStream::length ()
 {
@@ -447,12 +379,10 @@ GIO_IOStream::length ()
 
     if (error)
     {
-	return rv;
+        return rv;
     }
 
-    GFileInfo *info = g_file_io_stream_query_info (stream,
-                                                   G_FILE_ATTRIBUTE_STANDARD_SIZE,
-                                                   NULL, &error);
+    GFileInfo *info = g_file_io_stream_query_info (stream, G_FILE_ATTRIBUTE_STANDARD_SIZE, NULL, &error);
 
     if (info)
     {
@@ -471,12 +401,7 @@ GIO_IOStream::truncate (long int len)
         return;
     }
 
-    g_seekable_truncate (G_SEEKABLE (stream), len, NULL, &error);
-}
-
-const GError *GIO_IOStream::getError () const
-{
-    return error;
+    g_seekable_truncate (seekable, len, NULL, &error);
 }
 
 #endif /* ENABLE_MP4 */

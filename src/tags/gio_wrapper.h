@@ -24,63 +24,63 @@
 
 #ifdef ENABLE_MP4
 
+#include "../misc.h"
 #include <tiostream.h>
 #include <gio/gio.h>
 
-class GIO_InputStream : public TagLib::IOStream
+class GIO_Stream : public TagLib::IOStream
 {
 public:
-    GIO_InputStream (GFile *file_);
-    virtual ~GIO_InputStream ();
+    virtual ~GIO_Stream ();
     virtual TagLib::FileName name () const;
-    virtual TagLib::ByteVector readBlock (ulong length);
-    virtual void writeBlock (TagLib::ByteVector const &data);
-    virtual void insert (TagLib::ByteVector const &data, TagLib::offset_t start = 0, size_t replace = 0);
-    virtual void removeBlock (TagLib::offset_t start = 0, size_t length = 0);
-    virtual bool readOnly () const;
     virtual bool isOpen () const;
-    virtual void seek (long int offset, TagLib::IOStream::Position p = TagLib::IOStream::Beginning);
     virtual void clear ();
+    virtual void seek (long int offset, TagLib::IOStream::Position p = TagLib::IOStream::Beginning);
     virtual long int tell () const;
-    virtual long int length ();
-    virtual void truncate (long int length);
 
     virtual const GError *getError() const;
 
-private:
-    GIO_InputStream (const GIO_InputStream &other);
+protected:
+    GIO_Stream (GFile *file_);
+    GIO_Stream (const GIO_Stream &other) = delete;
+    void operator= (const GIO_Stream &other) = delete;
+
     GFile *file;
-    GFileInputStream *stream;
     char *filename;
+    GSeekable *seekable; // type depends on implementing class
     GError *error;
 };
 
-class GIO_IOStream : public TagLib::IOStream
+class GIO_InputStream : public GIO_Stream
 {
 public:
-    GIO_IOStream (GFile *file_);
-    virtual ~GIO_IOStream ();
-    virtual TagLib::FileName name () const;
+    GIO_InputStream (GFile *file_);
     virtual TagLib::ByteVector readBlock (ulong length);
     virtual void writeBlock (TagLib::ByteVector const &data);
     virtual void insert (TagLib::ByteVector const &data, TagLib::offset_t start = 0, size_t replace = 0);
     virtual void removeBlock (TagLib::offset_t start = 0, size_t length = 0);
     virtual bool readOnly () const;
-    virtual bool isOpen () const;
-    virtual void seek (long int offset, TagLib::IOStream::Position p = TagLib::IOStream::Beginning);
-    virtual void clear ();
-    virtual long int tell () const;
     virtual long int length ();
     virtual void truncate (long int length);
 
-    virtual const GError *getError() const;
+private:
+    GFileInputStream *stream; // owned by base class (seekable)
+};
+
+class GIO_IOStream : public GIO_Stream
+{
+public:
+    GIO_IOStream (GFile *file_);
+    virtual TagLib::ByteVector readBlock (ulong length);
+    virtual void writeBlock (TagLib::ByteVector const &data);
+    virtual void insert (TagLib::ByteVector const &data, TagLib::offset_t start = 0, size_t replace = 0);
+    virtual void removeBlock (TagLib::offset_t start = 0, size_t length = 0);
+    virtual bool readOnly () const;
+    virtual long int length ();
+    virtual void truncate (long int length);
 
 private:
-    GIO_IOStream (const GIO_IOStream &other);
-    GFile *file;
-    GFileIOStream *stream;
-    char *filename;
-    GError *error;
+    GFileIOStream *stream; // owned by base class (seekable)
 };
 
 #endif /* ENABLE_MP4 */
