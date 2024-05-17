@@ -32,8 +32,8 @@
 #include <glib/gstdio.h>
 #include "apetaglib.h"
 #include "../id3_tag.h"
-#include "../genres.h"
-#include "../win32/win32dep.h"
+#include "../../genres.h"
+#include "../../win32/win32dep.h"
 
 #include "is_tag.h"
 #ifdef ID3V2_READ

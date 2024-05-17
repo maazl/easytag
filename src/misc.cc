@@ -28,7 +28,6 @@
 #include <stdarg.h>
 
 #include "easytag.h"
-#include "id3_tag.h"
 #include "browser.h"
 #include "setting.h"
 #include "preferences_dialog.h"

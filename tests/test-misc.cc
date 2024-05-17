@@ -28,7 +28,7 @@ misc_convert_duration (void)
 {
     static const struct
     {
-        const gulong seconds;
+        const long long seconds;
         const gchar *result;
     } times[] = 
     {
@@ -37,8 +37,8 @@ misc_convert_duration (void)
         { 100, "1:40" },
         { 1000, "16:40" },
         { 10000, "2:46:40" },
-        { 100000, "27:46:40" },
-        { 1000000, "277:46:40" }
+        { 100000, "1d 3:46:40" },
+        { 1000000, "11d 13:46:40" }
         /* TODO: Add more tests. */
     };
 

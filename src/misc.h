@@ -53,6 +53,7 @@ struct gDeleter
 /// Managed GLIB object
 template <typename T>
 using gObject = std::unique_ptr<T, gDeleter>;
+
 /// Managed GLIB string
 struct gString : gObject<gchar>
 {	gString() { }
@@ -103,13 +104,6 @@ template <typename T, typename D>
 std::unique_ptr<T, D> make_unique(T* ptr, D deleter)
 {	return std::unique_ptr<T, D>(ptr, deleter);
 }
-
-// Reference helper to allow array of references
-template <typename T>
-struct reference
-{	T& Ref;
-	constexpr operator T&() const { return Ref; }
-};
 
 std::string Convert_Duration(long long duration);
 inline std::string Convert_Duration(double duration)
