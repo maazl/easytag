@@ -144,7 +144,7 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
         gint duration;
 
         etfile = (ET_File *)l->data;
-        filename = ((File_Name *)etfile->FileNameCur->data)->value;
+        filename = etfile->FileNameCur->data->value();
         duration = etfile->ETFileInfo.duration;
 
         if (g_settings_get_boolean (MainSettings, "playlist-relative"))

@@ -26,12 +26,13 @@
 #include <string.h>
 #include <wavpack/wavpack.h>
 
-#include "et_core.h"
 #include "picture.h"
 #include "charset.h"
 #include "misc.h"
 #include "wavpack_private.h"
 #include "wavpack_tag.h"
+#include "file.h"
+#include "file_description.h"
 
 #define MAXLEN 1024
 
@@ -235,7 +236,6 @@ wavpack_tag_write_file_tag (const ET_File *ETFile,
                                    wavpack_can_seek, wavpack_write_bytes };
     GFile *file;
     EtWavpackWriteState state;
-    const gchar *filename;
     const File_Tag *FileTag;
     WavpackContext *wpc;
     gchar message[80];
@@ -243,10 +243,9 @@ wavpack_tag_write_file_tag (const ET_File *ETFile,
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    filename = ((File_Name *)((GList *)ETFile->FileNameCur)->data)->value;
     FileTag = (File_Tag *)ETFile->FileTag->data;
 
-    file = g_file_new_for_path (filename);
+    file = g_file_new_for_path(ETFile->FileNameCur->data->value());
     state.error = NULL;
     state.iostream = g_file_open_readwrite (file, NULL, &state.error);
     g_object_unref (file);

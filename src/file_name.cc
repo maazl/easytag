@@ -321,53 +321,34 @@ void (*const File_Name::prepare_funcs[3][3])(std::string& filename_utf8, unsigne
 	}
 };
 
+File_Name::File_Name()
+:	key(et_undo_key_new())
+,	saved(false)
+,	_rel_start_utf8(0U)
+,	_file_start_utf8(0U)
+{}
 
-static gchar empty_singleton[] = "";
+File_Name::File_Name(const File_Name& r)
+:	key(r.key) // is this correct?
+,	saved(false)
+,	_value(r._value)
+,	_value_utf8(r._value_utf8)
+,	_rel_start_utf8(r._rel_start_utf8)
+,	_file_start_utf8(r._file_start_utf8)
+,	_path_value_ck(r._path_value_ck)
+,	_file_value_ck(r._file_value_ck)
+{}
 
-/*
- * Create a new File_Name structure
- */
-File_Name *
-et_file_name_new (void)
-{
-    File_Name *file_name;
+File_Name::~File_Name()
+{}
 
-    file_name = g_slice_new (File_Name);
-    file_name->key = et_undo_key_new ();
-    file_name->saved = FALSE;
-    file_name->value = NULL;
-    file_name->value_utf8 = NULL;
-    file_name->rel_value_utf8 = NULL;
-    file_name->path_value_utf8 = NULL;
-    file_name->file_value_utf8 = NULL;
-    file_name->path_value_ck = NULL;
-    file_name->file_value_ck = NULL;
-
-    return file_name;
-}
-
-static void
-et_file_name_free_value(File_Name *file_name)
-{
-    g_free (file_name->value);
-    if (file_name->value_utf8 != file_name->value)
-        g_free (file_name->value_utf8);
-    if (file_name->path_value_utf8 != empty_singleton)
-        g_free (file_name->path_value_utf8);
-    if (file_name->path_value_ck != empty_singleton)
-        g_free (file_name->path_value_ck);
-    g_free (file_name->file_value_ck);
-}
-
-/*
- * Frees a File_Name item.
- */
-void
-et_file_name_free (File_Name *file_name)
-{
-    g_return_if_fail (file_name != NULL);
-    et_file_name_free_value(file_name);
-    g_slice_free (File_Name, file_name);
+void File_Name::reset()
+{	_value.reset();
+	_value_utf8.reset();
+	_rel_start_utf8 = 0;
+	_file_start_utf8 = 0;
+	_path_value_ck.reset();
+	_file_value_ck.reset();
 }
 
 /*
@@ -375,136 +356,111 @@ et_file_name_free (File_Name *file_name)
  * Calculate also the collate key.
  * It treats numbers intelligently so that "file1" "file10" "file5" is sorted as "file1" "file5" "file10"
  */
-void
-ET_Set_Filename_File_Name_Item (File_Name *FileName,
-                                const File_Name *root,
-                                const gchar *filename_utf8,
-                                const gchar *filename)
+void File_Name::set_filename(const File_Name *root, const char *filename_utf8, const char *filename)
 {
-    string root_value_utf8;
+	if (!filename && !filename_utf8)
+	{	reset();
+		return;
+	}
 
-    g_return_if_fail (FileName != NULL);
+	_path_value_ck.reset();
+	_file_value_ck.reset();
+	_rel_start_utf8 = 0;
 
-    // be aware of aliasing root == FileName
-    if (root)
-    {
-        size_t len = root->rel_value_utf8 - root->value_utf8;
-        if (--len > 0)
-            root_value_utf8 = string(root->value_utf8, len);
-        else
-            root_value_utf8 = root->value_utf8;
-    }
+	if (filename_utf8 && filename)
+	{	_value = filename;
+		if (strcmp(filename_utf8, _value))
+			_value_utf8 = filename_utf8;
+		else
+			_value_utf8 = _value;
+	}
+	else if (filename_utf8)
+	{	_value_utf8 = filename_utf8;
+		gString v(filename_from_display(filename_utf8));
+		if (strcmp(_value_utf8, v) == 0)
+			_value = _value_utf8;
+		else
+			_value = xString(v.get());
+	}
+	else // if (filename)
+	{	_value = filename;
+		gString utf8(g_filename_display_name(filename));
+		if (strcmp(_value, utf8) == 0)
+			_value_utf8 = _value;
+		else
+			_value_utf8 = utf8.get();
+	}
 
-    et_file_name_free_value(FileName);
+	// be aware of aliasing root == FileName
+	size_t root_value_utf8_len = 0;
+	if (root)
+	{	root_value_utf8_len = root->_rel_start_utf8;
+		if (--root_value_utf8_len <= 0)
+			root_value_utf8_len = strlen(root->_value_utf8);
+	}
 
-    if (filename_utf8 && filename)
-    {
-        FileName->value = g_strdup (filename);
-        if (strcmp(filename_utf8, FileName->value) == 0)
-            FileName->value_utf8 = g_strdup (filename_utf8);
-        else
-            FileName->value_utf8 = FileName->value;
-    }
-    else if (filename_utf8)
-    {
-        FileName->value_utf8 = g_strdup (filename_utf8);
-        FileName->value = filename_from_display (filename_utf8);
+	if ((!root || strncmp(_value_utf8, root->_value_utf8, root_value_utf8_len) == 0)
+		&& _value_utf8[root_value_utf8_len] == G_DIR_SEPARATOR)
+		_rel_start_utf8 = root_value_utf8_len + 1;
 
-        if (strcmp(FileName->value_utf8, FileName->value) == 0)
-        {
-            g_free(FileName->value_utf8);
-            FileName->value_utf8 = FileName->value;
-        }
-    }
-    else if (filename)
-    {
-        FileName->value_utf8 = g_filename_display_name (filename);
-        FileName->value = g_strdup (filename);
-
-        if (strcmp(FileName->value_utf8, FileName->value) == 0)
-        {
-            g_free(FileName->value_utf8);
-            FileName->value_utf8 = FileName->value;
-        }
-    }
-
-    FileName->rel_value_utf8 = FileName->value_utf8;
-    if (strncmp(FileName->value_utf8, root_value_utf8.c_str(), root_value_utf8.length()) == 0
-        && FileName->rel_value_utf8[root_value_utf8.length()] == G_DIR_SEPARATOR)
-        FileName->rel_value_utf8 += root_value_utf8.length() + 1;
-
-    gchar* separator = strrchr(FileName->rel_value_utf8, G_DIR_SEPARATOR);
-    if (separator)
-    {
-        FileName->file_value_utf8 = separator + 1;
-        string path(FileName->rel_value_utf8, separator - FileName->rel_value_utf8);
-        FileName->path_value_utf8 = g_strdup(path.c_str());
-        // Replace dir separator by dot for more reasonable sort order
-        replace(path.begin(), path.end(), G_DIR_SEPARATOR, '.');
-        FileName->path_value_ck = g_utf8_collate_key_for_filename(path.c_str(), -1);
-    } else
-    {
-        FileName->file_value_utf8 = FileName->rel_value_utf8;
-        FileName->path_value_utf8 = empty_singleton;
-        FileName->path_value_ck = empty_singleton;
-    }
-    FileName->file_value_ck = g_utf8_collate_key_for_filename(FileName->file_value_utf8, -1);
+	const char* separator = strrchr(rel_value_utf8(), G_DIR_SEPARATOR);
+	if (separator)
+	{	_file_start_utf8 = separator - _value + 1;
+	} else
+	{	_file_start_utf8 = _rel_start_utf8;
+		_path_value_ck = xString::empty_str;
+	}
 }
 
-gboolean
-et_file_name_set_from_components (File_Name *file_name,
-                                  const File_Name *root,
-                                  const gchar *new_name,
-                                  const gchar *dir_name,
-                                  EtFilenameReplaceMode replace_illegal)
-{
-    /* Check if new filename seems to be correct. */
-    if (new_name)
-    {
-        string filename_new = new_name;
-        /* Convert the illegal characters. */
-        File_Name::prepare_func(replace_illegal, (EtConvertSpaces)g_settings_get_enum(MainSettings, "rename-convert-spaces"))(filename_new, 0);
-
-        /* Set the new filename (in file system encoding). */
-        gchar *path_new = g_build_filename (dir_name, filename_new.c_str(), NULL);
-        ET_Set_Filename_File_Name_Item (file_name, root, NULL, path_new);
-
-        g_free (path_new);
-        return TRUE;
-    }
-    else
-    {
-        et_file_name_free_value(file_name);
-        file_name->value = NULL;
-        file_name->value_utf8 = NULL;
-        file_name->path_value_ck = NULL;
-
-        return FALSE;
-    }
+string File_Name::path_value_utf8() const
+{	string ret;
+	if (_value_utf8 && _file_start_utf8)
+		ret.assign(_value_utf8, _file_start_utf8 - 1);
+	return ret;
 }
 
-/*
- * Compares two File_Name items :
- *  - returns TRUE if there aren't the same
- *  - else returns FALSE
- */
-gboolean
-et_file_name_detect_difference (const File_Name *a,
-                                const File_Name *b)
-{
-    g_return_val_if_fail (a && b, FALSE);
+string File_Name::file_value_noext_utf8() const
+{	string ret;
+	if (_value_utf8)
+	{	const char* dot = strrchr(file_value_utf8(), '.');
+		if (dot)
+			ret.assign(file_value_utf8(), dot - file_value_utf8());
+		else
+			ret.assign(_value_utf8);
+	}
+	return ret;
+}
 
-    if (a && !b) return TRUE;
-    if (!a && b) return TRUE;
+const xString& File_Name::path_value_ck() const
+{	if (!_path_value_ck && _value_utf8)
+	{	// Replace dir separator by dot for more reasonable sort order
+		string path(path_value_utf8());
+		replace(path.begin(), path.end(), G_DIR_SEPARATOR, '.');
+		_path_value_ck = gString(g_utf8_collate_key_for_filename(path.c_str(), -1)).get();
+	}
+	return _path_value_ck;
+}
 
-    /* Both a and b are != NULL. */
-    if (!a->value && !b->value) return FALSE;
-    if (a->value && !b->value) return TRUE;
-    if (!a->value && b->value) return TRUE;
+const xString& File_Name::file_value_ck() const
+{	if (!_file_value_ck && _value_utf8)
+		_file_value_ck = gString(g_utf8_collate_key_for_filename(file_value_utf8(), -1)).get();
+	return _file_value_ck;
+}
 
-    /* Compare collate keys (with FileName->value converted to UTF-8 as it
-     * contains raw data). */
-    /* Filename changed ? (we check path + file). */
-    return strcmp (a->file_value_ck, b->file_value_ck) != 0
-        || strcmp (a->path_value_ck, b->path_value_ck) != 0;
+bool File_Name::SetFromComponents(const File_Name *root,
+	const char *new_name, const char *dir_name, EtFilenameReplaceMode replace_illegal)
+{	if (!new_name)
+	{	reset();
+		return false;
+	}
+
+	// Check if new filename seems to be correct.
+	string filename_new = new_name;
+	// Convert the illegal characters.
+	File_Name::prepare_func(replace_illegal, (EtConvertSpaces)g_settings_get_enum(MainSettings, "rename-convert-spaces"))(filename_new, 0);
+
+	/* Set the new filename (in file system encoding). */
+	gString path_new(g_build_filename(dir_name, filename_new.c_str(), NULL));
+	set_filename(root, NULL, path_new);
+	return true;
 }

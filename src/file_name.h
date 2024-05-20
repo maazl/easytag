@@ -23,51 +23,69 @@
 #include <glib.h>
 
 #ifdef __cplusplus
+#include "xstring.h"
 #include <string>
-#endif
 
-/*
- * Description of each item of the FileNameList list
+/**
+ * Item of the FileNameList list
  */
-typedef struct File_Name
+typedef class File_Name
 {
-    guint key;
-    gboolean saved; /* Set to TRUE if this filename had been saved */
-    gchar *value; /* The filename containing the full path and the extension of the file */
-    gchar *value_utf8; /* Same than "value", but converted to UTF-8 to avoid multiple call to the conversion function */
-    gchar *rel_value_utf8; /* part of value_utf8 beyond the root path passed during initialization. */
-    gchar *path_value_utf8; /* directory part of rel_value_utf8 if any, "" in doubj. */
-    gchar *file_value_utf8; /* file base name part of (rel_)value_utf8. */
-    gchar *path_value_ck; /* collation string for path_value_utf8. */
-    gchar *file_value_ck; /* collation string for file_value_utf8. */
-
-#ifdef __cplusplus
+public:
+	guint key;
+	bool saved; ///< Set to \c true if this filename had been saved
 private:
+	xString _value; ///< The filename containing the full path and the extension of the file
+	xString _value_utf8; ///< Same than "value", but converted to UTF-8 to avoid multiple call to the conversion function
+	unsigned _rel_start_utf8; ///< start in value_utf8 beyond the root path passed during initialization.
+	unsigned _file_start_utf8; ///< start file base name part in \c _value_utf8.
+	mutable xString _path_value_ck; ///< collation string for path_value_utf8.
+	mutable xString _file_value_ck; ///< collation string for file_value_utf8.
+
 	static void (*const prepare_funcs[3][3])(std::string&, unsigned);
 public:
-	/**
-	 * Get function to replace illegal characters in UTF-8 file name.
-	 * @param replace_illegal Replacement mode for illegal characters
-	 * @param convert_spaces Replacement mode for spaces.
-	 * @return Function with
-	 * - filename as UTF-8 string, will be modified in place,
-	 * - (optional) start position in filename.
-	 * @remarks The function will always replace characters
-	 * that cause severe problems like path delimiters.
-	 */
+	File_Name();
+	File_Name(const File_Name& r);
+	~File_Name();
+	void reset();
+	void set_filename(const File_Name* root, const char* filename_utf8, const char* filename);
+	bool SetFromComponents(const File_Name* root, const char* new_name, const char* dir_name, EtFilenameReplaceMode replace_illegal);
+
+	/// Raw file name in file system representation.
+	const xString& value() const noexcept { return _value; }
+	/// File name in UTF-8 representation.
+	const xString& value_utf8() const noexcept { return _value_utf8; }
+	/// File name relative to the root path at creation time.
+	/// @remarks This is typically the currently selected directory.\n
+	/// If no root was specified it is the same as \ref value_utf8.
+	const char* rel_value_utf8() const noexcept { return _value_utf8 + _rel_start_utf8; }
+	/// Path component of \ref rel_value_utf8 without trailing path delimiter.
+	std::string path_value_utf8() const;
+	/// File name component of \ref value_utf8.
+	const char* file_value_utf8() const noexcept { return _value_utf8 + _file_start_utf8; }
+	/// File name component of \ref value_utf8 w/o file extension.
+	std::string file_value_noext_utf8() const;
+	/// \ref path_value_utf8 as GLib collation string.
+	/// @remarks The returned value is initialized lazily on first access.
+	const xString& path_value_ck() const;
+	/// \ref file_value_utf8 as GLib collation string.
+	/// @remarks The returned value is initialized lazily on first access.
+	const xString& file_value_ck() const;
+
+	/// Get function to replace illegal characters in UTF-8 file name.
+	/// @param replace_illegal Replacement mode for illegal characters
+	/// @param convert_spaces Replacement mode for spaces.
+	/// @return Function with
+	/// - filename as UTF-8 string, will be modified in place,
+	/// - (optional) start position in filename.
+	/// @remarks The function will always replace characters
+	/// that cause severe problems like path delimiters.
 	static void (*prepare_func(EtFilenameReplaceMode replace_illegal, EtConvertSpaces convert_spaces))(std::string& filename_utf8, unsigned start)
 	{	return prepare_funcs[std::min((unsigned)replace_illegal, 2U)][std::min((unsigned)convert_spaces - 1, 2U)]; }
-#endif
 } File_Name;
 
-G_BEGIN_DECLS
-
-File_Name * et_file_name_new (void);
-void et_file_name_free (File_Name *file_name);
-void ET_Set_Filename_File_Name_Item (File_Name *FileName, const File_Name *root, const gchar *filename_utf8, const gchar *filename);
-gboolean et_file_name_set_from_components (File_Name *file_name, const File_Name *root, const gchar *new_name, const gchar *dir_name, EtFilenameReplaceMode replace_illegal);
-gboolean et_file_name_detect_difference (const File_Name *a, const File_Name *b);
-
-G_END_DECLS
+#else
+struct File_Name;
+#endif
 
 #endif /* !ET_FILE_NAME_H_ */

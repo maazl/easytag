@@ -21,7 +21,7 @@
 
 #include <gtk/gtk.h>
 
-#include "et_core.h"
+#include "file.h"
 
 #define ET_TYPE_APPLICATION_WINDOW (et_application_window_get_type ())
 #define ET_APPLICATION_WINDOW(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_APPLICATION_WINDOW, EtApplicationWindow))

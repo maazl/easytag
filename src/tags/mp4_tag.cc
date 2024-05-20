@@ -28,9 +28,10 @@
 #include "mp4_tag.h"
 #include "picture.h"
 #include "misc.h"
-#include "et_core.h"
 #include "charset.h"
 #include "gio_wrapper.h"
+#include "file.h"
+#include "file_description.h"
 #include "taglib_base.h"
 
 /* Shadow warning in public TagLib headers. */
@@ -228,18 +229,15 @@ mp4tag_write_file_tag (const ET_File *ETFile,
                        GError **error)
 {
     const File_Tag *FileTag;
-    const gchar *filename;
-    const gchar *filename_utf8;
     MP4::Tag *tag;
 
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
 
     FileTag = ETFile->FileTag->data;
-    filename      = ETFile->FileNameCur->data->value;
-    filename_utf8 = ETFile->FileNameCur->data->value_utf8;
+    const char* filename_utf8 = ETFile->FileNameCur->data->value_utf8();
 
     /* Open file for writing */
-    GFile *file = g_file_new_for_path (filename);
+    GFile *file = g_file_new_for_path(ETFile->FileNameCur->data->value());
     GIO_IOStream stream (file);
     g_object_unref (file);
 

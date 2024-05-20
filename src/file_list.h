@@ -21,9 +21,10 @@
 
 #include <glib.h>
 
-#include "file.h"
-#include "file_tag.h"
 #include "setting.h"
+
+struct ET_File;
+struct File_Name;
 
 G_BEGIN_DECLS
 

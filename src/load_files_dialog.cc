@@ -131,9 +131,9 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
 
             /* Set the new filename */
             // Create a new 'File_Name' item
-            FileName = et_file_name_new ();
+            FileName = new File_Name();
             // Save changes of the 'File_Name' item
-            ET_Set_Filename_File_Name_Item(FileName, ETFile->FileNameCur->data, filename_new_utf8,NULL);
+            FileName->set_filename(ETFile->FileNameCur->data, filename_new_utf8, NULL);
             ET_Manage_Changes_Of_File_Data(ETFile,FileName,NULL);
 
             g_free(filename_new_utf8);
@@ -620,8 +620,6 @@ Load_File_List (EtLoadFilesDialog *self)
     EtLoadFilesDialogPrivate *priv;
     GList *l;
     ET_File *etfile;
-    gchar *filename_utf8;
-    gchar *pos;
 
     priv = et_load_files_dialog_get_instance_private (self);
 
@@ -630,16 +628,11 @@ Load_File_List (EtLoadFilesDialog *self)
     for (l = ETCore->ETFileList; l != NULL; l = g_list_next (l))
     {
         etfile = (ET_File *)l->data;
-        filename_utf8 = g_path_get_basename(etfile->FileNameNew->data->value_utf8);
-        // Remove the extension ('filename' must be allocated to don't affect the initial value)
-        if ((pos=strrchr(filename_utf8,'.'))!=NULL)
-            *pos = 0;
         gtk_list_store_insert_with_values (priv->file_name_model, NULL,
                                            G_MAXINT, LOAD_FILE_NAME_TEXT,
-                                           filename_utf8,
+                                           etfile->FileNameNew->data->file_value_noext_utf8().c_str(),
                                            LOAD_FILE_NAME_POINTER, l->data,
                                            -1);
-        g_free(filename_utf8);
     }
 }
 

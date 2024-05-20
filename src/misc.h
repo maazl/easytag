@@ -77,18 +77,20 @@ template <typename T>
 class gListP
 {	gList<T>* ptr;
 public:
-	gListP(gList<T>* p) : ptr(p) {}
+	gListP(gList<T>* p = nullptr) : ptr(p) {}
 	explicit gListP(GList* p) : ptr((gList<T>*)p) {}
-	explicit gListP(T t) : ptr((gList<T>*)g_list_append(nullptr, t)) {}
+	explicit gListP(T t) : ptr((gList<T>*)g_list_append(nullptr, (gpointer)t)) {}
 	gListP<T>& operator =(gList<T>* p) { ptr = p; return *this; }
 	operator GList*() const { return (GList*)ptr; }
 	gList<T>* operator ->() const { return ptr; }
 	gListP<T> last() const { return gListP<T>(g_list_last(*this)); }
-	gListP<T> append(T t) { return gListP<T>(g_list_append(*this, t)); }
+	gListP<T> prepend(T t) { return gListP<T>(g_list_prepend(*this, (gpointer)t)); }
+	gListP<T> append(T t) { return gListP<T>(g_list_append(*this, (gpointer)t)); }
 	template<typename U, typename std::enable_if<std::is_convertible<T, U>::value, bool>::type = true>
 	gListP<T> insert_sorted(T t, gint (*cmp)(U a, U b))
-	{ return gListP<T>(g_list_insert_sorted(*this, t, (GCompareFunc)cmp)); }
+	{ return gListP<T>(g_list_insert_sorted(*this, (gpointer)t, (GCompareFunc)cmp)); }
 	gListP<T> concat(gListP<T> l) { return gListP<T>(g_list_concat(*this, l)); }
+	gListP<T> reverse() { return gListP<T>(g_list_reverse(*this)); }
 };
 
 /** create unique pointer with explicit deleter

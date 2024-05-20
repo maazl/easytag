@@ -26,11 +26,10 @@
 #include "id3_tag.h"
 #include "ape_tag.h"
 #include "picture.h"
-#include "easytag.h"
 #include "genres.h"
 #include "setting.h"
 #include "misc.h"
-#include "et_core.h"
+#include "file.h"
 #include "charset.h"
 
 #ifdef ENABLE_MP3
@@ -124,8 +123,6 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
                           GError **error)
 {
     const File_Tag *FileTag;
-    const gchar *filename;
-    const gchar *filename_utf8;
     gboolean success = TRUE;
     gint number_of_frames;
     gboolean has_data = FALSE;
@@ -151,8 +148,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     }
 
     FileTag  = ETFile->FileTag->data;
-    filename      = ETFile->FileNameCur->data->value;
-    filename_utf8 = ETFile->FileNameCur->data->value_utf8;
+    const char* filename = ETFile->FileNameCur->data->value();
 
     auto file = make_unique(g_file_new_for_path(filename), g_object_unref);
 
@@ -198,8 +194,6 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
 
     /* Set padding when tag was changed, for faster writing */
     id3_tag.SetPadding(TRUE);
-
-    gString basename_utf8(g_path_get_basename (filename_utf8));
 
     has_data |= id3tag_set_text_frame(id3_tag, ID3FID_TITLE, FileTag->title);
 
@@ -338,16 +332,12 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     {
         // Delete the APE tag (create a dummy ETFile for the Ape_Tag_... function)
         ET_File   *ETFile_tmp    = ET_File_Item_New();
-        File_Name *FileName_tmp = et_file_name_new ();
-        File_Tag  *FileTag_tmp = et_file_tag_new();
         // Same file...
-        FileName_tmp->value      = g_strdup(filename);
-        FileName_tmp->value_utf8 = g_strdup(filename_utf8);  // Not necessary to fill 'value_ck'
-        ETFile_tmp->FileNameList = gListP<File_Name*>(FileName_tmp);
-        ETFile_tmp->FileNameCur  = ETFile_tmp->FileNameList;
+        ETFile_tmp->FileNameCur  =
+        ETFile_tmp->FileNameList = gListP<File_Name*>(new File_Name(*ETFile->FileNameCur->data));
         // With empty tag...
-        ETFile_tmp->FileTagList  = gListP<File_Tag*>(FileTag_tmp);
-        ETFile_tmp->FileTag      = ETFile_tmp->FileTagList;
+        ETFile_tmp->FileTag      =
+        ETFile_tmp->FileTagList  = gListP<File_Tag*>(et_file_tag_new());
         ape_tag_write_file_tag (ETFile_tmp, NULL);
         ET_Free_File_List_Item(ETFile_tmp);
     }
@@ -367,7 +357,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     {
         id3_tag.Strip(ID3TT_ID3V1);
         id3_tag.Strip(ID3TT_ID3V2);
-        g_debug (_("Removed tag of ‘%s’"), basename_utf8.get());
+        g_debug (_("Removed tag of ‘%s’"), ETFile->FileNameCur->data->file_value_utf8());
     }
     else
     {

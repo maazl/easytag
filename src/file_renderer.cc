@@ -52,14 +52,14 @@ void FileColumnRenderer::SetText(GtkCellRendererText* renderer, const gchar* tex
 
 namespace
 {
-class FileNameColumnRenderer : public FileColumnRenderer
+class GenericColumnRenderer : public FileColumnRenderer
 {
 protected:
-	gchar* File_Name::* const Field;
+	string (*const Getter)(const File_Name* file_name);
 	virtual string RenderText(const ET_File* file, bool original) const;
 public:
-	FileNameColumnRenderer(EtSortMode col, gchar* File_Name::* const field)
-	:	FileColumnRenderer(col), Field(field) {}
+	GenericColumnRenderer(EtSortMode col, string (*const getter)(const File_Name* file_name))
+	:	FileColumnRenderer(col), Getter(getter) {}
 };
 
 class TagColumnRenderer : public FileColumnRenderer
@@ -129,9 +129,9 @@ public:
 };
 
 // Static renderer instances
-const FileNameColumnRenderer
-	R_Path(ET_SORT_MODE_ASCENDING_FILEPATH, &File_Name::path_value_utf8),
-	R_File(ET_SORT_MODE_ASCENDING_FILENAME, &File_Name::file_value_utf8);
+const GenericColumnRenderer
+	R_Path(ET_SORT_MODE_ASCENDING_FILEPATH, [](const File_Name* file_name) { return file_name->path_value_utf8(); }),
+	R_File(ET_SORT_MODE_ASCENDING_FILENAME, [](const File_Name* file_name) { return string(file_name->file_value_utf8()); });
 const TagColumnRenderer
 	R_Title(ET_SORT_MODE_ASCENDING_TITLE, &File_Tag::title),
 	R_Version(ET_SORT_MODE_ASCENDING_VERSION, &File_Tag::version),
@@ -161,8 +161,8 @@ const FileInfoIntColumnRenderer
 	R_Samplerate(ET_SORT_MODE_ASCENDING_FILE_SAMPLERATE, &ET_File_Info::samplerate);
 const TagReplaygainRenderer R_Replaygain(ET_SORT_MODE_ASCENDING_REPLAYGAIN);
 
-string FileNameColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	return EmptfIfNull((original ? file->FileNameCur : file->FileNameNew)->data->*Field);
+string GenericColumnRenderer::RenderText(const ET_File* file, bool original) const
+{	return Getter((original ? file->FileNameCur : file->FileNameNew)->data);
 }
 
 string TagColumnRenderer::RenderText(const ET_File* file, bool original) const

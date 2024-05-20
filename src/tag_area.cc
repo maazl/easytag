@@ -369,8 +369,7 @@ on_apply_to_selection (GObject *object,
          * Note : 'etfilelistfull' and 'etfilelist' must be sorted in the same order */
         GList *etfilelistfull = NULL;
         EtSortMode sort_mode;
-        gchar *path = NULL;
-        gchar *path1 = NULL;
+        std::string last_path;
         gint i = 0;
 
         /* FIX ME!: see to fill also the Total Track (it's a good idea?) */
@@ -390,13 +389,15 @@ on_apply_to_selection (GObject *object,
             etfile = (ET_File*)etfilelist->data;
 
             // Restart counter when entering a new directory
-            g_free(path1);
-            path1 = g_path_get_dirname(FileNameCur->value);
-            if ( path && path1 && strcmp(path,path1)!=0 )
+            const string& path = FileNameCur->path_value_utf8();
+            if (last_path != path)
+            {
                 i = 0;
+                last_path = path;
+            }
 
             char buf[12];
-            sprintf(buf, "%i", ++i);
+            snprintf(buf, sizeof(buf), "%i", ++i);
             track_string = et_track_number_to_string(buf);
 
             // The file is in the selection?
@@ -411,13 +412,9 @@ on_apply_to_selection (GObject *object,
             }
 
             g_free (track_string);
-            g_free(path);
-            path = g_strdup(path1);
 
             etfilelistfull = g_list_next(etfilelistfull);
         }
-        g_free(path);
-        g_free(path1);
         //msg = g_strdup_printf(_("All %d tracks numbered sequentially."), ETCore->ETFileSelectionList_Length);
         msg = g_strdup_printf (_("Selected tracks numbered sequentially"));
     }
@@ -428,19 +425,14 @@ on_apply_to_selection (GObject *object,
         /* Used of Track and Total Track values */
         for (l = etfilelist; l != NULL; l = g_list_next (l))
         {
-            const gchar *filename_utf8;
-            gchar *path_utf8;
             gchar *track_string;
 
             etfile        = (ET_File *)l->data;
-            filename_utf8 = etfile->FileNameNew->data->value_utf8;
-            path_utf8     = g_path_get_dirname(filename_utf8);
+            string path_utf8 = etfile->FileNameNew->data->path_value_utf8();
 
             char buf[12];
-            sprintf(buf, "%u", et_file_list_get_n_files_in_path(ETCore->ETFileList, path_utf8));
+            sprintf(buf, "%u", et_file_list_get_n_files_in_path(ETCore->ETFileList, path_utf8.c_str()));
             track_string = et_track_number_to_string(buf);
-
-            g_free (path_utf8);
 
             if (!track_total)
             {
@@ -1512,7 +1504,7 @@ on_picture_add_button_clicked (GObject *object,
                                      FALSE);
 
     /* Starting directory (the same as the current file). */
-    init_dir = g_path_get_dirname (ETCore->ETFileDisplayed->FileNameCur->data->value);
+    init_dir = g_path_get_dirname (ETCore->ETFileDisplayed->FileNameCur->data->value());
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (FileSelectionWindow),
                                          init_dir);
     g_free (init_dir);

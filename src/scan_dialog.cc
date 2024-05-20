@@ -299,7 +299,6 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
     GList *fill_tag_list = NULL;
     GList *l;
     gchar *mask; // The 'mask' in the entry
-    gchar *filename_utf8;
     File_Tag *FileTag;
 
     g_return_if_fail (ETFile != NULL);
@@ -352,7 +351,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
 
         if (g_ascii_strcasecmp(ETFile->ETFileExtension, ".mp3"))
         {
-            file = g_file_new_for_path (ETFile->FileNameNew->data->value);
+            file = g_file_new_for_path (ETFile->FileNameNew->data->value());
 
             if (crc32_file_with_ID3_tag (file, &crc32_value, &error))
             {
@@ -381,9 +380,8 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
     et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
                                               _("Tag successfully scanned"),
                                               TRUE);
-    filename_utf8 = g_path_get_basename(ETFile->FileNameNew->data->value_utf8);
-    Log_Print (LOG_OK, _("Tag successfully scanned ‘%s’"), filename_utf8);
-    g_free(filename_utf8);
+    Log_Print (LOG_OK, _("Tag successfully scanned ‘%s’"),
+        ETFile->FileNameNew->data->file_value_utf8());
 }
 
 static GList *
@@ -407,7 +405,7 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, gchar *mask)
 
     g_return_val_if_fail (ETFile != NULL && mask != NULL, NULL);
 
-    filename_utf8 = g_strdup(ETFile->FileNameNew->data->value_utf8);
+    filename_utf8 = g_strdup(ETFile->FileNameNew->data->value_utf8());
     if (!filename_utf8) return NULL;
 
     // Remove extension of file (if found)
@@ -416,7 +414,7 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, gchar *mask)
         filename_utf8[strlen(filename_utf8) - strlen(desc->Extension)] = 0; //strrchr(source,'.') = 0;
     else
         Log_Print(LOG_ERROR, _("The extension ‘%s’ was not found in filename ‘%s’"),
-            ET_Get_File_Extension(filename_utf8), gString(g_path_get_basename(filename_utf8)).get());
+            ET_Get_File_Extension(filename_utf8), ETFile->FileNameNew->data->file_value_utf8());
 
     /* Replace characters into mask and filename before parsing. */
     convert_mode = (EtConvertSpaces)g_settings_get_enum (MainSettings, "fill-convert-spaces");
@@ -782,9 +780,9 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
 
     /* Set the new filename */
     /* Create a new 'File_Name' item. */
-    FileName = et_file_name_new ();
+    FileName = new File_Name();
     // Save changes of the 'File_Name' item
-    ET_Set_Filename_File_Name_Item(FileName,ETFile->FileNameCur->data, filename_new_utf8, NULL);
+    FileName->set_filename(ETFile->FileNameCur->data, filename_new_utf8, NULL);
 
     ET_Manage_Changes_Of_File_Data(ETFile,FileName,NULL);
     g_free(filename_new_utf8);
@@ -793,10 +791,8 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
                                               _("New filename successfully scanned"),
                                               TRUE);
 
-    filename_new_utf8 = g_path_get_basename(ETFile->FileNameNew->data->value_utf8);
     Log_Print (LOG_OK, _("New filename successfully scanned ‘%s’"),
-               filename_new_utf8);
-    g_free(filename_new_utf8);
+        ETFile->FileNameNew->data->file_value_utf8());
 
     return;
 }
@@ -832,10 +828,10 @@ et_scan_generate_new_filename_from_mask (const ET_File *ETFile,
         {
             // Relative path => set beginning of the path
             const File_Name* file = ETFile->FileNameCur->data;
-            if (file->rel_value_utf8 != file->value_utf8)
-                path_utf8_cur = g_strndup(file->value_utf8, file->rel_value_utf8 - file->value_utf8);
+            if (file->rel_value_utf8() != file->value_utf8())
+                path_utf8_cur = g_strndup(file->value_utf8(), file->rel_value_utf8() - file->value_utf8());
             else
-                path_utf8_cur = g_path_get_dirname(file->value_utf8);
+                path_utf8_cur = g_path_get_dirname(file->value_utf8());
         }
     }
 
@@ -865,7 +861,6 @@ Scan_Rename_File_Prefix_Path (EtScanDialog *self)
     gchar *path_tmp;
     const gchar *combo_text;
     const ET_File *ETFile = ETCore->ETFileDisplayed;
-    const gchar *filename_utf8_cur;
     gchar *path_utf8_cur;
 
     if (!ETFile)
@@ -873,11 +868,10 @@ Scan_Rename_File_Prefix_Path (EtScanDialog *self)
         return;
     }
 
-    filename_utf8_cur = ETFile->FileNameCur->data->value_utf8;
     priv = et_scan_dialog_get_instance_private (self);
 
     // The path to prefix
-    path_utf8_cur = g_path_get_dirname(filename_utf8_cur);
+    path_utf8_cur = g_path_get_dirname(ETFile->FileNameCur->data->value_utf8());
 
     /* The current text in the combobox. */
     combo_text = gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->rename_combo))));
@@ -1067,7 +1061,6 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
     File_Name *st_filename;
     File_Tag  *st_filetag;
     guint process_fields;
-    gchar     *filename_utf8;
     gchar     *string;
 
     g_return_if_fail (ETFile != NULL);
@@ -1079,26 +1072,22 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
     /* Process the filename */
     if (st_filename != NULL)
     {
-        if (st_filename->value_utf8 
+        if (st_filename->value_utf8()
             && (process_fields & ET_PROCESS_FIELD_FILENAME))
         {
-            gchar *string_utf8;
             gchar *pos;
 
-            filename_utf8 = st_filename->value_utf8;
-
             if (!FileName)
-                FileName = et_file_name_new ();
+                FileName = new File_Name();
 
-            string = g_path_get_basename(filename_utf8);
+            string = g_path_get_basename(st_filename->value_utf8());
             // Remove the extension to set it to lower case (to avoid problem with undo)
             if ((pos=strrchr(string,'.'))!=NULL) *pos = 0;
 
             Scan_Process_Fields_Functions (self, &string);
 
-            string_utf8 = et_file_generate_name (ETFile, string);
-            ET_Set_Filename_File_Name_Item(FileName, ETFile->FileNameCur->data, string_utf8, NULL);
-            g_free(string_utf8);
+            gString string_utf8(et_file_generate_name (ETFile, string));
+            FileName->set_filename(ETFile->FileNameCur->data, string_utf8, NULL);
             g_free(string);
         }
     }

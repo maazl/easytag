@@ -47,17 +47,17 @@ void ET_File::check_dates(int max_fields, bool additional_content) const
 	if (!File_Tag::check_date(tag->year, max_fields, additional_content))
 			Log_Print (LOG_WARNING,
 								 _("The year value ‘%s’ seems to be invalid in file ‘%s’."),
-								 tag->year, FileNameCur->data->value_utf8);
+								 tag->year, FileNameCur->data->value_utf8().get());
 
 	if (!File_Tag::check_date(tag->release_year, max_fields, additional_content))
 			Log_Print (LOG_WARNING,
 								 _("The release year value ‘%s’ seems to be invalid in file ‘%s’."),
-								 tag->release_year, FileNameCur->data->value_utf8);
+								 tag->release_year, FileNameCur->data->value_utf8().get());
 
 	if (!File_Tag::check_date(tag->orig_year, max_fields, additional_content))
 			Log_Print (LOG_WARNING,
 								 _("The original year value ‘%s’ seems to be invalid in file ‘%s’."),
-								 tag->orig_year, FileNameCur->data->value_utf8);
+								 tag->orig_year, FileNameCur->data->value_utf8().get());
 }
 
 
@@ -92,10 +92,10 @@ static gint CmpFilepath(const ET_File* ETFile1, const ET_File* ETFile2)
 	const File_Name *file2 = ETFile2->FileNameCur->data;
 	// !!!! : Must be the same rules as "Cddb_Track_List_Sort_Func" to be
 	// able to sort in the same order files in cddb and in the file list.
-	int r = strcmp(file1->path_value_ck, file2->path_value_ck);
+	int r = strcmp(file1->path_value_ck(), file2->path_value_ck());
 	if (r)
 		return sign(r);
-	return 2 * sign(strcmp(file1->file_value_ck, file2->file_value_ck));
+	return 2 * sign(strcmp(file1->file_value_ck(), file2->file_value_ck()));
 }
 
 /*
@@ -105,7 +105,7 @@ static gint CmpFilename(const ET_File* ETFile1, const ET_File* ETFile2)
 {
 	// !!!! : Must be the same rules as "Cddb_Track_List_Sort_Func" to be
 	// able to sort in the same order files in cddb and in the file list.
-	return sign(strcmp(ETFile1->FileNameCur->data->file_value_ck, ETFile2->FileNameCur->data->file_value_ck));
+	return sign(strcmp(ETFile1->FileNameCur->data->file_value_ck(), ETFile2->FileNameCur->data->file_value_ck()));
 }
 
 /*
@@ -174,7 +174,7 @@ static gint CmpCreationDate(const ET_File* ETFile1, const ET_File* ETFile2)
     guint64 time2 = 0;
 
     /* TODO: Report errors? */
-    file = g_file_new_for_path (ETFile1->FileNameCur->data->value);
+    file = g_file_new_for_path (ETFile1->FileNameCur->data->value());
     info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_CHANGED,
                               G_FILE_QUERY_INFO_NONE, NULL, NULL);
 
@@ -187,7 +187,7 @@ static gint CmpCreationDate(const ET_File* ETFile1, const ET_File* ETFile2)
         g_object_unref (info);
     }
 
-    file = g_file_new_for_path (ETFile2->FileNameCur->data->value);
+    file = g_file_new_for_path (ETFile2->FileNameCur->data->value());
     info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_CHANGED,
                               G_FILE_QUERY_INFO_NONE, NULL, NULL);
 
@@ -475,7 +475,7 @@ ET_Free_File_Name_List (GList *FileNameList)
 
     FileNameList = g_list_first (FileNameList);
 
-    g_list_free_full (FileNameList, (GDestroyNotify)et_file_name_free);
+    g_list_free_full (FileNameList, [](gpointer file_name) { delete (File_Name*)file_name; });
 
     return TRUE;
 }
@@ -523,7 +523,6 @@ ET_Save_File_Name_Internal (const ET_File *ETFile,
                             File_Name *FileName)
 {
     gchar *filename_new = NULL;
-    gchar *dirname = NULL;
     gchar *filename;
     gchar *extension;
     gchar *pos;
@@ -531,11 +530,8 @@ ET_Save_File_Name_Internal (const ET_File *ETFile,
 
     g_return_val_if_fail (ETFile != NULL && FileName != NULL, FALSE);
 
-    // Get the current path to the file
-    dirname = g_path_get_dirname(ETFile->FileNameNew->data->value);
-
     // Get the name of file (and rebuild it with extension with a 'correct' case)
-    filename = g_path_get_basename(ETFile->FileNameNew->data->value);
+    filename = g_path_get_basename(ETFile->FileNameNew->data->value());
 
     // Remove the extension
     if ((pos=strrchr(filename, '.'))!=NULL)
@@ -552,11 +548,11 @@ ET_Save_File_Name_Internal (const ET_File *ETFile,
     g_free(extension);
     g_free(filename);
 
-    success = et_file_name_set_from_components (FileName, ETFile->FileNameCur->data, filename_new, dirname,
+    success = FileName->SetFromComponents(ETFile->FileNameCur->data,
+        filename_new, ETFile->FileNameNew->data->path_value_utf8().c_str(),
         (EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"));
 
     g_free (filename_new);
-    g_free (dirname);
     return success;
 }
 
@@ -632,8 +628,6 @@ gboolean
 ET_Save_File_Tag_To_HD (ET_File *ETFile, GError **error)
 {
     const ET_File_Description *description;
-    const gchar *cur_filename;
-    const gchar *cur_filename_utf8;
     gboolean state;
     GFile *file;
     GFileInfo *fileinfo;
@@ -641,8 +635,7 @@ ET_Save_File_Tag_To_HD (ET_File *ETFile, GError **error)
     g_return_val_if_fail (ETFile != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    cur_filename = ETFile->FileNameCur->data->value;
-    cur_filename_utf8 = ETFile->FileNameCur->data->value_utf8;
+    const gchar *cur_filename = ETFile->FileNameCur->data->value();
 
     description = ETFile->ETFileDescription;
 
@@ -655,9 +648,8 @@ ET_Save_File_Tag_To_HD (ET_File *ETFile, GError **error)
     if (description->write_file_tag)
         state = (*description->write_file_tag)(ETFile, error);
     else
-        Log_Print (LOG_ERROR,
-                   "Saving unsupported for %s (%s).",
-                   description->FileType, cur_filename_utf8);
+        Log_Print (LOG_ERROR, "Saving unsupported for %s (%s).",
+            description->FileType, ETFile->FileNameCur->data->value_utf8().get());
 
     /* Update properties for the file. */
     if (fileinfo)
@@ -734,13 +726,13 @@ ET_Manage_Changes_Of_File_Data (ET_File *ETFile,
     if (FileName)
     {
         if (ETFile->FileNameNew
-            && et_file_name_detect_difference (ETFile->FileNameNew->data, FileName) == TRUE)
+            && g_strcmp0(ETFile->FileNameNew->data->rel_value_utf8(), FileName->rel_value_utf8()))
         {
-            ET_Add_File_Name_To_List(ETFile,FileName);
+            ET_Add_File_Name_To_List(ETFile, FileName);
             undo_added |= TRUE;
-        }else
+        } else
         {
-            et_file_name_free (FileName);
+            delete FileName;
         }
     }
 
@@ -1003,7 +995,7 @@ ET_Mark_File_Tag_As_Saved (ET_File *ETFile)
 void ET_Mark_File_Name_As_Saved (ET_File *ETFile)
 {
     g_list_foreach(ETFile->FileNameList, (GFunc)Set_Saved_Value_Of_File_Tag_To_False, NULL);
-    ETFile->FileNameNew->data->saved = TRUE; // The current FileName, to set to TRUE
+    ETFile->FileNameNew->data->saved = true; // The current FileName, to set to TRUE
 }
 
 /*
@@ -1026,7 +1018,7 @@ et_file_generate_name (const ET_File *ETFile,
     g_return_val_if_fail (ETFile && ETFile->FileNameNew->data, NULL);
     g_return_val_if_fail (new_file_name_utf8, NULL);
 
-    if ((dirname_utf8 = g_path_get_dirname (ETFile->FileNameNew->data->value_utf8)))
+    if ((dirname_utf8 = g_path_get_dirname (ETFile->FileNameNew->data->value_utf8())))
     {
         gchar *extension;
         gchar *new_file_name_path_utf8;

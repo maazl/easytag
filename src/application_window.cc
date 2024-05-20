@@ -43,6 +43,8 @@
 #include "status_bar.h"
 #include "tag_area.h"
 
+using namespace std;
+
 typedef struct
 {
     EtBrowser *browser;
@@ -325,19 +327,14 @@ delete_file (ET_File *ETFile, gboolean multiple_files, GError **error)
 {
     GtkWidget *msgdialog;
     GtkWidget *msgdialog_check_button = NULL;
-    const gchar *cur_filename;
-    const gchar *cur_filename_utf8;
-    gchar *basename_utf8;
     gint response;
-    gint stop_loop;
 
     g_return_val_if_fail (ETFile != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
     /* Filename of the file to delete. */
-    cur_filename      = ETFile->FileNameCur->data->value;
-    cur_filename_utf8 = ETFile->FileNameCur->data->value_utf8;
-    basename_utf8 = g_path_get_basename (cur_filename_utf8);
+    const xString& cur_filename = ETFile->FileNameCur->data->value();
+    const char* basename_utf8 = ETFile->FileNameCur->data->file_value_utf8();
 
     /*
      * Remove the file
@@ -399,11 +396,8 @@ delete_file (ET_File *ETFile, gboolean multiple_files, GError **error)
 
             if (g_file_delete (cur_file, NULL, error))
             {
-                gchar *msg = g_strdup_printf(_("File ‘%s’ deleted"), basename_utf8);
                 et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
-                                                          msg, FALSE);
-                g_free(msg);
-                g_free(basename_utf8);
+                    strprintf(_("File ‘%s’ deleted"), basename_utf8).c_str(), FALSE);
                 g_object_unref (cur_file);
                 g_assert (error == NULL || *error == NULL);
                 return 1;
@@ -417,16 +411,12 @@ delete_file (ET_File *ETFile, gboolean multiple_files, GError **error)
             break;
         case GTK_RESPONSE_CANCEL:
         case GTK_RESPONSE_DELETE_EVENT:
-            stop_loop = -1;
-            g_free(basename_utf8);
-            return stop_loop;
-            break;
+            return -1;
         default:
             g_assert_not_reached ();
             break;
     }
 
-    g_free(basename_utf8);
     return 0;
 }
 
@@ -1415,18 +1405,13 @@ on_run_player_artist (GSimpleAction *action,
 static gboolean
 run_audio_player_using_directory (GError **error)
 {
-    GList *l;
-    GList *file_list = NULL;
+    gListP<GFile*> file_list;
     gboolean res;
 
-    for (l = ETCore->ETFileList; l != NULL; l = g_list_next (l))
-    {
-        ET_File *etfile = (ET_File *)l->data;
-        const gchar *path = etfile->FileNameCur->data->value;
-        file_list = g_list_prepend (file_list, g_file_new_for_path (path));
-    }
+    for (gListP<ET_File*> l(ETCore->ETFileList); l; l = l->next)
+        file_list = file_list.prepend(g_file_new_for_path (l->data->FileNameCur->data->value()));
 
-    file_list = g_list_reverse (file_list);
+    file_list = file_list.reverse();
 
     res = et_run_audio_player (file_list, error);
 
@@ -1983,7 +1968,7 @@ et_application_window_update_file_name_from_ui (EtApplicationWindow *self,
     }
 
     /* Get the current path to the file. */
-    dirname = g_path_get_dirname (ETFile->FileNameNew->data->value);
+    dirname = g_path_get_dirname (ETFile->FileNameNew->data->value());
 
     /* Convert filename extension (lower or upper). */
     extension = ET_File_Format_File_Extension (ETFile);
@@ -2001,13 +1986,13 @@ et_application_window_update_file_name_from_ui (EtApplicationWindow *self,
     {
         /* Keep the 'last' filename (if a 'blank' filename was entered in the
          * fileentry for example). */
-        filename_new = g_path_get_basename (ETFile->FileNameNew->data->value);
+        filename_new = g_path_get_basename (ETFile->FileNameNew->data->value());
     }
 
     g_free (filename);
     g_free (extension);
 
-    et_file_name_set_from_components(FileName, et_application_window_get_current_path_name(self), filename_new, dirname,
+    FileName->SetFromComponents(et_application_window_get_current_path_name(self), filename_new, dirname,
         (EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"));
 
     g_free (filename_new);
@@ -2031,7 +2016,7 @@ et_application_window_update_et_file_from_ui (EtApplicationWindow *self)
                       && et_file->FileNameCur->data != NULL);
 
     /* Save filename and generate undo for filename. */
-    FileName = et_file_name_new ();
+    FileName = new File_Name();
     et_application_window_update_file_name_from_ui (self, et_file, FileName);
 
     FileTag = et_application_window_tag_area_create_file_tag(self, et_file->FileTag->data);
@@ -2050,29 +2035,18 @@ static void
 et_application_window_display_file_name (EtApplicationWindow *self,
                                          const ET_File *ETFile)
 {
-    const gchar *new_filename_utf8;
-    gchar *dirname_utf8;
-    gchar *text;
-
     g_return_if_fail (ETFile != NULL);
-
-    new_filename_utf8 = ETFile->FileNameNew->data->value_utf8;
 
     /*
      * Set the path to the file into BrowserEntry (dirbrowser)
      */
-    dirname_utf8 = g_path_get_dirname (new_filename_utf8);
-    et_application_window_browser_entry_set_text (self, dirname_utf8);
+    string dirname_utf8 = ETFile->FileNameNew->data->path_value_utf8();
+    et_application_window_browser_entry_set_text (self, dirname_utf8.c_str());
 
     // And refresh the number of files in this directory
-    text = g_strdup_printf (ngettext ("One file", "%u files",
-                                      et_file_list_get_n_files_in_path (ETCore->ETFileList,
-                                                                        dirname_utf8)),
-                            et_file_list_get_n_files_in_path (ETCore->ETFileList,
-                                                              dirname_utf8));
-    et_application_window_browser_label_set_text (self, text);
-    g_free(dirname_utf8);
-    g_free(text);
+    guint n_files = et_file_list_get_n_files_in_path(ETCore->ETFileList, dirname_utf8.c_str());
+    string text = strprintf(ngettext("One file", "%u files", n_files), n_files);
+    et_application_window_browser_label_set_text(self, text.c_str());
 }
 
 /*
@@ -2127,14 +2101,12 @@ et_application_window_display_et_file (EtApplicationWindow *self,
                                        ET_File *ETFile, int columns)
 {
     const ET_File_Description *description;
-    const gchar *cur_filename_utf8;
-    gchar *msg;
     EtFileHeaderFields fields;
 
     g_return_if_fail (ETFile != NULL && ETFile->FileNameCur->data != NULL);
                       /* For the case where ETFile is an "empty" structure. */
 
-    cur_filename_utf8 = ETFile->FileNameCur->data->value_utf8;
+    const char *cur_filename_utf8 = ETFile->FileNameCur->data->value_utf8();
     description = ETFile->ETFileDescription;
 
     /* Save the current displayed file */
@@ -2160,9 +2132,7 @@ et_application_window_display_et_file (EtApplicationWindow *self,
 
     et_application_window_file_area_set_header_fields(self, &fields);
 
-    msg = g_strdup_printf (_("File: ‘%s’"), cur_filename_utf8);
-    et_application_window_status_bar_message (self, msg, FALSE);
-    g_free (msg);
+    et_application_window_status_bar_message(self, strprintf(_("File: ‘%s’"), cur_filename_utf8).c_str(), FALSE);
 }
 
 GFile *

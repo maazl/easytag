@@ -150,19 +150,16 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
         GFileInfo *fileinfo;
 
         const ET_File *ETFile = (ET_File *)l->data;
-        const File_Tag *file_tag  = (File_Tag *)ETFile->FileTag->data;
-        const File_Name *FileName = (File_Name *)ETFile->FileNameNew->data;
-        const gchar *filename_cur = ((File_Name *)ETFile->FileNameCur->data)->value;
-        const gchar *filename_cur_utf8 = ((File_Name *)ETFile->FileNameCur->data)->value_utf8;
-        gchar *basename_cur_utf8 = g_path_get_basename(filename_cur_utf8);
+        const File_Tag *file_tag  = ETFile->FileTag->data;
+        const File_Name *FileName = ETFile->FileNameNew->data;
 
         // Count only the changed files or all files if force_saving_files==TRUE
         if (force_saving_files
-            || (FileName && FileName->saved == FALSE)
-            || (file_tag && file_tag->saved == FALSE))
+            || (FileName && !FileName->saved)
+            || (file_tag && !file_tag->saved))
             nb_files_to_save++;
 
-        file = g_file_new_for_path (filename_cur);
+        file = g_file_new_for_path(ETFile->FileNameCur->data->value());
         fileinfo = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_MODIFIED,
                                       G_FILE_QUERY_INFO_NONE, NULL, NULL);
         g_object_unref (file);
@@ -178,7 +175,6 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
 
             g_object_unref (fileinfo);
         }
-        g_free(basename_cur_utf8);
     }
 
     /* Initialize status bar */
@@ -251,8 +247,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
 
         /* We process only the files changed and not saved, or we force to save all
          * files if force_saving_files==TRUE */
-        if ( force_saving_files
-        || FileTag->saved == FALSE || FileNameNew->saved == FALSE )
+        if (force_saving_files || !FileTag->saved || !FileNameNew->saved)
         {
             /* ET_Display_File_Data_To_UI ((ET_File *)l->data);
              * Use of 'currentPath' to try to increase speed. Indeed, in many
@@ -353,16 +348,14 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
 {
     const File_Tag *FileTag;
     const File_Name *FileNameNew;
-    gint stop_loop = 0;
-    const gchar *filename_cur_utf8 = ((File_Name *)ETFile->FileNameCur->data)->value_utf8;
-    const gchar *filename_new_utf8 = ((File_Name *)ETFile->FileNameNew->data)->value_utf8;
-    gchar *basename_cur_utf8, *basename_new_utf8;
+    const char *filename_cur_utf8 = ETFile->FileNameCur->data->value_utf8();
+    const char *filename_new_utf8 = ETFile->FileNameNew->data->value_utf8();
     gchar *dirname_cur_utf8, *dirname_new_utf8;
 
     g_return_val_if_fail (ETFile != NULL, 0);
 
-    basename_cur_utf8 = g_path_get_basename(filename_cur_utf8);
-    basename_new_utf8 = g_path_get_basename(filename_new_utf8);
+    const char* basename_cur_utf8 = ETFile->FileNameCur->data->file_value_utf8();
+    const char* basename_new_utf8 = ETFile->FileNameNew->data->file_value_utf8();
 
     /* Save the current displayed data */
     //ET_Save_File_Data_From_UI((ET_File *)ETFileList->data); // Not needed, because it was done before
@@ -478,27 +471,14 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
                     ETFile->FileTagCur = ETFile->FileTag;
                 // if an error occurs when 'SF_HideMsgbox_Write_Tag is TRUE', we don't stop saving...
                 else if (!SF_HideMsgbox_Write_Tag)
-                {
-                    stop_loop = -1;
-
-                    g_free (basename_cur_utf8);
-                    g_free (basename_new_utf8);
-
-                    return stop_loop;
-                }
+                    return -1;
                 break;
             }
             case GTK_RESPONSE_NO:
                 break;
             case GTK_RESPONSE_CANCEL:
             case GTK_RESPONSE_DELETE_EVENT:
-                stop_loop = -1;
-
-                g_free (basename_cur_utf8);
-                g_free (basename_new_utf8);
-
-                return stop_loop;
-                break;
+                return -1;
             default:
                 g_assert_not_reached ();
                 break;
@@ -510,7 +490,7 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
      * Second part: rename the file
      */
     // Do only if changed! (don't take force_saving_files into account)
-    if ( FileNameNew->saved == FALSE ) // This filename had been already saved ?
+    if (!FileNameNew->saved) // This filename had been already saved ?
     {
         GtkWidget *msgdialog = NULL;
         GtkWidget *msgdialog_check_button = NULL;
@@ -606,11 +586,8 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
         {
             case GTK_RESPONSE_YES:
             {
-                gboolean rc;
                 GError *error = NULL;
-                const gchar *cur_filename = ((File_Name *)ETFile->FileNameCur->data)->value;
-                const gchar *new_filename = ((File_Name *)ETFile->FileNameNew->data)->value;
-                rc = et_rename_file (cur_filename, new_filename, &error);
+                gboolean rc = et_rename_file(ETFile->FileNameCur->data->value(), ETFile->FileNameNew->data->value(), &error);
 
                 // if 'SF_HideMsgbox_Rename_File is TRUE', then errors are displayed only in log
                 if (!rc)
@@ -647,14 +624,7 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
 
                 // if an error occurs when 'SF_HideMsgbox_Rename_File is TRUE', we don't stop saving...
                 if (!rc && !SF_HideMsgbox_Rename_File)
-                {
-                    stop_loop = -1;
-
-                    g_free (basename_cur_utf8);
-                    g_free (basename_new_utf8);
-
-                    return stop_loop;
-                }
+                    return -1;
 
                 /* Mark after renaming files. */
                 ETFile->FileNameCur = ETFile->FileNameNew;
@@ -665,21 +635,12 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
                 break;
             case GTK_RESPONSE_CANCEL:
             case GTK_RESPONSE_DELETE_EVENT:
-                stop_loop = -1;
-
-                g_free (basename_cur_utf8);
-                g_free (basename_new_utf8);
-
-                return stop_loop;
-                break;
+                return -1;
             default:
                 g_assert_not_reached ();
                 break;
         }
     }
-
-    g_free(basename_cur_utf8);
-    g_free(basename_new_utf8);
 
     /* Refresh file into browser list */
     // Browser_List_Refresh_File_In_List(ETFile);
@@ -696,25 +657,15 @@ static gboolean
 Write_File_Tag (ET_File *ETFile, gboolean hide_msgbox)
 {
     GError *error = NULL;
-    const gchar *cur_filename_utf8 = ((File_Name *)ETFile->FileNameCur->data)->value_utf8;
-    gchar *msg = NULL;
-    gchar *basename_utf8;
-    GtkWidget *msgdialog;
 
-    basename_utf8 = g_path_get_basename(cur_filename_utf8);
-    msg = g_strdup_printf (_("Writing tag of ‘%s’"),basename_utf8);
+    const char* basename_utf8 = ETFile->FileNameCur->data->file_value_utf8();
     et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
-                                              msg, TRUE);
-    g_free(msg);
-    msg = NULL;
+        strprintf(_("Writing tag of ‘%s’"), basename_utf8).c_str(), TRUE);
 
     if (ET_Save_File_Tag_To_HD (ETFile, &error))
     {
-        msg = g_strdup_printf (_("Wrote tag of ‘%s’"), basename_utf8);
         et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
-                                                  msg, TRUE);
-        g_free (msg);
-        g_free (basename_utf8);
+            strprintf(_("Wrote tag of ‘%s’"), basename_utf8).c_str(), TRUE);
         return TRUE;
     }
 
@@ -722,6 +673,7 @@ Write_File_Tag (ET_File *ETFile, gboolean hide_msgbox)
 
     if (!hide_msgbox)
     {
+        GtkWidget *msgdialog;
 #ifdef ENABLE_ID3LIB
         if (g_error_matches (error, ET_ID3_ERROR, ET_ID3_ERROR_BUGGY_ID3LIB))
         {
@@ -771,7 +723,6 @@ Write_File_Tag (ET_File *ETFile, gboolean hide_msgbox)
     }
 
     g_clear_error (&error);
-    g_free(basename_utf8);
 
     return FALSE;
 }
@@ -854,16 +805,16 @@ void ReplayGain_For_Selected_Files (void)
 		File_Tag* file_tag = (File_Tag*)file->FileTag->data;
 		const File_Name* file_name = (File_Name*)file->FileNameCur->data;
 
-		string err = analyzer.AnalyzeFile(file_name->value);
+		string err = analyzer.AnalyzeFile(file_name->value());
 		if (!err.empty())
-		{	Log_Print(LOG_ERROR, _("Failed to analyze file '%s': %s"), file_name->value_utf8, err.c_str());
+		{	Log_Print(LOG_ERROR, _("Failed to analyze file '%s': %s"), file_name->value_utf8().get(), err.c_str());
 			error = 1;
 		} else
 		{	file_tag = file_tag->clone();
 			file_tag->track_gain = analyzer.GetLastResult().Gain();
 			file_tag->track_peak = analyzer.GetLastResult().Peak();
 			ET_Manage_Changes_Of_File_Data(file, nullptr, file_tag);
-			Log_Print(LOG_OK, _("ReplayGain of file '%s' is %.1f dB, peak %.2f"), file_name->rel_value_utf8, file_tag->track_gain, file_tag->track_peak);
+			Log_Print(LOG_OK, _("ReplayGain of file '%s' is %.1f dB, peak %.2f"), file_name->rel_value_utf8(), file_tag->track_gain, file_tag->track_peak);
 
 			if (ETCore->ETFileDisplayed == file)
 				et_application_window_display_et_file(window, file, ET_COLUMN_REPLAYGAIN);
@@ -978,8 +929,8 @@ Read_Directory (const gchar *path_real)
 
     /* Read the directory recursively */
     et_application_window_status_bar_message (window, _("Search in progress…"), FALSE);
-    File_Name *root_path = et_file_name_new();
-    ET_Set_Filename_File_Name_Item(root_path, NULL, NULL, path_real);
+    File_Name *root_path = new File_Name();
+    root_path->set_filename(NULL, NULL, path_real);
     /* Search the supported files. */
     FileList = read_directory_recursively (FileList, dir_enumerator,
                                            g_settings_get_boolean (MainSettings,
@@ -1015,7 +966,7 @@ Read_Directory (const gchar *path_real)
     }
 
     g_list_free_full (FileList, g_object_unref);
-    et_file_name_free(root_path);
+    delete root_path;
     et_application_window_progress_set(window, 0, 0);
 
     /* Close window to quit recursion */

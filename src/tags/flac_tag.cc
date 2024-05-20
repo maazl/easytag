@@ -295,8 +295,6 @@ flac_tag_write_file_tag (const ET_File *ETFile,
                                     et_flac_seek_func, et_flac_tell_func,
                                     et_flac_eof_func,
                                     et_flac_write_close_func };
-    const gchar *filename;
-    const gchar *filename_utf8;
     const gchar *flac_error_msg;
     FLAC__Metadata_Chain *chain;
     FLAC__Metadata_Iterator *iter;
@@ -307,8 +305,7 @@ flac_tag_write_file_tag (const ET_File *ETFile,
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
     FileTag       = ETFile->FileTag->data;
-    filename      = ETFile->FileNameCur->data->value;
-    filename_utf8 = ETFile->FileNameCur->data->value_utf8;
+    const char* filename_utf8 = ETFile->FileNameCur->data->value_utf8();
 
     /* libFLAC is able to detect (and skip) ID3v2 tags by itself */
     
@@ -325,7 +322,7 @@ flac_tag_write_file_tag (const ET_File *ETFile,
         return FALSE;
     }
 
-    file = g_file_new_for_path (filename);
+    file = g_file_new_for_path(ETFile->FileNameCur->data->value());
 
     state.file = file;
     state.error = NULL;
@@ -665,16 +662,12 @@ flac_tag_write_file_tag (const ET_File *ETFile,
     {
         // Delete the ID3 tags (create a dummy ETFile for the Id3tag_... function)
         ET_File   *ETFile_tmp    = ET_File_Item_New();
-        File_Name *FileName_tmp = et_file_name_new ();
-        File_Tag  *FileTag_tmp = et_file_tag_new ();
         // Same file...
-        FileName_tmp->value      = g_strdup(filename);
-        FileName_tmp->value_utf8 = g_strdup(filename_utf8); // Not necessary to fill 'value_ck'
-        ETFile_tmp->FileNameList = gListP<File_Name*>(FileName_tmp);
-        ETFile_tmp->FileNameCur  = ETFile_tmp->FileNameList;
+        ETFile_tmp->FileNameCur  =
+        ETFile_tmp->FileNameList = gListP<File_Name*>(new File_Name(*ETFile->FileNameCur->data));
         // With empty tag...
-        ETFile_tmp->FileTagList  = gListP<File_Tag*>(FileTag_tmp);
-        ETFile_tmp->FileTag      = ETFile_tmp->FileTagList;
+        ETFile_tmp->FileTag      =
+        ETFile_tmp->FileTagList  = gListP<File_Tag*>(et_file_tag_new());
         id3tag_write_file_tag (ETFile_tmp, NULL);
         ET_Free_File_List_Item(ETFile_tmp);
     }

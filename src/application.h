@@ -21,8 +21,6 @@
 
 #include <gtk/gtk.h>
 
-#include "application_window.h"
-
 G_BEGIN_DECLS
 
 #define ET_TYPE_APPLICATION (et_application_get_type ())

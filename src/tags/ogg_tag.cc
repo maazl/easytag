@@ -822,7 +822,6 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
                         GError **error)
 {
     const File_Tag *FileTag;
-    const gchar *filename;
     GFile           *file;
     EtOggState *state;
     vorbis_comment *vc;
@@ -832,10 +831,9 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    FileTag       = (File_Tag *)ETFile->FileTag->data;
-    filename      = ((File_Name *)ETFile->FileNameCur->data)->value;
+    FileTag       = ETFile->FileTag->data;
 
-    file = g_file_new_for_path (filename);
+    file = g_file_new_for_path(ETFile->FileNameCur->data->value());
 
     state = vcedit_new_state();    // Allocate memory for 'state'
 

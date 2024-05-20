@@ -36,6 +36,8 @@
 #include "file.h"
 #include "picture.h"
 
+using namespace std;
+
 /*
  * et_file_list_free:
  * @file_list: (element-type ET_File) (allow-none): a list of files
@@ -136,7 +138,6 @@ et_file_list_add (GList *file_list,
     guint         undo_key;
     GFileInfo *fileinfo;
 
-    const gchar *display_path;
     GError *error = NULL;
 
     /* Get description of the file */
@@ -144,7 +145,7 @@ et_file_list_add (GList *file_list,
 
     /* Attach all data to this ETFile item */
     ET_File* ETFile = ET_File_Item_New();
-    File_Name* FileName = et_file_name_new ();
+    File_Name* FileName = new File_Name();
     File_Tag* FileTag = et_file_tag_new ();
 
     ETFile->IndexKey             = 0; // Will be renumered after...
@@ -159,9 +160,9 @@ et_file_list_add (GList *file_list,
     ETFile->FileTag              = gListP<File_Tag*>(FileTag);
 
     /* Fill the File_Name structure for FileNameList */
-    FileName->saved      = TRUE;    /* The file hasn't been changed, so it's saved */
-    ET_Set_Filename_File_Name_Item (FileName, root, NULL, filename);
-    display_path = FileName->value_utf8;
+    FileName->saved = true; /* The file hasn't been changed, so it's saved */
+    FileName->set_filename(root, NULL, filename);
+    const char *display_path = FileName->value_utf8();
 
     /* Fill the File_Tag structure for FileTagList */
     FileTag->saved = TRUE;    /* The file hasn't been changed, so it's saved */
@@ -202,7 +203,7 @@ fail:
      */
     undo_key = et_undo_key_new ();
 
-    FileName = et_file_name_new ();
+    FileName = new File_Name();
     FileName->key = undo_key;
     ET_Save_File_Name_Internal(ETFile,FileName);
 
@@ -221,7 +222,7 @@ fail:
      */
     FileTag  = ETFile->FileTag->data;
     FileName = ETFile->FileNameNew->data;
-    if ( (FileName && FileName->saved==FALSE) || (FileTag && FileTag->saved==FALSE) )
+    if ((FileName && !FileName->saved) || (FileTag && !FileTag->saved))
     {
         Log_Print (LOG_INFO, _("Automatic corrections applied for file ‘%s’"),
                    display_path);
@@ -709,7 +710,6 @@ et_file_list_update_directory_name (GList *file_list,
     GList *filelist;
     ET_File *file;
     GList *filenamelist;
-    gchar *filename;
     gchar *old_path_tmp;
 
     g_return_if_fail (file_list != NULL);
@@ -737,10 +737,11 @@ et_file_list_update_directory_name (GList *file_list,
             {
                 File_Name *FileName = (File_Name *)filenamelist->data;
 
-                if ( FileName && (filename=FileName->value) )
+                const char *filename;
+                if (FileName && (filename = FileName->value()))
                 {
                     /* Replace path of filename. */
-                    if (strncmp (filename, old_path_tmp, strlen (old_path_tmp))
+                    if (strncmp(filename, old_path_tmp, strlen (old_path_tmp))
                         == 0)
                     {
                         gchar *filename_tmp;
@@ -750,8 +751,7 @@ et_file_list_update_directory_name (GList *file_list,
                                                     (new_path[strlen (new_path) - 1] == G_DIR_SEPARATOR) ? "" : G_DIR_SEPARATOR_S,
                                                     &filename[strlen (old_path_tmp)],NULL);
 
-                        ET_Set_Filename_File_Name_Item (FileName, FileName, NULL,
-                                                        filename_tmp);
+                        FileName->set_filename(FileName, NULL, filename_tmp);
                         g_free (filename_tmp);
                     }
                 }
@@ -908,31 +908,19 @@ guint
 et_file_list_get_n_files_in_path (GList *file_list,
                                   const gchar *path_utf8)
 {
-    gchar *path_key;
     GList *l;
     guint  count = 0;
 
     g_return_val_if_fail (path_utf8 != NULL, count);
 
-    path_key = g_utf8_collate_key (path_utf8, -1);
-
     for (l = g_list_first (file_list); l != NULL; l = g_list_next (l))
     {
         ET_File *ETFile = (ET_File *)l->data;
-        const gchar *cur_filename_utf8 = ETFile->FileNameCur->data->value_utf8;
-        gchar *dirname_utf8      = g_path_get_dirname(cur_filename_utf8);
-        gchar *dirname_key = g_utf8_collate_key (dirname_utf8, -1);
+        string dirname_utf8(ETFile->FileNameCur->data->path_value_utf8());
 
-        if (strcmp (dirname_utf8, path_utf8) == 0)
-        {
+        if (strcmp (dirname_utf8.c_str(), path_utf8) == 0)
             count++;
-        }
-
-        g_free (dirname_utf8);
-        g_free (dirname_key);
     }
-
-    g_free (path_key);
 
     return count;
 }

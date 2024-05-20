@@ -26,7 +26,7 @@
 
 #include "setting.h"
 
-typedef struct ET_File ET_File;
+struct ET_File;
 
 #ifdef __cplusplus
 
@@ -94,7 +94,7 @@ struct ET_File_Description
 
 #else
 
-typedef struct ET_File_Description ET_File_Description;
+struct ET_File_Description;
 
 #endif
 

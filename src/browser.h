@@ -22,7 +22,10 @@
 
 #include <gtk/gtk.h>
 
-#include "et_core.h"
+#include "setting.h"
+
+struct ET_File;
+struct File_Name;
 
 G_BEGIN_DECLS
 

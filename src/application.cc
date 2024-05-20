@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include "application.h"
+#include "application_window.h"
 
 #include <glib/gi18n.h>
 #include <stdlib.h>
@@ -36,7 +37,11 @@ typedef struct
     GFile *init_directory;
 } EtApplicationPrivate;
 
+// learn correct return type for et_browser_get_instance_private
+#define et_application_get_instance_private et_application_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtApplication, et_application, GTK_TYPE_APPLICATION)
+#undef et_application_get_instance_private
+#define et_application_get_instance_private(x) ((EtApplicationPrivate*)et_application_get_instance_private_(x))
 
 static const GOptionEntry entries[] =
 {
@@ -453,7 +458,7 @@ et_application_open (GApplication *self,
         }
         else
         {
-            priv->init_directory = g_object_ref (arg);
+            priv->init_directory = (GFile*)g_object_ref (arg);
         }
     }
     else if (type == G_FILE_TYPE_REGULAR)
@@ -605,7 +610,7 @@ et_application_class_init (EtApplicationClass *klass)
 EtApplication *
 et_application_new (void)
 {
-    return g_object_new (ET_TYPE_APPLICATION, "application-id",
+    return (EtApplication*)g_object_new (ET_TYPE_APPLICATION, "application-id",
                          "org.gnome.EasyTAG", "flags",
                          G_APPLICATION_HANDLES_OPEN, NULL);
 }

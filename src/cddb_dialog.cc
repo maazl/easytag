@@ -1972,7 +1972,7 @@ set_et_file_from_cddb_album (ET_File * etfile,
         gchar *filename_new_utf8;
 
         /* Allocation of a new FileName. */
-        FileName = et_file_name_new ();
+        FileName = new File_Name();
 
         /* Build the filename with the path. */
         char buf[12];
@@ -1983,7 +1983,7 @@ set_et_file_from_cddb_album (ET_File * etfile,
         File_Name::prepare_func((EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"), ET_CONVERT_SPACES_NO_CHANGE)(filename_generated_utf8, 0);
         filename_new_utf8 = et_file_generate_name(etfile, filename_generated_utf8.c_str());
 
-        ET_Set_Filename_File_Name_Item(FileName, etfile->FileNameCur->data, filename_new_utf8, NULL);
+        FileName->set_filename(etfile->FileNameCur->data, filename_new_utf8, NULL);
 
         g_free (track_number);
         g_free(filename_new_utf8);

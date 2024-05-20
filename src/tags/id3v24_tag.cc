@@ -33,11 +33,11 @@
 
 #include "id3_tag.h"
 #include "picture.h"
-#include "browser.h"
 #include "setting.h"
 #include "misc.h"
-#include "et_core.h"
 #include "charset.h"
+#include "file.h"
+#include "file_description.h"
 
 #include "win32/win32dep.h"
 
@@ -935,7 +935,6 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
                           GError **error)
 {
     const File_Tag *FileTag;
-    const gchar *filename;
     struct id3_tag   *v1tag, *v2tag;
     struct id3_frame *frame;
     union id3_field  *field;
@@ -947,8 +946,8 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    FileTag       = (File_Tag *)ETFile->FileTag->data;
-    filename      = ((File_Name *)ETFile->FileNameCur->data)->value;
+    FileTag       = ETFile->FileTag->data;
+    const char* filename = ETFile->FileNameCur->data->value();
 
     v1tag = v2tag = NULL;
 

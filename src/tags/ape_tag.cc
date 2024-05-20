@@ -201,14 +201,12 @@ ape_tag_write_file_tag (const ET_File *ETFile,
                         GError **error)
 {
     const File_Tag *FileTag;
-    const gchar *filename_in;
     apetag   *ape_mem;
 
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    FileTag     = (File_Tag *)ETFile->FileTag->data;
-    filename_in = ((File_Name *)ETFile->FileNameCur->data)->value;
+    FileTag     = ETFile->FileTag->data;
 
     ape_mem = apetag_init ();
 
@@ -261,7 +259,7 @@ ape_tag_write_file_tag (const ET_File *ETFile,
     ape_set("REPLAYGAIN_ALBUM_PEAK", FileTag->album_peak_str().c_str());
 
     /* reread all tag-type again  excl. changed frames by apefrm_remove() */
-    if (apetag_save (filename_in, ape_mem, APE_TAG_V2 + SAVE_NEW_OLD_APE_TAG)
+    if (apetag_save (ETFile->FileNameCur->data->value(), ape_mem, APE_TAG_V2 + SAVE_NEW_OLD_APE_TAG)
         != 0)
     {
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "%s",

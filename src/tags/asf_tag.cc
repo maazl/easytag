@@ -153,10 +153,10 @@ gboolean asftag_write_file_tag (const ET_File *ETFile, GError **error)
 {
 	g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
 
-	const gchar *filename_utf8 = ETFile->FileNameCur->data->value_utf8;
+	const char *filename_utf8 = ETFile->FileNameCur->data->value_utf8();
 
 	/* Open file for writing */
-	GFile *file = g_file_new_for_path(ETFile->FileNameCur->data->value);
+	GFile *file = g_file_new_for_path(ETFile->FileNameCur->data->value());
 	GIO_IOStream stream (file);
 	g_object_unref (file);
 	if (!stream.isOpen())

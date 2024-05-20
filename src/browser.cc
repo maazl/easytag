@@ -338,8 +338,7 @@ et_browser_run_player_for_album_list (EtBrowser *self)
     for (; l != NULL; l = g_list_next (l))
     {
         ET_File *etfile = (ET_File *)l->data;
-        const gchar *path = etfile->FileNameCur->data->value;
-        file_list = g_list_prepend (file_list, g_file_new_for_path (path));
+        file_list = g_list_prepend (file_list, g_file_new_for_path (etfile->FileNameCur->data->value()));
     }
 
     file_list = g_list_reverse (file_list);
@@ -380,8 +379,7 @@ et_browser_run_player_for_artist_list (EtBrowser *self)
         for (m = (GList*)l->data; m != NULL; m = g_list_next (m))
         {
             ET_File *etfile = (ET_File *)m->data;
-            const gchar *path = etfile->FileNameCur->data->value;
-            file_list = g_list_prepend (file_list, g_file_new_for_path (path));
+            file_list = g_list_prepend (file_list, g_file_new_for_path (etfile->FileNameCur->data->value()));
         }
     }
 
@@ -415,8 +413,7 @@ et_browser_run_player_for_selection (EtBrowser *self)
     for (l = selfilelist; l != NULL; l = g_list_next (l))
     {
         ET_File *etfile = et_browser_get_et_file_from_path (self, (GtkTreePath*)l->data);
-        const gchar *path = etfile->FileNameCur->data->value;
-        file_list = g_list_prepend (file_list, g_file_new_for_path (path));
+        file_list = g_list_prepend(file_list, g_file_new_for_path(etfile->FileNameCur->data->value()));
     }
 
     file_list = g_list_reverse (file_list);
@@ -482,13 +479,11 @@ et_browser_set_current_path (EtBrowser *self,
     if (priv->current_path)
         g_object_unref (priv->current_path);
     if (priv->current_path_name)
-        et_file_name_free(priv->current_path_name);
+        delete priv->current_path_name;
 
     priv->current_path = file;
-    priv->current_path_name = et_file_name_new();
-    gchar* filename = g_file_get_path (file);
-    ET_Set_Filename_File_Name_Item(priv->current_path_name, NULL, NULL, filename);
-    g_free(filename);
+    priv->current_path_name = new File_Name();
+    priv->current_path_name->set_filename(NULL, NULL, gString(g_file_get_path(file)));
 }
 
 
@@ -1860,7 +1855,7 @@ et_browser_select_file_by_dlm (EtBrowser *self,
                                LIST_FILE_POINTER, &current_etfile, -1);
             gchar *current_title = current_etfile->FileTag->data->title;
 
-            if ((cur = dlm((current_title ? current_title : current_etfile->FileNameNew->data->file_value_utf8), string)) > max) // See "dlm.c"
+            if ((cur = dlm((current_title ? current_title : current_etfile->FileNameNew->data->file_value_utf8()), string)) > max) // See "dlm.c"
             {
                 max = cur;
                 iter2 = iter;
@@ -4340,7 +4335,7 @@ Run_Program_With_Selected_Files (EtBrowser *self)
     gchar   *program_name;
     GList   *selected_paths;
     GList *l;
-    GList   *args_list = NULL;
+    gListP<const char*> args_list;
     GtkTreeIter iter;
     gboolean program_ran;
     GError *error = NULL;
@@ -4366,12 +4361,12 @@ Run_Program_With_Selected_Files (EtBrowser *self)
             gtk_tree_model_get (GTK_TREE_MODEL (priv->file_model), &iter,
                                 LIST_FILE_POINTER, &ETFile, -1);
 
-            args_list = g_list_prepend (args_list, ETFile->FileNameCur->data->value);
+            args_list = args_list.prepend(ETFile->FileNameCur->data->value().get());
             //args_list = g_list_append(args_list,((File_Name *)ETFile->FileNameCur->data)->value_utf8);
         }
     }
 
-    args_list = g_list_reverse (args_list);
+    args_list = args_list.reverse();
     program_ran = et_run_program (program_name, args_list, &error);
 
     g_list_free_full (selected_paths, (GDestroyNotify)gtk_tree_path_free);
@@ -4655,7 +4650,7 @@ et_browser_finalize (GObject *object)
     priv = et_browser_get_instance_private (ET_BROWSER (object));
 
     g_clear_object (&priv->current_path);
-    et_file_name_free(priv->current_path_name);
+    delete priv->current_path_name;
     priv->current_path_name = NULL;
     g_clear_object (&priv->run_program_model);
 

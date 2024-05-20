@@ -41,7 +41,7 @@ easytag_CXXFLAGS = \
 
 easytag_SOURCES = \
 	src/about.c \
-	src/application.c \
+	src/application.cc \
 	src/application_window.cc \
 	src/browser.cc \
 	src/cddb_dialog.cc \
@@ -50,7 +50,7 @@ easytag_SOURCES = \
 	src/dlm.c \
 	src/easytag.cc \
 	src/enums.c \
-	src/et_core.c \
+	src/et_core.cc \
 	src/etflagsaction.cc \
 	src/file.cc \
 	src/file_area.cc \
@@ -60,7 +60,7 @@ easytag_SOURCES = \
 	src/file_renderer.cc \
 	src/file_tag.cc \
 	src/load_files_dialog.cc \
-	src/log.c \
+	src/log.cc \
 	src/main.c \
 	src/mask.cc \
 	src/misc.cc \
@@ -93,7 +93,8 @@ easytag_SOURCES = \
 	src/tags/vcedit.cc \
 	src/tags/wavpack_private.c \
 	src/tags/wavpack_tag.cc \
-	src/win32/win32dep.c
+	src/win32/win32dep.c \
+	src/xstring.cc
 
 nodist_easytag_SOURCES = \
 	src/resource.c
@@ -149,7 +150,8 @@ easytag_headers = \
 	src/tags/vcedit.h \
 	src/tags/wavpack_private.h \
 	src/tags/wavpack_tag.h \
-	src/win32/win32dep.h
+	src/win32/win32dep.h \
+	src/xstring.h
 
 nodist_easytag_headers = \
 	src/resource.h
@@ -441,7 +443,8 @@ check_PROGRAMS = \
 	tests/test-file_tag \
 	tests/test-misc \
 	tests/test-picture \
-	tests/test-scan
+	tests/test-scan \
+	tests/test-xstring
 
 common_test_cppflags = \
 	-I$(top_srcdir)/src \
@@ -535,6 +538,16 @@ tests_test_scan_SOURCES = \
 	src/scan.c
 
 tests_test_scan_LDADD = \
+	$(EASYTAG_LIBS)
+
+tests_test_xstring_CPPFLAGS = \
+	$(common_test_cppflags)
+
+tests_test_xstring_SOURCES = \
+	tests/test-xstring.cc \
+	src/xstring.cc
+
+tests_test_xstring_LDADD = \
 	$(EASYTAG_LIBS)
 
 check_SCRIPTS = \

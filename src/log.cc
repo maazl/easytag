@@ -40,7 +40,11 @@ typedef struct
     GtkWidget *menu;
 } EtLogAreaPrivate;
 
+// learn correct return type for et_log_area_get_instance_private
+#define et_log_area_get_instance_private et_log_area_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtLogArea, et_log_area, GTK_TYPE_BIN)
+#undef et_log_area_get_instance_private
+#define et_log_area_get_instance_private(x) (EtLogAreaPrivate*)et_log_area_get_instance_private_(x)
 
 enum
 {
@@ -162,7 +166,7 @@ et_log_area_init (EtLogArea *self)
 GtkWidget *
 et_log_area_new (void)
 {
-    return g_object_new (ET_TYPE_LOG_AREA, NULL);
+    return (GtkWidget*)g_object_new(ET_TYPE_LOG_AREA, NULL);
 }
 
 /*

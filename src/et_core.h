@@ -24,7 +24,7 @@
 
 #include <gdk/gdk.h>
 
-#include "file.h"
+struct ET_File;
 
 G_BEGIN_DECLS
 

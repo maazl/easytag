@@ -37,6 +37,7 @@
 #endif /* G_OS_WIN32 */
 
 #include <cmath>
+#include <atomic>
 using namespace std;
 
 string strprintf(const char* format, ...)
@@ -558,7 +559,7 @@ err:
 guint
 et_undo_key_new (void)
 {
-    static guint ETUndoKey = 0;
+    static atomic<unsigned> ETUndoKey(0);
     return ++ETUndoKey;
 }
 

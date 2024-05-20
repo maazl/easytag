@@ -21,7 +21,8 @@
 
 #include <gtk/gtk.h>
 
-#include "et_core.h"
+struct EtFileHeaderFields;
+struct ET_File;
 
 G_BEGIN_DECLS
 

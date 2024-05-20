@@ -81,7 +81,7 @@ typedef struct ET_File
 } ET_File;
 
 #else
-typedef struct ET_File ET_File;
+struct ET_File;
 #endif
 
 /*

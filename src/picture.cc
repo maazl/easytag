@@ -24,6 +24,7 @@
 #include <glib/gi18n.h>
 
 #include "easytag.h"
+#include "file.h"
 #include "log.h"
 #include "misc.h"
 #include "setting.h"

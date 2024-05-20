@@ -22,7 +22,7 @@
 
 #include <gio/gio.h>
 
-typedef struct ET_File ET_File;
+struct ET_File;
 
 G_BEGIN_DECLS
 
@@ -93,7 +93,7 @@ Picture_Format Picture_Format_From_Data (const EtPicture *pic);
 const gchar   *Picture_Mime_Type_String (Picture_Format format);
 const gchar * Picture_Type_String (EtPictureType type);
 gboolean et_picture_detect_difference (const EtPicture *a, const EtPicture *b);
-gchar * et_picture_format_info (const EtPicture *pic, const ET_File* etfile);
+gchar * et_picture_format_info (const EtPicture *pic, const struct ET_File* etfile);
 
 GBytes * et_picture_load_file_data (GFile *file, GError **error);
 gboolean et_picture_save_file_data (const EtPicture *pic, GFile *file, GError **error);

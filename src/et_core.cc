@@ -19,7 +19,6 @@
 
 #include "et_core.h"
 
-#include "file.h"
 #include "file_list.h"
 
 ET_Core *ETCore = NULL;
