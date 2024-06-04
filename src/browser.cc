@@ -483,7 +483,7 @@ et_browser_set_current_path (EtBrowser *self,
 
     priv->current_path = file;
     priv->current_path_name = new File_Name();
-    priv->current_path_name->set_filename(NULL, NULL, gString(g_file_get_path(file)));
+    priv->current_path_name->set_filename_raw(NULL, gString(g_file_get_path(file)));
 }
 
 

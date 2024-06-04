@@ -356,9 +356,9 @@ void File_Name::reset()
  * Calculate also the collate key.
  * It treats numbers intelligently so that "file1" "file10" "file5" is sorted as "file1" "file5" "file10"
  */
-void File_Name::set_filename(const File_Name *root, const char *filename_utf8, const char *filename)
+void File_Name::set_filename_raw(const File_Name *root, const char *filename)
 {
-	if (!filename && !filename_utf8)
+	if (!filename)
 	{	reset();
 		return;
 	}
@@ -367,32 +367,59 @@ void File_Name::set_filename(const File_Name *root, const char *filename_utf8, c
 	_file_value_ck.reset();
 	_rel_start_utf8 = 0;
 
-	if (filename_utf8 && filename)
-	{	_value = filename;
-		if (strcmp(filename_utf8, _value))
-			_value_utf8 = filename_utf8;
-		else
-			_value_utf8 = _value;
-	}
-	else if (filename_utf8)
-	{	_value_utf8 = filename_utf8;
-		gString v(filename_from_display(filename_utf8));
-		if (strcmp(_value_utf8, v) == 0)
-			_value = _value_utf8;
-		else
-			_value = xString(v.get());
-	}
-	else // if (filename)
-	{	_value = filename;
-		gString utf8(g_filename_display_name(filename));
-		if (strcmp(_value, utf8) == 0)
-			_value_utf8 = _value;
-		else
-			_value_utf8 = utf8.get();
-	}
+	_value = filename;
+	gString utf8(g_filename_display_name(filename));
+	if (strcmp(_value, utf8) == 0)
+		_value_utf8 = _value;
+	else
+		_value_utf8 = utf8.get();
 
 	// be aware of aliasing root == FileName
-	size_t root_value_utf8_len = 0;
+	unsigned root_value_utf8_len = 0;
+	if (root)
+	{	root_value_utf8_len = root->_rel_start_utf8;
+		if (--root_value_utf8_len <= 0)
+			root_value_utf8_len = strlen(root->_value_utf8);
+	}
+
+	if ((!root || strncmp(_value_utf8, root->_value_utf8, root_value_utf8_len) == 0)
+		&& _value_utf8[root_value_utf8_len] == G_DIR_SEPARATOR)
+		_rel_start_utf8 = root_value_utf8_len + 1;
+
+	const char* separator = strrchr(rel_value_utf8(), G_DIR_SEPARATOR);
+	if (separator)
+	{	_file_start_utf8 = separator - _value + 1;
+	} else
+	{	_file_start_utf8 = _rel_start_utf8;
+		_path_value_ck = xString::empty_str;
+	}
+}
+
+/*
+ * Fill content of a FileName item according to the filename passed in argument (UTF-8 filename or not)
+ * Calculate also the collate key.
+ * It treats numbers intelligently so that "file1" "file10" "file5" is sorted as "file1" "file5" "file10"
+ */
+void File_Name::set_filename_utf8(const File_Name *root, const char *filename_utf8)
+{
+	if (!filename_utf8)
+	{	reset();
+		return;
+	}
+
+	_path_value_ck.reset();
+	_file_value_ck.reset();
+	_rel_start_utf8 = 0;
+
+	_value_utf8 = filename_utf8;
+	gString v(filename_from_display(filename_utf8));
+	if (strcmp(_value_utf8, v) == 0)
+		_value = _value_utf8;
+	else
+		_value = xString(v.get());
+
+	// be aware of aliasing root == FileName
+	unsigned root_value_utf8_len = 0;
 	if (root)
 	{	root_value_utf8_len = root->_rel_start_utf8;
 		if (--root_value_utf8_len <= 0)
@@ -414,8 +441,8 @@ void File_Name::set_filename(const File_Name *root, const char *filename_utf8, c
 
 string File_Name::path_value_utf8() const
 {	string ret;
-	if (_value_utf8 && _file_start_utf8)
-		ret.assign(_value_utf8, _file_start_utf8 - 1);
+	if (_value_utf8 && _file_start_utf8 > _rel_start_utf8)
+		ret.assign(rel_value_utf8(), _file_start_utf8 - _rel_start_utf8 - 1);
 	return ret;
 }
 
@@ -461,6 +488,6 @@ bool File_Name::SetFromComponents(const File_Name *root,
 
 	/* Set the new filename (in file system encoding). */
 	gString path_new(g_build_filename(dir_name, filename_new.c_str(), NULL));
-	set_filename(root, NULL, path_new);
+	set_filename_raw(root, path_new);
 	return true;
 }

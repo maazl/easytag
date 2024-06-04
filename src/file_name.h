@@ -48,7 +48,8 @@ public:
 	File_Name(const File_Name& r);
 	~File_Name();
 	void reset();
-	void set_filename(const File_Name* root, const char* filename_utf8, const char* filename);
+	void set_filename_raw(const File_Name* root, const char* filename);
+	void set_filename_utf8(const File_Name* root, const char* filename_utf8);
 	bool SetFromComponents(const File_Name* root, const char* new_name, const char* dir_name, EtFilenameReplaceMode replace_illegal);
 
 	/// Raw file name in file system representation.

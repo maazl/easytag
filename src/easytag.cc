@@ -930,7 +930,7 @@ Read_Directory (const gchar *path_real)
     /* Read the directory recursively */
     et_application_window_status_bar_message (window, _("Search in progress…"), FALSE);
     File_Name *root_path = new File_Name();
-    root_path->set_filename(NULL, NULL, path_real);
+    root_path->set_filename_raw(NULL, path_real);
     /* Search the supported files. */
     FileList = read_directory_recursively (FileList, dir_enumerator,
                                            g_settings_get_boolean (MainSettings,

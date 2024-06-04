@@ -161,7 +161,7 @@ et_file_list_add (GList *file_list,
 
     /* Fill the File_Name structure for FileNameList */
     FileName->saved = true; /* The file hasn't been changed, so it's saved */
-    FileName->set_filename(root, NULL, filename);
+    FileName->set_filename_raw(root, filename);
     const char *display_path = FileName->value_utf8();
 
     /* Fill the File_Tag structure for FileTagList */
@@ -751,13 +751,13 @@ et_file_list_update_directory_name (GList *file_list,
                                                     (new_path[strlen (new_path) - 1] == G_DIR_SEPARATOR) ? "" : G_DIR_SEPARATOR_S,
                                                     &filename[strlen (old_path_tmp)],NULL);
 
-                        FileName->set_filename(FileName, NULL, filename_tmp);
+                        FileName->set_filename_raw(FileName, filename_tmp);
                         g_free (filename_tmp);
                     }
                 }
              }
         }
-    }
+    }s
 
     g_free (old_path_tmp);
 }

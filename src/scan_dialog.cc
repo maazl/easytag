@@ -782,7 +782,7 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
     /* Create a new 'File_Name' item. */
     FileName = new File_Name();
     // Save changes of the 'File_Name' item
-    FileName->set_filename(ETFile->FileNameCur->data, filename_new_utf8, NULL);
+    FileName->set_filename_utf8(ETFile->FileNameCur->data, filename_new_utf8);
 
     ET_Manage_Changes_Of_File_Data(ETFile,FileName,NULL);
     g_free(filename_new_utf8);
@@ -1087,7 +1087,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             Scan_Process_Fields_Functions (self, &string);
 
             gString string_utf8(et_file_generate_name (ETFile, string));
-            FileName->set_filename(ETFile->FileNameCur->data, string_utf8, NULL);
+            FileName->set_filename_utf8(ETFile->FileNameCur->data, string_utf8);
             g_free(string);
         }
     }
