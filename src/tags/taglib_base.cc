@@ -87,13 +87,13 @@ gboolean taglib_read_tag(const TagLib::File& tfile, ET_File *ETFile, GError **er
 	File_Tag* FileTag = ETFile->FileTag->data;
 	// the taglib tags are basically a dictionary, so querying keys
 	// that do not exist for a certain tag type is just a no-op.
-	et_file_tag_set_title(FileTag, tag->title().toCString(true));
-	et_file_tag_set_subtitle(FileTag, fetch_property("SUBTITLE").c_str());
-	et_file_tag_set_artist(FileTag, tag->artist().toCString(true));
+	FileTag->title.assignNFC(tag->title().toCString(true));
+	FileTag->subtitle.assignNFC(fetch_property("SUBTITLE"));
+	FileTag->artist.assignNFC(tag->artist().toCString(true));
 
-	et_file_tag_set_album(FileTag, tag->album().toCString(true));
-	et_file_tag_set_disc_subtitle(FileTag, fetch_property("DISCSUBTITLE").c_str());
-	et_file_tag_set_album_artist(FileTag, fetch_property("ALBUMARTIST").c_str());
+	FileTag->album.assignNFC(tag->album().toCString(true));
+	FileTag->disc_subtitle.assignNFC(fetch_property("DISCSUBTITLE"));
+	FileTag->album_artist.assignNFC(fetch_property("ALBUMARTIST"));
 
 	/* Disc number. */
 	/* Total disc number support in TagLib reads multiple disc numbers and
@@ -101,21 +101,21 @@ gboolean taglib_read_tag(const TagLib::File& tfile, ET_File *ETFile, GError **er
 	FileTag->disc_and_total(fetch_property("DISCNUMBER").c_str());
 	FileTag->track_and_total(fetch_property("TRACKNUMBER").c_str());
 
-	et_file_tag_set_year(FileTag, fetch_property("DATE").c_str());
-	et_file_tag_set_release_year(FileTag, fetch_property("RELEASEDATE").c_str());
+	FileTag->year.assignNFC(fetch_property("DATE"));
+	FileTag->release_year.assignNFC(fetch_property("RELEASEDATE"));
 
-	et_file_tag_set_genre(FileTag, tag->genre().toCString(true));
+	FileTag->genre.assignNFC(tag->genre().toCString(true));
 	if (g_settings_get_boolean(MainSettings, "tag-multiline-comment"))
-		et_file_tag_set_comment(FileTag, taglib_fetch_property(extra_tag, &Newline, "COMMENT").c_str());
+		FileTag->comment.assignNFC(taglib_fetch_property(extra_tag, &Newline, "COMMENT"));
 	else
-		et_file_tag_set_comment(FileTag, tag->comment().toCString(true));
-	et_file_tag_set_description(FileTag, fetch_property("PODCASTDESC").c_str());
+		FileTag->comment.assignNFC(tag->comment().toCString(true));
+	FileTag->description.assignNFC(fetch_property("PODCASTDESC"));
 
-	et_file_tag_set_orig_artist(FileTag, fetch_property("ORIGINALARTIST").c_str());
-	et_file_tag_set_orig_year(FileTag, fetch_property("ORIGINALDATE").c_str());
-	et_file_tag_set_composer(FileTag, fetch_property("COMPOSER").c_str());
-	et_file_tag_set_copyright(FileTag, fetch_property("COPYRIGHT").c_str());
-	et_file_tag_set_encoded_by(FileTag, fetch_property("ENCODEDBY").c_str());
+	FileTag->orig_artist.assignNFC(fetch_property("ORIGINALARTIST"));
+	FileTag->orig_year.assignNFC(fetch_property("ORIGINALDATE"));
+	FileTag->composer.assignNFC(fetch_property("COMPOSER"));
+	FileTag->copyright.assignNFC(fetch_property("COPYRIGHT"));
+	FileTag->encoded_by.assignNFC(fetch_property("ENCODEDBY"));
 
 	return TRUE;
 }

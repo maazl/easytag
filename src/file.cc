@@ -47,17 +47,17 @@ void ET_File::check_dates(int max_fields, bool additional_content) const
 	if (!File_Tag::check_date(tag->year, max_fields, additional_content))
 			Log_Print (LOG_WARNING,
 								 _("The year value ‘%s’ seems to be invalid in file ‘%s’."),
-								 tag->year, FileNameCur->data->value_utf8().get());
+								 tag->year.get(), FileNameCur->data->value_utf8().get());
 
 	if (!File_Tag::check_date(tag->release_year, max_fields, additional_content))
 			Log_Print (LOG_WARNING,
 								 _("The release year value ‘%s’ seems to be invalid in file ‘%s’."),
-								 tag->release_year, FileNameCur->data->value_utf8().get());
+								 tag->release_year.get(), FileNameCur->data->value_utf8().get());
 
 	if (!File_Tag::check_date(tag->orig_year, max_fields, additional_content))
 			Log_Print (LOG_WARNING,
 								 _("The original year value ‘%s’ seems to be invalid in file ‘%s’."),
-								 tag->orig_year, FileNameCur->data->value_utf8().get());
+								 tag->orig_year.get(), FileNameCur->data->value_utf8().get());
 }
 
 
@@ -220,31 +220,36 @@ static gint CmpCreationDate(const ET_File* ETFile1, const ET_File* ETFile2)
  * @return An integer less than, equal to, or greater than zero, if str1 is
  * less than, equal to or greater than str2
  */
-template <gchar* File_Tag::*V, bool CS, bool ST>
+template <xString0 File_Tag::*V, bool CS, bool ST>
 static gint CmpTagString2(const ET_File* file1, const ET_File* file2)
 {
-	const gchar* str1 = file1->FileTag->data->*V;
-	const gchar* str2 = file2->FileTag->data->*V;
+	const xString0& str1 = file1->FileTag->data->*V;
+	const xString0& str2 = file2->FileTag->data->*V;
 
-	if (!str2)
-		return !!str1;
-	if (!str1)
-		return -1;
-
-	if (strcmp(str1, str2) != 0)
-	{	gint result = CS ? et_normalized_strcmp0(str1, str2) : et_normalized_strcasecmp0(str1, str2);
-		if (result != 0)
-			return sign(result);
+	gint result;
+	if (CS)
+		result = str1.compare(str2);
+	else
+	{	if (!str2)
+			return !!str1;
+		if (!str1)
+			return -1;
+		if (strcmp(str1, str2) == 0)
+			goto second;
+		result = et_normalized_strcasecmp0(str1, str2);
 	}
+	if (result != 0)
+		return sign(result);
 
 	/* Secondary criterion. */
+second:
 	return 2 * (ST ? CmpDiscNumber(file1, file2) : CmpFilepath(file1, file2));
 }
 
 /*
  * Comparison function for sorting by ascending year.
  */
-template <gchar* File_Tag::*V>
+template <xString0 File_Tag::*V>
 static gint CmpTagInt(const ET_File* file1, const ET_File* file2)
 {
 	gint r = CmpInt(file1->FileTag->data->*V, file2->FileTag->data->*V);
@@ -298,7 +303,7 @@ static gint CmpRev(const ET_File *file1, const ET_File *file2)
 {	return F(file2, file1);
 }
 
-template <gchar* File_Tag::*V, bool R = false, bool ST = false>
+template <xString0 File_Tag::*V, bool R = false, bool ST = false>
 static gint (*CmpTagString())(const ET_File *file1, const ET_File *file2)
 {	return g_settings_get_boolean(MainSettings, "sort-case-sensitive")
 		? (R ? CmpRev<CmpTagString2<V,true,ST>> : CmpTagString2<V,true,ST>)
@@ -494,9 +499,9 @@ ET_Free_File_Tag_List (GList *FileTagList)
 
     for (l = FileTagList; l != NULL; l = g_list_next (l))
     {
-        if ((File_Tag *)l->data)
+        if (l->data)
         {
-            et_file_tag_free ((File_Tag *)l->data);
+            delete (File_Tag *)l->data;
         }
     }
 
@@ -505,10 +510,6 @@ ET_Free_File_Tag_List (GList *FileTagList)
     return TRUE;
 }
 
-
-/*********************
- * Copying functions *
- *********************/
 
 /********************
  * Saving functions *
@@ -555,71 +556,6 @@ ET_Save_File_Name_Internal (const ET_File *ETFile,
     g_free (filename_new);
     return success;
 }
-
-static gchar* strip_value(const gchar* value)
-{
-    if (et_str_empty (value))
-        return NULL;
-    else
-    {
-        gchar *value2 = g_strdup(value);
-        g_strstrip (value2);
-        return value2;
-    }
-}
-
-/*
- * Do the same thing of et_tag_area_create_file_tag without getting the data from the UI.
- */
-gboolean
-ET_Save_File_Tag_Internal (ET_File *ETFile, File_Tag *FileTag)
-{
-    g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL
-                          && FileTag != NULL, FALSE);
-
-    File_Tag *FileTagCur = (File_Tag *)ETFile->FileTag->data;
-
-    FileTag->title = strip_value(FileTagCur->title);
-    FileTag->version = strip_value(FileTagCur->version);
-    FileTag->subtitle = strip_value(FileTagCur->subtitle);
-
-    FileTag->artist = strip_value(FileTagCur->artist);
-    FileTag->album_artist = strip_value(FileTagCur->album_artist);
-    FileTag->album = strip_value(FileTagCur->album);
-    FileTag->disc_subtitle = strip_value(FileTagCur->disc_subtitle);
-
-    FileTag->disc_number = et_disc_number_to_string(FileTagCur->disc_number);
-    FileTag->disc_total = et_disc_number_to_string(FileTagCur->disc_total);
-
-    FileTag->year = strip_value(FileTagCur->year);
-    FileTag->release_year = strip_value(FileTagCur->release_year);
-
-    FileTag->track = et_track_number_to_string(FileTagCur->track);
-    FileTag->track_total = et_track_number_to_string(FileTagCur->track_total);
-
-    FileTag->genre = strip_value(FileTagCur->genre);
-    FileTag->comment = strip_value(FileTagCur->comment);
-
-    FileTag->composer = strip_value(FileTagCur->composer);
-    FileTag->orig_artist = strip_value(FileTagCur->orig_artist);
-    FileTag->orig_year = strip_value(FileTagCur->orig_year);
-
-    FileTag->copyright = strip_value(FileTagCur->copyright);
-    FileTag->url = strip_value(FileTagCur->url);
-    FileTag->encoded_by = strip_value(FileTagCur->encoded_by);
-    FileTag->description = strip_value(FileTagCur->description);
-
-    FileTag->track_gain = FileTagCur->track_gain;
-    FileTag->track_peak = FileTagCur->track_peak;
-    FileTag->album_gain = FileTagCur->album_gain;
-    FileTag->album_peak = FileTagCur->album_peak;
-
-    /* Picture */
-    et_file_tag_set_picture (FileTag, FileTagCur->picture);
-
-    return TRUE;
-}
-
 
 /*
  * Save data contained into File_Tag structure to the file on hard disk.
@@ -741,15 +677,14 @@ ET_Manage_Changes_Of_File_Data (ET_File *ETFile,
      */
     if (FileTag)
     {
-        if (ETFile->FileTag
-            && et_file_tag_detect_difference (ETFile->FileTag->data, FileTag) == TRUE)
+        if (ETFile->FileTag && *ETFile->FileTag->data != *FileTag)
         {
             ET_Add_File_Tag_To_List(ETFile,FileTag);
             undo_added |= TRUE;
         }
         else
         {
-            et_file_tag_free (FileTag);
+            delete FileTag;
         }
     }
 

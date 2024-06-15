@@ -337,7 +337,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
         ETFile_tmp->FileNameList = gListP<File_Name*>(new File_Name(*ETFile->FileNameCur->data));
         // With empty tag...
         ETFile_tmp->FileTag      =
-        ETFile_tmp->FileTagList  = gListP<File_Tag*>(et_file_tag_new());
+        ETFile_tmp->FileTagList  = gListP<File_Tag*>(new File_Tag());
         ape_tag_write_file_tag (ETFile_tmp, NULL);
         ET_Free_File_List_Item(ETFile_tmp);
     }
@@ -419,13 +419,12 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
                                        "id3v2-enable-unicode"))
         {
             ET_File   *ETFile_tmp    = ET_File_Item_New();
-            File_Tag  *FileTag_tmp   = et_file_tag_new ();
+            File_Tag  *FileTag_tmp   = new File_Tag();
             ETFile_tmp->FileTagList  = gListP<File_Tag*>(FileTag_tmp);
             ETFile_tmp->FileTag      = ETFile_tmp->FileTagList;
 
             if (id3_read_file(file.get(), ETFile_tmp, NULL) == TRUE
-                && et_file_tag_detect_difference (FileTag,
-                                                  FileTag_tmp) == TRUE)
+                && *FileTag != *FileTag_tmp)
             {
                 flag_id3lib_bugged = FALSE; /* Report the error only once. */
                 success = FALSE;
@@ -434,7 +433,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
                              _("Buggy id3lib"));
             }
 
-            et_file_tag_free (FileTag_tmp);
+            delete FileTag_tmp;
             ET_Free_File_List_Item(ETFile_tmp);
         }
     }

@@ -19,6 +19,7 @@
 #include "xstring.h"
 
 #include <glib/gstdio.h>
+using namespace std;
 
 
 static void constructor()
@@ -105,6 +106,70 @@ static void literal()
 	g_assert_cmpstr(s1, ==, "xxx");
 }
 
+static void equality()
+{
+	xString s1;
+	g_assert_false(s1.equals("abc"));
+	g_assert_false(s1.equals("abcd", 3));
+	g_assert_false(s1.equals(nullptr, 0));
+	g_assert_false(s1.equals(""));
+	g_assert_true(s1.equals(nullptr));
+	g_assert_false(s1.equals(""s));
+	g_assert_false(s1.equals("abc"s));
+
+	s1 = "abc";
+	g_assert_true(s1.equals("abc"));
+	g_assert_false(s1.equals("abcd"));
+	g_assert_true(s1.equals("abcd", 3));
+	g_assert_false(s1.equals("abc", 2));
+	g_assert_false(s1.equals(""));
+	g_assert_false(s1.equals(nullptr));
+	g_assert_false(s1.equals(""s));
+	g_assert_true(s1.equals("abc"s));
+	g_assert_false(s1.equals("abc\0"s));
+
+	s1 = "";
+	g_assert_false(s1.equals("abc"));
+	g_assert_false(s1.equals("abcd", 3));
+	g_assert_true(s1.equals(nullptr, 0));
+	g_assert_true(s1.equals(""));
+	g_assert_false(s1.equals(nullptr));
+	g_assert_true(s1.equals(""s));
+	g_assert_false(s1.equals("abc"s));
+}
+
+static void equality0()
+{
+	xString0 s1;
+	g_assert_false(s1.equals("abc"));
+	g_assert_false(s1.equals("abcd", 3));
+	g_assert_true(s1.equals(nullptr, 0));
+	g_assert_true(s1.equals(""));
+	g_assert_true(s1.equals(nullptr));
+	g_assert_true(s1.equals(""s));
+	g_assert_false(s1.equals("abc"s));
+
+	s1 = "abc";
+	g_assert_true(s1.equals("abc"));
+	g_assert_false(s1.equals("abcd"));
+	g_assert_true(s1.equals("abcd", 3));
+	g_assert_false(s1.equals("abc", 2));
+	g_assert_false(s1.equals(""));
+	g_assert_false(s1.equals(nullptr));
+	g_assert_false(s1.equals(""s));
+	g_assert_true(s1.equals("abc"s));
+	g_assert_false(s1.equals("abc\0"s));
+
+	s1 = "";
+	g_assert_false(s1.equals("abc"));
+	g_assert_false(s1.equals("abcd", 3));
+	g_assert_true(s1.equals(nullptr, 0));
+	g_assert_true(s1.equals(""));
+	g_assert_true(s1.equals(nullptr));
+	g_assert_true(s1.equals(""s));
+	g_assert_false(s1.equals("abc"s));
+}
+
 int main(int argc, char** argv)
 {
 	g_test_init (&argc, &argv, NULL);
@@ -112,6 +177,8 @@ int main(int argc, char** argv)
 	g_test_add_func ("/xstring/constructor", constructor);
 	g_test_add_func ("/xstring/assignment", assignment);
 	g_test_add_func ("/xstring/literal", literal);
+	g_test_add_func ("/xstring/equality", equality);
+	g_test_add_func ("/xstring/equality0", equality0);
 
 	return g_test_run ();
 }

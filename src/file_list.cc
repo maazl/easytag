@@ -146,7 +146,7 @@ et_file_list_add (GList *file_list,
     /* Attach all data to this ETFile item */
     ET_File* ETFile = ET_File_Item_New();
     File_Name* FileName = new File_Name();
-    File_Tag* FileTag = et_file_tag_new ();
+    File_Tag* FileTag = new File_Tag();
 
     ETFile->IndexKey             = 0; // Will be renumered after...
     ETFile->ETFileKey            = ET_File_Key_New();
@@ -207,9 +207,9 @@ fail:
     FileName->key = undo_key;
     ET_Save_File_Name_Internal(ETFile,FileName);
 
-    FileTag = et_file_tag_new ();
+    FileTag = new File_Tag(*ETFile->FileTag->data);
     FileTag->key = undo_key;
-    ET_Save_File_Tag_Internal(ETFile,FileTag);
+    FileTag->autofix();
 
     /*
      * Generate undo for the file and the main undo list.
@@ -757,7 +757,7 @@ et_file_list_update_directory_name (GList *file_list,
                 }
              }
         }
-    }s
+    }
 
     g_free (old_path_tmp);
 }

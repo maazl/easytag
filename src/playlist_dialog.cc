@@ -32,6 +32,8 @@
 #include "scan_dialog.h"
 #include "setting.h"
 
+using namespace std;
+
 typedef struct
 {
     GtkWidget *name_directory_radio;
@@ -192,8 +194,8 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
                         /* Special case: do not replace illegal characters and
                          * do not check if there is a directory separator in
                          * the mask. */
-                        gchar *filename_generated_utf8 = et_scan_generate_new_filename_from_mask (etfile, mask, TRUE);
-                        gchar *filename_generated = filename_from_display (filename_generated_utf8);
+                        string filename_generated_utf8 = et_scan_generate_new_filename_from_mask(etfile, mask, TRUE);
+                        gchar *filename_generated = filename_from_display(filename_generated_utf8.c_str());
 
                         to_write = g_string_new ("#EXTINF:");
                         /* Must be written in system encoding (not UTF-8). */
@@ -216,7 +218,6 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
                         }
                         g_string_free (to_write, TRUE);
                         g_free (mask);
-                        g_free (filename_generated_utf8);
 
                         break;
                     }
@@ -316,8 +317,8 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
                     /* Special case: do not replace illegal characters and
                      * do not check if there is a directory separator in
                      * the mask. */
-                    gchar *filename_generated_utf8 = et_scan_generate_new_filename_from_mask (etfile, mask, TRUE);
-                    gchar *filename_generated = filename_from_display (filename_generated_utf8);
+                    string filename_generated_utf8 = et_scan_generate_new_filename_from_mask(etfile, mask, TRUE);
+                    gchar *filename_generated = filename_from_display(filename_generated_utf8.c_str());
 
                     to_write = g_string_new ("#EXTINF:");
                     /* Must be written in system encoding (not UTF-8). */
@@ -339,7 +340,6 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
                     }
                     g_string_free (to_write, TRUE);
                     g_free (mask);
-                    g_free (filename_generated_utf8);
                 }
                 break;
                 default:
@@ -412,7 +412,7 @@ write_button_clicked (EtPlaylistDialog *self)
     EtPlaylistDialogPrivate *priv;
     gchar *playlist_name = NULL;
     gchar *playlist_path_utf8;      // Path
-    gchar *playlist_basename_utf8;  // Filename
+    string playlist_basename_utf8;  // Filename
     gchar *playlist_name_utf8;      // Path + filename
     gchar *temp;
     GtkWidget *msgdialog;
@@ -446,9 +446,7 @@ write_button_clicked (EtPlaylistDialog *self)
         /* Generate filename from tag of the current selected file (FIXME). */
         temp = filename_from_display (playlist_name);
         g_free (playlist_name);
-        playlist_basename_utf8 = et_scan_generate_new_filename_from_mask (ETCore->ETFileDisplayed,
-                                                                          temp,
-                                                                          FALSE);
+        playlist_basename_utf8 = et_scan_generate_new_filename_from_mask(ETCore->ETFileDisplayed, temp, FALSE);
         g_free (temp);
 
         /* Replace Characters (with scanner). */
@@ -464,7 +462,7 @@ write_button_clicked (EtPlaylistDialog *self)
                 Scan_Convert_Space_Into_Underscore (playlist_basename_utf8);
                 break;
             case ET_CONVERT_SPACES_REMOVE:
-                Scan_Remove_Spaces (playlist_basename_utf8);
+                Scan_Process_Fields_Remove_Space (playlist_basename_utf8);
                 break;
             /* FIXME: Check that this is intended. */
             case ET_CONVERT_SPACES_NO_CHANGE:
@@ -477,7 +475,7 @@ write_button_clicked (EtPlaylistDialog *self)
 
         if ( strcmp(playlist_path_utf8,G_DIR_SEPARATOR_S)==0 )
         {
-            playlist_basename_utf8 = g_strdup("playlist");
+            playlist_basename_utf8 = "playlist";
         }else
         {
             gchar *tmp_string = g_strdup(playlist_path_utf8);
@@ -486,7 +484,7 @@ write_button_clicked (EtPlaylistDialog *self)
                 tmp_string[strlen(tmp_string)-1] = '\0';
             // Get directory name
             temp = g_path_get_basename(tmp_string);
-            playlist_basename_utf8 = g_strdup(temp);
+            playlist_basename_utf8 = temp;
             g_free(tmp_string);
             g_free(temp);
         }
@@ -511,12 +509,11 @@ write_button_clicked (EtPlaylistDialog *self)
 
     // Generate path + filename of playlist
     if (playlist_path_utf8[strlen(playlist_path_utf8)-1]==G_DIR_SEPARATOR)
-        playlist_name_utf8 = g_strconcat(playlist_path_utf8,playlist_basename_utf8,".m3u",NULL);
+        playlist_name_utf8 = g_strconcat(playlist_path_utf8,playlist_basename_utf8.c_str(),".m3u",NULL);
     else
-        playlist_name_utf8 = g_strconcat(playlist_path_utf8,G_DIR_SEPARATOR_S,playlist_basename_utf8,".m3u",NULL);
+        playlist_name_utf8 = g_strconcat(playlist_path_utf8,G_DIR_SEPARATOR_S,playlist_basename_utf8.c_str(),".m3u",NULL);
 
     g_free(playlist_path_utf8);
-    g_free(playlist_basename_utf8);
 
     playlist_name = filename_from_display(playlist_name_utf8);
 

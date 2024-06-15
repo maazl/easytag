@@ -1,4 +1,5 @@
 /* EasyTAG - tag editor for audio files
+ * Copyright (C) 2024  Marcel Müller
  * Copyright (C) 2014,2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -23,158 +24,111 @@
 
 #include "misc.h"
 #include "picture.h"
+#include "xstring.h"
 
 #ifdef __cplusplus
 #include <string>
 #include <ctime>
-#endif
 
-/*
- * File_Tag:
- * @key: incremented value
- * @saved: %TRUE if the tag has been saved, %FALSE otherwise
- * @title: track name
- * @artist: track artist
- * @album_artist: artist for the album of which this track is part
- * @album: album name
- * @disc_number: disc number within a set (as a string)
- * @disc_total: total number of discs in the set (as a string)
- * @year: year (as a string)
- * @track: track number (as a string)
- * @track_total: total number of tracks (as a string)
- * @genre: text genre
- * @comment: comment
- * @composer: composer
- * @orig_artist: original artist
- * @copyright: copyright
- * @url: URL
- * @encoded_by: encoded by (strictly, a person, but often the encoding
- *              application)
- * @picture: #EtPicture, which may have several other linked instances
- * @other: a list of other tags, used for Vorbis comments
- * Description of each item of the TagList list
+/** Metadata of a file.
+ * @remarks All text fields contain <b>UTF-8 encoded NFC normalized data.</b>
+ * You must ensure this when assigning new data. Using \c xString::resetNFC is recommended.
  */
 typedef struct File_Tag
 {
-    guint key;
-    gboolean saved;
+	guint key;              ///< incremented value
+	bool saved;             ///< true if the tag data is in sync with the file.
 
-    gchar *title;
-    gchar *subtitle;
-    gchar *version;
-    gchar *artist;
-    gchar *album_artist;
-    gchar *album;
-    gchar *disc_subtitle;
-    gchar *disc_number;
-    gchar *disc_total;
-    gchar *year;
-    gchar *release_year;
-    gchar *track;
-    gchar *track_total;
-    gchar *genre;
-    gchar *comment;
-    gchar *composer;
-    gchar *orig_artist;
-    gchar *orig_year;
-    gchar *copyright;
-    gchar *url;
-    gchar *encoded_by;
-    gchar *description;
-    EtPicture *picture;
-    GList *other;
-    float track_gain;
-    float track_peak;
-    float album_gain;
-    float album_peak;
+	xString0 title;         ///< Track name
+	xString0 subtitle;      ///< Track subtitle
+	xString0 version;       ///< Track version
+	xString0 artist;        ///< Track artist
+	xString0 album_artist;  ///< Album artist
+	xString0 album;         ///< Album name
+	xString0 disc_subtitle; ///< Medium title
+	xString0 disc_number;   ///< Medium number within a set (as a string)
+	xString0 disc_total;    ///< Total number of media in the set (as a string)
+	xString0 year;          ///< Year, optionally with date (as a string)
+	xString0 release_year;  ///< Release year, optionally with date (as a string)
+	xString0 track;         ///< Track number within the medium (as a string)
+	xString0 track_total;   ///< Total number of tracks of the medium (as a string)
+	xString0 genre;         ///< Text genre
+	xString0 comment;       ///< Comment, multi-line in general
+	xString0 composer;      ///< Composer
+	xString0 orig_artist;   ///< Original artist of the track
+	xString0 orig_year;     ///< Original year of the track
+	xString0 copyright;     ///< Copyright note
+	xString0 url;           ///< URL
+	xString0 encoded_by;    ///< Encoded by (strictly, a person, but often the encoding application)
+	xString0 description;   ///< Detailed description of the track, multi-line
+	EtPicture *picture;     ///< Linked list of pictures
+	GList *other;           ///< List of other tags, used for Vorbis comments
+	float track_gain;       ///< Replay gain of the track in dB that should be applied during playback
+	float track_peak;       ///< Peak level of the track relative to 0dB FSR
+	float album_gain;       ///< Replay gain of the album or entire set in dB that should be applied during playback
+	float album_peak;       ///< Peak level of the album or entire set relative to 0dB FSR
 
-#ifdef __cplusplus
-    /// Consider ReplayGain changes of less than that as insignificant.
-    static constexpr float gain_epsilon = .05f;
-    /// Consider ReplayGain peak changes of less than that as insignificant.
-    static constexpr float peak_epsilon = .005f;
+	/// Consider ReplayGain changes of less than that as insignificant.
+	static constexpr float gain_epsilon = .05f;
+	/// Consider ReplayGain peak changes of less than that as insignificant.
+	static constexpr float peak_epsilon = .005f;
 
-    bool empty() const;
+	/// Create empty tag
+	File_Tag();
+	/// Clone tag
+	File_Tag(const File_Tag& r);
+	~File_Tag();
 
-    File_Tag* clone() const;
-    /// Set field value
-    gchar* set_field(gchar* File_Tag::*field, const gchar* value)
-    {	g_free(this->*field);
-    	return this->*field = et_str_empty(value) ? nullptr : g_strdup(value);
-    }
-    /// Set field value and take ownership of value
-    gchar* emplace_field(gchar* File_Tag::*field, gchar* value)
-    {	g_free(this->*field);
-    	if (!et_str_empty(value))
-    		return this->*field = value;
-    	g_free(value);
-    	return this->*field = nullptr;
-    }
+	bool empty() const;    ///< check whether this instance contains no data
 
-    /// Parse ISO date time
-    struct time : tm
-    { int field_count; ///< Number of fields parsed, <= 0 in case of an error
-      bool invalid;
-      time() : tm{ 0, 0, 0, 1, 0, 0 }, field_count(0), invalid(false) {}
-    };
-    static time parse_datetime(const char* value);
-    /// Check whether time stamp valid for the current format.
-    /// @param value Tag value
-    /// @param max_fields Maximum number of fields, i.e. 1111-22-33T44:55:66.
-    /// @param additional_content Allow arbitrary additional content after the last field.
-    static bool check_date(const char* value, int max_fields, bool additional_content);
+	/// Compares two File_Tag items and returns \c true if they aren't the same.
+	friend bool operator!=(const File_Tag& l, const File_Tag& r);
+	/// Compares two File_Tag items and returns \c true if they are the same.
+	friend bool operator==(const File_Tag& l, const File_Tag& r) { return !(l != r); }
 
-    std::string track_and_total() const;
-    std::string disc_and_total() const;
-    void track_and_total(const char* value);
-    void disc_and_total(const char* value);
+	/// Parse ISO date time
+	struct time : tm
+	{ int field_count; ///< Number of fields parsed, <= 0 in case of an error
+		bool invalid;
+		time() : tm{ 0, 0, 0, 1, 0, 0 }, field_count(0), invalid(false) {}
+	};
+	static time parse_datetime(const char*& value);
+	/// Check whether time stamp valid for the current format.
+	/// @param value Tag value
+	/// @param max_fields Maximum number of fields, i.e. 1111-22-33T44:55:66.
+	/// @param additional_content Allow arbitrary additional content after the last field.
+	static bool check_date(const char* value, int max_fields, bool additional_content);
 
-    // locale invariant format for ReplayGain values
-    static std::string format_float(const char* fmt, float value);
-    static float parse_float(const char* value);
+	std::string track_and_total() const;
+	std::string disc_and_total() const;
+	void track_and_total(const char* value);
+	void disc_and_total(const char* value);
 
-    std::string track_gain_str() const { return format_float("%.1f dB", track_gain); }
-    std::string track_peak_str() const { return format_float("%.2f", track_peak); }
-    std::string album_gain_str() const { return format_float("%.1f dB", album_gain); }
-    std::string album_peak_str() const { return format_float("%.2f", album_peak); }
-    void track_gain_str(const char* value) { track_gain = parse_float(value); }
-    void track_peak_str(const char* value) { track_peak = parse_float(value); }
-    void album_gain_str(const char* value) { album_gain = parse_float(value); }
-    void album_peak_str(const char* value) { album_peak = parse_float(value); }
+	// locale invariant format for ReplayGain values
+	static std::string format_float(const char* fmt, float value);
+	static float parse_float(const char* value);
 
-#endif
+	std::string track_gain_str() const { return format_float("%.1f dB", track_gain); }
+	std::string track_peak_str() const { return format_float("%.2f", track_peak); }
+	std::string album_gain_str() const { return format_float("%.1f dB", album_gain); }
+	std::string album_peak_str() const { return format_float("%.2f", album_peak); }
+	void track_gain_str(const char* value) { track_gain = parse_float(value); }
+	void track_peak_str(const char* value) { track_peak = parse_float(value); }
+	void album_gain_str(const char* value) { album_gain = parse_float(value); }
+	void album_peak_str(const char* value) { album_peak = parse_float(value); }
+
+	/// Apply automatic corrections
+	/// @return true if the operation made at least one change.
+	bool autofix();
+
 } File_Tag;
+#else // __cplusplus
+typedef struct File_Tag File_Tag;
+#endif
 
 G_BEGIN_DECLS
 
-File_Tag * et_file_tag_new (void);
-void et_file_tag_free (File_Tag *file_tag);
-
-void et_file_tag_set_title (File_Tag *file_tag, const gchar *title);
-void et_file_tag_set_version (File_Tag *file_tag, const gchar *version);
-void et_file_tag_set_subtitle (File_Tag *file_tag, const gchar *subtitle);
-void et_file_tag_set_artist (File_Tag *file_tag, const gchar *artist);
-void et_file_tag_set_album_artist (File_Tag *file_tag, const gchar *album_artist);
-void et_file_tag_set_album (File_Tag *file_tag, const gchar *album);
-void et_file_tag_set_disc_subtitle (File_Tag *file_tag, const gchar *disc_subtitle);
-void et_file_tag_set_disc_number (File_Tag *file_tag, const gchar *disc_number);
-void et_file_tag_set_disc_total (File_Tag *file_tag, const gchar *disc_total);
-void et_file_tag_set_year (File_Tag *file_tag, const gchar *year);
-void et_file_tag_set_release_year (File_Tag *file_tag, const gchar *year);
-void et_file_tag_set_track_number (File_Tag *file_tag, const gchar *track_number);
-void et_file_tag_set_track_total (File_Tag *file_tag, const gchar *track_total);
-void et_file_tag_set_genre (File_Tag *file_tag, const gchar *genre);
-void et_file_tag_set_comment (File_Tag *file_tag, const gchar *comment);
-void et_file_tag_set_composer (File_Tag *file_tag, const gchar *composer);
-void et_file_tag_set_orig_artist (File_Tag *file_tag, const gchar *orig_artist);
-void et_file_tag_set_orig_year (File_Tag *file_tag, const gchar *year);
-void et_file_tag_set_copyright (File_Tag *file_tag, const gchar *copyright);
-void et_file_tag_set_url (File_Tag *file_tag, const gchar *url);
-void et_file_tag_set_encoded_by (File_Tag *file_tag, const gchar *encoded_by);
-void et_file_tag_set_description (File_Tag *file_tag, const gchar *description);
 void et_file_tag_set_picture (File_Tag *file_tag, const EtPicture *pic);
-
-gboolean et_file_tag_detect_difference (const File_Tag *FileTag1, const File_Tag  *FileTag2);
 
 G_END_DECLS
 

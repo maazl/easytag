@@ -69,7 +69,7 @@ easytag_SOURCES = \
 	src/preferences_dialog.cc \
 	src/progress_bar.c \
 	src/replaygain.cc \
-	src/scan.c \
+	src/scan.cc \
 	src/scan_dialog.cc \
 	src/search_dialog.cc \
 	src/setting.cc \
@@ -481,6 +481,7 @@ tests_test_file_tag_SOURCES = \
 	tests/test-file_tag.cc \
 	src/file_tag.cc \
 	src/misc.cc \
+	src/xstring.cc \
 	src/picture.cc
 
 tests_test_file_tag_LDADD = \
@@ -534,8 +535,8 @@ tests_test_scan_CFLAGS = \
 	$(common_test_cflags)
 
 tests_test_scan_SOURCES = \
-	tests/test-scan.c \
-	src/scan.c
+	tests/test-scan.cc \
+	src/scan.cc
 
 tests_test_scan_LDADD = \
 	$(EASYTAG_LIBS)

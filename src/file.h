@@ -55,11 +55,12 @@ typedef struct ET_File
 
     guint ETFileKey;          /* Primary key to identify each item of the list (no longer used?) */
 
+    gString FilePath;         ///< Full raw path of the file, do not use in UI.
     guint64 FileSize;         ///< File size in bytes
     guint64 FileModificationTime; /* Save modification time of the file */
 
     const ET_File_Description *ETFileDescription;
-    gchar               *ETFileExtension;   /* Real extension of the file (keeping the case) (should be placed in ETFileDescription?) */
+    gchar *ETFileExtension;   /* Real extension of the file (keeping the case) (should be placed in ETFileDescription?) */
     ET_File_Info        ETFileInfo;        /* Header infos: bitrate, duration, ... */
 
     gListP<File_Name*> FileNameCur;      /* Points to item of FileNameList that represents the current value of filename state (i.e. file on hard disk) */
@@ -102,7 +103,6 @@ void ET_Free_File_List_Item (ET_File *ETFile);
 void ET_Save_File_Data_From_UI (ET_File *ETFile);
 gboolean ET_Save_File_Name_Internal (const ET_File *ETFile, File_Name *FileName);
 gboolean ET_Save_File_Tag_To_HD (ET_File *ETFile, GError **error);
-gboolean ET_Save_File_Tag_Internal (ET_File *ETFile, File_Tag *FileTag);
 
 gboolean ET_Undo_File_Data (ET_File *ETFile);
 gboolean ET_Redo_File_Data (ET_File *ETFile);

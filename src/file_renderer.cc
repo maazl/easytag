@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2022  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2022-2024  Marcel Müller <github@maazl.de>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -65,20 +65,20 @@ public:
 class TagColumnRenderer : public FileColumnRenderer
 {
 protected:
-	gchar* File_Tag::* const Field;
+	xString0 File_Tag::* const Field;
 	virtual string RenderText(const ET_File* file, bool original) const;
 public:
-	TagColumnRenderer(EtSortMode col, gchar* File_Tag::* const field)
+	TagColumnRenderer(EtSortMode col, xString0 File_Tag::* const field)
 	:	FileColumnRenderer(col), Field(field) {}
 };
 
 class TagPartColumnRenderer : public TagColumnRenderer
 {
-	gchar* File_Tag::* const Field2;
+	xString0 File_Tag::* const Field2;
 protected:
 	virtual string RenderText(const ET_File* file, bool original) const;
 public:
-	TagPartColumnRenderer(EtSortMode col, gchar* File_Tag::* const field1, gchar* File_Tag::* const field2)
+	TagPartColumnRenderer(EtSortMode col, xString0 File_Tag::* const field1, xString0 File_Tag::* const field2)
 	:	TagColumnRenderer(col, field1), Field2(field2) {}
 };
 
@@ -166,7 +166,7 @@ string GenericColumnRenderer::RenderText(const ET_File* file, bool original) con
 }
 
 string TagColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	string s = EmptfIfNull((original ? file->FileTagCur : file->FileTag)->data->*Field);
+{	string s = ((original ? file->FileTagCur : file->FileTag)->data->*Field).get();
 	size_t pos = s.find('\n');
 	if (pos != string::npos && g_settings_get_boolean(MainSettings, "browse-limit-lines"))
 	{	guint count = g_settings_get_uint(MainSettings, "browse-max-lines");
@@ -185,8 +185,8 @@ done:
 
 string TagPartColumnRenderer::RenderText(const ET_File* file, bool original) const
 {	const File_Tag* tag = (original ? file->FileTagCur : file->FileTag)->data;
-	string svalue = EmptfIfNull(tag->*Field);
-	const gchar* value2 = EmptfIfNull(tag->*Field2);
+	string svalue = (tag->*Field).get();
+	const gchar* value2 = tag->*Field2;
 	if (!et_str_empty(value2))
 	{	svalue += "/";
 		svalue += value2;

@@ -29,6 +29,12 @@
     \return pointer to genre as string
 */
 #define genre_no(IndeX) ( IndeX < (sizeof(id3_genres)/sizeof(*id3_genres) ) ? id3_genres[IndeX] : "Unknown" )
+/**
+    \def genre_no(IndeX)
+    \param IndeX number of genre using in id3v1
+    \return pointer to genre as string
+*/
+#define genre_no_or_null(IndeX) ( IndeX < (sizeof(id3_genres)/sizeof(*id3_genres) ) ? id3_genres[IndeX] : NULL )
 
 /* 
  * Do not sort genres!!

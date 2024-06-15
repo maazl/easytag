@@ -270,7 +270,7 @@ et_application_window_tag_area_create_file_tag(EtApplicationWindow *self, const 
     priv = et_application_window_get_instance_private (self);
 
     /* Save tag data and generate undo for tag. */
-    File_Tag* fileTag = tag->clone();
+    File_Tag* fileTag = new File_Tag(*tag);
     et_tag_area_store_file_tag(ET_TAG_AREA(priv->tag_area), fileTag);
     return fileTag;
 }
@@ -864,7 +864,7 @@ on_remove_tags (GSimpleAction *action,
     for (l = etfilelist; l != NULL; l = g_list_next (l))
     {
         ET_File *etfile = (ET_File *)l->data;
-        FileTag = et_file_tag_new ();
+        FileTag = new File_Tag();
         ET_Manage_Changes_Of_File_Data (etfile, NULL, FileTag);
 
         et_application_window_progress_set(self, ++progress_bar_index, selectcount);

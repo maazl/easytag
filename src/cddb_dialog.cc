@@ -1897,95 +1897,56 @@ set_et_file_from_cddb_album (ET_File * etfile,
     if (set_fields != 0)
     {
         /* Allocation of a new FileTag. */
-        FileTag = etfile->FileTag->data->clone();
+        FileTag = new File_Tag(*etfile->FileTag->data);
 
         if (set_fields & ET_CDDB_SET_FIELD_TITLE)
-        {
-            et_file_tag_set_title (FileTag,
-                                   cddbtrackalbum->track_name);
-        }
+            FileTag->title.assignNFC(cddbtrackalbum->track_name);
 
         if ((set_fields & ET_CDDB_SET_FIELD_ARTIST)
             && cddbtrackalbum->cddbalbum->artist)
-        {
-            et_file_tag_set_artist (FileTag,
-                                    cddbtrackalbum->cddbalbum->artist);
-        }
+            FileTag->artist.assignNFC(cddbtrackalbum->cddbalbum->artist);
 
         if ((set_fields & ET_CDDB_SET_FIELD_ALBUM)
             && cddbtrackalbum->cddbalbum->album)
-        {
-            et_file_tag_set_album (FileTag,
-                                   cddbtrackalbum->cddbalbum->album);
-        }
+            FileTag->album.assignNFC(cddbtrackalbum->cddbalbum->album);
 
         if ((set_fields & ET_CDDB_SET_FIELD_YEAR)
             && cddbtrackalbum->cddbalbum->year)
-        {
-            et_file_tag_set_year (FileTag,
-                                  cddbtrackalbum->cddbalbum->year);
-        }
+            FileTag->year.assignNFC(cddbtrackalbum->cddbalbum->year);
 
-        if (set_fields & ET_CDDB_SET_FIELD_TRACK)
-        {
-            char buf[12];
-            sprintf(buf, "%u", cddbtrackalbum->track_number);
-            gchar *track_number = et_track_number_to_string(buf);
-
-            et_file_tag_set_track_number (FileTag, track_number);
-
-            g_free (track_number);
-        }
+        if ((set_fields & ET_CDDB_SET_FIELD_TRACK)
+            && cddbtrackalbum->track_number)
+            FileTag->track = et_track_number_to_string(cddbtrackalbum->track_number);
 
         if (set_fields & ET_CDDB_SET_FIELD_TRACK_TOTAL)
-        {
-            char buf[12];
-            sprintf(buf, "%u", list_length);
-            gchar *track_total = et_track_number_to_string(buf);
-
-            et_file_tag_set_track_total (FileTag, track_total);
-
-            g_free (track_total);
-        }
+            FileTag->track_total = et_track_number_to_string(list_length);
 
         if ((set_fields & ET_CDDB_SET_FIELD_GENRE)
-            && (cddbtrackalbum->cddbalbum->genre
-                || cddbtrackalbum->cddbalbum->category))
+            && (cddbtrackalbum->cddbalbum->genre || cddbtrackalbum->cddbalbum->category))
         {
             if (!et_str_empty (cddbtrackalbum->cddbalbum->genre))
-            {
-                et_file_tag_set_genre (FileTag,
-                                       Cddb_Get_Id3_Genre_From_Cddb_Genre (cddbtrackalbum->cddbalbum->genre));
-            }
+                FileTag->genre.assignNFC(Cddb_Get_Id3_Genre_From_Cddb_Genre(cddbtrackalbum->cddbalbum->genre));
             else
-            {
-                et_file_tag_set_genre (FileTag,
-                                       Cddb_Get_Id3_Genre_From_Cddb_Genre (cddbtrackalbum->cddbalbum->category));
-            }
+                FileTag->genre.assignNFC(Cddb_Get_Id3_Genre_From_Cddb_Genre(cddbtrackalbum->cddbalbum->category));
         }
     }
 
     /* Filename field. */
     if (set_fields & ET_CDDB_SET_FIELD_FILENAME)
     {
-        gchar *track_number;
         gchar *filename_new_utf8;
 
         /* Allocation of a new FileName. */
         FileName = new File_Name();
 
         /* Build the filename with the path. */
-        char buf[12];
-        sprintf(buf, "%u", cddbtrackalbum->track_number);
-        track_number = et_track_number_to_string(buf);
-
-        string filename_generated_utf8 = string(track_number) + " - " + cddbtrackalbum->track_name;
+        string filename_generated_utf8 = et_track_number_to_string(cddbtrackalbum->track_number)
+            + " - " + cddbtrackalbum->track_name;
         File_Name::prepare_func((EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"), ET_CONVERT_SPACES_NO_CHANGE)(filename_generated_utf8, 0);
         filename_new_utf8 = et_file_generate_name(etfile, filename_generated_utf8.c_str());
 
         FileName->set_filename_utf8(etfile->FileNameCur->data, filename_new_utf8);
 
-        g_free (track_number);
         g_free(filename_new_utf8);
     }
 

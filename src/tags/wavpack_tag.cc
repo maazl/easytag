@@ -131,10 +131,10 @@ gboolean wavpack_read_file (GFile *file, ET_File *ETFile, GError **error)
 
     File_Tag* FileTag = ETFile->FileTag->data;
 
-    auto set_field = [wpc, &field](const char* tag, gchar*& target)
+    auto set_field = [wpc, &field](const char* tag, xString& target)
     {   int length = WavpackGetTagItem(wpc, tag, field, MAXLEN);
         if (length > 0 && target == NULL)
-            target = Try_To_Validate_Utf8_String(field);
+            target = gString(Try_To_Validate_Utf8_String(field)).get();
     };
 
     set_field("title", FileTag->title);
@@ -150,10 +150,8 @@ gboolean wavpack_read_file (GFile *file, ET_File *ETFile, GError **error)
      * Discnumber + Disctotal.
      */
     if (FileTag->disc_number == NULL)
-    {   gchar* value = nullptr;
-        set_field("part", value);
-        FileTag->disc_and_total(value);
-        g_free(value);
+    {   set_field("part", FileTag->disc_number);
+        FileTag->disc_and_total(FileTag->disc_number);
     }
 
     set_field("year", FileTag->year);
@@ -163,10 +161,8 @@ gboolean wavpack_read_file (GFile *file, ET_File *ETFile, GError **error)
      * Tracknumber + tracktotal
      */
     if (FileTag->track == NULL)
-    {   gchar* value = nullptr;
-        set_field("track", value);
-        FileTag->track_and_total(value);
-        g_free(value);
+    {   set_field("track", FileTag->track);
+        FileTag->track_and_total(FileTag->track);
     }
 
     set_field("genre", FileTag->genre);

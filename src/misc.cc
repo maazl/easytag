@@ -393,16 +393,16 @@ string Convert_Duration (long long duration)
 	return strprintf("%u:%.2u", minute, second);
 }
 
-static gchar* pad_number(const gchar* number, const gchar* flag, const gchar* length)
-{
+static string pad_number(const gchar* number, const gchar* flag, const gchar* length)
+{	string ret;
 	if (!number)
-		return nullptr;
+		return ret;
 
 	// trim
 	while (*number == ' ') ++number;
 	size_t len = strlen(number);
 	if (!len)
-		return nullptr;
+		return ret;
 	while (number[len-1] == ' ') --len;
 
 	if (g_settings_get_boolean(MainSettings, flag))
@@ -410,24 +410,34 @@ static gchar* pad_number(const gchar* number, const gchar* flag, const gchar* le
 		if (numcnt == len) // all digit?
 		{	len = g_settings_get_uint(MainSettings, length);
 			if (numcnt < len)
-			{	char* ret = g_strnfill(len, '0');
-				memcpy(ret + len - numcnt, number, numcnt);
+			{	ret.assign(len, '0');
+				memcpy(&ret[len - numcnt], number, numcnt);
 				return ret;
 			}
 		}
 	}
 
-	return g_strndup(number, len);
+	ret.assign(number, len);
+	return ret;
 }
 
-gchar* et_disc_number_to_string(const gchar* disc_number)
+string et_disc_number_to_string(const gchar* disc_number)
 {
 	return pad_number(disc_number, "tag-disc-padded", "tag-disc-length");
 }
 
-gchar* et_track_number_to_string (const gchar* track_number)
+string et_track_number_to_string(const gchar* track_number)
 {
 	return pad_number(track_number, "tag-number-padded", "tag-number-length");
+}
+string et_track_number_to_string(unsigned track_number)
+{	string ret = to_string(track_number);
+	if (g_settings_get_boolean(MainSettings, "tag-number-padded"))
+	{	int count = g_settings_get_uint(MainSettings, "tag-number-length") - ret.length();
+		if (count > 0)
+			ret.insert(0, count, '0');
+	}
+	return ret;
 }
 
 /*

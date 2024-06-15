@@ -1,5 +1,5 @@
 /* EasyTAG - Tag editor for audio files
- * Copyright (C) 2022  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2022-2024  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014-2015  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -41,6 +41,10 @@
 #include "crc32.h"
 #include "charset.h"
 #include "mask.h"
+
+#include <algorithm>
+#include <string>
+using namespace std;
 
 typedef struct
 {
@@ -172,120 +176,21 @@ struct _Scan_Mask_Item
  **************/
 static void Scan_Option_Button (void);
 
-static GList *Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, gchar *mask);
+static GList *Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, string&& mask);
 static void Scan_Free_File_Fill_Tag_List (GList *list);
 
 static void et_scan_on_response (GtkDialog *dialog, gint response_id,
                                  gpointer user_data);
 
-
-/*************
- * Functions *
- *************/
-
-static void
-et_scan_dialog_set_file_tag_for_mask_item (File_Tag *file_tag,
-                                           const Scan_Mask_Item *item,
-                                           gboolean overwrite)
-{
-    switch (item->code)
-    {
-        case 't':
-            if (!overwrite && !et_str_empty (file_tag->title)) return;
-            et_file_tag_set_title (file_tag, item->string);
-            break;
-        case 'v':
-            if (!overwrite && !et_str_empty (file_tag->version)) return;
-            et_file_tag_set_version (file_tag, item->string);
-            break;
-        case 's':
-            if (!overwrite && !et_str_empty (file_tag->subtitle)) return;
-            et_file_tag_set_subtitle (file_tag, item->string);
-            break;
-        case 'a':
-            if (!overwrite && !et_str_empty (file_tag->artist)) return;
-            et_file_tag_set_artist (file_tag, item->string);
-            break;
-        case 'A':
-        case 'z': /* for compatibility with earlier versions */
-            if (!overwrite && !et_str_empty (file_tag->album_artist)) return;
-            et_file_tag_set_album_artist (file_tag, item->string);
-            break;
-        case 'T':
-        case 'b': /* for compatibility with earlier versions */
-            if (!overwrite && !et_str_empty (file_tag->album)) return;
-            et_file_tag_set_album (file_tag, item->string);
-            break;
-        case 'S':
-            if (!overwrite && !et_str_empty (file_tag->disc_subtitle)) return;
-            et_file_tag_set_disc_subtitle (file_tag, item->string);
-            break;
-        case 'd':
-            if (!overwrite && !et_str_empty (file_tag->disc_number)) return;
-            et_file_tag_set_disc_number (file_tag, item->string);
-            break;
-        case 'D':
-        case 'x': /* for compatibility with earlier versions */
-            if (!overwrite && !et_str_empty (file_tag->disc_total)) return;
-            et_file_tag_set_disc_total (file_tag, item->string);
-            break;
-        case 'y':
-            if (!overwrite && !et_str_empty (file_tag->year)) return;
-            et_file_tag_set_year (file_tag, item->string);
-            break;
-        case 'Y':
-            if (!overwrite && !et_str_empty (file_tag->release_year)) return;
-            et_file_tag_set_release_year (file_tag, item->string);
-            break;
-        case 'n':
-            if (!overwrite && !et_str_empty (file_tag->track)) return;
-            et_file_tag_set_track_number (file_tag, item->string);
-            break;
-        case 'N':
-        case 'l': /* for compatibility with earlier versions */
-            if (!overwrite && !et_str_empty (file_tag->track_total)) return;
-            et_file_tag_set_track_total (file_tag, item->string);
-            break;
-        case 'g':
-            if (!overwrite && !et_str_empty (file_tag->genre)) return;
-            et_file_tag_set_genre (file_tag, item->string);
-            break;
-        case 'c':
-            if (!overwrite && !et_str_empty (file_tag->comment)) return;
-            et_file_tag_set_comment (file_tag, item->string);
-            break;
-        case 'p':
-            if (!overwrite && !et_str_empty (file_tag->composer)) return;
-            et_file_tag_set_composer (file_tag, item->string);
-            break;
-        case 'o':
-            if (!overwrite && !et_str_empty (file_tag->orig_artist)) return;
-            et_file_tag_set_orig_artist (file_tag, item->string);
-            break;
-        case 'w':
-            if (!overwrite && !et_str_empty (file_tag->orig_year)) return;
-            et_file_tag_set_orig_year (file_tag, item->string);
-            break;
-        case 'r':
-            if (!overwrite && !et_str_empty (file_tag->copyright)) return;
-            et_file_tag_set_copyright (file_tag, item->string);
-            break;
-        case 'u':
-            if (!overwrite && !et_str_empty (file_tag->url)) return;
-            et_file_tag_set_url (file_tag, item->string);
-            break;
-        case 'e':
-            if (!overwrite && !et_str_empty (file_tag->encoded_by)) return;
-            et_file_tag_set_encoded_by (file_tag, item->string);
-            break;
-        case 'i':
-            /* Ignored. */
-            break;
-        default:
-            Log_Print (LOG_ERROR, "Scanner: Invalid code '%%%c' found!",
-                       item->code);
-            break;
-    }
+static void et_scan_dialog_set_file_tag_for_mask_item
+(File_Tag *file_tag, const Scan_Mask_Item *item, gboolean overwrite)
+{	if (item->code == 'i')
+		return; // ignore field
+	xString0 File_Tag::*field = et_mask_field(item->code);
+	if (!field)
+		Log_Print(LOG_ERROR, "Scanner: Invalid code '%%%c' found!", item->code);
+	else if (overwrite || et_str_empty(file_tag->*field))
+		(file_tag->*field).assignNFC(item->string);
 }
 
 /*
@@ -298,31 +203,28 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
     EtScanDialogPrivate *priv;
     GList *fill_tag_list = NULL;
     GList *l;
-    gchar *mask; // The 'mask' in the entry
     File_Tag *FileTag;
 
     g_return_if_fail (ETFile != NULL);
 
     priv = et_scan_dialog_get_instance_private (self);
 
-    mask = g_strdup (gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->fill_combo)))));
-    if (!mask) return;
+    string mask = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->fill_combo))));
+    if (mask.empty())
+        return;
 
     // Create a new File_Tag item
-    FileTag = ETFile->FileTag->data->clone();
+    FileTag = new File_Tag(*ETFile->FileTag->data);
 
     // Process this mask with file
-    fill_tag_list = Scan_Generate_New_Tag_From_Mask(ETFile,mask);
+    fill_tag_list = Scan_Generate_New_Tag_From_Mask(ETFile, move(mask));
+    gboolean overwrite = g_settings_get_boolean(MainSettings, "fill-overwrite-tag-fields");
 
     for (l = fill_tag_list; l != NULL; l = g_list_next (l))
     {
         const Scan_Mask_Item *mask_item = (const Scan_Mask_Item*)l->data;
-
         /* We display the text affected to the code. */
-        et_scan_dialog_set_file_tag_for_mask_item (FileTag, mask_item,
-                                                   g_settings_get_boolean (MainSettings,
-                                                                           "fill-overwrite-tag-fields"));
-
+        et_scan_dialog_set_file_tag_for_mask_item (FileTag, mask_item, overwrite);
     }
 
     Scan_Free_File_Fill_Tag_List(fill_tag_list);
@@ -334,7 +236,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
     {
         gchar *default_comment = g_settings_get_string (MainSettings,
                                                         "fill-default-comment");
-        et_file_tag_set_comment  (FileTag, default_comment);
+        FileTag->comment.assignNFC(default_comment);
         g_free (default_comment);
     }
 
@@ -347,7 +249,6 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
         GFile *file;
         GError *error = NULL;
         guint32 crc32_value;
-        gchar *buffer;
 
         if (g_ascii_strcasecmp(ETFile->ETFileExtension, ".mp3"))
         {
@@ -355,10 +256,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
 
             if (crc32_file_with_ID3_tag (file, &crc32_value, &error))
             {
-                buffer = g_strdup_printf ("%.8" G_GUINT32_FORMAT,
-                                          crc32_value);
-                et_file_tag_set_comment (FileTag, buffer);
-                g_free(buffer);
+                FileTag->comment = strprintf("%.8" G_GUINT32_FORMAT, crc32_value).c_str();
             }
             else
             {
@@ -376,7 +274,6 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
     // Save changes of the 'File_Tag' item
     ET_Manage_Changes_Of_File_Data(ETFile,NULL,FileTag);
 
-    g_free(mask);
     et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
                                               _("Tag successfully scanned"),
                                               TRUE);
@@ -385,10 +282,9 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
 }
 
 static GList *
-Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, gchar *mask)
+Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, string&& mask)
 {
     GList *fill_tag_list = NULL;
-    gchar *filename_utf8;
     gchar *tmp;
     gchar *buf;
     gchar *separator;
@@ -403,18 +299,18 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, gchar *mask)
     Scan_Mask_Item *mask_item;
     EtConvertSpaces convert_mode;
 
-    g_return_val_if_fail (ETFile != NULL && mask != NULL, NULL);
+    g_return_val_if_fail (ETFile != NULL && !mask.empty(), NULL);
 
-    filename_utf8 = g_strdup(ETFile->FileNameNew->data->value_utf8());
-    if (!filename_utf8) return NULL;
+    std::string filename_utf8(ETFile->FileNameNew->data->value_utf8());
+    if (filename_utf8.empty()) return NULL;
 
     // Remove extension of file (if found)
-    const ET_File_Description* desc = ET_Get_File_Description(filename_utf8);
+    const ET_File_Description* desc = ET_Get_File_Description(filename_utf8.c_str());
     if (desc->IsSupported())
-        filename_utf8[strlen(filename_utf8) - strlen(desc->Extension)] = 0; //strrchr(source,'.') = 0;
+        filename_utf8[filename_utf8.length() - strlen(desc->Extension)] = 0; //strrchr(source,'.') = 0;
     else
         Log_Print(LOG_ERROR, _("The extension ‘%s’ was not found in filename ‘%s’"),
-            ET_Get_File_Extension(filename_utf8), ETFile->FileNameNew->data->file_value_utf8());
+            ET_Get_File_Extension(filename_utf8.c_str()), ETFile->FileNameNew->data->file_value_utf8());
 
     /* Replace characters into mask and filename before parsing. */
     convert_mode = (EtConvertSpaces)g_settings_get_enum (MainSettings, "fill-convert-spaces");
@@ -440,14 +336,14 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, gchar *mask)
     }
 
     // Split the Scanner mask
-    mask_splitted = g_strsplit(mask,G_DIR_SEPARATOR_S,0);
+    mask_splitted = g_strsplit(mask.c_str(), G_DIR_SEPARATOR_S, 0);
     // Get number of arguments into 'mask_splitted'
-    for (mask_splitted_number=0;mask_splitted[mask_splitted_number];mask_splitted_number++);
+    for (mask_splitted_number = 0; mask_splitted[mask_splitted_number]; mask_splitted_number++);
 
     // Split the File Path
-    file_splitted = g_strsplit(filename_utf8,G_DIR_SEPARATOR_S,0);
+    file_splitted = g_strsplit(filename_utf8.c_str(), G_DIR_SEPARATOR_S, 0);
     // Get number of arguments into 'file_splitted'
-    for (file_splitted_number=0;file_splitted[file_splitted_number];file_splitted_number++);
+    for (file_splitted_number = 0; file_splitted[file_splitted_number]; file_splitted_number++);
 
     // Set the starting position for each tab
     if (mask_splitted_number <= file_splitted_number)
@@ -567,7 +463,6 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, gchar *mask)
         loop++;
     }
 
-    g_free(filename_utf8);
     g_strfreev(mask_splitted);
     g_strfreev(file_splitted);
 
@@ -579,7 +474,6 @@ static void
 Scan_Fill_Tag_Generate_Preview (EtScanDialog *self)
 {
     EtScanDialogPrivate *priv;
-    gchar *mask = NULL;
     gchar *preview_text = NULL;
     GList *fill_tag_list = NULL;
     GList *l;
@@ -590,12 +484,12 @@ Scan_Fill_Tag_Generate_Preview (EtScanDialog *self)
         || gtk_notebook_get_current_page (GTK_NOTEBOOK (priv->notebook)) != ET_SCAN_MODE_FILL_TAG)
         return;
 
-    mask = g_strdup (gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->fill_combo)))));
-    if (!mask)
+    string mask = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->fill_combo))));
+    if (mask.empty())
         return;
 
     preview_text = g_strdup("");
-    fill_tag_list = Scan_Generate_New_Tag_From_Mask(ETCore->ETFileDisplayed,mask);
+    fill_tag_list = Scan_Generate_New_Tag_From_Mask(ETCore->ETFileDisplayed, move(mask));
     for (l = fill_tag_list; l != NULL; l = g_list_next (l))
     {
         Scan_Mask_Item *mask_item = (Scan_Mask_Item*)l->data;
@@ -632,7 +526,6 @@ Scan_Fill_Tag_Generate_Preview (EtScanDialog *self)
         gtk_widget_queue_resize (GTK_WIDGET (self));
     }
 
-    g_free(mask);
     g_free(preview_text);
 }
 
@@ -640,7 +533,6 @@ static void
 Scan_Rename_File_Generate_Preview (EtScanDialog *self)
 {
     EtScanDialogPrivate *priv;
-    gchar *preview_text = NULL;
     gchar *mask = NULL;
 
     priv = et_scan_dialog_get_instance_private (self);
@@ -658,15 +550,14 @@ Scan_Rename_File_Generate_Preview (EtScanDialog *self)
     if (!mask)
         return;
 
-    preview_text = et_scan_generate_new_filename_from_mask (ETCore->ETFileDisplayed,
-                                                            mask, FALSE);
+    string preview_text = et_scan_generate_new_filename_from_mask(ETCore->ETFileDisplayed, mask, FALSE);
 
     if (GTK_IS_LABEL (priv->rename_preview_label))
     {
-        if (preview_text)
+        if (!preview_text.empty())
         {
             //gtk_label_set_text(GTK_LABEL(priv->rename_preview_label),preview_text);
-            gchar *tmp_string = g_markup_printf_escaped("%s",preview_text); // To avoid problem with strings containing characters like '&'
+            gchar *tmp_string = g_markup_printf_escaped("%s",preview_text.c_str()); // To avoid problem with strings containing characters like '&'
             gchar *str = g_strdup_printf("<i>%s</i>",tmp_string);
             gtk_label_set_markup (GTK_LABEL (priv->rename_preview_label), str);
             g_free(tmp_string);
@@ -681,7 +572,6 @@ Scan_Rename_File_Generate_Preview (EtScanDialog *self)
     }
 
     g_free(mask);
-    g_free(preview_text);
 }
 
 
@@ -727,34 +617,26 @@ static void
 Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
 {
     EtScanDialogPrivate *priv;
-    gchar *filename_generated_utf8 = NULL;
     gchar *filename_generated = NULL;
     gchar *filename_new_utf8 = NULL;
-    gchar *mask = NULL;
     File_Name *FileName;
 
     g_return_if_fail (ETFile != NULL);
 
     priv = et_scan_dialog_get_instance_private (self);
 
-    mask = g_strdup (gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->rename_combo)))));
-    if (!mask) return;
+    const gchar* mask = gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->rename_combo))));
+    if (!mask)
+    	return;
 
     // Note : if the first character is '/', we have a path with the filename,
     // else we have only the filename. The both are in UTF-8.
-    filename_generated_utf8 = et_scan_generate_new_filename_from_mask (ETFile,
-                                                                       mask,
-                                                                       FALSE);
-    g_free(mask);
-
-    if (et_str_empty (filename_generated_utf8))
-    {
-        g_free (filename_generated_utf8);
+    string filename_generated_utf8 = et_scan_generate_new_filename_from_mask(ETFile, mask, FALSE);
+    if (filename_generated_utf8.empty())
         return;
-    }
 
     // Convert filename to file-system encoding
-    filename_generated = filename_from_display(filename_generated_utf8);
+    filename_generated = filename_from_display(filename_generated_utf8.c_str());
     if (!filename_generated)
     {
         GtkWidget *msgdialog;
@@ -763,20 +645,17 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
                              GTK_MESSAGE_ERROR,
                              GTK_BUTTONS_CLOSE,
                              _("Could not convert filename ‘%s’ into system filename encoding"),
-                             filename_generated_utf8);
-        gtk_window_set_title(GTK_WINDOW(msgdialog),_("Filename translation"));
+                             filename_generated_utf8.c_str());
+        gtk_window_set_title(GTK_WINDOW(msgdialog), _("Filename translation"));
 
         gtk_dialog_run(GTK_DIALOG(msgdialog));
         gtk_widget_destroy(msgdialog);
-        g_free(filename_generated_utf8);
         return;
     }
 
     /* Build the filename with the full path or relative to old path */
-    filename_new_utf8 = et_file_generate_name (ETFile,
-                                               filename_generated_utf8);
+    filename_new_utf8 = et_file_generate_name(ETFile, filename_generated_utf8.c_str());
     g_free(filename_generated);
-    g_free(filename_generated_utf8);
 
     /* Set the new filename */
     /* Create a new 'File_Name' item. */
@@ -807,18 +686,15 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
  *      function "Write_Playlist" for the content of the playlist.
  * Returns filename in UTF-8
  */
-gchar *
-et_scan_generate_new_filename_from_mask (const ET_File *ETFile,
-                                         const gchar *mask,
-                                         gboolean no_dir_check_or_conversion)
+string et_scan_generate_new_filename_from_mask
+(const ET_File *ETFile, const gchar *mask, gboolean no_dir_check_or_conversion)
 {
     g_return_val_if_fail (ETFile != NULL && mask != NULL, NULL);
-    gchar *filename_new_utf8 = NULL;
 
     /*
      * Check for a directory in the mask
      */
-    gchar *path_utf8_cur = NULL;
+    gString path_utf8_cur;
     if (!no_dir_check_or_conversion)
     {
         if (g_path_is_absolute(mask))
@@ -835,17 +711,11 @@ et_scan_generate_new_filename_from_mask (const ET_File *ETFile,
         }
     }
 
-    filename_new_utf8 = et_evaluate_mask(ETFile, mask, no_dir_check_or_conversion);
+    string filename_new_utf8 = et_evaluate_mask(ETFile, mask, no_dir_check_or_conversion);
 
     // Add current path if relative path entered
     if (path_utf8_cur)
-    {
-        gchar *filename_tmp = filename_new_utf8; // in UTF-8!
-        filename_new_utf8 = g_build_filename (path_utf8_cur, filename_new_utf8,
-                                              NULL);
-        g_free(filename_tmp);
-        g_free(path_utf8_cur);
-    }
+        filename_new_utf8 = gString(g_build_filename(path_utf8_cur, filename_new_utf8.c_str(), NULL));
 
     return filename_new_utf8; // in UTF-8!
 }
@@ -898,13 +768,10 @@ Scan_Rename_File_Prefix_Path (EtScanDialog *self)
 }
 
 
-gchar *
-et_scan_generate_new_directory_name_from_mask (const ET_File *ETFile,
-                                               const gchar *mask,
-                                               gboolean no_dir_check_or_conversion)
+string et_scan_generate_new_directory_name_from_mask
+(const ET_File *ETFile, const gchar *mask, gboolean no_dir_check_or_conversion)
 {
-    return et_scan_generate_new_filename_from_mask (ETFile, mask,
-                                                    no_dir_check_or_conversion);
+    return et_scan_generate_new_filename_from_mask(ETFile, mask, no_dir_check_or_conversion);
 }
 
 
@@ -913,7 +780,7 @@ et_scan_generate_new_directory_name_from_mask (const ET_File *ETFile,
  * Here use Regular Expression, to search and replace.
  */
 static void
-Scan_Convert_Character (EtScanDialog *self, gchar **string)
+Scan_Convert_Character (EtScanDialog *self, string& s)
 {
     EtScanDialogPrivate *priv;
     gchar *from;
@@ -934,7 +801,7 @@ Scan_Convert_Character (EtScanDialog *self, gchar **string)
         goto handle_error;
     }
 
-    new_string = g_regex_replace (regex, *string, -1, 0, to, (GRegexMatchFlags)0, &regex_error);
+    new_string = g_regex_replace (regex, s.c_str(), -1, 0, to, (GRegexMatchFlags)0, &regex_error);
     if (regex_error != NULL)
     {
         g_free (new_string);
@@ -944,8 +811,8 @@ Scan_Convert_Character (EtScanDialog *self, gchar **string)
 
     /* Success. */
     g_regex_unref (regex);
-    g_free (*string);
-    *string = new_string;
+    s = new_string;
+    g_free(new_string);
 
 out:
     g_free (from);
@@ -961,21 +828,19 @@ handle_error:
     goto out;
 }
 
-static void
-Scan_Process_Fields_Functions (EtScanDialog *self,
-                               gchar **string)
+static void Scan_Process_Fields_Functions (EtScanDialog *self, string& str)
 {
     switch (g_settings_get_enum (MainSettings, "process-convert"))
     {
         case ET_PROCESS_FIELDS_CONVERT_SPACES:
-            Scan_Convert_Underscore_Into_Space (*string);
-            Scan_Convert_P20_Into_Space (*string);
+            Scan_Convert_Underscore_Into_Space (str);
+            Scan_Convert_P20_Into_Space (str);
             break;
         case ET_PROCESS_FIELDS_CONVERT_UNDERSCORES:
-            Scan_Convert_Space_Into_Underscore (*string);
+            Scan_Convert_Space_Into_Underscore (str);
             break;
         case ET_PROCESS_FIELDS_CONVERT_CHARACTERS:
-            Scan_Convert_Character (self, string);
+            Scan_Convert_Character (self, str);
             break;
         case ET_PROCESS_FIELDS_CONVERT_NO_CHANGE:
             break;
@@ -985,68 +850,42 @@ Scan_Process_Fields_Functions (EtScanDialog *self,
     }
 
     if (g_settings_get_boolean (MainSettings, "process-insert-capital-spaces"))
-    {
-        gchar *res;
-        res = Scan_Process_Fields_Insert_Space (*string);
-        g_free (*string);
-        *string = res;
-    }
+        Scan_Process_Fields_Insert_Space (str);
 
     if (g_settings_get_boolean (MainSettings,
         "process-remove-duplicate-spaces"))
-    {
-        Scan_Process_Fields_Keep_One_Space (*string);
-    }
+        Scan_Process_Fields_Keep_One_Space (str);
 
     switch (g_settings_get_enum(MainSettings, "process-capitalize"))
     {
-        gchar *res;
     case ET_PROCESS_CAPITALIZE_ALL_UP:
-        res = Scan_Process_Fields_All_Uppercase (*string);
-        g_free (*string);
-        *string = res;
+        Scan_Process_Fields_All_Uppercase (str);
         break;
 
     case ET_PROCESS_CAPITALIZE_ALL_DOWN:
-        res = Scan_Process_Fields_All_Downcase (*string);
-        g_free (*string);
-        *string = res;
+        Scan_Process_Fields_All_Downcase (str);
         break;
 
     case ET_PROCESS_CAPITALIZE_FIRST_LETTER_UP:
-        res = Scan_Process_Fields_Letter_Uppercase (*string);
-        g_free (*string);
-        *string = res;
+        Scan_Process_Fields_Letter_Uppercase (str);
         break;
 
     case ET_PROCESS_CAPITALIZE_FIRST_WORDS_UP:
-        gboolean uppercase_preps;
-        gboolean handle_roman;
-
-        uppercase_preps = g_settings_get_boolean (MainSettings,
-                                                  "process-uppercase-prepositions");
-        handle_roman = g_settings_get_boolean (MainSettings,
-                                               "process-detect-roman-numerals");
-        Scan_Process_Fields_First_Letters_Uppercase (string, uppercase_preps,
-                                                     handle_roman);
+        Scan_Process_Fields_First_Letters_Uppercase (str,
+            g_settings_get_boolean (MainSettings, "process-uppercase-prepositions"),
+            g_settings_get_boolean (MainSettings, "process-detect-roman-numerals"));
     }
 
     if (g_settings_get_boolean (MainSettings, "process-remove-spaces"))
-    {
-        Scan_Process_Fields_Remove_Space (*string);
-    }
-
+        Scan_Process_Fields_Remove_Space (str);
 }
 
-static void Scan_Process_Tag_Field(EtScanDialog *self, File_Tag* FileTag, const gchar* value,
-	void (*set_func)(File_Tag *file_tag, const gchar *value))
-{
-	if (!value)
+static void Scan_Process_Tag_Field(EtScanDialog *self, File_Tag* FileTag, xString0 File_Tag::*field)
+{	if ((FileTag->*field).empty())
 		return;
-	gchar* string = g_strdup(value);
-	Scan_Process_Fields_Functions(self, &string);
-	set_func(FileTag, string);
-	g_free(string);
+	string s(FileTag->*field);
+	Scan_Process_Fields_Functions(self, s);
+	(FileTag->*field).assignNFC(s);
 }
 
 /*****************************
@@ -1061,7 +900,6 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
     File_Name *st_filename;
     File_Tag  *st_filetag;
     guint process_fields;
-    gchar     *string;
 
     g_return_if_fail (ETFile != NULL);
 
@@ -1075,69 +913,68 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
         if (st_filename->value_utf8()
             && (process_fields & ET_PROCESS_FIELD_FILENAME))
         {
-            gchar *pos;
-
             if (!FileName)
                 FileName = new File_Name();
 
-            string = g_path_get_basename(st_filename->value_utf8());
+            string s(st_filename->file_value_utf8());
             // Remove the extension to set it to lower case (to avoid problem with undo)
-            if ((pos=strrchr(string,'.'))!=NULL) *pos = 0;
+            size_t p = s.rfind('.');
+            if (p != string::npos)
+                s.erase(p);
 
-            Scan_Process_Fields_Functions (self, &string);
+            Scan_Process_Fields_Functions (self, s);
 
-            gString string_utf8(et_file_generate_name (ETFile, string));
+            gString string_utf8(et_file_generate_name (ETFile, s.c_str()));
             FileName->set_filename_utf8(ETFile->FileNameCur->data, string_utf8);
-            g_free(string);
         }
     }
 
     /* Process data of the tag */
     if (st_filetag != NULL && (process_fields & ~ET_PROCESS_FIELD_FILENAME))
     {
-        FileTag = st_filetag->clone();
+        FileTag = new File_Tag(*st_filetag);
 
         if (process_fields & ET_PROCESS_FIELD_TITLE)
-            Scan_Process_Tag_Field(self, FileTag, st_filetag->title, et_file_tag_set_title);
+            Scan_Process_Tag_Field(self, FileTag, &File_Tag::title);
 
         if (process_fields & ET_PROCESS_FIELD_VERSION)
-            Scan_Process_Tag_Field(self, FileTag, st_filetag->version, et_file_tag_set_version);
+            Scan_Process_Tag_Field(self, FileTag, &File_Tag::version);
 
         if (process_fields & ET_PROCESS_FIELD_SUBTITLE)
-            Scan_Process_Tag_Field(self, FileTag, st_filetag->subtitle, et_file_tag_set_subtitle);
+            Scan_Process_Tag_Field(self, FileTag, &File_Tag::subtitle);
 
         if (process_fields & ET_PROCESS_FIELD_ARTIST)
-            Scan_Process_Tag_Field(self, FileTag, st_filetag->artist, et_file_tag_set_artist);
+            Scan_Process_Tag_Field(self, FileTag, &File_Tag::artist);
 
         if (process_fields & ET_PROCESS_FIELD_ALBUM_ARTIST)
-            Scan_Process_Tag_Field(self, FileTag, st_filetag->album_artist, et_file_tag_set_album_artist);
+            Scan_Process_Tag_Field(self, FileTag, &File_Tag::album_artist);
 
         if (process_fields & ET_PROCESS_FIELD_ALBUM)
-            Scan_Process_Tag_Field(self, FileTag, st_filetag->album, et_file_tag_set_album);
+            Scan_Process_Tag_Field(self, FileTag, &File_Tag::album);
 
         if (process_fields & ET_PROCESS_FIELD_DISC_SUBTITLE)
-            Scan_Process_Tag_Field(self, FileTag, st_filetag->disc_subtitle, et_file_tag_set_disc_subtitle);
+            Scan_Process_Tag_Field(self, FileTag, &File_Tag::disc_subtitle);
 
         if (process_fields & ET_PROCESS_FIELD_GENRE)
-            Scan_Process_Tag_Field(self, FileTag, st_filetag->genre, et_file_tag_set_genre);
+            Scan_Process_Tag_Field(self, FileTag, &File_Tag::genre);
 
         if (process_fields & ET_PROCESS_FIELD_COMMENT)
-            Scan_Process_Tag_Field(self, FileTag, st_filetag->comment, et_file_tag_set_comment);
+            Scan_Process_Tag_Field(self, FileTag, &File_Tag::comment);
 
         if (process_fields & ET_PROCESS_FIELD_COMPOSER)
-            Scan_Process_Tag_Field(self, FileTag, st_filetag->composer, et_file_tag_set_composer);
+            Scan_Process_Tag_Field(self, FileTag, &File_Tag::composer);
 
         if (process_fields & ET_PROCESS_FIELD_ORIGINAL_ARTIST)
-            Scan_Process_Tag_Field(self, FileTag, st_filetag->orig_artist, et_file_tag_set_orig_artist);
+            Scan_Process_Tag_Field(self, FileTag, &File_Tag::orig_artist);
 
         if (process_fields & ET_PROCESS_FIELD_COPYRIGHT)
-            Scan_Process_Tag_Field(self, FileTag, st_filetag->copyright, et_file_tag_set_copyright);
+            Scan_Process_Tag_Field(self, FileTag, &File_Tag::copyright);
 
         if (process_fields & ET_PROCESS_FIELD_URL)
-            Scan_Process_Tag_Field(self, FileTag, st_filetag->url, et_file_tag_set_url);
+            Scan_Process_Tag_Field(self, FileTag, &File_Tag::url);
 
         if (process_fields & ET_PROCESS_FIELD_ENCODED_BY)
-            Scan_Process_Tag_Field(self, FileTag, st_filetag->encoded_by, et_file_tag_set_encoded_by);
+            Scan_Process_Tag_Field(self, FileTag, &File_Tag::encoded_by);
     }
 
     if (FileName && FileTag)
@@ -2122,25 +1959,24 @@ Scan_Option_Button (void)
 void
 entry_check_mask (GtkEntry *entry, gpointer user_data)
 {
-    g_return_if_fail (entry != NULL);
+	g_return_if_fail (entry != NULL);
 
-    const gchar* mask = gtk_entry_get_text (entry);
-    gchar* error;
+	const gchar* mask = gtk_entry_get_text (entry);
+	string error;
 
-    if (et_str_empty (mask))
-        error = strdup(_("Empty scanner mask."));
-    else
-        error = et_check_mask(mask);
+	if (et_str_empty (mask))
+		error = _("Empty scanner mask.");
+	else
+	{	error = et_check_mask(mask);
+		if (error.empty())
+		{
+			gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+			return;
+		}
+	}
 
-    if (error == NULL)
-    {
-        gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
-        return;
-    }
-
-    gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, "emblem-unreadable");
-    gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY, error);
-    g_free(error);
+	gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, "emblem-unreadable");
+	gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY, error.c_str());
 }
 
 void

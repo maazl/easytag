@@ -1529,32 +1529,31 @@ et_browser_refresh_file_in_list (EtBrowser *self,
     /* When displaying Artist + Album lists => refresh also rows color. */
     if (strcmp (g_variant_get_string (variant, NULL), "artist") == 0)
     {
-        gchar *current_artist = ETFile->FileTag->data->artist;
-        gchar *current_album  = ETFile->FileTag->data->album;
+        const xString0& current_artist = ETFile->FileTag->data->artist;
+        const xString0& current_album  = ETFile->FileTag->data->album;
 
         valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->artist_model),
                                                &selectedIter);
 
         while (valid)
         {
-                gtk_tree_model_get (GTK_TREE_MODEL (priv->artist_model),
-                                    &selectedIter, ARTIST_NAME, &artist, -1);
+            gtk_tree_model_get (GTK_TREE_MODEL (priv->artist_model),
+                                &selectedIter, ARTIST_NAME, &artist, -1);
 
-                if ((!current_artist && !artist)
-                    || (current_artist && artist
-                        && g_utf8_collate (current_artist, artist) == 0))
-                {
-                    /* Set color of the row. */
-                    Browser_Artist_List_Set_Row_Appearance (self,
-                                                            &selectedIter);
-                    g_free (artist);
-                    break;
-                }
-
+            // TODO: use xString compare, requires more sophisticated model
+            if ((!current_artist && !artist)
+                || (current_artist && artist
+                    && g_utf8_collate (current_artist, artist) == 0))
+            {
+                /* Set color of the row. */
+                Browser_Artist_List_Set_Row_Appearance (self, &selectedIter);
                 g_free (artist);
+                break;
+            }
 
-                valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (priv->artist_model),
-                                                  &selectedIter);
+            g_free (artist);
+
+            valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (priv->artist_model), &selectedIter);
         }
 
         //
@@ -1853,7 +1852,7 @@ et_browser_select_file_by_dlm (EtBrowser *self,
         {
             gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter,
                                LIST_FILE_POINTER, &current_etfile, -1);
-            gchar *current_title = current_etfile->FileTag->data->title;
+            const xString0& current_title = current_etfile->FileTag->data->title;
 
             if ((cur = dlm((current_title ? current_title : current_etfile->FileNameNew->data->file_value_utf8()), string)) > max) // See "dlm.c"
             {
@@ -2033,7 +2032,7 @@ Browser_Artist_List_Load_Files (EtBrowser *self, ET_File *etfile_to_select)
     GList *m;
     GtkTreeIter iter;
     GtkTreeSelection *selection;
-    gchar *artistname, *artist_to_select = NULL;
+    const gchar *artistname, *artist_to_select = NULL;
 
     priv = et_browser_get_instance_private (self);
 
@@ -2244,7 +2243,7 @@ Browser_Album_List_Load_Files (EtBrowser *self,
     ET_File *etfile;
     GtkTreeIter iter;
     GtkTreeSelection *selection;
-    gchar *albumname, *album_to_select = NULL;
+    const gchar *albumname, *album_to_select = NULL;
 
     priv = et_browser_get_instance_private (self);
 
@@ -3719,8 +3718,6 @@ static void
 rename_directory_generate_preview (EtBrowser *self)
 {
     EtBrowserPrivate *priv;
-    gchar *preview_text = NULL;
-    gchar *mask = NULL;
 
     priv = et_browser_get_instance_private (self);
 
@@ -3728,21 +3725,18 @@ rename_directory_generate_preview (EtBrowser *self)
     ||  !priv->rename_directory_dialog || !priv->rename_directory_mask_entry || !priv->rename_directory_preview_label)
         return;
 
-    mask = g_settings_get_string (MainSettings,
-                                  "rename-directory-default-mask");
-
+    gString mask(g_settings_get_string (MainSettings, "rename-directory-default-mask"));
     if (!mask)
         return;
 
-    preview_text = et_scan_generate_new_filename_from_mask (ETCore->ETFileDisplayed,
-                                                            mask, FALSE);
+    string preview_text = et_scan_generate_new_filename_from_mask (ETCore->ETFileDisplayed, mask, FALSE);
 
     if (GTK_IS_LABEL(priv->rename_directory_preview_label))
     {
-        if (preview_text)
+        if (!preview_text.empty())
         {
             //gtk_label_set_text(GTK_LABEL(priv->rename_file_preview_label),preview_text);
-            gchar *tmp_string = g_markup_printf_escaped("%s",preview_text); // To avoid problem with strings containing characters like '&'
+            gchar *tmp_string = g_markup_printf_escaped("%s",preview_text.c_str()); // To avoid problem with strings containing characters like '&'
             gchar *str = g_strdup_printf("<i>%s</i>",tmp_string);
             gtk_label_set_markup(GTK_LABEL(priv->rename_directory_preview_label),str);
             g_free(tmp_string);
@@ -3755,9 +3749,6 @@ rename_directory_generate_preview (EtBrowser *self)
         // Force the window to be redrawed else the preview label may be not placed correctly
         gtk_widget_queue_resize(priv->rename_directory_dialog);
     }
-
-    g_free(mask);
-    g_free(preview_text);
 }
 
 /*
@@ -3915,7 +3906,7 @@ Rename_Directory (EtBrowser *self)
     EtBrowserPrivate *priv;
     gchar *directory_parent;
     gchar *directory_last_name;
-    gchar *directory_new_name;
+    string directory_new_name;
     gchar *directory_new_name_file;
     gchar *last_path;
     gchar *last_path_utf8;
@@ -3935,24 +3926,17 @@ Rename_Directory (EtBrowser *self)
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->rename_directory_mask_toggle)))
     {
         /* Renamed from mask. */
-        gchar *mask;
-
-        mask = g_settings_get_string (MainSettings,
-                                      "rename-directory-default-mask");
-        directory_new_name = et_scan_generate_new_directory_name_from_mask (ETCore->ETFileDisplayed,
-                                                                            mask,
-                                                                            FALSE);
-        g_free (mask);
-
+        gString mask(g_settings_get_string(MainSettings, "rename-directory-default-mask"));
+        directory_new_name = et_scan_generate_new_directory_name_from_mask(ETCore->ETFileDisplayed, mask, FALSE);
     }
     else
     {
         /* Renamed 'manually'. */
-        directory_new_name  = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->rename_directory_entry)));
+        directory_new_name = gtk_entry_get_text(GTK_ENTRY(priv->rename_directory_entry));
     }
 
     /* Check if a name for the directory have been supplied */
-    if (et_str_empty (directory_new_name))
+    if (!directory_new_name.empty())
     {
         GtkWidget *msgdialog;
 
@@ -3966,12 +3950,11 @@ Rename_Directory (EtBrowser *self)
 
         gtk_dialog_run(GTK_DIALOG(msgdialog));
         gtk_widget_destroy(msgdialog);
-        g_free(directory_new_name);
         return;
     }
 
     /* Check that we can write the new directory name */
-    directory_new_name_file = filename_from_display(directory_new_name);
+    directory_new_name_file = filename_from_display(directory_new_name.c_str());
     if (!directory_new_name_file)
     {
         GtkWidget *msgdialog;
@@ -3981,7 +3964,7 @@ Rename_Directory (EtBrowser *self)
                                            GTK_MESSAGE_ERROR,
                                            GTK_BUTTONS_CLOSE,
                                            _("Could not convert ‘%s’ into filename encoding"),
-                                           directory_new_name);
+                                           directory_new_name.c_str());
         gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (msgdialog),
                                                   _("Please use another name."));
         gtk_window_set_title(GTK_WINDOW(msgdialog),_("Directory Name Error"));
@@ -3990,8 +3973,6 @@ Rename_Directory (EtBrowser *self)
         gtk_widget_destroy(msgdialog);
         g_free(directory_new_name_file);
     }
-
-    g_free (directory_new_name);
 
     /* If the directory name haven't been changed, we do nothing! */
     if (directory_last_name && directory_new_name_file

@@ -1,4 +1,5 @@
 /* EasyTAG - Tag editor for audio files
+ * Copyright (C) 2024  Marcel Müller
  * Copyright (C) 2014-2015  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -107,9 +108,35 @@ std::unique_ptr<T, D> make_unique(T* ptr, D deleter)
 {	return std::unique_ptr<T, D>(ptr, deleter);
 }
 
+/// Binary search with exact match handling.
+/// @tparam I iterator type
+/// @tparam T value type, not necessarily the same as the iterator's value type.
+/// @tparam C comparer to use, must return <=> 0 with the signature <tt>int C(I, T)</tt>.
+template <typename I, typename T, typename C>
+std::pair<I, bool> binary_find(I first, I last, const T& value, C comp)
+{	while (first != last)
+	{	I m = first + ((last - first) >> 1);
+		int cmp = comp(*m, value);
+		if (cmp == 0)
+			return std::make_pair(m, true);
+		if (cmp < 0)
+			first = m+1;
+		else
+			last = m;
+	}
+	return std::make_pair(first, false);
+}
+
 std::string Convert_Duration(long long duration);
 inline std::string Convert_Duration(double duration)
 { return Convert_Duration(llround(duration)); }
+
+/// Pad the number with trailing zeros according to settings "tag-disc-padded", "tag-disc-length".
+std::string et_disc_number_to_string(const gchar* disc_number);
+/// Pad the number with trailing zeros according to settings "tag-number-padded", "tag-number-length".
+std::string et_track_number_to_string(const gchar* track_number);
+/// Pad the number with trailing zeros according to settings "tag-number-padded", "tag-number-length".
+std::string et_track_number_to_string(unsigned track_number);
 
 #endif
 
@@ -126,17 +153,6 @@ GVariant* et_variant_string_array_set(GVariant* variant, const char* value, gboo
 
 gboolean et_run_audio_player (GList *files, GError **error);
 gboolean et_run_program (const gchar *program_name, GList *args_list, GError **error);
-
-/** Pad the number with trailing zeros according to settings "tag-disc-padded", "tag-disc-length".
- * @param disc_number
- * @return new string
- */
-gchar* et_disc_number_to_string (const gchar* disc_number);
-/** Pad the number with trailing zeros according to settings "tag-number-padded", "tag-number-length".
- * @param disc_number
- * @return new string
- */
-gchar* et_track_number_to_string (const gchar* track_number);
 
 gboolean et_rename_file (const gchar *old_filename, const gchar *new_filename, GError **error);
 

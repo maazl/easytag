@@ -22,26 +22,27 @@
 #include <gtk/gtk.h>
 
 #include "file.h"
+#include "file_tag.h"
 
-G_BEGIN_DECLS
+#ifdef __cplusplus
+/// Get tag field by mask character
+xString0 File_Tag::* et_mask_field(char code);
 
 /**
  * Check mask string for syntactical correctness.
  * @param mask
- * @return true: NULL: valid, error message otherwise.
- * The returned value need to be released with g_free.
+ * @return empty: valid, error message otherwise.
  */
-gchar* et_check_mask(const gchar* mask);
+std::string et_check_mask(const gchar* mask);
 
 /**
  * Apply the mask to a file and calculate new file name.
  * @param file
  * @param mask
  * @param no_dir_check_or_conversion Skip replacement of invalid file characters.
- * @return New file name or NULL if the mask did not evaluate because off missing tag field value(s).
+ * @return New file name or empty if the mask did not evaluate because off missing tag field value(s).
  */
-gchar* et_evaluate_mask(const ET_File *file, const gchar *mask, gboolean no_dir_check_or_conversion);
+std::string et_evaluate_mask(const ET_File *file, const gchar *mask, gboolean no_dir_check_or_conversion);
 
-G_END_DECLS
-
+#endif
 #endif

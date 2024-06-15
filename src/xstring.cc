@@ -58,7 +58,9 @@ const xString::data<0>* xString::Init(const char* str)
 
 const xString::data<0>* xString::Init(const char* str, size_t len, GNormalizeMode mode)
 {	if (!len)
-		return nullptr;
+	{	++empty_str.RefCount;
+		return &empty_str;
+	}
 	// GLib has no check for already normalized UTF8 strings.
 	// So perform a _very rough check_ to avoid excessive allocations.
 	const char* cp = str;
@@ -72,8 +74,12 @@ const xString::data<0>* xString::Init(const char* str, size_t len, GNormalizeMod
 }
 
 const xString::data<0>* xString::Init(const char* str, GNormalizeMode mode)
-{	if (et_str_empty(str))
+{	if (!str)
 		return nullptr;
+	if (!*str)
+	{	++empty_str.RefCount;
+		return &empty_str;
+	}
 	// GLib has no check for already normalized UTF8 strings.
 	// So perform a _very rough check_ to avoid excessive allocations.
 	const char* cp = str;
@@ -85,12 +91,18 @@ const xString::data<0>* xString::Init(const char* str, GNormalizeMode mode)
 	return Init(str, cp - str);
 }
 
-bool operator==(const xString& l, const xString& r) noexcept
-{	if (l.Ptr == r.Ptr)
+bool xString::equals(const char* str) const noexcept
+{	if (get() == str)
 		return true;
-	if (!l.Ptr || !l.Ptr)
+	if (!Ptr || !str)
 		return false;
-	return strcmp(l, r) == 0;
+	return strcmp(get(), str) == 0;
+}
+
+bool xString::equals(const char* str, size_t len) const noexcept
+{	if (!Ptr)
+		return false;
+	return strncmp(get(), str, len) == 0 && !get()[len];
 }
 
 char* xString::alloc(size_t len)
@@ -107,30 +119,6 @@ xString& xString::operator=(const xString& r) noexcept
 		Ptr = r.AddRef();
 	}
 	return *this;
-}
-
-bool xString::cmpassign(const xString& r)
-{	if (*this == r)
-		return false;
-	this->~xString();
-	Ptr = r.AddRef();
-	return true;
-}
-
-bool xString::cmpassign(cstring str)
-{	if (get() == str.Str)
-		return false;
-	if (Ptr && str.Str && strcmp(*this, str.Str) == 0)
-		return false;
-	xString(str).swap(*this);
-	return true;
-}
-
-bool xString::cmpassign(cppstring str)
-{	if (Ptr && strcmp(*this, str.Str.c_str()) == 0)
-		return false;
-	xString(str).swap(*this);
-	return true;
 }
 
 bool xString::trim()
@@ -185,12 +173,34 @@ const gchar* xString::collation_key() const
 	return ck;
 }
 
-int compare(const xString& l, const xString& r)
-{	if (l.Ptr == r.Ptr)
+int xString::compare(const xString& r) const
+{	if (Ptr == r.Ptr)
 		return 0;
-	if (!l.Ptr)
+	if (!Ptr)
 		return -1;
 	if (!r.Ptr)
 		return 1;
-	return strcmp(l.collation_key(), r.collation_key());
+	return strcmp(collation_key(), r.collation_key());
+}
+
+bool xString0::equals(const char* str) const noexcept
+{	if (xString::get() == str)
+		return true;
+	return et_str_empty(str) ? empty() : !empty() && strcmp(xString::get(), str) == 0;
+}
+
+bool xString0::equals(const char* str, size_t len) const noexcept
+{	return empty() ? !len : len && strncmp(xString::get(), str, len) == 0 && !xString::get()[len];
+}
+
+int xString0::compare(const xString0& r) const
+{	const char* lc = get();
+	const char* rc = r.get();
+	if (lc == rc)
+		return 0;
+	if (!*lc)
+		return -1;
+	if (!*rc)
+		return 1;
+	return strcmp(collation_key(), r.collation_key());
 }

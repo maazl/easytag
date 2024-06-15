@@ -667,7 +667,7 @@ flac_tag_write_file_tag (const ET_File *ETFile,
         ETFile_tmp->FileNameList = gListP<File_Name*>(new File_Name(*ETFile->FileNameCur->data));
         // With empty tag...
         ETFile_tmp->FileTag      =
-        ETFile_tmp->FileTagList  = gListP<File_Tag*>(et_file_tag_new());
+        ETFile_tmp->FileTagList  = gListP<File_Tag*>(new File_Tag());
         id3tag_write_file_tag (ETFile_tmp, NULL);
         ET_Free_File_List_Item(ETFile_tmp);
     }

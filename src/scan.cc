@@ -1,5 +1,6 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2014 David King <amigadave@amigadave.com>
+ * Copyright (C) 2024  Marcel Müller
+ * Copyright (C) 2014  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -17,217 +18,105 @@
  */
 
 #include "scan.h"
+#include "misc.h"
 
 #include <string.h>
 
-/*
- * Function to replace underscore '_' by a space. No need to reallocate.
- */
-void
-Scan_Convert_Underscore_Into_Space (gchar *string)
-{
-    gchar *tmp = string;
+#include <algorithm>
+using namespace std;
 
-    while ((tmp = strchr (tmp, '_')) != NULL)
-    {
-        *tmp = ' ';
-    }
+void Scan_Convert_Underscore_Into_Space(string& str)
+{	for (char& c : str)
+		if (c == '_')
+			c = ' ';
 }
 
-/*
- * Function to replace %20 by a space. No need to reallocate.
- */
-void
-Scan_Convert_P20_Into_Space (gchar *string)
-{
-    gchar *tmp, *tmp1;
-
-    while ((tmp = strstr (string, "%20")) != NULL)
-    {
-        tmp1 = tmp + 3;
-        *(tmp++) = ' ';
-        while (*tmp1)
-            *(tmp++) = *(tmp1++);
-        *tmp = '\0';
-    }
+void Scan_Convert_P20_Into_Space(string& str)
+{	size_t p = string::npos;
+	while ((p = str.rfind("%20", p)) != string::npos)
+		str.replace(p, 3, 1, ' ');
 }
 
-/*
- * Function to replace space by '_'. No need to reallocate.
- */
-void
-Scan_Convert_Space_Into_Underscore (gchar *string)
-{
-    gchar *tmp = string;
-
-    while ((tmp = strchr (tmp, ' ')) != NULL)
-    {
-        *tmp = '_';
-    }
+void Scan_Convert_Space_Into_Underscore(string& str)
+{	for (char& c : str)
+		if (c == ' ')
+			c = '_';
 }
 
-void
-Scan_Process_Fields_Remove_Space (gchar *string)
-{
-    gchar *tmp, *tmp1;
-
-    tmp = tmp1 = string;
-
-    while (*tmp)
-    {
-        while (*tmp == ' ')
-            tmp++;
-        if (*tmp)
-            *(tmp1++) = *(tmp++);
-    }
-    *tmp1 = '\0';
+void Scan_Process_Fields_Remove_Space(string& str)
+{	size_t p = string::npos;
+	while ((p = str.rfind(' ', p)) != string::npos)
+		str.erase(p, 1);
 }
 
-/*
- * Scan_Process_Fields_Insert_Space:
- * @string: Input string
- *
- * This function will insert space before every uppercase character.
- *
- * Returns: A newly allocated string.
- */
-gchar *
-Scan_Process_Fields_Insert_Space (const gchar *string)
-{
-    gchar *iter;
-    gunichar c;
-    GString *string1;
+void Scan_Process_Fields_Insert_Space(string& str)
+{	if (str.length() < 2)
+		return;
 
-    string1 = g_string_new ("");
-    g_string_append_c (string1, *string);
-
-    for (iter = g_utf8_next_char (string); *iter; iter = g_utf8_next_char (iter))
-    {
-        c = g_utf8_get_char (iter);
-
-        if (g_unichar_isupper (c))
-        {
-            g_string_append_c (string1, ' ');
-        }
-
-        g_string_append_unichar (string1, c);
-    }
-
-    return g_string_free (string1, FALSE);
+	gunichar last = 0;
+	for (const gchar* iter = str.c_str() + 1; *iter; iter = g_utf8_next_char(iter))
+	{	gunichar c = g_utf8_get_char(iter);
+		if (g_unichar_isupper(c) && !g_unichar_isspace(last))
+		{	size_t p = iter - str.c_str();
+			str.insert(p, 1, ' ');
+			iter = str.c_str() + p + 1;
+		}
+		last = c;
+	}
 }
 
 /*
  * The function removes the duplicated spaces. No need to reallocate.
  */
-void
-Scan_Process_Fields_Keep_One_Space (gchar *string)
-{
-    gchar *tmp, *tmp1;
-
-    tmp = tmp1 = string;
-
-    // Remove multiple consecutive underscores and spaces.
-    while (*tmp1)
-    {
-        while (*tmp1 && *tmp1 != ' ' && *tmp1 != '_')
-            *(tmp++) = *(tmp1++);
-        if (!*tmp1)
-            break;
-        *(tmp++) = *(tmp1++);
-        while (*tmp1 == ' ' || *tmp1 == '_')
-            tmp1++;
-    }
-    *tmp = '\0';
+void Scan_Process_Fields_Keep_One_Space(string& str)
+{	size_t p = string::npos;
+	while ((p = str.find_last_of(" _", p, 2)) != string::npos && p)
+	{	size_t q = p - 1;
+		p = str.find_last_not_of(" _", q, 2); // turns npos into 0
+		str.erase(p + 2, q - p);
+	}
 }
 
-/*
- * Function to remove spaces
- * No need to reallocate
- */
-void
-Scan_Remove_Spaces (gchar *string)
-{
-  int nextnotspace = 0, pos = 0;
-
-  while(string[pos] != '\0')
-  {
-    if(string[pos] == ' ')
-    {
-      nextnotspace = pos;
-      while(string[++nextnotspace] == ' ');
-      string[pos] = string[nextnotspace];
-      string[nextnotspace] = ' ';
-      continue;
-    }
-    pos++;
-  }
+void Scan_Process_Fields_All_Uppercase(string& str)
+{	str = gString(g_utf8_strup(str.c_str(), str.size()));
 }
 
-/* Returns a newly-allocated string. */
-gchar *
-Scan_Process_Fields_All_Uppercase (const gchar *string)
-{
-    return g_utf8_strup (string, -1);
+void Scan_Process_Fields_All_Downcase(string& str)
+{	str = gString(g_utf8_strdown(str.c_str(), str.size()));
 }
 
-/* Returns a newly-allocated string. */
-gchar *
-Scan_Process_Fields_All_Downcase (const gchar *string)
+void Scan_Process_Fields_Letter_Uppercase(string& str)
 {
-    return g_utf8_strdown (string, -1);
-}
+	string string1;
+	string1.reserve(str.length());
 
-/* Returns a newly-allocated string. */
-gchar *
-Scan_Process_Fields_Letter_Uppercase (const gchar *string)
-{
-    const gchar *temp;
-    gchar temp2[6];
-    gboolean set_to_upper_case = TRUE;
-    gunichar c;
-    GString *string1;
+	for (const gchar* temp = str.c_str(); *temp; temp = g_utf8_next_char (temp))
+	{
+		gunichar c = g_utf8_get_char(temp);
+		gchar temp2[6];
 
-    string1 = g_string_new ("");
+		// After the first time, all will be lower case.
+		if (temp == str.c_str())
+		{	if (g_unichar_islower(c))
+			{	string1.append(temp2, g_unichar_to_utf8(g_unichar_toupper(c), temp2));
+				continue;
+			}
+		}
+		// Uppercase the word 'I' in english
+		else if (c == 'I'
+			&& (temp[-1] == ' ' || temp[-1] == '_')
+			&& (temp[1] == ' ' || temp[1] == '_'))
+		{	string1 += 'I';
+			continue;
+		}
+		else if (g_unichar_isupper(c))
+		{	string1.append(temp2, g_unichar_to_utf8(g_unichar_tolower(c), temp2));
+			continue;
+		}
+		string1.append(temp, (const char*)g_utf8_next_char(temp));
+	}
 
-    for (temp = string; *temp; temp = g_utf8_next_char (temp))
-    {
-        gchar *temp3;
-        int l;
-
-        c = g_utf8_get_char (temp);
-        l = g_unichar_to_utf8 (c, temp2);
-
-        if (set_to_upper_case && g_unichar_islower(c))
-        {
-            temp3 = g_utf8_strup (temp2, l);
-            g_string_append (string1, temp3);
-            g_free (temp3);
-        }
-        else if (!set_to_upper_case && g_unichar_isupper(c))
-        {
-            temp3 = g_utf8_strdown (temp2, l);
-            g_string_append (string1, temp3);
-            g_free (temp3);
-        }
-        else
-        {
-            g_string_append_len (string1, temp2, l);
-        }
-
-        /* Uppercase the word 'I' in english */
-        if (!set_to_upper_case &&
-            (*(temp - 1) == ' ' || *(temp - 1) == '_') &&
-            (*temp == 'i' || *temp == 'I') &&
-            (*(temp + 1) == ' ' || *(temp + 1) == '_'))
-        {
-            string1->str [string1->len - 1] = 'I';
-        }
-
-        /* After the first time, all will be lower case. */
-        set_to_upper_case = FALSE;
-    }
-
-    return g_string_free (string1, FALSE);
+	str.swap(string1);
 }
 
 static gint
@@ -296,15 +185,12 @@ Scan_Word_Is_Roman_Numeral (const gchar *text)
     return i - text;
 }
 
-/*
- * Function to set the first letter of each word to uppercase, according the "Chicago Manual of Style" (http://www.docstyles.com/cmscrib.htm#Note2)
- * No needed to reallocate
- */
-void
-Scan_Process_Fields_First_Letters_Uppercase (gchar **str,
-                                             gboolean uppercase_preps,
-                                             gboolean handle_roman)
+void Scan_Process_Fields_First_Letters_Uppercase
+(string& str2, gboolean uppercase_preps, gboolean handle_roman)
 {
+    Scan_Process_Fields_All_Downcase(str2);
+    // code not ported to std::string because of inscrutable in place manipulation.
+    gchar* str = g_strdup(str2.c_str());
 /**** DANIEL TEST *****
     gchar *iter;
     gchar utf8_character[6];
@@ -326,7 +212,8 @@ Scan_Process_Fields_First_Letters_Uppercase (gchar **str,
     }
 ****/
 /**** Barış Çiçek version ****/
-    gchar *string = *str;
+
+    gchar *string = str;
     gchar *word, *word1, *word2, *temp;
     gint i, len;
     gchar utf8_character[6];
@@ -359,10 +246,6 @@ Scan_Process_Fields_First_Letters_Uppercase (gchar **str,
         "yet ",     "yet_",
         NULL
     };
-
-    temp = Scan_Process_Fields_All_Downcase (string);
-    g_free (*str);
-    *str = string = temp;
 
     if (!g_utf8_validate(string,-1,NULL))
     {
@@ -472,4 +355,7 @@ increment:
 
         set_to_upper_case = set_to_upper_case_tmp;
     }
+
+    str2 = str;
+    g_free(str);
 }

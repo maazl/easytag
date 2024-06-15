@@ -40,7 +40,6 @@ public:
 	const EtSortMode Column;
 protected:
 	FileColumnRenderer(EtSortMode col);
-	static const gchar* EmptfIfNull(const gchar* value) { return value ? value : ""; }
 public:
 	/**
 	 * Retrieve the column text.

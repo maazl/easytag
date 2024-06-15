@@ -96,7 +96,7 @@ ape_tag_read_file_tag (GFile *file,
     File_Tag* FileTag = ETFile->FileTag->data;
     FILE *fp;
     gchar *filename;
-    gchar *string = NULL;
+    const char *string;
     apetag *ape_cnt;
 
     filename = g_file_get_path (file);
@@ -115,46 +115,45 @@ ape_tag_read_file_tag (GFile *file,
 
     g_free (filename);
 
-    auto fetch_tag = [ape_cnt](const char* fieldname) -> gchar*
+    auto fetch_tag = [ape_cnt](xString& ret, const char* fieldname)
     {	const char* s = apefrm_getstr(ape_cnt, fieldname);
     	if (et_str_empty(s))
-    		return nullptr;
-    	return Try_To_Validate_Utf8_String(s);
+    		ret.reset();
+    	else
+    		ret = gString(Try_To_Validate_Utf8_String(s)).get();
     };
 
-    FileTag->title = fetch_tag(APE_TAG_FIELD_TITLE);
-    FileTag->subtitle = fetch_tag(APE_TAG_FIELD_SUBTITLE);
-    FileTag->version = fetch_tag("Version");
-    FileTag->artist = fetch_tag(APE_TAG_FIELD_ARTIST);
+    fetch_tag(FileTag->title, APE_TAG_FIELD_TITLE);
+    fetch_tag(FileTag->subtitle, APE_TAG_FIELD_SUBTITLE);
+    fetch_tag(FileTag->version, "Version");
+    fetch_tag(FileTag->artist, APE_TAG_FIELD_ARTIST);
 
-    FileTag->album_artist = fetch_tag(APE_TAG_FIELD_ALBUMARTIST);
-    FileTag->album = fetch_tag(APE_TAG_FIELD_ALBUM);
-    FileTag->disc_subtitle = fetch_tag("DiscSubtitle");
+    fetch_tag(FileTag->album_artist, APE_TAG_FIELD_ALBUMARTIST);
+    fetch_tag(FileTag->album, APE_TAG_FIELD_ALBUM);
+    fetch_tag(FileTag->disc_subtitle, "DiscSubtitle");
 
     /* Disc Number and Disc Total */
-    string = fetch_tag(APE_TAG_FIELD_PART);
+    string = apefrm_getstr(ape_cnt, APE_TAG_FIELD_PART);
     FileTag->disc_and_total(string);
-    g_free (string);
 
-    FileTag->year = fetch_tag(APE_TAG_FIELD_YEAR);
-    FileTag->release_year = fetch_tag("Release Year");
+    fetch_tag(FileTag->year, APE_TAG_FIELD_YEAR);
+    fetch_tag(FileTag->release_year, "Release Year");
 
     /* Track and Total Track */
-    string = fetch_tag(APE_TAG_FIELD_TRACK);
+    string = apefrm_getstr(ape_cnt, APE_TAG_FIELD_TRACK);
     FileTag->track_and_total(string);
-    g_free(string);
 
-    FileTag->genre = fetch_tag(APE_TAG_FIELD_GENRE);
-    FileTag->comment = fetch_tag(APE_TAG_FIELD_COMMENT);
-    FileTag->description = fetch_tag("Description");
+    fetch_tag(FileTag->genre, APE_TAG_FIELD_GENRE);
+    fetch_tag(FileTag->comment, APE_TAG_FIELD_COMMENT);
+    fetch_tag(FileTag->description, "Description");
 
-    FileTag->composer = fetch_tag(APE_TAG_FIELD_COMPOSER);
-    FileTag->orig_artist = fetch_tag("Original Artist");
-    FileTag->orig_year = fetch_tag("Original Year");
+    fetch_tag(FileTag->composer, APE_TAG_FIELD_COMPOSER);
+    fetch_tag(FileTag->orig_artist, "Original Artist");
+    fetch_tag(FileTag->orig_year, "Original Year");
 
-    FileTag->copyright = fetch_tag(APE_TAG_FIELD_COPYRIGHT);
-    FileTag->url =fetch_tag(APE_TAG_FIELD_RELATED_URL);
-    FileTag->encoded_by = fetch_tag("Encoded By");
+    fetch_tag(FileTag->copyright, APE_TAG_FIELD_COPYRIGHT);
+    fetch_tag(FileTag->url, APE_TAG_FIELD_RELATED_URL);
+    fetch_tag(FileTag->encoded_by, "Encoded By");
 
     auto fetch_float = [ape_cnt](const char* fieldname) -> float
     {	const char* s = apefrm_getstr(ape_cnt, fieldname);

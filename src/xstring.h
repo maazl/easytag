@@ -162,12 +162,39 @@ public:
 	/// @remarks It will free the storage if this is the last instance that owns the storage.
 	~xString() noexcept { if (Ptr && --RefCount() == 0) delete &static_cast<const storage<0>&>(*Ptr); }
 
+	/// Check if string is not null
+	constexpr explicit operator bool() const noexcept { return Ptr != nullptr; }
 	/// Check if string is null or empty
 	constexpr bool empty() const noexcept { return !Ptr || !*get(); }
 	/// Compare for equality
-	friend bool operator==(const xString& l, const xString& r) noexcept;
+	bool equals(const char* str) const noexcept;
+	/// Compare for equality
+	bool equals(const xString& r) const noexcept { return equals(r.get()); }
+	/// Compare for equality
+	bool equals(const char* str, std::size_t len) const noexcept;
+	/// Compare for equality
+	bool equals(const std::string& str) const noexcept { return equals(str.c_str(), str.length()); }
+	/// Compare for equality
+	friend bool operator==(const xString& l, const xString& r) noexcept { return l.equals(r); }
+	/// Compare for equality
+	friend bool operator==(const xString& l, const char* r) noexcept { return l.equals(r); }
+	/// Compare for equality
+	friend bool operator==(const char* l, const xString& r) noexcept { return r.equals(l); }
+	/// Compare for equality
+	friend bool operator==(const xString& l, const std::string& r) noexcept { return l.equals(r); }
+	/// Compare for equality
+	friend bool operator==(const std::string& l, const xString& r) noexcept { return r.equals(l); }
 	/// Compare for inequality
-	friend bool operator!=(const xString& l, const xString& r) noexcept { return !(l == r); }
+	friend bool operator!=(const xString& l, const xString& r) noexcept { return !l.equals(r); }
+	/// Compare for inequality
+	friend bool operator!=(const xString& l, const char* r) noexcept { return !l.equals(r); }
+	/// Compare for inequality
+	friend bool operator!=(const char* l, const xString& r) noexcept { return !r.equals(l); }
+	/// Compare for inequality
+	friend bool operator!=(const xString& l, const std::string& r) noexcept { return !l.equals(r); }
+	/// Compare for inequality
+	friend bool operator!=(const std::string& l, const xString& r) noexcept { return !r.equals(l); }
+
 	/// Current share count.
 	/// @return Number of \c xString instance that share the same storage
 	/// or 0 in case the current value is \c nullptr.
@@ -205,17 +232,6 @@ public:
 	/// Assign a new C string literal.
 	template<std::size_t N>
 	xString& operator=(const char (&str)[N]) { xString(str).swap(*this); return *this; }
-	/// Compare and assign
-	/// @return true when the string were different.
-	bool cmpassign(const xString& r);
-	/// Compare and assign
-	/// @return true when the string were different.
-	/// @remarks The function only consumes \a r if the strings are not equal, i.e. the return value is true.
-	bool cmpassign(xString&& r) noexcept { if (*this == r) return false; swap(r); return true; }
-	/// Assign a new C string.
-	bool cmpassign(cstring str);
-	/// Assign a new C++ string.
-	bool cmpassign(cppstring str);
 	/// Assign NFC normalized UTF-8 string.
 	/// @remarks Short cut for <tt>=xString(..., G_NORMALIZE_NFC)</tt>
 	void assignNFC(const char* str) { xString(str, G_NORMALIZE_NFC).swap(*this); }
@@ -244,7 +260,7 @@ public:
 	/// Relational comparison (spaceship operator)
 	/// @details Compares the collation keys.
 	/// Null strings are considered to be the smallest possible value.
-	friend int compare(const xString& l, const xString& r);
+	int compare(const xString& r) const;
 };
 
 /// Make \c xString literal from string literal.
@@ -254,5 +270,70 @@ public:
 template <std::size_t L>
 constexpr const xString::literal<L-1> xStringL(const char (&value)[L])
 {	return xString::literal<L-1>(value); }
+
+/// Variant of \ref xString that treats \c nullptr as an empty string
+class xString0 : public xString
+{public:
+	using xString::xString;
+	/// Copy
+	constexpr xString0(const xString0& r) = default;
+	/// Move
+	constexpr xString0(xString0&& r) = default;
+
+	using xString::operator=;
+	/// Assignment
+	xString0& operator=(const xString0& r) = default;
+	/// Assignment
+	xString0& operator=(xString0&& r) = default;
+
+	/// Implicit conversion to C string.
+	constexpr operator const char*() const noexcept { return xString::get() ? xString::get() : ""; }
+	/// Explicit conversion to C string.
+	constexpr const char* get() const noexcept { return *this; }
+
+	/// Check if string is not empty
+	constexpr explicit operator bool() const noexcept { return !empty(); }
+	/// Compare for equality
+	bool equals(const char* str) const noexcept;
+	/// Compare for equality
+	bool equals(const xString0& r) const noexcept { return equals(r.get()); }
+	/// Compare for equality
+	bool equals(const char* str, std::size_t len) const noexcept;
+	/// Compare for equality
+	bool equals(const std::string& str) const noexcept { return equals(str.c_str(), str.length()); }
+	/// Compare for equality
+	friend bool operator==(const xString0& l, const xString0& r) noexcept { return l.equals(r.get()); }
+	/// Compare for equality
+	friend bool operator==(const xString0& l, cstring r) noexcept { return l.equals(r); }
+	/// Compare for equality
+	friend bool operator==(cstring l, const xString0& r) noexcept { return r.equals(l); }
+	/// Compare for equality
+	friend bool operator==(const xString0& l, cppstring r) noexcept { return l.equals(r.Str); }
+	/// Compare for equality
+	friend bool operator==(cppstring l, const xString0& r) noexcept { return r.equals(l); }
+	/// Compare for inequality
+	friend bool operator!=(const xString0& l, const xString0& r) noexcept { return !l.equals(r.get()); }
+	/// Compare for inequality
+	friend bool operator!=(const xString0& l, cstring r) noexcept { return !l.equals(r); }
+	/// Compare for inequality
+	friend bool operator!=(cstring l, const xString0& r) noexcept { return !r.equals(l); }
+	/// Compare for inequality
+	friend bool operator!=(const xString0& l, cppstring r) noexcept { return !l.equals(r.Str); }
+	/// Compare for inequality
+	friend bool operator!=(cppstring l, const xString0& r) noexcept { return !r.equals(l); }
+
+	/// Get collation key of the current string content.
+	/// @return Collation key or \c nullptr if the current instance is null.
+	/// @remarks The collation key is generated on the first call and cached.
+	/// Furthermore is is a file name collation key with special handling for numbers.
+	const gchar* collation_key() const { return empty() ? "" : xString::collation_key(); }
+	/// Relational comparison (spaceship operator)
+	/// @details Compares the collation keys.
+	int compare(const xString0& r) const;
+
+	/// Remove trailing and leading whitespace
+	/// @return true if the operation caused a change.
+	bool trim() { return !empty() && xString::trim(); }
+};
 
 #endif

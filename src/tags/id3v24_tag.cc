@@ -90,7 +90,7 @@ enum {
 static void   get_audio_frame_header    (ET_File_Info* info, const id3_byte_t* data, int len);
 static bool   etag_guess_byteorder      (const id3_ucs4_t *ustr, gchar **ret);
 static bool   etag_ucs42gchar           (const id3_ucs4_t *usrc, unsigned is_latin, unsigned is_utf16, gchar **res);
-static bool   libid3tag_Get_Frame_Str   (const struct id3_frame *frame, unsigned etag_field_type, const gchar* split_delimiter, gString& retstr);
+static bool   libid3tag_Get_Frame_Str   (const struct id3_frame *frame, unsigned etag_field_type, const gchar* split_delimiter, string& retstr);
 static bool   apply_tag(File_Tag* FileTag, id3_tag* tag);
 
 static void   Id3tag_delete_frames      (struct id3_tag *tag, const gchar *name, int start);
@@ -278,40 +278,39 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
 
     gchar* split_delimiter = g_settings_get_string(MainSettings, "split-delimiter");
 
-    auto fetch_tag = [tag, split_delimiter, &update](gchar** target, const char* tagName, unsigned fieldType) -> bool
-    {   gString result;
+    auto fetch_tag = [tag, split_delimiter, &update](xString& target, const char* tagName, unsigned fieldType) -> bool
+    {   string result;
         id3_frame *frame = id3_tag_findframe(tag, tagName, 0);
         if (!frame)
             return false;
         update |= libid3tag_Get_Frame_Str(frame, fieldType, split_delimiter, result);
-        g_free(*target);
-        if (!et_str_empty(result))
-            *target = result.release();
+        if (!result.empty())
+            target.assignNFC(result);
         else
-            *target = nullptr;
+            target.reset();
         return true;
     };
 
-    fetch_tag(&FileTag->title, ID3_FRAME_TITLE, EASYTAG_ID3_FIELD_STRINGLIST);
-    fetch_tag(&FileTag->subtitle, "TIT3", EASYTAG_ID3_FIELD_STRINGLIST);
-    fetch_tag(&FileTag->artist, ID3_FRAME_ARTIST, EASYTAG_ID3_FIELD_STRINGLIST);
-    fetch_tag(&FileTag->album_artist, "TPE2", EASYTAG_ID3_FIELD_STRINGLIST);
-    fetch_tag(&FileTag->album, ID3_FRAME_ALBUM, EASYTAG_ID3_FIELD_STRINGLIST);
-    fetch_tag(&FileTag->disc_subtitle, "TSST", EASYTAG_ID3_FIELD_STRINGLIST);
+    fetch_tag(FileTag->title, ID3_FRAME_TITLE, EASYTAG_ID3_FIELD_STRINGLIST);
+    fetch_tag(FileTag->subtitle, "TIT3", EASYTAG_ID3_FIELD_STRINGLIST);
+    fetch_tag(FileTag->artist, ID3_FRAME_ARTIST, EASYTAG_ID3_FIELD_STRINGLIST);
+    fetch_tag(FileTag->album_artist, "TPE2", EASYTAG_ID3_FIELD_STRINGLIST);
+    fetch_tag(FileTag->album, ID3_FRAME_ALBUM, EASYTAG_ID3_FIELD_STRINGLIST);
+    fetch_tag(FileTag->disc_subtitle, "TSST", EASYTAG_ID3_FIELD_STRINGLIST);
     /* Part of a set (TPOS) */
-    gchar* string1 = nullptr;
-    if (fetch_tag(&string1, "TPOS", ~0))
+    xString string1;
+    if (fetch_tag(string1, "TPOS", ~0))
         FileTag->disc_and_total(string1);
 
-    fetch_tag(&FileTag->year, ID3_FRAME_YEAR, ~0);
-    fetch_tag(&FileTag->release_year, "TRDL", ~0);
+    fetch_tag(FileTag->year, ID3_FRAME_YEAR, ~0);
+    fetch_tag(FileTag->release_year, "TRDL", ~0);
 
     /* Track and Total Track (TRCK) */
-    if (fetch_tag(&string1, ID3_FRAME_TRACK, ~0))
+    if (fetch_tag(string1, ID3_FRAME_TRACK, ~0))
         FileTag->track_and_total(string1);
 
     /* Genre (TCON) */
-    if (fetch_tag(&string1, ID3_FRAME_GENRE, ~0) && string1)
+    if (fetch_tag(string1, ID3_FRAME_GENRE, ~0) && string1)
     {
         /*
          * We manipulate only the name of the genre
@@ -324,78 +323,64 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
         unsigned genre = 0;
         FileTag->genre = NULL;
 
-        if ((string1[0] == '(') && g_ascii_isdigit (string1[1])
-            && (tmp = (gchar*)strchr(&string1[1], ')')) && *(tmp+1))
-            /* Convert a genre written as '(3)EuroDance' into 'EuroDance' */
+        if (string1[0] == '(' && g_ascii_isdigit(string1[1])
+            && (tmp = (gchar*)strchr(string1 + 2, ')')))
         {
-            FileTag->emplace_field(&File_Tag::genre, g_strdup (tmp + 1));
-        }
-        else if ((string1[0] == '(') && g_ascii_isdigit (string1[1])
-                 && strchr(string1, ')'))
-        {
-            /* Convert a genre written as '(3)' into 'Dance' */
-            genre = strtol(&string1[1] , &tmp, 10);
-            if (*tmp != ')')
-            {   FileTag->emplace_field(&File_Tag::genre, string1);
-                string1 = nullptr;
+            if (tmp[1])
+                /* Convert a genre written as '(3)EuroDance' into 'EuroDance' */
+                FileTag->genre.assignNFC(tmp + 1);
+            else
+            {
+                genre = strtol(string1 + 1, &tmp, 10);
+                if (*tmp != ')')
+                    FileTag->genre.assignNFC(string1);
+                else
+                    /* Convert a genre written as '(3)' into 'Dance' */
+                    FileTag->genre = genre_no_or_null(genre);
             }
         }
         else
         {
-            genre = strtol (string1, &tmp, 10);
-            if (tmp == string1)
-            {   FileTag->emplace_field(&File_Tag::genre, string1);
-                string1 = nullptr;
-            }
-        }
-
-        if (!FileTag->genre)
-        {
-            if (id3_genre_index (genre))
-            {
-                FileTag->emplace_field(&File_Tag::genre, (gchar *)id3_ucs4_utf8duplicate (id3_genre_index (genre)));
-            }
-            else if (strcmp (genre_no (genre),
-                             genre_no (ID3_INVALID_GENRE)) != 0)
-            {
-                /* If the integer genre is not found in the (outdated)
-                 * libid3tag index, try the EasyTAG index instead. */
-                FileTag->set_field(&File_Tag::genre, genre_no (genre));
-            }
+            genre = strtol(string1, &tmp, 10);
+            if (tmp == string1 || *tmp)
+                FileTag->genre.assignNFC(string1);
+            else
+                /* Convert a genre written as '3' into 'Dance' */
+                FileTag->genre = genre_no_or_null(genre);
         }
     }
 
-    g_free(string1);
+    string1.reset();
 
-    fetch_tag(&FileTag->comment, ID3_FRAME_COMMENT, /* EASYTAG_ID3_FIELD_STRING | */ EASYTAG_ID3_FIELD_STRINGFULL);
-    fetch_tag(&FileTag->composer, "TCOM", ~0);
-    fetch_tag(&FileTag->orig_artist, "TOPE", ~0);
-    fetch_tag(&FileTag->orig_year, "TDOR", ~0);
-    fetch_tag(&FileTag->copyright, "TCOP", ~0);
-    fetch_tag(&FileTag->url, "WXXX", EASYTAG_ID3_FIELD_LATIN1);
-    fetch_tag(&FileTag->encoded_by, "TENC", ~0);
+    fetch_tag(FileTag->comment, ID3_FRAME_COMMENT, /* EASYTAG_ID3_FIELD_STRING | */ EASYTAG_ID3_FIELD_STRINGFULL);
+    fetch_tag(FileTag->composer, "TCOM", ~0);
+    fetch_tag(FileTag->orig_artist, "TOPE", ~0);
+    fetch_tag(FileTag->orig_year, "TDOR", ~0);
+    fetch_tag(FileTag->copyright, "TCOP", ~0);
+    fetch_tag(FileTag->url, "WXXX", EASYTAG_ID3_FIELD_LATIN1);
+    fetch_tag(FileTag->encoded_by, "TENC", ~0);
 
     /* TXXX frames */
     struct id3_frame *frame;
     union id3_field *field;
     for (i = 0; (frame = id3_tag_findframe(tag, "TXXX", i)); i++)
     {
-        gString string2;
-        bool tmpupdate = libid3tag_Get_Frame_Str(frame, ~0, "\n", string2);
-        if (string2)
-        {   if (g_ascii_strncasecmp(string2, "REPLAYGAIN_TRACK_GAIN\n", sizeof("REPLAYGAIN_TRACK_GAIN\n") -1) == 0)
-                FileTag->track_gain_str(string2 + sizeof("REPLAYGAIN_TRACK_GAIN\n") -1);
-            else if (g_ascii_strncasecmp(string2, "REPLAYGAIN_TRACK_PEAK\n", sizeof("REPLAYGAIN_TRACK_PEAK\n") -1) == 0)
-                FileTag->track_peak_str(string2 + sizeof("REPLAYGAIN_TRACK_PEAK\n") -1);
-            else if (g_ascii_strncasecmp(string2, "REPLAYGAIN_ALBUM_GAIN\n", sizeof("REPLAYGAIN_ALBUM_GAIN\n") -1) == 0)
-                FileTag->album_gain_str(string2 + sizeof("REPLAYGAIN_ALBUM_GAIN\n") -1);
-            else if (g_ascii_strncasecmp(string2, "REPLAYGAIN_ALBUM_PEAK\n", sizeof("REPLAYGAIN_ALBUM_PEAK\n") -1) == 0)
-                FileTag->album_peak_str(string2 + sizeof("REPLAYGAIN_ALBUM_PEAK\n") -1);
+        string string1;
+        bool tmpupdate = libid3tag_Get_Frame_Str(frame, ~0, "\n", string1);
+        if (!string1.empty())
+        {   if (g_ascii_strncasecmp(string1.c_str(), "REPLAYGAIN_TRACK_GAIN\n", sizeof("REPLAYGAIN_TRACK_GAIN\n") -1) == 0)
+                FileTag->track_gain_str(string1.c_str() + sizeof("REPLAYGAIN_TRACK_GAIN\n") -1);
+            else if (g_ascii_strncasecmp(string1.c_str(), "REPLAYGAIN_TRACK_PEAK\n", sizeof("REPLAYGAIN_TRACK_PEAK\n") -1) == 0)
+                FileTag->track_peak_str(string1.c_str() + sizeof("REPLAYGAIN_TRACK_PEAK\n") -1);
+            else if (g_ascii_strncasecmp(string1.c_str(), "REPLAYGAIN_ALBUM_GAIN\n", sizeof("REPLAYGAIN_ALBUM_GAIN\n") -1) == 0)
+                FileTag->album_gain_str(string1.c_str() + sizeof("REPLAYGAIN_ALBUM_GAIN\n") -1);
+            else if (g_ascii_strncasecmp(string1.c_str(), "REPLAYGAIN_ALBUM_PEAK\n", sizeof("REPLAYGAIN_ALBUM_PEAK\n") -1) == 0)
+                FileTag->album_peak_str(string1.c_str() + sizeof("REPLAYGAIN_ALBUM_PEAK\n") -1);
             else if (!FileTag->encoded_by // Do nothing if already read...
-                && g_ascii_strncasecmp(string2, EASYTAG_STRING_ENCODEDBY, sizeof(EASYTAG_STRING_ENCODEDBY) -1) == 0
+                && g_ascii_strncasecmp(string1.c_str(), EASYTAG_STRING_ENCODEDBY, sizeof(EASYTAG_STRING_ENCODEDBY) -1) == 0
                 && string1[sizeof(EASYTAG_STRING_ENCODEDBY) -1] == '\n')
             {
-                FileTag->encoded_by = g_strdup(&string2[sizeof(EASYTAG_STRING_ENCODEDBY)]);
+                FileTag->encoded_by.assignNFC(&string1[sizeof(EASYTAG_STRING_ENCODEDBY)]);
                 update |= tmpupdate;
             }
         }
@@ -447,10 +432,10 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
         /* Picture description. The accepted fields are restricted to those
          * of string type, as the description field is the only one of string
          * type in the APIC tag (the MIME type is Latin1 type). */
-        gString description;
+        string description;
         update |= libid3tag_Get_Frame_Str (frame, EASYTAG_ID3_FIELD_STRING, nullptr, description);
 
-        EtPicture *pic = et_picture_new(type, description ? description.get() : "", 0, 0, bytes);
+        EtPicture *pic = et_picture_new(type, description.c_str(), 0, 0, bytes);
         g_bytes_unref (bytes);
 
         if (!prev_pic)
@@ -773,11 +758,11 @@ static bool
 libid3tag_Get_Frame_Str (const struct id3_frame *frame,
                          unsigned etag_field_type,
                          const gchar* split_delimiter,
-                         gString& retstr)
+                         string& retstr)
 {
     const union id3_field *field;
     unsigned i;
-    gchar *ret = NULL;
+    retstr.clear();
     unsigned is_latin = 1, is_utf16 = 0;
     bool retval = false;
 
@@ -903,17 +888,9 @@ libid3tag_Get_Frame_Str (const struct id3_frame *frame,
 
         if (!et_str_empty (tmpstr) && g_utf8_validate (tmpstr, -1, NULL))
         {
-            if (ret)
-            {
-                gchar *to_free = ret;
-                ret = g_strconcat (ret, split_delimiter, tmpstr, NULL);
-                g_free (to_free);
-            }
-            else
-            {
-                ret = tmpstr;
-                tmpstr = nullptr;
-            }
+            if (!retstr.empty())
+                retstr += split_delimiter;
+            retstr += tmpstr;
         }
 
         g_free (tmpstr);
@@ -922,7 +899,6 @@ libid3tag_Get_Frame_Str (const struct id3_frame *frame,
             break; // no delimiter => only first string returned
     }
 
-    retstr = ret;
     return retval;
 }
 
@@ -1596,11 +1572,11 @@ etag_set_txxxtag(const gchar *str,
 
     for (int i = 0; (frame = id3_tag_findframe(v2tag, "TXXX", i)); i++)
     {
-        gString string1;
+        string string1;
         libid3tag_Get_Frame_Str(frame, ~0, nullptr, string1);
-        if (!string1) continue; // empty TXXX Frame???
+        if (string1.empty()) continue; // empty TXXX Frame???
 
-        if (g_ascii_strcasecmp(string1, frame_desc) == 0)
+        if (g_ascii_strcasecmp(string1.c_str(), frame_desc) == 0)
             goto frame;
     }
 

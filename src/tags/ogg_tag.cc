@@ -519,28 +519,42 @@ void tags_hash::to_file_tags(File_Tag *FileTag)
 {
 	gString delimiter;
 
-	auto fetch_field = [this, &delimiter](const char* fieldname, gchar*& target, gboolean useNewline = FALSE)
-	{
-		auto range = equal_range(fieldname);
+	auto fetch_field = [this, &delimiter](const char* fieldname, xString& target, gboolean useNewline = FALSE)
+	{	auto range = equal_range(fieldname);
+		// calculate length
+		size_t len = 0;
+		size_t delim_len = 1;
 		for (iterator it = range.first; it != range.second; ++it)
-		{	gString value(it->second.release());
-			if (et_str_empty(value))
+		{	if (et_str_empty(it->second))
 				continue;
-
-			if (target) // merge?
-			{	const gchar* delim = "\n";
-				if (!useNewline)
-				{	if (!delimiter)
-						delimiter.reset(g_settings_get_string(MainSettings, "split-delimiter"));
-					delim = delimiter;
+			if (len)
+			{	if (!useNewline && !delimiter)
+				{	delimiter.reset(g_settings_get_string(MainSettings, "split-delimiter"));
+					delim_len = strlen(delimiter);
 				}
-
-				value.reset(g_strconcat(target, delim, value.get(), NULL));
-				g_free(target);
+				len += delim_len;
+			}
+			len += strlen(it->second);
+		}
+		// assign value
+		char* dp = target.alloc(len);
+		*dp = 0;
+		for (iterator it = range.first; it != range.second; ++it)
+		{	if (et_str_empty(it->second))
+				continue;
+			if (!target.empty()) // merge?
+			{	if (useNewline)
+					*dp = '\n';
+				else
+					memcpy(dp, delimiter, delim_len);
+				dp += delim_len;
 			}
 
-			target = value.release();
+			size_t l = strlen(it->second);
+			memcpy(dp, it->second, l);
+			dp += l;
 		}
+
 		erase(range.first, range.second);
 	};
 
@@ -558,34 +572,22 @@ void tags_hash::to_file_tags(File_Tag *FileTag)
 
 	/* Disc number and total discs. */
 	fetch_field(ET_VORBIS_COMMENT_FIELD_DISC_TOTAL, FileTag->disc_total);
-	FileTag->disc_total = et_disc_number_to_string(gString(FileTag->disc_total));
+	FileTag->disc_total = et_disc_number_to_string(FileTag->disc_total);
 
 	fetch_field(ET_VORBIS_COMMENT_FIELD_DISC_NUMBER, FileTag->disc_number);
 	if (!et_str_empty(FileTag->disc_number))
-	{	gchar *separator = strchr(FileTag->disc_number, '/');
-		if (separator && !FileTag->disc_total)
-		{	FileTag->disc_total = et_disc_number_to_string(separator + 1);
-			*separator = '\0';
-		}
-		FileTag->disc_number = et_disc_number_to_string(gString(FileTag->disc_number));
-	}
+		FileTag->disc_and_total(FileTag->disc_number);
 
 	fetch_field(ET_VORBIS_COMMENT_FIELD_DATE, FileTag->year);
 	fetch_field(ET_VORBIS_COMMENT_FIELD_RELEASE_DATE, FileTag->release_year);
 
 	/* Track number and total tracks. */
 	fetch_field(ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL, FileTag->track_total);
-	FileTag->track_total = et_disc_number_to_string(gString(FileTag->track_total));
+	FileTag->track_total = et_disc_number_to_string(FileTag->track_total);
 
 	fetch_field(ET_VORBIS_COMMENT_FIELD_TRACK_NUMBER, FileTag->track);
 	if (!et_str_empty(FileTag->track))
-	{	gchar *separator = strchr(FileTag->track, '/');
-		if (separator && !FileTag->track_total)
-		{	FileTag->track_total = et_track_number_to_string(separator + 1);
-			*separator = '\0';
-		}
-		FileTag->track = et_track_number_to_string(gString(FileTag->track));
-	}
+		FileTag->track_and_total(FileTag->track);
 
 	fetch_field(ET_VORBIS_COMMENT_FIELD_GENRE, FileTag->genre);
 	fetch_field(ET_VORBIS_COMMENT_FIELD_COMMENT, FileTag->comment, g_settings_get_boolean(MainSettings, "tag-multiline-comment"));

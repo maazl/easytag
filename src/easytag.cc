@@ -780,7 +780,7 @@ void ReplayGain_For_Selected_Files (void)
 		float album_peak = analyzer.GetAggregatedResult().Peak();
 		for (auto cur = first; cur != last; ++cur)
 		{	ET_File* file = *cur;
-			File_Tag* file_tag = ((File_Tag*)file->FileTag->data)->clone();;
+			File_Tag* file_tag = new File_Tag(*file->FileTag->data);
 			file_tag->album_gain = album_gain;
 			file_tag->album_peak = album_peak;
 			ET_Manage_Changes_Of_File_Data(file, nullptr, file_tag);
@@ -810,7 +810,7 @@ void ReplayGain_For_Selected_Files (void)
 		{	Log_Print(LOG_ERROR, _("Failed to analyze file '%s': %s"), file_name->value_utf8().get(), err.c_str());
 			error = 1;
 		} else
-		{	file_tag = file_tag->clone();
+		{	file_tag = new File_Tag(*file_tag);
 			file_tag->track_gain = analyzer.GetLastResult().Gain();
 			file_tag->track_peak = analyzer.GetLastResult().Peak();
 			ET_Manage_Changes_Of_File_Data(file, nullptr, file_tag);
