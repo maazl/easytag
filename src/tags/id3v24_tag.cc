@@ -119,7 +119,7 @@ gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
     File_Tag *FileTag = ETFile->FileTag->data;
     ET_File_Info* info = &ETFile->ETFileInfo;
 
-    auto istream = make_unique(G_INPUT_STREAM(g_file_read(gfile, NULL, error)), g_object_unref);
+    gObject<GInputStream> istream(G_INPUT_STREAM(g_file_read(gfile, NULL, error)));
     if (!istream)
         return FALSE; // cannot open
 

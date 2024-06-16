@@ -113,7 +113,7 @@ info_mac_read (GFile *file,
     
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    auto istream = make_unique(g_file_read(file, NULL, error), g_object_unref);
+    gObject<GFileInputStream> istream (g_file_read(file, NULL, error));
     if (!istream)
         return FALSE;
 
