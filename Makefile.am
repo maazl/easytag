@@ -59,6 +59,7 @@ easytag_SOURCES = \
 	src/file_name.cc \
 	src/file_renderer.cc \
 	src/file_tag.cc \
+	src/genres.c \
 	src/load_files_dialog.cc \
 	src/log.c \
 	src/main.c \
@@ -490,7 +491,8 @@ tests_test_genres_CFLAGS = \
 	$(common_test_cflags)
 
 tests_test_genres_SOURCES = \
-	tests/test-genres.c
+	tests/test-genres.c \
+	src/genres.c
 
 tests_test_genres_LDADD = \
 	$(EASYTAG_LIBS)
