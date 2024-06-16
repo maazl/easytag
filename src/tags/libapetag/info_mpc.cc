@@ -106,7 +106,7 @@ info_mpc_read (GFile *file,
         fclose (fp);
     }
         
-    auto istream = make_unique(g_file_read(file, NULL, error), g_object_unref);
+    gObject<GFileInputStream> istream(g_file_read(file, NULL, error));
     if (!istream)
         return FALSE;
 

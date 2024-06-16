@@ -47,21 +47,43 @@ MAKE_FLAGS_ENUM(GtkDialogFlags)
 MAKE_FLAGS_ENUM(GtkDestDefaults)
 MAKE_FLAGS_ENUM(GSettingsBindFlags)
 
-/// Deleter for GLIB objects
-struct gDeleter
-{	void operator()(gchar* ptr) { g_free(ptr); }
+/// Deleter for GLIB allocations
+struct gAllocDeleter
+{	void operator()(void* ptr) { g_free(ptr); }
 };
-/// Managed GLIB object
+/// Managed GLIB allocation
 template <typename T>
-using gObject = std::unique_ptr<T, gDeleter>;
+using gAlloc = std::unique_ptr<T, gAllocDeleter>;
 
 /// Managed GLIB string
-struct gString : gObject<gchar>
+struct gString : gAlloc<gchar>
 {	gString() { }
-	explicit gString(gchar* ptr) : std::unique_ptr<gchar, gDeleter>(ptr) { }
+	explicit gString(gchar* ptr) : gAlloc<gchar>(ptr) { }
 	operator const gchar*() const { return get(); }
 	gString& operator=(gchar* ptr) { reset(ptr); return *this; }
 };
+
+/// Deleter for managed GLIB object
+struct gObjectDeleter
+{	void operator()(void* ptr) { g_object_unref(ptr); }
+};
+/// Managed GLIB object
+template <typename T>
+using gObject = std::unique_ptr<T, gObjectDeleter>;
+
+/** create unique pointer with explicit deleter
+ * @tparam T pointer target type
+ * @tparam D deleter type
+ * @param ptr
+ * @param deleter
+ * @return the unique pointer
+ * @example This function can be used to create managed objects for C APIs.
+ * @code auto s = make_unique(g_strdup(...), g_free);
+ */
+template <typename T, typename D>
+std::unique_ptr<T, D> make_unique(T* ptr, D deleter)
+{	return std::unique_ptr<T, D>(ptr, deleter);
+}
 
 /// Strongly typed GList entry
 /// @tparam T Must be a pointer like type.
@@ -94,19 +116,6 @@ public:
 	gListP<T> reverse() { return gListP<T>(g_list_reverse(*this)); }
 };
 
-/** create unique pointer with explicit deleter
- * @tparam T pointer target type
- * @tparam D deleter type
- * @param ptr
- * @param deleter
- * @return the unique pointer
- * @example This function can be used to create managed objects for C APIs.
- * @code auto s = make_unique(g_strdup(...), g_free);
- */
-template <typename T, typename D>
-std::unique_ptr<T, D> make_unique(T* ptr, D deleter)
-{	return std::unique_ptr<T, D>(ptr, deleter);
-}
 
 /// Binary search with exact match handling.
 /// @tparam I iterator type

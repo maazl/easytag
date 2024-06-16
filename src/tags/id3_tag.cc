@@ -150,7 +150,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     FileTag  = ETFile->FileTag->data;
     const char* filename = ETFile->FileNameCur->data->value();
 
-    auto file = make_unique(g_file_new_for_path(filename), g_object_unref);
+    gObject<GFile> file(g_file_new_for_path(filename));
 
     /* This is a protection against a bug in id3lib that enters an infinite
      * loop with corrupted MP3 files (files containing only zeroes) */
