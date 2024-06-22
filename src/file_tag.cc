@@ -31,7 +31,6 @@ using namespace std;
 File_Tag::File_Tag()
 :	key(et_undo_key_new ())
 ,	saved(false)
-,	picture(nullptr)
 ,	other(nullptr)
 ,	track_gain(numeric_limits<float>::quiet_NaN())
 ,	track_peak(numeric_limits<float>::quiet_NaN())
@@ -64,19 +63,13 @@ File_Tag::File_Tag(const File_Tag& r)
 ,	url(r.url)
 ,	encoded_by(r.encoded_by)
 ,	description(r.description)
-,	picture(nullptr)
+,	pictures(r.pictures)
 ,	other(nullptr)
 ,	track_gain(r.track_gain)
 ,	track_peak(r.track_peak)
 ,	album_gain(r.album_gain)
 ,	album_peak(r.album_peak)
-{
-	et_file_tag_set_picture(this, r.picture);
-
-	for (GList* l = r.other; l != NULL; l = g_list_next(l))
-		other = g_list_prepend(other, g_strdup((gchar*)l->data));
-	other = g_list_reverse(other);
-}
+{}
 
 /*
  * Frees the list of 'other' field in a File_Tag item (contains attached gchar data).
@@ -91,7 +84,6 @@ et_file_tag_free_other_field (File_Tag *file_tag)
 
 File_Tag::~File_Tag()
 {
-	et_file_tag_set_picture(this, NULL);
 	et_file_tag_free_other_field(this);
 }
 
@@ -154,37 +146,11 @@ bool File_Tag::empty() const
 		&& !copyright
 		&& !url
 		&& !encoded_by
-		&& !picture
+		&& pictures.empty()
 		&& !isfinite(track_gain)
 		&& !isfinite(track_peak)
 		&& !isfinite(album_gain)
 		&& !isfinite(album_peak);
-}
-
-/*
- * et_file_tag_set_picture:
- * @file_tag: the #File_Tag on which to set the image
- * @pic: the image to set
- *
- * Set the images inside @file_tag to be @pic, freeing existing images as
- * necessary. Copies @pic with et_picture_copy_all().
- */
-void
-et_file_tag_set_picture (File_Tag *file_tag,
-                         const EtPicture *pic)
-{
-    g_return_if_fail (file_tag != NULL);
-
-    if (file_tag->picture != NULL)
-    {
-        et_picture_free (file_tag->picture);
-        file_tag->picture = NULL;
-    }
-
-    if (pic)
-    {
-        file_tag->picture = et_picture_copy_all (pic);
-    }
 }
 
 static bool floatequals(float f1, float f2, float epsilon)
@@ -199,9 +165,6 @@ static bool floatequals(float f1, float f2, float epsilon)
  */
 bool operator!=(const File_Tag& l, const File_Tag& r)
 {
-    const EtPicture *pic1;
-    const EtPicture *pic2;
-
     if (l.title != r.title
         || l.version != r.version
         || l.subtitle != r.subtitle
@@ -231,10 +194,10 @@ bool operator!=(const File_Tag& l, const File_Tag& r)
         return TRUE;
 
     /* Picture */
-    for (pic1 = l.picture, pic2 = r.picture;
-         pic1 || pic2;
-         pic1 = pic1->next, pic2 = pic2->next)
-        if (et_picture_detect_difference (pic1, pic2))
+    if (l.pictures.size() != r.pictures.size())
+        return TRUE;
+    for (size_t i = 0; i < l.pictures.size(); ++i)
+        if (l.pictures[i] != r.pictures[i])
             return TRUE;
 
     return FALSE; /* No changes */

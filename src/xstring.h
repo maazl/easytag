@@ -48,7 +48,7 @@ class xString
 	/// Shared reference counted storage for xString
 	struct header
 	{	mutable std::atomic<gchar*> CollationKey;
-		mutable std::atomic<int> RefCount;
+		mutable std::atomic<unsigned> RefCount;
 
 		void* operator new(std::size_t) = delete;
 		void* operator new[](std::size_t) = delete;
@@ -86,7 +86,7 @@ class xString
 	/// Use RefCount to access the storage content and cast to <tt>const char*</tt> to get the C string.
 	const data<0>* Ptr;
 
-	constexpr std::atomic<int>& RefCount() const noexcept { return static_cast<const storage<0>&>(*Ptr).RefCount; }
+	constexpr std::atomic<unsigned>& RefCount() const noexcept { return static_cast<const storage<0>&>(*Ptr).RefCount; }
 	constexpr const data<0>* AddRef() const noexcept { if (Ptr) ++RefCount(); return Ptr; }
 	static const data<0>* Init(const char* str, std::size_t len);
 	static const data<0>* Init(const char* str);
@@ -200,7 +200,7 @@ public:
 	/// or 0 in case the current value is \c nullptr.
 	/// @remarks In multi-threaded environment the returned value is volatile
 	/// unless it is \<= 1, i.e. you are the only owner or it is \c nullptr.
-	constexpr int use_count() const noexcept { return Ptr ? RefCount().load() : 0; }
+	constexpr unsigned use_count() const noexcept { return Ptr ? RefCount().load() : 0; }
 
 	/// Implicit conversion to C string.
 	constexpr operator const char*() const noexcept { return &Ptr->C.at(0); }

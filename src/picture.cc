@@ -31,29 +31,50 @@
 #include "charset.h"
 
 #include "win32/win32dep.h"
+using namespace std;
+
+static EtPicture* et_picture_copy_single(const EtPicture* pic) { return new EtPicture(*pic); }
+static void et_picture_free(EtPicture* pic) { delete pic; }
 
 G_DEFINE_BOXED_TYPE (EtPicture, et_picture, et_picture_copy_single, et_picture_free)
 
-/*
- * Note :
- * -> MP4_TAG :
- *      Just has one picture (ET_PICTURE_TYPE_FRONT_COVER).
- *      The format's don't matter to the MP4 side.
- *
- */
+EtPicture::EtPicture(EtPictureType type, const gchar *description, guint width, guint height, const void* data, size_t size)
+:	storage((Data*)g_malloc(offsetof(Data, bytes) + size))
+,	description(description)
+,	type(type)
+{	new(storage) Data(size);
+	storage->width = width;
+	storage->height = height;
+	memcpy(storage->bytes, data, size);
+}
 
-/*
- * et_picture_type_from_filename:
- * @filename: UTF-8 representation of a filename
- *
- * Use some heuristics to provide an estimate of the type of the picture, based
- * on the filename.
- *
- * Returns: the picture type, or %ET_PICTURE_TYPE_FRONT_COVER if the type could
- * not be estimated
- */
-EtPictureType
-et_picture_type_from_filename (const gchar *filename_utf8)
+EtPicture::EtPicture(const EtPicture& r) noexcept
+:	storage(r.storage)
+,	description(r.description)
+,	type(r.type)
+{	if (storage)
+		++storage->ref_count;
+}
+
+EtPicture::~EtPicture()
+{	if (storage && !--storage->ref_count)
+	{	storage->ref_count.~atomic();
+		g_free(storage);
+	}
+}
+
+bool operator==(const EtPicture& l, const EtPicture& r)
+{	if (l.description != r.description || l.type != r.type)
+		return false;
+	if (l.storage == r.storage)
+		return true;
+	if (!l.storage || !r.storage)
+		return false;
+	return l.storage->size == r.storage->size
+		&& memcmp(l.storage->bytes, r.storage->bytes, l.storage->size) == 0;
+}
+
+EtPictureType EtPicture::type_from_filename(const gchar *filename_utf8)
 {
     EtPictureType picture_type = ET_PICTURE_TYPE_FRONT_COVER;
 
@@ -109,46 +130,35 @@ et_picture_type_from_filename (const gchar *filename_utf8)
     return picture_type;
 }
 
-/* FIXME: Possibly use gnome_vfs_get_mime_type_for_buffer. */
-Picture_Format
-Picture_Format_From_Data (const EtPicture *pic)
+/* FIXME: Possibly use gnome_vfs_get_mime_type_for_buffer.
+ * and cache the result in EtPictureData */
+Picture_Format EtPicture::Format() const
 {
-    gsize size;
-    gconstpointer data;
+    g_return_val_if_fail(storage != NULL, PICTURE_FORMAT_UNKNOWN);
 
-    g_return_val_if_fail (pic != NULL, PICTURE_FORMAT_UNKNOWN);
-
-    data = g_bytes_get_data (pic->bytes, &size);
+    size_t size = storage->size;
+    const void* raw = storage->bytes;
 
     /* JPEG : "\xff\xd8\xff". */
-    if (size > 3 && (memcmp (data, "\xff\xd8\xff", 3) == 0))
-    {
+    if (size > 3 && (memcmp(raw, "\xff\xd8\xff", 3) == 0))
         return PICTURE_FORMAT_JPEG;
-    }
 
     /* PNG : "\x89PNG\x0d\x0a\x1a\x0a". */
-    if (size > 8 && (memcmp (data, "\x89PNG\x0d\x0a\x1a\x0a", 8) == 0))
-    {
+    if (size > 8 && (memcmp(raw, "\x89PNG\x0d\x0a\x1a\x0a", 8) == 0))
         return PICTURE_FORMAT_PNG;
-    }
     
     /* GIF: "GIF87a" */
-    if (size > 6 && (memcmp (data, "GIF87a", 6) == 0))
-    {
+    if (size > 6 && (memcmp(raw, "GIF87a", 6) == 0))
         return PICTURE_FORMAT_GIF;
-    }
 
     /* GIF: "GIF89a" */
-    if (size > 6 && (memcmp (data, "GIF89a", 6) == 0))
-    {
+    if (size > 6 && (memcmp(raw, "GIF89a", 6) == 0))
         return PICTURE_FORMAT_GIF;
-    }
     
     return PICTURE_FORMAT_UNKNOWN;
 }
 
-const gchar *
-Picture_Mime_Type_String (Picture_Format format)
+const char* EtPicture::Mime_Type_String(Picture_Format format)
 {
     switch (format)
     {
@@ -166,8 +176,7 @@ Picture_Mime_Type_String (Picture_Format format)
 }
 
 
-static const gchar *
-Picture_Format_String (Picture_Format format)
+const char* EtPicture::Format_String(Picture_Format format)
 {
     switch (format)
     {
@@ -183,8 +192,7 @@ Picture_Format_String (Picture_Format format)
     }
 }
 
-const gchar *
-Picture_Type_String (EtPictureType type)
+const char* EtPicture::Type_String(EtPictureType type)
 {
     switch (type)
     {
@@ -237,174 +245,29 @@ Picture_Type_String (EtPictureType type)
     }
 }
 
-gboolean
-et_picture_detect_difference (const EtPicture *a,
-                              const EtPicture *b)
+string EtPicture::format_info(const ET_File& ETFile) const
 {
-    if (!a && !b)
-    {
-        return FALSE;
-    }
+    g_return_val_if_fail(storage != NULL, string());
 
-    if ((a && !b) || (!a && b))
-    {
-        return TRUE;
-    }
-
-    if (a->type != b->type)
-    {
-        return TRUE;
-    }
-
-    if ((a->width != b->width) || (a->height != b->height))
-    {
-        return TRUE;
-    }
-
-    if (et_normalized_strcmp0 (a->description, b->description) != 0)
-    {
-        return TRUE;
-    }
-
-    if (!g_bytes_equal (a->bytes, b->bytes))
-    {
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
-gchar *
-et_picture_format_info (const EtPicture *pic, const ET_File* ETFile)
-{
-    const gchar *format, *desc, *type;
-    gchar *r, *size_str;
-
-    format = Picture_Format_String(Picture_Format_From_Data(pic));
-
-    if (pic->description)
-        desc = pic->description;
-    else
-        desc = "";
-
-    type = Picture_Type_String (pic->type);
-    size_str = g_format_size (g_bytes_get_size (pic->bytes));
+    const char* format = Format_String(Format());
+    const char* desc = description;
+    const char* type = Type_String(this->type);
+    gString size_str(g_format_size(storage->size));
 
     /* Behaviour following the tag type. */
-    if (!ETFile->ETFileDescription->support_multiple_pictures(ETFile))
-    {
-        r = g_strdup_printf ("%s (%s - %d×%d %s)\n%s: %s", format,
-                             size_str, pic->width, pic->height,
-                             _("pixels"), _("Type"), type);
-    }
+    if (!ETFile.ETFileDescription->support_multiple_pictures(&ETFile))
+        return strprintf("%s (%s - %d×%d %s)\n%s: %s", format,
+            size_str.get(), storage->width, storage->height,
+            _("pixels"), _("Type"), type);
     else
-    {
-        r = g_strdup_printf ("%s (%s - %d×%d %s)\n%s: %s\n%s: %s", format,
-                             size_str, pic->width, pic->height,
-                             _("pixels"), _("Type"), type,
-                             _("Description"), desc);
-    }
-
-    g_free (size_str);
-
-    return r;
+        return strprintf("%s (%s - %d×%d %s)\n%s: %s\n%s: %s", format,
+            size_str.get(), storage->width, storage->height,
+            _("pixels"), _("Type"), type, _("Description"), desc);
 }
 
-/*
- * et_picture_new:
- * @type: the image type
- * @description: a text description
- * @width: image width
- * @height image height
- * @bytes: image data
- *
- * Create a new #EtPicture instance, copying the string and adding a reference
- * to the image data.
- *
- * Returns: a new #EtPicture, or %NULL on failure
- */
-EtPicture *
-et_picture_new (EtPictureType type,
-                const gchar *description,
-                guint width,
-                guint height,
-                GBytes *bytes)
-{
-    EtPicture *pic;
-
-    g_return_val_if_fail (description != NULL, NULL);
-    g_return_val_if_fail (bytes != NULL, NULL);
-
-    pic = g_slice_new (EtPicture);
-
-    pic->type = type;
-    pic->description = g_strdup (description);
-    pic->width = width;
-    pic->height = height;
-    pic->bytes = g_bytes_ref (bytes);
-    pic->next = NULL;
-
-    return pic;
-}
-
-EtPicture *
-et_picture_copy_single (const EtPicture *pic)
-{
-    EtPicture *pic2;
-
-    g_return_val_if_fail (pic != NULL, NULL);
-
-    pic2 = et_picture_new (pic->type, pic->description, pic->width,
-                           pic->height, pic->bytes);
-
-    return pic2;
-}
-
-EtPicture *
-et_picture_copy_all (const EtPicture *pic)
-{
-    EtPicture *pic2 = et_picture_copy_single (pic);
-
-    if (pic->next)
-    {
-        pic2->next = et_picture_copy_all (pic->next);
-    }
-
-    return pic2;
-}
-
-void
-et_picture_free (EtPicture *pic)
-{
-    if (pic == NULL)
-    {
-        return;
-    }
-
-    if (pic->next)
-    {
-        et_picture_free (pic->next);
-    }
-
-    g_free (pic->description);
-    g_bytes_unref (pic->bytes);
-    pic->bytes = NULL;
-
-    g_slice_free (EtPicture, pic);
-}
-
-
-/*
- * et_picture_load_file_data:
- * @file: the GFile from which to load an image
- * @error: a #GError to provide information on errors, or %NULL to ignore
- *
- * Load an image from the supplied @file.
- *
- * Returns: image data on success, %NULL otherwise
- */
-GBytes *
-et_picture_load_file_data (GFile *file, GError **error)
+EtPicture::EtPicture(GFile *file, GError **error)
+:	storage(nullptr)
+,	type(ET_PICTURE_TYPE_UNDEFINED)
 {
     gsize size;
     GFileInfo *info;
@@ -413,19 +276,17 @@ et_picture_load_file_data (GFile *file, GError **error)
 
     info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE,
                               G_FILE_QUERY_INFO_NONE, NULL, error);
-
     if (!info)
     {
         g_assert (error == NULL || *error != NULL);
-        return NULL;
+        return;
     }
 
     file_istream = g_file_read (file, NULL, error);
-
     if (!file_istream)
     {
         g_assert (error == NULL || *error != NULL);
-        return NULL;
+        return;
     }
 
     size = g_file_info_get_size (info);
@@ -433,79 +294,83 @@ et_picture_load_file_data (GFile *file, GError **error)
 
     /* HTTP servers may not report a size, or the file could be empty. */
     if (size == 0)
-    {
-        ostream = g_memory_output_stream_new (NULL, 0, g_realloc, g_free);
-    }
-    else
+        size = 60000;
     {
         gchar *buffer = (gchar*)g_malloc (size);
         ostream = g_memory_output_stream_new (buffer, size, g_realloc, g_free);
+        g_seekable_seek(G_SEEKABLE(ostream), offsetof(Data, bytes), G_SEEK_SET, NULL, NULL);
     }
 
     if (g_output_stream_splice (ostream, G_INPUT_STREAM (file_istream),
-                                G_OUTPUT_STREAM_SPLICE_NONE, NULL,
-                                error) == -1)
+        G_OUTPUT_STREAM_SPLICE_NONE, NULL, error) == -1)
     {
         g_object_unref (ostream);
         g_object_unref (file_istream);
         g_assert (error == NULL || *error != NULL);
-        return NULL;
+        return;
     }
-    else
+
+    /* Image loaded. */
+    g_object_unref (file_istream);
+
+    if (!g_output_stream_close (ostream, NULL, error))
     {
-        /* Image loaded. */
-        GBytes *bytes;
-
-        g_object_unref (file_istream);
-
-        if (!g_output_stream_close (ostream, NULL, error))
-        {
-            g_object_unref (ostream);
-            g_assert (error == NULL || *error != NULL);
-            return NULL;
-        }
-
-        g_assert (error == NULL || *error == NULL);
-
-        if (g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (ostream))
-            == 0)
-        {
-            g_object_unref (ostream);
-            /* FIXME: Mark up the string for translation. */
-            g_set_error (error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA, "%s",
-                         _("Input truncated or empty"));
-            return NULL;
-        }
-
-        bytes = g_memory_output_stream_steal_as_bytes (G_MEMORY_OUTPUT_STREAM (ostream));
-
         g_object_unref (ostream);
-        g_assert (error == NULL || *error == NULL);
-        return bytes;
+        g_assert (error == NULL || *error != NULL);
+        return;
     }
+
+    g_assert (error == NULL || *error == NULL);
+
+    // update to real size
+    size = g_memory_output_stream_get_data_size(G_MEMORY_OUTPUT_STREAM(ostream));
+    if (size == 0)
+    {
+        g_object_unref (ostream);
+        /* FIXME: Mark up the string for translation. */
+        g_set_error (error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA, "%s",
+                     _("Input truncated or empty"));
+        return;
+    }
+
+    storage = (Data*)g_memory_output_stream_steal_data(G_MEMORY_OUTPUT_STREAM(ostream));
+    new(storage) Data(size);
+
+    g_object_unref (ostream);
+    g_assert (error == NULL || *error == NULL);
 }
 
-/*
- * et_picture_save_file_data:
- * @pic: the #EtPicture from which to take an image
- * @file: the #GFile for which to save an image
- * @error: a #GError to provide information on errors, or %NULL to ignore
- *
- * Saves an image from @pic to the supplied @file.
- *
- * Returns: %TRUE on success, %FALSE otherwise
- */
-gboolean
-et_picture_save_file_data (const EtPicture *pic,
-                           GFile *file,
-                           GError **error)
+gObject<GdkPixbuf> EtPicture::get_pix_buf(GError **error) const
+{
+    gObject<GdkPixbuf> pixbuf;
+    // analyze file data
+    gObject<GdkPixbufLoader> loader(gdk_pixbuf_loader_new());
+    if (!gdk_pixbuf_loader_write_bytes(loader.get(), bytes().get(), error))
+        return pixbuf;
+
+    if (!gdk_pixbuf_loader_close(loader.get(), error))
+        return pixbuf;
+
+    pixbuf = gObject<GdkPixbuf>(gdk_pixbuf_loader_get_pixbuf(loader.get()));
+    if (!pixbuf)
+    {   g_set_error(error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA, "%s",
+            _("Cannot display the image because not enough data has been read to determine how to create the image buffer"));
+        return pixbuf;
+    } else
+    {   g_object_ref(pixbuf.get());
+
+        storage->width  = gdk_pixbuf_get_width(pixbuf.get());
+        storage->height = gdk_pixbuf_get_height(pixbuf.get());
+    }
+    return pixbuf;
+}
+
+bool EtPicture::save_file_data(GFile *file, GError **error) const
 {
     GFileOutputStream *file_ostream;
-    gconstpointer data;
-    gsize data_size;
     gsize bytes_written;
 
-    g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+    g_return_val_if_fail (storage != NULL && (error == NULL || *error == NULL), false);
 
     file_ostream = g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE, NULL,
                                    error);
@@ -513,30 +378,27 @@ et_picture_save_file_data (const EtPicture *pic,
     if (!file_ostream)
     {
         g_assert (error == NULL || *error != NULL);
-        return FALSE;
+        return false;
     }
 
-    data = g_bytes_get_data (pic->bytes, &data_size);
-
-    if (!g_output_stream_write_all (G_OUTPUT_STREAM (file_ostream), data,
-                                    data_size, &bytes_written, NULL, error))
+    if (!g_output_stream_write_all (G_OUTPUT_STREAM (file_ostream),
+        storage->bytes, storage->size, &bytes_written, NULL, error))
     {
         g_debug ("Only %" G_GSIZE_FORMAT " bytes out of %" G_GSIZE_FORMAT
-                 " bytes of picture data were written", bytes_written,
-                 g_bytes_get_size (pic->bytes));
+                 " bytes of picture data were written", bytes_written, storage->size);
         g_object_unref (file_ostream);
         g_assert (error == NULL || *error != NULL);
-        return FALSE;
+        return false;
     }
 
     if (!g_output_stream_close (G_OUTPUT_STREAM (file_ostream), NULL, error))
     {
         g_object_unref (file_ostream);
         g_assert (error == NULL || *error != NULL);
-        return FALSE;
+        return false;
     }
 
     g_assert (error == NULL || *error == NULL);
     g_object_unref (file_ostream);
-    return TRUE;
+    return true;
 }

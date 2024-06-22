@@ -199,17 +199,13 @@ gboolean mp4_read_file(GFile *file, ET_File *ETFile, GError **error)
         const MP4::CoverArtList &covers = cover.toCoverArtList ();
         const MP4::CoverArt &art = covers.front ();
 
-        /* TODO: Use g_bytes_new_with_free_func()? */
-        GBytes *bytes = g_bytes_new (art.data ().data (), art.data ().size ());
-
         /* MP4 does not support image types, nor descriptions. */
-        FileTag->picture = et_picture_new (ET_PICTURE_TYPE_FRONT_COVER, "", 0,
-                                           0, bytes);
-        g_bytes_unref (bytes);
+        FileTag->pictures.emplace_back(ET_PICTURE_TYPE_FRONT_COVER, nullptr,
+            0, 0, art.data().data(), art.data().size());
     }
     else
     {
-        et_file_tag_set_picture (FileTag, NULL);
+        FileTag->pictures.clear();
     }
 
     // validate date fields
@@ -300,16 +296,12 @@ mp4tag_write_file_tag (const ET_File *ETFile,
     /***********
      * Picture *
      ***********/
-    if (FileTag->picture)
+    if (FileTag->pictures.size())
     {
-        Picture_Format pf;
+        const EtPicture& pic = FileTag->pictures.front();
+
         MP4::CoverArt::Format f;
-        gconstpointer data;
-        gsize data_size;
-
-        pf = Picture_Format_From_Data (FileTag->picture);
-
-        switch (pf)
+        switch (pic.Format())
         {
             case PICTURE_FORMAT_JPEG:
                 f = MP4::CoverArt::JPEG;
@@ -327,12 +319,8 @@ mp4tag_write_file_tag (const ET_File *ETFile,
                 break;
         }
 
-        data = g_bytes_get_data (FileTag->picture->bytes, &data_size);
-        MP4::CoverArt art (f, ByteVector((char *)data,
-                                                         data_size));
-
-        tag->setItem("covr",
-                            MP4::Item (MP4::CoverArtList ().append (art)));
+        MP4::CoverArt art(f, ByteVector((char*)pic.storage->bytes, pic.storage->size));
+        tag->setItem("covr", MP4::Item(MP4::CoverArtList().append(art)));
     }
     else
     {

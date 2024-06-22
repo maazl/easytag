@@ -29,6 +29,7 @@
 #ifdef __cplusplus
 #include <string>
 #include <ctime>
+#include <vector>
 
 /** Metadata of a file.
  * @remarks All text fields contain <b>UTF-8 encoded NFC normalized data.</b>
@@ -61,7 +62,7 @@ typedef struct File_Tag
 	xString0 url;           ///< URL
 	xString0 encoded_by;    ///< Encoded by (strictly, a person, but often the encoding application)
 	xString0 description;   ///< Detailed description of the track, multi-line
-	EtPicture *picture;     ///< Linked list of pictures
+	std::vector<EtPicture> pictures; ///< List of pictures
 	GList *other;           ///< List of other tags, used for Vorbis comments
 	float track_gain;       ///< Replay gain of the track in dB that should be applied during playback
 	float track_peak;       ///< Peak level of the track relative to 0dB FSR
@@ -125,11 +126,5 @@ typedef struct File_Tag
 #else // __cplusplus
 typedef struct File_Tag File_Tag;
 #endif
-
-G_BEGIN_DECLS
-
-void et_file_tag_set_picture (File_Tag *file_tag, const EtPicture *pic);
-
-G_END_DECLS
 
 #endif /* !ET_FILE_TAG_H_ */

@@ -22,11 +22,20 @@
 
 #include <gio/gio.h>
 
-struct ET_File;
-
 G_BEGIN_DECLS
 
 #define ET_TYPE_PICTURE (et_picture_get_type ())
+GType et_picture_get_type (void);
+
+G_END_DECLS
+
+#ifdef __cplusplus
+#include "misc.h"
+#include "xstring.h"
+#include <atomic>
+#endif
+
+struct ET_File;
 
 typedef enum // Picture types
 {
@@ -56,26 +65,6 @@ typedef enum // Picture types
     ET_PICTURE_TYPE_UNDEFINED
 } EtPictureType;
 
-/*
- * EtPicture:
- * @type: type of cover art
- * @description: string to describe the image, often a suitable filename
- * @width: original width, or 0 if unknown
- * @height: original height, or 0 if unknown
- * @bytes: image data
- * @next: next image data in the list, or %NULL
- */
-typedef struct _EtPicture EtPicture;
-struct _EtPicture
-{
-    EtPictureType type;
-    gchar *description;
-    gint width;
-    gint height;
-    GBytes *bytes;
-    EtPicture *next;
-};
-
 typedef enum
 {
     PICTURE_FORMAT_JPEG,
@@ -84,22 +73,73 @@ typedef enum
     PICTURE_FORMAT_UNKNOWN
 } Picture_Format;
 
-GType et_picture_get_type (void);
-EtPicture * et_picture_new (EtPictureType type, const gchar *description, guint width, guint height, GBytes *bytes);
-EtPicture * et_picture_copy_single (const EtPicture *pic);
-EtPicture * et_picture_copy_all (const EtPicture *pic);
-void et_picture_free (EtPicture *pic);
-Picture_Format Picture_Format_From_Data (const EtPicture *pic);
-const gchar   *Picture_Mime_Type_String (Picture_Format format);
-const gchar * Picture_Type_String (EtPictureType type);
-gboolean et_picture_detect_difference (const EtPicture *a, const EtPicture *b);
-gchar * et_picture_format_info (const EtPicture *pic, const struct ET_File* etfile);
+#ifdef __cplusplus
+/*
+ * EtPicture:
+ * @type: type of cover art
+ * @description: string to describe the image, often a suitable filename
+ * @width: original width, or 0 if unknown
+ * @height: original height, or 0 if unknown
+ * @bytes: image data
+ */
+typedef struct EtPicture
+{	/// Backing store in EtPicture.
+	struct Data
+	{	const std::size_t size; ///< size of \ref bytes\.
+		std::atomic<unsigned> ref_count;
+		gint width;             ///< image width (pixels) or 0 if unknown.
+		gint height;            ///< image height (pixels) or 0 if unknown.
+		char bytes[];           ///< image data.
+		Data(std::size_t size) noexcept : size(size), ref_count(1), width(0), height(0) {}
+	};
 
-GBytes * et_picture_load_file_data (GFile *file, GError **error);
-gboolean et_picture_save_file_data (const EtPicture *pic, GFile *file, GError **error);
+	Data* storage;
+	xString0 description;
+	EtPictureType type;
+public:
+	EtPicture(const EtPicture& r) noexcept;
+	constexpr EtPicture(EtPicture&& r) noexcept : storage(r.storage), description(std::move(r.description)), type(r.type) { r.storage = nullptr; }
+	EtPicture(EtPictureType type, const char *description, guint width, guint height, const void* data, std::size_t size);
+	/// Load an image from the supplied \a file.
+	/// @param File the GFile from which to load an image
+	/// @param Error a GError to provide information on errors, or \c NULL to ignore
+	/// On error \ref storage is \c nullptr.
+	/// @remarks This function does not validate the loaded image data in any way.
+	/// Call \ref get_pix_buf to do so.
+	EtPicture(GFile* file, GError** error);
+	~EtPicture();
+	EtPicture& operator=(const EtPicture& r) = default;
+	EtPicture& operator=(EtPicture&& r) = default;
+	friend bool operator==(const EtPicture& l, const EtPicture& r);
+	friend bool operator!=(const EtPicture& l, const EtPicture& r) { return !(l == r); }
+	gBytes bytes() const { return storage ? gBytes(g_bytes_new_static(storage->bytes, storage->size)) : gBytes(); }
 
-EtPictureType et_picture_type_from_filename (const gchar *filename_utf8);
+	/// Use some heuristics to provide an estimate of the type of the picture,
+	/// based on the filename.
+	/// @param filename UTF-8 representation of a filename
+	/// @return The picture type, or \ref ET_PICTURE_TYPE_FRONT_COVER if the type could not be estimated.
+	/// @note MP4_TAG:
+	/// Just has one picture (ET_PICTURE_TYPE_FRONT_COVER).
+	/// The format's don't matter to the MP4 side.
+	static EtPictureType type_from_filename(const gchar *filename_utf8);
+	Picture_Format Format() const;
+	static const char* Mime_Type_String(Picture_Format format);
+	static const char* Format_String(Picture_Format format);
+	static const char* Type_String(EtPictureType type);
+	std::string format_info(const ET_File& etfil) const;
 
-G_END_DECLS
+	/// Parse the current image data into a GdkPixbuf.
+	/// @param Error a GError to provide information on errors, or \c NULL to ignore
+	/// @return image data on success, \c NULL otherwise
+	/// @details Calling this function successfully has the side effect
+	/// to fill width and height of the image data.
+	gObject<GdkPixbuf> get_pix_buf(GError** error) const;
+	/// Saves the image to the supplied \a file.
+	/// @param file The GFile for which to save an image.
+	/// @param Error a GError to provide information on errors, or \c NULL to ignore
+	/// @return \c TRUE on success
+	bool save_file_data(GFile* file, GError** error) const;
+} EtPicture;
+#endif
 
 #endif /* ET_PICTURE_H_ */

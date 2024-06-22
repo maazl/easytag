@@ -487,7 +487,7 @@ on_apply_to_selection (GObject *object,
     }
     else if (object == G_OBJECT (priv->apply_image_toolitem))
     {
-        EtPicture *res = NULL, *pic, *prev_pic = NULL;
+        vector<EtPicture> pics;
         GtkTreeModel *model;
         GtkTreeIter iter;
 
@@ -497,14 +497,9 @@ on_apply_to_selection (GObject *object,
         {
             do
             {
-                gtk_tree_model_get (model, &iter, PICTURE_COLUMN_DATA, &pic,
-                                    -1);
-
-                if (!res)
-                    res = pic;
-                else
-                    prev_pic->next = pic;
-                prev_pic = pic;
+                EtPicture* pic;
+                gtk_tree_model_get (model, &iter, PICTURE_COLUMN_DATA, &pic, -1);
+                pics.emplace_back(move(*pic));
             } while (gtk_tree_model_iter_next(model, &iter));
         }
 
@@ -512,10 +507,10 @@ on_apply_to_selection (GObject *object,
         {
             etfile = (ET_File *)l->data;
             FileTag = new File_Tag(*etfile->FileTag->data);
-            et_file_tag_set_picture (FileTag, res);
+            FileTag->pictures = pics;
             ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
         }
-        if (res)
+        if (!pics.empty())
         {
             msg = g_strdup (_("Selected files tagged with images"));
         }
@@ -523,8 +518,6 @@ on_apply_to_selection (GObject *object,
         {
             msg = g_strdup (_("Removed images from selected files"));
         }
-
-        et_picture_free (res);
     }
 
     g_list_free(etfilelist);
@@ -827,15 +820,14 @@ populate_genre_combo (EtTagArea *self)
     priv = et_tag_area_get_instance_private (self);
 
     gtk_list_store_insert_with_values (priv->genre_combo_model, NULL,
-                                       G_MAXINT, GENRE_COLUMN_GENRE, "", -1);
+                                       -1, GENRE_COLUMN_GENRE, "", -1);
     gtk_list_store_insert_with_values (priv->genre_combo_model, NULL,
-                                       G_MAXINT, GENRE_COLUMN_GENRE, "Unknown",
-                                       -1);
+                                       -1, GENRE_COLUMN_GENRE, "Unknown", -1);
 
     for (i = 0; i <= GENRE_MAX; i++)
     {
         gtk_list_store_insert_with_values (priv->genre_combo_model, NULL,
-                                           G_MAXINT, GENRE_COLUMN_GENRE,
+                                           -1, GENRE_COLUMN_GENRE,
                                            id3_genres[i], -1);
     }
 }
@@ -1087,30 +1079,12 @@ static void
 on_picture_view_selection_changed (GtkTreeSelection *selection,
                                    gpointer user_data)
 {
-    EtTagArea *self;
-    EtTagAreaPrivate *priv;
+    EtTagAreaPrivate *priv = et_tag_area_get_instance_private(ET_TAG_AREA(user_data));
 
-    self = ET_TAG_AREA (user_data);
-    priv = et_tag_area_get_instance_private (self);
-
-    if (gtk_tree_selection_count_selected_rows (GTK_TREE_SELECTION (selection)) >= 1)
-    {
-        gtk_widget_set_sensitive (GTK_WIDGET (priv->remove_image_toolitem),
-                                  TRUE);
-        gtk_widget_set_sensitive (GTK_WIDGET (priv->save_image_toolitem),
-                                  TRUE);
-        gtk_widget_set_sensitive (GTK_WIDGET (priv->image_properties_toolitem),
-                                  TRUE);
-    }
-    else
-    {
-        gtk_widget_set_sensitive (GTK_WIDGET (priv->remove_image_toolitem),
-                                  FALSE);
-        gtk_widget_set_sensitive (GTK_WIDGET (priv->save_image_toolitem),
-                                  FALSE);
-        gtk_widget_set_sensitive (GTK_WIDGET (priv->image_properties_toolitem),
-                                  FALSE);
-    }
+    gboolean havePics = gtk_tree_selection_count_selected_rows(GTK_TREE_SELECTION(selection)) >= 1;
+    gtk_widget_set_sensitive(GTK_WIDGET(priv->remove_image_toolitem), havePics);
+    gtk_widget_set_sensitive(GTK_WIDGET(priv->save_image_toolitem), havePics);
+    gtk_widget_set_sensitive(GTK_WIDGET(priv->image_properties_toolitem), havePics);
 }
 
 static void
@@ -1124,141 +1098,52 @@ PictureEntry_Clear (EtTagArea *self)
 }
 
 static void
-PictureEntry_Update (EtTagArea *self,
-                     EtPicture *pic,
-                     gboolean select_it)
+PictureEntry_Update(EtTagArea *self, const EtPicture& pic, gObject<GdkPixbuf> pixbuf, bool select_it)
 {
-    EtTagAreaPrivate *priv;
-    GdkPixbufLoader *loader = 0;
-    GError *error = NULL;
-    
-    g_return_if_fail (pic != NULL);
+    EtTagAreaPrivate* priv = et_tag_area_get_instance_private (self);
 
-    priv = et_tag_area_get_instance_private (self);
+    auto selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->images_view));
 
-    if (g_bytes_get_size (pic->bytes) == 0)
-    {
-        goto next;
-    }
+    if (!pixbuf)
+        pixbuf = pic.get_pix_buf(nullptr);
 
-    loader = gdk_pixbuf_loader_new ();
+    cairo_surface_t* surface;
+    gObject<GdkPixbuf> scaled_pixbuf;
+    GdkWindow* view_window = gtk_widget_get_window(priv->images_view);
 
-    if (loader)
-    {
-        if (gdk_pixbuf_loader_write_bytes (loader, pic->bytes, &error))
-        {
-            GtkTreeSelection *selection;
-            GdkPixbuf *pixbuf;
+    if (!pixbuf)
+        surface = gdk_window_create_similar_image_surface(view_window, CAIRO_FORMAT_A1, 96, 96, 0);
+    else
+    {   // Keep aspect ratio of the picture
+        gint width  = gdk_pixbuf_get_width(pixbuf.get());
+        gint height = gdk_pixbuf_get_height(pixbuf.get());
+        /* TODO: Connect to notify:scale-factor and update when the
+         * scale changes. */
+        gint scale_factor = gtk_widget_get_scale_factor(priv->images_view) * 96;
 
-            if (!gdk_pixbuf_loader_close(loader, &error))
-            {
-                Log_Print (LOG_ERROR, _("Error parsing image data ‘%s’"),
-                           error->message);
-                g_error_free (error);
-            }
-
-            selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->images_view));
-
-            pixbuf = gdk_pixbuf_loader_get_pixbuf(loader);
-            if (pixbuf)
-            {
-                GtkTreeIter iter1;
-                gint scale_factor;
-                GdkPixbuf *scaled_pixbuf;
-                cairo_surface_t *surface;
-                GdkWindow *view_window;
-                gint scaled_pixbuf_width;
-                gint scaled_pixbuf_height;
-                gchar *pic_info;
-
-                g_object_ref(pixbuf);
-                g_object_unref(loader);
-                
-                // Keep aspect ratio of the picture
-                pic->width  = gdk_pixbuf_get_width(pixbuf);
-                pic->height = gdk_pixbuf_get_height(pixbuf);
-                /* TODO: Connect to notify:scale-factor and update when the
-                 * scale changes. */
-                scale_factor = gtk_widget_get_scale_factor (priv->images_view);
-
-                if (pic->width > pic->height)
-                {
-                    scaled_pixbuf_width = 96 * scale_factor;
-                    scaled_pixbuf_height = 96 * scale_factor * pic->height
-                                           / pic->width;
-                }else
-                {
-                    scaled_pixbuf_width = 96 * scale_factor * pic->width
-                                          / pic->height;
-                    scaled_pixbuf_height = 96 * scale_factor;
-                }
-
-                scaled_pixbuf = gdk_pixbuf_scale_simple (pixbuf,
-                                                         scaled_pixbuf_width,
-                                                         scaled_pixbuf_height,
-                                                         GDK_INTERP_BILINEAR);
-                g_object_unref (pixbuf);
-
-                /* This ties the model to the view, so if the model is to be
-                 * shared in the future, the surface should be per-view. */
-                view_window = gtk_widget_get_window (priv->images_view);
-                surface = gdk_cairo_surface_create_from_pixbuf (scaled_pixbuf,
-                                                                scale_factor,
-                                                                view_window);
-                pic_info = et_picture_format_info (pic,
-                                                   ETCore->ETFileDisplayed);
-                gtk_list_store_insert_with_values (priv->images_model, &iter1,
-                                                   G_MAXINT,
-                                                   PICTURE_COLUMN_SURFACE,
-                                                   surface,
-                                                   PICTURE_COLUMN_TEXT,
-                                                   pic_info,
-                                                   PICTURE_COLUMN_DATA,
-                                                   pic, -1);
-                g_free(pic_info);
-
-                if (select_it)
-                    gtk_tree_selection_select_iter(selection, &iter1);
-                g_object_unref(scaled_pixbuf);
-            }else
-            {
-                GtkWidget *msgdialog;
-                
-                g_object_unref(loader);
-                
-                Log_Print (LOG_ERROR, "%s",
-                           _("Cannot display the image because not enough data has been read to determine how to create the image buffer"));
-
-                msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-                                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                   GTK_MESSAGE_ERROR,
-                                                   GTK_BUTTONS_CLOSE,
-                                                   "%s",
-                                                   _("Cannot display the image"));
-                gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (msgdialog),
-                                                          _("Not enough data has been read to determine how to create the image buffer."));
-                gtk_window_set_title (GTK_WINDOW (msgdialog),
-                                      _("Load Image File"));
-                gtk_dialog_run(GTK_DIALOG(msgdialog));
-                gtk_widget_destroy(msgdialog);
-            }
-        }
+        gint scaled_pixbuf_width;
+        gint scaled_pixbuf_height;
+        if (width > height)
+            scaled_pixbuf_height = (scaled_pixbuf_width = scale_factor) * height / width;
         else
-        {
-            Log_Print (LOG_ERROR, _("Error parsing image data ‘%s’"),
-                       error->message);
-            g_error_free (error);
-        }
+            scaled_pixbuf_width = (scaled_pixbuf_height = scale_factor) * width / height;
+
+        scaled_pixbuf = gObject<GdkPixbuf>(gdk_pixbuf_scale_simple(pixbuf.get(),
+            scaled_pixbuf_width, scaled_pixbuf_height, GDK_INTERP_BILINEAR));
+        pixbuf.reset();
+
+        /* This ties the model to the view, so if the model is to be
+         * shared in the future, the surface should be per-view. */
+        surface = gdk_cairo_surface_create_from_pixbuf(scaled_pixbuf.get(), 0, view_window);
     }
 
-next:
-    /* Do also for next picture. */
-    if (pic->next)
-    {
-        PictureEntry_Update (self, pic->next, select_it);
-    }
-
-    return;
+    GtkTreeIter iter1;
+    gtk_list_store_insert_with_values(priv->images_model, &iter1, -1,
+        PICTURE_COLUMN_SURFACE, surface,
+        PICTURE_COLUMN_TEXT,    pic.format_info(*ETCore->ETFileDisplayed).c_str(),
+        PICTURE_COLUMN_DATA,    &pic, -1);
+    if (select_it)
+        gtk_tree_selection_select_iter(selection, &iter1);
 }
 
 
@@ -1273,14 +1158,10 @@ static void
 load_picture_from_file (GFile *file,
                         EtTagArea *self)
 {
-    GBytes *bytes;
-    const gchar *filename_utf8;
-    GFileInfo *info;
     GError *error = NULL;
 
-    info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
-                              G_FILE_QUERY_INFO_NONE, NULL, &error);
-
+    gObject<GFileInfo> info(g_file_query_info(file,
+        G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, G_FILE_QUERY_INFO_NONE, NULL, &error));
     if (!info)
     {
         Log_Print (LOG_ERROR, _("Image file not loaded ‘%s’"), error->message);
@@ -1288,10 +1169,11 @@ load_picture_from_file (GFile *file,
         return;
     }
 
-    filename_utf8 = g_file_info_get_display_name (info);
-    bytes = et_picture_load_file_data (file, &error);
+    const gchar *filename_utf8 = g_file_info_get_display_name(info.get());
 
-    if (!bytes)
+    EtPicture pic(file, &error);
+    gObject<GdkPixbuf> pixbuf;
+    if (!pic.storage || !(pixbuf = gObject<GdkPixbuf>(pic.get_pix_buf(&error))))
     {
         GtkWidget *msgdialog;
 
@@ -1313,42 +1195,21 @@ load_picture_from_file (GFile *file,
         g_error_free (error);
         return;
     }
-    else
+
+    Log_Print (LOG_OK, _("Image file loaded"));
+
+    pic.type = ET_PICTURE_TYPE_FRONT_COVER;
+    // Behaviour following the tag type...
+    // Only one picture of type ET_PICTURE_TYPE_FRONT_COVER supported for MP4
+    if (ETCore->ETFileDisplayed->ETFileDescription->support_multiple_pictures(ETCore->ETFileDisplayed))
     {
-        Log_Print (LOG_OK, _("Image file loaded"));
+        pic.description = filename_utf8;
+
+        if (g_settings_get_boolean (MainSettings, "tag-image-type-automatic"))
+            pic.type = EtPicture::type_from_filename(filename_utf8);
     }
 
-    if (filename_utf8)
-    {
-        EtPicture *pic;
-        EtPictureType type;
-        const gchar *description;
-
-        // Behaviour following the tag type...
-        if (!ETCore->ETFileDisplayed->ETFileDescription->support_multiple_pictures(ETCore->ETFileDisplayed))
-        {
-            // Only one picture supported for MP4
-            description = "";
-            type = ET_PICTURE_TYPE_FRONT_COVER;
-        } else
-        {
-            description = filename_utf8;
-
-            if (g_settings_get_boolean (MainSettings, "tag-image-type-automatic"))
-                type = et_picture_type_from_filename (description);
-            else
-                type = ET_PICTURE_TYPE_FRONT_COVER;
-        }
-
-        pic = et_picture_new (type, description, 0, 0, bytes);
-
-        PictureEntry_Update (self, pic, TRUE);
-
-        et_picture_free (pic);
-    }
-
-    g_bytes_unref (bytes);
-    g_object_unref (info);
+    PictureEntry_Update(self, pic, pixbuf, true);
 }
 
 /*
@@ -1535,13 +1396,9 @@ on_picture_properties_button_clicked (GObject *object,
             /* Load picture type (only Front Cover!). */
             GtkTreeIter itertype;
 
-            gtk_list_store_insert_with_values (store, &itertype,
-                                               G_MAXINT,
-                                               PICTURE_TYPE_COLUMN_TEXT,
-                                               _(Picture_Type_String (ET_PICTURE_TYPE_FRONT_COVER)),
-                                               PICTURE_TYPE_COLUMN_TYPE_CODE,
-                                               ET_PICTURE_TYPE_FRONT_COVER,
-                                               -1);
+            gtk_list_store_insert_with_values(store, &itertype, -1,
+                PICTURE_TYPE_COLUMN_TEXT, _(EtPicture::Type_String(ET_PICTURE_TYPE_FRONT_COVER)),
+                PICTURE_TYPE_COLUMN_TYPE_CODE, ET_PICTURE_TYPE_FRONT_COVER, -1);
             /* Line to select by default. */
             type_iter_to_select = itertype;
         }
@@ -1553,17 +1410,12 @@ on_picture_properties_button_clicked (GObject *object,
             {
                 GtkTreeIter itertype;
 
-                gtk_list_store_insert_with_values (store, &itertype,
-                                                   G_MAXINT,
-                                                   PICTURE_TYPE_COLUMN_TEXT,
-                                                   _(Picture_Type_String ((EtPictureType)pic_type)),
-                                                   PICTURE_TYPE_COLUMN_TYPE_CODE,
-                                                   pic_type, -1);
+                gtk_list_store_insert_with_values(store, &itertype, -1,
+                    PICTURE_TYPE_COLUMN_TEXT, _(EtPicture::Type_String((EtPictureType)pic_type)),
+                    PICTURE_TYPE_COLUMN_TYPE_CODE, pic_type, -1);
                 /* Line to select by default. */
                 if (pic->type == pic_type)
-                {
                     type_iter_to_select = itertype;
-                }
             }
         }
 
@@ -1579,17 +1431,11 @@ on_picture_properties_button_clicked (GObject *object,
         gtk_tree_path_free (rowPath);
 
         /* Entry for the description. */
-        desc = GTK_WIDGET (gtk_builder_get_object (builder,
-                                                   "description_entry"));
+        desc = GTK_WIDGET(gtk_builder_get_object(builder, "description_entry"));
 
         g_object_unref (builder);
 
-        if (pic->description)
-        {
-            gchar *tmp = Try_To_Validate_Utf8_String (pic->description);
-            gtk_entry_set_text (GTK_ENTRY (desc), tmp);
-            g_free (tmp);
-        }
+        gtk_entry_set_text(GTK_ENTRY(desc), pic->description);
 
         /* Behaviour following the tag type. */
         if (!ETCore->ETFileDisplayed->ETFileDescription->support_multiple_pictures(ETCore->ETFileDisplayed))
@@ -1612,17 +1458,10 @@ on_picture_properties_button_clicked (GObject *object,
             if (gtk_tree_selection_get_selected (selectiontype, &modeltype,
                                                  &itertype))
             {
-                gchar *buffer, *pic_info;
                 gint t;
-
                 gtk_tree_model_get (modeltype, &itertype,
                                    PICTURE_TYPE_COLUMN_TYPE_CODE, &t, -1);
                 pic->type = (EtPictureType)t;
-
-                buffer = g_strdup (gtk_entry_get_text (GTK_ENTRY (desc)));
-                g_strstrip (buffer);
-
-                g_free (pic->description);
 
                 /* If the entry was empty, buffer will be the empty string "".
                  * This can be safely passed to the underlying
@@ -1630,19 +1469,18 @@ on_picture_properties_button_clicked (GObject *object,
                  * https://bugs.launchpad.net/ubuntu/+source/easytag/+bug/558804
                  * and https://bugzilla.redhat.com/show_bug.cgi?id=559828 for
                  * downstream bugs when 0 was passed instead. */
-                pic->description = buffer;
+                pic->description = gtk_entry_get_text(GTK_ENTRY(desc));
+                pic->description.trim();
 
                 /* Update value in the PictureEntryView. */
-                pic_info = et_picture_format_info (pic, ETCore->ETFileDisplayed);
                 gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-                                    PICTURE_COLUMN_TEXT, pic_info,
-                                    PICTURE_COLUMN_DATA, pic, -1);
-                g_free (pic_info);
+                    PICTURE_COLUMN_TEXT, pic->format_info(*ETCore->ETFileDisplayed).c_str(),
+                    PICTURE_COLUMN_DATA, pic, -1);
             }
         }
 
         gtk_widget_destroy (PictureTypesWindow);
-        et_picture_free (pic);
+        delete pic;
     }
 
     g_list_free_full (selection_list, (GDestroyNotify)gtk_tree_path_free);
@@ -1743,7 +1581,7 @@ on_picture_save_button_clicked (GObject *object,
         }else
         {
             gchar *image_name = NULL;
-            switch (Picture_Format_From_Data (pic))
+            switch (pic->Format())
             {
                 case PICTURE_FORMAT_JPEG :
                     image_name = g_strdup("image_name.jpg");
@@ -1780,7 +1618,7 @@ on_picture_save_button_clicked (GObject *object,
 
             file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (FileSelectionWindow));
 
-            if (!et_picture_save_file_data (pic, file, &error))
+            if (!pic->save_file_data(file, &error))
             {
                  Log_Print (LOG_ERROR, _("Image file not saved ‘%s’"),
                             error->message);
@@ -1790,6 +1628,7 @@ on_picture_save_button_clicked (GObject *object,
             g_object_unref (file);
         }
         gtk_widget_destroy(FileSelectionWindow);
+        delete pic;
     }
 
     g_list_free_full (selection_list, (GDestroyNotify)gtk_tree_path_free);
@@ -2406,11 +2245,11 @@ void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 	/* Picture */
 	if (gtk_widget_get_visible(priv->images_grid))
 	{
-		EtPicture *pic, *prev_pic = NULL;
+		EtPicture *pic;
 		GtkTreeModel *model;
 		GtkTreeIter iter;
 
-		et_file_tag_set_picture (FileTag, NULL);
+		FileTag->pictures.clear();
 
 		model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->images_view));
 
@@ -2419,13 +2258,7 @@ void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 			do
 			{
 				gtk_tree_model_get (model, &iter, PICTURE_COLUMN_DATA, &pic, -1);
-
-				if (!FileTag->picture)
-					FileTag->picture = pic;
-				else
-					prev_pic->next = pic;
-
-				prev_pic = pic;
+				FileTag->pictures.emplace_back(move(*pic));
 			} while (gtk_tree_model_iter_next (model, &iter));
 		}
 	}
@@ -2548,22 +2381,14 @@ et_tag_area_display_et_file (EtTagArea *self, const ET_File *ETFile, int columns
 			PictureEntry_Clear (self);
 
 			GtkWidget* page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (priv->tag_notebook), 1);
-			if (FileTag && FileTag->picture)
+			if (FileTag && FileTag->pictures.size())
 			{
-				EtPicture *pic;
-				guint    nbr_pic = 0;
-				gchar *string;
+				for (const EtPicture& pic : FileTag->pictures)
+					PictureEntry_Update(self, pic, gObject<GdkPixbuf>(), false);
 
-				PictureEntry_Update (self, FileTag->picture, FALSE);
-
-				// Count the number of items
-				for (pic = FileTag->picture; pic != NULL; pic = pic->next)
-					nbr_pic++;
-
-				string = g_strdup_printf (_("Images (%u)"), nbr_pic);
-				gtk_notebook_set_tab_label_text (GTK_NOTEBOOK (priv->tag_notebook), page, string);
-				gtk_notebook_set_menu_label_text (GTK_NOTEBOOK (priv->tag_notebook), page, string);
-				g_free (string);
+				string s = strprintf(_("Images (%zu)"), FileTag->pictures.size());
+				gtk_notebook_set_tab_label_text (GTK_NOTEBOOK (priv->tag_notebook), page, s.c_str());
+				gtk_notebook_set_menu_label_text (GTK_NOTEBOOK (priv->tag_notebook), page, s.c_str());
 			}
 			else
 			{

@@ -389,45 +389,22 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
     /******************
      * Picture (APIC) *
      ******************/
-    EtPicture *prev_pic = FileTag->picture;
-    if (prev_pic)
-        while(prev_pic->next)
-            prev_pic = prev_pic->next;
-
     for (i = 0; (frame = id3_tag_findframe(tag, "APIC", i)); i++)
     {
-        GBytes *bytes = NULL;
         EtPictureType type = ET_PICTURE_TYPE_FRONT_COVER;
+        id3_length_t size;
+        id3_byte_t const *data;
 
         /* Picture file data. */
         for (j = 0; (field = id3_frame_field(frame, j)); j++)
-        {
-            enum id3_field_type field_type;
-
-            field_type = id3_field_type (field);
-
-            if (field_type == ID3_FIELD_TYPE_BINARYDATA)
+            switch (id3_field_type(field))
             {
-                id3_length_t size;
-                id3_byte_t const *data;
-
+            case ID3_FIELD_TYPE_BINARYDATA:
                 data = id3_field_getbinarydata (field, &size);
-
-                if (data)
-                {
-                    if (bytes)
-                    {
-                        g_bytes_unref (bytes);
-                    }
-
-                    bytes = g_bytes_new (data, size);
-                }
-            }
-            else if (field_type == ID3_FIELD_TYPE_INT8)
-            {
+                break;
+            case ID3_FIELD_TYPE_INT8:
                 type = (EtPictureType)id3_field_getint (field);
             }
-        }
 
         /* Picture description. The accepted fields are restricted to those
          * of string type, as the description field is the only one of string
@@ -435,14 +412,7 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
         string description;
         update |= libid3tag_Get_Frame_Str (frame, EASYTAG_ID3_FIELD_STRING, nullptr, description);
 
-        EtPicture *pic = et_picture_new(type, description.c_str(), 0, 0, bytes);
-        g_bytes_unref (bytes);
-
-        if (!prev_pic)
-            FileTag->picture = pic;
-        else
-            prev_pic->next = pic;
-        prev_pic = pic;
+        FileTag->pictures.emplace_back(type, description.c_str(), 0, 0, data, size);
     }
 
     /**********************
@@ -914,7 +884,6 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
     struct id3_tag   *v1tag, *v2tag;
     struct id3_frame *frame;
     union id3_field  *field;
-    EtPicture          *pic;
     gboolean strip_tags = TRUE;
     guchar genre_value = ID3_INVALID_GENRE;
     gboolean success;
@@ -1157,7 +1126,7 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
          ***********/
         Id3tag_delete_frames(v2tag, "APIC", 0);
 
-        for (pic = FileTag->picture; pic != NULL; pic = pic->next)
+        for (const EtPicture& pic : FileTag->pictures)
         {
             gint i;
 
@@ -1167,32 +1136,20 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
             id3_tag_attachframe(v2tag, frame);
             for (i = 0; (field = id3_frame_field(frame, i)); i++)
             {
-                Picture_Format format;
                 enum id3_field_type field_type;
 
                 field_type = id3_field_type (field);
                 
                 if (field_type == ID3_FIELD_TYPE_LATIN1)
-                {
-                    format = Picture_Format_From_Data(pic);
-                    id3_field_setlatin1(field, (id3_latin1_t const *)Picture_Mime_Type_String(format));
-                }
+                    id3_field_setlatin1(field, (id3_latin1_t const*)EtPicture::Mime_Type_String(pic.Format()));
                 else if (field_type == ID3_FIELD_TYPE_INT8)
-                {
-                    id3_field_setint (field, pic->type);
-                }
+                    id3_field_setint (field, pic.type);
                 else if (field_type == ID3_FIELD_TYPE_BINARYDATA)
-                {
-                    gconstpointer data;
-                    gsize data_size;
-
-                    data = g_bytes_get_data (pic->bytes, &data_size);
-                    id3_field_setbinarydata (field, (id3_byte_t const*)data, data_size);
-                }
+                    id3_field_setbinarydata(field, (id3_byte_t const*)pic.storage->bytes, pic.storage->size);
             }
 
-            if (pic->description)
-                id3taglib_set_field(frame, pic->description, ID3_FIELD_TYPE_STRING, 0, 0, 0);
+            if (!pic.description.empty())
+                id3taglib_set_field(frame, pic.description, ID3_FIELD_TYPE_STRING, 0, 0, 0);
 
             strip_tags = FALSE;
         }

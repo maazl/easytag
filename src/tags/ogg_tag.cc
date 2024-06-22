@@ -647,8 +647,6 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 	tags.to_file_tags(FileTag);
 
 	/* Cover art. */
-	EtPicture* prev_pic = nullptr;
-
 	auto range = tags.equal_range(ET_VORBIS_COMMENT_FIELD_COVER_ART);
 	if (range.first != range.second)
 	{
@@ -664,14 +662,11 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 
 		while (l != range.second && !et_str_empty(l->second))
 		{
-			EtPicture *pic;
 			guchar *data;
 			gsize data_size;
-			GBytes *bytes;
 
 			/* Decode picture data. */
 			data = g_base64_decode(l->second, &data_size);
-			bytes = g_bytes_new_take(data, data_size);
 
 			/* It is only necessary for there to be image data, but the type
 			 * and description are optional. */
@@ -682,22 +677,16 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 				++m;
 			}
 
-			const gchar* description = "";
+			const gchar* description = nullptr;
 			if (n != descs.second)
 			{	if (!et_str_empty(n->second))
 					description = n->second;
 				++n;
 			}
 
-			pic = et_picture_new(type, description, 0, 0, bytes);
-			g_bytes_unref(bytes);
+			FileTag->pictures.emplace_back(type, description, 0, 0, data, data_size);
 
-			if (!prev_pic)
-				FileTag->picture = pic;
-			else
-				prev_pic->next = pic;
-			prev_pic = pic;
-
+			g_free(data);
 			++l;
 		}
 
@@ -712,29 +701,22 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 	{
 		for (tags_hash::iterator l = range.first; l != range.second; l = ++l)
 		{
-			EtPicture *pic;
 			gsize bytes_pos, mimelen, desclen;
 			string description;
-			GBytes *bytes = NULL;
 			EtPictureType type;
-			GBytes *pic_bytes;
 			gsize decoded_size;
 			gsize data_size;
 
 			/* Decode picture data. */
-			guchar *decoded_ustr = g_base64_decode(l->second, &decoded_size);
+			gAlloc<guchar> decoded_ustr(g_base64_decode(l->second, &decoded_size));
 
 			/* Check that the comment decoded to a long enough string to hold the
 			 * whole structure (8 fields of 4 bytes each). */
 			if (decoded_size < 8 * 4)
-			{	g_free (decoded_ustr);
 				goto invalid_picture;
-			}
-
-			bytes = g_bytes_new_take(decoded_ustr, decoded_size);
 
 			/* Reading picture type. */
-			type = (EtPictureType)read_guint32_from_byte(decoded_ustr, 0);
+			type = (EtPictureType)read_guint32_from_byte(decoded_ustr.get(), 0);
 			bytes_pos = 4;
 
 			/* TODO: Check that there is a maximum of 1 of each of
@@ -744,7 +726,7 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 				goto invalid_picture;
 
 			/* Reading MIME data. */
-			mimelen = read_guint32_from_byte(decoded_ustr, bytes_pos);
+			mimelen = read_guint32_from_byte(decoded_ustr.get(), bytes_pos);
 			bytes_pos += 4;
 
 			if (mimelen > decoded_size - bytes_pos - (6 * 4))
@@ -752,7 +734,7 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 
 			/* Check for a valid MIME type. */
 			if (mimelen > 0)
-			{	const gchar *mime = (const gchar*)&decoded_ustr[bytes_pos];
+			{	const gchar *mime = (const gchar*)&decoded_ustr.get()[bytes_pos];
 				/* TODO: Check for "-->" when adding linked image support. */
 				if (strncmp (mime, "image/", mimelen) != 0
 					&& strncmp (mime, "image/png", mimelen) != 0
@@ -766,47 +748,32 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 			bytes_pos += mimelen;
 
 			/* Reading description */
-			desclen = read_guint32_from_byte (decoded_ustr, bytes_pos);
+			desclen = read_guint32_from_byte (decoded_ustr.get(), bytes_pos);
 			bytes_pos += 4;
 
 			if (desclen > decoded_size - bytes_pos - (5 * 4))
 				goto invalid_picture;
 
-			description.assign((const char*)&decoded_ustr[bytes_pos], desclen);
+			description.assign((const char*)&decoded_ustr.get()[bytes_pos], desclen);
 
 			/* Skip the width, height, color depth and number-of-colors fields. */
 			bytes_pos += desclen + 16;
 
 			/* Reading picture size */
-			data_size = read_guint32_from_byte (decoded_ustr, bytes_pos);
+			data_size = read_guint32_from_byte (decoded_ustr.get(), bytes_pos);
 			bytes_pos += 4;
 
 			if (data_size > decoded_size - bytes_pos)
 				goto invalid_picture;
 
-			/* Read only the image data into a new GBytes. */
-			pic_bytes = g_bytes_new_from_bytes (bytes, bytes_pos, data_size);
-
-			pic = et_picture_new (type, description.c_str(), 0, 0, pic_bytes);
-
-			g_bytes_unref (pic_bytes);
-
-			if (!prev_pic)
-				FileTag->picture = pic;
-			else
-				prev_pic->next = pic;
-			prev_pic = pic;
-
-			/* pic->bytes still holds a ref on the decoded data. */
-			g_bytes_unref(bytes);
+			FileTag->pictures.emplace_back(type, description.c_str(), 0, 0,
+				decoded_ustr.get() + bytes_pos, data_size);
 			continue;
 
 		invalid_picture:
 			/* Mark the file as modified, so that the invalid field is removed upon
 			 * saving. */
 			FileTag->saved = FALSE;
-
-			g_bytes_unref (bytes);
 		}
 
 		tags.erase(range.first, range.second);
@@ -828,7 +795,6 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
     EtOggState *state;
     vorbis_comment *vc;
     GList *l;
-    EtPicture *pic;
 
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -916,7 +882,7 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
     /***********
      * Picture *
      ***********/
-    for (pic = FileTag->picture; pic != NULL; pic = pic->next)
+    for (const EtPicture& pic : FileTag->pictures)
     {
         const gchar *mime;
         guchar array[4];
@@ -924,9 +890,8 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
         gsize ustring_len = 0;
         gchar *base64_string;
         gsize desclen;
-        gconstpointer data;
-        gsize data_size;
-        Picture_Format format = Picture_Format_From_Data (pic);
+        Picture_Format format = pic.Format();
+        gBytes bytes;
 
         /* According to the specification, only PNG and JPEG images should
          * be added to Vorbis comments. */
@@ -937,8 +902,7 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
 
             loader = gdk_pixbuf_loader_new ();
 
-            if (!gdk_pixbuf_loader_write_bytes (loader, pic->bytes,
-                                                &loader_error))
+            if (!gdk_pixbuf_loader_write_bytes(loader, pic.bytes().get(), &loader_error))
             {
                 g_debug ("Error parsing image data: %s",
                          loader_error->message);
@@ -986,24 +950,22 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
 
                 g_object_unref (pixbuf);
 
-                g_bytes_unref (pic->bytes);
-                pic->bytes = g_bytes_new_take (buffer, buffer_size);
+                bytes = gBytes(g_bytes_new_take(buffer, buffer_size));
 
                 /* Set the picture format to reflect the new data. */
-                format = Picture_Format_From_Data (pic);
+                format = PICTURE_FORMAT_PNG;
             }
-        }
+        } else
+            bytes = pic.bytes();
 
-        mime = Picture_Mime_Type_String (format);
-
-        data = g_bytes_get_data (pic->bytes, &data_size);
+        mime = EtPicture::Mime_Type_String(format);
 
         /* Calculating full length of byte string and allocating. */
-        desclen = pic->description ? strlen (pic->description) : 0;
-        ustring = (guchar*)g_malloc (4 * 8 + strlen (mime) + desclen + data_size);
+        desclen = strlen(pic.description);
+        ustring = (guchar*)g_malloc (4 * 8 + strlen (mime) + desclen + bytes.size());
 
         /* Adding picture type. */
-        convert_to_byte_array (pic->type, array);
+        convert_to_byte_array (pic.type, array);
         add_to_guchar_str (ustring, &ustring_len, array, 4);
 
         /* Adding MIME string and its length. */
@@ -1016,14 +978,14 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
         convert_to_byte_array (desclen, array);
         add_to_guchar_str (ustring, &ustring_len, array, 4);
         add_to_guchar_str (ustring, &ustring_len,
-                           (guchar *)pic->description,
+                           (guchar *)pic.description.get(),
                            desclen);
 
         /* Adding width, height, color depth, indexed colors. */
-        convert_to_byte_array (pic->width, array);
+        convert_to_byte_array (pic.storage->width, array);
         add_to_guchar_str (ustring, &ustring_len, array, 4);
 
-        convert_to_byte_array (pic->height, array);
+        convert_to_byte_array (pic.storage->height, array);
         add_to_guchar_str (ustring, &ustring_len, array, 4);
 
         /* TODO: Determine the depth per pixel by querying the pixbuf to see
@@ -1036,10 +998,10 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
         add_to_guchar_str (ustring, &ustring_len, array, 4);
 
         /* Adding picture data and its size. */
-        convert_to_byte_array (data_size, array);
+        convert_to_byte_array (bytes.size(), array);
         add_to_guchar_str (ustring, &ustring_len, array, 4);
 
-        add_to_guchar_str (ustring, &ustring_len, (const guchar*)data, data_size);
+        add_to_guchar_str (ustring, &ustring_len, (const guchar*)bytes.data(), bytes.size());
 
         base64_string = g_base64_encode (ustring, ustring_len);
         vorbis_comment_add_tag (vc,

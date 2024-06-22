@@ -134,16 +134,14 @@ gboolean asf_read_file(GFile *file, ET_File *ETFile, GError **error)
 
 	// picture
 	const ASF::AttributeList pictures = tag->attribute("WM/Picture");
-	EtPicture** pic = &FileTag->picture;
 	for (const ASF::Attribute &attr : pictures)
 	{	const ASF::Picture& picture = attr.toPicture();
 		const ByteVector& data = picture.picture();
-		*pic = et_picture_new(
+		FileTag->pictures.emplace_back(
 			(EtPictureType)picture.type(), // EtPictureType and ASF::Picture::Type are compatible
 			picture.description().toCString(true),
 			0, 0,
-			g_bytes_new(data.data(), data.size()));
-		pic = &(*pic)->next;
+			data.data(), data.size());
 	}
 
 	return TRUE;
@@ -208,18 +206,14 @@ gboolean asftag_write_file_tag (const ET_File *ETFile, GError **error)
 
 	// Pictures
 	tag->removeItem("WM/Picture");
-	EtPicture* pic = FileTag->picture;
-	while (pic)
+	for (const EtPicture& pic : FileTag->pictures)
 	{	ASF::Picture picture;
-		picture.setType((ASF::Picture::Type)pic->type); // EtPictureType and ASF::Picture::Type are compatible
-		picture.setMimeType(Picture_Mime_Type_String(Picture_Format_From_Data(pic)));
-		unsigned long data_size;
-		const char* data = (const char*)g_bytes_get_data(pic->bytes, &data_size);
-		picture.setPicture(ByteVector(data, data_size));
-		picture.setDescription(pic->description);
+		picture.setType((ASF::Picture::Type)pic.type); // EtPictureType and ASF::Picture::Type are compatible
+		picture.setMimeType(EtPicture::Mime_Type_String(pic.Format()));
+		picture.setPicture(ByteVector((const char*)pic.storage->bytes, pic.storage->size));
+		picture.setDescription(pic.description.get());
 
 		tag->setAttribute("WM/Picture", ASF::Attribute(picture));
-		pic = pic->next;
 	}
 
 	tag->setProperties(fields);

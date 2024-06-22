@@ -68,8 +68,6 @@ gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error)
                                     et_flac_seek_func, et_flac_tell_func,
                                     et_flac_eof_func,
                                     et_flac_read_close_func };
-    EtPicture *prev_pic = NULL;
-
     g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
@@ -140,28 +138,11 @@ gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error)
         {
             /* Picture. */
             const FLAC__StreamMetadata_Picture *p;
-            GBytes *bytes;
-            EtPicture *pic;
-        
             /* Get picture data from block. */
             p = &block->data.picture;
 
-            bytes = g_bytes_new (p->data, p->data_length);
-        
-            pic = et_picture_new ((EtPictureType)p->type,
-                                  (const gchar *)p->description, 0, 0, bytes);
-            g_bytes_unref (bytes);
-
-            if (!prev_pic)
-            {
-                FileTag->picture = pic;
-            }
-            else
-            {
-                prev_pic->next = pic;
-            }
-
-            prev_pic = pic;
+            FileTag->pictures.emplace_back((EtPictureType)p->type,
+                (const char*)p->description, 0, 0, p->data, p->data_length);
         }
         else if (block->type == FLAC__METADATA_TYPE_STREAMINFO)
         {
@@ -504,67 +485,51 @@ flac_tag_write_file_tag (const ET_File *ETFile,
     /***********
      * Picture *
      ***********/
+    for (const EtPicture& pic : FileTag->pictures)
     {
-        EtPicture *pic = FileTag->picture;
+        const gchar *violation;
+        FLAC__StreamMetadata *picture_block; // For picture data
+        Picture_Format format;
 
-        while (pic)
+        // Allocate block for picture data
+        picture_block = FLAC__metadata_object_new(FLAC__METADATA_TYPE_PICTURE);
+
+        // Type
+        picture_block->data.picture.type = (FLAC__StreamMetadata_Picture_Type)pic.type;
+
+        // Mime type
+        /* Safe to pass a const string, according to the FLAC API
+         * reference. */
+        FLAC__metadata_object_picture_set_mime_type(picture_block,
+            (gchar*)EtPicture::Mime_Type_String(pic.Format()), TRUE);
+
+        // Description
+        if (!pic.description.empty())
+            FLAC__metadata_object_picture_set_description(picture_block,
+                (FLAC__byte *)pic.description.get(), TRUE);
+
+        // Resolution
+        picture_block->data.picture.width  = pic.storage->width;
+        picture_block->data.picture.height = pic.storage->height;
+        picture_block->data.picture.depth  = 0;
+
+        /* Picture data. */
+        /* Safe to pass const data, if the last argument (copy) is
+         * TRUE, according the the FLAC API reference. */
+        FLAC__metadata_object_picture_set_data(picture_block,
+            (FLAC__byte *)pic.storage->bytes, (FLAC__uint32)pic.storage->size, true);
+
+        if (!FLAC__metadata_object_picture_is_legal (picture_block,
+                                                     &violation))
         {
-            /* TODO: Can this ever be NULL? */
-            if (pic->bytes)
-            {
-                const gchar *violation;
-                FLAC__StreamMetadata *picture_block; // For picture data
-                Picture_Format format;
-                gconstpointer data;
-                gsize data_size;
-                
-                // Allocate block for picture data
-                picture_block = FLAC__metadata_object_new(FLAC__METADATA_TYPE_PICTURE);
-                
-                // Type
-                picture_block->data.picture.type = (FLAC__StreamMetadata_Picture_Type)pic->type;
-                
-                // Mime type
-                format = Picture_Format_From_Data(pic);
-                /* Safe to pass a const string, according to the FLAC API
-                 * reference. */
-                FLAC__metadata_object_picture_set_mime_type(picture_block, (gchar *)Picture_Mime_Type_String(format), TRUE);
-
-                // Description
-                if (pic->description)
-                {
-                    FLAC__metadata_object_picture_set_description(picture_block, (FLAC__byte *)pic->description, TRUE);
-                }
-                
-                // Resolution
-                picture_block->data.picture.width  = pic->width;
-                picture_block->data.picture.height = pic->height;
-                picture_block->data.picture.depth  = 0;
-
-                /* Picture data. */
-                data = g_bytes_get_data (pic->bytes, &data_size);
-                /* Safe to pass const data, if the last argument (copy) is
-                 * TRUE, according the the FLAC API reference. */
-                FLAC__metadata_object_picture_set_data (picture_block,
-                                                        (FLAC__byte *)data,
-                                                        (FLAC__uint32)data_size,
-                                                        true);
-                
-                if (!FLAC__metadata_object_picture_is_legal (picture_block,
-                                                             &violation))
-                {
-                    g_critical ("Created an invalid picture block: ‘%s’",
-                                violation);
-                    FLAC__metadata_object_delete (picture_block);
-                }
-                else
-                {
-                    // Add the block to the the chain (so we don't need to free the block)
-                    FLAC__metadata_iterator_insert_block_after(iter, picture_block);
-                }
-            }
-            
-            pic = pic->next;
+            g_critical ("Created an invalid picture block: ‘%s’",
+                        violation);
+            FLAC__metadata_object_delete (picture_block);
+        }
+        else
+        {
+            // Add the block to the the chain (so we don't need to free the block)
+            FLAC__metadata_iterator_insert_block_after(iter, picture_block);
         }
     }
     

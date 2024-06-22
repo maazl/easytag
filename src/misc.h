@@ -63,13 +63,22 @@ struct gString : gAlloc<gchar>
 	gString& operator=(gchar* ptr) { reset(ptr); return *this; }
 };
 
-/// Deleter for managed GLIB object
-struct gObjectDeleter
-{	void operator()(void* ptr) { g_object_unref(ptr); }
-};
 /// Managed GLIB object
 template <typename T>
-using gObject = std::unique_ptr<T, gObjectDeleter>;
+class gObject
+{	T* Ptr;
+public:
+	constexpr gObject() noexcept : Ptr(nullptr) {}
+	constexpr explicit gObject(T* ptr) noexcept : Ptr(ptr) {}
+	gObject(const gObject<T>& r) : Ptr(r.Ptr) { g_object_ref(Ptr); }
+	constexpr gObject(gObject<T>&& r) noexcept : Ptr(r.Ptr) { r.Ptr = nullptr; }
+	~gObject() { if (Ptr) g_object_unref(Ptr); }
+	constexpr explicit operator bool() const noexcept { return Ptr != nullptr; }
+	constexpr T* get() const noexcept { return Ptr; }
+	void reset() { this->~gObject(); Ptr = nullptr; }
+	T* release() { T* ptr = Ptr; Ptr = nullptr; return ptr; }
+	gObject<T>& operator=(const gObject<T>& r) { this->~gObject(); g_object_ref(Ptr = r.Ptr); return *this; }
+};
 
 /** create unique pointer with explicit deleter
  * @tparam T pointer target type
@@ -84,6 +93,27 @@ template <typename T, typename D>
 std::unique_ptr<T, D> make_unique(T* ptr, D deleter)
 {	return std::unique_ptr<T, D>(ptr, deleter);
 }
+
+class gBytes
+{	GBytes* Bytes;
+	friend class std::hash<gBytes>;
+public:
+	constexpr gBytes() : Bytes(nullptr) {}
+	gBytes(const void* data, std::size_t size) : Bytes(g_bytes_new(data, size)) {}
+	gBytes(const gBytes& r) : Bytes(g_bytes_ref(r.Bytes)) {}
+	gBytes(const gBytes& r, std::size_t offset, std::size_t length) : Bytes(g_bytes_new_from_bytes(r.get(), offset, length)) {}
+	constexpr gBytes(gBytes&& r) noexcept : Bytes(r.Bytes) { r.Bytes = nullptr; }
+	explicit gBytes(GBytes* bytes) : Bytes(bytes) {}
+	~gBytes() { g_bytes_unref(Bytes); }
+	void swap(gBytes& r) noexcept { std::swap(Bytes, r.Bytes); }
+	gBytes& operator=(const gBytes& r) { gBytes(r).swap(*this); return *this; }
+	gBytes& operator=(gBytes&& r) noexcept { swap(r); return *this; }
+	void assign(const void* data, std::size_t size) { this->~gBytes(); Bytes = g_bytes_new(data, size); }
+	const void* data() const { return Bytes ? g_bytes_get_data(Bytes, nullptr) : nullptr; }
+	std::size_t size() const { return Bytes ? g_bytes_get_size(Bytes) : 0U; }
+	constexpr GBytes* get() const noexcept { return Bytes; }
+	friend bool operator==(const gBytes& l, const gBytes& r) { return (bool)g_bytes_equal(l.Bytes, r.Bytes); }
+};
 
 /// Strongly typed GList entry
 /// @tparam T Must be a pointer like type.

@@ -133,7 +133,6 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     ID3_Frame *id3_frame;
     ID3_Field *id3_field;
     string tmp;
-    EtPicture *pic;
 
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -255,9 +254,9 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     while ( (id3_frame = id3_tag.Find(ID3FID_PICTURE)) )
         delete id3_tag.RemoveFrame(id3_frame);
 
-    for (pic = FileTag->picture; pic != NULL; pic = pic->next)
+    for (const EtPicture& pic : FileTag->pictures)
     {
-        Picture_Format format = Picture_Format_From_Data(pic);
+        Picture_Format format = pic.Format();
 
         id3_frame = new ID3_Frame(ID3FID_PICTURE);
         id3_tag.AttachFrame(id3_frame);
@@ -266,20 +265,20 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
         {
             case PICTURE_FORMAT_JPEG:
                 if ((id3_field = id3_frame->GetField(ID3FN_MIMETYPE)))
-                    id3_field->Set(Picture_Mime_Type_String(format));
+                    id3_field->Set(EtPicture::Mime_Type_String(format));
                 if ((id3_field = id3_frame->GetField(ID3FN_IMAGEFORMAT)))
                     id3_field->Set("JPG");
                 break;
 
             case PICTURE_FORMAT_PNG:
                 if ((id3_field = id3_frame->GetField(ID3FN_MIMETYPE)))
-                    id3_field->Set(Picture_Mime_Type_String(format));
+                    id3_field->Set(EtPicture::Mime_Type_String(format));
                 if ((id3_field = id3_frame->GetField(ID3FN_IMAGEFORMAT)))
                     id3_field->Set("PNG");
                 break;
             case PICTURE_FORMAT_GIF:
                 if ((id3_field = id3_frame->GetField(ID3FN_MIMETYPE)))
-                    id3_field->Set(Picture_Mime_Type_String(format));
+                    id3_field->Set(EtPicture::Mime_Type_String(format));
                 if ((id3_field = id3_frame->GetField(ID3FN_IMAGEFORMAT)))
                     /* I could find no reference for what ID3FN_IMAGEFORMAT
                      * should contain, so this is a guess. */
@@ -291,19 +290,13 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
         }
 
         if ((id3_field = id3_frame->GetField(ID3FN_PICTURETYPE)))
-            id3_field->Set(pic->type);
+            id3_field->Set(pic.type);
 
-        if (pic->description)
-            Id3tag_Set_Field(*id3_frame, ID3FN_DESCRIPTION, pic->description);
+        if (!pic.description.empty())
+            Id3tag_Set_Field(*id3_frame, ID3FN_DESCRIPTION, pic.description);
 
         if ((id3_field = id3_frame->GetField(ID3FN_DATA)))
-        {
-            gconstpointer data;
-            gsize data_size;
-
-            data = g_bytes_get_data (pic->bytes, &data_size);
-            id3_field->Set((const uchar*)data, data_size);
-        }
+            id3_field->Set((const uchar*)pic.storage->bytes, pic.storage->size);
 
         has_data = TRUE;
     }
