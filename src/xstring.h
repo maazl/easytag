@@ -133,7 +133,7 @@ public:
 	/// @remarks This constructor does not cause memory allocation.
 	constexpr xString(const xString& r) noexcept : Ptr(r.AddRef()) {}
 	/// Move constructor
-	constexpr xString(xString&& r) noexcept : Ptr(r.Ptr) { Ptr = nullptr; }
+	constexpr xString(xString&& r) noexcept : Ptr(r.Ptr) { r.Ptr = nullptr; }
 	/// Initialization from \c xString literal.
 	/// @remarks This constructor does not cause memory allocation.
 	constexpr xString(const header& r) noexcept : Ptr(&static_cast<const storage<0>&>(r)) { ++RefCount(); }
