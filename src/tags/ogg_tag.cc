@@ -982,10 +982,10 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
                            desclen);
 
         /* Adding width, height, color depth, indexed colors. */
-        convert_to_byte_array (pic.storage->width, array);
+        convert_to_byte_array (pic.storage->Width, array);
         add_to_guchar_str (ustring, &ustring_len, array, 4);
 
-        convert_to_byte_array (pic.storage->height, array);
+        convert_to_byte_array (pic.storage->Height, array);
         add_to_guchar_str (ustring, &ustring_len, array, 4);
 
         /* TODO: Determine the depth per pixel by querying the pixbuf to see

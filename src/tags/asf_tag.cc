@@ -210,7 +210,7 @@ gboolean asftag_write_file_tag (const ET_File *ETFile, GError **error)
 	{	ASF::Picture picture;
 		picture.setType((ASF::Picture::Type)pic.type); // EtPictureType and ASF::Picture::Type are compatible
 		picture.setMimeType(EtPicture::Mime_Type_String(pic.Format()));
-		picture.setPicture(ByteVector((const char*)pic.storage->bytes, pic.storage->size));
+		picture.setPicture(ByteVector((const char*)pic.storage->Bytes, pic.storage->Size));
 		picture.setDescription(pic.description.get());
 
 		tag->setAttribute("WM/Picture", ASF::Attribute(picture));

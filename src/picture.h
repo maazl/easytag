@@ -1,4 +1,5 @@
 /* EasyTAG - tag editor for audio files
+ * Copyright (C) 2024 Marcel Müller
  * Copyright (C) 2014-2015  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -85,21 +86,39 @@ typedef enum
 typedef struct EtPicture
 {	/// Backing store in EtPicture.
 	struct Data
-	{	const std::size_t size; ///< size of \ref bytes\.
-		std::atomic<unsigned> ref_count;
-		gint width;             ///< image width (pixels) or 0 if unknown.
-		gint height;            ///< image height (pixels) or 0 if unknown.
-		char bytes[];           ///< image data.
-		Data(std::size_t size) noexcept : size(size), ref_count(1), width(0), height(0) {}
+	{	std::atomic<unsigned> RefCount; ///< Reference counter. 0 = tag for use of bytes_ptr.
+		const unsigned        Size;     ///< size of \ref bytes or \ref bytes_ref\.
+		const guint           Hash;     ///< hash value of \ref bytes or \ref bytes_ref\.
+		gint                  Width;    ///< image width (pixels) or 0 if unknown.
+		gint                  Height;   ///< image height (pixels) or 0 if unknown.
+		union
+		{	char                Bytes[1]; ///< inline image data.
+			const void*         DataRef;  ///< referenced image data - <b>internal use only</b>
+		};
+	private:
+		static guint CalcHash(const void* bytes, unsigned size);
+	public:
+		/// Constructor <b>for placement new only!</b>
+		explicit Data(unsigned size, unsigned hash) noexcept
+		:	RefCount(2), Size(size), Hash(hash), Width(0), Height(0) {}
+		/// Constructor <b>for placement new only!</b> Assumes that \ref bytes are already in place.
+		explicit Data(unsigned size) noexcept
+		:	RefCount(1), Size(size), Hash(CalcHash(&Bytes, size)), Width(0), Height(0) {}
+		/// Constructor for unowned data storage. <b>No reference counting, internal use only!</b>
+		Data(const void* data, unsigned size) noexcept
+		:	RefCount(0), Size(size), Hash(CalcHash(data, size)), Width(0), Height(0), DataRef(data) {}
 	};
 
 	Data* storage;
 	xString0 description;
 	EtPictureType type;
+
+	static Data* GetOrAllocate(const void* data, unsigned size);
+	void Deduplicate();
 public:
 	EtPicture(const EtPicture& r) noexcept;
 	constexpr EtPicture(EtPicture&& r) noexcept : storage(r.storage), description(std::move(r.description)), type(r.type) { r.storage = nullptr; }
-	EtPicture(EtPictureType type, const char *description, guint width, guint height, const void* data, std::size_t size);
+	EtPicture(EtPictureType type, const char *description, guint width, guint height, const void* data, unsigned size);
 	/// Load an image from the supplied \a file.
 	/// @param File the GFile from which to load an image
 	/// @param Error a GError to provide information on errors, or \c NULL to ignore
@@ -112,7 +131,7 @@ public:
 	EtPicture& operator=(EtPicture&& r) = default;
 	friend bool operator==(const EtPicture& l, const EtPicture& r);
 	friend bool operator!=(const EtPicture& l, const EtPicture& r) { return !(l == r); }
-	gBytes bytes() const { return storage ? gBytes(g_bytes_new_static(storage->bytes, storage->size)) : gBytes(); }
+	gBytes bytes() const { return storage ? gBytes(g_bytes_new_static(storage->Bytes, storage->Size)) : gBytes(); }
 
 	/// Use some heuristics to provide an estimate of the type of the picture,
 	/// based on the filename.
@@ -139,6 +158,9 @@ public:
 	/// @param Error a GError to provide information on errors, or \c NULL to ignore
 	/// @return \c TRUE on success
 	bool save_file_data(GFile* file, GError** error) const;
+
+	/// Clean up the internal picture store from orphaned references.
+	static void GarbageCollector();
 } EtPicture;
 #endif
 

@@ -319,7 +319,7 @@ mp4tag_write_file_tag (const ET_File *ETFile,
                 break;
         }
 
-        MP4::CoverArt art(f, ByteVector((char*)pic.storage->bytes, pic.storage->size));
+        MP4::CoverArt art(f, ByteVector((char*)pic.storage->Bytes, pic.storage->Size));
         tag->setItem("covr", MP4::Item(MP4::CoverArtList().append(art)));
     }
     else

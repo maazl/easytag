@@ -1145,7 +1145,7 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
                 else if (field_type == ID3_FIELD_TYPE_INT8)
                     id3_field_setint (field, pic.type);
                 else if (field_type == ID3_FIELD_TYPE_BINARYDATA)
-                    id3_field_setbinarydata(field, (id3_byte_t const*)pic.storage->bytes, pic.storage->size);
+                    id3_field_setbinarydata(field, (id3_byte_t const*)pic.storage->Bytes, pic.storage->Size);
             }
 
             if (!pic.description.empty())

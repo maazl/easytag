@@ -1,4 +1,5 @@
 /* EasyTAG - Tag editor for audio files
+ * Copyright (C) 2024 Marcel Müller
  * Copyright (C) 2014-2015  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -31,21 +32,93 @@
 #include "charset.h"
 
 #include "win32/win32dep.h"
+#include <unordered_set>
+#include <mutex>
 using namespace std;
+
+
+guint EtPicture::Data::CalcHash(const void* bytes, unsigned size)
+{	GBytes* gb = g_bytes_new_static(bytes, size);
+	guint hash = g_bytes_hash(gb);
+	g_bytes_unref(gb);
+	return hash;
+}
+
+struct EtPictureDataHash
+{	constexpr size_t operator()(const EtPicture::Data* d) const noexcept
+	{	return d->Hash; }
+};
+
+struct EtPictureDataEquals
+{	static const void* GetBytes(const EtPicture::Data* d) noexcept
+	{	return d->RefCount ? &d->Bytes : d->DataRef; }
+	bool operator()(EtPicture::Data* l, EtPicture::Data* r) const noexcept
+	{	return l->Size == r->Size && memcmp(GetBytes(l), GetBytes(r), l->Size) == 0; }
+};
+
+// Repository with all instances.
+
+// If the ref count of an instance is 1 it could be removed.
+static unordered_set<EtPicture::Data*, EtPictureDataHash, EtPictureDataEquals> Instances;
+// Protect the dictionary above
+static mutex InstancesMutex;
+
+EtPicture::Data* EtPicture::GetOrAllocate(const void* data, unsigned size)
+{	lock_guard<mutex> lock(InstancesMutex);
+	Data tmp(data, size);
+	auto it = Instances.find(&tmp);
+	if (it != Instances.end())
+	{	// cache hit => return reference
+		++(*it)->RefCount;
+		return *it;
+	}
+	// cache miss => allocate storage
+	Data* storage = (Data*)g_malloc(offsetof(Data, Bytes) + size);
+	memcpy(storage->Bytes, data, size);
+	new(storage) Data(size, tmp.Hash);
+	Instances.insert(storage);
+	return storage;
+}
+
+void EtPicture::Deduplicate()
+{	lock_guard<mutex> lock(InstancesMutex);
+	auto it = Instances.find(storage);
+	if (it != Instances.end())
+	{	// cache hit
+		g_free(storage);
+		storage = *it;
+	} else
+		Instances.insert(storage);
+	++storage->RefCount;
+}
+
+void EtPicture::GarbageCollector()
+{	lock_guard<mutex> lock(InstancesMutex);
+	for (auto it = Instances.begin(); it != Instances.end(); )
+	{	if ((*it)->RefCount != 1)
+			++it;
+		else
+		{	auto ptr = *it;
+			it = Instances.erase(it);
+			g_free(ptr);
+		}
+	}
+}
+
 
 static EtPicture* et_picture_copy_single(const EtPicture* pic) { return new EtPicture(*pic); }
 static void et_picture_free(EtPicture* pic) { delete pic; }
 
 G_DEFINE_BOXED_TYPE (EtPicture, et_picture, et_picture_copy_single, et_picture_free)
 
-EtPicture::EtPicture(EtPictureType type, const gchar *description, guint width, guint height, const void* data, size_t size)
-:	storage((Data*)g_malloc(offsetof(Data, bytes) + size))
+EtPicture::EtPicture(EtPictureType type, const gchar *description, guint width, guint height, const void* data, unsigned size)
+:	storage(GetOrAllocate(data, size))
 ,	description(description)
 ,	type(type)
-{	new(storage) Data(size);
-	storage->width = width;
-	storage->height = height;
-	memcpy(storage->bytes, data, size);
+{	if (!storage->Width)
+		storage->Width = width;
+	if (!storage->Height)
+		storage->Height = height;
 }
 
 EtPicture::EtPicture(const EtPicture& r) noexcept
@@ -53,12 +126,12 @@ EtPicture::EtPicture(const EtPicture& r) noexcept
 ,	description(r.description)
 ,	type(r.type)
 {	if (storage)
-		++storage->ref_count;
+		++storage->RefCount;
 }
 
 EtPicture::~EtPicture()
-{	if (storage && !--storage->ref_count)
-	{	storage->ref_count.~atomic();
+{	if (storage && !--storage->RefCount)
+	{	storage->RefCount.~atomic();
 		g_free(storage);
 	}
 }
@@ -70,8 +143,8 @@ bool operator==(const EtPicture& l, const EtPicture& r)
 		return true;
 	if (!l.storage || !r.storage)
 		return false;
-	return l.storage->size == r.storage->size
-		&& memcmp(l.storage->bytes, r.storage->bytes, l.storage->size) == 0;
+	return l.storage->Size == r.storage->Size
+		&& memcmp(l.storage->Bytes, r.storage->Bytes, l.storage->Size) == 0;
 }
 
 EtPictureType EtPicture::type_from_filename(const gchar *filename_utf8)
@@ -136,8 +209,8 @@ Picture_Format EtPicture::Format() const
 {
     g_return_val_if_fail(storage != NULL, PICTURE_FORMAT_UNKNOWN);
 
-    size_t size = storage->size;
-    const void* raw = storage->bytes;
+    size_t size = storage->Size;
+    const void* raw = storage->Bytes;
 
     /* JPEG : "\xff\xd8\xff". */
     if (size > 3 && (memcmp(raw, "\xff\xd8\xff", 3) == 0))
@@ -252,16 +325,16 @@ string EtPicture::format_info(const ET_File& ETFile) const
     const char* format = Format_String(Format());
     const char* desc = description;
     const char* type = Type_String(this->type);
-    gString size_str(g_format_size(storage->size));
+    gString size_str(g_format_size(storage->Size));
 
     /* Behaviour following the tag type. */
     if (!ETFile.ETFileDescription->support_multiple_pictures(&ETFile))
         return strprintf("%s (%s - %d×%d %s)\n%s: %s", format,
-            size_str.get(), storage->width, storage->height,
+            size_str.get(), storage->Width, storage->Height,
             _("pixels"), _("Type"), type);
     else
         return strprintf("%s (%s - %d×%d %s)\n%s: %s\n%s: %s", format,
-            size_str.get(), storage->width, storage->height,
+            size_str.get(), storage->Width, storage->Height,
             _("pixels"), _("Type"), type, _("Description"), desc);
 }
 
@@ -272,7 +345,7 @@ EtPicture::EtPicture(GFile *file, GError **error)
     gsize size;
     GFileInfo *info;
     GFileInputStream *file_istream;
-    GOutputStream *ostream;
+    gObject<GOutputStream> ostream;
 
     info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE,
                               G_FILE_QUERY_INFO_NONE, NULL, error);
@@ -297,14 +370,14 @@ EtPicture::EtPicture(GFile *file, GError **error)
         size = 60000;
     {
         gchar *buffer = (gchar*)g_malloc (size);
-        ostream = g_memory_output_stream_new (buffer, size, g_realloc, g_free);
-        g_seekable_seek(G_SEEKABLE(ostream), offsetof(Data, bytes), G_SEEK_SET, NULL, NULL);
+        ostream = gObject<GOutputStream>(g_memory_output_stream_new(buffer, size, g_realloc, g_free));
+        g_seekable_seek(G_SEEKABLE(ostream.get()), offsetof(Data, Bytes), G_SEEK_SET, NULL, NULL);
     }
 
-    if (g_output_stream_splice (ostream, G_INPUT_STREAM (file_istream),
+    if (g_output_stream_splice(ostream.get(), G_INPUT_STREAM (file_istream),
         G_OUTPUT_STREAM_SPLICE_NONE, NULL, error) == -1)
     {
-        g_object_unref (ostream);
+        g_object_unref(ostream.get());
         g_object_unref (file_istream);
         g_assert (error == NULL || *error != NULL);
         return;
@@ -313,9 +386,8 @@ EtPicture::EtPicture(GFile *file, GError **error)
     /* Image loaded. */
     g_object_unref (file_istream);
 
-    if (!g_output_stream_close (ostream, NULL, error))
+    if (!g_output_stream_close(ostream.get(), NULL, error))
     {
-        g_object_unref (ostream);
         g_assert (error == NULL || *error != NULL);
         return;
     }
@@ -323,20 +395,20 @@ EtPicture::EtPicture(GFile *file, GError **error)
     g_assert (error == NULL || *error == NULL);
 
     // update to real size
-    size = g_memory_output_stream_get_data_size(G_MEMORY_OUTPUT_STREAM(ostream));
+    size = g_memory_output_stream_get_data_size(G_MEMORY_OUTPUT_STREAM(ostream.get()));
     if (size == 0)
     {
-        g_object_unref (ostream);
         /* FIXME: Mark up the string for translation. */
         g_set_error (error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA, "%s",
                      _("Input truncated or empty"));
         return;
     }
 
-    storage = (Data*)g_memory_output_stream_steal_data(G_MEMORY_OUTPUT_STREAM(ostream));
+    storage = (Data*)g_memory_output_stream_steal_data(G_MEMORY_OUTPUT_STREAM(ostream.get()));
     new(storage) Data(size);
 
-    g_object_unref (ostream);
+    Deduplicate();
+
     g_assert (error == NULL || *error == NULL);
 }
 
@@ -359,8 +431,8 @@ gObject<GdkPixbuf> EtPicture::get_pix_buf(GError **error) const
     } else
     {   g_object_ref(pixbuf.get());
 
-        storage->width  = gdk_pixbuf_get_width(pixbuf.get());
-        storage->height = gdk_pixbuf_get_height(pixbuf.get());
+        storage->Width  = gdk_pixbuf_get_width(pixbuf.get());
+        storage->Height = gdk_pixbuf_get_height(pixbuf.get());
     }
     return pixbuf;
 }
@@ -382,10 +454,10 @@ bool EtPicture::save_file_data(GFile *file, GError **error) const
     }
 
     if (!g_output_stream_write_all (G_OUTPUT_STREAM (file_ostream),
-        storage->bytes, storage->size, &bytes_written, NULL, error))
+        storage->Bytes, storage->Size, &bytes_written, NULL, error))
     {
-        g_debug ("Only %" G_GSIZE_FORMAT " bytes out of %" G_GSIZE_FORMAT
-                 " bytes of picture data were written", bytes_written, storage->size);
+        g_debug ("Only %" G_GSIZE_FORMAT " bytes out of %u"
+                 " bytes of picture data were written", bytes_written, storage->Size);
         g_object_unref (file_ostream);
         g_assert (error == NULL || *error != NULL);
         return false;

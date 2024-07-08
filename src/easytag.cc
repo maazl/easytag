@@ -975,6 +975,8 @@ Read_Directory (const gchar *path_real)
     action = g_action_map_lookup_action (G_ACTION_MAP (MainWindow), "stop");
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
 
+    EtPicture::GarbageCollector(); // release orphaned images
+
     //ET_Debug_Print_File_List(ETCore->ETFileList,__FILE__,__LINE__,__FUNCTION__);
 
     if (ETCore->ETFileList)

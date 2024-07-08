@@ -1,4 +1,4 @@
-3.0.0 - 2024-03-16 :
+3.0.0 - 2024-07-08 :
 ====================
 
     * Add support for RelpayGain tags including calculation
@@ -17,6 +17,7 @@
     * Add columns with file information (size, bitrate, duration,...)
     * Speed up directory scan significantly
     * Add ASF/Windows Media support
+    * Save memory (deduplicate image data)
     * Optionally use similar Unicode replacement characters for reserved
       characters in file names
     * Support for powerful pattern groups in scanner (see documentation)

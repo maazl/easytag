@@ -509,15 +509,15 @@ flac_tag_write_file_tag (const ET_File *ETFile,
                 (FLAC__byte *)pic.description.get(), TRUE);
 
         // Resolution
-        picture_block->data.picture.width  = pic.storage->width;
-        picture_block->data.picture.height = pic.storage->height;
+        picture_block->data.picture.width  = pic.storage->Width;
+        picture_block->data.picture.height = pic.storage->Height;
         picture_block->data.picture.depth  = 0;
 
         /* Picture data. */
         /* Safe to pass const data, if the last argument (copy) is
          * TRUE, according the the FLAC API reference. */
         FLAC__metadata_object_picture_set_data(picture_block,
-            (FLAC__byte *)pic.storage->bytes, (FLAC__uint32)pic.storage->size, true);
+            (FLAC__byte *)pic.storage->Bytes, (FLAC__uint32)pic.storage->Size, true);
 
         if (!FLAC__metadata_object_picture_is_legal (picture_block,
                                                      &violation))

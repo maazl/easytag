@@ -296,7 +296,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
             Id3tag_Set_Field(*id3_frame, ID3FN_DESCRIPTION, pic.description);
 
         if ((id3_field = id3_frame->GetField(ID3FN_DATA)))
-            id3_field->Set((const uchar*)pic.storage->bytes, pic.storage->size);
+            id3_field->Set((const uchar*)pic.storage->Bytes, pic.storage->Size);
 
         has_data = TRUE;
     }
