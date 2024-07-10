@@ -86,8 +86,8 @@ class xString
 	/// Use RefCount to access the storage content and cast to <tt>const char*</tt> to get the C string.
 	const data<0>* Ptr;
 
-	constexpr std::atomic<unsigned>& RefCount() const noexcept { return static_cast<const storage<0>&>(*Ptr).RefCount; }
-	constexpr const data<0>* AddRef() const noexcept { if (Ptr) ++RefCount(); return Ptr; }
+	constexpr const header& Header() const noexcept { return static_cast<const storage<0>&>(*Ptr); }
+	constexpr const data<0>* AddRef() const noexcept { if (Ptr) ++Header().RefCount; return Ptr; }
 	static const data<0>* Init(const char* str, std::size_t len);
 	static const data<0>* Init(const char* str);
 	static const data<0>* Init(const char* str, std::size_t len, GNormalizeMode mode);
@@ -136,7 +136,7 @@ public:
 	constexpr xString(xString&& r) noexcept : Ptr(r.Ptr) { r.Ptr = nullptr; }
 	/// Initialization from \c xString literal.
 	/// @remarks This constructor does not cause memory allocation.
-	constexpr xString(const header& r) noexcept : Ptr(&static_cast<const storage<0>&>(r)) { ++RefCount(); }
+	constexpr xString(const header& r) noexcept : Ptr(&static_cast<const storage<0>&>(r)) { ++Header().RefCount; }
 	/// Initialization from raw C string storage.
 	/// @param len Length of the string excluding the termination 0.
 	/// @remarks Although this construction has a length property
@@ -160,7 +160,7 @@ public:
 	xString(const char* str, GNormalizeMode mode) : Ptr(Init(str, mode)) {}
 	/// Destructor
 	/// @remarks It will free the storage if this is the last instance that owns the storage.
-	~xString() noexcept { if (Ptr && --RefCount() == 0) delete &static_cast<const storage<0>&>(*Ptr); }
+	~xString() noexcept { if (Ptr && --Header().RefCount == 0) delete &static_cast<const storage<0>&>(*Ptr); }
 
 	/// Check if string is not null
 	constexpr explicit operator bool() const noexcept { return Ptr != nullptr; }
@@ -200,7 +200,7 @@ public:
 	/// or 0 in case the current value is \c nullptr.
 	/// @remarks In multi-threaded environment the returned value is volatile
 	/// unless it is \<= 1, i.e. you are the only owner or it is \c nullptr.
-	constexpr unsigned use_count() const noexcept { return Ptr ? RefCount().load() : 0; }
+	constexpr unsigned use_count() const noexcept { return Ptr ? Header().RefCount.load() : 0; }
 
 	/// Implicit conversion to C string.
 	constexpr operator const char*() const noexcept { return &Ptr->C.at(0); }

@@ -148,6 +148,12 @@ int xString::deduplicate(const xString& r) noexcept
 		return 0;
 	if (!Ptr || !r.Ptr || strcmp(*this, r))
 		return -1;
+
+	gchar* ck = Header().CollationKey;
+	if (ck && Header().RefCount == 1)
+		// transfer collation key
+		Header().CollationKey = r.Header().CollationKey.exchange(ck);
+
 	this->~xString();
 	Ptr = r.AddRef();
 	return 1;
@@ -156,7 +162,7 @@ int xString::deduplicate(const xString& r) noexcept
 const gchar* xString::collation_key() const
 {	if (!Ptr)
 		return nullptr;
-	gchar* ck = static_cast<const storage<0>&>(*Ptr).CollationKey;
+	gchar* ck = Header().CollationKey;
 	if (ck)
 		return ck;
 	// Replace dir separator by dot for more reasonable sort order
@@ -166,7 +172,7 @@ const gchar* xString::collation_key() const
 	replace(tmp, tmp + len - 1, G_DIR_SEPARATOR, '.');
 	gchar* ck2 = g_utf8_collate_key_for_filename(tmp, -1);
 	// atomically apply the new key
-	if (G_LIKELY(static_cast<const storage<0>&>(*Ptr).CollationKey.compare_exchange_strong(ck, ck2)))
+	if (G_LIKELY(Header().CollationKey.compare_exchange_strong(ck, ck2)))
 		return ck2;
 	// atomic operation failed => discard key
 	g_free(ck2);
