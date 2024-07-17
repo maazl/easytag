@@ -53,8 +53,8 @@ const struct Asf_Description : ET_File_Description
 		support_multiple_pictures = [](const ET_File*) { return false; };
 	}
 }
-MP4_Description(".wma", _("Windows Media File")),
-M4A_Description(".asf", _("ASF File"));
+WMA_Description(".wma", _("Windows Media File")),
+ASF_Description(".asf", _("ASF File"));
 
 
 gboolean asf_read_file(GFile *file, ET_File *ETFile, GError **error)
