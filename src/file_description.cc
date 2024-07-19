@@ -27,7 +27,7 @@
 using namespace std;
 
 
-static vector<const ET_File_Description*> ETFileDescription;
+const ET_File_Description* ET_File_Description::Root = nullptr;
 
 const struct NotSupportedDescription : ET_File_Description
 {	NotSupportedDescription()
@@ -40,20 +40,16 @@ const struct NotSupportedDescription : ET_File_Description
 
 ET_File_Description::ET_File_Description()
 {	if (this != &NotSupportedDescription)
-		ETFileDescription.push_back(this);
+	{	Link = Root;
+		Root = this;
+	}
 	support_multiple_pictures = [](const ET_File* file) { return true; };
 }
 
-ET_File_Description::~ET_File_Description()
-{	if (this != &NotSupportedDescription)
-		ETFileDescription.erase(find(ETFileDescription.begin(), ETFileDescription.end(), this));
-}
-
-const ET_File_Description *
-ET_Get_File_Description (const gchar *filename)
+const ET_File_Description* ET_File_Description::Get(const gchar *filename)
 {	filename = ET_Get_File_Extension(filename);
 	if (!et_str_empty(filename))
-		for (auto desc : ETFileDescription)
+		for (auto desc = Root; desc; desc = desc->Link)
 			if (g_ascii_strcasecmp(desc->Extension, filename) == 0)
 				return desc;
 	// If not found in the list

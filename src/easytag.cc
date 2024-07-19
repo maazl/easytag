@@ -1165,7 +1165,7 @@ read_directory_recursively (GList *file_list, GFileEnumerator *dir_enumerator,
                 }
             }
             else if (type == G_FILE_TYPE_REGULAR &&
-                ET_Get_File_Description(file_name)->IsSupported())
+                ET_File_Description::Get(file_name)->IsSupported())
             {
                 GFile *file = g_file_enumerator_get_child (dir_enumerator, info);
                 file_list = g_list_append (file_list, file);
