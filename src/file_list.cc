@@ -150,7 +150,7 @@ et_file_list_add (GList *file_list,
 
     ETFile->IndexKey             = 0; // Will be renumered after...
     ETFile->ETFileKey            = ET_File_Key_New();
-    ETFile->ETFileDescription    = ET_Get_File_Description (filename);
+    ETFile->ETFileDescription    = ET_File_Description::Get(filename);
     ETFile->ETFileExtension      = g_strdup(ET_Get_File_Extension(filename));
     ETFile->FileNameList         =
     ETFile->FileNameCur          =
@@ -181,7 +181,7 @@ et_file_list_add (GList *file_list,
             _("Error while querying information for file ‘%s’: %s"), display_path, error->message);
         g_clear_error(&error);
         // bypass handler if we did not even get the file size.
-        ETFile->ETFileDescription = ET_Get_File_Description(nullptr);
+        ETFile->ETFileDescription = ET_File_Description::Get(nullptr);
         goto fail;
     }
 

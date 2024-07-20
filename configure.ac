@@ -4,7 +4,7 @@ AC_PREREQ([2.64])
 
 dnl To set also in config.h.mingw
 dnl defines ($PACKAGE_NAME, $PACKAGE_VERSION, etc.)
-AC_INIT([EasyTAG], [3.0.0], [https://bugzilla.gnome.org/enter_bug.cgi?product=easytag], [easytag], [https://wiki.gnome.org/Apps/EasyTAG])
+AC_INIT([EasyTAG], [3.0.], [https://gitlab.gnome.org/GNOME/easytag/-/issues/], [easytag], [https://wiki.gnome.org/Apps/EasyTAG])
 
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_HEADERS([config.h])
@@ -44,7 +44,7 @@ dnl -------------------------------
 dnl Checks for programs.
 dnl -------------------------------
 AC_PROG_CC
-AC_PROG_CC_C99
+AM_PROG_CC_C_O
 AC_PROG_CXX
 AC_PROG_CXXCPP
 AX_CXX_COMPILE_STDCXX([14], [noext], [mandatory])

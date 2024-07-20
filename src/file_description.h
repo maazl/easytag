@@ -73,8 +73,8 @@ struct ET_File_Description
     const char* TagType;  ///< Human readable, translated type of tag, e.g. "ID3 Tag"
 
     /// Implicit registration of this file type
+    /// @remarks <b>You must not create non-static instances of this class.</b>
     ET_File_Description();
-    ~ET_File_Description();
 
     /// Supported file type or dummy entry?
     bool IsSupported() const { return *Extension != 0; }
@@ -90,6 +90,15 @@ struct ET_File_Description
     unsigned (*unsupported_fields)(const ET_File* file);
     /// Check whether the tag supports multiple pictures with description. true by default.
     bool (*support_multiple_pictures)(const ET_File* file);
+
+    /// Determines description of file.
+    /// @returns If \p filename is NULL or no registered instance of ET_File_Description matches the file extension,
+    /// it returns a default instance that represents unsupported files.
+    static const ET_File_Description* Get(const gchar *filename);
+
+private:
+    static const ET_File_Description* Root;
+    const ET_File_Description* Link;
 };
 
 #else
@@ -104,11 +113,6 @@ G_BEGIN_DECLS
 inline const gchar* ET_Get_File_Extension(const gchar *filename)
 {	return filename ? strrchr(filename, '.') : NULL;
 }
-
-/// Determines description of file.
-/// @returns If \p filename is NULL or no registered instance of ET_File_Description matches the file extension,
-/// it returns a default instance that represents unsupported files.
-const ET_File_Description* ET_Get_File_Description(const gchar *filename);
 
 G_END_DECLS
 

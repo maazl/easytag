@@ -305,7 +305,7 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, string&& mask)
     if (filename_utf8.empty()) return NULL;
 
     // Remove extension of file (if found)
-    const ET_File_Description* desc = ET_Get_File_Description(filename_utf8.c_str());
+    const ET_File_Description* desc = ET_File_Description::Get(filename_utf8.c_str());
     if (desc->IsSupported())
         filename_utf8[filename_utf8.length() - strlen(desc->Extension)] = 0; //strrchr(source,'.') = 0;
     else
