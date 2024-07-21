@@ -388,7 +388,7 @@ void File_Name::set_filename_raw(const File_Name *root, const char *filename)
 
 	const char* separator = strrchr(rel_value_utf8(), G_DIR_SEPARATOR);
 	if (separator)
-	{	_file_start_utf8 = separator - _value + 1;
+	{	_file_start_utf8 = separator - _value_utf8.get() + 1;
 	} else
 	{	_file_start_utf8 = _rel_start_utf8;
 		_path_value_ck = xString::empty_str;
@@ -432,7 +432,7 @@ void File_Name::set_filename_utf8(const File_Name *root, const char *filename_ut
 
 	const char* separator = strrchr(rel_value_utf8(), G_DIR_SEPARATOR);
 	if (separator)
-	{	_file_start_utf8 = separator - _value + 1;
+	{	_file_start_utf8 = separator - _value_utf8.get() + 1;
 	} else
 	{	_file_start_utf8 = _rel_start_utf8;
 		_path_value_ck = xString::empty_str;
