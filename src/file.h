@@ -73,12 +73,22 @@ typedef struct ET_File
     gListP<File_Tag*> FileTagList;       /* Contains the history of changes about file tag data */
     gListP<File_Tag*> FileTagListBak;    /* Contains items of FileTagList removed by 'undo' procedure but have data currently saved */
 
-    gboolean activate_bg_color; // For browser list: alternating background due to sub directory change.
+    bool activate_bg_color; // For browser list: alternating background due to sub directory change.
+
+    /// Create empty file
+    ET_File();
+    ~ET_File();
 
     /// Check all time stamp for the current format and create a warning if not.
     /// @param max_fields Maximum number of fields, i.e. 1111-22-33T44:55:66.
     /// @param additional_content Allow arbitrary additional content after the last field.
     void check_dates(int max_fields, bool additional_content) const;
+    /// Checks if the current files had been changed but not saved.
+    /// @return \c true if the file has been saved. \c false if some changes haven't been saved.
+    bool check_saved() const
+    {	return !(FileTag && !FileTag->data->saved)
+    		&& !(FileNameNew && !FileNameNew->data->saved);
+    }
 } ET_File;
 
 #else
@@ -95,12 +105,6 @@ typedef struct
 
 G_BEGIN_DECLS
 
-gboolean et_file_check_saved (const ET_File *ETFile);
-
-ET_File * ET_File_Item_New (void);
-void ET_Free_File_List_Item (ET_File *ETFile);
-
-void ET_Save_File_Data_From_UI (ET_File *ETFile);
 gboolean ET_Save_File_Name_Internal (const ET_File *ETFile, File_Name *FileName);
 gboolean ET_Save_File_Tag_To_HD (ET_File *ETFile, GError **error);
 

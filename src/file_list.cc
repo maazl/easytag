@@ -49,7 +49,7 @@ et_file_list_free (GList *file_list)
 {
     g_return_if_fail (file_list != NULL);
 
-    g_list_free_full (file_list, (GDestroyNotify)ET_Free_File_List_Item);
+    g_list_free_full (file_list, [](gpointer file) { delete (ET_File*)file; });
 }
 
 static void
@@ -144,7 +144,7 @@ et_file_list_add (GList *file_list,
     gString filename(g_file_get_path(file));
 
     /* Attach all data to this ETFile item */
-    ET_File* ETFile = ET_File_Item_New();
+    ET_File* ETFile = new ET_File();
     File_Name* FileName = new File_Name();
     File_Tag* FileTag = new File_Tag();
 
@@ -548,7 +548,7 @@ ET_Remove_File_From_File_List (ET_File *ETFile)
                                                  ETFile);
 
     // Free data of the file
-    ET_Free_File_List_Item(ETFile);
+    delete ETFile;
 
     /* Recalculate length of ETFileDisplayedList list. */
     ETCore->ETFileDisplayedList_Length = et_displayed_file_list_length (ETCore->ETFileDisplayedList);
@@ -890,7 +890,7 @@ et_file_list_check_all_saved (GList *etfilelist)
 
         for (l = g_list_first (etfilelist); l != NULL; l = g_list_next (l))
         {
-            if (!et_file_check_saved ((ET_File *)l->data))
+            if (!((ET_File *)l->data)->check_saved())
             {
                 return FALSE;
             }

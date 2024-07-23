@@ -324,15 +324,14 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
      ******************************/
     {
         // Delete the APE tag (create a dummy ETFile for the Ape_Tag_... function)
-        ET_File   *ETFile_tmp    = ET_File_Item_New();
+        ET_File   ETFile_tmp;
         // Same file...
-        ETFile_tmp->FileNameCur  =
-        ETFile_tmp->FileNameList = gListP<File_Name*>(new File_Name(*ETFile->FileNameCur->data));
+        ETFile_tmp.FileNameCur  =
+        ETFile_tmp.FileNameList = gListP<File_Name*>(new File_Name(*ETFile->FileNameCur->data));
         // With empty tag...
-        ETFile_tmp->FileTag      =
-        ETFile_tmp->FileTagList  = gListP<File_Tag*>(new File_Tag());
-        ape_tag_write_file_tag (ETFile_tmp, NULL);
-        ET_Free_File_List_Item(ETFile_tmp);
+        ETFile_tmp.FileTag      =
+        ETFile_tmp.FileTagList  = gListP<File_Tag*>(new File_Tag());
+        ape_tag_write_file_tag(&ETFile_tmp, NULL);
     }
 
 
@@ -411,12 +410,12 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
             && g_settings_get_boolean (MainSettings,
                                        "id3v2-enable-unicode"))
         {
-            ET_File   *ETFile_tmp    = ET_File_Item_New();
+            ET_File   ETFile_tmp;
             File_Tag  *FileTag_tmp   = new File_Tag();
-            ETFile_tmp->FileTagList  = gListP<File_Tag*>(FileTag_tmp);
-            ETFile_tmp->FileTag      = ETFile_tmp->FileTagList;
+            ETFile_tmp.FileTag      =
+            ETFile_tmp.FileTagList  = gListP<File_Tag*>(FileTag_tmp);
 
-            if (id3_read_file(file.get(), ETFile_tmp, NULL) == TRUE
+            if (id3_read_file(file.get(), &ETFile_tmp, NULL) == TRUE
                 && *FileTag != *FileTag_tmp)
             {
                 flag_id3lib_bugged = FALSE; /* Report the error only once. */
@@ -427,7 +426,6 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
             }
 
             delete FileTag_tmp;
-            ET_Free_File_List_Item(ETFile_tmp);
         }
     }
 

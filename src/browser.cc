@@ -2153,7 +2153,7 @@ Browser_Artist_List_Set_Row_Appearance (EtBrowser *self, GtkTreeIter *iter)
     {
         for (m = (GList *)l->data; m != NULL; m = g_list_next (m))
         {
-            if (!et_file_check_saved ((ET_File *)m->data))
+            if (!((ET_File *)m->data)->check_saved())
             {
                 if (g_settings_get_boolean (MainSettings, "file-changed-bold"))
                 {
@@ -2392,7 +2392,7 @@ Browser_Album_List_Set_Row_Appearance (EtBrowser *self, GtkTreeIter *iter)
                              ALBUM_ETFILE_LIST_POINTER, &l, -1);
          l != NULL; l = g_list_next (l))
     {
-        if (!et_file_check_saved ((ET_File *)l->data))
+        if (!((ET_File *)l->data)->check_saved())
         {
             if (g_settings_get_boolean (MainSettings, "file-changed-bold"))
             {
@@ -3554,7 +3554,7 @@ static void set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkT
 	gtk_tree_model_get(model, iter, LIST_FILE_POINTER, &file, -1);
 	auto renderer = (const FileColumnRenderer*)data;
 	string text = renderer->RenderText(file);
-	bool saved = et_file_check_saved(file);
+	bool saved = file->check_saved();
 	bool changed = !saved
 		&& (renderer->Column < ET_SORT_MODE_ASCENDING_CREATION_DATE || renderer->Column >= ET_SORT_MODE_ASCENDING_REPLAYGAIN)
 		&& text != renderer->RenderText(file, true);

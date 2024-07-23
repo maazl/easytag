@@ -358,7 +358,6 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
     const char* basename_new_utf8 = ETFile->FileNameNew->data->file_value_utf8();
 
     /* Save the current displayed data */
-    //ET_Save_File_Data_From_UI((ET_File *)ETFileList->data); // Not needed, because it was done before
     FileTag     = (File_Tag*)ETFile->FileTag->data;
     FileNameNew = (File_Name*)ETFile->FileNameNew->data;
 

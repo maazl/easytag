@@ -626,15 +626,14 @@ flac_tag_write_file_tag (const ET_File *ETFile,
 #ifdef ENABLE_MP3
     {
         // Delete the ID3 tags (create a dummy ETFile for the Id3tag_... function)
-        ET_File   *ETFile_tmp    = ET_File_Item_New();
+        ET_File   ETFile_tmp;
         // Same file...
-        ETFile_tmp->FileNameCur  =
-        ETFile_tmp->FileNameList = gListP<File_Name*>(new File_Name(*ETFile->FileNameCur->data));
+        ETFile_tmp.FileNameCur  =
+        ETFile_tmp.FileNameList = gListP<File_Name*>(new File_Name(*ETFile->FileNameCur->data));
         // With empty tag...
-        ETFile_tmp->FileTag      =
-        ETFile_tmp->FileTagList  = gListP<File_Tag*>(new File_Tag());
-        id3tag_write_file_tag (ETFile_tmp, NULL);
-        ET_Free_File_List_Item(ETFile_tmp);
+        ETFile_tmp.FileTag      =
+        ETFile_tmp.FileTagList  = gListP<File_Tag*>(new File_Tag());
+        id3tag_write_file_tag(&ETFile_tmp, NULL);
     }
 #endif
     

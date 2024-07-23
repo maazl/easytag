@@ -73,15 +73,16 @@ static gboolean ET_Add_File_Tag_To_List (ET_File *ETFile, File_Tag  *FileTag);
 /*
  * Create a new ET_File structure
  */
-ET_File *
-ET_File_Item_New (void)
-{
-    ET_File *ETFile;
-
-    ETFile = g_slice_new0 (ET_File);
-
-    return ETFile;
-}
+ET_File::ET_File()
+:	IndexKey(0)
+,	ETFileKey(0)
+,	FileSize(0)
+,	FileModificationTime(0)
+,	ETFileDescription(nullptr)
+,	ETFileExtension(nullptr)
+,	ETFileInfo{}
+,	activate_bg_color(FALSE)
+{}
 
 /*
  * Comparison function for sorting by ascending path.
@@ -437,36 +438,22 @@ gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1,
 /*
  * Frees one item of the full main list of files.
  */
-void
-ET_Free_File_List_Item (ET_File *ETFile)
+ET_File::~ET_File()
 {
-    if (ETFile)
-    {
-        /* Frees the lists */
-        if (ETFile->FileNameList)
-        {
-            ET_Free_File_Name_List(ETFile->FileNameList);
-        }
-        if (ETFile->FileNameListBak)
-        {
-            ET_Free_File_Name_List(ETFile->FileNameListBak);
-        }
-        if (ETFile->FileTagList)
-        {
-            ET_Free_File_Tag_List (ETFile->FileTagList);
-        }
-        if (ETFile->FileTagListBak)
-        {
-            ET_Free_File_Tag_List (ETFile->FileTagListBak);
-        }
-        /* Frees infos of ETFileInfo */
-        g_free(ETFile->ETFileInfo.mpc_profile);
-        g_free(ETFile->ETFileInfo.mpc_version);
+	/* Frees the lists */
+	if (FileNameList)
+		ET_Free_File_Name_List(FileNameList);
+	if (FileNameListBak)
+		ET_Free_File_Name_List(FileNameListBak);
+	if (FileTagList)
+		ET_Free_File_Tag_List(FileTagList);
+	if (FileTagListBak)
+		ET_Free_File_Tag_List(FileTagListBak);
+	/* Frees infos of ETFileInfo */
+	g_free(ETFileInfo.mpc_profile);
+	g_free(ETFileInfo.mpc_version);
 
-        g_free(ETFile->ETFileExtension);
-
-        g_slice_free (ET_File, ETFile);
-    }
+	g_free(ETFileExtension);
 }
 
 
@@ -564,7 +551,7 @@ gboolean
 ET_Save_File_Tag_To_HD (ET_File *ETFile, GError **error)
 {
     const ET_File_Description *description;
-    gboolean state;
+    gboolean state = FALSE;
     GFile *file;
     GFileInfo *fileinfo;
 
@@ -618,7 +605,6 @@ ET_Save_File_Tag_To_HD (ET_File *ETFile, GError **error)
 
     if (state==TRUE)
     {
-
         /* Update date and time of the parent directory of the file after
          * changing the tag value (ex: needed for Amarok for refreshing). Note
          * that when renaming a file the parent directory is automatically
@@ -881,28 +867,6 @@ ET_File_Data_Has_Redo_Data (const ET_File *ETFile)
     if (ETFile->FileTag && ETFile->FileTag->next)         has_filetag_redo_data  = TRUE;
 
     return has_filename_redo_data | has_filetag_redo_data;
-}
-
-/*
- * Checks if the current files had been changed but not saved.
- * Returns TRUE if the file has been saved.
- * Returns FALSE if some changes haven't been saved.
- */
-gboolean
-et_file_check_saved (const ET_File *ETFile)
-{
-    g_return_val_if_fail (ETFile != NULL, TRUE);
-
-    /* Check if the tag has been changed. */
-    if (ETFile->FileTag && !ETFile->FileTag->data->saved)
-        return FALSE;
-
-    /* Check if name of file has been changed. */
-    if (ETFile->FileNameNew && !ETFile->FileNameNew->data->saved)
-        return FALSE;
-
-    /* No changes. */
-    return TRUE;
 }
 
 /*******************
