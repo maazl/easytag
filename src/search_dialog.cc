@@ -212,7 +212,7 @@ on_delete_event (GtkWidget *widget)
     et_search_dialog_apply_changes (ET_SEARCH_DIALOG (widget));
     gtk_widget_hide (widget);
 
-    return TRUE;
+    return G_SOURCE_CONTINUE;
 }
 
 static void on_visible_columns_changed(EtSearchDialog *self, const gchar *key, GSettings *settings)

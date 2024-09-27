@@ -544,7 +544,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="replaygain_column">
-                                                <property name="clickable">False</property>
+                                                <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="title" translatable="yes">ReplayGain</property>
                                                 <child>

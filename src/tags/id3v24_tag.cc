@@ -303,7 +303,7 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
         FileTag->disc_and_total(string1);
 
     fetch_tag(FileTag->year, ID3_FRAME_YEAR, ~0);
-    fetch_tag(FileTag->release_year, "TRDL", ~0);
+    fetch_tag(FileTag->release_year, "TDRL", ~0);
 
     /* Track and Total Track (TRCK) */
     if (fetch_tag(string1, ID3_FRAME_TRACK, ~0))
