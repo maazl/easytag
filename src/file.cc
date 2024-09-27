@@ -40,6 +40,8 @@
 
 #include "win32/win32dep.h"
 
+#include <cmath>
+using namespace std;
 
 void ET_File::check_dates(int max_fields, bool additional_content) const
 {
@@ -255,6 +257,26 @@ static gint CmpTagInt(const ET_File* file1, const ET_File* file2)
 }
 
 /*
+ * Comparison function for replay gain values.
+ */
+template <float File_Tag::*V>
+static gint CmpTagFloat(const ET_File* file1, const ET_File* file2)
+{
+	float v1 = file1->FileTag->data->*V;
+	float v2 = file2->FileTag->data->*V;
+
+	if (isnan(v2))
+		return isnan(v1);
+	if (isnan(v1) || v1 < v2)
+		return -1;
+	if (v1 > v2)
+		return 1;
+
+	// 2nd criterion - does this make sense here?
+	return 2 * CmpFilepath(file1, file2);
+}
+
+/*
  * Comparison function for sorting by ascending file type (mp3, ogg, ...).
  */
 static gint CmpFileType(const ET_File* ETFile1, const ET_File* ETFile2)
@@ -420,6 +442,10 @@ gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1,
 		return CmpInfoNum<gint,&ET_File_Info::samplerate>;
 	case ET_SORT_MODE_DESCENDING_FILE_SAMPLERATE:
 		return CmpRev<CmpInfoNum<gint,&ET_File_Info::samplerate>>;
+	case ET_SORT_MODE_ASCENDING_REPLAYGAIN:
+		return CmpTagFloat<&File_Tag::track_gain>;
+	case ET_SORT_MODE_DESCENDING_REPLAYGAIN:
+		return CmpRev<CmpTagFloat<&File_Tag::track_gain>>;
 	default:
 		return nullptr;
 	}
