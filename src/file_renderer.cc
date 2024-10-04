@@ -130,8 +130,8 @@ public:
 
 // Static renderer instances
 const GenericColumnRenderer
-	R_Path(ET_SORT_MODE_ASCENDING_FILEPATH, [](const File_Name* file_name) { return file_name->path_value_utf8(); }),
-	R_File(ET_SORT_MODE_ASCENDING_FILENAME, [](const File_Name* file_name) { return string(file_name->file_value_utf8()); });
+	R_Path(ET_SORT_MODE_ASCENDING_FILEPATH, [](const File_Name* file_name) { return string(file_name->Path); }),
+	R_File(ET_SORT_MODE_ASCENDING_FILENAME, [](const File_Name* file_name) { return string(file_name->File); });
 const TagColumnRenderer
 	R_Title(ET_SORT_MODE_ASCENDING_TITLE, &File_Tag::title),
 	R_Version(ET_SORT_MODE_ASCENDING_VERSION, &File_Tag::version),

@@ -892,7 +892,7 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
     FileTag       = ETFile->FileTag->data;
-    const char* filename = ETFile->FileNameCur->data->value();
+    const char* filename = ETFile->FilePath;
 
     v1tag = v2tag = NULL;
 

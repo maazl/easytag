@@ -51,16 +51,12 @@ typedef struct
  */
 typedef struct ET_File
 {
-    guint IndexKey;           /* Value used to display the position in the list (and in the BrowserList) - Must be renumered after resorting the list - This value varies when resorting list */
+    const gString FilePath;   ///< Full raw path of the file, do not use in UI.
 
-    guint ETFileKey;          /* Primary key to identify each item of the list (no longer used?) */
-
-    gString FilePath;         ///< Full raw path of the file, do not use in UI.
     guint64 FileSize;         ///< File size in bytes
-    guint64 FileModificationTime; /* Save modification time of the file */
+    guint64 FileModificationTime; ///< Save modification time of the file
 
     const ET_File_Description *ETFileDescription;
-    gchar *ETFileExtension;   /* Real extension of the file (keeping the case) (should be placed in ETFileDescription?) */
     ET_File_Info        ETFileInfo;        /* Header infos: bitrate, duration, ... */
 
     gListP<File_Name*> FileNameCur;      /* Points to item of FileNameList that represents the current value of filename state (i.e. file on hard disk) */
@@ -73,10 +69,15 @@ typedef struct ET_File
     gListP<File_Tag*> FileTagList;       /* Contains the history of changes about file tag data */
     gListP<File_Tag*> FileTagListBak;    /* Contains items of FileTagList removed by 'undo' procedure but have data currently saved */
 
+    guint IndexKey;           /* Value used to display the position in the list (and in the BrowserList) - Must be renumered after resorting the list - This value varies when resorting list */
+    guint ETFileKey;          /* Primary key to identify each item of the list (no longer used?) */
+
     bool activate_bg_color; // For browser list: alternating background due to sub directory change.
 
-    /// Create empty file
-    ET_File();
+    /// Create file
+    /// @param filepath Full file path in file system encoding.
+    ET_File(gString&& filepath);
+    ET_File(const gString& filepath) : ET_File(gString(g_strdup(filepath))) {}
     ~ET_File();
 
     /// Check all time stamp for the current format and create a warning if not.
@@ -105,7 +106,6 @@ typedef struct
 
 G_BEGIN_DECLS
 
-gboolean ET_Save_File_Name_Internal (const ET_File *ETFile, File_Name *FileName);
 gboolean ET_Save_File_Tag_To_HD (ET_File *ETFile, GError **error);
 
 gboolean ET_Undo_File_Data (ET_File *ETFile);
@@ -115,8 +115,6 @@ gboolean ET_File_Data_Has_Redo_Data (const ET_File *ETFile);
 
 gboolean ET_Manage_Changes_Of_File_Data (ET_File *ETFile, File_Name *FileName, File_Tag *FileTag);
 void ET_Mark_File_Name_As_Saved (ET_File *ETFile);
-gchar *et_file_generate_name (const ET_File *ETFile, const gchar *new_file_name);
-gchar * ET_File_Format_File_Extension (const ET_File *ETFile);
 
 gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1, const ET_File *ETFile2);
 

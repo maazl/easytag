@@ -201,7 +201,7 @@ et_file_area_set_file_fields (EtFileArea *self,
 
     priv = et_file_area_get_instance_private (self);
 
-    file = g_file_new_for_path(ETFile->FileNameCur->data->value());
+    file = g_file_new_for_path(ETFile->FilePath);
 
     info = g_file_query_info (file, G_FILE_ATTRIBUTE_ACCESS_CAN_READ ","
                               G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE,
@@ -287,7 +287,7 @@ et_file_area_set_file_fields (EtFileArea *self,
 
     /* Set new filename into name_entry. This matches the GFile edit name. */
     gtk_entry_set_text(GTK_ENTRY(priv->name_entry),
-        ETFile->FileNameNew->data->file_value_noext_utf8().c_str());
+        ET_Remove_File_Extension(ETFile->FileNameNew->data->File).c_str());
 
     /* Show position of current file in list */
     text = g_strdup_printf ("%u/%u:", ETFile->IndexKey,

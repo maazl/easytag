@@ -286,7 +286,7 @@ flac_tag_write_file_tag (const ET_File *ETFile,
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
     FileTag       = ETFile->FileTag->data;
-    const char* filename_utf8 = ETFile->FileNameCur->data->value_utf8();
+    const File_Name& filename = *ETFile->FileNameCur->data;
 
     /* libFLAC is able to detect (and skip) ID3v2 tags by itself */
     
@@ -299,11 +299,11 @@ flac_tag_write_file_tag (const ET_File *ETFile,
         
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
                      _("Error while opening file ‘%s’ as FLAC: %s"),
-                     filename_utf8, flac_error_msg);
+                     filename.full_name().get(), flac_error_msg);
         return FALSE;
     }
 
-    file = g_file_new_for_path(ETFile->FileNameCur->data->value());
+    file = g_file_new_for_path(ETFile->FilePath);
 
     state.file = file;
     state.error = NULL;
@@ -332,7 +332,7 @@ flac_tag_write_file_tag (const ET_File *ETFile,
 
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
                      _("Error while opening file ‘%s’ as FLAC: %s"),
-                     filename_utf8, flac_error_msg);
+                     filename.full_name().get(), flac_error_msg);
         et_flac_write_close_func (&state);
         return FALSE;
     }
@@ -346,7 +346,7 @@ flac_tag_write_file_tag (const ET_File *ETFile,
 
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
                      _("Error while opening file ‘%s’ as FLAC: %s"),
-                     filename_utf8, flac_error_msg);
+                     filename.full_name().get(), flac_error_msg);
         FLAC__metadata_chain_delete (chain);
         et_flac_write_close_func (&state);
         return FALSE;
@@ -583,7 +583,7 @@ flac_tag_write_file_tag (const ET_File *ETFile,
 
             g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
                          _("Failed to write comments to file ‘%s’: %s"),
-                         filename_utf8, flac_error_msg);
+                         filename.full_name().get(), flac_error_msg);
             return FALSE;
         }
 
@@ -595,7 +595,7 @@ flac_tag_write_file_tag (const ET_File *ETFile,
 
             g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
                          _("Failed to write comments to file ‘%s’: %s"),
-                         filename_utf8, state.error->message);
+                         filename.full_name().get(), state.error->message);
             et_flac_write_close_func (&state);
             return FALSE;
         }
@@ -615,7 +615,7 @@ flac_tag_write_file_tag (const ET_File *ETFile,
 
             g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
                          _("Failed to write comments to file ‘%s’: %s"),
-                         filename_utf8, flac_error_msg);
+                         filename.full_name().get(), flac_error_msg);
             return FALSE;
         }
     }
@@ -626,7 +626,7 @@ flac_tag_write_file_tag (const ET_File *ETFile,
 #ifdef ENABLE_MP3
     {
         // Delete the ID3 tags (create a dummy ETFile for the Id3tag_... function)
-        ET_File   ETFile_tmp;
+        ET_File ETFile_tmp(ETFile->FilePath);
         // Same file...
         ETFile_tmp.FileNameCur  =
         ETFile_tmp.FileNameList = gListP<File_Name*>(new File_Name(*ETFile->FileNameCur->data));

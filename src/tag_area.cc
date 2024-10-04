@@ -340,7 +340,7 @@ on_apply_to_selection (GObject *object,
          * Note : 'etfilelistfull' and 'etfilelist' must be sorted in the same order */
         GList *etfilelistfull = NULL;
         EtSortMode sort_mode;
-        std::string last_path;
+        xString0 last_path;
         gint i = 0;
 
         /* FIX ME!: see to fill also the Total Track (it's a good idea?) */
@@ -359,7 +359,7 @@ on_apply_to_selection (GObject *object,
             etfile = (ET_File*)etfilelist->data;
 
             // Restart counter when entering a new directory
-            const string& path = FileNameCur->path_value_utf8();
+            const xString0& path = FileNameCur->Path;
             if (last_path != path)
             {
                 i = 0;
@@ -391,8 +391,7 @@ on_apply_to_selection (GObject *object,
         for (l = etfilelist; l != NULL; l = g_list_next (l))
         {
             etfile        = (ET_File *)l->data;
-            string path_utf8 = etfile->FileNameNew->data->path_value_utf8();
-            string track_string = et_track_number_to_string(et_file_list_get_n_files_in_path(ETCore->ETFileList, path_utf8.c_str()));
+            string track_string = et_track_number_to_string(et_file_list_get_n_files_in_path(ETCore->ETFileList, etfile->FileNameNew->data->Path));
 
             if (!track_total)
             {
@@ -1285,7 +1284,7 @@ on_picture_add_button_clicked (GObject *object,
                                      FALSE);
 
     /* Starting directory (the same as the current file). */
-    init_dir = g_path_get_dirname (ETCore->ETFileDisplayed->FileNameCur->data->value());
+    init_dir = g_path_get_dirname (ETCore->ETFileDisplayed->FilePath);
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (FileSelectionWindow),
                                          init_dir);
     g_free (init_dir);

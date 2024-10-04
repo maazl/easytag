@@ -151,16 +151,16 @@ gboolean asftag_write_file_tag (const ET_File *ETFile, GError **error)
 {
 	g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
 
-	const char *filename_utf8 = ETFile->FileNameCur->data->value_utf8();
+	const File_Name& filename = *ETFile->FileNameCur->data;
 
 	/* Open file for writing */
-	GFile *file = g_file_new_for_path(ETFile->FileNameCur->data->value());
+	GFile *file = g_file_new_for_path(ETFile->FilePath);
 	GIO_IOStream stream (file);
 	g_object_unref (file);
 	if (!stream.isOpen())
 	{	const GError *tmp_error = stream.getError();
 		g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-			_("Error while opening file ‘%s’: %s"), filename_utf8,
+			_("Error while opening file ‘%s’: %s"), filename.full_name().get(),
 			tmp_error->message);
 		return FALSE;
 	}
@@ -169,7 +169,7 @@ gboolean asftag_write_file_tag (const ET_File *ETFile, GError **error)
 	if (!asffile.isOpen())
 	{	const GError *tmp_error = stream.getError();
 		g_set_error(error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-			_("Error while opening file ‘%s’: %s"), filename_utf8,
+			_("Error while opening file ‘%s’: %s"), filename.full_name().get(),
 			tmp_error ? tmp_error->message : _("ASF format invalid"));
 		return FALSE;
 	}
@@ -181,7 +181,7 @@ gboolean asftag_write_file_tag (const ET_File *ETFile, GError **error)
 	ASF::Tag* tag = asffile.tag();
 	if (!tag)
 	{	g_set_error(error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-			_("Error reading tags from file ‘%s’"), filename_utf8);
+			_("Error reading tags from file ‘%s’"), filename.full_name().get());
 		return FALSE;
 	}
 

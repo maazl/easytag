@@ -107,13 +107,12 @@ struct ET_File_Description;
 
 #endif
 
-G_BEGIN_DECLS
-
 /// Returns the extension of the file
 inline const gchar* ET_Get_File_Extension(const gchar *filename)
-{	return filename ? strrchr(filename, '.') : NULL;
+{	return filename ? strrchr(filename, '.') : nullptr;
 }
 
-G_END_DECLS
+/// Removes the extension from the file name.
+std::string ET_Remove_File_Extension(const gchar *filename);
 
 #endif /* !ET_FILE_DESCRIPTION_H_ */

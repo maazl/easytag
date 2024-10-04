@@ -250,9 +250,9 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
         GError *error = NULL;
         guint32 crc32_value;
 
-        if (g_ascii_strcasecmp(ETFile->ETFileExtension, ".mp3"))
+        if (g_ascii_strcasecmp(ETFile->ETFileDescription->Extension, ".mp3"))
         {
-            file = g_file_new_for_path (ETFile->FileNameNew->data->value());
+            file = g_file_new_for_path (ETFile->FilePath);
 
             if (crc32_file_with_ID3_tag (file, &crc32_value, &error))
             {
@@ -277,8 +277,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
     et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
                                               _("Tag successfully scanned"),
                                               TRUE);
-    Log_Print (LOG_OK, _("Tag successfully scanned ‘%s’"),
-        ETFile->FileNameNew->data->file_value_utf8());
+    Log_Print (LOG_OK, _("Tag successfully scanned ‘%s’"), ETFile->FileNameNew->data->File.get());
 }
 
 static GList *
@@ -301,7 +300,7 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, string&& mask)
 
     g_return_val_if_fail (ETFile != NULL && !mask.empty(), NULL);
 
-    std::string filename_utf8(ETFile->FileNameNew->data->value_utf8());
+    std::string filename_utf8(ETFile->FileNameNew->data->full_name());
     if (filename_utf8.empty()) return NULL;
 
     // Remove extension of file (if found)
@@ -310,7 +309,7 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, string&& mask)
         filename_utf8[filename_utf8.length() - strlen(desc->Extension)] = 0; //strrchr(source,'.') = 0;
     else
         Log_Print(LOG_ERROR, _("The extension ‘%s’ was not found in filename ‘%s’"),
-            ET_Get_File_Extension(filename_utf8.c_str()), ETFile->FileNameNew->data->file_value_utf8());
+            ET_Get_File_Extension(filename_utf8.c_str()), ETFile->FileNameNew->data->File.get());
 
     /* Replace characters into mask and filename before parsing. */
     convert_mode = (EtConvertSpaces)g_settings_get_enum (MainSettings, "fill-convert-spaces");
@@ -550,7 +549,7 @@ Scan_Rename_File_Generate_Preview (EtScanDialog *self)
     if (!mask)
         return;
 
-    string preview_text = et_scan_generate_new_filename_from_mask(ETCore->ETFileDisplayed, mask, FALSE);
+    string preview_text = et_evaluate_mask(ETCore->ETFileDisplayed, mask, FALSE);
 
     if (GTK_IS_LABEL (priv->rename_preview_label))
     {
@@ -616,14 +615,8 @@ Scan_Free_File_Fill_Tag_List (GList *list)
 static void
 Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
 {
-    EtScanDialogPrivate *priv;
-    gchar *filename_generated = NULL;
-    gchar *filename_new_utf8 = NULL;
-    File_Name *FileName;
-
     g_return_if_fail (ETFile != NULL);
-
-    priv = et_scan_dialog_get_instance_private (self);
+    EtScanDialogPrivate *priv = et_scan_dialog_get_instance_private (self);
 
     const gchar* mask = gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->rename_combo))));
     if (!mask)
@@ -631,12 +624,12 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
 
     // Note : if the first character is '/', we have a path with the filename,
     // else we have only the filename. The both are in UTF-8.
-    string filename_generated_utf8 = et_scan_generate_new_filename_from_mask(ETFile, mask, FALSE);
+    string filename_generated_utf8 = et_evaluate_mask(ETFile, mask, FALSE);
     if (filename_generated_utf8.empty())
         return;
 
     // Convert filename to file-system encoding
-    filename_generated = filename_from_display(filename_generated_utf8.c_str());
+    gString filename_generated(filename_from_display(filename_generated_utf8.c_str()));
     if (!filename_generated)
     {
         GtkWidget *msgdialog;
@@ -654,70 +647,17 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
     }
 
     /* Build the filename with the full path or relative to old path */
-    filename_new_utf8 = et_file_generate_name(ETFile, filename_generated_utf8.c_str());
-    g_free(filename_generated);
-
-    /* Set the new filename */
-    /* Create a new 'File_Name' item. */
-    FileName = new File_Name();
+    File_Name *FileName = new File_Name(ETFile->FileNameNew->data->generate_name(filename_generated_utf8.c_str(), false));
     // Save changes of the 'File_Name' item
-    FileName->set_filename_utf8(ETFile->FileNameCur->data, filename_new_utf8);
-
     ET_Manage_Changes_Of_File_Data(ETFile,FileName,NULL);
-    g_free(filename_new_utf8);
 
     et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
                                               _("New filename successfully scanned"),
                                               TRUE);
 
-    Log_Print (LOG_OK, _("New filename successfully scanned ‘%s’"),
-        ETFile->FileNameNew->data->file_value_utf8());
+    Log_Print (LOG_OK, _("New filename successfully scanned ‘%s’"), ETFile->FileNameNew->data->File.get());
 
     return;
-}
-
-/*
- * Build the new filename using tag + mask
- * Used also to rename the directory (from the browser)
- * @param ETFile                     : the etfile to process
- * @param mask                       : the pattern to parse
- * @param no_dir_check_or_conversion : if FALSE, disable checking of a directory
- *      in the mask, and don't convert "illegal" characters. This is used in the
- *      function "Write_Playlist" for the content of the playlist.
- * Returns filename in UTF-8
- */
-string et_scan_generate_new_filename_from_mask
-(const ET_File *ETFile, const gchar *mask, gboolean no_dir_check_or_conversion)
-{
-    g_return_val_if_fail (ETFile != NULL && mask != NULL, NULL);
-
-    /*
-     * Check for a directory in the mask
-     */
-    gString path_utf8_cur;
-    if (!no_dir_check_or_conversion)
-    {
-        if (g_path_is_absolute(mask))
-        {
-            // Absolute directory
-        } else if (strchr(mask,G_DIR_SEPARATOR)!=NULL) // This is '/' on UNIX machines and '\' under Windows
-        {
-            // Relative path => set beginning of the path
-            const File_Name* file = ETFile->FileNameCur->data;
-            if (file->rel_value_utf8() != file->value_utf8())
-                path_utf8_cur = g_strndup(file->value_utf8(), file->rel_value_utf8() - file->value_utf8());
-            else
-                path_utf8_cur = g_path_get_dirname(file->value_utf8());
-        }
-    }
-
-    string filename_new_utf8 = et_evaluate_mask(ETFile, mask, no_dir_check_or_conversion);
-
-    // Add current path if relative path entered
-    if (path_utf8_cur)
-        filename_new_utf8 = gString(g_build_filename(path_utf8_cur, filename_new_utf8.c_str(), NULL));
-
-    return filename_new_utf8; // in UTF-8!
 }
 
 /*
@@ -726,52 +666,37 @@ string et_scan_generate_new_filename_from_mask
 static void
 Scan_Rename_File_Prefix_Path (EtScanDialog *self)
 {
-    EtScanDialogPrivate *priv;
-    gint pos;
-    gchar *path_tmp;
-    const gchar *combo_text;
-    const ET_File *ETFile = ETCore->ETFileDisplayed;
-    gchar *path_utf8_cur;
-
-    if (!ETFile)
-    {
+    if (!ETCore->ETFileDisplayed)
         return;
-    }
 
-    priv = et_scan_dialog_get_instance_private (self);
-
-    // The path to prefix
-    path_utf8_cur = g_path_get_dirname(ETFile->FileNameCur->data->value_utf8());
+    EtScanDialogPrivate *priv = et_scan_dialog_get_instance_private (self);
 
     /* The current text in the combobox. */
-    combo_text = gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->rename_combo))));
+    const gchar *combo_text = gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->rename_combo))));
+    if (!combo_text || g_path_is_absolute(combo_text))
+        return;
+
+    // The path to prefix
+    const char* filepath = ETCore->ETFileDisplayed->FileNameCur->data->Path;
+    string path_tmp;
+    if (!g_path_is_absolute(filepath))
+    {   // Current root path
+        path_tmp = gString(g_filename_display_name(et_application_window_get_current_path_name(ET_APPLICATION_WINDOW(MainWindow))));
+        if (!G_IS_DIR_SEPARATOR(path_tmp.back()))
+            path_tmp += G_DIR_SEPARATOR;
+    }
+    if (*filepath)
+        (path_tmp += filepath) += G_DIR_SEPARATOR;
 
     // If the path already exists we don't add it again
     // Use g_utf8_collate_key instead of strncmp
-    if (combo_text && path_utf8_cur
-        && strncmp (combo_text, path_utf8_cur, strlen (path_utf8_cur)) != 0)
+    if (!path_tmp.empty()
+        && strncmp(combo_text, path_tmp.c_str(), path_tmp.length()) != 0)
     {
-        if (g_path_is_absolute (combo_text))
-        {
-            path_tmp = g_strdup(path_utf8_cur);
-        } else
-        {
-            path_tmp = g_strconcat(path_utf8_cur,G_DIR_SEPARATOR_S,NULL);
-        }
-	pos = 0;
+        gint pos = 0;
         gtk_editable_insert_text (GTK_EDITABLE (gtk_bin_get_child (GTK_BIN (priv->rename_combo))),
-                                  path_tmp, -1, &pos);
-        g_free(path_tmp);
+                                  path_tmp.c_str(), -1, &pos);
     }
-
-    g_free(path_utf8_cur);
-}
-
-
-string et_scan_generate_new_directory_name_from_mask
-(const ET_File *ETFile, const gchar *mask, gboolean no_dir_check_or_conversion)
-{
-    return et_scan_generate_new_filename_from_mask(ETFile, mask, no_dir_check_or_conversion);
 }
 
 
@@ -910,22 +835,14 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
     /* Process the filename */
     if (st_filename != NULL)
     {
-        if (st_filename->value_utf8()
-            && (process_fields & ET_PROCESS_FIELD_FILENAME))
+        if (process_fields & ET_PROCESS_FIELD_FILENAME)
         {
-            if (!FileName)
-                FileName = new File_Name();
-
-            string s(st_filename->file_value_utf8());
             // Remove the extension to set it to lower case (to avoid problem with undo)
-            size_t p = s.rfind('.');
-            if (p != string::npos)
-                s.erase(p);
+            string s(ET_Remove_File_Extension(st_filename->File));
 
             Scan_Process_Fields_Functions (self, s);
 
-            gString string_utf8(et_file_generate_name (ETFile, s.c_str()));
-            FileName->set_filename_utf8(ETFile->FileNameCur->data, string_utf8);
+            FileName = new File_Name(ETFile->FileNameNew->data->generate_name(s.c_str(), true));
         }
     }
 
@@ -1948,36 +1865,6 @@ Scan_Option_Button (void)
     et_application_window_show_preferences_dialog_scanner (ET_APPLICATION_WINDOW (MainWindow));
 }
 
-
-/*
- * entry_check_mask:
- * @entry: the entry for which to check the mask
- * @user_data: user data set when the signal was connected
- *
- * Display an icon in the entry if the current text contains an invalid mask.
- */
-void
-entry_check_mask (GtkEntry *entry, gpointer user_data)
-{
-	g_return_if_fail (entry != NULL);
-
-	const gchar* mask = gtk_entry_get_text (entry);
-	string error;
-
-	if (et_str_empty (mask))
-		error = _("Empty scanner mask.");
-	else
-	{	error = et_check_mask(mask);
-		if (error.empty())
-		{
-			gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
-			return;
-		}
-	}
-
-	gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, "emblem-unreadable");
-	gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY, error.c_str());
-}
 
 void
 et_scan_dialog_scan_selected_files (EtScanDialog *self)

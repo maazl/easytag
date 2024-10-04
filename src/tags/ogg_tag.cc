@@ -801,7 +801,7 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
 
     FileTag       = ETFile->FileTag->data;
 
-    file = g_file_new_for_path(ETFile->FileNameCur->data->value());
+    file = g_file_new_for_path(ETFile->FilePath);
 
     state = vcedit_new_state();    // Allocate memory for 'state'
 

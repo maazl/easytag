@@ -159,7 +159,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
             || (file_tag && !file_tag->saved))
             nb_files_to_save++;
 
-        file = g_file_new_for_path(ETFile->FileNameCur->data->value());
+        file = g_file_new_for_path(ETFile->FilePath);
         fileinfo = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_MODIFIED,
                                       G_FILE_QUERY_INFO_NONE, NULL, NULL);
         g_object_unref (file);
@@ -346,20 +346,12 @@ static gint
 Save_File (ET_File *ETFile, gboolean multiple_files,
            gboolean force_saving_files)
 {
-    const File_Tag *FileTag;
-    const File_Name *FileNameNew;
-    const char *filename_cur_utf8 = ETFile->FileNameCur->data->value_utf8();
-    const char *filename_new_utf8 = ETFile->FileNameNew->data->value_utf8();
-    gchar *dirname_cur_utf8, *dirname_new_utf8;
-
     g_return_val_if_fail (ETFile != NULL, 0);
 
-    const char* basename_cur_utf8 = ETFile->FileNameCur->data->file_value_utf8();
-    const char* basename_new_utf8 = ETFile->FileNameNew->data->file_value_utf8();
+    const File_Name& filename_cur = *ETFile->FileNameCur->data;
+    const File_Name& filename_new = *ETFile->FileNameNew->data;
 
     /* Save the current displayed data */
-    FileTag     = (File_Tag*)ETFile->FileTag->data;
-    FileNameNew = (File_Name*)ETFile->FileNameNew->data;
 
     /*
      * Check if file was changed by an external program
@@ -403,8 +395,7 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
      * First part: write tag information (artist, title,...)
      */
     // Note : the option 'force_saving_files' is only used to save tags
-    if ( force_saving_files
-    || FileTag->saved == FALSE ) // This tag had been already saved ?
+    if ( force_saving_files || ETFile->FileTag->data->saved == FALSE ) // This tag had been already saved ?
     {
         GtkWidget *msgdialog = NULL;
         GtkWidget *msgdialog_check_button = NULL;
@@ -420,7 +411,7 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
                                                GTK_MESSAGE_QUESTION,
                                                GTK_BUTTONS_NONE,
                                                _("Do you want to write the tag of file ‘%s’?"),
-                                               basename_cur_utf8);
+                                               filename_cur.File.get());
             gtk_window_set_title(GTK_WINDOW(msgdialog),_("Confirm Tag Writing"));
             if (multiple_files)
             {
@@ -489,7 +480,7 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
      * Second part: rename the file
      */
     // Do only if changed! (don't take force_saving_files into account)
-    if (!FileNameNew->saved) // This filename had been already saved ?
+    if (!filename_new.saved) // This filename had been already saved ?
     {
         GtkWidget *msgdialog = NULL;
         GtkWidget *msgdialog_check_button = NULL;
@@ -503,27 +494,23 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
             gchar *msg1 = NULL;
             // ET_Display_File_Data_To_UI(ETFile);
 
-            dirname_cur_utf8 = g_path_get_dirname(filename_cur_utf8);
-            dirname_new_utf8 = g_path_get_dirname(filename_new_utf8);
-
             // Directories were renamed? or only filename?
-            if (g_utf8_collate(dirname_cur_utf8,dirname_new_utf8) != 0)
+            if (filename_cur.Path != filename_new.Path)
             {
-                if (g_utf8_collate(basename_cur_utf8,basename_new_utf8) != 0)
+                if (filename_cur.File != filename_new.File)
                 {
                     // Directories and filename changed
                     msgdialog_title = g_strdup (_("Rename File and Directory"));
                     msg = g_strdup(_("File and directory rename confirmation required"));
                     msg1 = g_strdup_printf (_("Do you want to rename the file and directory ‘%s’ to ‘%s’?"),
-                                           filename_cur_utf8, filename_new_utf8);
+                                           filename_cur.full_name().get(), filename_new.full_name().get());
                 }else
                 {
                     // Only directories changed
                     msgdialog_title = g_strdup (_("Rename Directory"));
                     msg = g_strdup(_("Directory rename confirmation required"));
                     msg1 = g_strdup_printf (_("Do you want to rename the directory ‘%s’ to ‘%s’?"),
-                                            dirname_cur_utf8,
-                                            dirname_new_utf8);
+                                            filename_cur.Path.get(), filename_new.Path.get());
                 }
             }else
             {
@@ -531,11 +518,8 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
                 msgdialog_title = g_strdup (_("Rename File"));
                 msg = g_strdup(_("File rename confirmation required"));
                 msg1 = g_strdup_printf (_("Do you want to rename the file ‘%s’ to ‘%s’?"),
-                                       basename_cur_utf8, basename_new_utf8);
+                                       filename_cur.File.get(), filename_new.File.get());
             }
-
-            g_free(dirname_cur_utf8);
-            g_free(dirname_new_utf8);
 
             msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
                                                GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -585,8 +569,13 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
         {
             case GTK_RESPONSE_YES:
             {
+                // Make absolute path of the file in file system notation.
+                gString raw_name(filename_from_display(filename_new.full_name().get()));
+                raw_name = g_canonicalize_filename(raw_name.get(),
+                    et_application_window_get_current_path_name(ET_APPLICATION_WINDOW(MainWindow)));
+
                 GError *error = NULL;
-                gboolean rc = et_rename_file(ETFile->FileNameCur->data->value(), ETFile->FileNameNew->data->value(), &error);
+                gboolean rc = et_rename_file(ETFile->FilePath, raw_name, &error);
 
                 // if 'SF_HideMsgbox_Rename_File is TRUE', then errors are displayed only in log
                 if (!rc)
@@ -598,8 +587,8 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
                                                             GTK_MESSAGE_ERROR,
                                                             GTK_BUTTONS_CLOSE,
                                                             _("Cannot rename file ‘%s’ to ‘%s’"),
-                                                            filename_cur_utf8,
-                                                            filename_new_utf8);
+                                                            filename_cur.full_name().get(),
+                                                            filename_new.full_name().get());
                         gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (msgdialog),
                                                                   "%s",
                                                                   error->message);
@@ -612,7 +601,8 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
 
                     Log_Print (LOG_ERROR,
                                _("Cannot rename file ‘%s’ to ‘%s’: %s"),
-                               filename_cur_utf8, filename_new_utf8,
+                               filename_cur.full_name().get(),
+                               filename_new.full_name().get(),
                                error->message);
 
                     et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
@@ -657,7 +647,7 @@ Write_File_Tag (ET_File *ETFile, gboolean hide_msgbox)
 {
     GError *error = NULL;
 
-    const char* basename_utf8 = ETFile->FileNameCur->data->file_value_utf8();
+    const char* basename_utf8 = ETFile->FileNameCur->data->File.get();
     et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
         strprintf(_("Writing tag of ‘%s’"), basename_utf8).c_str(), TRUE);
 
@@ -801,19 +791,19 @@ void ReplayGain_For_Selected_Files (void)
 			first = cur;
 		}
 
-		File_Tag* file_tag = (File_Tag*)file->FileTag->data;
-		const File_Name* file_name = (File_Name*)file->FileNameCur->data;
+		File_Tag* file_tag = file->FileTag->data;
+		const File_Name& file_name = *file->FileNameCur->data;
 
-		string err = analyzer.AnalyzeFile(file_name->value());
+		string err = analyzer.AnalyzeFile(file->FilePath);
 		if (!err.empty())
-		{	Log_Print(LOG_ERROR, _("Failed to analyze file '%s': %s"), file_name->value_utf8().get(), err.c_str());
+		{	Log_Print(LOG_ERROR, _("Failed to analyze file '%s': %s"), file_name.full_name().get(), err.c_str());
 			error = 1;
 		} else
 		{	file_tag = new File_Tag(*file_tag);
 			file_tag->track_gain = analyzer.GetLastResult().Gain();
 			file_tag->track_peak = analyzer.GetLastResult().Peak();
 			ET_Manage_Changes_Of_File_Data(file, nullptr, file_tag);
-			Log_Print(LOG_OK, _("ReplayGain of file '%s' is %.1f dB, peak %.2f"), file_name->rel_value_utf8(), file_tag->track_gain, file_tag->track_peak);
+			Log_Print(LOG_OK, _("ReplayGain of file '%s' is %.1f dB, peak %.2f"), file_name.full_name().get(), file_tag->track_gain, file_tag->track_peak);
 
 			if (ETCore->ETFileDisplayed == file)
 				et_application_window_display_et_file(window, file, ET_COLUMN_REPLAYGAIN);
@@ -928,8 +918,6 @@ Read_Directory (const gchar *path_real)
 
     /* Read the directory recursively */
     et_application_window_status_bar_message (window, _("Search in progress…"), FALSE);
-    File_Name *root_path = new File_Name();
-    root_path->set_filename_raw(NULL, path_real);
     /* Search the supported files. */
     FileList = read_directory_recursively (FileList, dir_enumerator,
                                            g_settings_get_boolean (MainSettings,
@@ -956,7 +944,7 @@ Read_Directory (const gchar *path_real)
         g_free (filename_real);
         g_free (display_path);
 
-        ETCore->ETFileList = et_file_list_add (ETCore->ETFileList, file, root_path);
+        ETCore->ETFileList = et_file_list_add (ETCore->ETFileList, file, path_real);
 
         /* Update the progress bar. */
         et_application_window_progress_set(window, ++progress_bar_index, nbrfile);
@@ -965,7 +953,6 @@ Read_Directory (const gchar *path_real)
     }
 
     g_list_free_full (FileList, g_object_unref);
-    delete root_path;
     et_application_window_progress_set(window, 0, 0);
 
     /* Close window to quit recursion */

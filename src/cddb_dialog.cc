@@ -1934,20 +1934,12 @@ set_et_file_from_cddb_album (ET_File * etfile,
     /* Filename field. */
     if (set_fields & ET_CDDB_SET_FIELD_FILENAME)
     {
-        gchar *filename_new_utf8;
-
-        /* Allocation of a new FileName. */
-        FileName = new File_Name();
-
         /* Build the filename with the path. */
         string filename_generated_utf8 = et_track_number_to_string(cddbtrackalbum->track_number)
             + " - " + cddbtrackalbum->track_name;
         File_Name::prepare_func((EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"), ET_CONVERT_SPACES_NO_CHANGE)(filename_generated_utf8, 0);
-        filename_new_utf8 = et_file_generate_name(etfile, filename_generated_utf8.c_str());
 
-        FileName->set_filename_utf8(etfile->FileNameCur->data, filename_new_utf8);
-
-        g_free(filename_new_utf8);
+        FileName = new File_Name(etfile->FileNameNew->data->generate_name(filename_generated_utf8.c_str(), true));
     }
 
     ET_Manage_Changes_Of_File_Data (etfile, FileName, FileTag);

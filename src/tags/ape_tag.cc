@@ -258,7 +258,7 @@ ape_tag_write_file_tag (const ET_File *ETFile,
     ape_set("REPLAYGAIN_ALBUM_PEAK", FileTag->album_peak_str().c_str());
 
     /* reread all tag-type again  excl. changed frames by apefrm_remove() */
-    if (apetag_save (ETFile->FileNameCur->data->value(), ape_mem, APE_TAG_V2 + SAVE_NEW_OLD_APE_TAG)
+    if (apetag_save (ETFile->FilePath, ape_mem, APE_TAG_V2 + SAVE_NEW_OLD_APE_TAG)
         != 0)
     {
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "%s",

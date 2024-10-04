@@ -47,19 +47,19 @@ void ET_File::check_dates(int max_fields, bool additional_content) const
 {
 	File_Tag* tag = FileTagCur->data;
 	if (!File_Tag::check_date(tag->year, max_fields, additional_content))
-			Log_Print (LOG_WARNING,
-								 _("The year value ‘%s’ seems to be invalid in file ‘%s’."),
-								 tag->year.get(), FileNameCur->data->value_utf8().get());
+		Log_Print (LOG_WARNING,
+			_("The year value ‘%s’ seems to be invalid in file ‘%s’."),
+			tag->year.get(), FileNameCur->data->full_name().get());
 
 	if (!File_Tag::check_date(tag->release_year, max_fields, additional_content))
-			Log_Print (LOG_WARNING,
-								 _("The release year value ‘%s’ seems to be invalid in file ‘%s’."),
-								 tag->release_year.get(), FileNameCur->data->value_utf8().get());
+		Log_Print (LOG_WARNING,
+			_("The release year value ‘%s’ seems to be invalid in file ‘%s’."),
+			tag->release_year.get(), FileNameCur->data->full_name().get());
 
 	if (!File_Tag::check_date(tag->orig_year, max_fields, additional_content))
-			Log_Print (LOG_WARNING,
-								 _("The original year value ‘%s’ seems to be invalid in file ‘%s’."),
-								 tag->orig_year.get(), FileNameCur->data->value_utf8().get());
+		Log_Print (LOG_WARNING,
+			_("The original year value ‘%s’ seems to be invalid in file ‘%s’."),
+			tag->orig_year.get(), FileNameCur->data->full_name().get());
 }
 
 
@@ -75,13 +75,13 @@ static gboolean ET_Add_File_Tag_To_List (ET_File *ETFile, File_Tag  *FileTag);
 /*
  * Create a new ET_File structure
  */
-ET_File::ET_File()
-:	IndexKey(0)
+ET_File::ET_File(gString&& filepath)
+:	FilePath(move(filepath))
+,	IndexKey(0)
 ,	ETFileKey(0)
 ,	FileSize(0)
 ,	FileModificationTime(0)
 ,	ETFileDescription(nullptr)
-,	ETFileExtension(nullptr)
 ,	ETFileInfo{}
 ,	activate_bg_color(FALSE)
 {}
@@ -95,10 +95,10 @@ static gint CmpFilepath(const ET_File* ETFile1, const ET_File* ETFile2)
 	const File_Name *file2 = ETFile2->FileNameCur->data;
 	// !!!! : Must be the same rules as "Cddb_Track_List_Sort_Func" to be
 	// able to sort in the same order files in cddb and in the file list.
-	int r = strcmp(file1->path_value_ck(), file2->path_value_ck());
+	int r = file1->Path.compare(file2->Path);
 	if (r)
 		return sign(r);
-	return 2 * sign(strcmp(file1->file_value_ck(), file2->file_value_ck()));
+	return 2 * sign(file1->File.compare(file2->File));
 }
 
 /*
@@ -108,7 +108,7 @@ static gint CmpFilename(const ET_File* ETFile1, const ET_File* ETFile2)
 {
 	// !!!! : Must be the same rules as "Cddb_Track_List_Sort_Func" to be
 	// able to sort in the same order files in cddb and in the file list.
-	return sign(strcmp(ETFile1->FileNameCur->data->file_value_ck(), ETFile2->FileNameCur->data->file_value_ck()));
+	return sign(ETFile1->FileNameCur->data->File.compare(ETFile2->FileNameCur->data->File));
 }
 
 /*
@@ -177,7 +177,7 @@ static gint CmpCreationDate(const ET_File* ETFile1, const ET_File* ETFile2)
     guint64 time2 = 0;
 
     /* TODO: Report errors? */
-    file = g_file_new_for_path (ETFile1->FileNameCur->data->value());
+    file = g_file_new_for_path (ETFile1->FilePath);
     info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_CHANGED,
                               G_FILE_QUERY_INFO_NONE, NULL, NULL);
 
@@ -190,7 +190,7 @@ static gint CmpCreationDate(const ET_File* ETFile1, const ET_File* ETFile2)
         g_object_unref (info);
     }
 
-    file = g_file_new_for_path (ETFile2->FileNameCur->data->value());
+    file = g_file_new_for_path (ETFile2->FilePath);
     info = g_file_query_info (file, G_FILE_ATTRIBUTE_TIME_CHANGED,
                               G_FILE_QUERY_INFO_NONE, NULL, NULL);
 
@@ -478,8 +478,6 @@ ET_File::~ET_File()
 	/* Frees infos of ETFileInfo */
 	g_free(ETFileInfo.mpc_profile);
 	g_free(ETFileInfo.mpc_version);
-
-	g_free(ETFileExtension);
 }
 
 
@@ -529,48 +527,6 @@ ET_Free_File_Tag_List (GList *FileTagList)
  ********************/
 
 /*
- * Do the same thing of ET_Save_File_Name_From_UI, but without getting the
- * data from the UI.
- */
-gboolean
-ET_Save_File_Name_Internal (const ET_File *ETFile,
-                            File_Name *FileName)
-{
-    gchar *filename_new = NULL;
-    gchar *filename;
-    gchar *extension;
-    gchar *pos;
-    gboolean success;
-
-    g_return_val_if_fail (ETFile != NULL && FileName != NULL, FALSE);
-
-    // Get the name of file (and rebuild it with extension with a 'correct' case)
-    filename = g_path_get_basename(ETFile->FileNameNew->data->value());
-
-    // Remove the extension
-    if ((pos=strrchr(filename, '.'))!=NULL)
-        *pos = 0;
-
-    /* Convert filename extension (lower/upper). */
-    extension = ET_File_Format_File_Extension (ETFile);
-
-    // Check length of filename
-    //ET_File_Name_Check_Length(ETFile,filename);
-
-    // Regenerate the new filename (without path)
-    filename_new = g_strconcat(filename,extension,NULL);
-    g_free(extension);
-    g_free(filename);
-
-    success = FileName->SetFromComponents(ETFile->FileNameCur->data,
-        filename_new, ETFile->FileNameNew->data->path_value_utf8().c_str(),
-        (EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"));
-
-    g_free (filename_new);
-    return success;
-}
-
-/*
  * Save data contained into File_Tag structure to the file on hard disk.
  */
 gboolean
@@ -584,7 +540,7 @@ ET_Save_File_Tag_To_HD (ET_File *ETFile, GError **error)
     g_return_val_if_fail (ETFile != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    const gchar *cur_filename = ETFile->FileNameCur->data->value();
+    const gchar *cur_filename = ETFile->FilePath;
 
     description = ETFile->ETFileDescription;
 
@@ -598,7 +554,7 @@ ET_Save_File_Tag_To_HD (ET_File *ETFile, GError **error)
         state = (*description->write_file_tag)(ETFile, error);
     else
         Log_Print (LOG_ERROR, "Saving unsupported for %s (%s).",
-            description->FileType, ETFile->FileNameCur->data->value_utf8().get());
+            description->FileType, ETFile->FileNameCur->data->full_name().get());
 
     /* Update properties for the file. */
     if (fileinfo)
@@ -673,11 +629,10 @@ ET_Manage_Changes_Of_File_Data (ET_File *ETFile,
      */
     if (FileName)
     {
-        if (ETFile->FileNameNew
-            && g_strcmp0(ETFile->FileNameNew->data->rel_value_utf8(), FileName->rel_value_utf8()))
+        if (ETFile->FileNameNew && *ETFile->FileNameNew->data != *FileName)
         {
             ET_Add_File_Name_To_List(ETFile, FileName);
-            undo_added |= TRUE;
+            undo_added = TRUE;
         } else
         {
             delete FileName;
@@ -692,7 +647,7 @@ ET_Manage_Changes_Of_File_Data (ET_File *ETFile,
         if (ETFile->FileTag && *ETFile->FileTag->data != *FileTag)
         {
             ET_Add_File_Tag_To_List(ETFile,FileTag);
-            undo_added |= TRUE;
+            undo_added = TRUE;
         }
         else
         {
@@ -921,132 +876,4 @@ void ET_Mark_File_Name_As_Saved (ET_File *ETFile)
 {
     g_list_foreach(ETFile->FileNameList, (GFunc)Set_Saved_Value_Of_File_Tag_To_False, NULL);
     ETFile->FileNameNew->data->saved = true; // The current FileName, to set to TRUE
-}
-
-/*
- * et_file_generate_name:
- * @ETFile: the file from which to read the existing name
- * @new_file_name_utf8: UTF-8 encoded new filename
- *
- * This function generates a new filename using path of the old file and the
- * new name.
- *
- * Returns: a newly-allocated filename, in UTF-8
- */
-#if 1
-gchar *
-et_file_generate_name (const ET_File *ETFile,
-                       const gchar *new_file_name_utf8)
-{
-    gchar *dirname_utf8;
-
-    g_return_val_if_fail (ETFile && ETFile->FileNameNew->data, NULL);
-    g_return_val_if_fail (new_file_name_utf8, NULL);
-
-    if ((dirname_utf8 = g_path_get_dirname (ETFile->FileNameNew->data->value_utf8())))
-    {
-        gchar *extension;
-        gchar *new_file_name_path_utf8;
-
-        /* Convert filename extension (lower/upper). */
-        extension = ET_File_Format_File_Extension (ETFile);
-
-        // Check length of filename (limit ~255 characters)
-        //ET_File_Name_Check_Length(ETFile,new_file_name_utf8);
-
-        if (g_path_is_absolute (new_file_name_utf8))
-        {
-            /* Just add the extension. */
-            new_file_name_path_utf8 = g_strconcat (new_file_name_utf8,
-                                                   extension, NULL);
-        }
-        else
-        {
-            /* New path (with filename). */
-            if (strcmp (dirname_utf8, G_DIR_SEPARATOR_S) == 0)
-            {
-                /* Root directory. */
-                new_file_name_path_utf8 = g_strconcat (dirname_utf8,
-                                                       new_file_name_utf8,
-                                                       extension, NULL);
-            }
-            else
-            {
-                new_file_name_path_utf8 = g_strconcat (dirname_utf8,
-                                                       G_DIR_SEPARATOR_S,
-                                                       new_file_name_utf8,
-                                                       extension, NULL);
-            }
-        }
-
-        g_free (dirname_utf8);
-        g_free (extension);
-
-        return new_file_name_path_utf8;
-    }
-
-    return NULL;
-}
-#else
-/* FOR TESTING */
-/* Returns filename in file system encoding */
-gchar *et_file_generate_name (ET_File *ETFile, gchar *new_file_name_utf8)
-{
-    gchar *dirname;
-
-    if (ETFile && ETFile->FileNameNew->data && new_file_name_utf8
-    && (dirname=g_path_get_dirname(ETFile->FileNameNew->data->value)) )
-    {
-        gchar *extension;
-        gchar *new_file_name_path;
-        gchar *new_file_name;
-
-        new_file_name = filename_from_display(new_file_name_utf8);
-
-        /* Convert filename extension (lower/upper). */
-        extension = ET_File_Format_File_Extension (ETFile);
-
-        // Check length of filename (limit ~255 characters)
-        //ET_File_Name_Check_Length(ETFile,new_file_name_utf8);
-
-        // If filemame starts with /, it's a full filename with path but without extension
-        if (g_path_is_absolute(new_file_name))
-        {
-            // We just add the extension
-            new_file_name_path = g_strconcat(new_file_name,extension,NULL);
-        }else
-        {
-            // New path (with filename)
-            if ( strcmp(dirname,G_DIR_SEPARATOR_S)==0 ) // Root directory?
-                new_file_name_path = g_strconcat(dirname,new_file_name,extension,NULL);
-            else
-                new_file_name_path = g_strconcat(dirname,G_DIR_SEPARATOR_S,new_file_name,extension,NULL);
-        }
-
-        g_free(dirname);
-        g_free(new_file_name);
-        g_free(extension);
-        return new_file_name_path; // in file system encoding
-    }else
-    {
-        return NULL;
-    }
-}
-#endif
-
-
-/* Convert filename extension (lower/upper/no change). */
-gchar *
-ET_File_Format_File_Extension (const ET_File *ETFile)
-{
-    switch (g_settings_get_enum (MainSettings, "rename-extension-mode"))
-    {
-        case ET_FILENAME_EXTENSION_LOWER_CASE:
-            return g_ascii_strdown (ETFile->ETFileDescription->Extension, -1);
-        case ET_FILENAME_EXTENSION_UPPER_CASE:
-            return g_ascii_strup (ETFile->ETFileDescription->Extension, -1);
-        case ET_FILENAME_EXTENSION_NO_CHANGE:
-        default:
-            return g_strdup (ETFile->ETFileExtension);
-    };
 }

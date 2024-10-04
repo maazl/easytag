@@ -55,3 +55,15 @@ const ET_File_Description* ET_File_Description::Get(const gchar *filename)
 	// If not found in the list
 	return &NotSupportedDescription;
 }
+
+string ET_Remove_File_Extension(const gchar *filename)
+{	string ret;
+	if (filename)
+	{	const char* dot = strrchr(filename, '.');
+		if (dot)
+			ret.assign(filename, dot - filename);
+		else
+			ret.assign(filename);
+	}
+	return ret;
+}

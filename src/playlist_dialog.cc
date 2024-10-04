@@ -29,7 +29,7 @@
 #include "misc.h"
 #include "picture.h"
 #include "scan.h"
-#include "scan_dialog.h"
+#include "mask.h"
 #include "setting.h"
 
 using namespace std;
@@ -146,7 +146,7 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
         gint duration;
 
         etfile = (ET_File *)l->data;
-        filename = etfile->FileNameCur->data->value();
+        filename = etfile->FilePath;
         duration = etfile->ETFileInfo.duration;
 
         if (g_settings_get_boolean (MainSettings, "playlist-relative"))
@@ -194,7 +194,7 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
                         /* Special case: do not replace illegal characters and
                          * do not check if there is a directory separator in
                          * the mask. */
-                        string filename_generated_utf8 = et_scan_generate_new_filename_from_mask(etfile, mask, TRUE);
+                        string filename_generated_utf8 = et_evaluate_mask(etfile, mask, TRUE);
                         gchar *filename_generated = filename_from_display(filename_generated_utf8.c_str());
 
                         to_write = g_string_new ("#EXTINF:");
@@ -317,7 +317,7 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
                     /* Special case: do not replace illegal characters and
                      * do not check if there is a directory separator in
                      * the mask. */
-                    string filename_generated_utf8 = et_scan_generate_new_filename_from_mask(etfile, mask, TRUE);
+                    string filename_generated_utf8 = et_evaluate_mask(etfile, mask, TRUE);
                     gchar *filename_generated = filename_from_display(filename_generated_utf8.c_str());
 
                     to_write = g_string_new ("#EXTINF:");
@@ -446,7 +446,7 @@ write_button_clicked (EtPlaylistDialog *self)
         /* Generate filename from tag of the current selected file (FIXME). */
         temp = filename_from_display (playlist_name);
         g_free (playlist_name);
-        playlist_basename_utf8 = et_scan_generate_new_filename_from_mask(ETCore->ETFileDisplayed, temp, FALSE);
+        playlist_basename_utf8 = et_evaluate_mask(ETCore->ETFileDisplayed, temp, FALSE);
         g_free (temp);
 
         /* Replace Characters (with scanner). */

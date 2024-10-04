@@ -28,9 +28,13 @@ struct File_Name;
 
 G_BEGIN_DECLS
 
-GList * et_file_list_add (GList *file_list, GFile *file, const File_Name *root);
+GList * et_file_list_add (GList *file_list, GFile *file, const gchar *root);
 void ET_Remove_File_From_File_List (ET_File *ETFile);
 gboolean et_file_list_check_all_saved (GList *etfilelist);
+/// Update path of file names after directory rename
+/// @param file_list this pointer
+/// @param old_path Old <em>relative</em> path with respect to current root.
+/// @param new_path New <em>relative</em> path with respect to current root.
 void et_file_list_update_directory_name (GList *file_list, const gchar *old_path, const gchar *new_path);
 guint et_file_list_get_n_files_in_path (GList *file_list, const gchar *path_utf8);
 void et_file_list_free (GList *file_list);

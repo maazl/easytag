@@ -130,7 +130,7 @@ ET_File_Key_New (void)
 GList *
 et_file_list_add (GList *file_list,
                   GFile *file,
-                  const File_Name *root)
+                  const gchar *root)
 {
     g_return_val_if_fail (file != NULL, file_list);
 
@@ -141,31 +141,34 @@ et_file_list_add (GList *file_list,
     GError *error = NULL;
 
     /* Get description of the file */
-    gString filename(g_file_get_path(file));
+    ET_File* ETFile = new ET_File(gString(g_file_get_path(file)));
+    const char* filename = ETFile->FilePath;
+    // make filename relative if possible
+    if (root)
+    {	unsigned root_len = strlen(root);
+    	if (root_len && strncmp(filename, root, root_len) == 0)
+    	{	if (filename[root_len - 1] == G_DIR_SEPARATOR)
+    			filename += root_len;
+    		else if (filename[root_len] == G_DIR_SEPARATOR)
+    			filename += root_len + 1;
+    	}
+    }
 
     /* Attach all data to this ETFile item */
-    ET_File* ETFile = new ET_File();
-    File_Name* FileName = new File_Name();
+    File_Name* FileName = new File_Name(gString(g_filename_display_name(filename)));
+    FileName->saved = true;
     File_Tag* FileTag = new File_Tag();
+    FileTag->saved = true; /* The file hasn't been changed, so it's saved */
 
     ETFile->IndexKey             = 0; // Will be renumered after...
     ETFile->ETFileKey            = ET_File_Key_New();
     ETFile->ETFileDescription    = ET_File_Description::Get(filename);
-    ETFile->ETFileExtension      = g_strdup(ET_Get_File_Extension(filename));
     ETFile->FileNameList         =
     ETFile->FileNameCur          =
     ETFile->FileNameNew          = gListP<File_Name*>(FileName);
     ETFile->FileTagList          =
     ETFile->FileTagCur           =
     ETFile->FileTag              = gListP<File_Tag*>(FileTag);
-
-    /* Fill the File_Name structure for FileNameList */
-    FileName->saved = true; /* The file hasn't been changed, so it's saved */
-    FileName->set_filename_raw(root, filename);
-    const char *display_path = FileName->value_utf8();
-
-    /* Fill the File_Tag structure for FileTagList */
-    FileTag->saved = TRUE;    /* The file hasn't been changed, so it's saved */
 
     /* Store the size and the modification time of the file
      * to check if the file was changed before saving */
@@ -178,7 +181,7 @@ et_file_list_add (GList *file_list,
         g_object_unref (fileinfo);
     } else
     {   Log_Print (LOG_ERROR,
-            _("Error while querying information for file ‘%s’: %s"), display_path, error->message);
+            _("Error while querying information for file ‘%s’: %s"), FileName->full_name().get(), error->message);
         g_clear_error(&error);
         // bypass handler if we did not even get the file size.
         ETFile->ETFileDescription = ET_File_Description::Get(nullptr);
@@ -189,7 +192,7 @@ et_file_list_add (GList *file_list,
         && !(*ETFile->ETFileDescription->read_file)(file, ETFile, &error))
     {
         Log_Print (LOG_ERROR, _("Error reading tag from %s ‘%s’: %s"),
-                   ETFile->ETFileDescription->FileType, display_path, error->message);
+                   ETFile->ETFileDescription->FileType, FileName->full_name().get(), error->message);
         g_clear_error (&error);
     }
 
@@ -203,9 +206,14 @@ fail:
      */
     undo_key = et_undo_key_new ();
 
-    FileName = new File_Name();
+    FileName = new File_Name(*ETFile->FileNameCur->data);
     FileName->key = undo_key;
-    ET_Save_File_Name_Internal(ETFile,FileName);
+
+    /* Convert filename extension (lower/upper). */
+    FileName->format_extension();
+
+    // Convert the illegal characters.
+    FileName->format_filepath();
 
     FileTag = new File_Tag(*ETFile->FileTag->data);
     FileTag->key = undo_key;
@@ -223,10 +231,7 @@ fail:
     FileTag  = ETFile->FileTag->data;
     FileName = ETFile->FileNameNew->data;
     if ((FileName && !FileName->saved) || (FileTag && !FileTag->saved))
-    {
-        Log_Print (LOG_INFO, _("Automatic corrections applied for file ‘%s’"),
-                   display_path);
-    }
+        Log_Print(LOG_INFO, _("Automatic corrections applied for file ‘%s’"), FileName->full_name().get());
 
     /* Add the item to the ArtistAlbum list (placed here to take advantage of previous changes) */
     //ET_Add_File_To_Artist_Album_File_List(ETFile);
@@ -707,59 +712,39 @@ et_file_list_update_directory_name (GList *file_list,
                                     const gchar *old_path,
                                     const gchar *new_path)
 {
-    GList *filelist;
-    ET_File *file;
-    GList *filenamelist;
-    gchar *old_path_tmp;
-
     g_return_if_fail (file_list != NULL);
     g_return_if_fail (!et_str_empty (old_path));
     g_return_if_fail (!et_str_empty (new_path));
 
-    /* Add '/' to end of path to avoid ambiguity between a directory and a
-     * filename... */
-    if (old_path[strlen (old_path) - 1] == G_DIR_SEPARATOR)
-    {
-        old_path_tmp = g_strdup (old_path);
-    }
-    else
-    {
-        old_path_tmp = g_strconcat (old_path, G_DIR_SEPARATOR_S, NULL);
-    }
+    size_t old_path_len = strlen(old_path);
+    if (old_path_len && old_path[old_path_len - 1] == G_DIR_SEPARATOR)
+        --old_path_len;
+    size_t new_path_len = strlen(new_path);
+    if (new_path_len && new_path[new_path_len - 1] == G_DIR_SEPARATOR)
+        --new_path_len;
 
-    for (filelist = g_list_first (file_list); filelist != NULL;
-         filelist = g_list_next (filelist))
+    for (GList *filelist = g_list_first(file_list); filelist; filelist = g_list_next(filelist))
     {
-        if ((file = (ET_File*)filelist->data))
+        ET_File *file = (ET_File*)filelist->data;
+        if (!file)
+            continue;
+
+        for (gListP<File_Name*> filenamelist = file->FileNameList; filenamelist; filenamelist = filenamelist->next)
         {
-            for (filenamelist = file->FileNameList; filenamelist != NULL;
-                 filenamelist = g_list_next (filenamelist))
-            {
-                File_Name *FileName = (File_Name *)filenamelist->data;
+            const char* path = filenamelist->data->Path;
 
-                const char *filename;
-                if (FileName && (filename = FileName->value()))
-                {
-                    /* Replace path of filename. */
-                    if (strncmp(filename, old_path_tmp, strlen (old_path_tmp))
-                        == 0)
-                    {
-                        gchar *filename_tmp;
-
-                        // Create the new filename
-                        filename_tmp = g_strconcat (new_path,
-                                                    (new_path[strlen (new_path) - 1] == G_DIR_SEPARATOR) ? "" : G_DIR_SEPARATOR_S,
-                                                    &filename[strlen (old_path_tmp)],NULL);
-
-                        FileName->set_filename_raw(FileName, filename_tmp);
-                        g_free (filename_tmp);
-                    }
-                }
-             }
+            if (strncmp(path, old_path, old_path_len) == 0
+                // Check for '/' at the end of path
+                && (path[old_path_len] == 0 || path[old_path_len] == G_DIR_SEPARATOR))
+            {   // Replace path of filename.
+                size_t path_len = strlen(path);
+                xString newpath;
+                char* cp = newpath.alloc(path_len - old_path_len + new_path_len);
+                memcpy(cp, new_path, new_path_len);
+                memcpy(cp + new_path_len, path + old_path_len, path_len - old_path_len);
+            }
         }
     }
-
-    g_free (old_path_tmp);
 }
 
 /*
@@ -916,9 +901,8 @@ et_file_list_get_n_files_in_path (GList *file_list,
     for (l = g_list_first (file_list); l != NULL; l = g_list_next (l))
     {
         ET_File *ETFile = (ET_File *)l->data;
-        string dirname_utf8(ETFile->FileNameCur->data->path_value_utf8());
 
-        if (strcmp (dirname_utf8.c_str(), path_utf8) == 0)
+        if (strcmp(ETFile->FileNameCur->data->Path.get(), path_utf8) == 0)
             count++;
     }
 

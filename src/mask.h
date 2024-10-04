@@ -44,5 +44,12 @@ std::string et_check_mask(const gchar* mask);
  */
 std::string et_evaluate_mask(const ET_File *file, const gchar *mask, gboolean no_dir_check_or_conversion);
 
+/**
+ * Display an icon in the entry if the current text contains an invalid mask.
+ * @param entry The entry for which to check the mask
+ * @param user_data User data set when the signal was connected
+ */
+void entry_check_mask(GtkEntry *entry, gpointer user_data);
+
 #endif
 #endif

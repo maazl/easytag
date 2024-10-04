@@ -1,4 +1,5 @@
 /* EasyTAG - tag editor for audio files
+ * Copyright (C) 2024  Marcel Müller
  * Copyright (C) 2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,6 +20,7 @@
 #ifndef ET_FILE_NAME_H_
 #define ET_FILE_NAME_H_
 
+#include "misc.h"
 #include "setting.h"
 #include <glib.h>
 
@@ -34,44 +36,39 @@ typedef class File_Name
 public:
 	guint key;
 	bool saved; ///< Set to \c true if this filename had been saved
+	xString0 Path; ///< Path component as UTF-8, maybe relative to the current root path. May be empty.
+	xString0 File; ///< File name within \ref Path as UTF-8 with extension.
+
 private:
-	xString _value; ///< The filename containing the full path and the extension of the file
-	xString _value_utf8; ///< Same than "value", but converted to UTF-8 to avoid multiple call to the conversion function
-	unsigned _rel_start_utf8; ///< start in value_utf8 beyond the root path passed during initialization.
-	unsigned _file_start_utf8; ///< start file base name part in \c _value_utf8.
-	mutable xString _path_value_ck; ///< collation string for path_value_utf8.
-	mutable xString _file_value_ck; ///< collation string for file_value_utf8.
-
 	static void (*const prepare_funcs[3][3])(std::string&, unsigned);
-public:
-	File_Name();
-	File_Name(const File_Name& r);
-	~File_Name();
-	void reset();
-	void set_filename_raw(const File_Name* root, const char* filename);
-	void set_filename_utf8(const File_Name* root, const char* filename_utf8);
-	bool SetFromComponents(const File_Name* root, const char* new_name, const char* dir_name, EtFilenameReplaceMode replace_illegal);
 
-	/// Raw file name in file system representation.
-	const xString& value() const noexcept { return _value; }
-	/// File name in UTF-8 representation.
-	const xString& value_utf8() const noexcept { return _value_utf8; }
-	/// File name relative to the root path at creation time.
-	/// @remarks This is typically the currently selected directory.\n
-	/// If no root was specified it is the same as \ref value_utf8.
-	const char* rel_value_utf8() const noexcept { return _value_utf8 + _rel_start_utf8; }
-	/// Path component of \ref rel_value_utf8 without trailing path delimiter.
-	std::string path_value_utf8() const;
-	/// File name component of \ref value_utf8.
-	const char* file_value_utf8() const noexcept { return _value_utf8 + _file_start_utf8; }
-	/// File name component of \ref value_utf8 w/o file extension.
-	std::string file_value_noext_utf8() const;
-	/// \ref path_value_utf8 as GLib collation string.
-	/// @remarks The returned value is initialized lazily on first access.
-	const xString& path_value_ck() const;
-	/// \ref file_value_utf8 as GLib collation string.
-	/// @remarks The returned value is initialized lazily on first access.
-	const xString& file_value_ck() const;
+public:
+	File_Name(const File_Name& r);
+	/// Initialize from file name.
+	/// @param path Path of the file (UTF-8).
+	/// @remarks \a path may be relative or absolute.
+	File_Name(const char* path);
+
+	friend bool operator==(const File_Name& l, const File_Name& r) { return l.File == r.File && l.Path == r.Path; }
+	friend bool operator!=(const File_Name& l, const File_Name& r) { return !(l == r); }
+
+	/// Get file name with relative path (UTF-8).
+	gString full_name() const;
+
+	/// Create new file path by applying a new path and file name.
+	/// @param new_filepath new UTF-8 file name <em>w/o extension</em> and path to apply to \a current.
+	/// If the path is absolute it will completely replace the file path.
+	/// @param keep_path Keep the current \ref Path.
+	/// @return Generated file path with (current) extension.
+	/// @remarks The result of this function is typically passed to the constructor.
+	gString generate_name(const char* new_filepath, bool keep_path) const;
+
+	/// Convert filename extension (lower/upper/no change)
+	/// @return true if the operation made a change.
+	bool format_extension();
+	/// Convert filename and path according to character replacement rules.
+	/// @return true if the operation made a change.
+	bool format_filepath();
 
 	/// Get function to replace illegal characters in UTF-8 file name.
 	/// @param replace_illegal Replacement mode for illegal characters

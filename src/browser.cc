@@ -42,7 +42,7 @@
 #include "easytag.h"
 #include "et_core.h"
 #include "file_list.h"
-#include "scan_dialog.h"
+#include "mask.h"
 #include "log.h"
 #include "misc.h"
 #include "setting.h"
@@ -100,7 +100,7 @@ typedef struct
     GtkWidget *rename_directory_preview_label;
 
     GFile *current_path;
-    File_Name *current_path_name;
+    gchar *current_path_name; //< name of current_path in system encoding
 } EtBrowserPrivate;
 
 // learn correct return type for et_browser_get_instance_private
@@ -338,7 +338,7 @@ et_browser_run_player_for_album_list (EtBrowser *self)
     for (; l != NULL; l = g_list_next (l))
     {
         ET_File *etfile = (ET_File *)l->data;
-        file_list = g_list_prepend (file_list, g_file_new_for_path (etfile->FileNameCur->data->value()));
+        file_list = g_list_prepend (file_list, g_file_new_for_path (etfile->FilePath));
     }
 
     file_list = g_list_reverse (file_list);
@@ -379,7 +379,7 @@ et_browser_run_player_for_artist_list (EtBrowser *self)
         for (m = (GList*)l->data; m != NULL; m = g_list_next (m))
         {
             ET_File *etfile = (ET_File *)m->data;
-            file_list = g_list_prepend (file_list, g_file_new_for_path (etfile->FileNameCur->data->value()));
+            file_list = g_list_prepend (file_list, g_file_new_for_path (etfile->FilePath));
         }
     }
 
@@ -413,7 +413,7 @@ et_browser_run_player_for_selection (EtBrowser *self)
     for (l = selfilelist; l != NULL; l = g_list_next (l))
     {
         ET_File *etfile = et_browser_get_et_file_from_path (self, (GtkTreePath*)l->data);
-        file_list = g_list_prepend(file_list, g_file_new_for_path(etfile->FileNameCur->data->value()));
+        file_list = g_list_prepend(file_list, g_file_new_for_path(etfile->FilePath));
     }
 
     file_list = g_list_reverse (file_list);
@@ -478,12 +478,10 @@ et_browser_set_current_path (EtBrowser *self,
 
     if (priv->current_path)
         g_object_unref (priv->current_path);
-    if (priv->current_path_name)
-        delete priv->current_path_name;
+    g_free(priv->current_path_name);
 
     priv->current_path = file;
-    priv->current_path_name = new File_Name();
-    priv->current_path_name->set_filename_raw(NULL, gString(g_file_get_path(file)));
+    priv->current_path_name = g_file_get_path(file);
 }
 
 
@@ -505,7 +503,7 @@ et_browser_get_current_path (EtBrowser *self)
 /*
  * Return the current path
  */
-const File_Name *
+const gchar*
 et_browser_get_current_path_name (EtBrowser *self)
 {
     EtBrowserPrivate *priv;
@@ -1854,7 +1852,7 @@ et_browser_select_file_by_dlm (EtBrowser *self,
                                LIST_FILE_POINTER, &current_etfile, -1);
             const xString0& current_title = current_etfile->FileTag->data->title;
 
-            if ((cur = dlm((current_title ? current_title : current_etfile->FileNameNew->data->file_value_utf8()), string)) > max) // See "dlm.c"
+            if ((cur = dlm((current_title ? current_title : current_etfile->FileNameNew->data->File.get()), string)) > max) // See "dlm.c"
             {
                 max = cur;
                 iter2 = iter;
@@ -3729,7 +3727,7 @@ rename_directory_generate_preview (EtBrowser *self)
     if (!mask)
         return;
 
-    string preview_text = et_scan_generate_new_filename_from_mask (ETCore->ETFileDisplayed, mask, FALSE);
+    string preview_text = et_evaluate_mask(ETCore->ETFileDisplayed, mask, FALSE);
 
     if (GTK_IS_LABEL(priv->rename_directory_preview_label))
     {
@@ -3927,7 +3925,7 @@ Rename_Directory (EtBrowser *self)
     {
         /* Renamed from mask. */
         gString mask(g_settings_get_string(MainSettings, "rename-directory-default-mask"));
-        directory_new_name = et_scan_generate_new_directory_name_from_mask(ETCore->ETFileDisplayed, mask, FALSE);
+        directory_new_name = et_evaluate_mask(ETCore->ETFileDisplayed, mask, FALSE);
     }
     else
     {
@@ -3936,7 +3934,7 @@ Rename_Directory (EtBrowser *self)
     }
 
     /* Check if a name for the directory have been supplied */
-    if (!directory_new_name.empty())
+    if (directory_new_name.empty())
     {
         GtkWidget *msgdialog;
 
@@ -4342,7 +4340,7 @@ Run_Program_With_Selected_Files (EtBrowser *self)
             gtk_tree_model_get (GTK_TREE_MODEL (priv->file_model), &iter,
                                 LIST_FILE_POINTER, &ETFile, -1);
 
-            args_list = args_list.prepend(ETFile->FileNameCur->data->value().get());
+            args_list = args_list.prepend(ETFile->FilePath.get());
             //args_list = g_list_append(args_list,((File_Name *)ETFile->FileNameCur->data)->value_utf8);
         }
     }
@@ -4631,7 +4629,7 @@ et_browser_finalize (GObject *object)
     priv = et_browser_get_instance_private (ET_BROWSER (object));
 
     g_clear_object (&priv->current_path);
-    delete priv->current_path_name;
+    g_free(priv->current_path_name);
     priv->current_path_name = NULL;
     g_clear_object (&priv->run_program_model);
 

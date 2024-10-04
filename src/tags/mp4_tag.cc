@@ -230,10 +230,10 @@ mp4tag_write_file_tag (const ET_File *ETFile,
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
 
     FileTag = ETFile->FileTag->data;
-    const char* filename_utf8 = ETFile->FileNameCur->data->value_utf8();
+    const File_Name& filename = *ETFile->FileNameCur->data;
 
     /* Open file for writing */
-    GFile *file = g_file_new_for_path(ETFile->FileNameCur->data->value());
+    GFile *file = g_file_new_for_path(ETFile->FilePath);
     GIO_IOStream stream (file);
     g_object_unref (file);
 
@@ -241,7 +241,7 @@ mp4tag_write_file_tag (const ET_File *ETFile,
     {
         const GError *tmp_error = stream.getError ();
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                     _("Error while opening file ‘%s’: %s"), filename_utf8,
+                     _("Error while opening file ‘%s’: %s"), filename.full_name().get(),
                      tmp_error->message);
         return FALSE;
     }
@@ -259,13 +259,13 @@ mp4tag_write_file_tag (const ET_File *ETFile,
         if (tmp_error)
         {
             g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                         _("Error while opening file ‘%s’: %s"), filename_utf8,
+                         _("Error while opening file ‘%s’: %s"), filename.full_name().get(),
                          tmp_error->message);
         }
         else
         {
             g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                         _("Error while opening file ‘%s’: %s"), filename_utf8,
+                         _("Error while opening file ‘%s’: %s"), filename.full_name().get(),
                          _("MP4 format invalid"));
         }
 
@@ -275,7 +275,7 @@ mp4tag_write_file_tag (const ET_File *ETFile,
     if (!(tag = mp4file.tag ()))
     {
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                     _("Error reading tags from file ‘%s’"), filename_utf8);
+                     _("Error reading tags from file ‘%s’"), filename.full_name().get());
         return FALSE;
     }
 

@@ -1,4 +1,5 @@
 /* EasyTAG - tag editor for audio files
+ * Copyright (C) 2024  Marcel Müller
  * Copyright (C) 2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,10 +20,12 @@
 #include "file_name.h"
 
 #include "charset.h"
+#include "file_description.h"
 #include "misc.h"
 
 #include <string.h>
 #include <string>
+#include <vector>
 #include <algorithm>
 using namespace std;
 
@@ -116,7 +119,6 @@ static void replace_chars_ascii(EtConvertSpaces convert_mode, string& val, size_
 				*p = ' ';
 			}
 			break;
-		case 0:
 		case 13:
 			p = val.erase(p);
 			continue;
@@ -162,9 +164,6 @@ static void replace_chars_unicode(EtConvertSpaces convert_mode, string& val, siz
 	for (p = val.begin() + start; p != val.end(); )
 	{	switch (*p)
 		{
-		case 0:
-			replace("\xe2\x90\x80"); // ␀ Symbol for Null
-			break;
 		case 1:
 			replace("\xe2\x90\x81"); // ␁ Symbol for Start of Heading
 			break;
@@ -321,173 +320,107 @@ void (*const File_Name::prepare_funcs[3][3])(std::string& filename_utf8, unsigne
 	}
 };
 
-File_Name::File_Name()
-:	key(et_undo_key_new())
-,	saved(false)
-,	_rel_start_utf8(0U)
-,	_file_start_utf8(0U)
-{}
-
 File_Name::File_Name(const File_Name& r)
 :	key(r.key) // is this correct?
 ,	saved(false)
-,	_value(r._value)
-,	_value_utf8(r._value_utf8)
-,	_rel_start_utf8(r._rel_start_utf8)
-,	_file_start_utf8(r._file_start_utf8)
-,	_path_value_ck(r._path_value_ck)
-,	_file_value_ck(r._file_value_ck)
+,	Path(r.Path)
+,	File(r.File)
 {}
 
-File_Name::~File_Name()
-{}
-
-void File_Name::reset()
-{	_value.reset();
-	_value_utf8.reset();
-	_rel_start_utf8 = 0;
-	_file_start_utf8 = 0;
-	_path_value_ck.reset();
-	_file_value_ck.reset();
-}
-
-/*
- * Fill content of a FileName item according to the filename passed in argument (UTF-8 filename or not)
- * Calculate also the collate key.
- * It treats numbers intelligently so that "file1" "file10" "file5" is sorted as "file1" "file5" "file10"
- */
-void File_Name::set_filename_raw(const File_Name *root, const char *filename)
-{
-	if (!filename)
-	{	reset();
-		return;
-	}
-
-	_path_value_ck.reset();
-	_file_value_ck.reset();
-	_rel_start_utf8 = 0;
-
-	_value = filename;
-	gString utf8(g_filename_display_name(filename));
-	if (strcmp(_value, utf8) == 0)
-		_value_utf8 = _value;
-	else
-		_value_utf8 = utf8.get();
-
-	// be aware of aliasing root == FileName
-	unsigned root_value_utf8_len = 0;
-	if (root)
-	{	root_value_utf8_len = root->_rel_start_utf8;
-		if (--root_value_utf8_len <= 0)
-			root_value_utf8_len = strlen(root->_value_utf8);
-	}
-
-	if ((!root || strncmp(_value_utf8, root->_value_utf8, root_value_utf8_len) == 0)
-		&& _value_utf8[root_value_utf8_len] == G_DIR_SEPARATOR)
-		_rel_start_utf8 = root_value_utf8_len + 1;
-
-	const char* separator = strrchr(rel_value_utf8(), G_DIR_SEPARATOR);
+File_Name::File_Name(const char* filename)
+:	key(et_undo_key_new())
+,	saved(false)
+{	// separate file name from path
+	const char* separator = strrchr(filename, G_DIR_SEPARATOR);
 	if (separator)
-	{	_file_start_utf8 = separator - _value_utf8.get() + 1;
+	{	File.assignNFC(separator + 1);
+		Path.assignNFC(filename, separator - filename);
 	} else
-	{	_file_start_utf8 = _rel_start_utf8;
-		_path_value_ck = xString::empty_str;
+	{	File.assignNFC(filename);
 	}
 }
 
-/*
- * Fill content of a FileName item according to the filename passed in argument (UTF-8 filename or not)
- * Calculate also the collate key.
- * It treats numbers intelligently so that "file1" "file10" "file5" is sorted as "file1" "file5" "file10"
- */
-void File_Name::set_filename_utf8(const File_Name *root, const char *filename_utf8)
-{
-	if (!filename_utf8)
-	{	reset();
-		return;
-	}
+gString File_Name::generate_name(const char* new_filepath, bool keep_path) const
+{	// keep extension
+	gString np(g_strconcat(new_filepath, ET_Get_File_Extension(File.get()), NULL));
 
-	_path_value_ck.reset();
-	_file_value_ck.reset();
-	_rel_start_utf8 = 0;
+	if (keep_path && Path && !g_path_is_absolute(new_filepath))
+		np = g_strconcat(Path, G_DIR_SEPARATOR_S, np.get(), NULL);
+	// else: Just add the extension.
 
-	_value_utf8 = filename_utf8;
-	gString v(filename_from_display(filename_utf8));
-	if (strcmp(_value_utf8, v) == 0)
-		_value = _value_utf8;
-	else
-		_value = xString(v.get());
-
-	// be aware of aliasing root == FileName
-	unsigned root_value_utf8_len = 0;
-	if (root)
-	{	root_value_utf8_len = root->_rel_start_utf8;
-		if (--root_value_utf8_len <= 0)
-			root_value_utf8_len = strlen(root->_value_utf8);
-	}
-
-	if ((!root || strncmp(_value_utf8, root->_value_utf8, root_value_utf8_len) == 0)
-		&& _value_utf8[root_value_utf8_len] == G_DIR_SEPARATOR)
-		_rel_start_utf8 = root_value_utf8_len + 1;
-
-	const char* separator = strrchr(rel_value_utf8(), G_DIR_SEPARATOR);
-	if (separator)
-	{	_file_start_utf8 = separator - _value_utf8.get() + 1;
-	} else
-	{	_file_start_utf8 = _rel_start_utf8;
-		_path_value_ck = xString::empty_str;
-	}
+	return np;
 }
 
-string File_Name::path_value_utf8() const
-{	string ret;
-	if (_value_utf8 && _file_start_utf8 > _rel_start_utf8)
-		ret.assign(rel_value_utf8(), _file_start_utf8 - _rel_start_utf8 - 1);
-	return ret;
+gString File_Name::full_name() const
+{	if (Path.empty())
+		return gString(g_strdup(File));
+	return gString(g_strconcat(Path, G_DIR_SEPARATOR_S, File.get(), NULL));
 }
 
-string File_Name::file_value_noext_utf8() const
-{	string ret;
-	if (_value_utf8)
-	{	const char* dot = strrchr(file_value_utf8(), '.');
-		if (dot)
-			ret.assign(file_value_utf8(), dot - file_value_utf8());
-		else
-			ret.assign(_value_utf8);
-	}
-	return ret;
-}
-
-const xString& File_Name::path_value_ck() const
-{	if (!_path_value_ck && _value_utf8)
-	{	// Replace dir separator by dot for more reasonable sort order
-		string path(path_value_utf8());
-		replace(path.begin(), path.end(), G_DIR_SEPARATOR, '.');
-		_path_value_ck = gString(g_utf8_collate_key_for_filename(path.c_str(), -1)).get();
-	}
-	return _path_value_ck;
-}
-
-const xString& File_Name::file_value_ck() const
-{	if (!_file_value_ck && _value_utf8)
-		_file_value_ck = gString(g_utf8_collate_key_for_filename(file_value_utf8(), -1)).get();
-	return _file_value_ck;
-}
-
-bool File_Name::SetFromComponents(const File_Name *root,
-	const char *new_name, const char *dir_name, EtFilenameReplaceMode replace_illegal)
-{	if (!new_name)
-	{	reset();
+/* Convert filename extension (lower/upper/no change). */
+bool File_Name::format_extension()
+{	gchar* (*func)(const gchar*, gssize);
+	switch (g_settings_get_enum(MainSettings, "rename-extension-mode"))
+	{
+	default:
 		return false;
+	case ET_FILENAME_EXTENSION_LOWER_CASE:
+		func = g_ascii_strdown;
+		break;
+	case ET_FILENAME_EXTENSION_UPPER_CASE:
+		func = g_ascii_strup;
+	};
+
+	const char* ext = ET_Get_File_Extension(File);
+	if (ext == nullptr)
+		return false;
+
+	gString new_ext((*func)(ext, -1));
+	if (strcmp(new_ext, ext) == 0)
+		return false;
+
+	size_t len = ext - File.get();
+	size_t ext_len = strlen(new_ext);
+	xString file;
+	char* cp = file.alloc(len + ext_len);
+	memcpy(cp, File, len);
+	memcpy(cp + len, new_ext, ext_len);
+	file.swap(File);
+	return true;
+}
+
+bool File_Name::format_filepath()
+{
+	auto prep = File_Name::prepare_func(
+		(EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"),
+		(EtConvertSpaces)g_settings_get_enum(MainSettings, "rename-convert-spaces"));
+
+	bool changed = false;
+
+	string tmp = File.get();
+	prep(tmp, 0);
+	if (tmp != File)
+	{	File = tmp;
+		changed = true;
 	}
 
-	// Check if new filename seems to be correct.
-	string filename_new = new_name;
-	// Convert the illegal characters.
-	File_Name::prepare_func(replace_illegal, (EtConvertSpaces)g_settings_get_enum(MainSettings, "rename-convert-spaces"))(filename_new, 0);
+	tmp = Path.get();
+	// replace path delimiters by 0 characters to prevent replacement.
+	for (auto& c : tmp)
+		if (G_IS_DIR_SEPARATOR(c))
+			c = 0;
 
-	/* Set the new filename (in file system encoding). */
-	gString path_new(g_build_filename(dir_name, filename_new.c_str(), NULL));
-	set_filename_raw(root, path_new);
-	return true;
+	prep(tmp, 0);
+
+	// undo replacement
+	for (auto& c : tmp)
+		if (!c)
+			c = G_DIR_SEPARATOR;
+
+	if (tmp != Path)
+	{	Path = tmp;
+		changed = true;
+	}
+
+	return changed;
 }

@@ -205,3 +205,25 @@ string et_evaluate_mask(const ET_File *file, const gchar *mask, gboolean no_dir_
 
 	return MaskEvaluator(*file, postprocess).Evaluate(mask);
 }
+
+void entry_check_mask (GtkEntry *entry, gpointer user_data)
+{
+	g_return_if_fail (entry != NULL);
+
+	const gchar* mask = gtk_entry_get_text (entry);
+	string error;
+
+	if (et_str_empty (mask))
+		error = _("Empty scanner mask.");
+	else
+	{	error = et_check_mask(mask);
+		if (error.empty())
+		{
+			gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+			return;
+		}
+	}
+
+	gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, "emblem-unreadable");
+	gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY, error.c_str());
+}

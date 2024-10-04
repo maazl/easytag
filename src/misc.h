@@ -58,6 +58,7 @@ using gAlloc = std::unique_ptr<T, gAllocDeleter>;
 /// Managed GLIB string
 struct gString : gAlloc<gchar>
 {	gString() { }
+	gString(gString&& r) : gAlloc<gchar>(std::move(r)) { }
 	explicit gString(gchar* ptr) : gAlloc<gchar>(ptr) { }
 	operator const gchar*() const { return get(); }
 	gString& operator=(gchar* ptr) { reset(ptr); return *this; }

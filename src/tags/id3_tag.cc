@@ -147,7 +147,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     }
 
     FileTag  = ETFile->FileTag->data;
-    const char* filename = ETFile->FileNameCur->data->value();
+    const char* filename = ETFile->FilePath;
 
     gObject<GFile> file(g_file_new_for_path(filename));
 
@@ -324,7 +324,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
      ******************************/
     {
         // Delete the APE tag (create a dummy ETFile for the Ape_Tag_... function)
-        ET_File   ETFile_tmp;
+        ET_File ETFile_tmp(ETFile->FilePath);
         // Same file...
         ETFile_tmp.FileNameCur  =
         ETFile_tmp.FileNameList = gListP<File_Name*>(new File_Name(*ETFile->FileNameCur->data));
@@ -349,7 +349,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     {
         id3_tag.Strip(ID3TT_ID3V1);
         id3_tag.Strip(ID3TT_ID3V2);
-        g_debug (_("Removed tag of ‘%s’"), ETFile->FileNameCur->data->file_value_utf8());
+        g_debug (_("Removed tag of ‘%s’"), ETFile->FileNameCur->data->File.get());
     }
     else
     {
@@ -410,7 +410,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
             && g_settings_get_boolean (MainSettings,
                                        "id3v2-enable-unicode"))
         {
-            ET_File   ETFile_tmp;
+            ET_File ETFile_tmp(ETFile->FilePath);
             File_Tag  *FileTag_tmp   = new File_Tag();
             ETFile_tmp.FileTag      =
             ETFile_tmp.FileTagList  = gListP<File_Tag*>(FileTag_tmp);

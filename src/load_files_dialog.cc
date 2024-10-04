@@ -121,22 +121,13 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
 
         if (ETFile && !et_str_empty (list_text))
         {
-            gchar *filename_new_utf8;
-
             string list_text_tmp = list_text;
             prepare_func(list_text_tmp, 0);
 
             /* Build the filename with the path */
-            filename_new_utf8 = et_file_generate_name (ETFile, list_text_tmp.c_str());
-
-            /* Set the new filename */
-            // Create a new 'File_Name' item
-            FileName = new File_Name();
+            FileName = new File_Name(ETFile->FileNameNew->data->generate_name(list_text_tmp.c_str(), true));
             // Save changes of the 'File_Name' item
-            FileName->set_filename_utf8(ETFile->FileNameCur->data, filename_new_utf8);
             ET_Manage_Changes_Of_File_Data(ETFile,FileName,NULL);
-
-            g_free(filename_new_utf8);
 
             /* Then run current scanner if requested. */
             if (g_settings_get_boolean (MainSettings,
@@ -630,7 +621,7 @@ Load_File_List (EtLoadFilesDialog *self)
         etfile = (ET_File *)l->data;
         gtk_list_store_insert_with_values (priv->file_name_model, NULL,
                                            G_MAXINT, LOAD_FILE_NAME_TEXT,
-                                           etfile->FileNameNew->data->file_value_noext_utf8().c_str(),
+                                           ET_Remove_File_Extension(etfile->FileNameNew->data->File).c_str(),
                                            LOAD_FILE_NAME_POINTER, l->data,
                                            -1);
     }

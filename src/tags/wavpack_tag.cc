@@ -241,7 +241,7 @@ wavpack_tag_write_file_tag (const ET_File *ETFile,
 
     FileTag = (File_Tag *)ETFile->FileTag->data;
 
-    file = g_file_new_for_path(ETFile->FileNameCur->data->value());
+    file = g_file_new_for_path(ETFile->FilePath);
     state.error = NULL;
     state.iostream = g_file_open_readwrite (file, NULL, &state.error);
     g_object_unref (file);
