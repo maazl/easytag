@@ -33,6 +33,8 @@
 #include "file.h"
 #include "file_description.h"
 #include "taglib_base.h"
+#include "file_name.h"
+#include "file_tag.h"
 
 /* Shadow warning in public TagLib headers. */
 #pragma GCC diagnostic push
@@ -97,7 +99,7 @@ Map<ByteVector, String> CustomItemFactory::namePropertyMap() const
  *
  * Read tag data into an Mp4 file.
  */
-gboolean mp4_read_file(GFile *file, ET_File *ETFile, GError **error)
+File_Tag* mp4_read_file(GFile *file, ET_File *ETFile, GError **error)
 {
     g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
 
@@ -109,7 +111,7 @@ gboolean mp4_read_file(GFile *file, ET_File *ETFile, GError **error)
         const GError *tmp_error = stream.getError ();
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
                      _("Error while opening file: %s"), tmp_error->message);
-        return FALSE;
+        return nullptr;
     }
 
 #if TAGLIB_MAJOR_VERSION >= 2
@@ -135,12 +137,13 @@ gboolean mp4_read_file(GFile *file, ET_File *ETFile, GError **error)
                          _("MP4 format invalid"));
         }
 
-        return FALSE;
+        return nullptr;
     }
 
     // base processing
-    if (!taglib_read_tag(mp4file, ETFile, error))
-        return FALSE;
+    File_Tag* FileTag = taglib_read_tag(mp4file, ETFile, error);
+    if (!FileTag)
+        return nullptr;
 
     // additional info's for MP4
     ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
@@ -167,15 +170,13 @@ gboolean mp4_read_file(GFile *file, ET_File *ETFile, GError **error)
     /* tag metadata */
     MP4::Tag *tag = mp4file.tag();
 
-    File_Tag* FileTag = ETFile->FileTag->data;
-
     const MP4::ItemMap &extra_items = tag->itemMap ();
 
     /* Description */
 #if (TAGLIB_MAJOR_VERSION == 1) && (TAGLIB_MINOR_VERSION < 12)
     /* No "PODCASTDESC" support in TagLib until 1.12; use atom directly. */
     if (extra_items.contains ("desc"))
-        et_file_tag_set_description(FileTag, extra_items["desc"].toStringList().front().toCString(true));
+        et_file_tag_set_description(FileTagNew, extra_items["desc"].toStringList().front().toCString(true));
 #endif
 
 #if TAGLIB_MAJOR_VERSION >= 2
@@ -209,9 +210,9 @@ gboolean mp4_read_file(GFile *file, ET_File *ETFile, GError **error)
     }
 
     // validate date fields
-    ETFile->check_dates(1, false); // Year only
+    FileTag->check_dates(1, false, *ETFile->FileNameCur()); // Year only
 
-    return TRUE;
+    return FileTag;
 }
 
 
@@ -224,13 +225,12 @@ gboolean
 mp4tag_write_file_tag (const ET_File *ETFile,
                        GError **error)
 {
-    const File_Tag *FileTag;
     MP4::Tag *tag;
 
-    g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
+    g_return_val_if_fail (ETFile != NULL && ETFile->FileTagNew() != NULL, FALSE);
 
-    FileTag = ETFile->FileTag->data;
-    const File_Name& filename = *ETFile->FileNameCur->data;
+    const File_Tag* FileTag = ETFile->FileTagNew();
+    const File_Name& filename = *ETFile->FileNameCur();
 
     /* Open file for writing */
     GFile *file = g_file_new_for_path(ETFile->FilePath);

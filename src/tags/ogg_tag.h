@@ -28,8 +28,11 @@
 #include <gio/gio.h>
 #include <vorbis/vorbisfile.h>
 
-#include "../file.h"
 #include "../misc.h"
+
+struct ET_File;
+struct File_Tag;
+struct EtFileHeaderFields;
 
 #ifdef __cplusplus
 #include <unordered_map>
@@ -86,15 +89,15 @@ GQuark et_ogg_error_quark (void);
 
 #define ET_OGG_ERROR et_ogg_error_quark ()
 
-gboolean ogg_read_file (GFile *file, ET_File *ETFile, GError **error);
+File_Tag* ogg_read_file (GFile *file, ET_File *ETFile, GError **error);
 gboolean ogg_tag_write_file_tag (const ET_File *ETFile, GError **error);
 
-void et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile);
+File_Tag* get_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile);
 void et_add_vorbis_comments_from_file_tags (vorbis_comment *vc, File_Tag *FileTag);
 
 void et_ogg_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
 
-gboolean speex_read_file(GFile *file, ET_File *ETFile, GError **error);
+File_Tag* speex_read_file(GFile *file, ET_File *ETFile, GError **error);
 
 G_END_DECLS
 

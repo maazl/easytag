@@ -52,7 +52,6 @@ void et_displayed_file_list_set (GList *ETFileList);
 void et_displayed_file_list_free (GList *file_list);
 
 GList * et_history_list_add (GList *history_list, ET_File *ETFile);
-gboolean ET_Add_File_To_History_List (ET_File *ETFile);
 ET_File * ET_Undo_History_File_Data (void);
 ET_File * ET_Redo_History_File_Data (void);
 gboolean et_history_list_has_undo (GList *history_list);

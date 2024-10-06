@@ -25,21 +25,20 @@
 #include "misc.h"
 #include "picture.h"
 #include "xstring.h"
+#include "undo_list.h"
 
-#ifdef __cplusplus
 #include <string>
 #include <ctime>
 #include <vector>
+
+class File_Name;
 
 /** Metadata of a file.
  * @remarks All text fields contain <b>UTF-8 encoded NFC normalized data.</b>
  * You must ensure this when assigning new data. Using \c xString::resetNFC is recommended.
  */
-typedef struct File_Tag
+struct File_Tag : public UndoList<File_Tag>::Intrusive
 {
-	guint key;              ///< incremented value
-	bool saved;             ///< true if the tag data is in sync with the file.
-
 	xString0 title;         ///< Track name
 	xString0 subtitle;      ///< Track subtitle
 	xString0 version;       ///< Track version
@@ -99,6 +98,10 @@ typedef struct File_Tag
 	/// @param max_fields Maximum number of fields, i.e. 1111-22-33T44:55:66.
 	/// @param additional_content Allow arbitrary additional content after the last field.
 	static bool check_date(const char* value, int max_fields, bool additional_content);
+	/// Check all time stamp for the current format and create a warning if not.
+	/// @param max_fields Maximum number of fields, i.e. 1111-22-33T44:55:66.
+	/// @param additional_content Allow arbitrary additional content after the last field.
+	void check_dates(int max_fields, bool additional_content, const File_Name& filename) const;
 
 	std::string track_and_total() const;
 	std::string disc_and_total() const;
@@ -121,10 +124,6 @@ typedef struct File_Tag
 	/// Apply automatic corrections
 	/// @return true if the operation made at least one change.
 	bool autofix();
-
-} File_Tag;
-#else // __cplusplus
-typedef struct File_Tag File_Tag;
-#endif
+};
 
 #endif /* !ET_FILE_TAG_H_ */

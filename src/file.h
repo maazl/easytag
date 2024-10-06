@@ -1,6 +1,6 @@
 /* EasyTAG - tag editor for audio files
+ * Copyright (C) 2022,2024  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014,2015  David King <amigadave@amigadave.com>
- * Copyright (C) 2022  Marcel Müller <github@maazl.de>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -25,9 +25,8 @@
 #include "file_description.h"
 #include "file_name.h"
 #include "file_tag.h"
-#include "setting.h"
-#ifdef __cplusplus
 #include "misc.h"
+#include "undo_list.h"
 
 /*
  * Structure containing informations of the header of file
@@ -49,75 +48,103 @@ typedef struct
 /*
  * Description of each item of the ETFileList list
  */
-typedef struct ET_File
+class ET_File
 {
-    const gString FilePath;   ///< Full raw path of the file, do not use in UI.
+public:
+	gString FilePath;             ///< Full raw path of the file, do not use in UI.
 
-    guint64 FileSize;         ///< File size in bytes
-    guint64 FileModificationTime; ///< Save modification time of the file
+	guint64 FileSize;             ///< File size in bytes
+	guint64 FileModificationTime; ///< Save modification time of the file
 
-    const ET_File_Description *ETFileDescription;
-    ET_File_Info        ETFileInfo;        /* Header infos: bitrate, duration, ... */
+	const ET_File_Description *ETFileDescription;
+	ET_File_Info      ETFileInfo; ///< Header infos: bitrate, duration, ...
 
-    gListP<File_Name*> FileNameCur;      /* Points to item of FileNameList that represents the current value of filename state (i.e. file on hard disk) */
-    gListP<File_Name*> FileNameNew;      /* Points to item of FileNameList that represents the new value of filename state */
-    gListP<File_Name*> FileNameList;     /* Contains the history of changes about the filename. */
-    gListP<File_Name*> FileNameListBak;  /* Contains items of FileNameList removed by 'undo' procedure but have data currently saved (for example, when you save your last changes, make some 'undo', then make new changes) */
+private:
+	UndoList<File_Name> FileName; ///< File name data with change history
+	UndoList<File_Tag>  FileTag;  ///< File tag data with change history
+	bool force_tag_save_;
 
-    gListP<File_Tag*> FileTagCur;        /* Points to the current item used of FileTagList */
-    gListP<File_Tag*> FileTag;           /* Points to the new item used of FileTagList */
-    gListP<File_Tag*> FileTagList;       /* Contains the history of changes about file tag data */
-    gListP<File_Tag*> FileTagListBak;    /* Contains items of FileTagList removed by 'undo' procedure but have data currently saved */
+public:
+	bool activate_bg_color; // For browser list: alternating background due to sub directory change.
+	guint IndexKey;           /* Value used to display the position in the list (and in the BrowserList) - Must be renumered after resorting the list - This value varies when resorting list */
 
-    guint IndexKey;           /* Value used to display the position in the list (and in the BrowserList) - Must be renumered after resorting the list - This value varies when resorting list */
-    guint ETFileKey;          /* Primary key to identify each item of the list (no longer used?) */
+private:
+	/// Populate FileSize and FileModificationTime
+	bool read_fileinfo(GFile* file, GError **error = nullptr);
 
-    bool activate_bg_color; // For browser list: alternating background due to sub directory change.
+public:
+	/// Create file
+	/// @param filepath Full file path in file system encoding.
+	ET_File(gString&& filepath);
+	ET_File(const gString& filepath) : ET_File(gString(g_strdup(filepath))) {}
+	~ET_File();
 
-    /// Create file
-    /// @param filepath Full file path in file system encoding.
-    ET_File(gString&& filepath);
-    ET_File(const gString& filepath) : ET_File(gString(g_strdup(filepath))) {}
-    ~ET_File();
+	/// Currently saved file name
+	const File_Name* FileNameCur() const { return FileName.Cur; }
+	/// Current, possibly unsaved file name
+	const File_Name* FileNameNew() const { return FileName.New; }
 
-    /// Check all time stamp for the current format and create a warning if not.
-    /// @param max_fields Maximum number of fields, i.e. 1111-22-33T44:55:66.
-    /// @param additional_content Allow arbitrary additional content after the last field.
-    void check_dates(int max_fields, bool additional_content) const;
-    /// Checks if the current files had been changed but not saved.
-    /// @return \c true if the file has been saved. \c false if some changes haven't been saved.
-    bool check_saved() const
-    {	return !(FileTag && !FileTag->data->saved)
-    		&& !(FileNameNew && !FileNameNew->data->saved);
-    }
-} ET_File;
+	/// Currently saved tag data
+	const File_Tag* FileTagCur() const { return FileTag.Cur; }
+	/// Current, possibly unsaved tag data
+	const File_Tag* FileTagNew() const { return FileTag.New; }
 
-#else
-struct ET_File;
-#endif
+	bool read_file(GFile *file, const gchar *root, GError **error);
 
-/*
- * Description of each item of the ETHistoryFileList list
- */
-typedef struct
-{
-    ET_File *ETFile;           /* Pointer to item of ETFileList changed */
-} ET_History_File;
+	/// Add new version of file and tag data to the undo list.
+	/// @return Undo key generated, i.e. at least one of \a fileName or \a fileTag caused a change.
+	/// @details The function always takes the ownership of \a fileName and \a fileTag.
+	/// If the values are identical to the current state or an argument is \c nullptr no action is taken.
+	bool apply_changes(File_Name *fileName, File_Tag *fileTag);
 
-G_BEGIN_DECLS
+	/// @return \c true if file contains undo data (filename or tag)
+	bool has_undo_data() const
+	{	return FileName.undo_key() || FileTag.undo_key(); }
+	/// @return \c true if file contains redo data (filename or tag)
+	bool has_redo_data() const
+	{	return FileName.redo_key() || FileTag.redo_key(); }
 
-gboolean ET_Save_File_Tag_To_HD (ET_File *ETFile, GError **error);
+	/// Applies one undo to the ETFile data (to reload the previous data).
+	/// @return \c true if an undo had been applied.
+	bool undo();
+	/// Applies one redo to the ETFile data (to reload the previous data).
+	/// @return \c true if an undo had been applied.
+	bool redo();
 
-gboolean ET_Undo_File_Data (ET_File *ETFile);
-gboolean ET_Redo_File_Data (ET_File *ETFile);
-gboolean ET_File_Data_Has_Undo_Data (const ET_File *ETFile);
-gboolean ET_File_Data_Has_Redo_Data (const ET_File *ETFile);
+	bool is_filename_saved() const { return FileName.is_saved(); }
+	bool is_filetag_saved() const { return FileTag.is_saved() && !force_tag_save_; }
+	/// Checks if the current files had been changed but not saved.
+	/// @return \c true if the file has been saved. \c false if some changes haven't been saved.
+	bool is_saved() const { return is_filename_saved() && is_filetag_saved(); }
 
-gboolean ET_Manage_Changes_Of_File_Data (ET_File *ETFile, File_Name *FileName, File_Tag *FileTag);
-void ET_Mark_File_Name_As_Saved (ET_File *ETFile);
+	/// Used by read_tag implementations to identify invisible changes,
+	/// e.g. automatic tag version upgrades.
+	void force_tag_save() { force_tag_save_ = true; }
 
-gint (*ET_Get_Comp_Func_Sort_File(EtSortMode sort_mode))(const ET_File *ETFile1, const ET_File *ETFile2);
+	bool autofix();
 
-G_END_DECLS
+	gboolean save_file_tag(GError **error);
+	gboolean rename_file(GError **error);
+
+	struct UpdateDirectoyNameArgs
+	{	gString OldPath; ///< Old name in file system encoding
+		gString NewPath; ///< New name in file system encoding
+		gString OldPathUTF8; ///< Old name as normalized UTF-8
+		gString NewPathUTF8; ///< New name as normalized UTF-8
+		const char* OldPathRelUTF8; ///< Old name relative to root as UTF-8 if applicable
+		const char* NewPathRelUTF8; ///< New name relative to root as UTF-8 if applicable
+		/// @param old_path Absolute path of the previous directory name in file system encoding.
+		/// @param new_path Absolute path of the new directory name in file system encoding.
+		/// @param root Current root path if any.
+		UpdateDirectoyNameArgs(const gchar *old_path, const gchar *new_path, const gchar* root);
+	};
+	/// Notify about a directory rename operation.
+	/// @returns \c true if the operation caused a change.
+	/// @remarks This is basically a find and replace operation.
+	/// But only persisted file names are updated. Unsaved matches are ignored.
+	bool update_directory_name(const UpdateDirectoyNameArgs& args);
+
+	static gint (*get_comp_func(EtSortMode sort_mode))(const ET_File *ETFile1, const ET_File *ETFile2);
+};
 
 #endif /* !ET_FILE_H_ */

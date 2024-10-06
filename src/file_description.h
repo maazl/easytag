@@ -27,6 +27,7 @@
 #include "setting.h"
 
 struct ET_File;
+struct File_Tag;
 
 #ifdef __cplusplus
 
@@ -81,7 +82,7 @@ struct ET_File_Description
 
     // temporary vtable for ET_File...
     /// read tag and file information from file
-    gboolean (*read_file)(GFile* gfile, ET_File* FileTag, GError** error);
+    File_Tag* (*read_file)(GFile* gfile, ET_File* FileTag, GError** error);
     /// write tag to file
     gboolean (*write_file_tag)(const ET_File* file, GError** error);
     /// extract file header information for UI

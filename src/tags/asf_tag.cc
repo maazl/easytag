@@ -25,6 +25,8 @@
 #include "../file.h"
 #include "../picture.h"
 #include "gio_wrapper.h"
+#include "../file_name.h"
+#include "../file_tag.h"
 
 #include <glib/gi18n.h>
 
@@ -57,7 +59,7 @@ WMA_Description(".wma", _("Windows Media File")),
 ASF_Description(".asf", _("ASF File"));
 
 
-gboolean asf_read_file(GFile *file, ET_File *ETFile, GError **error)
+File_Tag* asf_read_file(GFile *file, ET_File *ETFile, GError **error)
 {
 	g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
 
@@ -68,7 +70,7 @@ gboolean asf_read_file(GFile *file, ET_File *ETFile, GError **error)
 	{	const GError *tmp_error = stream.getError();
 		g_set_error(error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
 			_("Error while opening file: %s"), tmp_error->message);
-		return FALSE;
+		return nullptr;
 	}
 
 	ASF::File asffile(&stream);
@@ -77,12 +79,13 @@ gboolean asf_read_file(GFile *file, ET_File *ETFile, GError **error)
 	{	const GError *tmp_error = stream.getError();
 		g_set_error(error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
 			_("Error while opening file: %s"), tmp_error ? tmp_error->message : _("ASF format invalid"));
-		return FALSE;
+		return nullptr;
 	}
 
 	// base processing
-	if (!taglib_read_tag(asffile, ETFile, error))
-		return FALSE;
+	File_Tag* FileTag = taglib_read_tag(asffile, ETFile, error);
+	if (!FileTag)
+		return nullptr;
 
   /* ET_File_Info header data */
 	const ASF::Properties* properties = asffile.audioProperties();
@@ -124,8 +127,6 @@ gboolean asf_read_file(GFile *file, ET_File *ETFile, GError **error)
 		return list[0].toString().toCString(true);
 	};
 
-	File_Tag* FileTag = ETFile->FileTag->data;
-
 	// tolerate case differences
 	FileTag->track_gain_str(fetch_string("REPLAYGAIN_TRACK_GAIN", "replaygain_track_gain"));
 	FileTag->track_peak_str(fetch_string("REPLAYGAIN_TRACK_PEAK", "replaygain_track_peak"));
@@ -144,14 +145,14 @@ gboolean asf_read_file(GFile *file, ET_File *ETFile, GError **error)
 			data.data(), data.size());
 	}
 
-	return TRUE;
+	return FileTag;
 }
 
 gboolean asftag_write_file_tag (const ET_File *ETFile, GError **error)
 {
-	g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
+	g_return_val_if_fail (ETFile != NULL && ETFile->FileTagNew() != NULL, FALSE);
 
-	const File_Name& filename = *ETFile->FileNameCur->data;
+	const File_Name& filename = *ETFile->FileNameCur();
 
 	/* Open file for writing */
 	GFile *file = g_file_new_for_path(ETFile->FilePath);
@@ -188,7 +189,7 @@ gboolean asftag_write_file_tag (const ET_File *ETFile, GError **error)
 	PropertyMap fields = tag->properties();
 	taglib_write_file_tag(fields, ETFile, split_fields);
 
-	const File_Tag *FileTag = ETFile->FileTag->data;
+	const File_Tag *FileTag = ETFile->FileTagNew();
 
 	fields.erase("WM/Track"); // remove deprecated track information that might not match WM/TrackNumber
 

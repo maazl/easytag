@@ -34,6 +34,8 @@
 #include "scan.h"
 #include "scan_dialog.h"
 #include "replaygain.h"
+#include "file_name.h"
+#include "file_tag.h"
 
 #include <unordered_set>
 #include <functional>
@@ -184,9 +186,9 @@ static void apply_field_to_selection(const F& value_to_set, GList *etfilelist,
 	F File_Tag::* field)
 {	for (GList *l = etfilelist; l != NULL; l = g_list_next (l))
 	{	ET_File *etfile = (ET_File *)l->data;
-		File_Tag *FileTag = new File_Tag(*etfile->FileTag->data);
+		File_Tag *FileTag = new File_Tag(*etfile->FileTagNew());
 		FileTag->*field = value_to_set;
-		ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
+		etfile->apply_changes(nullptr, FileTag);
 	}
 }
 static gchar* apply_field_to_selection(GtkWidget* widget, GList *etfilelist,
@@ -284,10 +286,10 @@ on_apply_to_selection (GObject *object,
         for (l = etfilelist; l != NULL; l = g_list_next (l))
         {
             etfile = (ET_File *)l->data;
-            FileTag = new File_Tag(*etfile->FileTag->data);
+            FileTag = new File_Tag(*etfile->FileTagNew());
             FileTag->disc_number = disc_number;
             FileTag->disc_total = disc_total;
-            ET_Manage_Changes_Of_File_Data(etfile, NULL, FileTag);
+            etfile->apply_changes(nullptr, FileTag);
         }
 
         if (!et_str_empty (string_to_set))
@@ -318,12 +320,12 @@ on_apply_to_selection (GObject *object,
         for (l = etfilelist; l != NULL; l = g_list_next (l))
         {
             etfile = (ET_File *)l->data;
-            FileTag = new File_Tag(*etfile->FileTag->data);
+            FileTag = new File_Tag(*etfile->FileTagNew());
 
             if (track)
                 FileTag->track = track;
             FileTag->track_total = total;
-            ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
+            etfile->apply_changes(nullptr, FileTag);
         }
 
         if (et_str_empty(total))
@@ -354,7 +356,7 @@ on_apply_to_selection (GObject *object,
         while (etfilelist && etfilelistfull)
         {
             // To get the path of the file
-            const File_Name *FileNameCur = ((ET_File *)etfilelistfull->data)->FileNameNew->data;
+            const File_Name *FileNameCur = ((ET_File *)etfilelistfull->data)->FileNameNew();
             // The ETFile in the selected file list
             etfile = (ET_File*)etfilelist->data;
 
@@ -370,9 +372,9 @@ on_apply_to_selection (GObject *object,
             // The file is in the selection?
             if ( (ET_File *)etfilelistfull->data == etfile )
             {
-                FileTag = new File_Tag(*etfile->FileTag->data);
+                FileTag = new File_Tag(*etfile->FileTagNew());
                 FileTag->track = et_track_number_to_string(i);
-                ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
+                etfile->apply_changes(nullptr, FileTag);
 
                 if (!etfilelist->next) break;
                 etfilelist = g_list_next(etfilelist);
@@ -391,7 +393,7 @@ on_apply_to_selection (GObject *object,
         for (l = etfilelist; l != NULL; l = g_list_next (l))
         {
             etfile        = (ET_File *)l->data;
-            string track_string = et_track_number_to_string(et_file_list_get_n_files_in_path(ETCore->ETFileList, etfile->FileNameNew->data->Path));
+            string track_string = et_track_number_to_string(et_file_list_get_n_files_in_path(ETCore->ETFileList, etfile->FileNameNew()->Path));
 
             if (!track_total)
             {
@@ -399,9 +401,9 @@ on_apply_to_selection (GObject *object,
                 track_total = g_strdup(track_string.c_str());
             }
 
-            FileTag = new File_Tag(*etfile->FileTag->data);
+            FileTag = new File_Tag(*etfile->FileTagNew());
             FileTag->track_total = track_string;
-            ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
+            etfile->apply_changes(nullptr, FileTag);
         }
 
         if (!et_str_empty (track_total))
@@ -505,9 +507,9 @@ on_apply_to_selection (GObject *object,
         for (l = etfilelist; l != NULL; l = g_list_next (l))
         {
             etfile = (ET_File *)l->data;
-            FileTag = new File_Tag(*etfile->FileTag->data);
+            FileTag = new File_Tag(*etfile->FileTagNew());
             FileTag->pictures = pics;
-            ET_Manage_Changes_Of_File_Data(etfile,NULL,FileTag);
+            etfile->apply_changes(nullptr, FileTag);
         }
         if (!pics.empty())
         {
@@ -2276,7 +2278,7 @@ et_tag_area_display_et_file (EtTagArea *self, const ET_File *ETFile, int columns
 
     g_return_val_if_fail (ET_TAG_AREA (self), FALSE);
 
-    if (!ETFile || !ETFile->FileTag)
+    if (!ETFile || !ETFile->FileTagNew())
     {
         et_tag_area_clear (self);
         //Tag_Area_Set_Sensitive(FALSE);
@@ -2289,7 +2291,7 @@ et_tag_area_display_et_file (EtTagArea *self, const ET_File *ETFile, int columns
 
     //Tag_Area_Set_Sensitive(TRUE); // Causes displaying problem when saving files
 
-    FileTag = ETFile->FileTag->data;
+    FileTag = ETFile->FileTagNew();
     if (!FileTag)
     {
         et_tag_area_clear(self);

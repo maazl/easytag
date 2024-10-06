@@ -151,6 +151,7 @@ easytag_headers = \
 	src/tags/vcedit.h \
 	src/tags/wavpack_private.h \
 	src/tags/wavpack_tag.h \
+	src/undo_list.h \
 	src/win32/win32dep.h \
 	src/xstring.h
 

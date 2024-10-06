@@ -44,6 +44,8 @@
 #include "id3_tag.h"
 #include "setting.h"
 #include "charset.h"
+#include "file_name.h"
+#include "file_tag.h"
 
 #include <cmath>
 using namespace std;
@@ -1897,7 +1899,7 @@ set_et_file_from_cddb_album (ET_File * etfile,
     if (set_fields != 0)
     {
         /* Allocation of a new FileTag. */
-        FileTag = new File_Tag(*etfile->FileTag->data);
+        FileTag = new File_Tag(*etfile->FileTagNew());
 
         if (set_fields & ET_CDDB_SET_FIELD_TITLE)
             FileTag->title.assignNFC(cddbtrackalbum->track_name);
@@ -1939,10 +1941,10 @@ set_et_file_from_cddb_album (ET_File * etfile,
             + " - " + cddbtrackalbum->track_name;
         File_Name::prepare_func((EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"), ET_CONVERT_SPACES_NO_CHANGE)(filename_generated_utf8, 0);
 
-        FileName = new File_Name(etfile->FileNameNew->data->generate_name(filename_generated_utf8.c_str(), true));
+        FileName = new File_Name(etfile->FileNameNew()->generate_name(filename_generated_utf8.c_str(), true));
     }
 
-    ET_Manage_Changes_Of_File_Data (etfile, FileName, FileTag);
+    etfile->apply_changes(FileName, FileTag);
 
     /* Then run current scanner if requested. */
     if (g_settings_get_boolean (MainSettings, "cddb-run-scanner"))

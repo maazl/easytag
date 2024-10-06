@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include "file_area.h"
+#include "file_name.h"
 #include "file_description.h"
 
 #include <glib/gi18n.h>
@@ -287,7 +288,7 @@ et_file_area_set_file_fields (EtFileArea *self,
 
     /* Set new filename into name_entry. This matches the GFile edit name. */
     gtk_entry_set_text(GTK_ENTRY(priv->name_entry),
-        ET_Remove_File_Extension(ETFile->FileNameNew->data->File).c_str());
+        ET_Remove_File_Extension(ETFile->FileNameNew()->File).c_str());
 
     /* Show position of current file in list */
     text = g_strdup_printf ("%u/%u:", ETFile->IndexKey,

@@ -33,6 +33,8 @@
 #include "wavpack_tag.h"
 #include "file.h"
 #include "file_description.h"
+#include "file_name.h"
+#include "file_tag.h"
 
 #define MAXLEN 1024
 
@@ -74,7 +76,7 @@ WV_Description;
 /*
  * Read tag data from a Wavpack file.
  */
-gboolean wavpack_read_file (GFile *file, ET_File *ETFile, GError **error)
+File_Tag* wavpack_read_file (GFile *file, ET_File *ETFile, GError **error)
 {
     WavpackStreamReader reader = { wavpack_read_bytes, wavpack_get_pos,
                                    wavpack_set_pos_abs, wavpack_set_pos_rel,
@@ -95,7 +97,7 @@ gboolean wavpack_read_file (GFile *file, ET_File *ETFile, GError **error)
     if (!state.istream)
     {
         g_propagate_error (error, state.error);
-        return FALSE;
+        return nullptr;
     }
 
     state.seekable = G_SEEKABLE (state.istream);
@@ -107,17 +109,12 @@ gboolean wavpack_read_file (GFile *file, ET_File *ETFile, GError **error)
     if (wpc == NULL)
     {
         if (state.error)
-        {
             g_propagate_error (error, state.error);
-        }
         else
-        {
-            g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "%s",
-                         message);
-        }
+            g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "%s", message);
 
         g_object_unref (state.istream);
-        return FALSE;
+        return nullptr;
     }
 
     ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
@@ -129,7 +126,7 @@ gboolean wavpack_read_file (GFile *file, ET_File *ETFile, GError **error)
     ETFileInfo->layer       = WavpackGetChannelMask (wpc);
     ETFileInfo->duration    = (double)WavpackGetNumSamples(wpc) / ETFileInfo->samplerate;
 
-    File_Tag* FileTag = ETFile->FileTag->data;
+    File_Tag* FileTag = new File_Tag();
 
     auto set_field = [wpc, &field](const char* tag, xString& target)
     {   int length = WavpackGetTagItem(wpc, tag, field, MAXLEN);
@@ -190,7 +187,10 @@ gboolean wavpack_read_file (GFile *file, ET_File *ETFile, GError **error)
 
     g_object_unref (state.istream);
 
-    return TRUE;
+    // validate date fields
+    FileTag->check_dates(3, true, *ETFile->FileNameCur()); // From field 3 arbitrary strings are allowed
+
+    return FileTag;
 }
 
 /*
@@ -232,14 +232,13 @@ wavpack_tag_write_file_tag (const ET_File *ETFile,
                                    wavpack_can_seek, wavpack_write_bytes };
     GFile *file;
     EtWavpackWriteState state;
-    const File_Tag *FileTag;
     WavpackContext *wpc;
     gchar message[80];
 
-    g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
+    g_return_val_if_fail (ETFile != NULL && ETFile->FileTagNew() != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    FileTag = (File_Tag *)ETFile->FileTag->data;
+    const File_Tag *FileTag = ETFile->FileTagNew();
 
     file = g_file_new_for_path(ETFile->FilePath);
     state.error = NULL;
@@ -340,9 +339,6 @@ wavpack_tag_write_file_tag (const ET_File *ETFile,
     WavpackCloseFile (wpc);
 
     g_object_unref (state.iostream);
-
-    // validate date fields
-    ETFile->check_dates(3, true); // From field 3 arbitrary strings are allowed
 
     return TRUE;
 

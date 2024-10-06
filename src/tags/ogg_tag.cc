@@ -34,6 +34,9 @@
 #include "setting.h"
 #include "charset.h"
 #include "log.h"
+#include "file_name.h"
+#include "file_tag.h"
+#include "file.h"
 
 /* for mkstemp. */
 #include "win32/win32dep.h"
@@ -45,7 +48,7 @@ using namespace std;
 
 // registration
 struct Ogg_Description : ET_File_Description
-{	Ogg_Description(const char* extension, const char* description, gboolean (*read_file)(GFile* gfile, ET_File* FileTag, GError** error))
+{	Ogg_Description(const char* extension, const char* description, File_Tag* (*read_file)(GFile* gfile, ET_File* FileTagNew, GError** error))
 	{	Extension = extension;
 		FileType = description;
 		TagType = _("Ogg Vorbis Tag");
@@ -211,7 +214,7 @@ et_ogg_tell_func (void *datasource)
  * Note:
  *  - if field is found but contains no info (strlen(str)==0), we don't read it
  */
-gboolean ogg_read_file(GFile *file, ET_File *ETFile, GError **error)
+File_Tag* ogg_read_file(GFile *file, ET_File *ETFile, GError **error)
 {
     OggVorbis_File vf;
     gint res;
@@ -230,11 +233,8 @@ gboolean ogg_read_file(GFile *file, ET_File *ETFile, GError **error)
                                                  &state.error));
 
     if (!state.istream)
-    {
-        g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                     _("Error while opening file: %s"), state.error->message);
-        return FALSE;
-    }
+        return g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
+            _("Error while opening file: %s"), state.error->message), nullptr;
 
     /* Check for an unsupported ID3v2 tag. */
     guchar tmp_id3[10];
@@ -257,13 +257,13 @@ gboolean ogg_read_file(GFile *file, ET_File *ETFile, GError **error)
 
             /* Mark the file as modified, so that the ID3 tag is removed
              * upon saving. */
-            ETFile->FileTag->data->saved = FALSE;
+            ETFile->force_tag_save();
         }
 
         if (!g_seekable_seek (G_SEEKABLE(state.istream), start, G_SEEK_SET, NULL, error))
         {
             g_object_unref (state.istream);
-            return FALSE;
+            return nullptr;
         }
     }
 
@@ -284,14 +284,16 @@ gboolean ogg_read_file(GFile *file, ET_File *ETFile, GError **error)
                          _("The specified bitstream does not exist or the "
                          "file has been initialized improperly"));
             et_ogg_close_func (&state);
-            return FALSE;
+            return nullptr;
         }
 
         ETFileInfo->duration = ov_time_total(&vf, -1); // (s) Total time.
 
-        et_add_file_tags_from_vorbis_comments(ov_comment(&vf, 0), ETFile);
+        File_Tag* FileTag = get_file_tags_from_vorbis_comments(ov_comment(&vf, 0), ETFile);
 
         ov_clear(&vf); // This close also the file
+
+        return FileTag;
     }else
     {
         /* On error. */
@@ -323,20 +325,17 @@ gboolean ogg_read_file(GFile *file, ET_File *ETFile, GError **error)
 
             g_set_error (error, state.error->domain, state.error->code,
                          "%s", message);
-            et_ogg_close_func (&state);
-            return FALSE;
         }
 
         et_ogg_close_func (&state);
+        return nullptr;
     }
-
-    return TRUE;
 }
 
 
 #ifdef ENABLE_SPEEX
 
-gboolean speex_read_file(GFile *file, ET_File *ETFile, GError **error)
+File_Tag* speex_read_file(GFile *file, ET_File *ETFile, GError **error)
 {
     EtOggState *state;
     const SpeexHeader *si;
@@ -377,10 +376,10 @@ gboolean speex_read_file(GFile *file, ET_File *ETFile, GError **error)
         //g_print("compressed length: %ld bytes\n",(long)(ov_raw_total(&vf,-1)));
     }
 
-    et_add_file_tags_from_vorbis_comments(vcedit_comments(state), ETFile);
+    File_Tag* FileTag = get_file_tags_from_vorbis_comments(vcedit_comments(state), ETFile);
 
     vcedit_clear(state);
-    return TRUE;
+    return FileTag;
 }
 #endif
 
@@ -631,13 +630,13 @@ void tags_hash::to_other_tags(File_Tag *FileTag)
  *
  * Reads Vorbis comments and copies them to file tag.
  */
-void
-et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
+File_Tag*
+get_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 {
 	if (!vc)
-		return;
+		return nullptr;
 
-	File_Tag *FileTag = ETFile->FileTag->data;
+	File_Tag *FileTag = new File_Tag();
 	tags_hash tags;
 
 	for (int i = 0; i < vc->comments; i++)
@@ -658,7 +657,7 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 
 		/* Force marking the file as modified, so that the deprecated cover art
 		 * field is converted to a METADATA_PICTURE_BLOCK field. */
-		FileTag->saved = FALSE;
+		ETFile->force_tag_save();
 
 		while (l != range.second && !et_str_empty(l->second))
 		{
@@ -773,7 +772,7 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 		invalid_picture:
 			/* Mark the file as modified, so that the invalid field is removed upon
 			 * saving. */
-			FileTag->saved = FALSE;
+			ETFile->force_tag_save();
 		}
 
 		tags.erase(range.first, range.second);
@@ -783,23 +782,24 @@ et_add_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 	tags.to_other_tags(FileTag);
 
 	// validate date fields
-	ETFile->check_dates(3, true); // From field 3 arbitrary strings are allowed
+	FileTag->check_dates(3, true, *ETFile->FileNameCur()); // From field 3 arbitrary strings are allowed
+
+	return FileTag;
 }
 
 gboolean
 ogg_tag_write_file_tag (const ET_File *ETFile,
                         GError **error)
 {
-    const File_Tag *FileTag;
     GFile           *file;
     EtOggState *state;
     vorbis_comment *vc;
     GList *l;
 
-    g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
+    g_return_val_if_fail (ETFile != NULL && ETFile->FileTagNew() != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    FileTag       = ETFile->FileTag->data;
+    const File_Tag* FileTag = ETFile->FileTagNew();
 
     file = g_file_new_for_path(ETFile->FilePath);
 

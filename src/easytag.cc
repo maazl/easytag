@@ -38,6 +38,8 @@
 #include "et_core.h"
 #include "charset.h"
 #include "replaygain.h"
+#include "file_name.h"
+#include "file_tag.h"
 
 #include "win32/win32dep.h"
 
@@ -120,8 +122,6 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
     gchar     *msg;
     GList *l;
     ET_File   *etfile_save_position = NULL;
-    File_Tag  *FileTag;
-    File_Name *FileNameNew;
     GAction *action;
     GVariant *variant;
     GtkWidget *widget_focused;
@@ -150,13 +150,11 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
         GFileInfo *fileinfo;
 
         const ET_File *ETFile = (ET_File *)l->data;
-        const File_Tag *file_tag  = ETFile->FileTag->data;
-        const File_Name *FileName = ETFile->FileNameNew->data;
+        const File_Tag* file_tag  = ETFile->FileTagNew();
+        const File_Name* FileName = ETFile->FileNameNew();
 
         // Count only the changed files or all files if force_saving_files==TRUE
-        if (force_saving_files
-            || (FileName && !FileName->saved)
-            || (file_tag && !file_tag->saved))
+        if (force_saving_files || !ETFile->is_saved())
             nb_files_to_save++;
 
         file = g_file_new_for_path(ETFile->FilePath);
@@ -242,20 +240,16 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
     for (l = etfilelist; l != NULL && !Main_Stop_Button_Pressed;
          l = g_list_next (l))
     {
-        FileTag = (File_Tag*)((ET_File *)l->data)->FileTag->data;
-        FileNameNew = (File_Name*)((ET_File *)l->data)->FileNameNew->data;
+        ET_File* ETFile = (ET_File *)l->data;
 
         /* We process only the files changed and not saved, or we force to save all
          * files if force_saving_files==TRUE */
-        if (force_saving_files || !FileTag->saved || !FileNameNew->saved)
+        if (force_saving_files || !ETFile->is_saved())
         {
             /* ET_Display_File_Data_To_UI ((ET_File *)l->data);
              * Use of 'currentPath' to try to increase speed. Indeed, in many
              * cases, the next file to select, is the next in the list. */
-            currentPath = et_application_window_browser_select_file_by_et_file2 (window,
-                                                                                (ET_File *)l->data,
-                                                                                FALSE,
-                                                                                currentPath);
+            currentPath = et_application_window_browser_select_file_by_et_file2(window, ETFile, FALSE, currentPath);
 
             et_application_window_progress_set(window, ++progress_bar_index, nb_files_to_save);
             /* Needed to refresh status bar */
@@ -263,9 +257,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
                 gtk_main_iteration();
 
             // Save tag and rename file
-            saving_answer = Save_File ((ET_File *)l->data,
-                                       nb_files_to_save > 1 ? TRUE : FALSE,
-                                       force_saving_files);
+            saving_answer = Save_File(ETFile, nb_files_to_save > 1, force_saving_files);
 
             if (saving_answer == -1)
             {
@@ -348,8 +340,8 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
 {
     g_return_val_if_fail (ETFile != NULL, 0);
 
-    const File_Name& filename_cur = *ETFile->FileNameCur->data;
-    const File_Name& filename_new = *ETFile->FileNameNew->data;
+    const File_Name& filename_cur = *ETFile->FileNameCur();
+    const File_Name& filename_new = *ETFile->FileNameNew();
 
     /* Save the current displayed data */
 
@@ -395,7 +387,7 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
      * First part: write tag information (artist, title,...)
      */
     // Note : the option 'force_saving_files' is only used to save tags
-    if ( force_saving_files || ETFile->FileTag->data->saved == FALSE ) // This tag had been already saved ?
+    if (force_saving_files || !ETFile->is_filetag_saved()) // This tag had been already saved ?
     {
         GtkWidget *msgdialog = NULL;
         GtkWidget *msgdialog_check_button = NULL;
@@ -451,19 +443,11 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
         switch (response)
         {
             case GTK_RESPONSE_YES:
-            {
-                gboolean rc;
-
                 // if 'SF_HideMsgbox_Write_Tag is TRUE', then errors are displayed only in log
-                rc = Write_File_Tag(ETFile,SF_HideMsgbox_Write_Tag);
-                if (rc)
-                    /* Mark after writing tag. */
-                    ETFile->FileTagCur = ETFile->FileTag;
-                // if an error occurs when 'SF_HideMsgbox_Write_Tag is TRUE', we don't stop saving...
-                else if (!SF_HideMsgbox_Write_Tag)
+                if (!Write_File_Tag(ETFile,SF_HideMsgbox_Write_Tag)
+                    // if an error occurs when 'SF_HideMsgbox_Write_Tag is TRUE', we don't stop saving...
+                    && !SF_HideMsgbox_Write_Tag)
                     return -1;
-                break;
-            }
             case GTK_RESPONSE_NO:
                 break;
             case GTK_RESPONSE_CANCEL:
@@ -480,7 +464,7 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
      * Second part: rename the file
      */
     // Do only if changed! (don't take force_saving_files into account)
-    if (!filename_new.saved) // This filename had been already saved ?
+    if (!ETFile->is_filename_saved()) // This filename had been already saved ?
     {
         GtkWidget *msgdialog = NULL;
         GtkWidget *msgdialog_check_button = NULL;
@@ -569,13 +553,8 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
         {
             case GTK_RESPONSE_YES:
             {
-                // Make absolute path of the file in file system notation.
-                gString raw_name(filename_from_display(filename_new.full_name().get()));
-                raw_name = g_canonicalize_filename(raw_name.get(),
-                    et_application_window_get_current_path_name(ET_APPLICATION_WINDOW(MainWindow)));
-
                 GError *error = NULL;
-                gboolean rc = et_rename_file(ETFile->FilePath, raw_name, &error);
+                gboolean rc = ETFile->rename_file(&error);
 
                 // if 'SF_HideMsgbox_Rename_File is TRUE', then errors are displayed only in log
                 if (!rc)
@@ -614,10 +593,6 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
                 // if an error occurs when 'SF_HideMsgbox_Rename_File is TRUE', we don't stop saving...
                 if (!rc && !SF_HideMsgbox_Rename_File)
                     return -1;
-
-                /* Mark after renaming files. */
-                ETFile->FileNameCur = ETFile->FileNameNew;
-                ET_Mark_File_Name_As_Saved (ETFile);
                 break;
             }
             case GTK_RESPONSE_NO:
@@ -647,11 +622,11 @@ Write_File_Tag (ET_File *ETFile, gboolean hide_msgbox)
 {
     GError *error = NULL;
 
-    const char* basename_utf8 = ETFile->FileNameCur->data->File.get();
+    const char* basename_utf8 = ETFile->FileNameCur()->File.get();
     et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
         strprintf(_("Writing tag of ‘%s’"), basename_utf8).c_str(), TRUE);
 
-    if (ET_Save_File_Tag_To_HD (ETFile, &error))
+    if (ETFile->save_file_tag(&error))
     {
         et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
             strprintf(_("Wrote tag of ‘%s’"), basename_utf8).c_str(), TRUE);
@@ -749,7 +724,7 @@ void ReplayGain_For_Selected_Files (void)
 	case ET_REPLAYGAIN_GROUPBY_FILEPATH:
 		mode = ET_SORT_MODE_ASCENDING_FILEPATH;
 	sort:
-		comp = ET_Get_Comp_Func_Sort_File(mode);
+		comp = ET_File::get_comp_func(mode);
 		sort(files.begin(), files.end(), [comp](ET_File* l, ET_File* r){ return comp(l, r) < 0; });
 	default:;
 	}
@@ -769,10 +744,10 @@ void ReplayGain_For_Selected_Files (void)
 		float album_peak = analyzer.GetAggregatedResult().Peak();
 		for (auto cur = first; cur != last; ++cur)
 		{	ET_File* file = *cur;
-			File_Tag* file_tag = new File_Tag(*file->FileTag->data);
+			File_Tag* file_tag = new File_Tag(*file->FileTagNew());
 			file_tag->album_gain = album_gain;
 			file_tag->album_peak = album_peak;
-			ET_Manage_Changes_Of_File_Data(file, nullptr, file_tag);
+			file->apply_changes(nullptr, file_tag);
 
 			if (ETCore->ETFileDisplayed == file)
 				et_application_window_display_et_file(window, file, ET_COLUMN_REPLAYGAIN);
@@ -791,18 +766,17 @@ void ReplayGain_For_Selected_Files (void)
 			first = cur;
 		}
 
-		File_Tag* file_tag = file->FileTag->data;
-		const File_Name& file_name = *file->FileNameCur->data;
+		const File_Name& file_name = *file->FileNameCur();
 
 		string err = analyzer.AnalyzeFile(file->FilePath);
 		if (!err.empty())
 		{	Log_Print(LOG_ERROR, _("Failed to analyze file '%s': %s"), file_name.full_name().get(), err.c_str());
 			error = 1;
 		} else
-		{	file_tag = new File_Tag(*file_tag);
+		{	File_Tag* file_tag = new File_Tag(*file->FileTagNew());
 			file_tag->track_gain = analyzer.GetLastResult().Gain();
 			file_tag->track_peak = analyzer.GetLastResult().Peak();
-			ET_Manage_Changes_Of_File_Data(file, nullptr, file_tag);
+			file->apply_changes(nullptr, file_tag);
 			Log_Print(LOG_OK, _("ReplayGain of file '%s' is %.1f dB, peak %.2f"), file_name.full_name().get(), file_tag->track_gain, file_tag->track_peak);
 
 			if (ETCore->ETFileDisplayed == file)

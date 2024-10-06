@@ -18,6 +18,7 @@
 
 #include "mask.h"
 #include "misc.h"
+#include "file_name.h"
 
 #include <glib/gi18n.h>
 
@@ -79,7 +80,7 @@ public:
 };
 
 string MaskEvaluator::TagFieldFromMaskCode(gchar code)
-{	const File_Tag *tag = File.FileTag->data;
+{	const File_Tag *tag = File.FileTagNew();
 	size_t maxlen = numeric_limits<size_t>::max();
 	switch (code)
 	{

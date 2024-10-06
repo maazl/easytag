@@ -27,7 +27,7 @@
 #include "ogg_tag.h"
 #include "charset.h"
 #include "misc.h"
-
+#include "file.h"
 
 // registration
 struct Opus_Description : ET_File_Description
@@ -157,20 +157,20 @@ et_opus_open_file (GFile *gfile, GError **error)
  *
  * Returns: %TRUE if successful otherwise %FALSE
  */
-gboolean opus_read_file(GFile *gfile, ET_File* ETFile, GError **error)
+File_Tag* opus_read_file(GFile *gfile, ET_File* ETFile, GError **error)
 {
 	  OggOpusFile *file;
     const OpusHead* head;
 
-    g_return_val_if_fail (gfile != NULL && ETFile != NULL, FALSE);
-    g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+    g_return_val_if_fail (gfile != NULL && ETFile != NULL, nullptr);
+    g_return_val_if_fail (error == NULL || *error == NULL, nullptr);
 
     file = et_opus_open_file (gfile, error);
 
     if G_UNLIKELY(!file)
     {
         g_assert (error == NULL || *error != NULL);
-        return FALSE;
+        return nullptr;
     }
 
     ET_File_Info *ETFileInfo = &ETFile->ETFileInfo;
@@ -196,12 +196,12 @@ gboolean opus_read_file(GFile *gfile, ET_File* ETFile, GError **error)
     ETFileInfo->duration = (double)op_pcm_total(file, -1) / 48000.;
 
     /* The cast is safe according to the opusfile documentation. */
-    et_add_file_tags_from_vorbis_comments((vorbis_comment *)op_tags(file, 0), ETFile);
+    File_Tag* FileTag = get_file_tags_from_vorbis_comments((vorbis_comment *)op_tags(file, 0), ETFile);
 
     op_free (file);
 
     g_assert (error == NULL || *error == NULL);
-    return TRUE;
+    return FileTag;
 }
 
 /*

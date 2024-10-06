@@ -22,11 +22,14 @@
 #define ET_FLAC_TAG_H_
 
 #include <glib.h>
-#include "../file.h"
+
+struct ET_File;
+struct File_Tag;
+struct EtFileHeaderFields;
 
 G_BEGIN_DECLS
 
-gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error);
+File_Tag* flac_read_file (GFile *file, ET_File *ETFile, GError **error);
 gboolean flac_tag_write_file_tag (const ET_File *ETFile, GError **error);
 void et_flac_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
 

@@ -38,6 +38,8 @@
 #include "charset.h"
 #include "file.h"
 #include "file_description.h"
+#include "file_name.h"
+#include "file_tag.h"
 
 #include "win32/win32dep.h"
 
@@ -111,17 +113,17 @@ static gboolean etag_write_tags (const gchar *filename, struct id3_tag const *v1
  * Returns TRUE on success, else FALSE.
  * If a tag entry exists (ex: title), we allocate memory, else value stays to NULL
  */
-gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
+File_Tag* id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
 {
-    g_return_val_if_fail (gfile != NULL && ETFile != NULL, FALSE);
-    g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+    g_return_val_if_fail (gfile != NULL && ETFile != NULL, nullptr);
+    g_return_val_if_fail (error == NULL || *error == NULL, nullptr);
 
-    File_Tag *FileTag = ETFile->FileTag->data;
+    File_Tag *FileTag = new File_Tag();
     ET_File_Info* info = &ETFile->ETFileInfo;
 
     gObject<GInputStream> istream(G_INPUT_STREAM(g_file_read(gfile, NULL, error)));
     if (!istream)
-        return FALSE; // cannot open
+        return nullptr; // cannot open
 
     vector<id3_byte_t> string1(PEEK_MPEG_DATA_LEN);
     gsize bytes_read;
@@ -132,7 +134,7 @@ gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
     if (!g_input_stream_read_all(istream.get(), string1.data(), string1.size(), &bytes_read, NULL, error))
         return FALSE;
     else if (bytes_read < ID3_TAG_QUERYSIZE)
-        return g_set_error(error, G_IO_ERROR, G_IO_ERROR_PARTIAL_INPUT, "%s", _("Error reading tags from file")), FALSE;
+        return g_set_error(error, G_IO_ERROR, G_IO_ERROR_PARTIAL_INPUT, "%s", _("Error reading tags from file")), nullptr;
 
     auto v2tag = make_unique((id3_tag*)nullptr, id3_tag_delete);
 
@@ -144,11 +146,11 @@ gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
             if (!g_input_stream_read_all(istream.get(), &string1[PEEK_MPEG_DATA_LEN], tagsize - PEEK_MPEG_DATA_LEN, &bytes_read, NULL, error))
                 return FALSE;
             if (bytes_read != (gsize)(tagsize - PEEK_MPEG_DATA_LEN))
-                return g_set_error(error, G_IO_ERROR, G_IO_ERROR_PARTIAL_INPUT, "%s", _("Error reading tags from file")), FALSE;
+                return g_set_error(error, G_IO_ERROR, G_IO_ERROR_PARTIAL_INPUT, "%s", _("Error reading tags from file")), nullptr;
         }
         v2tag.reset(id3_tag_parse(string1.data(), tagsize));
         if (!v2tag)
-            return g_set_error(error, G_IO_ERROR, G_IO_ERROR_FAILED, "%s", _("Error reading tags from file")), FALSE;
+            return g_set_error(error, G_IO_ERROR, G_IO_ERROR_FAILED, "%s", _("Error reading tags from file")), nullptr;
         tagbytes += tagsize;
     }
 
@@ -161,7 +163,7 @@ gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
         else
             memmove(string1.data(), string1.data() + tagsize, PEEK_MPEG_DATA_LEN - tagsize);
         if (!g_input_stream_read_all(istream.get(), string1.data() + PEEK_MPEG_DATA_LEN - tagsize, tagsize, &bytes_read, NULL, error))
-            return FALSE;
+            return nullptr;
         bytes_read += PEEK_MPEG_DATA_LEN - tagsize;
         get_audio_frame_header(info, string1.data(), bytes_read);
     }
@@ -176,9 +178,9 @@ gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
     {
         if (!g_seekable_seek(seekable, -ID3V1_TAG_SIZE-ID3_TAG_QUERYSIZE, G_SEEK_END, NULL, error)
             || !g_input_stream_read_all(istream.get(), string1.data(), ID3V1_TAG_SIZE+ID3_TAG_QUERYSIZE, &bytes_read, NULL, error))
-            return FALSE;
+            return nullptr;
         if (bytes_read != ID3V1_TAG_SIZE+ID3_TAG_QUERYSIZE)
-            return g_set_error(error, G_IO_ERROR, G_IO_ERROR_PARTIAL_INPUT, "%s", _("Error reading tags from file")), FALSE;
+            return g_set_error(error, G_IO_ERROR, G_IO_ERROR_PARTIAL_INPUT, "%s", _("Error reading tags from file")), nullptr;
 
         /* check for V1 tag */
         v1tag.reset(id3_tag_parse(&string1[ID3_TAG_QUERYSIZE], ID3V1_TAG_SIZE));
@@ -192,19 +194,19 @@ gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
         {   if (tagsize > v2read)
             {   // read tag unless it happens to fit into the buffer
                 if (!g_seekable_seek(seekable, -tagsize-ID3V1_TAG_SIZE+v2read, G_SEEK_END, NULL, error))
-                    return FALSE;
+                    return nullptr;
                 if (tagsize > (long)string1.size())
                     string1.resize(tagsize);
                 v2read += ID3_TAG_QUERYSIZE;
                 memcpy(string1.data()+tagsize-v2read, string1.data(), v2read);
                 if (g_input_stream_read_all(istream.get(), &string1[0], tagsize - v2read, &bytes_read, NULL, error))
-                    return FALSE;
+                    return nullptr;
                 if (bytes_read == (gsize)(tagsize - v2read))
-                    return g_set_error(error, G_IO_ERROR, G_IO_ERROR_PARTIAL_INPUT, "%s", _("Error reading tags from file")), FALSE;
+                    return g_set_error(error, G_IO_ERROR, G_IO_ERROR_PARTIAL_INPUT, "%s", _("Error reading tags from file")), nullptr;
             }
             v2tag.reset(id3_tag_parse(string1.data(), tagsize));
             if (!v2tag)
-                return g_set_error(error, G_IO_ERROR, G_IO_ERROR_FAILED, "%s", _("Error reading tags from file")), FALSE;
+                return g_set_error(error, G_IO_ERROR, G_IO_ERROR_FAILED, "%s", _("Error reading tags from file")), nullptr;
             tagbytes -= tagsize;
         }
     }
@@ -221,39 +223,39 @@ gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
     if (!v2tag) // treat V2 tag at the end like tag at start
         v2tag.reset(v2etag.release());
 
-    if (!v1tag && !v2tag)
-        return TRUE; // no tag at all => nothing to do
+    if (v1tag || v2tag) // no tag at all => nothing to do
+    {
+        /* should V1 tag be removed or added? */
+        if (g_settings_get_boolean(MainSettings, "id3v1-auto-add-remove")
+            && (!v1tag ^ !g_settings_get_boolean(MainSettings, "id3v1-enabled")))
+            ETFile->force_tag_save();
 
-    /* should V1 tag be removed or added? */
-    if (g_settings_get_boolean(MainSettings, "id3v1-auto-add-remove")
-        && (!v1tag ^ !g_settings_get_boolean(MainSettings, "id3v1-enabled")))
-        FileTag->saved = FALSE;
-
-    if (!v2tag ^ !g_settings_get_boolean(MainSettings, "id3v2-enabled"))
-        FileTag->saved = FALSE; /* To create or delete the tag. */
-    else if (g_settings_get_boolean(MainSettings, "id3v2-convert-old"))
-    {   /* Determine version if user want to upgrade old tags */
-        unsigned version = id3_tag_version(v2tag.get());
+        if (!v2tag ^ !g_settings_get_boolean(MainSettings, "id3v2-enabled"))
+            ETFile->force_tag_save(); /* To create or delete the tag. */
+        else if (g_settings_get_boolean(MainSettings, "id3v2-convert-old"))
+        {   /* Determine version if user want to upgrade old tags */
+            unsigned version = id3_tag_version(v2tag.get());
 #ifdef ENABLE_ID3LIB
-        /* Besides upgrade old tags we will downgrade id3v2.4 to id3v2.3 */
-        if (g_settings_get_boolean (MainSettings, "id3v2-version-4"))
-        {   if (ID3_TAG_VERSION_MAJOR(version) < 4)
-                FileTag->saved = FALSE;
-        } else
-        {   if ((ID3_TAG_VERSION_MAJOR(version) < 3) | (ID3_TAG_VERSION_MAJOR(version) == 4))
-                FileTag->saved = FALSE;
-        }
+            /* Besides upgrade old tags we will downgrade id3v2.4 to id3v2.3 */
+            if (g_settings_get_boolean (MainSettings, "id3v2-version-4"))
+            {   if (ID3_TAG_VERSION_MAJOR(version) < 4)
+                    ETFile->force_tag_save();
+            } else
+            {   if ((ID3_TAG_VERSION_MAJOR(version) < 3) | (ID3_TAG_VERSION_MAJOR(version) == 4))
+                    ETFile->force_tag_save();
+            }
 #else
-        if (ID3_TAG_VERSION_MAJOR(version) >= 4)
-            FileTag->saved = FALSE;
+            if (ID3_TAG_VERSION_MAJOR(version) >= 4)
+                ETFile->force_tag_save();
 #endif
-    }
+        }
 
-    // Assign tag values, last wins
-    if (apply_tag(FileTag, v1tag.get())
-        | apply_tag(FileTag, v2tag.get())
-        | apply_tag(FileTag, v2etag.get()))
-        FileTag->saved = FALSE;
+        // Assign tag values, last wins
+        if (apply_tag(FileTag, v1tag.get())
+            | apply_tag(FileTag, v2tag.get())
+            | apply_tag(FileTag, v2etag.get()))
+            ETFile->force_tag_save();
+    }
 
     // validate date fields
     int max_date_fields;
@@ -263,9 +265,9 @@ gboolean id3_read_file(GFile *gfile, ET_File *ETFile, GError **error)
         max_date_fields = 3;
     else
         max_date_fields = 6;
-    ETFile->check_dates(max_date_fields, false);
+    FileTag->check_dates(max_date_fields, false, *ETFile->FileNameCur());
 
-    return TRUE;
+    return FileTag;
 }
 
 static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
@@ -880,7 +882,6 @@ gboolean
 id3tag_write_file_v24tag (const ET_File *ETFile,
                           GError **error)
 {
-    const File_Tag *FileTag;
     struct id3_tag   *v1tag, *v2tag;
     struct id3_frame *frame;
     union id3_field  *field;
@@ -888,10 +889,10 @@ id3tag_write_file_v24tag (const ET_File *ETFile,
     guchar genre_value = ID3_INVALID_GENRE;
     gboolean success;
 
-    g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
+    g_return_val_if_fail (ETFile != NULL && ETFile->FileTagNew() != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    FileTag       = ETFile->FileTag->data;
+    const File_Tag* FileTag = ETFile->FileTagNew();
     const char* filename = ETFile->FilePath;
 
     v1tag = v2tag = NULL;

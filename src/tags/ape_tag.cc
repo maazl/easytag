@@ -34,6 +34,7 @@
 #include "libapetag/apetaglib.h"
 #include "libapetag/info_mac.h"
 #include "libapetag/info_mpc.h"
+#include "file_tag.h"
 
 #include <cmath>
 #include <limits>
@@ -88,12 +89,11 @@ OFS_Description(".ofs");
  * Note:
  *  - if field is found but contains no info (strlen(str)==0), we don't read it
  */
-static gboolean
+static File_Tag*
 ape_tag_read_file_tag (GFile *file,
                        ET_File *ETFile,
                        GError **error)
 {
-    File_Tag* FileTag = ETFile->FileTag->data;
     FILE *fp;
     gchar *filename;
     const char *string;
@@ -107,7 +107,7 @@ ape_tag_read_file_tag (GFile *file,
                      _("Error while opening file: %s"),
                      g_strerror (errno));
         g_free (filename);
-        return FALSE;
+        return nullptr;
     }
 
     ape_cnt = apetag_init();
@@ -122,6 +122,8 @@ ape_tag_read_file_tag (GFile *file,
     	else
     		ret = gString(Try_To_Validate_Utf8_String(s)).get();
     };
+
+    File_Tag* FileTag = new File_Tag();
 
     fetch_tag(FileTag->title, APE_TAG_FIELD_TITLE);
     fetch_tag(FileTag->subtitle, APE_TAG_FIELD_SUBTITLE);
@@ -171,27 +173,29 @@ ape_tag_read_file_tag (GFile *file,
     fclose (fp);
 
     // validate date fields
-    ETFile->check_dates(3, true); // From field 3 arbitrary strings are allowed
+    FileTag->check_dates(3, true, *ETFile->FileNameCur()); // From field 3 arbitrary strings are allowed
 
-    return TRUE;
+    return FileTag;
 }
 
-gboolean mac_read_file(GFile *file, ET_File *ETFile, GError **error)
+File_Tag* mac_read_file(GFile *file, ET_File *ETFile, GError **error)
 {
 	g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	return ape_tag_read_file_tag(file, ETFile, error)
-		&& info_mac_read(file, ETFile, error);
+	if (!info_mac_read(file, ETFile, error))
+		return nullptr;
+	return ape_tag_read_file_tag(file, ETFile, error);
 }
 
-gboolean mpc_read_file(GFile *file, ET_File *ETFile, GError **error)
+File_Tag* mpc_read_file(GFile *file, ET_File *ETFile, GError **error)
 {
 	g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	return ape_tag_read_file_tag(file, ETFile, error)
-		&& info_mpc_read (file, ETFile, error);
+	if (!info_mpc_read (file, ETFile, error))
+		return nullptr;
+	return ape_tag_read_file_tag(file, ETFile, error);
 }
 
 
@@ -199,13 +203,12 @@ gboolean
 ape_tag_write_file_tag (const ET_File *ETFile,
                         GError **error)
 {
-    const File_Tag *FileTag;
     apetag   *ape_mem;
 
-    g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
+    g_return_val_if_fail (ETFile != NULL && ETFile->FileTagNew() != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    FileTag     = ETFile->FileTag->data;
+    const File_Tag *FileTag = ETFile->FileTagNew();
 
     ape_mem = apetag_init ();
 

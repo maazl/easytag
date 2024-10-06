@@ -22,20 +22,18 @@
 
 #include "misc.h"
 #include "setting.h"
+#include "undo_list.h"
 #include <glib.h>
 
-#ifdef __cplusplus
 #include "xstring.h"
 #include <string>
 
 /**
  * Item of the FileNameList list
  */
-typedef class File_Name
+class File_Name : public UndoList<File_Name>::Intrusive
 {
 public:
-	guint key;
-	bool saved; ///< Set to \c true if this filename had been saved
 	xString0 Path; ///< Path component as UTF-8, maybe relative to the current root path. May be empty.
 	xString0 File; ///< File name within \ref Path as UTF-8 with extension.
 
@@ -80,10 +78,6 @@ public:
 	/// that cause severe problems like path delimiters.
 	static void (*prepare_func(EtFilenameReplaceMode replace_illegal, EtConvertSpaces convert_spaces))(std::string& filename_utf8, unsigned start)
 	{	return prepare_funcs[std::min((unsigned)replace_illegal, 2U)][std::min((unsigned)convert_spaces - 1, 2U)]; }
-} File_Name;
-
-#else
-struct File_Name;
-#endif
+};
 
 #endif /* !ET_FILE_NAME_H_ */

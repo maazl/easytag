@@ -196,7 +196,6 @@ gboolean et_run_program (const gchar *program_name, GList *args_list, GError **e
 
 gboolean et_rename_file (const gchar *old_filename, const gchar *new_filename, GError **error);
 
-guint et_undo_key_new (void);
 gint et_normalized_strcmp0 (const gchar *str1, const gchar *str2);
 gint et_normalized_strcasecmp0 (const gchar *str1, const gchar *str2);
 /*

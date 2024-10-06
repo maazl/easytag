@@ -55,9 +55,10 @@ GQuark et_opus_error_quark (void);
 #define ET_OPUS_ERROR et_opus_error_quark ()
 
 struct ET_File;
+struct File_Tag;
 struct EtFileHeaderFields;
 
-gboolean opus_read_file(GFile *file, ET_File* ETFile, GError **error);
+File_Tag* opus_read_file(GFile *file, ET_File* ETFile, GError **error);
 void et_opus_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
 
 G_END_DECLS

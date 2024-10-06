@@ -19,6 +19,8 @@
 #include "file_renderer.h"
 #include "misc.h"
 #include "enums.h"
+#include "file_name.h"
+#include "file_tag.h"
 
 #include <vector>
 #include <utility>
@@ -162,11 +164,11 @@ const FileInfoIntColumnRenderer
 const TagReplaygainRenderer R_Replaygain(ET_SORT_MODE_ASCENDING_REPLAYGAIN);
 
 string GenericColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	return Getter((original ? file->FileNameCur : file->FileNameNew)->data);
+{	return Getter(original ? file->FileNameCur() : file->FileNameNew());
 }
 
 string TagColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	string s = ((original ? file->FileTagCur : file->FileTag)->data->*Field).get();
+{	string s = ((original ? file->FileTagCur() : file->FileTagNew())->*Field).get();
 	size_t pos = s.find('\n');
 	if (pos != string::npos && g_settings_get_boolean(MainSettings, "browse-limit-lines"))
 	{	guint count = g_settings_get_uint(MainSettings, "browse-max-lines");
@@ -184,7 +186,7 @@ done:
 }
 
 string TagPartColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	const File_Tag* tag = (original ? file->FileTagCur : file->FileTag)->data;
+{	const File_Tag* tag = original ? file->FileTagCur() : file->FileTagNew();
 	string svalue = (tag->*Field).get();
 	const gchar* value2 = tag->*Field2;
 	if (!et_str_empty(value2))
@@ -245,7 +247,7 @@ string BitrateColumnRenderer::RenderText(const ET_File* file, bool original) con
 }
 
 string TagReplaygainRenderer::RenderText(const ET_File* file, bool original) const
-{	const File_Tag* tag = (original ? file->FileTagCur : file->FileTag)->data;
+{	const File_Tag* tag = original ? file->FileTagCur() : file->FileTagNew();
 	char buf[40];
 	char* dp = buf;
 	if (isfinite(tag->track_gain))

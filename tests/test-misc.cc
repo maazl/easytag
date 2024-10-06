@@ -194,16 +194,6 @@ misc_str_empty (void)
     }
 }
 
-static void
-misc_undo_key (void)
-{
-    guint undo_key;
-
-    undo_key = et_undo_key_new ();
-    g_assert_cmpint (undo_key, >, 0U);
-    g_assert_cmpint (undo_key, <, et_undo_key_new ());
-}
-
 int
 main (int argc, char** argv)
 {
@@ -215,7 +205,6 @@ main (int argc, char** argv)
                      misc_normalized_strcasecmp0);
     g_test_add_func ("/misc/rename-file", misc_rename_file);
     g_test_add_func ("/misc/str-empty", misc_str_empty);
-    g_test_add_func ("/misc/undo-key", misc_undo_key);
 
     return g_test_run ();
 }

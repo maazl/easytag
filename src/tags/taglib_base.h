@@ -32,6 +32,7 @@
 #include <string>
 
 struct ET_File;
+struct File_Tag;
 
 /// Fetch a property value from TagLib PropertyMap
 /// @param fields Property store
@@ -42,7 +43,7 @@ struct ET_File;
 /// @return Property value, empty if not found
 std::string taglib_fetch_property(const TagLib::PropertyMap& fields, gString* delimiter, const char* property);
 
-gboolean taglib_read_tag(const TagLib::File& tfile, ET_File *ETFile, GError **error);
+File_Tag* taglib_read_tag(const TagLib::File& tfile, ET_File *ETFile, GError **error);
 
 /// Add a property to a TagLib property store
 /// @param fields Target

@@ -41,6 +41,8 @@
 #include "crc32.h"
 #include "charset.h"
 #include "mask.h"
+#include "file_name.h"
+#include "file_tag.h"
 
 #include <algorithm>
 #include <string>
@@ -214,7 +216,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
         return;
 
     // Create a new File_Tag item
-    FileTag = new File_Tag(*ETFile->FileTag->data);
+    FileTag = new File_Tag(*ETFile->FileTagNew());
 
     // Process this mask with file
     fill_tag_list = Scan_Generate_New_Tag_From_Mask(ETFile, move(mask));
@@ -272,12 +274,12 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
 #endif
 
     // Save changes of the 'File_Tag' item
-    ET_Manage_Changes_Of_File_Data(ETFile,NULL,FileTag);
+    ETFile->apply_changes(nullptr, FileTag);
 
     et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
                                               _("Tag successfully scanned"),
                                               TRUE);
-    Log_Print (LOG_OK, _("Tag successfully scanned ‘%s’"), ETFile->FileNameNew->data->File.get());
+    Log_Print (LOG_OK, _("Tag successfully scanned ‘%s’"), ETFile->FileNameNew()->File.get());
 }
 
 static GList *
@@ -300,7 +302,7 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, string&& mask)
 
     g_return_val_if_fail (ETFile != NULL && !mask.empty(), NULL);
 
-    std::string filename_utf8(ETFile->FileNameNew->data->full_name());
+    std::string filename_utf8(ETFile->FileNameNew()->full_name());
     if (filename_utf8.empty()) return NULL;
 
     // Remove extension of file (if found)
@@ -309,7 +311,7 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, string&& mask)
         filename_utf8[filename_utf8.length() - strlen(desc->Extension)] = 0; //strrchr(source,'.') = 0;
     else
         Log_Print(LOG_ERROR, _("The extension ‘%s’ was not found in filename ‘%s’"),
-            ET_Get_File_Extension(filename_utf8.c_str()), ETFile->FileNameNew->data->File.get());
+            ET_Get_File_Extension(filename_utf8.c_str()), ETFile->FileNameNew()->File.get());
 
     /* Replace characters into mask and filename before parsing. */
     convert_mode = (EtConvertSpaces)g_settings_get_enum (MainSettings, "fill-convert-spaces");
@@ -647,15 +649,15 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
     }
 
     /* Build the filename with the full path or relative to old path */
-    File_Name *FileName = new File_Name(ETFile->FileNameNew->data->generate_name(filename_generated_utf8.c_str(), false));
+    File_Name *FileName = new File_Name(ETFile->FileNameNew()->generate_name(filename_generated_utf8.c_str(), false));
     // Save changes of the 'File_Name' item
-    ET_Manage_Changes_Of_File_Data(ETFile,FileName,NULL);
+    ETFile->apply_changes(FileName, nullptr);
 
     et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
                                               _("New filename successfully scanned"),
                                               TRUE);
 
-    Log_Print (LOG_OK, _("New filename successfully scanned ‘%s’"), ETFile->FileNameNew->data->File.get());
+    Log_Print (LOG_OK, _("New filename successfully scanned ‘%s’"), ETFile->FileNameNew()->File.get());
 
     return;
 }
@@ -677,7 +679,7 @@ Scan_Rename_File_Prefix_Path (EtScanDialog *self)
         return;
 
     // The path to prefix
-    const char* filepath = ETCore->ETFileDisplayed->FileNameCur->data->Path;
+    const char* filepath = ETCore->ETFileDisplayed->FileNameCur()->Path;
     string path_tmp;
     if (!g_path_is_absolute(filepath))
     {   // Current root path
@@ -822,14 +824,12 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
 {
     File_Name *FileName = NULL;
     File_Tag  *FileTag  = NULL;
-    File_Name *st_filename;
-    File_Tag  *st_filetag;
     guint process_fields;
 
     g_return_if_fail (ETFile != NULL);
 
-    st_filename = ETFile->FileNameNew->data;
-    st_filetag  = ETFile->FileTag->data;
+    auto st_filename = ETFile->FileNameNew();
+    auto st_filetag  = ETFile->FileTagNew();
     process_fields = g_settings_get_flags (MainSettings, "process-fields");
 
     /* Process the filename */
@@ -842,7 +842,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
 
             Scan_Process_Fields_Functions (self, s);
 
-            FileName = new File_Name(ETFile->FileNameNew->data->generate_name(s.c_str(), true));
+            FileName = new File_Name(st_filename->generate_name(s.c_str(), true));
         }
     }
 
@@ -894,13 +894,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             Scan_Process_Tag_Field(self, FileTag, &File_Tag::encoded_by);
     }
 
-    if (FileName && FileTag)
-    {
-        // Synchronize undo key of the both structures (used for the
-        // undo functions, as they are generated as the same time)
-        FileName->key = FileTag->key;
-    }
-    ET_Manage_Changes_Of_File_Data(ETFile,FileName,FileTag);
+    ETFile->apply_changes(FileName, FileTag);
 
 }
 

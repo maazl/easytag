@@ -21,7 +21,9 @@
 
 #include "misc.h"
 #include "log.h"
+#include "file_name.h"
 
+#include <glib/gi18n.h>
 #include <limits>
 #include <cmath>
 #include <string>
@@ -29,9 +31,7 @@
 using namespace std;
 
 File_Tag::File_Tag()
-:	key(et_undo_key_new ())
-,	saved(false)
-,	other(nullptr)
+:	other(nullptr)
 ,	track_gain(numeric_limits<float>::quiet_NaN())
 ,	track_peak(numeric_limits<float>::quiet_NaN())
 ,	album_gain(numeric_limits<float>::quiet_NaN())
@@ -39,9 +39,7 @@ File_Tag::File_Tag()
 {}
 
 File_Tag::File_Tag(const File_Tag& r)
-:	key(et_undo_key_new ())
-,	saved(false)
-,	title(r.title)
+:	title(r.title)
 ,	subtitle(r.subtitle)
 ,	version(r.version)
 ,	artist(r.artist)
@@ -272,6 +270,24 @@ bool File_Tag::check_date(const char* value, int max_fields, bool additional_con
 	if (!additional_content)
 		return false;
 	return t.field_count <= max_fields;
+}
+
+void File_Tag::check_dates(int max_fields, bool additional_content, const File_Name& filename) const
+{
+	if (!check_date(year, max_fields, additional_content))
+		Log_Print (LOG_WARNING,
+			_("The year value ‘%s’ seems to be invalid in file ‘%s’."),
+			year.get(), filename.full_name().get());
+
+	if (!check_date(release_year, max_fields, additional_content))
+		Log_Print (LOG_WARNING,
+			_("The release year value ‘%s’ seems to be invalid in file ‘%s’."),
+			release_year.get(), filename.full_name().get());
+
+	if (!check_date(orig_year, max_fields, additional_content))
+		Log_Print (LOG_WARNING,
+			_("The original year value ‘%s’ seems to be invalid in file ‘%s’."),
+			orig_year.get(), filename.full_name().get());
 }
 
 std::string File_Tag::track_and_total() const

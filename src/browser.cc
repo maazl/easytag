@@ -47,6 +47,7 @@
 #include "misc.h"
 #include "setting.h"
 #include "enums.h"
+#include "file_name.h"
 
 #include "win32/win32dep.h"
 
@@ -1319,7 +1320,7 @@ static void set_zebra(GtkTreeModel* model)
 	if (!gtk_tree_model_get_iter_first(model, &iter))
 		return;
 	ET_File* last = nullptr;
-	auto cmp = ET_Get_Comp_Func_Sort_File((EtSortMode)g_settings_get_enum(MainSettings, "sort-mode"));
+	auto cmp = ET_File::get_comp_func((EtSortMode)g_settings_get_enum(MainSettings, "sort-mode"));
 	bool activate_bg_color = false;
 	do
 	{	ET_File *file;
@@ -1463,7 +1464,7 @@ et_browser_refresh_file_in_list (EtBrowser *self,
         {
             gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &selectedIter,
                            LIST_FILE_POINTER, &etfile, -1);
-            if (ETFile->ETFileKey == etfile->ETFileKey)
+            if (ETFile == etfile)
             {
                 row_found = TRUE;
             }
@@ -1483,7 +1484,7 @@ et_browser_refresh_file_in_list (EtBrowser *self,
             {
                 gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &selectedIter,
                                    LIST_FILE_POINTER, &etfile, -1);
-                if (ETFile->ETFileKey == etfile->ETFileKey)
+                if (ETFile == etfile)
                 {
                     row_found = TRUE;
                 }
@@ -1501,7 +1502,7 @@ et_browser_refresh_file_in_list (EtBrowser *self,
         {
             gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &selectedIter,
                                LIST_FILE_POINTER, &etfile, -1);
-            if (ETFile->ETFileKey == etfile->ETFileKey)
+            if (ETFile == etfile)
             {
                 row_found = TRUE;
                 break;
@@ -1527,8 +1528,8 @@ et_browser_refresh_file_in_list (EtBrowser *self,
     /* When displaying Artist + Album lists => refresh also rows color. */
     if (strcmp (g_variant_get_string (variant, NULL), "artist") == 0)
     {
-        const xString0& current_artist = ETFile->FileTag->data->artist;
-        const xString0& current_album  = ETFile->FileTag->data->album;
+        const xString0& current_artist = ETFile->FileTagNew()->artist;
+        const xString0& current_album  = ETFile->FileTagNew()->album;
 
         valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->artist_model),
                                                &selectedIter);
@@ -1850,9 +1851,9 @@ et_browser_select_file_by_dlm (EtBrowser *self,
         {
             gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter,
                                LIST_FILE_POINTER, &current_etfile, -1);
-            const xString0& current_title = current_etfile->FileTag->data->title;
+            const xString0& current_title = current_etfile->FileTagNew()->title;
 
-            if ((cur = dlm((current_title ? current_title : current_etfile->FileNameNew->data->File.get()), string)) > max) // See "dlm.c"
+            if ((cur = dlm((current_title ? current_title : current_etfile->FileNameNew()->File.get()), string)) > max) // See "dlm.c"
             {
                 max = cur;
                 iter2 = iter;
@@ -1918,7 +1919,7 @@ Browser_List_Sort_Func (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
     gtk_tree_model_get(model, a, LIST_FILE_POINTER, &ETFile1, -1);
     gtk_tree_model_get(model, b, LIST_FILE_POINTER, &ETFile2, -1);
 
-    return ET_Get_Comp_Func_Sort_File((EtSortMode)g_settings_get_enum(MainSettings, "sort-mode"))(ETFile1, ETFile2);
+    return ET_File::get_comp_func((EtSortMode)g_settings_get_enum(MainSettings, "sort-mode"))(ETFile1, ETFile2);
 }
 
 /*
@@ -2037,7 +2038,7 @@ Browser_Artist_List_Load_Files (EtBrowser *self, ET_File *etfile_to_select)
     g_return_if_fail (priv->artist_view != NULL);
 
     if (etfile_to_select)
-        artist_to_select = etfile_to_select->FileTag->data->artist;
+        artist_to_select = etfile_to_select->FileTagNew()->artist;
 
     et_browser_clear_artist_model (self);
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->artist_view));
@@ -2051,7 +2052,7 @@ Browser_Artist_List_Load_Files (EtBrowser *self, ET_File *etfile_to_select)
         AlbumList = (GList *)l->data;
         etfilelist = (GList *)AlbumList->data;
         etfile     = (ET_File *)etfilelist->data;
-        artistname = etfile->FileTag->data->artist;
+        artistname = etfile->FileTagNew()->artist;
 
         // Third column text : number of files
         for (m = g_list_first (AlbumList); m != NULL; m = g_list_next (m))
@@ -2151,7 +2152,7 @@ Browser_Artist_List_Set_Row_Appearance (EtBrowser *self, GtkTreeIter *iter)
     {
         for (m = (GList *)l->data; m != NULL; m = g_list_next (m))
         {
-            if (!((ET_File *)m->data)->check_saved())
+            if (!((ET_File *)m->data)->is_saved())
             {
                 if (g_settings_get_boolean (MainSettings, "file-changed-bold"))
                 {
@@ -2248,7 +2249,7 @@ Browser_Album_List_Load_Files (EtBrowser *self,
     g_return_if_fail (priv->album_view != NULL);
 
     if (etfile_to_select)
-        album_to_select = etfile_to_select->FileTag->data->album;
+        album_to_select = etfile_to_select->FileTagNew()->album;
 
     et_browser_clear_album_model (self);
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->album_view));
@@ -2285,7 +2286,7 @@ Browser_Album_List_Load_Files (EtBrowser *self,
         // Insert a line for each album
         etfilelist = (GList *)l->data;
         etfile     = (ET_File *)etfilelist->data;
-        albumname  = etfile->FileTag->data->album;
+        albumname  = etfile->FileTagNew()->album;
 
         /* TODO: Make the icon use the symbolic variant. */
         icon = g_themed_icon_new_with_default_fallbacks ("media-optical-cd-audio");
@@ -2390,7 +2391,7 @@ Browser_Album_List_Set_Row_Appearance (EtBrowser *self, GtkTreeIter *iter)
                              ALBUM_ETFILE_LIST_POINTER, &l, -1);
          l != NULL; l = g_list_next (l))
     {
-        if (!((ET_File *)l->data)->check_saved())
+        if (!((ET_File *)l->data)->is_saved())
         {
             if (g_settings_get_boolean (MainSettings, "file-changed-bold"))
             {
@@ -2743,7 +2744,7 @@ on_file_tree_button_press_event (GtkWidget *widget,
         g_free(nick);
         if (!enum_value)
             return GDK_EVENT_PROPAGATE;
-        auto cmp = ET_Get_Comp_Func_Sort_File((EtSortMode)enum_value->value);
+        auto cmp = ET_File::get_comp_func((EtSortMode)enum_value->value);
         if (!cmp)
             return GDK_EVENT_PROPAGATE;
 
@@ -3552,7 +3553,7 @@ static void set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkT
 	gtk_tree_model_get(model, iter, LIST_FILE_POINTER, &file, -1);
 	auto renderer = (const FileColumnRenderer*)data;
 	string text = renderer->RenderText(file);
-	bool saved = file->check_saved();
+	bool saved = file->is_saved();
 	bool changed = !saved
 		&& (renderer->Column < ET_SORT_MODE_ASCENDING_CREATION_DATE || renderer->Column >= ET_SORT_MODE_ASCENDING_REPLAYGAIN)
 		&& text != renderer->RenderText(file, true);

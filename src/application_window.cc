@@ -42,6 +42,8 @@
 #include "setting.h"
 #include "status_bar.h"
 #include "tag_area.h"
+#include "file_name.h"
+#include "file_tag.h"
 
 using namespace std;
 
@@ -333,7 +335,7 @@ delete_file (ET_File *ETFile, gboolean multiple_files, GError **error)
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
     /* Filename of the file to delete. */
-    const char* basename_utf8 = ETFile->FileNameCur->data->File.get();
+    const char* basename_utf8 = ETFile->FileNameCur()->File.get();
 
     /*
      * Remove the file
@@ -624,7 +626,7 @@ on_undo_file_changes (GSimpleAction *action,
 
     for (l = etfilelist; l != NULL; l = g_list_next (l))
     {
-        state |= ET_Undo_File_Data ((ET_File *)l->data);
+        state |= ((ET_File *)l->data)->undo();
     }
 
     g_list_free (etfilelist);
@@ -657,7 +659,7 @@ on_redo_file_changes (GSimpleAction *action,
 
     for (l = etfilelist; l != NULL; l = g_list_next (l))
     {
-        state |= ET_Redo_File_Data ((ET_File *)l->data);
+        state |= ((ET_File *)l->data)->redo();
     }
 
     g_list_free (etfilelist);
@@ -864,7 +866,7 @@ on_remove_tags (GSimpleAction *action,
     {
         ET_File *etfile = (ET_File *)l->data;
         FileTag = new File_Tag();
-        ET_Manage_Changes_Of_File_Data (etfile, NULL, FileTag);
+        etfile->apply_changes(nullptr, FileTag);
 
         et_application_window_progress_set(self, ++progress_bar_index, selectcount);
         /* Needed to refresh status bar */
@@ -1970,7 +1972,7 @@ et_application_window_create_file_name_from_ui (EtApplicationWindow *self,
     File_Name::prepare_func((EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"),
         (EtConvertSpaces)g_settings_get_enum(MainSettings, "rename-convert-spaces"))(filename_new, 0);
 
-    return new File_Name(ETFile->FileNameNew->data->generate_name(filename_new.c_str(), true));
+    return new File_Name(ETFile->FileNameNew()->generate_name(filename_new.c_str(), true));
 }
 
 void
@@ -1985,19 +1987,19 @@ et_application_window_update_et_file_from_ui (EtApplicationWindow *self)
 
     et_file = ETCore->ETFileDisplayed;
 
-    g_return_if_fail (et_file != NULL && et_file->FileNameCur != NULL
-                      && et_file->FileNameCur->data != NULL);
+    g_return_if_fail (et_file != NULL && et_file->FileNameCur() != NULL
+                      && et_file->FileTagCur() != NULL);
 
     /* Save filename and generate undo for filename. */
     FileName = et_application_window_create_file_name_from_ui(self, et_file);
 
-    FileTag = et_application_window_tag_area_create_file_tag(self, et_file->FileTag->data);
+    FileTag = et_application_window_tag_area_create_file_tag(self, et_file->FileTagNew());
 
     /*
      * Generate undo for the file and the main undo list.
      * If no changes detected, FileName and FileTag item are deleted.
      */
-    ET_Manage_Changes_Of_File_Data (et_file, FileName, FileTag);
+    et_file->apply_changes(FileName, FileTag);
 
     /* Refresh file into browser list */
     et_application_window_browser_refresh_file_in_list (self, et_file);
@@ -2012,7 +2014,7 @@ et_application_window_display_file_name (EtApplicationWindow *self,
     /*
      * Set the path to the file into BrowserEntry (dirbrowser)
      */
-    const char* dirname_utf8 = ETFile->FileNameNew->data->Path;
+    const char* dirname_utf8 = ETFile->FileNameNew()->Path;
     et_application_window_browser_entry_set_text(self, dirname_utf8);
 
     // And refresh the number of files in this directory
@@ -2075,7 +2077,7 @@ et_application_window_display_et_file (EtApplicationWindow *self,
     const ET_File_Description *description;
     EtFileHeaderFields fields;
 
-    g_return_if_fail (ETFile != NULL && ETFile->FileNameCur->data != NULL);
+    g_return_if_fail (ETFile != NULL && ETFile->FileNameCur() != NULL);
                       /* For the case where ETFile is an "empty" structure. */
 
     description = ETFile->ETFileDescription;
@@ -2103,7 +2105,7 @@ et_application_window_display_et_file (EtApplicationWindow *self,
 
     et_application_window_file_area_set_header_fields(self, &fields);
 
-    et_application_window_status_bar_message(self, strprintf(_("File: ‘%s’"), ETFile->FileNameCur->data->full_name().get()).c_str(), FALSE);
+    et_application_window_status_bar_message(self, strprintf(_("File: ‘%s’"), ETFile->FileNameCur()->full_name().get()).c_str(), FALSE);
 }
 
 GFile *
@@ -2375,8 +2377,8 @@ et_application_window_update_actions (EtApplicationWindow *self)
             {
                 const ET_File *etfile = (ET_File *)l->data;
 
-                has_undo |= ET_File_Data_Has_Undo_Data (etfile);
-                has_redo |= ET_File_Data_Has_Redo_Data (etfile);
+                has_undo |= etfile->has_undo_data();
+                has_redo |= etfile->has_redo_data();
                 /* has_to_save |= et_file_check_saved (etfile); */
                 if ((has_undo && has_redo /*&& has_to_save*/) || !l->next) // Useless to check the other files
                     break;

@@ -565,14 +565,6 @@ err:
     return FALSE;
 }
 
-/* Key for Undo */
-guint
-et_undo_key_new (void)
-{
-    static atomic<unsigned> ETUndoKey(0);
-    return ++ETUndoKey;
-}
-
 /*
  * et_normalized_strcmp0:
  * @str1: UTF-8 string, or %NULL

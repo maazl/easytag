@@ -20,6 +20,7 @@
 #if defined(ENABLE_ASF) || defined(ENABLE_MP4)
 
 #include "../file.h"
+#include "../file_tag.h"
 
 #include <glib/gi18n.h>
 #include <taglib/audioproperties.h>
@@ -50,14 +51,14 @@ string taglib_fetch_property(const PropertyMap& fields, gString* delimiter, cons
 	return res;
 };
 
-gboolean taglib_read_tag(const TagLib::File& tfile, ET_File *ETFile, GError **error)
+File_Tag* taglib_read_tag(const TagLib::File& tfile, ET_File *ETFile, GError **error)
 {
 	/* ET_File_Info header data */
 	const AudioProperties* properties = tfile.audioProperties();
 	if (properties == NULL)
 	{	g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "%s",
 			_("Error reading properties from file"));
-		return FALSE;
+		return nullptr;
 	}
 
 	ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
@@ -74,7 +75,7 @@ gboolean taglib_read_tag(const TagLib::File& tfile, ET_File *ETFile, GError **er
 	if (!tag)
 	{	g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "%s",
 			_("Error reading tags from file"));
-		return FALSE;
+		return nullptr;
 	}
 
 	const PropertyMap& extra_tag = tag->properties();
@@ -84,7 +85,7 @@ gboolean taglib_read_tag(const TagLib::File& tfile, ET_File *ETFile, GError **er
 	{ return taglib_fetch_property(extra_tag, &delimiter, property);
 	};
 
-	File_Tag* FileTag = ETFile->FileTag->data;
+	File_Tag* FileTag = new File_Tag();
 	// the taglib tags are basically a dictionary, so querying keys
 	// that do not exist for a certain tag type is just a no-op.
 	FileTag->title.assignNFC(tag->title().toCString(true));
@@ -117,7 +118,7 @@ gboolean taglib_read_tag(const TagLib::File& tfile, ET_File *ETFile, GError **er
 	FileTag->copyright.assignNFC(fetch_property("COPYRIGHT"));
 	FileTag->encoded_by.assignNFC(fetch_property("ENCODEDBY"));
 
-	return TRUE;
+	return FileTag;
 }
 
 void taglib_set_property(TagLib::PropertyMap& fields, gString* delimiter, const char* property, const char* value)
@@ -155,7 +156,7 @@ void taglib_set_property(TagLib::PropertyMap& fields, gString* delimiter, const 
 
 void taglib_write_file_tag(TagLib::PropertyMap& fields, const ET_File *ETFile, unsigned split_fields)
 {
-	const File_Tag *FileTag = ETFile->FileTag->data;
+	const File_Tag *FileTag = ETFile->FileTagNew();
 	const unsigned supported = ~ETFile->ETFileDescription->unsupported_fields(ETFile);
 	gString delimiter;
 

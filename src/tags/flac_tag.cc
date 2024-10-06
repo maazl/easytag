@@ -35,6 +35,9 @@
 #include "setting.h"
 #include "picture.h"
 #include "charset.h"
+#include "../file_name.h"
+#include "../file_tag.h"
+#include "../file.h"
 
 #include <memory>
 
@@ -60,7 +63,7 @@ FLA_Description(".fla");
  * Note:
  *  - if field is found but contains no info (strlen(str)==0), we don't read it
  */
-gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error)
+File_Tag* flac_read_file (GFile *file, ET_File *ETFile, GError **error)
 {
     EtFlacReadState state;
     FLAC__IOCallbacks callbacks = { et_flac_read_func,
@@ -68,8 +71,8 @@ gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error)
                                     et_flac_seek_func, et_flac_tell_func,
                                     et_flac_eof_func,
                                     et_flac_read_close_func };
-    g_return_val_if_fail (file != NULL && ETFile != NULL, FALSE);
-    g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+    g_return_val_if_fail (file != NULL && ETFile != NULL, nullptr);
+    g_return_val_if_fail (error == NULL || *error == NULL, nullptr);
 
     auto chain = make_unique(FLAC__metadata_chain_new(), FLAC__metadata_chain_delete);
 
@@ -77,7 +80,7 @@ gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error)
     {
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_NOMEM, "%s",
                      g_strerror (ENOMEM));
-        return FALSE;
+        return nullptr;
     }
 
     state.eof = FALSE;
@@ -92,7 +95,7 @@ gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error)
                      _("Error opening FLAC file"));
         et_flac_read_close_func (&state);
 
-        return FALSE;
+        return nullptr;
     }
 
     auto iter = make_unique(FLAC__metadata_iterator_new(), FLAC__metadata_iterator_delete);
@@ -102,10 +105,10 @@ gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error)
         et_flac_read_close_func (&state);
         g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_NOMEM, "%s",
                      g_strerror (ENOMEM));
-        return FALSE;
+        return nullptr;
     }
 
-    File_Tag* FileTag = ETFile->FileTag->data;
+    File_Tag* FileTag = new File_Tag();
     ET_File_Info* ETFileInfo = &ETFile->ETFileInfo;
 
     FLAC__metadata_iterator_init(iter.get(), chain.get());
@@ -188,19 +191,24 @@ gboolean flac_read_file (GFile *file, ET_File *ETFile, GError **error)
      * (but it will be deleted when rewriting the tag) */
     if (FileTag->empty())
     {
-        id3_read_file(file, ETFile, NULL);
+        File_Tag* FileTag2 = id3_read_file(file, ETFile, NULL);
+        if (FileTag2)
+        {
+            delete FileTag;
+            FileTag = FileTag2;
 
-        // If an ID3 tag has been found (and no FLAC tag), we mark the file as
-        // unsaved to rewrite a flac tag.
-        if (!FileTag->empty())
-            FileTag->saved = FALSE;
+            // If an ID3 tag has been found (and no FLAC tag), we mark the file as
+            // unsaved to rewrite a flac tag.
+            if (FileTag->empty())
+                ETFile->force_tag_save();
+        }
     }
 #endif
 
     // validate date fields
-    ETFile->check_dates(3, true); // From field 3 arbitrary strings are allowed
+    FileTag->check_dates(3, true, *ETFile->FileNameCur()); // From field 3 arbitrary strings are allowed
 
-    return TRUE;
+    return FileTag;
 }
 
 /*
@@ -268,7 +276,6 @@ gboolean
 flac_tag_write_file_tag (const ET_File *ETFile,
                          GError **error)
 {
-    const File_Tag *FileTag;
     GFile *file;
     GFileIOStream *iostream;
     EtFlacWriteState state;
@@ -282,11 +289,11 @@ flac_tag_write_file_tag (const ET_File *ETFile,
     FLAC__StreamMetadata_VorbisComment_Entry vce_field_vendor_string; // To save vendor string
     gboolean vce_field_vendor_string_found = FALSE;
 
-    g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
+    g_return_val_if_fail (ETFile != NULL && ETFile->FileTagNew() != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-    FileTag       = ETFile->FileTag->data;
-    const File_Name& filename = *ETFile->FileNameCur->data;
+    const File_Tag* FileTag = ETFile->FileTagNew();
+    const File_Name& filename = *ETFile->FileNameCur();
 
     /* libFLAC is able to detect (and skip) ID3v2 tags by itself */
     
@@ -489,7 +496,6 @@ flac_tag_write_file_tag (const ET_File *ETFile,
     {
         const gchar *violation;
         FLAC__StreamMetadata *picture_block; // For picture data
-        Picture_Format format;
 
         // Allocate block for picture data
         picture_block = FLAC__metadata_object_new(FLAC__METADATA_TYPE_PICTURE);
@@ -627,12 +633,10 @@ flac_tag_write_file_tag (const ET_File *ETFile,
     {
         // Delete the ID3 tags (create a dummy ETFile for the Id3tag_... function)
         ET_File ETFile_tmp(ETFile->FilePath);
-        // Same file...
-        ETFile_tmp.FileNameCur  =
-        ETFile_tmp.FileNameList = gListP<File_Name*>(new File_Name(*ETFile->FileNameCur->data));
-        // With empty tag...
-        ETFile_tmp.FileTag      =
-        ETFile_tmp.FileTagList  = gListP<File_Tag*>(new File_Tag());
+        // Same file with empty tag...
+        ETFile_tmp.apply_changes(
+            new File_Name(*ETFile->FileNameCur()),
+            new File_Tag());
         id3tag_write_file_tag(&ETFile_tmp, NULL);
     }
 #endif

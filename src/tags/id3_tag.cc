@@ -31,6 +31,8 @@
 #include "misc.h"
 #include "file.h"
 #include "charset.h"
+#include "file_name.h"
+#include "file_tag.h"
 
 #ifdef ENABLE_MP3
 
@@ -122,7 +124,6 @@ static gboolean
 id3tag_write_file_v23tag (const ET_File *ETFile,
                           GError **error)
 {
-    const File_Tag *FileTag;
     gboolean success = TRUE;
     gint number_of_frames;
     gboolean has_data = FALSE;
@@ -134,7 +135,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     ID3_Field *id3_field;
     string tmp;
 
-    g_return_val_if_fail (ETFile != NULL && ETFile->FileTag != NULL, FALSE);
+    g_return_val_if_fail (ETFile != NULL && ETFile->FileTagNew() != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
     // When writing the first MP3 file, we check if the version of id3lib of the
@@ -146,7 +147,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
         flag_id3lib_bugged = id3tag_check_if_id3lib_is_buggy (NULL);
     }
 
-    FileTag  = ETFile->FileTag->data;
+    const File_Tag* FileTag = ETFile->FileTagNew();
     const char* filename = ETFile->FilePath;
 
     gObject<GFile> file(g_file_new_for_path(filename));
@@ -325,12 +326,10 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     {
         // Delete the APE tag (create a dummy ETFile for the Ape_Tag_... function)
         ET_File ETFile_tmp(ETFile->FilePath);
-        // Same file...
-        ETFile_tmp.FileNameCur  =
-        ETFile_tmp.FileNameList = gListP<File_Name*>(new File_Name(*ETFile->FileNameCur->data));
-        // With empty tag...
-        ETFile_tmp.FileTag      =
-        ETFile_tmp.FileTagList  = gListP<File_Tag*>(new File_Tag());
+        // Same file with empty tag...
+        ETFile_tmp.apply_changes(
+            new File_Name(*ETFile->FileNameCur()),
+            new File_Tag());
         ape_tag_write_file_tag(&ETFile_tmp, NULL);
     }
 
@@ -349,7 +348,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     {
         id3_tag.Strip(ID3TT_ID3V1);
         id3_tag.Strip(ID3TT_ID3V2);
-        g_debug (_("Removed tag of ‘%s’"), ETFile->FileNameCur->data->File.get());
+        g_debug (_("Removed tag of ‘%s’"), ETFile->FileNameCur()->File.get());
     }
     else
     {
@@ -411,12 +410,9 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
                                        "id3v2-enable-unicode"))
         {
             ET_File ETFile_tmp(ETFile->FilePath);
-            File_Tag  *FileTag_tmp   = new File_Tag();
-            ETFile_tmp.FileTag      =
-            ETFile_tmp.FileTagList  = gListP<File_Tag*>(FileTag_tmp);
 
-            if (id3_read_file(file.get(), &ETFile_tmp, NULL) == TRUE
-                && *FileTag != *FileTag_tmp)
+            FileTag = id3_read_file(file.get(), &ETFile_tmp, NULL);
+            if (FileTag && *FileTag != *ETFile_tmp.FileTagNew())
             {
                 flag_id3lib_bugged = FALSE; /* Report the error only once. */
                 success = FALSE;
@@ -424,8 +420,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
                              ET_ID3_ERROR_BUGGY_ID3LIB, "%s",
                              _("Buggy id3lib"));
             }
-
-            delete FileTag_tmp;
+            delete FileTag;
         }
     }
 

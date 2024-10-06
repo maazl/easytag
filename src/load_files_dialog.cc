@@ -32,6 +32,7 @@
 #include "picture.h"
 #include "scan_dialog.h"
 #include "setting.h"
+#include "file_name.h"
 
 using namespace std;
 
@@ -125,9 +126,9 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
             prepare_func(list_text_tmp, 0);
 
             /* Build the filename with the path */
-            FileName = new File_Name(ETFile->FileNameNew->data->generate_name(list_text_tmp.c_str(), true));
+            FileName = new File_Name(ETFile->FileNameNew()->generate_name(list_text_tmp.c_str(), true));
             // Save changes of the 'File_Name' item
-            ET_Manage_Changes_Of_File_Data(ETFile,FileName,NULL);
+            ETFile->apply_changes(FileName, nullptr);
 
             /* Then run current scanner if requested. */
             if (g_settings_get_boolean (MainSettings,
@@ -621,7 +622,7 @@ Load_File_List (EtLoadFilesDialog *self)
         etfile = (ET_File *)l->data;
         gtk_list_store_insert_with_values (priv->file_name_model, NULL,
                                            G_MAXINT, LOAD_FILE_NAME_TEXT,
-                                           ET_Remove_File_Extension(etfile->FileNameNew->data->File).c_str(),
+                                           ET_Remove_File_Extension(etfile->FileNameNew()->File).c_str(),
                                            LOAD_FILE_NAME_POINTER, l->data,
                                            -1);
     }

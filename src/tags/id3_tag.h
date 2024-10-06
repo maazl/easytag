@@ -42,6 +42,7 @@ GQuark et_id3_error_quark (void);
 #define ET_ID3_ERROR et_id3_error_quark ()
 
 struct ET_File;
+struct File_Tag;
 struct EtFileHeaderFields;
 
 /*
@@ -55,7 +56,7 @@ typedef enum
     ET_ID3_ERROR_BUGGY_ID3LIB
 } EtID3Error;
 
-gboolean id3_read_file (GFile *file, ET_File *ETFile, GError **error);
+File_Tag* id3_read_file (GFile *file, ET_File *ETFile, GError **error);
 gboolean id3tag_write_file_v24tag (const ET_File *ETFile, GError **error);
 gboolean id3tag_write_file_tag (const ET_File *ETFile, GError **error);
 void et_mpeg_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);

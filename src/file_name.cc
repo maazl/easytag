@@ -321,15 +321,11 @@ void (*const File_Name::prepare_funcs[3][3])(std::string& filename_utf8, unsigne
 };
 
 File_Name::File_Name(const File_Name& r)
-:	key(r.key) // is this correct?
-,	saved(false)
-,	Path(r.Path)
+:	Path(r.Path)
 ,	File(r.File)
 {}
 
 File_Name::File_Name(const char* filename)
-:	key(et_undo_key_new())
-,	saved(false)
 {	// separate file name from path
 	const char* separator = strrchr(filename, G_DIR_SEPARATOR);
 	if (separator)
