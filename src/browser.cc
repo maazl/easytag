@@ -1853,7 +1853,7 @@ et_browser_select_file_by_dlm (EtBrowser *self,
                                LIST_FILE_POINTER, &current_etfile, -1);
             const xString0& current_title = current_etfile->FileTagNew()->title;
 
-            if ((cur = dlm((current_title ? current_title : current_etfile->FileNameNew()->File.get()), string)) > max) // See "dlm.c"
+            if ((cur = dlm((current_title ? current_title : current_etfile->FileNameNew()->file().get()), string)) > max) // See "dlm.c"
             {
                 max = cur;
                 iter2 = iter;

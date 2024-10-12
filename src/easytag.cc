@@ -150,8 +150,6 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
         GFileInfo *fileinfo;
 
         const ET_File *ETFile = (ET_File *)l->data;
-        const File_Tag* file_tag  = ETFile->FileTagNew();
-        const File_Name* FileName = ETFile->FileNameNew();
 
         // Count only the changed files or all files if force_saving_files==TRUE
         if (force_saving_files || !ETFile->is_saved())
@@ -403,7 +401,7 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
                                                GTK_MESSAGE_QUESTION,
                                                GTK_BUTTONS_NONE,
                                                _("Do you want to write the tag of file ‘%s’?"),
-                                               filename_cur.File.get());
+                                               filename_cur.file().get());
             gtk_window_set_title(GTK_WINDOW(msgdialog),_("Confirm Tag Writing"));
             if (multiple_files)
             {
@@ -479,9 +477,9 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
             // ET_Display_File_Data_To_UI(ETFile);
 
             // Directories were renamed? or only filename?
-            if (filename_cur.Path != filename_new.Path)
+            if (filename_cur.path() != filename_new.path())
             {
-                if (filename_cur.File != filename_new.File)
+                if (filename_cur.file() != filename_new.file())
                 {
                     // Directories and filename changed
                     msgdialog_title = g_strdup (_("Rename File and Directory"));
@@ -494,7 +492,7 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
                     msgdialog_title = g_strdup (_("Rename Directory"));
                     msg = g_strdup(_("Directory rename confirmation required"));
                     msg1 = g_strdup_printf (_("Do you want to rename the directory ‘%s’ to ‘%s’?"),
-                                            filename_cur.Path.get(), filename_new.Path.get());
+                                            filename_cur.path().get(), filename_new.path().get());
                 }
             }else
             {
@@ -502,7 +500,7 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
                 msgdialog_title = g_strdup (_("Rename File"));
                 msg = g_strdup(_("File rename confirmation required"));
                 msg1 = g_strdup_printf (_("Do you want to rename the file ‘%s’ to ‘%s’?"),
-                                       filename_cur.File.get(), filename_new.File.get());
+                                       filename_cur.file().get(), filename_new.file().get());
             }
 
             msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
@@ -622,7 +620,7 @@ Write_File_Tag (ET_File *ETFile, gboolean hide_msgbox)
 {
     GError *error = NULL;
 
-    const char* basename_utf8 = ETFile->FileNameCur()->File.get();
+    const char* basename_utf8 = ETFile->FileNameCur()->file().get();
     et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
         strprintf(_("Writing tag of ‘%s’"), basename_utf8).c_str(), TRUE);
 

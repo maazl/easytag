@@ -799,7 +799,7 @@ et_file_list_get_n_files_in_path (GList *file_list,
     {
         ET_File *ETFile = (ET_File *)l->data;
 
-        if (strcmp(ETFile->FileNameCur()->Path.get(), path_utf8) == 0)
+        if (strcmp(ETFile->FileNameCur()->path().get(), path_utf8) == 0)
             count++;
     }
 

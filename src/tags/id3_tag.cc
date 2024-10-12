@@ -348,7 +348,7 @@ id3tag_write_file_v23tag (const ET_File *ETFile,
     {
         id3_tag.Strip(ID3TT_ID3V1);
         id3_tag.Strip(ID3TT_ID3V2);
-        g_debug (_("Removed tag of ‘%s’"), ETFile->FileNameCur()->File.get());
+        g_debug (_("Removed tag of ‘%s’"), ETFile->FileNameCur()->file().get());
     }
     else
     {

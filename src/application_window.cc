@@ -335,7 +335,7 @@ delete_file (ET_File *ETFile, gboolean multiple_files, GError **error)
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
     /* Filename of the file to delete. */
-    const char* basename_utf8 = ETFile->FileNameCur()->File.get();
+    const char* basename_utf8 = ETFile->FileNameCur()->file().get();
 
     /*
      * Remove the file
@@ -2014,7 +2014,7 @@ et_application_window_display_file_name (EtApplicationWindow *self,
     /*
      * Set the path to the file into BrowserEntry (dirbrowser)
      */
-    const char* dirname_utf8 = ETFile->FileNameNew()->Path;
+    const char* dirname_utf8 = ETFile->FileNameNew()->path();
     et_application_window_browser_entry_set_text(self, dirname_utf8);
 
     // And refresh the number of files in this directory

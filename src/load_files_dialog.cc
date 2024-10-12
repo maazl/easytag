@@ -622,7 +622,7 @@ Load_File_List (EtLoadFilesDialog *self)
         etfile = (ET_File *)l->data;
         gtk_list_store_insert_with_values (priv->file_name_model, NULL,
                                            G_MAXINT, LOAD_FILE_NAME_TEXT,
-                                           ET_Remove_File_Extension(etfile->FileNameNew()->File).c_str(),
+                                           ET_Remove_File_Extension(etfile->FileNameNew()->file()).c_str(),
                                            LOAD_FILE_NAME_POINTER, l->data,
                                            -1);
     }

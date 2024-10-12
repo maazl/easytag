@@ -361,7 +361,7 @@ on_apply_to_selection (GObject *object,
             etfile = (ET_File*)etfilelist->data;
 
             // Restart counter when entering a new directory
-            const xString0& path = FileNameCur->Path;
+            const xString0& path = FileNameCur->path();
             if (last_path != path)
             {
                 i = 0;
@@ -393,7 +393,7 @@ on_apply_to_selection (GObject *object,
         for (l = etfilelist; l != NULL; l = g_list_next (l))
         {
             etfile        = (ET_File *)l->data;
-            string track_string = et_track_number_to_string(et_file_list_get_n_files_in_path(ETCore->ETFileList, etfile->FileNameNew()->Path));
+            string track_string = et_track_number_to_string(et_file_list_get_n_files_in_path(ETCore->ETFileList, etfile->FileNameNew()->path()));
 
             if (!track_total)
             {

@@ -29,11 +29,10 @@
 #include <string>
 
 /**
- * Item of the FileNameList list
+ * Item of the FileNameList list, all UTF-8.
  */
 class File_Name : public UndoList<File_Name>::Intrusive
 {
-public:
 	xString0 Path; ///< Path component as UTF-8, maybe relative to the current root path. May be empty.
 	xString0 File; ///< File name within \ref Path as UTF-8 with extension.
 
@@ -50,6 +49,10 @@ public:
 	friend bool operator==(const File_Name& l, const File_Name& r) { return l.File == r.File && l.Path == r.Path; }
 	friend bool operator!=(const File_Name& l, const File_Name& r) { return !(l == r); }
 
+	/// Path component as UTF-8, maybe relative to the current root path. May be empty.
+	const xString0& path() const { return Path; }
+		/// File name within \ref path as UTF-8 with extension.
+	const xString0& file() const { return File; }
 	/// Get file name with relative path (UTF-8).
 	gString full_name() const;
 

@@ -69,10 +69,10 @@ static gint CmpFilepath(const ET_File* ETFile1, const ET_File* ETFile2)
 	const File_Name *file2 = ETFile2->FileNameCur();
 	// !!!! : Must be the same rules as "Cddb_Track_List_Sort_Func" to be
 	// able to sort in the same order files in cddb and in the file list.
-	int r = file1->Path.compare(file2->Path);
+	int r = file1->path().compare(file2->path());
 	if (r)
 		return sign(r);
-	return 2 * sign(file1->File.compare(file2->File));
+	return 2 * sign(file1->file().compare(file2->file()));
 }
 
 /*
@@ -82,7 +82,7 @@ static gint CmpFilename(const ET_File* ETFile1, const ET_File* ETFile2)
 {
 	// !!!! : Must be the same rules as "Cddb_Track_List_Sort_Func" to be
 	// able to sort in the same order files in cddb and in the file list.
-	return sign(ETFile1->FileNameCur()->File.compare(ETFile2->FileNameCur()->File));
+	return sign(ETFile1->FileNameCur()->file().compare(ETFile2->FileNameCur()->file()));
 }
 
 /*

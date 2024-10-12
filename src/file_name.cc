@@ -395,7 +395,7 @@ bool File_Name::format_filepath()
 
 	string tmp = File.get();
 	prep(tmp, 0);
-	if (tmp != File)
+	if (tmp != File.get())
 	{	File = tmp;
 		changed = true;
 	}
@@ -413,7 +413,7 @@ bool File_Name::format_filepath()
 		if (!c)
 			c = G_DIR_SEPARATOR;
 
-	if (tmp != Path)
+	if (tmp != Path.get())
 	{	Path = tmp;
 		changed = true;
 	}

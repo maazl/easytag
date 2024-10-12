@@ -279,7 +279,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
     et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
                                               _("Tag successfully scanned"),
                                               TRUE);
-    Log_Print (LOG_OK, _("Tag successfully scanned ‘%s’"), ETFile->FileNameNew()->File.get());
+    Log_Print (LOG_OK, _("Tag successfully scanned ‘%s’"), ETFile->FileNameNew()->file().get());
 }
 
 static GList *
@@ -311,7 +311,7 @@ Scan_Generate_New_Tag_From_Mask (ET_File *ETFile, string&& mask)
         filename_utf8[filename_utf8.length() - strlen(desc->Extension)] = 0; //strrchr(source,'.') = 0;
     else
         Log_Print(LOG_ERROR, _("The extension ‘%s’ was not found in filename ‘%s’"),
-            ET_Get_File_Extension(filename_utf8.c_str()), ETFile->FileNameNew()->File.get());
+            ET_Get_File_Extension(filename_utf8.c_str()), ETFile->FileNameNew()->file().get());
 
     /* Replace characters into mask and filename before parsing. */
     convert_mode = (EtConvertSpaces)g_settings_get_enum (MainSettings, "fill-convert-spaces");
@@ -657,7 +657,7 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
                                               _("New filename successfully scanned"),
                                               TRUE);
 
-    Log_Print (LOG_OK, _("New filename successfully scanned ‘%s’"), ETFile->FileNameNew()->File.get());
+    Log_Print (LOG_OK, _("New filename successfully scanned ‘%s’"), ETFile->FileNameNew()->file().get());
 
     return;
 }
@@ -679,7 +679,7 @@ Scan_Rename_File_Prefix_Path (EtScanDialog *self)
         return;
 
     // The path to prefix
-    const char* filepath = ETCore->ETFileDisplayed->FileNameCur()->Path;
+    const char* filepath = ETCore->ETFileDisplayed->FileNameCur()->path();
     string path_tmp;
     if (!g_path_is_absolute(filepath))
     {   // Current root path
@@ -838,7 +838,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
         if (process_fields & ET_PROCESS_FIELD_FILENAME)
         {
             // Remove the extension to set it to lower case (to avoid problem with undo)
-            string s(ET_Remove_File_Extension(st_filename->File));
+            string s(ET_Remove_File_Extension(st_filename->file()));
 
             Scan_Process_Fields_Functions (self, s);
 
