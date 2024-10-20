@@ -67,20 +67,20 @@ public:
 class TagColumnRenderer : public FileColumnRenderer
 {
 protected:
-	xString0 File_Tag::* const Field;
+	xStringD0 File_Tag::* const Field;
 	virtual string RenderText(const ET_File* file, bool original) const;
 public:
-	TagColumnRenderer(EtSortMode col, xString0 File_Tag::* const field)
+	TagColumnRenderer(EtSortMode col, xStringD0 File_Tag::* const field)
 	:	FileColumnRenderer(col), Field(field) {}
 };
 
 class TagPartColumnRenderer : public TagColumnRenderer
 {
-	xString0 File_Tag::* const Field2;
+	xStringD0 File_Tag::* const Field2;
 protected:
 	virtual string RenderText(const ET_File* file, bool original) const;
 public:
-	TagPartColumnRenderer(EtSortMode col, xString0 File_Tag::* const field1, xString0 File_Tag::* const field2)
+	TagPartColumnRenderer(EtSortMode col, xStringD0 File_Tag::* const field1, xStringD0 File_Tag::* const field2)
 	:	TagColumnRenderer(col, field1), Field2(field2) {}
 };
 

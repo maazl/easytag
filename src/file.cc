@@ -197,11 +197,11 @@ static gint CmpCreationDate(const ET_File* ETFile1, const ET_File* ETFile2)
  * @return An integer less than, equal to, or greater than zero, if str1 is
  * less than, equal to or greater than str2
  */
-template <xString0 File_Tag::*V, bool CS, bool ST>
+template <xStringD0 File_Tag::*V, bool CS, bool ST>
 static gint CmpTagString2(const ET_File* file1, const ET_File* file2)
 {
-	const xString0& str1 = file1->FileTagNew()->*V;
-	const xString0& str2 = file2->FileTagNew()->*V;
+	const xStringD0& str1 = file1->FileTagNew()->*V;
+	const xStringD0& str2 = file2->FileTagNew()->*V;
 
 	gint result;
 	if (CS)
@@ -226,7 +226,7 @@ second:
 /*
  * Comparison function for sorting by ascending year.
  */
-template <xString0 File_Tag::*V>
+template <xStringD0 File_Tag::*V>
 static gint CmpTagInt(const ET_File* file1, const ET_File* file2)
 {
 	gint r = CmpInt(file1->FileTagNew()->*V, file2->FileTagNew()->*V);
@@ -300,7 +300,7 @@ static gint CmpRev(const ET_File *file1, const ET_File *file2)
 {	return F(file2, file1);
 }
 
-template <xString0 File_Tag::*V, bool R = false, bool ST = false>
+template <xStringD0 File_Tag::*V, bool R = false, bool ST = false>
 static gint (*CmpTagString())(const ET_File *file1, const ET_File *file2)
 {	return g_settings_get_boolean(MainSettings, "sort-case-sensitive")
 		? (R ? CmpRev<CmpTagString2<V,true,ST>> : CmpTagString2<V,true,ST>)

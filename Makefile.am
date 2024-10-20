@@ -45,7 +45,7 @@ easytag_SOURCES = \
 	src/application_window.cc \
 	src/browser.cc \
 	src/cddb_dialog.cc \
-	src/charset.c \
+	src/charset.cc \
 	src/crc32.cc \
 	src/dlm.c \
 	src/easytag.cc \
@@ -74,7 +74,7 @@ easytag_SOURCES = \
 	src/scan_dialog.cc \
 	src/search_dialog.cc \
 	src/setting.cc \
-	src/status_bar.c \
+	src/status_bar.cc \
 	src/tag_area.cc \
 	src/tags/libapetag/apetaglib.cc \
 	src/tags/libapetag/is_tag.cc \
@@ -482,6 +482,9 @@ tests_test_file_tag_CFLAGS = \
 tests_test_file_tag_SOURCES = \
 	tests/test-file_tag.cc \
 	src/file_tag.cc \
+	src/file_name.cc \
+	src/charset.cc \
+	tests/log-stub.cc \
 	src/misc.cc \
 	src/xstring.cc \
 	src/picture.cc
@@ -524,8 +527,11 @@ tests_test_picture_CFLAGS = \
 	$(common_test_cflags)
 
 tests_test_picture_SOURCES = \
-	tests/test-picture.c \
+	tests/test-picture.cc \
 	src/misc.cc \
+	src/xstring.cc \
+	src/charset.cc \
+	tests/log-stub.cc \
 	src/picture.cc
 
 tests_test_picture_LDADD = \
@@ -549,6 +555,8 @@ tests_test_xstring_CPPFLAGS = \
 
 tests_test_xstring_SOURCES = \
 	tests/test-xstring.cc \
+	src/charset.cc \
+	tests/log-stub.cc \
 	src/xstring.cc
 
 tests_test_xstring_LDADD = \

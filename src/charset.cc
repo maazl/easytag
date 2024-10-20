@@ -289,7 +289,7 @@ get_encoding_from_locale (const char *locale)
 
     for (i = 0; variants[i]; i++)
     {
-        encoding = g_hash_table_lookup (encodings, variants[i]);
+        encoding = (const char*)g_hash_table_lookup(encodings, variants[i]);
 
         if (encoding != NULL)
         {
@@ -445,7 +445,7 @@ convert_string_1 (const gchar *string, gssize length, const gchar *from_codeset,
         // end. It can cause some garbage at the end of a string for UTF-16.
         // The second \0 should be set manually.
         gchar *new_output;
-        new_output = g_realloc (output, bytes_written + 2);
+        new_output = (gchar*)g_realloc (output, bytes_written + 2);
         if (new_output != NULL)
         {
             output = new_output;
@@ -494,8 +494,8 @@ filename_from_display (const gchar *string)
     /* If the target encoding is not UTF-8, try the user-chosen alternative. */
     if (!g_get_filename_charsets (&filename_encodings))
     {
-        EtRenameEncoding enc_option = g_settings_get_enum (MainSettings,
-                                                           "rename-encoding");
+        EtRenameEncoding enc_option =
+            (EtRenameEncoding)g_settings_get_enum(MainSettings, "rename-encoding");
 
         switch (enc_option)
         {
@@ -595,51 +595,39 @@ filename_from_display (const gchar *string)
 gchar *
 Try_To_Validate_Utf8_String (const gchar *string)
 {
-    gchar *ret = NULL;
-    GError *error = NULL;
-
     g_return_val_if_fail (string != NULL, NULL);
 
     if (g_utf8_validate (string, -1, NULL))
-    {
         /* String already in UTF-8. */
-        ret = g_strdup (string);
-    }
+        return g_strdup (string);
     else
-    {
-        const gchar *legacy_encoding;
+        return Convert_Invalid_Utf8_String(string, -1);
+}
 
-        /* Guess the legacy (pre-Unicode) encoding associated with the locale.
-         * For example, fr_FR.UTF-8 => fr_FR => ISO-8859-1. */
-        legacy_encoding = get_encoding_from_locale (get_locale ());
-        ret = g_convert (string, -1, "UTF-8", legacy_encoding, NULL, NULL,
-                         &error);
+gchar* Convert_Invalid_Utf8_String(const gchar *string, gssize len)
+{
+  g_return_val_if_fail (string != NULL, NULL);
 
-        if (!ret)
-        {
-            /* Failing that, try ISO-8859-1. */
-            g_debug ("Error converting string to legacy encoding '%s': %s",
-                     legacy_encoding, error->message);
-            g_clear_error (&error);
-            ret = g_convert (string, -1, "UTF-8", "ISO-8859-1", NULL, NULL,
-                             &error);
-        }
+	/* Guess the legacy (pre-Unicode) encoding associated with the locale.
+	 * For example, fr_FR.UTF-8 => fr_FR => ISO-8859-1. */
+	const gchar *legacy_encoding = get_encoding_from_locale(get_locale());
+	GError *error = NULL;
+	gchar* ret = g_convert(string, len, "UTF-8", legacy_encoding, NULL, NULL, &error);
+	if (ret)
+		return ret;
 
-        if (!ret)
-        {
-            gchar *escaped_str = g_strescape (string, NULL);
+	/* Failing that, try ISO-8859-1. */
+	g_debug("Error converting string to legacy encoding '%s': %s", legacy_encoding, error->message);
+	g_clear_error(&error);
+	ret = g_convert(string, len, "UTF-8", "ISO-8859-1", NULL, NULL, &error);
+	if (ret)
+		return ret;
 
-            /* TODO: Improve error string. */
-            Log_Print (LOG_ERROR,
-                       _("The string ‘%s’ could not be converted into UTF-8: %s"),
-                       escaped_str, error->message);
-            g_clear_error (&error);
-
-            ret = escaped_str;
-        }
-    }
-
-    return ret;
+	ret = g_strescape(string, NULL);
+	/* TODO: Improve error string. */
+	Log_Print (LOG_ERROR, _("The string ‘%s’ could not be converted into UTF-8: %s"), ret, error->message);
+	g_clear_error(&error);
+	return ret;
 }
 
 void

@@ -12,6 +12,9 @@ Vorbis, Speex and Opus, MP4/AAC, MusePack, Monkey's Audio and WavPack files.
 Its simple and nice GTK+ interface makes tagging easier under GNU/Linux or
 Windows.
 
+This is an extended version not officially supported by the Gnome team.
+It adds plenty much of new features. See NEWS file.
+
 
 Features
 --------
@@ -20,7 +23,8 @@ Currently EasyTAG supports the following:
 
 * view, edit, write tags of MP3, MP2 files (ID3 tag with pictures), FLAC files
   (FLAC Vorbis tag), Ogg Vorbis, Speex and Opus files (Ogg Vorbis tag), MP4/AAC
-  (MP4/AAC tag), MusePack, Monkey's Audio and WavPack files (APE tag)
+  (MP4/AAC tag), MusePack, Monkey's Audio and WavPack files (APE tag), ASF/WMA
+  (Windows Media)
 * can edit more tag fields : Title, Artist, Album, Disc Album, Year, Track
   Number, Genre, Comment, Composer, Original Artist/Performer, Copyright, URL
   and Encoder name

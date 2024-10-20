@@ -87,8 +87,11 @@ AC_DEFUN([AX_COMPILER_FLAGS_CXXFLAGS],[
             -Warray-bounds dnl
             -Wreturn-type dnl
             -Wno-overloaded-virtual dnl
-            -Wswitch-enum dnl
-            -Wswitch-default dnl
+            -Wno-switch dnl
+            -Wno-switch-enum dnl
+            -Wno-switch-default dnl
+            -Wno-implicit-fallthrough dnl
+            -Wno-format-nonliteral dnl
             $4 dnl
             $5 dnl
             $6 dnl

@@ -27,7 +27,7 @@
 using namespace std;
 
 /// Placeholder mapping table. MUST BE ORDERED BY FIRST FIELD!
-static const std::pair<char, xString0 File_Tag::*> fieldmap[] =
+static const std::pair<char, xStringD0 File_Tag::*> fieldmap[] =
 {	{	'A', &File_Tag::album_artist }
 ,	{	'D', &File_Tag::disc_total }
 ,	{	'N', &File_Tag::track_total }
@@ -55,10 +55,10 @@ static const std::pair<char, xString0 File_Tag::*> fieldmap[] =
 ,	{	'z', &File_Tag::album_artist } // for compatibility with earlier versions
 };
 
-xString0 File_Tag::* et_mask_field(char code)
+xStringD0 File_Tag::* et_mask_field(char code)
 {
 	auto res = binary_find(fieldmap, fieldmap + G_N_ELEMENTS(fieldmap), code,
-		[](const std::pair<char, xString0 File_Tag::*>& l, char r) { return l.first - (int)r; });
+		[](const std::pair<char, xStringD0 File_Tag::*>& l, char r) { return l.first - (int)r; });
 	return res.second ? res.first->second : nullptr;
 }
 
@@ -89,9 +89,9 @@ string MaskEvaluator::TagFieldFromMaskCode(gchar code)
 	case 'w': /* Original year */
 		maxlen = 4;
 	default:
-		{	xString0 File_Tag::*field = et_mask_field(code);
+		{	xStringD0 File_Tag::*field = et_mask_field(code);
 			if (field)
-			{	const xString0& r = tag->*field;
+			{	const xStringD0& r = tag->*field;
 				string ret;
 				if (r)
 					ret.assign(r, min(maxlen, strlen(r)));

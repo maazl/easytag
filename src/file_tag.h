@@ -39,30 +39,29 @@ class File_Name;
  */
 struct File_Tag : public UndoList<File_Tag>::Intrusive
 {
-	xString0 title;         ///< Track name
-	xString0 subtitle;      ///< Track subtitle
-	xString0 version;       ///< Track version
-	xString0 artist;        ///< Track artist
-	xString0 album_artist;  ///< Album artist
-	xString0 album;         ///< Album name
-	xString0 disc_subtitle; ///< Medium title
-	xString0 disc_number;   ///< Medium number within a set (as a string)
-	xString0 disc_total;    ///< Total number of media in the set (as a string)
-	xString0 year;          ///< Year, optionally with date (as a string)
-	xString0 release_year;  ///< Release year, optionally with date (as a string)
-	xString0 track;         ///< Track number within the medium (as a string)
-	xString0 track_total;   ///< Total number of tracks of the medium (as a string)
-	xString0 genre;         ///< Text genre
-	xString0 comment;       ///< Comment, multi-line in general
-	xString0 composer;      ///< Composer
-	xString0 orig_artist;   ///< Original artist of the track
-	xString0 orig_year;     ///< Original year of the track
-	xString0 copyright;     ///< Copyright note
-	xString0 url;           ///< URL
-	xString0 encoded_by;    ///< Encoded by (strictly, a person, but often the encoding application)
-	xString0 description;   ///< Detailed description of the track, multi-line
+	xStringD0 title;         ///< Track name
+	xStringD0 subtitle;      ///< Track subtitle
+	xStringD0 version;       ///< Track version
+	xStringD0 artist;        ///< Track artist
+	xStringD0 album_artist;  ///< Album artist
+	xStringD0 album;         ///< Album name
+	xStringD0 disc_subtitle; ///< Medium title
+	xStringD0 disc_number;   ///< Medium number within a set (as a string)
+	xStringD0 disc_total;    ///< Total number of media in the set (as a string)
+	xStringD0 year;          ///< Year, optionally with date (as a string)
+	xStringD0 release_year;  ///< Release year, optionally with date (as a string)
+	xStringD0 track;         ///< Track number within the medium (as a string)
+	xStringD0 track_total;   ///< Total number of tracks of the medium (as a string)
+	xStringD0 genre;         ///< Text genre
+	xStringD0 comment;       ///< Comment, multi-line in general
+	xStringD0 composer;      ///< Composer
+	xStringD0 orig_artist;   ///< Original artist of the track
+	xStringD0 orig_year;     ///< Original year of the track
+	xStringD0 copyright;     ///< Copyright note
+	xStringD0 url;           ///< URL
+	xStringD0 encoded_by;    ///< Encoded by (strictly, a person, but often the encoding application)
+	xStringD0 description;   ///< Detailed description of the track, multi-line
 	std::vector<EtPicture> pictures; ///< List of pictures
-	GList *other;           ///< List of other tags, used for Vorbis comments
 	float track_gain;       ///< Replay gain of the track in dB that should be applied during playback
 	float track_peak;       ///< Peak level of the track relative to 0dB FSR
 	float album_gain;       ///< Replay gain of the album or entire set in dB that should be applied during playback

@@ -29,7 +29,6 @@ file_tag_copy (void)
 {
     File_Tag *tag1;
     File_Tag *tag2;
-    GList *l;
 
     tag1 = new File_Tag();
 
@@ -38,15 +37,10 @@ file_tag_copy (void)
     tag1->title = "foo";
     tag1->artist = "bar";
     tag1->album_artist = "baz";
-    tag1->other = g_list_prepend (tag1->other, g_strdup ("ofoo"));
 
     g_assert_cmpstr (tag1->title, ==, "foo");
     g_assert_cmpstr (tag1->artist, ==, "bar");
     g_assert_cmpstr (tag1->album_artist, ==, "baz");
-    l = tag1->other;
-    g_assert_cmpstr ((gchar*)l->data, ==, "ofoo");
-    l = g_list_next (l);
-    g_assert_false(l);
 
     tag2 = new File_Tag(*tag1);
 
@@ -55,10 +49,6 @@ file_tag_copy (void)
     g_assert_cmpstr (tag2->title, ==, "foo");
     g_assert_cmpstr (tag2->artist, ==, "bar");
     g_assert_cmpstr (tag2->album_artist, ==, "baz");
-    l = tag2->other;
-    g_assert_cmpstr ((gchar*)l->data, ==, "ofoo");
-    l = g_list_next (l);
-    g_assert_false(l);
 
     delete tag2;
     delete tag1;
@@ -69,7 +59,6 @@ file_tag_difference (void)
 {
     File_Tag *tag1;
     File_Tag *tag2;
-    GBytes *bytes;
 
     tag1 = new File_Tag();
 
@@ -103,13 +92,7 @@ file_tag_difference (void)
     delete tag1;
 
     tag1 = new File_Tag();
-    bytes = g_bytes_new_static ("foo", 3);
-
-    et_file_tag_set_picture (tag1,
-                             et_picture_new (ET_PICTURE_TYPE_FRONT_COVER, "", 0, 0,
-                                             bytes));
-
-    g_bytes_unref (bytes);
+    tag1->pictures.emplace_back(ET_PICTURE_TYPE_FRONT_COVER, xStringD0(""), 0, 0, "foo", 3);
 
     tag2 = new File_Tag();
 

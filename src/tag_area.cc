@@ -192,8 +192,8 @@ static void apply_field_to_selection(const F& value_to_set, GList *etfilelist,
 	}
 }
 static gchar* apply_field_to_selection(GtkWidget* widget, GList *etfilelist,
-	xString0 File_Tag::*field, const gchar* nonempty_text, const gchar* empty_text)
-{	xString0 value;
+	xStringD0 File_Tag::*field, const gchar* nonempty_text, const gchar* empty_text)
+{	xStringD0 value;
 	value.assignNFC(gtk_entry_get_text(GTK_ENTRY(widget)));
 	apply_field_to_selection(value, etfilelist, field);
 	if (!et_str_empty(value))
@@ -275,7 +275,7 @@ on_apply_to_selection (GObject *object,
         string_to_set = gtk_entry_get_text (GTK_ENTRY (priv->disc_number_entry));
         const char* separator = strchr(string_to_set, '/');
 
-        xString0 disc_number, disc_total;
+        xStringD0 disc_number, disc_total;
         if (separator)
         {   disc_number.assignNFC(string_to_set, separator - string_to_set);
             disc_total.assignNFC(separator + 1);
@@ -310,7 +310,7 @@ on_apply_to_selection (GObject *object,
     else if (object == G_OBJECT (priv->track_total_entry))
     {
         /* Used of Track and Total Track values */
-        xString0 track, total;
+        xStringD0 track, total;
         total.assignNFC(gtk_entry_get_text(GTK_ENTRY(priv->track_total_entry)));
         // We apply the TrackEntry field to all others files only if it is to delete
         // the field (string=""). Else we don't overwrite the track number
@@ -342,7 +342,7 @@ on_apply_to_selection (GObject *object,
          * Note : 'etfilelistfull' and 'etfilelist' must be sorted in the same order */
         GList *etfilelistfull = NULL;
         EtSortMode sort_mode;
-        xString0 last_path;
+        xStringD0 last_path;
         gint i = 0;
 
         /* FIX ME!: see to fill also the Total Track (it's a good idea?) */
@@ -361,7 +361,7 @@ on_apply_to_selection (GObject *object,
             etfile = (ET_File*)etfilelist->data;
 
             // Restart counter when entering a new directory
-            const xString0& path = FileNameCur->path();
+            const xStringD0& path = FileNameCur->path();
             if (last_path != path)
             {
                 i = 0;
@@ -430,7 +430,7 @@ on_apply_to_selection (GObject *object,
     }
     else if (object == G_OBJECT (priv->apply_comment_toolitem))
     {
-        xString0 text(gString(text_view_get_text(priv->comment_text)).get());
+        xStringD0 text(gString(text_view_get_text(priv->comment_text)).get());
         apply_field_to_selection(text, etfilelist, &File_Tag::comment);
         msg = !et_str_empty(text)
             ? g_strdup_printf(_("Selected files tagged with comment ‘%s’"), text.get())
@@ -2161,7 +2161,7 @@ void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 
 	EtTagAreaPrivate *priv = et_tag_area_get_instance_private (self);
 
-	auto store_field = [FileTag](xString0 File_Tag::*field, GtkWidget* widget)
+	auto store_field = [FileTag](xStringD0 File_Tag::*field, GtkWidget* widget)
 	{	if (!gtk_widget_get_visible(widget))
 			return;
 		const char* value = gtk_entry_get_text(GTK_ENTRY(widget));
@@ -2366,15 +2366,9 @@ et_tag_area_display_et_file (EtTagArea *self, const ET_File *ETFile, int columns
     {
       GtkTextBuffer* buffer = gtk_text_view_get_buffer(priv->description_text);
       if (!et_str_empty(FileTag->description))
-      {
-        gchar *tmp = Try_To_Validate_Utf8_String(FileTag->description);
-        gtk_text_buffer_set_text(buffer, tmp, -1);
-        g_free(tmp);
-      }
+        gtk_text_buffer_set_text(buffer, FileTag->description, -1);
       else
-      {
         gtk_text_buffer_set_text(buffer, "", 0);
-      }
     }
 
     if (columns & ET_COLUMN_IMAGE)

@@ -24,6 +24,7 @@
 #include <glib/gi18n.h>
 
 #include "charset.h"
+#include "misc.h"
 
 typedef struct
 {
@@ -32,7 +33,11 @@ typedef struct
     guint timer_id;
 } EtStatusBarPrivate;
 
+// learn correct return type for et_status_bar_get_instance_private
+#define et_status_bar_get_instance_private et_status_bar_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtStatusBar, et_status_bar, GTK_TYPE_STATUSBAR)
+#undef et_status_bar_get_instance_private
+#define et_status_bar_get_instance_private(x) (EtStatusBarPrivate*)et_status_bar_get_instance_private_(x)
 
 static void et_status_bar_remove_timer (EtStatusBar *self);
 
@@ -98,30 +103,24 @@ et_status_bar_message (EtStatusBar *self,
                        const gchar *message,
                        gboolean with_timer)
 {
-    EtStatusBarPrivate *priv;
-    gchar *msg_temp;
+    g_return_if_fail(self);
+    EtStatusBarPrivate* priv = et_status_bar_get_instance_private(self);
 
-    g_return_if_fail (ET_STATUS_BAR (self));
+    gString msg_temp;
+    if (!g_utf8_validate(message, -1, NULL))
+        message = msg_temp = Convert_Invalid_Utf8_String(message, -1);
 
-    priv = et_status_bar_get_instance_private (self);
-
-    msg_temp = Try_To_Validate_Utf8_String (message);
-    
     /* Push the given message */
     if (with_timer)
     {
         et_status_bar_start_timer (self);
-        gtk_statusbar_push (GTK_STATUSBAR (self), priv->timer_context,
-                            msg_temp);
+        gtk_statusbar_push(GTK_STATUSBAR(self), priv->timer_context, message);
     }
     else
     {
-        gtk_statusbar_pop (GTK_STATUSBAR (self), priv->message_context);
-        gtk_statusbar_push (GTK_STATUSBAR (self), priv->message_context,
-                            msg_temp);
+        gtk_statusbar_pop(GTK_STATUSBAR(self), priv->message_context);
+        gtk_statusbar_push(GTK_STATUSBAR(self), priv->message_context, message);
     }
-
-    g_free (msg_temp);
 }
 
 static void
@@ -179,5 +178,5 @@ et_status_bar_class_init (EtStatusBarClass *klass)
 GtkWidget *
 et_status_bar_new (void)
 {
-    return g_object_new (ET_TYPE_STATUS_BAR, NULL);
+    return (GtkWidget*)g_object_new(ET_TYPE_STATUS_BAR, NULL);
 }

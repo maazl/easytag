@@ -115,12 +115,12 @@ ape_tag_read_file_tag (GFile *file,
 
     g_free (filename);
 
-    auto fetch_tag = [ape_cnt](xString& ret, const char* fieldname)
+    auto fetch_tag = [ape_cnt](xStringD0& ret, const char* fieldname)
     {	const char* s = apefrm_getstr(ape_cnt, fieldname);
     	if (et_str_empty(s))
     		ret.reset();
     	else
-    		ret = gString(Try_To_Validate_Utf8_String(s)).get();
+    		ret.assignNFC(s);
     };
 
     File_Tag* FileTag = new File_Tag();

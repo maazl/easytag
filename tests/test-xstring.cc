@@ -18,9 +18,11 @@
 
 #include "xstring.h"
 
+#include <gtk/gtk.h>
 #include <glib/gstdio.h>
 using namespace std;
 
+GSettings *MainSettings;
 
 static void constructor()
 {

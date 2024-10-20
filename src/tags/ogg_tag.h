@@ -29,19 +29,42 @@
 #include <vorbis/vorbisfile.h>
 
 #include "../misc.h"
+#include "../xstring.h"
 
 struct ET_File;
 struct File_Tag;
 struct EtFileHeaderFields;
 
 #ifdef __cplusplus
-#include <unordered_map>
+#include <unordered_set>
 #include <string>
 
-struct tags_hash : std::unordered_multimap<std::string,gString>
-{	void add_tag(const char* comment, int len);
+struct vorbis_tag : public xString::cstring
+{
+	struct key_hash
+	{	unsigned operator()(const xString::cstring& tag) const;
+	};
+
+	struct key_equal
+	{	bool operator()(const xString::cstring& tag1, const xString::cstring& tag2) const;
+	};
+
+	constexpr vorbis_tag(const char* str, std::size_t len) noexcept : xString::cstring(str, len) {}
+	template <std::size_t N>
+	constexpr vorbis_tag(const char (&str)[N]) noexcept : xString::cstring(str, N-1) {}
+
+	xString::cstring key() const;
+	xString::cstring value() const;
+};
+
+class vorbis_tags : public std::unordered_multiset<vorbis_tag, vorbis_tag::key_hash, vorbis_tag::key_equal>
+{	gString delimiter;
+	void fetch_field(const vorbis_tag& fieldname, xStringD0& target, bool useNewline = false);
+	float fetch_float(const vorbis_tag& fieldname);
+public:
+	vorbis_tags(std::size_t capacity) : std::unordered_multiset<vorbis_tag, vorbis_tag::key_hash, vorbis_tag::key_equal>(capacity) {}
 	void to_file_tags(File_Tag *FileTag);
-	void to_other_tags(File_Tag *FileTag);
+	void to_other_tags(ET_File *ETFile);
 };
 
 #endif
@@ -92,7 +115,7 @@ GQuark et_ogg_error_quark (void);
 File_Tag* ogg_read_file (GFile *file, ET_File *ETFile, GError **error);
 gboolean ogg_tag_write_file_tag (const ET_File *ETFile, GError **error);
 
-File_Tag* get_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile);
+File_Tag* get_file_tags_from_vorbis_comments (const vorbis_comment *vc, ET_File *ETFile);
 void et_add_vorbis_comments_from_file_tags (vorbis_comment *vc, File_Tag *FileTag);
 
 void et_ogg_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);

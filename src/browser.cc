@@ -1528,8 +1528,8 @@ et_browser_refresh_file_in_list (EtBrowser *self,
     /* When displaying Artist + Album lists => refresh also rows color. */
     if (strcmp (g_variant_get_string (variant, NULL), "artist") == 0)
     {
-        const xString0& current_artist = ETFile->FileTagNew()->artist;
-        const xString0& current_album  = ETFile->FileTagNew()->album;
+        const xStringD0& current_artist = ETFile->FileTagNew()->artist;
+        const xStringD0& current_album  = ETFile->FileTagNew()->album;
 
         valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->artist_model),
                                                &selectedIter);
@@ -1851,7 +1851,7 @@ et_browser_select_file_by_dlm (EtBrowser *self,
         {
             gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter,
                                LIST_FILE_POINTER, &current_etfile, -1);
-            const xString0& current_title = current_etfile->FileTagNew()->title;
+            const xStringD0& current_title = current_etfile->FileTagNew()->title;
 
             if ((cur = dlm((current_title ? current_title : current_etfile->FileNameNew()->file().get()), string)) > max) // See "dlm.c"
             {

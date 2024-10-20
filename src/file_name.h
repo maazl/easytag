@@ -33,8 +33,8 @@
  */
 class File_Name : public UndoList<File_Name>::Intrusive
 {
-	xString0 Path; ///< Path component as UTF-8, maybe relative to the current root path. May be empty.
-	xString0 File; ///< File name within \ref Path as UTF-8 with extension.
+	xStringD0 Path; ///< Path component as UTF-8, maybe relative to the current root path. May be empty.
+	xStringD0 File; ///< File name within \ref Path as UTF-8 with extension.
 
 private:
 	static void (*const prepare_funcs[3][3])(std::string&, unsigned);
@@ -50,9 +50,9 @@ public:
 	friend bool operator!=(const File_Name& l, const File_Name& r) { return !(l == r); }
 
 	/// Path component as UTF-8, maybe relative to the current root path. May be empty.
-	const xString0& path() const { return Path; }
+	const xStringD0& path() const { return Path; }
 		/// File name within \ref path as UTF-8 with extension.
-	const xString0& file() const { return File; }
+	const xStringD0& file() const { return File; }
 	/// Get file name with relative path (UTF-8).
 	gString full_name() const;
 

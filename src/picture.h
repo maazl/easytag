@@ -110,7 +110,7 @@ typedef struct EtPicture
 	};
 
 	Data* storage;
-	xString0 description;
+	xStringD0 description;
 	EtPictureType type;
 
 	static Data* GetOrAllocate(const void* data, unsigned size);
@@ -118,7 +118,7 @@ typedef struct EtPicture
 public:
 	EtPicture(const EtPicture& r) noexcept;
 	constexpr EtPicture(EtPicture&& r) noexcept : storage(r.storage), description(std::move(r.description)), type(r.type) { r.storage = nullptr; }
-	EtPicture(EtPictureType type, const char *description, guint width, guint height, const void* data, unsigned size);
+	EtPicture(EtPictureType type, const xStringD0& description, guint width, guint height, const void* data, unsigned size);
 	/// Load an image from the supplied \a file.
 	/// @param File the GFile from which to load an image
 	/// @param Error a GError to provide information on errors, or \c NULL to ignore

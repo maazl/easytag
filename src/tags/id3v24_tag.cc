@@ -280,7 +280,7 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
 
     gchar* split_delimiter = g_settings_get_string(MainSettings, "split-delimiter");
 
-    auto fetch_tag = [tag, split_delimiter, &update](xString& target, const char* tagName, unsigned fieldType) -> bool
+    auto fetch_tag = [tag, split_delimiter, &update](xStringD0& target, const char* tagName, unsigned fieldType) -> bool
     {   string result;
         id3_frame *frame = id3_tag_findframe(tag, tagName, 0);
         if (!frame)
@@ -300,7 +300,7 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
     fetch_tag(FileTag->album, ID3_FRAME_ALBUM, EASYTAG_ID3_FIELD_STRINGLIST);
     fetch_tag(FileTag->disc_subtitle, "TSST", EASYTAG_ID3_FIELD_STRINGLIST);
     /* Part of a set (TPOS) */
-    xString string1;
+    xStringD0 string1;
     if (fetch_tag(string1, "TPOS", ~0))
         FileTag->disc_and_total(string1);
 
@@ -323,7 +323,7 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
          */
         gchar *tmp;
         unsigned genre = 0;
-        FileTag->genre = NULL;
+        FileTag->genre.reset();
 
         if (string1[0] == '(' && g_ascii_isdigit(string1[1])
             && (tmp = (gchar*)strchr(string1 + 2, ')')))
@@ -335,7 +335,7 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
             {
                 genre = strtol(string1 + 1, &tmp, 10);
                 if (*tmp != ')')
-                    FileTag->genre.assignNFC(string1);
+                    FileTag->genre = string1;
                 else
                     /* Convert a genre written as '(3)' into 'Dance' */
                     FileTag->genre = genre_no_or_null(genre);
@@ -345,7 +345,7 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
         {
             genre = strtol(string1, &tmp, 10);
             if (tmp == string1 || *tmp)
-                FileTag->genre.assignNFC(string1);
+                FileTag->genre = string1;
             else
                 /* Convert a genre written as '3' into 'Dance' */
                 FileTag->genre = genre_no_or_null(genre);
@@ -414,7 +414,7 @@ static bool apply_tag(File_Tag* FileTag, id3_tag* tag)
         string description;
         update |= libid3tag_Get_Frame_Str (frame, EASYTAG_ID3_FIELD_STRING, nullptr, description);
 
-        FileTag->pictures.emplace_back(type, description.c_str(), 0, 0, data, size);
+        FileTag->pictures.emplace_back(type, xStringD0(description), 0, 0, data, size);
     }
 
     /**********************

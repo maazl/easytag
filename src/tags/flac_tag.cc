@@ -122,20 +122,20 @@ File_Tag* flac_read_file (GFile *file, ET_File *ETFile, GError **error)
 
         if (block->type == FLAC__METADATA_TYPE_VORBIS_COMMENT)
         {
-            tags_hash tags;
             const FLAC__StreamMetadata_VorbisComment* vc = &block->data.vorbis_comment;
+            vorbis_tags tags(vc->num_comments);
 
             /* Get comments from block. */
             for (int i = 0; i < vc->num_comments; i++)
             {
-                const FLAC__StreamMetadata_VorbisComment_Entry comment = vc->comments[i];
-                tags.add_tag((const char*)comment.entry, comment.length);
+                auto& comment = vc->comments[i];
+                tags.emplace((const char*)comment.entry, comment.length);
             }
 
             tags.to_file_tags(FileTag);
 
             /* Save unsupported fields. */
-            tags.to_other_tags(FileTag);
+            tags.to_other_tags(ETFile);
         }
         else if (block->type == FLAC__METADATA_TYPE_PICTURE)
         {
@@ -145,7 +145,7 @@ File_Tag* flac_read_file (GFile *file, ET_File *ETFile, GError **error)
             p = &block->data.picture;
 
             FileTag->pictures.emplace_back((EtPictureType)p->type,
-                (const char*)p->description, 0, 0, p->data, p->data_length);
+                xStringD0((const char*)p->description), 0, 0, p->data, p->data_length);
         }
         else if (block->type == FLAC__METADATA_TYPE_STREAMINFO)
         {
@@ -397,11 +397,8 @@ flac_tag_write_file_tag (const ET_File *ETFile,
     // Create and insert a new VORBISCOMMENT block
     //
     {
-        FLAC__StreamMetadata *vc_block; // For vorbis comments
-        GList *l;
-        
         // Allocate a block for Vorbis comments
-        vc_block = FLAC__metadata_object_new(FLAC__METADATA_TYPE_VORBIS_COMMENT);
+        FLAC__StreamMetadata *vc_block = FLAC__metadata_object_new(FLAC__METADATA_TYPE_VORBIS_COMMENT);
 
         // Set the original vendor string, else will be use the version of library
         if (vce_field_vendor_string_found)
@@ -474,20 +471,13 @@ flac_tag_write_file_tag (const ET_File *ETFile,
         /**************************
          * Set unsupported fields *
          **************************/
-        for (l = FileTag->other; l != NULL; l = g_list_next (l))
-        {
-            vc_block_append_other_tag (vc_block, (gchar *)l->data);
-        }
+        if (ETFile->other)
+            for (gString* l = ETFile->other.get(); l; ++l)
+                vc_block_append_other_tag(vc_block, *l);
 
         // Add the block to the the chain (so we don't need to free the block)
         FLAC__metadata_iterator_insert_block_after(iter, vc_block);
     }
-    
-    
-    
-    //
-    // Create and insert PICTURE blocks
-    //
     
     /***********
      * Picture *

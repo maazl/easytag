@@ -24,9 +24,8 @@
 #include "file.h"
 #include "file_tag.h"
 
-#ifdef __cplusplus
 /// Get tag field by mask character
-xString0 File_Tag::* et_mask_field(char code);
+xStringD0 File_Tag::* et_mask_field(char code);
 
 /**
  * Check mask string for syntactical correctness.
@@ -51,5 +50,4 @@ std::string et_evaluate_mask(const ET_File *file, const gchar *mask, gboolean no
  */
 void entry_check_mask(GtkEntry *entry, gpointer user_data);
 
-#endif
 #endif

@@ -1,4 +1,5 @@
 /* EasyTAG - Tag editor for audio files
+ * Copyright (C) 2024 Marcel Müller
  * Copyright (C) 2014  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -34,6 +35,7 @@ gchar *filename_from_display (const gchar *string);
 
 // TODO: do not always allocate
 gchar *Try_To_Validate_Utf8_String (const gchar *string);
+gchar *Convert_Invalid_Utf8_String (const gchar *string, gssize len);
 
 void Charset_Populate_Combobox (GtkComboBox *combo, gint select_charset);
 const gchar * et_charset_get_name_from_index (guint index);

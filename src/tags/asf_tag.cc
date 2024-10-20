@@ -140,7 +140,7 @@ File_Tag* asf_read_file(GFile *file, ET_File *ETFile, GError **error)
 		const ByteVector& data = picture.picture();
 		FileTag->pictures.emplace_back(
 			(EtPictureType)picture.type(), // EtPictureType and ASF::Picture::Type are compatible
-			picture.description().toCString(true),
+			xStringD0(picture.description().toCString(true)),
 			0, 0,
 			data.data(), data.size());
 	}

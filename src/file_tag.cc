@@ -31,8 +31,7 @@
 using namespace std;
 
 File_Tag::File_Tag()
-:	other(nullptr)
-,	track_gain(numeric_limits<float>::quiet_NaN())
+:	track_gain(numeric_limits<float>::quiet_NaN())
 ,	track_peak(numeric_limits<float>::quiet_NaN())
 ,	album_gain(numeric_limits<float>::quiet_NaN())
 ,	album_peak(numeric_limits<float>::quiet_NaN())
@@ -62,28 +61,14 @@ File_Tag::File_Tag(const File_Tag& r)
 ,	encoded_by(r.encoded_by)
 ,	description(r.description)
 ,	pictures(r.pictures)
-,	other(nullptr)
 ,	track_gain(r.track_gain)
 ,	track_peak(r.track_peak)
 ,	album_gain(r.album_gain)
 ,	album_peak(r.album_peak)
 {}
 
-/*
- * Frees the list of 'other' field in a File_Tag item (contains attached gchar data).
- */
-static void
-et_file_tag_free_other_field (File_Tag *file_tag)
-{
-    g_list_free_full (file_tag->other, g_free);
-    file_tag->other = NULL;
-}
-
-
 File_Tag::~File_Tag()
-{
-	et_file_tag_free_other_field(this);
-}
+{}
 
 string File_Tag::format_float(const char* fmt, float value)
 {	string ret(12, '\0');
@@ -342,7 +327,7 @@ void File_Tag::disc_and_total(const char* value)
 	}
 }
 
-static bool cmpassign(xString& l, string r)
+static bool cmpassign(xStringD0& l, string r)
 {	if (l.equals(r))
 		return false;
 	l = r;

@@ -15,9 +15,9 @@
     * Use current sort order as base for zebra background
     * Highlight changes in browser window
     * Add columns with file information (size, bitrate, duration,...)
-    * Speed up directory scan significantly
     * Add ASF/Windows Media support
-    * Save memory (deduplicate image data)
+    * Speed up directory scan significantly
+    * Save memory (deduplicate tag and image data)
     * Optionally use similar Unicode replacement characters for reserved
       characters in file names
     * Support for powerful pattern groups in scanner (see documentation)

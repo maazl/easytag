@@ -105,7 +105,7 @@ typedef struct
     GtkWidget *rename_preview_label;
 } EtScanDialogPrivate;
 
-// learn correct return type for et_browser_get_instance_private
+// learn correct return type for et_scan_dialog_get_instance_private
 #define et_scan_dialog_get_instance_private et_scan_dialog_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtScanDialog, et_scan_dialog, GTK_TYPE_DIALOG)
 #undef et_scan_dialog_get_instance_private
@@ -188,7 +188,7 @@ static void et_scan_dialog_set_file_tag_for_mask_item
 (File_Tag *file_tag, const Scan_Mask_Item *item, gboolean overwrite)
 {	if (item->code == 'i')
 		return; // ignore field
-	xString0 File_Tag::*field = et_mask_field(item->code);
+	xStringD0 File_Tag::*field = et_mask_field(item->code);
 	if (!field)
 		Log_Print(LOG_ERROR, "Scanner: Invalid code '%%%c' found!", item->code);
 	else if (overwrite || et_str_empty(file_tag->*field))
@@ -807,7 +807,7 @@ static void Scan_Process_Fields_Functions (EtScanDialog *self, string& str)
         Scan_Process_Fields_Remove_Space (str);
 }
 
-static void Scan_Process_Tag_Field(EtScanDialog *self, File_Tag* FileTag, xString0 File_Tag::*field)
+static void Scan_Process_Tag_Field(EtScanDialog *self, File_Tag* FileTag, xStringD0 File_Tag::*field)
 {	if ((FileTag->*field).empty())
 		return;
 	string s(FileTag->*field);
@@ -995,7 +995,6 @@ Mask_Editor_List_Add (EtScanDialog *self)
     EtScanDialogPrivate *priv;
     gint i = 0;
     GtkTreeModel *treemodel;
-    gchar *temp;
 
     priv = et_scan_dialog_get_instance_private (self);
 
@@ -1005,24 +1004,18 @@ Mask_Editor_List_Add (EtScanDialog *self)
     {
         while(Scan_Masks[i])
         {
-            temp = Try_To_Validate_Utf8_String(Scan_Masks[i]);
-
             gtk_list_store_insert_with_values (GTK_LIST_STORE (treemodel),
                                                NULL, G_MAXINT,
-                                               MASK_EDITOR_TEXT, temp, -1);
-            g_free(temp);
+                                               MASK_EDITOR_TEXT, Scan_Masks[i], -1);
             i++;
         }
     } else if (gtk_notebook_get_current_page (GTK_NOTEBOOK (priv->notebook)) == ET_SCAN_MODE_RENAME_FILE)
     {
         while(Rename_File_Masks[i])
         {
-            temp = Try_To_Validate_Utf8_String(Rename_File_Masks[i]);
-
             gtk_list_store_insert_with_values (GTK_LIST_STORE (treemodel),
                                                NULL, G_MAXINT,
-                                               MASK_EDITOR_TEXT, temp, -1);
-            g_free(temp);
+                                               MASK_EDITOR_TEXT, Rename_File_Masks[i], -1);
             i++;
         }
     }

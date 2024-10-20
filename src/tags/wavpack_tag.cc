@@ -128,10 +128,10 @@ File_Tag* wavpack_read_file (GFile *file, ET_File *ETFile, GError **error)
 
     File_Tag* FileTag = new File_Tag();
 
-    auto set_field = [wpc, &field](const char* tag, xString& target)
+    auto set_field = [wpc, &field](const char* tag, xStringD0& target)
     {   int length = WavpackGetTagItem(wpc, tag, field, MAXLEN);
         if (length > 0 && target == NULL)
-            target = gString(Try_To_Validate_Utf8_String(field)).get();
+            target.assignNFC(field);
     };
 
     set_field("title", FileTag->title);

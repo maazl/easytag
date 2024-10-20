@@ -19,45 +19,59 @@
 #include "xstring.h"
 
 #include "misc.h"
+#include "charset.h"
 
 #include <string>
 #include <cstring>
 #include <algorithm>
+#include <unordered_set>
+#include <mutex>
 using namespace std;
+
+unsigned xString::hasher::operator()(const char* s) const
+{	if (!s)
+		return 0;
+	unsigned hash = 2166136261U;
+	for (; *s; ++s)
+	{	hash ^= *s;
+		hash *= 16777619U;
+	}
+	return hash;
+}
 
 const xString::literal<0> xString::empty_str("");
 
 #ifndef NDEBUG
-[[noreturn]] void xString::header::freestillused() const
-{	fprintf(stderr, "xString literal destroyed while in use. Use count %d, value '%s'\n",
-		RefCount.load(), (const char*)(this + 1));
+void xString::header::checkstillused() const
+{	if ((RefCount & (std::numeric_limits<unsigned>::max() >> 1)) == 1) // ignore xStringD repository
+		return;
+	fprintf(stderr, "xString literal destroyed while in use. Use count %d, value '%s'\n",
+		RefCount.load(), static_cast<const storage<0>*>(this)->C.data());
 	std::abort();
 }
 #endif
 
-const xString::data<0>* xString::Init(const char* str, size_t len)
-{	if (!len)
-	{	++empty_str.RefCount;
-		return &empty_str;
-	}
+xString::storage<0>* xString::Factory(const char* str, gssize len)
+{	len = len < 0 ? strlen(str) : strnlen(str, len); // real string length
 	storage<0>* ptr = new(len) storage<0>;
 	((char*)memcpy(const_cast<char*>(ptr->C.data()), str, len))[len] = 0;
 	return ptr;
 }
 
-const xString::data<0>* xString::Init(const char* str)
+const xString::data<0>* xString::Init(const char* str, gssize len)
 {	if (!str)
 		return nullptr;
-	if (!*str)
+	if (!len || !*str)
 	{	++empty_str.RefCount;
 		return &empty_str;
 	}
-	size_t len = strlen(str);
-	return (data<0>*)memcpy(const_cast<char*>((new(len) storage<0>)->C.data()), str, len + 1);
+	return Factory(str, len);
 }
 
-const xString::data<0>* xString::Init(const char* str, size_t len, GNormalizeMode mode)
-{	if (!len)
+const xString::data<0>* xString::Init(const char* str, gssize len, GNormalizeMode mode)
+{	if (!str)
+		return nullptr;
+	if (!len || !*str)
 	{	++empty_str.RefCount;
 		return &empty_str;
 	}
@@ -67,28 +81,16 @@ const xString::data<0>* xString::Init(const char* str, size_t len, GNormalizeMod
 	const char* cpe = cp + len;
 	do
 		if (*cp & 0x80)
-			return Init(gString(g_utf8_normalize(str, len, mode)).get());
-	while (++cp != cpe);
+		{	gString s(g_utf8_normalize(str, len, mode));
+			if (!s)
+				s = g_utf8_normalize(gString(Convert_Invalid_Utf8_String(str, len)), -1, mode);
+			return Factory(s, -1);
+		}
+	while (++cp != cpe && *cp);
 	// fast path
-	return Init(str, cp - str);
-}
-
-const xString::data<0>* xString::Init(const char* str, GNormalizeMode mode)
-{	if (!str)
-		return nullptr;
-	if (!*str)
-	{	++empty_str.RefCount;
-		return &empty_str;
-	}
-	// GLib has no check for already normalized UTF8 strings.
-	// So perform a _very rough check_ to avoid excessive allocations.
-	const char* cp = str;
-	do
-		if (*cp & 0x80)
-			return Init(gString(g_utf8_normalize(str, -1, mode)).get());
-	while (*++cp);
-	// fast path
-	return Init(str, cp - str);
+	storage<0>* ptr = new(len) storage<0>;
+	((char*)memcpy(const_cast<char*>(ptr->C.data()), str, len))[len] = 0;
+	return ptr;
 }
 
 bool xString::equals(const char* str) const noexcept
@@ -189,6 +191,136 @@ int xString::compare(const xString& r) const
 	return strcmp(collation_key(), r.collation_key());
 }
 
+
+// Repository with deduplicated xStringD::storage instances.
+// To avoid a C++20 dependency for find operations instead of storage a pointer to the character data is stored.
+// A downcast to the storage instance is always valid. Each intance in this collection is one reference count.
+static unordered_set<const char*, xString::hasher, xString::equal> Instances;
+
+static mutex InstancesMutex;
+
+xString::storage<0>* xStringD::Factory(const char* str, gssize len)
+{	storage<0>* ptr;
+	unique_lock<mutex> lock(InstancesMutex, defer_lock_t());
+	unordered_set<const char*, hasher, equal>::iterator p;
+	if (len > 0 && str[len])
+	{	// If str is not null terminated Instances.find(str) cannot work (would require C++20).
+		// => Create null terminated string first.
+		ptr = xString::Factory(str, len);
+		lock.lock();
+		p = Instances.find(&ptr->C[0]);
+		if (p != Instances.end())
+		{	delete ptr;
+		match:
+			ptr = (storage<0>*)(data<0>*)*p;
+			++ptr->RefCount;
+			return ptr;
+		}
+	}
+	else
+	{	lock.lock();
+		p = Instances.find(str);
+		if (p != Instances.end())
+			goto match;
+		ptr = xString::Factory(str, len);
+	}
+
+	// add previously unknown string
+	ptr->RefCount += DedupRefCount;
+		Instances.insert(p, &ptr->C[0]);
+	return ptr;
+}
+
+const xStringD::data<0>* xStringD::Init(const char* str, gssize len)
+{	if (!str)
+		return nullptr;
+	if (!len || !*str)
+	{	++empty_str.RefCount;
+		return &empty_str;
+	}
+	return Factory(str, len);
+}
+
+const xStringD::data<0>* xStringD::Init(const char* str, gssize len, GNormalizeMode mode)
+{	if (!str)
+		return nullptr;
+	if (!len || !*str)
+	{	++empty_str.RefCount;
+		return &empty_str;
+	}
+	// GLib has no check for already normalized UTF8 strings.
+	// So perform a _very rough check_ to avoid excessive allocations.
+	const char* cp = str;
+	const char* cpe = cp + len;
+	do
+		if (*cp & 0x80)
+		{	gString s(g_utf8_normalize(str, len, mode));
+			if (!s)
+				s = g_utf8_normalize(gString(Convert_Invalid_Utf8_String(str, len)), -1, mode);
+			return Factory(s, -1);
+		}
+	while (++cp != cpe && *cp);
+	// fast path
+	return Factory(str, cp - str);
+}
+
+const xStringD::data<0>* xStringD::Init(const data<0>* ptr)
+{	if (!ptr)
+		return ptr;
+
+	if (ptr->C[0] && (static_cast<const storage<0>&>(*ptr).RefCount & DedupRefCount) == 0) // empty or already deduplicated?
+	{	lock_guard<mutex> lock(InstancesMutex);
+		auto p = Instances.insert(&ptr->C[0]);
+		if (p.second)
+		{	((const storage<0>*)ptr)->RefCount += DedupRefCount + 1;
+			return ptr;
+		}
+		ptr = (data<0>*)*(p.first);
+	}
+	++((const storage<0>*)ptr)->RefCount;
+	return ptr;
+}
+
+const xStringD::data<0>* xStringD::Init(const data<0>* ptr, GNormalizeMode mode)
+{	if (!ptr)
+		return ptr;
+	// GLib has no check for already normalized UTF8 strings.
+	// So perform a _very rough check_ to avoid excessive allocations.
+	const char* cp = ptr->C.data();
+	while(*cp)
+		if (*cp++ & 0x80)
+		{	gString s(g_utf8_normalize(ptr->C.data(), -1, mode));
+			if (!s)
+				s = g_utf8_normalize(gString(Convert_Invalid_Utf8_String(ptr->C.data(), -1)), -1, mode);
+			return Factory(s, -1);
+		}
+	// fast path
+	return Init(ptr);
+}
+
+bool xStringD::trim()
+{	if (!Ptr)
+		return false;
+	const char* start = *this;
+	if (!*start)
+		return false;
+	while (isspace(*start))
+		++start;
+	size_t len = strlen(start);
+	if (!len)
+	{	*this = empty_str;
+		return true;
+	}
+	const char* end = start + len;
+	while (isspace(end[-1]))
+		--end;
+	if (start == *this && end == start + len)
+		return false;
+	xStringD(start, end - start).swap(*this);
+	return true;
+}
+
+
 bool xString0::equals(const char* str) const noexcept
 {	if (xString::get() == str)
 		return true;
@@ -200,6 +332,28 @@ bool xString0::equals(const char* str, size_t len) const noexcept
 }
 
 int xString0::compare(const xString0& r) const
+{	const char* lc = get();
+	const char* rc = r.get();
+	if (lc == rc)
+		return 0;
+	if (!*lc)
+		return -1;
+	if (!*rc)
+		return 1;
+	return strcmp(collation_key(), r.collation_key());
+}
+
+bool xStringD0::equals(const char* str) const noexcept
+{	if (xStringD::get() == str)
+		return true;
+	return et_str_empty(str) ? empty() : !empty() && strcmp(xStringD::get(), str) == 0;
+}
+
+bool xStringD0::equals(const char* str, size_t len) const noexcept
+{	return empty() ? !len : len && strncmp(xStringD::get(), str, len) == 0 && !xString::get()[len];
+}
+
+int xStringD0::compare(const xStringD0& r) const
 {	const char* lc = get();
 	const char* rc = r.get();
 	if (lc == rc)

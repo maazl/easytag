@@ -111,7 +111,7 @@ static void et_picture_free(EtPicture* pic) { delete pic; }
 
 G_DEFINE_BOXED_TYPE (EtPicture, et_picture, et_picture_copy_single, et_picture_free)
 
-EtPicture::EtPicture(EtPictureType type, const gchar *description, guint width, guint height, const void* data, unsigned size)
+EtPicture::EtPicture(EtPictureType type, const xStringD0& description, guint width, guint height, const void* data, unsigned size)
 :	storage(GetOrAllocate(data, size))
 ,	description(description)
 ,	type(type)

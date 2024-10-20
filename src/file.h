@@ -58,6 +58,7 @@ public:
 
 	const ET_File_Description *ETFileDescription;
 	ET_File_Info      ETFileInfo; ///< Header infos: bitrate, duration, ...
+	std::unique_ptr<gString[]> other; ///< NULL terminated array of other tags, used for Vorbis comments
 
 private:
 	UndoList<File_Name> FileName; ///< File name data with change history

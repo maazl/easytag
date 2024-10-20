@@ -376,12 +376,11 @@ bool File_Name::format_extension()
 		return false;
 
 	size_t len = ext - File.get();
-	size_t ext_len = strlen(new_ext);
-	xString file;
-	char* cp = file.alloc(len + ext_len);
+	size_t ext_len = strlen(new_ext) + 1;
+	char cp[len + ext_len];
 	memcpy(cp, File, len);
 	memcpy(cp + len, new_ext, ext_len);
-	file.swap(File);
+	File = cp;
 	return true;
 }
 

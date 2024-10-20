@@ -465,100 +465,98 @@ read_guint32_from_byte (guchar *str, gsize start)
     return read;
 }
 
-/*
- * validate_field_utf8:
- * @field_value: the string to validate
- * @field_len: the length of the string
- *
- * Validate a Vorbis comment field to ensure that it is UTF-8. Either return a
- * duplicate of the original (valid) string, or a converted equivalent (of an
- * invalid UTF-8 string).
- *
- * Returns: a valid UTF-8 represenation of @field_value
- */
-static gchar *
-validate_field_utf8 (const gchar *field_value,
-                     gint field_len)
-{
-    gchar *result;
-
-    if (g_utf8_validate (field_value, field_len, NULL))
-    {
-        result = g_strndup (field_value, field_len);
-    }
-    else
-    {
-        gchar *field_value_tmp = g_strndup (field_value,
-                                            field_len);
-        /* Unnecessarily validates the field again, but this should not be the
-         * common case. */
-        result = Try_To_Validate_Utf8_String (field_value_tmp);
-        g_free (field_value_tmp);
-    }
-
-    return result;
+unsigned vorbis_tag::key_hash::operator()(const xString::cstring& tag) const
+{	const char* s = tag.Str;
+	const char* se = s + tag.Len;
+	unsigned hash = 2166136261U;
+	while (s != se && *s != '=')
+	{	hash ^= tolower(*s++);
+		hash *= 16777619U;
+	}
+	return hash;
 }
 
-void tags_hash::add_tag(const char* comment, int len)
-{
-	const char* separator = (const char*)memchr(comment, '=', len);
-	if (!separator)
-	{	g_warning("Field separator not found when reading Vorbis tag: %*s", len, comment);
+bool vorbis_tag::key_equal::operator()(const xString::cstring& tag1, const xString::cstring& tag2) const
+{	const char* s1 = tag1.Str;
+	const char* s1e = s1 + tag1.Len;
+	const char* s2 = tag2.Str;
+	const char* s2e = s2 + tag2.Len;
+	do
+	{	if (s1 == s1e || *s1 == '=')
+			return s2 == s2e || *s2 == '=';
+		if (s2 == s2e || *s2 == '=')
+			return false;
+	} while (tolower(*s1++) == tolower(*s2++));
+	return true;
+}
+
+xString::cstring vorbis_tag::key() const
+{	const char* sep = (const char*)memchr(Str, '=', Len);
+	if (!sep)
+		return *this;
+	return xString::cstring(Str, sep - Str);
+}
+
+xString::cstring vorbis_tag::value() const
+{	const char* sep = (const char*)memchr(Str, '=', Len);
+	if (!sep)
+		return xString::cstring(nullptr, 0);
+	return xString::cstring(sep + 1, Len - (sep + 1 - Str));
+}
+
+void vorbis_tags::fetch_field(const vorbis_tag& fieldname, xStringD0& target, bool useNewline)
+{	auto range = equal_range(fieldname);
+	if (range.first == range.second)
+	{	target.reset();
 		return;
 	}
-
-	string key(comment, separator - comment);
-	for (char& c : key) c = toupper(c);
-
-	gchar* value = validate_field_utf8(separator + 1, len - ((separator + 1) - comment));
-	emplace(key, gString(value));
+	auto value = range.first->value();
+	if (++range.first == range.second)
+	{	// simple: only one instance
+		target.assignNFC(value.Str, value.Len);
+	} else
+	{	// multiple items => concatenate
+		// calculate length
+		size_t len = value.Len;
+		size_t delim_len = 1;
+		if (!useNewline)
+		{	if (!delimiter)
+				delimiter.reset(g_settings_get_string(MainSettings, "split-delimiter"));
+			delim_len = strlen(delimiter);
+		}
+		for (iterator it = range.first; it != range.second; ++it)
+			len += delim_len + it->value().Len;
+		// assign value
+		xString res;
+		char* dp = res.alloc(len);
+		memcpy(dp, value.Str, value.Len);
+		for (iterator it = range.first; it != range.second; ++it)
+		{	dp += value.Len;
+			if (useNewline)
+				*dp = '\n';
+			else
+				memcpy(dp, delimiter, delim_len);
+			dp += delim_len;
+			value = it->value();
+			memcpy(dp, value.Str, value.Len);
+		}
+		target.assignNFC(res);
+	}
+	erase(range.first, range.second);
 }
 
-void tags_hash::to_file_tags(File_Tag *FileTag)
+float vorbis_tags::fetch_float(const vorbis_tag& fieldname)
+{	auto it = find(fieldname);
+	if (it == end())
+		return numeric_limits<float>::quiet_NaN();
+	auto value = it->value();
+	float f = File_Tag::parse_float(string(value.Str, value.Len).c_str());
+	erase(it);
+	return f;
+}
+
+void vorbis_tags::to_file_tags(File_Tag *FileTag)
 {
-	gString delimiter;
-
-	auto fetch_field = [this, &delimiter](const char* fieldname, xString& target, gboolean useNewline = FALSE)
-	{	auto range = equal_range(fieldname);
-		// calculate length
-		size_t len = 0;
-		size_t delim_len = 1;
-		for (iterator it = range.first; it != range.second; ++it)
-		{	if (et_str_empty(it->second))
-				continue;
-			if (len)
-			{	if (!useNewline && !delimiter)
-				{	delimiter.reset(g_settings_get_string(MainSettings, "split-delimiter"));
-					delim_len = strlen(delimiter);
-				}
-				len += delim_len;
-			}
-			len += strlen(it->second);
-		}
-		// assign value
-		char* dp = target.alloc(len);
-		*dp = 0;
-		for (iterator it = range.first; it != range.second; ++it)
-		{	if (et_str_empty(it->second))
-				continue;
-			if (!target.empty()) // merge?
-			{	if (useNewline)
-					*dp = '\n';
-				else
-					memcpy(dp, delimiter, delim_len);
-				dp += delim_len;
-			}
-
-			size_t l = strlen(it->second);
-			memcpy(dp, it->second, l);
-			dp += l;
-		}
-
-		erase(range.first, range.second);
-	};
-
-	/* Note : don't forget to add any new field to 'Save unsupported fields' */
-
 	fetch_field(ET_VORBIS_COMMENT_FIELD_TITLE, FileTag->title);
 	fetch_field(ET_VORBIS_COMMENT_FIELD_VERSION, FileTag->version);
 	fetch_field(ET_VORBIS_COMMENT_FIELD_SUBTITLE, FileTag->subtitle);
@@ -600,27 +598,26 @@ void tags_hash::to_file_tags(File_Tag *FileTag)
 	fetch_field(ET_VORBIS_COMMENT_FIELD_CONTACT, FileTag->url);
 	fetch_field(ET_VORBIS_COMMENT_FIELD_ENCODED_BY, FileTag->encoded_by);
 
-	auto fetch_float = [this](const char* fieldname) -> float
-	{	auto it = find(fieldname);
-		if (it == end())
-			return numeric_limits<float>::quiet_NaN();
-		float f = File_Tag::parse_float(it->second);
-		erase(it);
-		return f;
-	};
-
 	FileTag->track_gain = fetch_float(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_TRACK_GAIN);
 	FileTag->track_peak = fetch_float(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_TRACK_PEAK);
 	FileTag->album_gain = fetch_float(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_ALBUM_GAIN);
 	FileTag->album_peak = fetch_float(ET_VORBIS_COMMENT_FIELD_REPLAYGAIN_ALBUM_PEAK);
 }
 
-void tags_hash::to_other_tags(File_Tag *FileTag)
-{
+void vorbis_tags::to_other_tags(ET_File *ETFile)
+{	gString* arr = new gString[size() + 1];
+	ETFile->other.reset(arr);
 	for (const auto& v : *this)
-		FileTag->other = g_list_prepend(FileTag->other, g_strconcat(v.first.c_str(), "=", v.second.get(), NULL));
-	if (FileTag->other)
-		FileTag->other = g_list_reverse(FileTag->other);
+		*arr++ = g_strndup(v.Str, v.Len);
+}
+
+// Variant of g_base64_decode_step that can deal with length limited input
+static guchar* base64_decode(const char* str, size_t len, gsize& data_size)
+{	gint state = 0;
+	guint save = 0;
+	guchar* out = (guchar*)g_malloc((len / 4 + 1) * 3);
+	data_size = g_base64_decode_step(str, len, out, &state, &save);
+	return out;
 }
 
 /*
@@ -631,16 +628,16 @@ void tags_hash::to_other_tags(File_Tag *FileTag)
  * Reads Vorbis comments and copies them to file tag.
  */
 File_Tag*
-get_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
+get_file_tags_from_vorbis_comments (const vorbis_comment *vc, ET_File *ETFile)
 {
 	if (!vc)
 		return nullptr;
 
 	File_Tag *FileTag = new File_Tag();
-	tags_hash tags;
+	vorbis_tags tags(vc->comments);
 
 	for (int i = 0; i < vc->comments; i++)
-		tags.add_tag(vc->user_comments[i], vc->comment_lengths[i]);
+		tags.emplace(vc->user_comments[i], vc->comment_lengths[i]);
 
 	/* add standard tags */
 	tags.to_file_tags(FileTag);
@@ -651,68 +648,71 @@ get_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 	{
 		auto types = tags.equal_range(ET_VORBIS_COMMENT_FIELD_COVER_ART_TYPE);
 		auto descs = tags.equal_range(ET_VORBIS_COMMENT_FIELD_COVER_ART_DESCRIPTION);
-		tags_hash::iterator l = range.first;
-		tags_hash::iterator m = types.first;
-		tags_hash::iterator n = descs.first;
+		vorbis_tags::iterator l = range.first;
+		vorbis_tags::iterator m = types.first;
+		vorbis_tags::iterator n = descs.first;
 
 		/* Force marking the file as modified, so that the deprecated cover art
 		 * field is converted to a METADATA_PICTURE_BLOCK field. */
 		ETFile->force_tag_save();
 
-		while (l != range.second && !et_str_empty(l->second))
-		{
-			guchar *data;
-			gsize data_size;
+		for (; l != range.second; ++l)
+		{	auto value = l->value();
+			if (!value.Len)
+				break;
 
 			/* Decode picture data. */
-			data = g_base64_decode(l->second, &data_size);
+			gsize data_size;
+			gAlloc<guchar> data(base64_decode(value.Str, value.Len, data_size));
 
 			/* It is only necessary for there to be image data, but the type
 			 * and description are optional. */
 			EtPictureType type = ET_PICTURE_TYPE_FRONT_COVER;
 			if (m != types.second)
-			{	if (!et_str_empty(m->second))
-					type = (EtPictureType)atoi(m->second);
-				++m;
+			{	value = m++->value();
+				if (!value.Len)
+					type = (EtPictureType)atoi(string(value.Str, value.Len).c_str());
 			}
 
-			const gchar* description = nullptr;
+			xStringD0 description;
 			if (n != descs.second)
-			{	if (!et_str_empty(n->second))
-					description = n->second;
-				++n;
+			{	value = n++->value();
+				if (!value.Len)
+					description.assignNFC(value);
 			}
 
-			FileTag->pictures.emplace_back(type, description, 0, 0, data, data_size);
-
-			g_free(data);
-			++l;
+			FileTag->pictures.emplace_back(type, description, 0, 0, data.get(), data_size);
 		}
 
 		tags.erase(range.first, range.second); // invalidates iterators
-		tags.erase(ET_VORBIS_COMMENT_FIELD_COVER_ART_DESCRIPTION);
-		tags.erase(ET_VORBIS_COMMENT_FIELD_COVER_ART_TYPE);
+		tags.erase(types.first, types.second);
+		tags.erase(descs.first, descs.second);
 	}
 
 	/* METADATA_BLOCK_PICTURE tag used for picture information. */
 	range = tags.equal_range(ET_VORBIS_COMMENT_FIELD_METADATA_BLOCK_PICTURE);
 	if (range.first != range.second)
 	{
-		for (tags_hash::iterator l = range.first; l != range.second; l = ++l)
+		for (vorbis_tags::iterator l = range.first; l != range.second; l = ++l)
 		{
 			gsize bytes_pos, mimelen, desclen;
-			string description;
 			EtPictureType type;
-			gsize decoded_size;
 			gsize data_size;
 
 			/* Decode picture data. */
-			gAlloc<guchar> decoded_ustr(g_base64_decode(l->second, &decoded_size));
+			auto value = l->value();
+			gsize decoded_size;
+			gAlloc<guchar> decoded_ustr(base64_decode(value.Str, value.Len, decoded_size));
 
 			/* Check that the comment decoded to a long enough string to hold the
 			 * whole structure (8 fields of 4 bytes each). */
 			if (decoded_size < 8 * 4)
-				goto invalid_picture;
+			{invalid_picture:
+				/* Mark the file as modified, so that the invalid field is removed upon
+				 * saving. */
+				ETFile->force_tag_save();
+				continue;
+			}
 
 			/* Reading picture type. */
 			type = (EtPictureType)read_guint32_from_byte(decoded_ustr.get(), 0);
@@ -753,7 +753,8 @@ get_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 			if (desclen > decoded_size - bytes_pos - (5 * 4))
 				goto invalid_picture;
 
-			description.assign((const char*)&decoded_ustr.get()[bytes_pos], desclen);
+			xStringD0 description;
+			description.assignNFC((const char*)&decoded_ustr.get()[bytes_pos], desclen);
 
 			/* Skip the width, height, color depth and number-of-colors fields. */
 			bytes_pos += desclen + 16;
@@ -765,21 +766,15 @@ get_file_tags_from_vorbis_comments (vorbis_comment *vc, ET_File *ETFile)
 			if (data_size > decoded_size - bytes_pos)
 				goto invalid_picture;
 
-			FileTag->pictures.emplace_back(type, description.c_str(), 0, 0,
+			FileTag->pictures.emplace_back(type, description, 0, 0,
 				decoded_ustr.get() + bytes_pos, data_size);
-			continue;
-
-		invalid_picture:
-			/* Mark the file as modified, so that the invalid field is removed upon
-			 * saving. */
-			ETFile->force_tag_save();
 		}
 
 		tags.erase(range.first, range.second);
 	}
 
 	/* Save unsupported fields. */
-	tags.to_other_tags(FileTag);
+	tags.to_other_tags(ETFile);
 
 	// validate date fields
 	FileTag->check_dates(3, true, *ETFile->FileNameCur()); // From field 3 arbitrary strings are allowed
@@ -794,7 +789,6 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
     GFile           *file;
     EtOggState *state;
     vorbis_comment *vc;
-    GList *l;
 
     g_return_val_if_fail (ETFile != NULL && ETFile->FileTagNew() != NULL, FALSE);
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -1015,13 +1009,9 @@ ogg_tag_write_file_tag (const ET_File *ETFile,
     /**************************
      * Set unsupported fields *
      **************************/
-    for (l = FileTag->other; l != NULL; l = g_list_next (l))
-    {
-        if (l->data)
-        {
-            vorbis_comment_add (vc, (gchar *)l->data);
-        }
-    }
+    if (ETFile->other)
+        for (gString* l = ETFile->other.get(); *l; ++l)
+            vorbis_comment_add(vc, *l);
 
     /* Write tag to 'file' in all cases */
     if (!vcedit_write (state, file, error))
