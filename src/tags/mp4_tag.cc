@@ -71,6 +71,7 @@ const struct QuickTime_Description : ET_File_Description
 }
 MP4_Description(".mp4", _("MPEG4 File")),
 M4A_Description(".m4a", _("MPEG4 File")),
+M4B_Description(".m4b", _("MPEG4 File")),
 M4P_Description(".m4p", _("MPEG4 File")),
 M4V_Description(".m4v", _("MPEG4 File")),
 AAC_Description(".aac", _("AAC File")); // TODO .aac is typically ADTS rather than MPEG4
