@@ -348,7 +348,7 @@ public:
 	friend void swap(xStringD& l, xStringD& r) noexcept { l.swap(r); }
 	using xString::reset;
 	/// Assign another value.
-	xStringD& operator=(const xStringD& r) noexcept { xString::operator=(*this); return *this; }
+	xStringD& operator=(const xStringD& r) noexcept { xString::operator=(r); return *this; }
 	/// Assign another value.
 	xStringD& operator=(const xString& r) noexcept { if (equals(r)) xStringD(r).swap(*this); return *this; }
 	/// Assign another rvalue.
