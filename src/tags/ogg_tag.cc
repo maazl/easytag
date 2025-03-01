@@ -510,8 +510,9 @@ void vorbis_tags::fetch_field(const vorbis_tag& fieldname, xStringD0& target, bo
 	{	target.reset();
 		return;
 	}
-	auto value = range.first->value();
-	if (++range.first == range.second)
+	iterator it = range.first;
+	auto value = it++->value();
+	if (it == range.second)
 	{	// simple: only one instance
 		target.assignNFC(value.Str, value.Len);
 	} else
@@ -524,13 +525,13 @@ void vorbis_tags::fetch_field(const vorbis_tag& fieldname, xStringD0& target, bo
 				delimiter.reset(g_settings_get_string(MainSettings, "split-delimiter"));
 			delim_len = strlen(delimiter);
 		}
-		for (iterator it = range.first; it != range.second; ++it)
+		for (; it != range.second; ++it)
 			len += delim_len + it->value().Len;
 		// assign value
 		xString res;
 		char* dp = res.alloc(len);
 		memcpy(dp, value.Str, value.Len);
-		for (iterator it = range.first; it != range.second; ++it)
+		for (it = range.first; ++it != range.second;)
 		{	dp += value.Len;
 			if (useNewline)
 				*dp = '\n';
@@ -609,6 +610,7 @@ void vorbis_tags::to_other_tags(ET_File *ETFile)
 	ETFile->other.reset(arr);
 	for (const auto& v : *this)
 		*arr++ = g_strndup(v.Str, v.Len);
+	*arr = nullptr;
 }
 
 // Variant of g_base64_decode_step that can deal with length limited input
