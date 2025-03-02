@@ -546,7 +546,9 @@ gboolean ET_File::rename_file(GError **error)
 
 	gboolean rc = et_rename_file(FilePath, raw_name, error);
 	if (rc)
-		FileName.mark_saved();
+	{	FileName.mark_saved();
+		FilePath.swap(raw_name);
+	}
 
 	return rc;
 }
