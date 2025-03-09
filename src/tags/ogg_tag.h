@@ -35,7 +35,6 @@ struct ET_File;
 struct File_Tag;
 struct EtFileHeaderFields;
 
-#ifdef __cplusplus
 #include <unordered_set>
 #include <string>
 
@@ -66,10 +65,6 @@ public:
 	void to_file_tags(File_Tag *FileTag);
 	void to_other_tags(ET_File *ETFile);
 };
-
-#endif
-
-G_BEGIN_DECLS
 
 /*
  * EtOGGError:
@@ -121,8 +116,6 @@ void et_add_vorbis_comments_from_file_tags (vorbis_comment *vc, File_Tag *FileTa
 void et_ogg_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
 
 File_Tag* speex_read_file(GFile *file, ET_File *ETFile, GError **error);
-
-G_END_DECLS
 
 #endif /* ENABLE_OGG */
 

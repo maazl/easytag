@@ -23,8 +23,6 @@
 
 #include "et_core.h"
 
-G_BEGIN_DECLS
-
 #define ET_TYPE_PLAYLIST_DIALOG (et_playlist_dialog_get_type ())
 #define ET_PLAYLIST_DIALOG(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_PLAYLIST_DIALOG, EtPlaylistDialog))
 
@@ -45,7 +43,5 @@ struct _EtPlaylistDialogClass
 
 GType et_playlist_dialog_get_type (void);
 EtPlaylistDialog *et_playlist_dialog_new (GtkWindow *window);
-
-G_END_DECLS
 
 #endif /* !ET_PLAYLIST_DIALOG_H_ */

@@ -322,8 +322,6 @@ typedef enum
  * Config variables
  */
 
-G_BEGIN_DECLS
-
 extern GSettings *MainSettings;
 
 void Init_Config_Variables (void);
@@ -372,7 +370,5 @@ gboolean et_settings_flags_toggle_get (GValue *value, GVariant *variant,
 GVariant *et_settings_flags_toggle_set (const GValue *value,
                                         const GVariantType *expected_type,
                                         gpointer user_data);
-
-G_END_DECLS
 
 #endif /* ET_SETTINGS_H_ */

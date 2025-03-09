@@ -40,7 +40,7 @@ easytag_CXXFLAGS = \
 	$(EASYTAG_CFLAGS)
 
 easytag_SOURCES = \
-	src/about.c \
+	src/about.cc \
 	src/application.cc \
 	src/application_window.cc \
 	src/browser.cc \
@@ -62,13 +62,13 @@ easytag_SOURCES = \
 	src/genres.c \
 	src/load_files_dialog.cc \
 	src/log.cc \
-	src/main.c \
+	src/main.cc \
 	src/mask.cc \
 	src/misc.cc \
 	src/picture.cc \
 	src/playlist_dialog.cc \
 	src/preferences_dialog.cc \
-	src/progress_bar.c \
+	src/progress_bar.cc \
 	src/replaygain.cc \
 	src/scan.cc \
 	src/scan_dialog.cc \

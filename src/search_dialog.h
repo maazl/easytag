@@ -26,8 +26,6 @@
 #define ET_TYPE_SEARCH_DIALOG (et_search_dialog_get_type ())
 #define ET_SEARCH_DIALOG(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_SEARCH_DIALOG, EtSearchDialog))
 
-G_BEGIN_DECLS
-
 typedef struct _EtSearchDialog EtSearchDialog;
 typedef struct _EtSearchDialogClass EtSearchDialogClass;
 
@@ -47,7 +45,5 @@ GType et_search_dialog_get_type (void);
 EtSearchDialog *et_search_dialog_new (GtkWindow *parent);
 void et_search_dialog_apply_changes (EtSearchDialog *self);
 void et_search_dialog_clear(EtSearchDialog *self);
-
-G_END_DECLS
 
 #endif /* !ET_SEARCH_DIALOG_H_ */

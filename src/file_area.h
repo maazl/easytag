@@ -24,8 +24,6 @@
 struct EtFileHeaderFields;
 struct ET_File;
 
-G_BEGIN_DECLS
-
 #define ET_TYPE_FILE_AREA (et_file_area_get_type ())
 #define ET_FILE_AREA(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_FILE_AREA, EtFileArea))
 
@@ -50,7 +48,5 @@ void et_file_area_clear (EtFileArea *self);
 void et_file_area_set_header_fields (EtFileArea *self, const EtFileHeaderFields *fields);
 void et_file_area_set_file_fields (EtFileArea *self, const ET_File *ETFile);
 const gchar * et_file_area_get_filename (EtFileArea *self);
-
-G_END_DECLS
 
 #endif /* ET_FILE_AREA_H_ */

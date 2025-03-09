@@ -23,8 +23,6 @@
 
 #include <gtk/gtk.h>
 
-G_BEGIN_DECLS
-
 const char  *get_encoding_from_locale (const char *locale);
 const gchar *get_locale               (void);
 
@@ -42,7 +40,5 @@ const gchar * et_charset_get_name_from_index (guint index);
 
 void Charset_Insert_Locales_Init    (void);
 void Charset_Insert_Locales_Destroy (void);
-
-G_END_DECLS
 
 #endif /* ET_CHARSET_H_ */

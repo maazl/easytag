@@ -21,8 +21,6 @@
 
 #include <gio/gio.h>
 
-G_BEGIN_DECLS
-
 /*
  * EtOpusError:
  * @ET_OPUS_ERROR_READ: Error reading file
@@ -60,7 +58,5 @@ struct EtFileHeaderFields;
 
 File_Tag* opus_read_file(GFile *file, ET_File* ETFile, GError **error);
 void et_opus_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
-
-G_END_DECLS
 
 #endif /* ET_OPUS_TAG_H_ */

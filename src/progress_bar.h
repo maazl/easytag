@@ -20,10 +20,6 @@
 
 #include <gtk/gtk.h>
 
-G_BEGIN_DECLS
-
 GtkWidget * et_progress_bar_new (void);
-
-G_END_DECLS
 
 #endif /* ET_PROGRESS_BAR_H_ */

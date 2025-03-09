@@ -24,8 +24,6 @@
 
 #include <gio/gio.h>
 
-G_BEGIN_DECLS
-
 /* Ogg Vorbis fields names in (most of) ASCII, excluding '=':
  * http://www.xiph.org/vorbis/doc/v-comment.html
  *
@@ -133,7 +131,5 @@ int vcedit_open (EtOggState *state, GFile *in, GError **error);
 int vcedit_write (EtOggState *state, GFile *file, GError **error);
 
 #endif /* ENABLE_OGG */
-
-G_END_DECLS
 
 #endif /* ET_VCEDIT_H_ */

@@ -26,8 +26,6 @@
 #include <glib.h>
 #include <gio/gio.h>
 
-G_BEGIN_DECLS
-
 #define ID3_INVALID_GENRE 255
 #define ID3V1_TAG_SIZE 128
 
@@ -66,8 +64,6 @@ const gchar * Id3tag_Genre_To_String (unsigned char genre_code);
 guchar Id3tag_String_To_Genre (const gchar *genre);
 
 gboolean et_id3tag_check_if_file_is_valid (GFile *file, GError **error);
-
-G_END_DECLS
 
 #endif
 #endif /* ET_ID3TAG_H_ */

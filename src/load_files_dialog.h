@@ -26,8 +26,6 @@
 #define ET_TYPE_LOAD_FILES_DIALOG (et_load_files_dialog_get_type ())
 #define ET_LOAD_FILES_DIALOG(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_LOAD_FILES_DIALOG, EtLoadFilesDialog))
 
-G_BEGIN_DECLS
-
 typedef struct _EtLoadFilesDialog EtLoadFilesDialog;
 typedef struct _EtLoadFilesDialogClass EtLoadFilesDialogClass;
 
@@ -45,7 +43,5 @@ struct _EtLoadFilesDialogClass
 
 GType et_load_files_dialog_get_type (void);
 EtLoadFilesDialog *et_load_files_dialog_new (GtkWindow *parent);
-
-G_END_DECLS
 
 #endif /* !ET_LOAD_FILES_DIALOG_H_ */

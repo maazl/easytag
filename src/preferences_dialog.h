@@ -23,8 +23,6 @@
 
 #include <gtk/gtk.h>
 
-G_BEGIN_DECLS
-
 #define ET_TYPE_PREFERENCES_DIALOG (et_preferences_dialog_get_type ())
 #define ET_PREFERENCES_DIALOG(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_PREFERENCES_DIALOG, EtPreferencesDialog))
 
@@ -46,7 +44,5 @@ struct _EtPreferencesDialogClass
 GType et_preferences_dialog_get_type (void);
 EtPreferencesDialog *et_preferences_dialog_new (GtkWindow *parent);
 void et_preferences_dialog_show_scanner (EtPreferencesDialog *self);
-
-G_END_DECLS
 
 #endif /* ET_PREFERENCES_DIALOG_H_ */

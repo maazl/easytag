@@ -27,8 +27,6 @@
 struct ET_File;
 struct File_Name;
 
-G_BEGIN_DECLS
-
 #define ET_TYPE_BROWSER (et_browser_get_type ())
 #define ET_BROWSER(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_BROWSER, EtBrowser))
 
@@ -121,7 +119,5 @@ GList * et_browser_get_selected_files (EtBrowser *self);
 GtkTreeSelection * et_browser_get_selection (EtBrowser *self);
 
 GtkTreeViewColumn * et_browser_get_column_for_sort_mode (EtBrowser *self, EtSortMode sort_mode);
-
-G_END_DECLS
 
 #endif /* ET_BROWSER_H_ */

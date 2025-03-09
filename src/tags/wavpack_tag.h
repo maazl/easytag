@@ -23,8 +23,6 @@
 #include <glib.h>
 #include <gio/gio.h>
 
-G_BEGIN_DECLS
-
 struct ET_File;
 struct File_Tag;
 struct EtFileHeaderFields;
@@ -32,7 +30,5 @@ struct EtFileHeaderFields;
 File_Tag* wavpack_read_file (GFile *file, ET_File *ETFile, GError **error);
 gboolean wavpack_tag_write_file_tag (const ET_File *ETFile, GError **error);
 void et_wavpack_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
-
-G_END_DECLS
 
 #endif /* ET_WAVPACK_TAG_H_ */

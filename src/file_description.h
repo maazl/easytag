@@ -29,8 +29,6 @@
 struct ET_File;
 struct File_Tag;
 
-#ifdef __cplusplus
-
 #include <string>
 
 /*
@@ -101,12 +99,6 @@ private:
     static const ET_File_Description* Root;
     const ET_File_Description* Link;
 };
-
-#else
-
-struct ET_File_Description;
-
-#endif
 
 /// Returns the extension of the file
 inline const gchar* ET_Get_File_Extension(const gchar *filename)

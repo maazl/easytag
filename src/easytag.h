@@ -27,8 +27,6 @@
 
 #include "et_core.h"
 
-G_BEGIN_DECLS
-
 /* Variable to force to quit recursive functions (reading dirs) or stop saving files */
 extern gboolean Main_Stop_Button_Pressed;
 
@@ -55,7 +53,5 @@ void ReplayGain_For_Selected_Files (void);
 void Action_Main_Stop_Button_Pressed (void);
 
 gboolean Read_Directory (const gchar *path);
-
-G_END_DECLS
 
 #endif /* __EASYTAG_H__ */

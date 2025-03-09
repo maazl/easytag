@@ -27,14 +27,10 @@ struct ET_File;
 struct File_Tag;
 struct EtFileHeaderFields;
 
-G_BEGIN_DECLS
-
 File_Tag* mac_read_file(GFile *file, ET_File *ETFile, GError **error);
 File_Tag* mpc_read_file(GFile *file, ET_File *ETFile, GError **error);
 gboolean ape_tag_write_file_tag (const ET_File *ETFile, GError **error);
 void et_mac_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
 void et_mpc_header_display_file_info_to_ui (EtFileHeaderFields *fields, const ET_File *ETFile);
-
-G_END_DECLS
 
 #endif /* ET_APE_TAG_H_ */

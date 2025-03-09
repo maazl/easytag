@@ -21,8 +21,6 @@
 
 #include <gtk/gtk.h>
 
-G_BEGIN_DECLS
-
 #define ET_TYPE_APPLICATION (et_application_get_type ())
 #define ET_APPLICATION(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_APPLICATION, EtApplication))
 
@@ -43,7 +41,5 @@ struct _EtApplicationClass
 
 GType et_application_get_type (void);
 EtApplication *et_application_new (void);
-
-G_END_DECLS
 
 #endif /* !ET_APPLICATION_H_ */

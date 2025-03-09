@@ -23,8 +23,6 @@
 
 #include "file.h"
 
-G_BEGIN_DECLS
-
 #define ET_TYPE_TAG_AREA (et_tag_area_get_type ())
 #define ET_TAG_AREA(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_TAG_AREA, EtTagArea))
 
@@ -54,7 +52,5 @@ gboolean et_tag_area_select_all_if_focused (EtTagArea *self, GtkWidget *focused)
 gboolean et_tag_area_unselect_all_if_focused (EtTagArea *self, GtkWidget *focused);
 
 void on_entry_populate_popup (GtkEntry *entry, GtkWidget *menu, EtTagArea *self);
-
-G_END_DECLS
 
 #endif /* ET_TAG_AREA_H_ */

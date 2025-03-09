@@ -21,8 +21,6 @@
 
 #include <gtk/gtk.h>
 
-G_BEGIN_DECLS
-
 #define ET_TYPE_STATUS_BAR (et_status_bar_get_type ())
 #define ET_STATUS_BAR(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_STATUS_BAR, EtStatusBar))
 
@@ -44,7 +42,5 @@ struct _EtStatusBarClass
 GType et_status_bar_get_type (void);
 GtkWidget * et_status_bar_new (void);
 void et_status_bar_message (EtStatusBar *self, const gchar *message, gboolean with_timer);
-
-G_END_DECLS
 
 #endif /* ET_STATUS_BAR_H_ */

@@ -22,8 +22,6 @@
 
 #include <gtk/gtk.h>
 
-G_BEGIN_DECLS
-
 #define ET_TYPE_CDDB_DIALOG (et_cddb_dialog_get_type ())
 #define ET_CDDB_DIALOG(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_CDDB_DIALOG, EtCDDBDialog))
 
@@ -45,7 +43,5 @@ struct _EtCDDBDialogClass
 GType et_cddb_dialog_get_type (void);
 EtCDDBDialog *et_cddb_dialog_new (void);
 gboolean et_cddb_dialog_search_from_selection (EtCDDBDialog *self);
-
-G_END_DECLS
 
 #endif /* ET_CDDB_H_ */

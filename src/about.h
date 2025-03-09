@@ -22,10 +22,6 @@
 
 #include <gtk/gtk.h>
 
-G_BEGIN_DECLS
-
 void et_show_about_dialog (GtkWindow *parent);
-
-G_END_DECLS
 
 #endif /* ET_ABOUT_H_ */

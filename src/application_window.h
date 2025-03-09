@@ -26,8 +26,6 @@
 #define ET_TYPE_APPLICATION_WINDOW (et_application_window_get_type ())
 #define ET_APPLICATION_WINDOW(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_APPLICATION_WINDOW, EtApplicationWindow))
 
-G_BEGIN_DECLS
-
 typedef struct _EtApplicationWindow EtApplicationWindow;
 typedef struct _EtApplicationWindowClass EtApplicationWindowClass;
 
@@ -84,9 +82,7 @@ GtkTreeSelection * et_application_window_browser_get_selection (EtApplicationWin
 GtkTreeViewColumn *et_application_window_browser_get_column_for_sort_mode (EtApplicationWindow *self, EtSortMode sort_mode);
 void et_application_window_browser_select_file_by_iter_string (EtApplicationWindow *self, const gchar *iter_string, gboolean select);
 void et_application_window_update_et_file_from_ui (EtApplicationWindow *self);
-#ifdef __cplusplus
 void et_application_window_display_et_file (EtApplicationWindow *self, ET_File *ETFile, int columns = ~0);
-#endif
 void et_application_window_browser_select_file_by_et_file (EtApplicationWindow *self, const ET_File *file, gboolean select);
 GtkTreePath * et_application_window_browser_select_file_by_et_file2 (EtApplicationWindow *self, const ET_File *file, gboolean select, GtkTreePath *start_path);
 ET_File * et_application_window_browser_select_file_by_dlm (EtApplicationWindow *self, const gchar *string, gboolean select);
@@ -102,7 +98,5 @@ void et_application_window_scan_dialog_update_previews (EtApplicationWindow *sel
 void et_application_window_progress_set (EtApplicationWindow *self, gint current, gint total);
 void et_application_window_status_bar_message (EtApplicationWindow *self, const gchar *message, gboolean with_timer);
 void et_application_window_quit (EtApplicationWindow *self);
-
-G_END_DECLS
 
 #endif /* !ET_APPLICATION_WINDOW_H_ */

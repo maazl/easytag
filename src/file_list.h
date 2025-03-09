@@ -26,8 +26,6 @@
 struct ET_File;
 struct File_Name;
 
-G_BEGIN_DECLS
-
 GList * et_file_list_add (GList *file_list, GFile *file, const gchar *root);
 void ET_Remove_File_From_File_List (ET_File *ETFile);
 gboolean et_file_list_check_all_saved (GList *etfilelist);
@@ -59,7 +57,5 @@ gboolean et_history_list_has_redo (GList *history_list);
 void et_history_file_list_free (GList *file_list);
 
 GList *ET_Sort_File_List (GList *ETFileList, EtSortMode Sorting_Type);
-
-G_END_DECLS
 
 #endif /* !ET_FILE_H_ */

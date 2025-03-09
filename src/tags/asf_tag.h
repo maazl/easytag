@@ -21,8 +21,6 @@
 
 #include <gio/gio.h>
 
-G_BEGIN_DECLS
-
 struct ET_File;
 struct File_Tag;
 struct EtFileHeaderFields;
@@ -31,7 +29,5 @@ File_Tag* asf_read_file(GFile *file, ET_File *ETFile, GError **error);
 gboolean asftag_write_file_tag(const ET_File *ETFile, GError **error);
 void et_asf_header_display_file_info_to_ui(EtFileHeaderFields *fields, const ET_File *ETFile);
 unsigned asftag_unsupported_fields(const ET_File* file);
-
-G_END_DECLS
 
 #endif /* ET_ASF_TAG_H_ */

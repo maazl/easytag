@@ -28,11 +28,7 @@
 #include <glib.h>
 #include <gio/gio.h>
 
-G_BEGIN_DECLS
-
 gboolean crc32_file_with_ID3_tag (GFile *file, guint32 *crc32, GError **err);
-
-G_END_DECLS
 
 #endif
 #endif /* ET_CRC32_H_ */

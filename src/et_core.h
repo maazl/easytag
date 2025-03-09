@@ -26,8 +26,6 @@
 
 struct ET_File;
 
-G_BEGIN_DECLS
-
 /*
  * Colors Used (see declaration into et_core.c)
  */
@@ -61,7 +59,5 @@ extern ET_Core *ETCore; /* Main pointer to structure needed by EasyTAG. */
 
 void ET_Core_Create (void);
 void ET_Core_Free (void);
-
-G_END_DECLS
 
 #endif /* ET_CORE_H_ */

@@ -23,7 +23,6 @@
 
 #include <gtk/gtk.h>
 
-#ifdef __cplusplus
 #include <string>
 #include <memory>
 #include <array>
@@ -178,10 +177,6 @@ std::string et_track_number_to_string(const gchar* track_number);
 /// Pad the number with trailing zeros according to settings "tag-number-padded", "tag-number-length".
 std::string et_track_number_to_string(unsigned track_number);
 
-#endif
-
-G_BEGIN_DECLS
-
 /*
  * Combobox misc functions
  */
@@ -207,7 +202,5 @@ gint et_normalized_strcasecmp0 (const gchar *str1, const gchar *str2);
  * Returns: %TRUE is @str is either %NULL or "", %FALSE otherwise
  */
 inline gboolean et_str_empty (const gchar *str) { return !str || !str[0]; }
-
-G_END_DECLS
 
 #endif /* ET_MISC_H_ */

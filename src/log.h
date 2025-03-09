@@ -22,8 +22,6 @@
 
 #include <gtk/gtk.h>
 
-G_BEGIN_DECLS
-
 #define ET_TYPE_LOG_AREA (et_log_area_get_type ())
 #define ET_LOG_AREA(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_LOG_AREA, EtLogArea))
 
@@ -64,7 +62,5 @@ GtkWidget * et_log_area_new (void);
 void et_log_area_clear (EtLogArea *self);
 void Log_Print (EtLogAreaKind error_type,
                 const gchar * const format, ...) G_GNUC_PRINTF (2, 3);
-
-G_END_DECLS
 
 #endif /* ET_LOG_AREA_H_ */

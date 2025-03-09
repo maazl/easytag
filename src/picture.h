@@ -23,18 +23,12 @@
 
 #include <gio/gio.h>
 
-G_BEGIN_DECLS
-
 #define ET_TYPE_PICTURE (et_picture_get_type ())
 GType et_picture_get_type (void);
 
-G_END_DECLS
-
-#ifdef __cplusplus
 #include "misc.h"
 #include "xstring.h"
 #include <atomic>
-#endif
 
 struct ET_File;
 
@@ -74,7 +68,6 @@ typedef enum
     PICTURE_FORMAT_UNKNOWN
 } Picture_Format;
 
-#ifdef __cplusplus
 /*
  * EtPicture:
  * @type: type of cover art
@@ -162,6 +155,5 @@ public:
 	/// Clean up the internal picture store from orphaned references.
 	static void GarbageCollector();
 } EtPicture;
-#endif
 
 #endif /* ET_PICTURE_H_ */
