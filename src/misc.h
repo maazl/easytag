@@ -28,6 +28,7 @@
 #include <array>
 #include <cmath>
 #include <type_traits>
+#include <functional>
 
 std::string strprintf(const char* format, ...)
 #ifdef __GNUC__
@@ -145,6 +146,14 @@ public:
 	gListP<T> concat(gListP<T> l) { return gListP<T>(g_list_concat(*this, l)); }
 	gListP<T> reverse() { return gListP<T>(g_list_reverse(*this)); }
 };
+
+/// Execute function asynchronously in main loop.
+/// @param func Pointer to the function to be executed.
+/// The function takes the ownership of this object.
+/// It will be deleted after invocation or removal of the event.
+/// @param priority Optional priority level, G_PRIORITY_DEFAULT_IDLE by default.
+/// @return ID of the registered event source.
+guint gIdleAdd(std::function<void()>* func, gint priority = G_PRIORITY_DEFAULT_IDLE);
 
 
 /// Binary search with exact match handling.

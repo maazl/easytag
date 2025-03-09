@@ -20,7 +20,7 @@
 #ifdef ENABLE_REPLAYGAIN
 
 #include "misc.h"
-#include "setting.h"
+#include "easytag.h"
 
 #include <vector>
 #include <memory>
@@ -375,8 +375,8 @@ void ReplayGain2::operator+=(const Result& right)
 	Lj.insert(Lj.end(), rg.Lj.begin(), rg.Lj.end());
 }
 
-static ReplayGain* Factory()
-{	switch (g_settings_get_enum(MainSettings, "replaygain-model"))
+static ReplayGain* Factory(EtReplayGainModel model)
+{	switch (model)
 	{case ET_REPLAYGAIN_MODEL_V1:
 		return new ReplayGain1();
 	 case ET_REPLAYGAIN_MODEL_V2:
@@ -440,7 +440,7 @@ found_stream:
 	if (rc < 0)
 		return string(_("Resampler has not been properly initialized: ")) + avstrerr(rc);
 
-	ReplayGain* acc = Factory();
+	ReplayGain* acc = Factory(Model);
 	Last.reset(acc);
 	acc->Setup(codec->channel_layout);
 
@@ -475,6 +475,9 @@ found_stream:
 				return string("Error sending packet to codec: ") + avstrerr(rc);
 		}
 
+		if (Main_Stop_Button_Pressed)
+			return "$Aborted";
+
 		while (avcodec_receive_frame(codec.get(), frame.get()) == 0)
 		{
 			// resample
@@ -506,7 +509,7 @@ found_stream:
 
 	// album gain
 	if (!Aggregated)
-		Aggregated.reset(Factory());
+		Aggregated.reset(Factory(Model));
 	*Aggregated += *acc;
 
 	// all cleanup is done by unique_ptr destructors

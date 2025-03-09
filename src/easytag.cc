@@ -40,11 +40,13 @@
 #include "replaygain.h"
 #include "file_name.h"
 #include "file_tag.h"
+#include "xptr.h"
 
 #include "win32/win32dep.h"
 
 #include <vector>
 #include <algorithm>
+#include <thread>
 using namespace std;
 
 static GtkWidget *QuitRecursionWindow = NULL;
@@ -690,115 +692,211 @@ Write_File_Tag (ET_File *ETFile, gboolean hide_msgbox)
 }
 
 #ifdef ENABLE_REPLAYGAIN
-void ReplayGain_For_Selected_Files (void)
+class ReplayGainWorker : public xObj
 {
-	EtApplicationWindow* const window = ET_APPLICATION_WINDOW(MainWindow);
-	vector<ET_File*> files;
-	{	GList *etfilelist = et_application_window_browser_get_selected_files(window);
-		for (GList* l = etfilelist; l; l = g_list_next(l))
-			files.emplace_back((ET_File*)l->data);
-		g_list_free(etfilelist);
+	typedef std::vector<xPtr<ET_File>> FileList;
+
+	/// The currently running instance if any.
+	static xPtr<ReplayGainWorker> Instance;
+
+	ReplayGainAnalyzer Analyzer;
+
+	gint (*AlbumComparer)(const ET_File *ETFile1, const ET_File *ETFile2) = nullptr;
+	unsigned CompareLevel = 1;
+
+	/// List of files to process.
+	/// @remarks Must not be modified after \ref Start is called.
+	FileList Files;
+	double TotalDuration = 0.;
+	double CurrentDuration = 0.; // this field belongs to the main thread.
+
+	FileList::iterator AlbumFirst;
+
+private:
+	double GetFileDuration(const ET_File* file)
+	{	double duration = file->ETFileInfo.duration;
+		return duration > 0 ? duration : file->FileSize / 16000.; // no length? => use some default
 	}
 
-	if (files.empty())
-		return;
+	void OnFileCompleted(FileList::iterator cur, string err, float track_gain, float track_peak);
+	void OnAlbumCompleted(FileList::iterator first, FileList::iterator last, bool error, float album_gain, float album_peak);
+	void OnFinished(bool cancelled);
 
-	Main_Stop_Button_Pressed = FALSE;
-	et_application_window_disable_command_actions(window, TRUE);
-	et_application_window_progress_set(window, 0, files.size());
-	/* Needed to refresh status bar */
-	while (gtk_events_pending())
-		gtk_main_iteration();
+	ReplayGainWorker();
+	void FinishAlbum(FileList::iterator first, FileList::iterator last, bool error);
+	/// Background thread
+	void Run();
+public:
+	/// Initialize a new worker instance.
+	/// @return Instance pointer or \c nullptr if there is another instance still running.
+	static ReplayGainWorker* Init()
+	{	return Instance ? nullptr : (Instance = new ReplayGainWorker()).get(); }
+	void AddFile(ET_File* file)
+	{	TotalDuration += GetFileDuration(file);
+		Files.emplace_back(file);
+	}
+	/// Start the worker with the files pushed into \ref Files.
+	void Start();
+};
 
-	gint (*comp)(const ET_File *ETFile1, const ET_File *ETFile2) = nullptr;
-	unsigned level = 1;
+xPtr<ReplayGainWorker> ReplayGainWorker::Instance = nullptr;
+
+ReplayGainWorker::ReplayGainWorker()
+:	Analyzer((EtReplayGainModel)g_settings_get_enum(MainSettings, "replaygain-model"))
+{
 	switch ((EtReplayGainGroupBy)g_settings_get_enum(MainSettings, "replaygain-groupby"))
 	{	EtSortMode mode;
 	case ET_REPLAYGAIN_GROUPBY_DISC:
-		level = 2;
+		CompareLevel = 2;
 	case ET_REPLAYGAIN_GROUPBY_ALBUM:
 		mode = ET_SORT_MODE_ASCENDING_ALBUM;
 		goto sort;
 	case ET_REPLAYGAIN_GROUPBY_FILEPATH:
 		mode = ET_SORT_MODE_ASCENDING_FILEPATH;
 	sort:
-		comp = ET_File::get_comp_func(mode);
-		sort(files.begin(), files.end(), [comp](ET_File* l, ET_File* r){ return comp(l, r) < 0; });
+		AlbumComparer = ET_File::get_comp_func(mode);
 	default:;
 	}
+}
 
-	ReplayGainAnalyzer analyzer;
+void ReplayGainWorker::OnAlbumCompleted(FileList::iterator first, FileList::iterator last, bool error, float album_gain, float album_peak)
+{
+	if (error)
+		return Log_Print(LOG_WARNING, _("Skip album gain because of previous errors."));
 
-	int done = 0;
+	EtApplicationWindow* const window = ET_APPLICATION_WINDOW(MainWindow);
+
+	for (auto cur = first; cur != last; ++cur)
+	{	ET_File* file = cur->get();
+		File_Tag* file_tag = new File_Tag(*file->FileTagNew());
+		file_tag->album_gain = album_gain;
+		file_tag->album_peak = album_peak;
+		file->apply_changes(nullptr, file_tag);
+
+		if (ETCore->ETFileDisplayed == file)
+			et_application_window_display_et_file(window, file, ET_COLUMN_REPLAYGAIN);
+	}
+	Log_Print(LOG_OK, _("ReplayGain of album is %.1f dB, peak %.2f"), album_gain, album_peak);
+	et_application_window_browser_refresh_list(window); // hmm, maybe a bit too much
+}
+
+void ReplayGainWorker::OnFileCompleted(FileList::iterator cur, string err, float track_gain, float track_peak)
+{
+	ET_File* const file = cur->get();
+	const File_Name& file_name = *file->FileNameCur();
+	EtApplicationWindow* const window = ET_APPLICATION_WINDOW(MainWindow);
+
+	if (!err.empty())
+	{	Log_Print(LOG_ERROR, _("Failed to analyze file '%s': %s"), file_name.full_name().get(), err.c_str());
+	} else
+	{	File_Tag* file_tag = new File_Tag(*file->FileTagNew());
+		file_tag->track_gain = track_gain;
+		file_tag->track_peak = track_peak;
+		file->apply_changes(nullptr, file_tag);
+		Log_Print(LOG_OK, _("ReplayGain of file '%s' is %.1f dB, peak %.2f"), file_name.full_name().get(), file_tag->track_gain, file_tag->track_peak);
+
+		if (ETCore->ETFileDisplayed == file)
+			et_application_window_display_et_file(window, file, ET_COLUMN_REPLAYGAIN);
+		et_application_window_browser_refresh_file_in_list(window, file);
+	}
+
+	CurrentDuration += GetFileDuration(*cur);
+	et_application_window_progress_set(window, cur - Files.begin() + 1, Files.size(), CurrentDuration / TotalDuration);
+}
+
+void ReplayGainWorker::FinishAlbum(FileList::iterator first, FileList::iterator last, bool error)
+{
+	float album_gain = Analyzer.GetAggregatedResult().Gain();
+	float album_peak = Analyzer.GetAggregatedResult().Peak();
+	gIdleAdd(new function<void()>([that = xPtr<ReplayGainWorker>(this), first, last, error, album_gain, album_peak]()
+		{ that->OnAlbumCompleted(first, last, error, album_gain, album_peak); }));
+}
+
+void ReplayGainWorker::Start()
+{
+	Main_Stop_Button_Pressed = FALSE;
+	EtApplicationWindow* const window = ET_APPLICATION_WINDOW(MainWindow);
+	et_application_window_disable_command_actions(window, TRUE);
+	et_application_window_progress_set(window, 0, Files.size(), 0.);
+
+	std::thread(&ReplayGainWorker::Run, ref(*this)).detach();
+}
+
+void ReplayGainWorker::Run()
+{
+	if (AlbumComparer)
+		sort(Files.begin(), Files.end(), [comp = AlbumComparer](const xPtr<ET_File>& l, const xPtr<ET_File>& r){ return comp(l, r) < 0; });
+
 	bool error = false;
-	auto first = files.begin();
+	auto first = Files.begin();
 
-	auto finish_album = [&first, &error, &analyzer, window](decltype(first) last)
-	{
-		if (error)
-			return Log_Print(LOG_WARNING, _("Skip album gain because of previous errors."));
-
-		float album_gain = analyzer.GetAggregatedResult().Gain();
-		float album_peak = analyzer.GetAggregatedResult().Peak();
-		for (auto cur = first; cur != last; ++cur)
-		{	ET_File* file = *cur;
-			File_Tag* file_tag = new File_Tag(*file->FileTagNew());
-			file_tag->album_gain = album_gain;
-			file_tag->album_peak = album_peak;
-			file->apply_changes(nullptr, file_tag);
-
-			if (ETCore->ETFileDisplayed == file)
-				et_application_window_display_et_file(window, file, ET_COLUMN_REPLAYGAIN);
-		}
-		Log_Print(LOG_OK, _("ReplayGain of album is %.1f dB, peak %.2f"), album_gain, album_peak);
-		et_application_window_browser_refresh_list(window);
-	};
-
-	for (auto cur = first; cur != files.end(); ++cur)
-	{	ET_File* file = *cur;
+	for (auto cur = first; cur != Files.end(); ++cur)
+	{	ET_File* file = cur->get();
 		// Group processing for album gain
-		if (comp && first != cur && (unsigned)(abs(comp(*first, file)) - 1) < level)
-		{	finish_album(cur);
-			analyzer.Reset();
+		if (AlbumComparer && first != cur && (unsigned)(abs(AlbumComparer(*first, file)) - 1) < CompareLevel)
+		{	FinishAlbum(first, cur, error);
+			Analyzer.Reset();
 			error = false;
 			first = cur;
 		}
 
-		const File_Name& file_name = *file->FileNameCur();
-
-		string err = analyzer.AnalyzeFile(file->FilePath);
-		if (!err.empty())
-		{	Log_Print(LOG_ERROR, _("Failed to analyze file '%s': %s"), file_name.full_name().get(), err.c_str());
-			error = 1;
-		} else
-		{	File_Tag* file_tag = new File_Tag(*file->FileTagNew());
-			file_tag->track_gain = analyzer.GetLastResult().Gain();
-			file_tag->track_peak = analyzer.GetLastResult().Peak();
-			file->apply_changes(nullptr, file_tag);
-			Log_Print(LOG_OK, _("ReplayGain of file '%s' is %.1f dB, peak %.2f"), file_name.full_name().get(), file_tag->track_gain, file_tag->track_peak);
-
-			if (ETCore->ETFileDisplayed == file)
-				et_application_window_display_et_file(window, file, ET_COLUMN_REPLAYGAIN);
-			et_application_window_browser_refresh_file_in_list(window, file);
-		}
-
-		et_application_window_progress_set(window, ++done, files.size());
-		/* Needed to refresh status bar */
-		while (gtk_events_pending())
-			gtk_main_iteration();
-
-		if (Main_Stop_Button_Pressed)
-		{	et_application_window_status_bar_message (window, _("ReplayGain calculation stopped"), TRUE);
+		string err = Analyzer.AnalyzeFile(file->FilePath);
+		if (err == "$Aborted")
+		{abort:
+			error = true;
 			goto end;
 		}
+		if (!err.empty())
+			error = true;
+
+		float track_gain = Analyzer.GetLastResult().Gain();
+		float track_peak = Analyzer.GetLastResult().Peak();
+		gIdleAdd(new function<void()>([that = xPtr<ReplayGainWorker>(this), cur, err, track_gain, track_peak]()
+			{ that->OnFileCompleted(cur, err, track_gain, track_peak); }));
+
+		if (Main_Stop_Button_Pressed)
+			goto abort;
 	}
 
-	if (files.size() > 1) // album gain requires at least 2 files
-		finish_album(files.end());
+	if (Files.size() > 1) // album gain requires at least 2 files
+		FinishAlbum(first, Files.end(), error);
+
+	error = false;
 
 end:
+	gIdleAdd(new function<void()>([that = xPtr<ReplayGainWorker>(this), error]()
+		{ that->OnFinished(error); }));
+
+	Instance.reset();
+}
+
+void ReplayGainWorker::OnFinished(bool cancelled)
+{
+	EtApplicationWindow* const window = ET_APPLICATION_WINDOW(MainWindow);
+
+	if (cancelled)
+		et_application_window_status_bar_message (window, _("ReplayGain calculation stopped"), TRUE);
+
 	et_application_window_progress_set(window, 0, 0);
 	et_application_window_update_actions(window);
+}
+
+void ReplayGain_For_Selected_Files (void)
+{
+	GList *etfilelist = et_application_window_browser_get_selected_files(ET_APPLICATION_WINDOW(MainWindow));
+	if (!etfilelist)
+		return; // nothing to do
+
+	ReplayGainWorker* worker = ReplayGainWorker::Init();
+	if (!worker)
+		return g_list_free(etfilelist); // reentrant call not permitted
+
+	GList* l = etfilelist;
+	do worker->AddFile((ET_File*)l->data);
+	while ((l = l->next));
+	g_list_free(etfilelist);
+
+	worker->Start();
 }
 #endif
 

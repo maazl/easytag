@@ -60,7 +60,7 @@ et_file_list_free (GList *file_list)
 {
     g_return_if_fail (file_list != NULL);
 
-    g_list_free_full (file_list, [](gpointer file) { delete (ET_File*)file; });
+    g_list_free_full (file_list, [](gpointer file) { xPtr<ET_File>::fromCptr((ET_File*)file); });
 }
 
 static void
@@ -141,7 +141,7 @@ et_file_list_add (GList *file_list,
     GError *error = NULL;
 
     /* Get description of the file */
-    ET_File* ETFile = new ET_File(gString(g_file_get_path(file)));
+    ET_File* ETFile = xPtr<ET_File>::toCptr(xPtr<ET_File>(new ET_File(gString(g_file_get_path(file)))));
     if (!ETFile->read_file(file, root, &error))
     {   Log_Print (LOG_ERROR, _("Error reading tag from %s ‘%s’: %s"),
                    ETFile->ETFileDescription->FileType, ETFile->FileNameNew()->full_name().get(), error->message);
@@ -473,7 +473,7 @@ ET_Remove_File_From_File_List (ET_File *ETFile)
                                                  ETFile);
 
     // Free data of the file
-    delete ETFile;
+    xPtr<ET_File>::fromCptr(ETFile);
 
     /* Recalculate length of ETFileDisplayedList list. */
     ETCore->ETFileDisplayedList_Length = et_displayed_file_list_length (ETCore->ETFileDisplayedList);

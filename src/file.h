@@ -27,6 +27,7 @@
 #include "file_tag.h"
 #include "misc.h"
 #include "undo_list.h"
+#include "xptr.h"
 
 /*
  * Structure containing informations of the header of file
@@ -48,7 +49,7 @@ typedef struct
 /*
  * Description of each item of the ETFileList list
  */
-class ET_File
+class ET_File : public xObj
 {
 public:
 	gString FilePath;             ///< Full raw path of the file, do not use in UI.

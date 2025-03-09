@@ -1731,14 +1731,15 @@ et_application_window_scan_dialog_update_previews (EtApplicationWindow *self)
     }
 }
 
-void et_application_window_progress_set(EtApplicationWindow *self, gint current, gint total)
+void et_application_window_progress_set(EtApplicationWindow *self, gint current, gint total, double fraction)
 {
 	g_return_if_fail(ET_APPLICATION_WINDOW(self));
 	EtApplicationWindowPrivate *priv = et_application_window_get_instance_private(self);
 	GtkProgressBar* progress_bar = GTK_PROGRESS_BAR(priv->progress_bar);
 
-	double fraction = (double)current/total;
-	if (fraction >= 0) // valid progress
+	if (fraction < 0)
+		fraction = (double)current/total;
+	if (fraction >= 0 && fraction <= 1) // valid progress
 	{	gtk_progress_bar_set_fraction(progress_bar, fraction);
 		gtk_progress_bar_set_text(progress_bar, strprintf("%d/%d", current, total).c_str());
 		gtk_widget_show(priv->progress_bar);

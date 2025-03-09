@@ -52,6 +52,16 @@ string strprintf(const char* format, ...)
 	return buf;
 }
 
+
+guint gIdleAdd(std::function<void()>* func, gint priority)
+{	return g_idle_add_full(
+		priority,
+		[](void* user_data) { (*static_cast<std::function<void()>*>(user_data))(); return G_SOURCE_REMOVE; },
+		func,
+		[](void* user_data) { delete static_cast<std::function<void()>*>(user_data); });
+}
+
+
 /*
  * Add the 'string' passed in parameter to the list store
  * If this string already exists in the list store, it doesn't add it.

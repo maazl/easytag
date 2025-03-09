@@ -95,7 +95,7 @@ void et_application_window_scan_dialog_update_previews (EtApplicationWindow *sel
  * @param total total prograss (for 100%)
  * @details If current/total is non not a number the progress bar becomes inactive,
  * e.g. if you pass -1 for total. */
-void et_application_window_progress_set (EtApplicationWindow *self, gint current, gint total);
+void et_application_window_progress_set (EtApplicationWindow *self, gint current, gint total, double fraction = -1);
 void et_application_window_status_bar_message (EtApplicationWindow *self, const gchar *message, gboolean with_timer);
 void et_application_window_quit (EtApplicationWindow *self);
 

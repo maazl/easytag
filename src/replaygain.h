@@ -22,8 +22,12 @@
 #include "config.h"
 #ifdef ENABLE_REPLAYGAIN
 
+#include "setting.h"
+
 #include <string>
 #include <memory>
+
+class ET_File;
 
 class ReplayGainAnalyzer
 {
@@ -37,13 +41,17 @@ public:
 		/** aggregate results */
 		virtual void operator+=(const Result& r) = 0;
 	};
+	const EtReplayGainModel Model;
 private:
 	std::unique_ptr<Result> Last;
 	std::unique_ptr<Result> Aggregated;
 public:
+	ReplayGainAnalyzer(EtReplayGainModel model) : Model(model) {}
+
 	/** Analyze a file and aggregate the results in the current instance.
 	 * @param fileName
-	 * @return Error message if any, empty on success. */
+	 * @return Error message if any, empty on success,
+	 * "$Aborted" if Main_Stop_Button_Pressed has been set. */
 	std::string AnalyzeFile(const char* fileName);
 
 	/** Retrieve the last file result (for track gain). */
@@ -57,4 +65,4 @@ public:
 };
 
 #endif
-#endif /* !ET_SCAN_H_ */
+#endif /* ET_REPLAYGAIN_H_ */
