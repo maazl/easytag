@@ -640,7 +640,7 @@ bool ET_File::apply_changes(File_Name *fileName, File_Tag *fileTag)
 	/*
 	 * Generate main undo (file history of modifications)
 	 */
-	guint undo_key =0;
+	guint undo_key = 0;
 	if ((fileName && FileName.New) || (fileTag && FileTag.New))
 		undo_key = ++ETUndoKey;
 	if (fileName)
@@ -649,7 +649,7 @@ bool ET_File::apply_changes(File_Name *fileName, File_Tag *fileTag)
 		FileTag.add(fileTag, undo_key);
 
 	if (undo_key)
-		ETCore->ETHistoryFileList = et_history_list_add(ETCore->ETHistoryFileList, this);
+		ET_FileList::history_list_add(this);
 
 	return true;
 }

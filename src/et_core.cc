@@ -43,6 +43,8 @@ ET_Core_Free (void)
 {
     g_return_if_fail (ETCore != NULL);
 
+    ET_FileList::reset();
+
     /* First frees lists. */
     if (ETCore->ETFileList)
     {
@@ -54,12 +56,6 @@ ET_Core_Free (void)
     {
         et_displayed_file_list_free (ETCore->ETFileDisplayedList);
         ETCore->ETFileDisplayedList = NULL;
-    }
-
-    if (ETCore->ETHistoryFileList)
-    {
-        et_history_file_list_free (ETCore->ETHistoryFileList);
-        ETCore->ETHistoryFileList = NULL;
     }
 
     if (ETCore->ETArtistAlbumFileList)

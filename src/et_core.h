@@ -50,9 +50,6 @@ typedef struct
 
     // Displayed item
     ET_File *ETFileDisplayed;           // Pointer to the current ETFile displayed in EasyTAG (may be NULL)
-
-    // History list
-    GList *ETHistoryFileList;           // History list of files changes for undo/redo actions
 } ET_Core;
 
 extern ET_Core *ETCore; /* Main pointer to structure needed by EasyTAG. */

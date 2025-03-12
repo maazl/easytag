@@ -40,13 +40,16 @@
 
 using namespace std;
 
-/*
- * Description of each item of the ETHistoryFileList list
- */
-typedef struct
+
+vector<xPtr<ET_File>> ET_FileList::ETHistoryFileList;
+unsigned ET_FileList::ETHistoryFileListRedo = 0;
+
+
+void ET_FileList::reset()
 {
-    ET_File *ETFile;           /* Pointer to item of ETFileList changed */
-} ET_History_File;
+	ETHistoryFileList.clear();
+	ETHistoryFileListRedo = 0;
+}
 
 
 /*
@@ -61,26 +64,6 @@ et_file_list_free (GList *file_list)
     g_return_if_fail (file_list != NULL);
 
     g_list_free_full (file_list, [](gpointer file) { xPtr<ET_File>::fromCptr((ET_File*)file); });
-}
-
-static void
-et_history_file_free (ET_History_File *file)
-{
-    g_slice_free (ET_History_File, file);
-}
-
-/*
- * History list contains only pointers, so no data to free except the history structure.
- */
-void
-et_history_file_list_free (GList *file_list)
-{
-    g_return_if_fail (file_list != NULL);
-
-    /* et_history_list_add() sets the list to the final element, so explicitly
-     * go back to the start. */
-    g_list_free_full (g_list_first (file_list),
-                      (GDestroyNotify)et_history_file_free);
 }
 
 /*
@@ -644,111 +627,40 @@ void et_file_list_update_directory_name(GList *file_list, const gchar *old_path,
 	}
 }
 
-/*
- * Execute one 'undo' in the main undo list (it selects the last ETFile changed,
- * before to apply an undo action)
- */
-ET_File *
-ET_Undo_History_File_Data (void)
+ET_File* ET_FileList::undo()
 {
-    ET_File *ETFile;
-    const ET_History_File *ETHistoryFile;
+	g_return_val_if_fail(has_undo(), NULL);
 
-    g_return_val_if_fail (ETCore->ETHistoryFileList != NULL, NULL);
-    g_return_val_if_fail (et_history_list_has_undo (ETCore->ETHistoryFileList), NULL);
-
-    ETHistoryFile = (ET_History_File *)ETCore->ETHistoryFileList->data;
-    ETFile        = (ET_File *)ETHistoryFile->ETFile;
-    ET_Displayed_File_List_By_Etfile(ETFile);
-    ETFile->undo();
-
-    if (ETCore->ETHistoryFileList->prev)
-        ETCore->ETHistoryFileList = ETCore->ETHistoryFileList->prev;
-    return ETFile;
+	ET_File* ETFile = ETHistoryFileList[--ETHistoryFileListRedo].get();
+	ET_Displayed_File_List_By_Etfile(ETFile);
+	ETFile->undo();
+	return ETFile;
 }
-
-/*
- * et_history_list_has_undo:
- * @history_list: the end of a history list
- *
- * Returns: %TRUE if undo file list contains undo data, %FALSE otherwise
- */
-gboolean
-et_history_list_has_undo (GList *history_list)
-{
-    return history_list && history_list->prev;
-}
-
 
 /*
  * Execute one 'redo' in the main undo list
  */
-ET_File *
-ET_Redo_History_File_Data (void)
+ET_File* ET_FileList::redo()
 {
-    ET_File *ETFile;
-    ET_History_File *ETHistoryFile;
+	if (!has_redo())
+		return NULL;
 
-    if (!ETCore->ETHistoryFileList
-        || !et_history_list_has_redo (ETCore->ETHistoryFileList))
-    {
-        return NULL;
-    }
-
-    ETHistoryFile = (ET_History_File *)ETCore->ETHistoryFileList->next->data;
-    ETFile        = (ET_File *)ETHistoryFile->ETFile;
-    ET_Displayed_File_List_By_Etfile(ETFile);
-    ETFile->redo();
-
-    if (ETCore->ETHistoryFileList->next)
-        ETCore->ETHistoryFileList = ETCore->ETHistoryFileList->next;
-    return ETFile;
-}
-
-/*
- * et_history_list_has_redo:
- * @history_list: the end of a history list
- *
- * Returns: %TRUE if undo file list contains redo data, %FALSE otherwise
- */
-gboolean
-et_history_list_has_redo (GList *history_list)
-{
-    return history_list && history_list->next;
+	ET_File* ETFile = ETHistoryFileList[ETHistoryFileListRedo++].get();
+	ET_Displayed_File_List_By_Etfile(ETFile);
+	ETFile->redo();
+	return ETFile;
 }
 
 /*
  * Add a ETFile item to the main undo list of files
  */
-GList *
-et_history_list_add (GList *history_list,
-                     ET_File *ETFile)
+void ET_FileList::history_list_add(ET_File *ETFile)
 {
-    ET_History_File *ETHistoryFile;
-    GList *result;
-
-    g_return_val_if_fail (ETFile != NULL, FALSE);
-
-    ETHistoryFile = g_slice_new0 (ET_History_File);
-    ETHistoryFile->ETFile = ETFile;
-
-    /* The undo list must contains one item before the 'first undo' data */
-    if (!history_list)
-    {
-        result = g_list_append (NULL,
-                                g_slice_new0 (ET_History_File));
-    }
-    else
-    {
-        result = history_list;
-    }
+    g_return_if_fail(ETFile != NULL);
 
     /* Add the item to the list (cut end of list from the current element) */
-    result = g_list_append (result, ETHistoryFile);
-    /* TODO: Investigate whether this is sensible. */
-    result = g_list_last (result);
-
-    return result;
+    ETHistoryFileList.erase(ETHistoryFileList.begin() + ETHistoryFileListRedo++, ETHistoryFileList.end());
+    ETHistoryFileList.emplace_back(ETFile);
 }
 
 /*

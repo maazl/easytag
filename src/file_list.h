@@ -22,9 +22,40 @@
 #include <glib.h>
 
 #include "setting.h"
+#include "file.h"
 
-struct ET_File;
+#include <vector>
+
 struct File_Name;
+
+
+class ET_FileList
+{
+	/// Files in the currently selected root directory and optionally subdirectories.
+	static std::vector<xPtr<ET_File>> ETFileList;
+
+	/// History list of file changes for undo/redo actions
+	static std::vector<xPtr<ET_File>> ETHistoryFileList;
+	/// Current redo index in ETHistoryFileList. Equals ETHistoryFileList.size() unless redo available.
+	static unsigned ETHistoryFileListRedo;
+
+public:
+	static void reset();
+
+	/// \c TRUE if undo file list contains undo data.
+	static gboolean has_undo() { return ETHistoryFileListRedo > 0; }
+	/// \c TRUE if undo file list contains redo data.
+	static gboolean has_redo() { return ETHistoryFileListRedo < ETHistoryFileList.size(); }
+
+	/// Add a ET_File item to the main undo list of files.
+	static void history_list_add(ET_File* ETFile);
+
+	/// Execute one 'undo' in the main undo list (it selects the last ETFile changed,
+	/// before to apply an undo action)
+	static ET_File* undo();
+	static ET_File* redo();
+};
+
 
 GList * et_file_list_add (GList *file_list, GFile *file, const gchar *root);
 void ET_Remove_File_From_File_List (ET_File *ETFile);
@@ -49,11 +80,6 @@ GList * ET_Displayed_File_List_By_Etfile (const ET_File *ETFile);
 void et_displayed_file_list_set (GList *ETFileList);
 void et_displayed_file_list_free (GList *file_list);
 
-GList * et_history_list_add (GList *history_list, ET_File *ETFile);
-ET_File * ET_Undo_History_File_Data (void);
-ET_File * ET_Redo_History_File_Data (void);
-gboolean et_history_list_has_undo (GList *history_list);
-gboolean et_history_list_has_redo (GList *history_list);
 void et_history_file_list_free (GList *file_list);
 
 GList *ET_Sort_File_List (GList *ETFileList, EtSortMode Sorting_Type);

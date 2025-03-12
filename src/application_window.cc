@@ -798,7 +798,7 @@ on_undo_last_changes (GSimpleAction *action,
 
     et_application_window_update_et_file_from_ui (self);
 
-    ETFile = ET_Undo_History_File_Data ();
+    ETFile = ET_FileList::undo();
 
     if (ETFile)
     {
@@ -825,7 +825,7 @@ on_redo_last_changes (GSimpleAction *action,
 
     et_application_window_update_et_file_from_ui (self);
 
-    ETFile = ET_Redo_History_File_Data ();
+    ETFile = ET_FileList::redo();
 
     if (ETFile)
     {
@@ -2418,24 +2418,10 @@ et_application_window_update_actions (EtApplicationWindow *self)
         set_action_state (self, "save-force", TRUE);
 
         /* Enable undo command if there are data into main undo list (history list) */
-        if (et_history_list_has_undo (ETCore->ETHistoryFileList))
-        {
-            set_action_state (self, "undo-last-changes", TRUE);
-        }
-        else
-        {
-            set_action_state (self, "undo-last-changes", FALSE);
-        }
+        set_action_state (self, "undo-last-changes", ET_FileList::has_undo());
 
         /* Enable redo commands if there are data into main redo list (history list) */
-        if (et_history_list_has_redo (ETCore->ETHistoryFileList))
-        {
-            set_action_state (self, "redo-last-changes", TRUE);
-        }
-        else
-        {
-            set_action_state (self, "redo-last-changes", FALSE);
-        }
+        set_action_state (self, "redo-last-changes", ET_FileList::has_redo());
 
         {
             GVariant *variant;
