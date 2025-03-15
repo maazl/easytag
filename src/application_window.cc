@@ -2242,8 +2242,8 @@ et_application_window_file_area_set_sensitive (EtApplicationWindow *self,
                               sensitive);
 }
 
-static void
-set_action_state (EtApplicationWindow *self,
+void
+et_application_set_action_state (EtApplicationWindow *self,
                   const gchar *action_name,
                   gboolean enabled)
 {
@@ -2271,24 +2271,24 @@ et_application_window_disable_command_actions (EtApplicationWindow *self, gboole
         gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, FALSE);
 
     /* Tool bar buttons (the others are covered by the menu) */
-    set_action_state (self, "stop", allowStop);
+    et_application_set_action_state (self, "stop", allowStop);
 
     /* "File" menu commands */
-    set_action_state (self, "open-with", FALSE);
-    set_action_state (self, "invert-selection", FALSE);
-    set_action_state (self, "delete", FALSE);
-    set_action_state (self, "go-first", FALSE);
-    set_action_state (self, "go-previous", FALSE);
-    set_action_state (self, "go-next", FALSE);
-    set_action_state (self, "go-last", FALSE);
-    set_action_state (self, "remove-tags", FALSE);
-    set_action_state (self, "undo-file-changes", FALSE);
-    set_action_state (self, "redo-file-changes", FALSE);
-    set_action_state (self, "save", FALSE);
-    set_action_state (self, "save-force", FALSE);
-    set_action_state (self, "undo-last-changes", FALSE);
-    set_action_state (self, "redo-last-changes", FALSE);
-    set_action_state (self, "replaygain", FALSE);
+    et_application_set_action_state (self, "open-with", FALSE);
+    et_application_set_action_state (self, "invert-selection", FALSE);
+    et_application_set_action_state (self, "delete", FALSE);
+    et_application_set_action_state (self, "go-first", FALSE);
+    et_application_set_action_state (self, "go-previous", FALSE);
+    et_application_set_action_state (self, "go-next", FALSE);
+    et_application_set_action_state (self, "go-last", FALSE);
+    et_application_set_action_state (self, "remove-tags", FALSE);
+    et_application_set_action_state (self, "undo-file-changes", FALSE);
+    et_application_set_action_state (self, "redo-file-changes", FALSE);
+    et_application_set_action_state (self, "save", FALSE);
+    et_application_set_action_state (self, "save-force", FALSE);
+    et_application_set_action_state (self, "undo-last-changes", FALSE);
+    et_application_set_action_state (self, "redo-last-changes", FALSE);
+    et_application_set_action_state (self, "replaygain", FALSE);
 
     /* FIXME: "Scanner" menu commands */
     /*set_action_state (self, "scan-mode", FALSE);*/
@@ -2300,7 +2300,7 @@ et_application_window_update_actions (EtApplicationWindow *self)
     GtkDialog *dialog = GTK_DIALOG (et_application_window_get_scan_dialog (self));
 
     /* Tool bar buttons (the others are covered by the menu) */
-    set_action_state (self, "stop", FALSE);
+    et_application_set_action_state (self, "stop", FALSE);
 
     if (!ETCore->ETFileDisplayedList)
     {
@@ -2315,28 +2315,28 @@ et_application_window_update_actions (EtApplicationWindow *self)
             gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, FALSE);
 
         /* Menu commands */
-        set_action_state (self, "open-with", FALSE);
-        set_action_state (self, "invert-selection", FALSE);
-        set_action_state (self, "delete", FALSE);
+        et_application_set_action_state (self, "open-with", FALSE);
+        et_application_set_action_state (self, "invert-selection", FALSE);
+        et_application_set_action_state (self, "delete", FALSE);
         /* FIXME: set_action_state (self, "sort-mode", FALSE); */
-        set_action_state (self, "go-previous", FALSE);
-        set_action_state (self, "go-next", FALSE);
-        set_action_state (self, "go-first", FALSE);
-        set_action_state (self, "go-last", FALSE);
-        set_action_state (self, "remove-tags", FALSE);
-        set_action_state (self, "undo-file-changes", FALSE);
-        set_action_state (self, "redo-file-changes", FALSE);
-        set_action_state (self, "save", FALSE);
-        set_action_state (self, "save-force", FALSE);
-        set_action_state (self, "undo-last-changes", FALSE);
-        set_action_state (self, "redo-last-changes", FALSE);
-        set_action_state (self, "find", FALSE);
-        set_action_state (self, "show-load-filenames", FALSE);
-        set_action_state (self, "show-playlist", FALSE);
-        set_action_state (self, "run-player", FALSE);
-        set_action_state (self, "replaygain", FALSE);
+        et_application_set_action_state (self, "go-previous", FALSE);
+        et_application_set_action_state (self, "go-next", FALSE);
+        et_application_set_action_state (self, "go-first", FALSE);
+        et_application_set_action_state (self, "go-last", FALSE);
+        et_application_set_action_state (self, "remove-tags", FALSE);
+        et_application_set_action_state (self, "undo-file-changes", FALSE);
+        et_application_set_action_state (self, "redo-file-changes", FALSE);
+        et_application_set_action_state (self, "save", FALSE);
+        et_application_set_action_state (self, "save-force", FALSE);
+        et_application_set_action_state (self, "undo-last-changes", FALSE);
+        et_application_set_action_state (self, "redo-last-changes", FALSE);
+        et_application_set_action_state (self, "find", FALSE);
+        et_application_set_action_state (self, "show-load-filenames", FALSE);
+        et_application_set_action_state (self, "show-playlist", FALSE);
+        et_application_set_action_state (self, "run-player", FALSE);
+        et_application_set_action_state (self, "replaygain", FALSE);
         /* FIXME set_action_state (self, "scan-mode", FALSE);*/
-        set_action_state (self, "file-artist-view", FALSE);
+        et_application_set_action_state (self, "file-artist-view", FALSE);
 
         return;
     }else
@@ -2354,18 +2354,18 @@ et_application_window_update_actions (EtApplicationWindow *self)
             gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, TRUE);
 
         /* Commands into menu */
-        set_action_state (self, "open-with", TRUE);
-        set_action_state (self, "invert-selection", TRUE);
-        set_action_state (self, "delete", TRUE);
+        et_application_set_action_state (self, "open-with", TRUE);
+        et_application_set_action_state (self, "invert-selection", TRUE);
+        et_application_set_action_state (self, "delete", TRUE);
         /* FIXME set_action_state (self, "sort-mode", TRUE); */
-        set_action_state (self, "remove-tags", TRUE);
-        set_action_state (self, "find", TRUE);
-        set_action_state (self, "show-load-filenames", TRUE);
-        set_action_state (self, "show-playlist", TRUE);
-        set_action_state (self, "run-player", TRUE);
-        set_action_state (self, "replaygain", TRUE);
+        et_application_set_action_state (self, "remove-tags", TRUE);
+        et_application_set_action_state (self, "find", TRUE);
+        et_application_set_action_state (self, "show-load-filenames", TRUE);
+        et_application_set_action_state (self, "show-playlist", TRUE);
+        et_application_set_action_state (self, "run-player", TRUE);
+        et_application_set_action_state (self, "replaygain", TRUE);
         /* FIXME set_action_state (self, "scan-mode", TRUE); */
-        set_action_state (self, "file-artist-view", TRUE);
+        et_application_set_action_state (self, "file-artist-view", TRUE);
 
         /* Check if one of the selected files has undo or redo data */
         {
@@ -2391,21 +2391,21 @@ et_application_window_update_actions (EtApplicationWindow *self)
         /* Enable undo commands if there are undo data */
         if (has_undo)
         {
-            set_action_state (self, "undo-file-changes", TRUE);
+            et_application_set_action_state (self, "undo-file-changes", TRUE);
         }
         else
         {
-            set_action_state (self, "undo-file-changes", FALSE);
+            et_application_set_action_state (self, "undo-file-changes", FALSE);
         }
 
         /* Enable redo commands if there are redo data */
         if (has_redo)
         {
-            set_action_state (self, "redo-file-changes", TRUE);
+            et_application_set_action_state (self, "redo-file-changes", TRUE);
         }
         else
         {
-            set_action_state (self, "redo-file-changes", FALSE);
+            et_application_set_action_state (self, "redo-file-changes", FALSE);
         }
 
         /* Enable save file command if file has been changed */
@@ -2413,15 +2413,15 @@ et_application_window_update_actions (EtApplicationWindow *self)
         /*if (has_to_save)
             ui_widget_set_sensitive(MENU_FILE, AM_SAVE, FALSE);
         else*/
-            set_action_state (self, "save", TRUE);
+            et_application_set_action_state (self, "save", TRUE);
         
-        set_action_state (self, "save-force", TRUE);
+        et_application_set_action_state (self, "save-force", TRUE);
 
         /* Enable undo command if there are data into main undo list (history list) */
-        set_action_state (self, "undo-last-changes", ET_FileList::has_undo());
+        et_application_set_action_state (self, "undo-last-changes", ET_FileList::has_undo());
 
         /* Enable redo commands if there are data into main redo list (history list) */
-        set_action_state (self, "redo-last-changes", ET_FileList::has_redo());
+        et_application_set_action_state (self, "redo-last-changes", ET_FileList::has_redo());
 
         {
             GVariant *variant;
@@ -2434,13 +2434,13 @@ et_application_window_update_actions (EtApplicationWindow *self)
 
             if (strcmp (state, "artist") == 0)
             {
-                set_action_state (self, "collapse-tree", FALSE);
-                set_action_state (self, "reload-tree", FALSE);
+                et_application_set_action_state (self, "collapse-tree", FALSE);
+                et_application_set_action_state (self, "reload-tree", FALSE);
             }
             else if (strcmp (state, "file") == 0)
             {
-                set_action_state (self, "collapse-tree", TRUE);
-                set_action_state (self, "reload-tree", TRUE);
+                et_application_set_action_state (self, "collapse-tree", TRUE);
+                et_application_set_action_state (self, "reload-tree", TRUE);
             }
             else
             {
@@ -2453,24 +2453,24 @@ et_application_window_update_actions (EtApplicationWindow *self)
 
     if (!ETCore->ETFileDisplayedList->prev)    /* Is it the 1st item ? */
     {
-        set_action_state (self, "go-previous", FALSE);
-        set_action_state (self, "go-first", FALSE);
+        et_application_set_action_state (self, "go-previous", FALSE);
+        et_application_set_action_state (self, "go-first", FALSE);
     }
     else
     {
-        set_action_state (self, "go-previous", TRUE);
-        set_action_state (self, "go-first", TRUE);
+        et_application_set_action_state (self, "go-previous", TRUE);
+        et_application_set_action_state (self, "go-first", TRUE);
     }
 
     if (!ETCore->ETFileDisplayedList->next)    /* Is it the last item ? */
     {
-        set_action_state (self, "go-next", FALSE);
-        set_action_state (self, "go-last", FALSE);
+        et_application_set_action_state (self, "go-next", FALSE);
+        et_application_set_action_state (self, "go-last", FALSE);
     }
     else
     {
-        set_action_state (self, "go-next", TRUE);
-        set_action_state (self, "go-last", TRUE);
+        et_application_set_action_state (self, "go-next", TRUE);
+        et_application_set_action_state (self, "go-last", TRUE);
     }
 }
 

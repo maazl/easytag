@@ -645,6 +645,13 @@
       <default>[]</default>
     </key>
 
+    <key name="background-threads" type="u">
+      <summary>Number of background worker threads</summary>
+      <description>This controls the parallelism when scanning a directory tree.</description>
+      <default>3</default>
+      <range min="0" max="16" />
+    </key>
+
     <key name="preferences-page" type="u">
       <summary>Page to show in the preferences dialog</summary>
       <description>The page in the notebook of the preferences dialog</description>

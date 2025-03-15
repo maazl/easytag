@@ -897,7 +897,7 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
     gtk_tree_path_free(selectedPath);
 
     /* Don't start a new reading, if another one is running... */
-    if (ReadingDirectory == TRUE)
+    if (IsReadingDirectory())
         return TRUE;
 
     /* Browser_Tree_Set_Node_Visible (priv->directory_view, selectedPath); */
@@ -978,7 +978,8 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
         gboolean dir_loaded;
         GtkTreeIter parentIter;
 
-        dir_loaded = Read_Directory(pathName);
+        dir_loaded = Read_Directory(gString(pathName));
+        pathName = NULL;
 
         // If the directory can't be loaded, the directory musn't exist.
         // So we load the parent node and refresh the children

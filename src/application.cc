@@ -37,7 +37,7 @@ typedef struct
     GFile *init_directory;
 } EtApplicationPrivate;
 
-// learn correct return type for et_browser_get_instance_private
+// learn correct return type for et_application_get_instance_private
 #define et_application_get_instance_private et_application_get_instance_private_
 G_DEFINE_TYPE_WITH_PRIVATE (EtApplication, et_application, GTK_TYPE_APPLICATION)
 #undef et_application_get_instance_private
@@ -171,7 +171,6 @@ common_init (EtApplication *self)
 
     /* Initialization */
     ET_Core_Create ();
-    Main_Stop_Button_Pressed = FALSE;
 
     /* The main window */
     window = et_application_window_new (GTK_APPLICATION (self));

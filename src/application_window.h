@@ -50,6 +50,8 @@ const gchar * et_application_window_file_area_get_filename (EtApplicationWindow 
 void et_application_window_file_area_set_file_fields (EtApplicationWindow *self, const ET_File *ETFile);
 void et_application_window_file_area_clear (EtApplicationWindow *self);
 void et_application_window_file_area_set_sensitive (EtApplicationWindow *self, gboolean sensitive);
+
+void et_application_set_action_state(EtApplicationWindow *self, const gchar *action_name, gboolean enabled);
 /** Disable buttons when saving files (do not disable Quit button). */
 void et_application_window_disable_command_actions (EtApplicationWindow *self, gboolean allowStop);
 /** Set to sensitive/unsensitive the state of each button into

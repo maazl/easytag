@@ -26,18 +26,18 @@
 #include <gtk/gtk.h>
 
 #include "et_core.h"
+#include "misc.h"
+
+#include <atomic>
 
 /* Variable to force to quit recursive functions (reading dirs) or stop saving files */
-extern gboolean Main_Stop_Button_Pressed;
+extern std::atomic<bool> Main_Stop_Button_Pressed;
 
 extern GtkWidget *MainWindow;
 
 #ifndef errno
 extern int errno;
 #endif
-
-/* A flag to start/avoid a new reading while another one is running */
-extern gboolean ReadingDirectory;
 
 
 /**************
@@ -52,6 +52,8 @@ void ReplayGain_For_Selected_Files (void);
 
 void Action_Main_Stop_Button_Pressed (void);
 
-gboolean Read_Directory (const gchar *path);
+/* A flag to start/avoid a new reading while another one is running */
+bool IsReadingDirectory();
+gboolean Read_Directory(gString path);
 
 #endif /* __EASYTAG_H__ */

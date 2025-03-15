@@ -57,11 +57,12 @@ using gAlloc = std::unique_ptr<T, gAllocDeleter>;
 
 /// Managed GLIB string
 struct gString : gAlloc<gchar>
-{	gString() { }
-	gString(gString&& r) : gAlloc<gchar>(std::move(r)) { }
-	explicit gString(gchar* ptr) : gAlloc<gchar>(ptr) { }
-	operator const gchar*() const { return get(); }
-	gString& operator=(gchar* ptr) { reset(ptr); return *this; }
+{	constexpr gString() noexcept { }
+	gString(gString&& r) noexcept : gAlloc<gchar>(std::move(r)) { }
+	explicit gString(gchar* ptr) noexcept : gAlloc<gchar>(ptr) { }
+	operator const gchar*() const noexcept { return get(); }
+	gString& operator=(gchar* ptr) noexcept { reset(ptr); return *this; }
+	using gAlloc<gchar>::operator=;
 };
 
 /// Managed GLIB object
@@ -69,16 +70,17 @@ template <typename T>
 class gObject
 {	T* Ptr;
 public:
-	constexpr gObject() noexcept : Ptr(nullptr) {}
+	constexpr T* release() noexcept { T* ptr = Ptr; Ptr = nullptr; return ptr; }
+	constexpr gObject(nullptr_t = nullptr) noexcept : Ptr(nullptr) {}
 	constexpr explicit gObject(T* ptr) noexcept : Ptr(ptr) {}
 	gObject(const gObject<T>& r) : Ptr(r.Ptr) { g_object_ref(Ptr); }
-	constexpr gObject(gObject<T>&& r) noexcept : Ptr(r.Ptr) { r.Ptr = nullptr; }
+	constexpr gObject(gObject<T>&& r) noexcept : Ptr(r.release()) {}
 	~gObject() { if (Ptr) g_object_unref(Ptr); }
 	constexpr explicit operator bool() const noexcept { return Ptr != nullptr; }
 	constexpr T* get() const noexcept { return Ptr; }
-	void reset() { this->~gObject(); Ptr = nullptr; }
-	T* release() { T* ptr = Ptr; Ptr = nullptr; return ptr; }
-	gObject<T>& operator=(const gObject<T>& r) { this->~gObject(); g_object_ref(Ptr = r.Ptr); return *this; }
+	void reset() noexcept { this->~gObject(); Ptr = nullptr; }
+	gObject<T>& operator=(const gObject<T>& r) { if (Ptr != r.Ptr) { this->~gObject(); g_object_ref(Ptr = r.Ptr); } return *this; }
+	constexpr gObject<T>& operator=(gObject<T>&& r) noexcept { Ptr = r.release(); return *this; }
 };
 
 /** create unique pointer with explicit deleter

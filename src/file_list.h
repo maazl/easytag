@@ -57,7 +57,6 @@ public:
 };
 
 
-GList * et_file_list_add (GList *file_list, GFile *file, const gchar *root);
 void ET_Remove_File_From_File_List (ET_File *ETFile);
 gboolean et_file_list_check_all_saved (GList *etfilelist);
 /// Update path of file names after directory rename

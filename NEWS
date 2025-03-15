@@ -1,12 +1,16 @@
-3.0.0 - 2024-07-08 :
+3.0.0 - 2025-03-16 :
 ====================
 
     * Add support for RelpayGain tags including calculation
     * Add support for original year and release year tag
     * Add support for sub title and media title tag
     * Add support for long description tag (not supported by ID3V2 tags)
+    * Process directory scan and ReplayGain asynchronously
+    * Speed up directory scan by at least an order of magnitude
     * Write comment to COMMENT rather than DESCRIPTION in Ogg files
     * Allow multi line comments
+    * Support Ogg version tag
+    * Allow ISO date values (not just year)
     * Added column with file path in browser
     * Option to hide unused fields
     * Option to hide columns
@@ -16,13 +20,10 @@
     * Highlight changes in browser window
     * Add columns with file information (size, bitrate, duration,...)
     * Add ASF/Windows Media support
-    * Speed up directory scan significantly
     * Save memory (deduplicate tag and image data)
     * Optionally use similar Unicode replacement characters for reserved
       characters in file names
     * Support for powerful pattern groups in scanner (see documentation)
-    * Support Ogg version tag
-    * Allow ISO date values (not just year)
     * Configurable multi value separator
 
     * Several fixes

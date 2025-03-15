@@ -45,16 +45,17 @@
 #include "win32/win32dep.h"
 
 #include <vector>
+#include <deque>
 #include <algorithm>
 #include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <atomic>
 using namespace std;
 
-static GtkWidget *QuitRecursionWindow = NULL;
-
 /* Referenced in the header. */
-gboolean Main_Stop_Button_Pressed;
+atomic<bool> Main_Stop_Button_Pressed(false);
 GtkWidget *MainWindow;
-gboolean ReadingDirectory;
 
 /* Used to force to hide the msgbox when saving tag */
 static gboolean SF_HideMsgbox_Write_Tag;
@@ -70,14 +71,6 @@ static gint Save_File (ET_File *ETFile, gboolean multiple_files,
                        gboolean force_saving_files);
 static gint Save_List_Of_Files (GList *etfilelist,
                                 gboolean force_saving_files);
-
-static GList *read_directory_recursively (GList *file_list,
-                                          GFileEnumerator *dir_enumerator,
-                                          gboolean recurse);
-static void Open_Quit_Recursion_Function_Window (void);
-static void Destroy_Quit_Recursion_Function_Window (void);
-static void et_on_quit_recursion_response (GtkDialog *dialog, gint response_id,
-                                           gpointer user_data);
 
 
 /*
@@ -124,7 +117,6 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
     gchar     *msg;
     GList *l;
     ET_File   *etfile_save_position = NULL;
-    GAction *action;
     GVariant *variant;
     GtkWidget *widget_focused;
     GtkTreePath *currentPath = NULL;
@@ -189,10 +181,9 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
     SF_HideMsgbox_Write_Tag = FALSE;
     SF_HideMsgbox_Rename_File = FALSE;
 
-    Main_Stop_Button_Pressed = FALSE;
+    Main_Stop_Button_Pressed = false;
     /* Activate the stop button. */
-    action = g_action_map_lookup_action (G_ACTION_MAP (MainWindow), "stop");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+    et_application_set_action_state(window, "stop", FALSE);
 
     /*
      * Check if file was changed by an external program
@@ -229,7 +220,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
             case GTK_RESPONSE_NO:
             case GTK_RESPONSE_DELETE_EVENT:
                 /* Skip the following loop. */
-                Main_Stop_Button_Pressed = TRUE;
+                Main_Stop_Button_Pressed = true;
                 break;
             default:
                 g_assert_not_reached ();
@@ -287,9 +278,8 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
     else
         msg = g_strdup (_("All files have been saved"));
 
-    Main_Stop_Button_Pressed = FALSE;
-    action = g_action_map_lookup_action (G_ACTION_MAP (MainWindow), "stop");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+    Main_Stop_Button_Pressed = false;
+    et_application_set_action_state(window, "stop", FALSE);
 
     /* Return to the saved position in the list */
     et_application_window_display_et_file (ET_APPLICATION_WINDOW (MainWindow),
@@ -299,9 +289,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
                                                           TRUE);
 
     /* FIXME: Find out why this is a special case for the artist/album mode. */
-    action = g_action_map_lookup_action (G_ACTION_MAP (MainWindow),
-                                         "file-artist-view");
-    variant = g_action_get_state (action);
+    variant = g_action_get_state(g_action_map_lookup_action (G_ACTION_MAP(MainWindow), "file-artist-view"));
 
     if (strcmp (g_variant_get_string (variant, NULL), "artist") == 0)
     {
@@ -739,7 +727,7 @@ public:
 	void Start();
 };
 
-xPtr<ReplayGainWorker> ReplayGainWorker::Instance = nullptr;
+xPtr<ReplayGainWorker> ReplayGainWorker::Instance;
 
 ReplayGainWorker::ReplayGainWorker()
 :	Analyzer((EtReplayGainModel)g_settings_get_enum(MainSettings, "replaygain-model"))
@@ -814,7 +802,7 @@ void ReplayGainWorker::FinishAlbum(FileList::iterator first, FileList::iterator 
 
 void ReplayGainWorker::Start()
 {
-	Main_Stop_Button_Pressed = FALSE;
+	Main_Stop_Button_Pressed = false;
 	EtApplicationWindow* const window = ET_APPLICATION_WINDOW(MainWindow);
 	et_application_window_disable_command_actions(window, TRUE);
 	et_application_window_progress_set(window, 0, Files.size(), 0.);
@@ -900,33 +888,314 @@ void ReplayGain_For_Selected_Files (void)
 }
 #endif
 
+class ReadDirectoryWorker : public xObj
+{
+	/// The currently running instance if any.
+	static xPtr<ReadDirectoryWorker> Instance;
+
+	// captured settings
+	const bool Recursive;
+	const bool BrowseHidden;
+	const size_t NumWorkers;
+
+	const gString RootPath;
+
+	/// worker queue
+	/// @details
+	/// GFile, false => audio file,
+	/// GFile, true => directory,
+	/// nullptr, false => end marker,
+	/// nullptr, true => last end marker
+	deque<pair<gObject<GFile>, bool>> Files;
+	/// worker threads
+	vector<thread> Worker;
+	/// Synchronize access to the above data
+	mutex Sync;
+	condition_variable Cond;
+
+	atomic<int> DirCount;
+	// data for the UI
+	atomic<int> FilesTotal;
+	int FilesCompleted;
+
+private:
+	static void OnDirCompleted(GFile* child_dir, const char* error);
+	static void OnFileCompleted(xPtr<ET_File> ETFile, const char* error, bool autofix);
+	static void OnFinished();
+
+	ReadDirectoryWorker(gString&& path);
+	void DirScan(gObject<GFileEnumerator> dir_enumerator);
+	void ItemWorker();
+public:
+	static bool Start(gString&& path);
+	static bool IsReadingDirectory() { return !!Instance; }
+	~ReadDirectoryWorker();
+};
+
+ReadDirectoryWorker::ReadDirectoryWorker(gString&& path)
+:	Recursive(g_settings_get_boolean(MainSettings, "browse-subdir"))
+,	BrowseHidden(g_settings_get_boolean(MainSettings, "browse-show-hidden"))
+,	NumWorkers(g_settings_get_uint(MainSettings, "background-threads"))
+,	RootPath(move(path))
+,	Worker()
+,	DirCount(1)
+,	FilesTotal(0)
+,	FilesCompleted(0)
+{	Worker.reserve(NumWorkers);
+	// kick off root dir worker
+	lock_guard<mutex> lock(Sync);
+	Files.emplace_front(move(gObject<GFile>(g_file_new_for_path(RootPath))), true);
+	// from here continue in background thread
+	Worker.emplace_back(&ReadDirectoryWorker::ItemWorker, ref(*this));
+}
+
+xPtr<ReadDirectoryWorker> ReadDirectoryWorker::Instance;
+
+ReadDirectoryWorker::~ReadDirectoryWorker()
+{	for (auto& w : Worker)
+		if (w.joinable())
+			w.join();
+}
+
+bool ReadDirectoryWorker::Start(gString&& path)
+{
+	if (Instance)
+		return false;
+
+	Instance = xPtr<ReadDirectoryWorker>(new ReadDirectoryWorker(move(path)));
+
+	// Set to unsensitive the Browser Area, to avoid to select another file while loading the first one
+	EtApplicationWindow* window = ET_APPLICATION_WINDOW(MainWindow);
+
+	et_application_window_disable_command_actions(window, TRUE);
+	et_application_window_status_bar_message(window, _("Searching for audio files…"), FALSE);
+
+	return true;
+}
+
+void ReadDirectoryWorker::OnDirCompleted(GFile* child_dir, const char* error)
+{	if (!child_dir)
+		Log_Print(LOG_ERROR, _("Cannot read directory ‘%s’"), error);
+	else
+	{	gString child_path(g_file_get_path(child_dir));
+		gString display_path(g_filename_display_name(child_path));
+		if (Instance->DirCount)
+			Log_Print(LOG_ERROR, _("Error opening directory ‘%s’: %s"), display_path.get(), error);
+		else
+		{	// Message if the root directory doesn't exist...
+			GtkWidget *msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
+				GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_MESSAGE_ERROR,
+				GTK_BUTTONS_CLOSE,
+				_("Cannot read directory ‘%s’"),
+				display_path.get());
+			gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(msgdialog), "%s", error);
+			gtk_window_set_title(GTK_WINDOW(msgdialog), _("Directory Read Error"));
+
+			gtk_dialog_run(GTK_DIALOG(msgdialog));
+			gtk_widget_destroy(msgdialog);
+		}
+	}
+}
+
+void ReadDirectoryWorker::OnFileCompleted(xPtr<ET_File> ETFile, const char* error, bool autofix)
+{	if (error)
+		Log_Print(LOG_ERROR, _("Error reading tag from %s ‘%s’: %s"),
+			ETFile->ETFileDescription->FileType, ETFile->FileNameNew()->full_name().get(), error);
+	else if (autofix)
+		Log_Print(LOG_INFO, _("Automatic corrections applied for file ‘%s’"), ETFile->FileNameNew()->full_name().get());
+
+	/* Add the item to the "main list" */
+	ETCore->ETFileList = g_list_prepend(ETCore->ETFileList, xPtr<ET_File>::toCptr(ETFile));
+
+  /* Update the progress bar. */
+  et_application_window_progress_set(ET_APPLICATION_WINDOW(MainWindow), ++Instance->FilesCompleted, Instance->FilesTotal);
+}
+
+void ReadDirectoryWorker::OnFinished()
+{	EtApplicationWindow* window = ET_APPLICATION_WINDOW(MainWindow);
+
+	et_application_window_progress_set(window, 0, 0);
+
+	const gchar* msg;
+	gString msgBuffer;
+
+	if (Main_Stop_Button_Pressed)
+		msg = _("Directory scan aborted.");
+	else if (ETCore->ETFileList)
+	{	/* Load the list of file into the browser list widget */
+		et_application_window_browser_toggle_display_mode (window);
+
+		/* Prepare message for the status bar */
+		if (g_settings_get_boolean (MainSettings, "browse-subdir"))
+			msg = msgBuffer = g_strdup_printf(ngettext("Found one file in this directory and subdirectories",
+					"Found %u files in this directory and subdirectories",
+					ETCore->ETFileDisplayedList_Length),
+				ETCore->ETFileDisplayedList_Length);
+		else
+			msg = msgBuffer = g_strdup_printf(ngettext("Found one file in this directory",
+					"Found %u files in this directory",
+					ETCore->ETFileDisplayedList_Length),
+				ETCore->ETFileDisplayedList_Length);
+	} else
+	{	/* Clear entry boxes */
+		et_application_window_file_area_clear(window);
+		et_application_window_tag_area_clear(window);
+
+		et_application_window_browser_label_set_text(window,
+			/* Translators: No files, as in "0 files". */ ("No files")); /* See in ET_Display_Filename_To_UI */
+
+		/* Prepare message for the status bar */
+		if (g_settings_get_boolean (MainSettings, "browse-subdir"))
+			msg = _("No file found in this directory and subdirectories");
+		else
+			msg = _("No file found in this directory");
+	}
+
+	/* Update sensitivity of buttons and menus */
+	Main_Stop_Button_Pressed = false;
+	et_application_window_update_actions(window);
+	et_application_window_status_bar_message(window, msg, FALSE);
+
+	Instance.reset();
+}
+
+void ReadDirectoryWorker::DirScan(gObject<GFileEnumerator> dir_enumerator)
+{
+	GError *error = NULL;
+	gObject<GFileInfo> info;
+
+	while ((info = gObject<GFileInfo>(g_file_enumerator_next_file(dir_enumerator.get(), NULL, &error))))
+	{
+		if (Main_Stop_Button_Pressed)
+			return;
+
+		/* Hidden directory like '.mydir' will also be browsed if allowed. */
+		if (!BrowseHidden && g_file_info_get_is_hidden(info.get()))
+			continue;
+
+		const char *file_name = g_file_info_get_name(info.get());
+		GFileType type = g_file_info_get_file_type(info.get());
+		switch (type)
+		{case G_FILE_TYPE_REGULAR:
+			if (ET_File_Description::Get(file_name)->IsSupported())
+				break;
+			continue;
+		 case G_FILE_TYPE_DIRECTORY:
+			if (Recursive)
+				break;
+		 default:
+			continue;
+		}
+
+		GFile* file = g_file_enumerator_get_child(dir_enumerator.get(), info.get());
+		lock_guard<mutex> lock(Sync);
+		if (type == G_FILE_TYPE_REGULAR)
+		{	Files.emplace_back(gObject<GFile>(file), false);
+			++FilesTotal;
+		} else
+		{	// place directories to the front to get total count ASAP
+			Files.emplace_front(gObject<GFile>(file), true);
+			++DirCount;
+		}
+
+		// notification required?
+		if (Files.size() < Worker.size())
+			Cond.notify_one();
+		// start more workers?
+		if (Worker.size() < min(NumWorkers, Files.size()))
+			Worker.emplace_back(&ReadDirectoryWorker::ItemWorker, ref(*this));
+	}
+
+	if (error)
+	{	gIdleAdd(new function<void()>([msg = xString(error->message)]()
+			{	OnDirCompleted(nullptr, msg); }));
+		g_error_free(error);
+	}
+}
+
+void ReadDirectoryWorker::ItemWorker()
+{	while (true)
+	{	// fetch next item
+		pair<gObject<GFile>, bool> item;
+		{	unique_lock<mutex> lock(Sync);
+			while (!Files.size()) Cond.wait(lock);
+
+			item = move(Files.front());
+
+			if (item.first && Main_Stop_Button_Pressed)
+			{	// cancel immediately
+				Files.clear();
+				// force termination of all workers
+				for (size_t i = Worker.size(); --i; )
+					Files.emplace_back();
+				Files.emplace_back(nullptr, true);
+				Cond.notify_all();
+				item = move(Files.front());
+			}
+
+			Files.pop_front();
+		}
+
+		if (!item.first) // deadly termination pill
+		{	if (item.second)
+			{	gIdleAdd(new function<void()>([]() { OnFinished(); }));
+				EtPicture::GarbageCollector(); // release orphaned images
+			}
+			return;
+		}
+
+		GError *error = NULL;
+
+		if (!item.second)
+		{	/* Get description of the file */
+			xPtr<ET_File> ETFile(new ET_File(gString(g_file_get_path(item.first.get()))));
+			bool autofix = false;
+
+			if (ETFile->read_file(item.first.get(), RootPath, &error))
+				autofix = ETFile->autofix();
+
+			gIdleAdd(new function<void()>([ETFile = move(ETFile), msg = xString(error ? error->message : nullptr), autofix]()
+				{	OnFileCompleted(move(ETFile), msg, autofix); }));
+		} else
+		{	// Searching for files recursively.
+			gObject<GFileEnumerator> childdir_enumerator(g_file_enumerate_children(item.first.get(),
+				G_FILE_ATTRIBUTE_STANDARD_NAME "," G_FILE_ATTRIBUTE_STANDARD_TYPE "," G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN,
+				G_FILE_QUERY_INFO_NONE, NULL, &error));
+			if (childdir_enumerator)
+				DirScan(move(childdir_enumerator));
+			else
+				gIdleAdd(new function<void()>([child_dir = move(item.first), msg = xString(error->message)]()
+					{	OnDirCompleted(child_dir.get(), msg); }));
+
+			if (--DirCount == 0)
+			{	// last directory processed => put termination markers in the queue
+				lock_guard<mutex> lock(Sync);
+				for (size_t i = Worker.size(); --i; )
+					Files.emplace_back();
+				Files.emplace_back(nullptr, true);
+				Cond.notify_all();
+			}
+		}
+
+		if (error)
+			g_error_free(error);
+	}
+}
+
+bool IsReadingDirectory()
+{	return ReadDirectoryWorker::IsReadingDirectory();
+}
+
 /*
  * Scans the specified directory: and load files into a list.
  * If the path doesn't exist, we free the previous loaded list of files.
  */
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <string.h>
-gboolean
-Read_Directory (const gchar *path_real)
+gboolean Read_Directory(gString path_real)
 {
-    GFile *dir;
-    GFileEnumerator *dir_enumerator;
-    GError *error = NULL;
-    gchar *msg;
-    guint  nbrfile = 0;
-    GList *FileList = NULL;
-    GList *l;
-    gint   progress_bar_index = 0;
-    GAction *action;
-    EtApplicationWindow *window;
-
     g_return_val_if_fail (path_real != NULL, FALSE);
 
-    ReadingDirectory = TRUE;    /* A flag to avoid to start another reading */
-
-    window = ET_APPLICATION_WINDOW (MainWindow);
+    EtApplicationWindow *window = ET_APPLICATION_WINDOW (MainWindow);
 
     /* Initialize browser list */
     et_application_window_browser_clear (window);
@@ -941,323 +1210,15 @@ Read_Directory (const gchar *path_real)
     ET_Core_Create ();
     et_application_window_update_actions (ET_APPLICATION_WINDOW (MainWindow));
 
-    // Set to unsensitive the Browser Area, to avoid to select another file while loading the first one
-    et_application_window_browser_set_sensitive (window, FALSE);
-
-    /* Placed only here, to empty the previous list of files */
-    dir = g_file_new_for_path (path_real);
-    dir_enumerator = g_file_enumerate_children (dir,
-                                                G_FILE_ATTRIBUTE_STANDARD_NAME ","
-                                                G_FILE_ATTRIBUTE_STANDARD_TYPE ","
-                                                G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN,
-                                                G_FILE_QUERY_INFO_NONE,
-                                                NULL, &error);
-    if (!dir_enumerator)
-    {
-        // Message if the directory doesn't exist...
-        GtkWidget *msgdialog;
-        gchar *display_path = g_filename_display_name (path_real);
-
-        msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           _("Cannot read directory ‘%s’"),
-                                           display_path);
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (msgdialog),
-                                                  "%s", error->message);
-        gtk_window_set_title(GTK_WINDOW(msgdialog),_("Directory Read Error"));
-
-        gtk_dialog_run(GTK_DIALOG(msgdialog));
-        gtk_widget_destroy(msgdialog);
-        g_free (display_path);
-
-        ReadingDirectory = FALSE; //Allow a new reading
-        et_application_window_browser_set_sensitive (window, TRUE);
-        g_object_unref (dir);
-        g_error_free (error);
-        return FALSE;
-    }
-
-    /* Open the window to quit recursion (since 27/04/2007 : not only into recursion mode) */
-    et_application_window_set_busy_cursor (window);
-    action = g_action_map_lookup_action (G_ACTION_MAP (MainWindow), "stop");
-    g_settings_bind (MainSettings, "browse-subdir", G_SIMPLE_ACTION (action),
-                     "enabled", G_SETTINGS_BIND_GET);
-    Open_Quit_Recursion_Function_Window();
-
-    /* Read the directory recursively */
-    et_application_window_status_bar_message (window, _("Search in progress…"), FALSE);
-    /* Search the supported files. */
-    FileList = read_directory_recursively (FileList, dir_enumerator,
-                                           g_settings_get_boolean (MainSettings,
-                                                                   "browse-subdir"));
-    g_file_enumerator_close (dir_enumerator, NULL, &error);
-    g_object_unref (dir_enumerator);
-    g_object_unref (dir);
-
-    nbrfile = g_list_length(FileList);
-
-    et_application_window_progress_set (window, 0, nbrfile);
-
-    // Load the supported files (Extension recognized)
-    for (l = FileList; l != NULL && !Main_Stop_Button_Pressed;
-         l = g_list_next (l))
-    {
-        GFile *file = (GFile*)l->data;
-        gchar *filename_real = g_file_get_path (file);
-        gchar *display_path = g_filename_display_name (filename_real);
-
-        msg = g_strdup_printf (_("File: ‘%s’"), display_path);
-        et_application_window_status_bar_message (window, msg, FALSE);
-        g_free(msg);
-        g_free (filename_real);
-        g_free (display_path);
-
-        ETCore->ETFileList = et_file_list_add (ETCore->ETFileList, file, path_real);
-
-        /* Update the progress bar. */
-        et_application_window_progress_set(window, ++progress_bar_index, nbrfile);
-        while (gtk_events_pending())
-            gtk_main_iteration();
-    }
-
-    g_list_free_full (FileList, g_object_unref);
-    et_application_window_progress_set(window, 0, 0);
-
-    /* Close window to quit recursion */
-    Destroy_Quit_Recursion_Function_Window();
-    Main_Stop_Button_Pressed = FALSE;
-    action = g_action_map_lookup_action (G_ACTION_MAP (MainWindow), "stop");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
-
-    EtPicture::GarbageCollector(); // release orphaned images
-
-    //ET_Debug_Print_File_List(ETCore->ETFileList,__FILE__,__LINE__,__FUNCTION__);
-
-    if (ETCore->ETFileList)
-    {
-        //GList *etfilelist;
-        /* Load the list of file into the browser list widget */
-        et_application_window_browser_toggle_display_mode (window);
-
-        /* Display the first file */
-        //No need to select first item, because Browser_Display_Tree_Or_Artist_Album_List() does this
-        //etfilelist = ET_Displayed_File_List_First();
-        //if (etfilelist)
-        //{
-        //    ET_Display_File_Data_To_UI((ET_File *)etfilelist->data);
-        //    Browser_List_Select_File_By_Etfile((ET_File *)etfilelist->data,FALSE);
-        //}
-
-        /* Prepare message for the status bar */
-        if (g_settings_get_boolean (MainSettings, "browse-subdir"))
-        {
-            msg = g_strdup_printf (ngettext ("Found one file in this directory and subdirectories",
-                                             "Found %u files in this directory and subdirectories",
-                                             ETCore->ETFileDisplayedList_Length),
-                                   ETCore->ETFileDisplayedList_Length);
-        }
-        else
-        {
-            msg = g_strdup_printf (ngettext ("Found one file in this directory",
-                                             "Found %u files in this directory",
-                                             ETCore->ETFileDisplayedList_Length),
-                                   ETCore->ETFileDisplayedList_Length);
-        }
-    }else
-    {
-        /* Clear entry boxes */
-        et_application_window_file_area_clear (ET_APPLICATION_WINDOW (MainWindow));
-        et_application_window_tag_area_clear (ET_APPLICATION_WINDOW (MainWindow));
-
-        et_application_window_browser_label_set_text (ET_APPLICATION_WINDOW (MainWindow),
-                                                      /* Translators: No files, as in "0 files". */
-                                                      _("No files")); /* See in ET_Display_Filename_To_UI */
-
-        /* Prepare message for the status bar */
-        if (g_settings_get_boolean (MainSettings, "browse-subdir"))
-            msg = g_strdup(_("No file found in this directory and subdirectories"));
-        else
-            msg = g_strdup(_("No file found in this directory"));
-    }
-
-    /* Update sensitivity of buttons and menus */
-    et_application_window_update_actions (window);
-
-    et_application_window_browser_set_sensitive (window, TRUE);
-
-    et_application_window_status_bar_message (window, msg, FALSE);
-    g_free (msg);
-    et_application_window_set_normal_cursor (window);
-    ReadingDirectory = FALSE;
-
-    return TRUE;
+    return ReadDirectoryWorker::Start(move(path_real));
 }
 
-
-
-/*
- * Recurse the path to create a list of files. Return a GList of the files found.
- */
-static GList *
-read_directory_recursively (GList *file_list, GFileEnumerator *dir_enumerator,
-                            gboolean recurse)
-{
-    GError *error = NULL;
-    GFileInfo *info;
-    const char *file_name;
-    gboolean is_hidden;
-    GFileType type;
-
-    g_return_val_if_fail (dir_enumerator != NULL, file_list);
-
-    while ((info = g_file_enumerator_next_file (dir_enumerator, NULL, &error))
-           != NULL)
-    {
-        if (Main_Stop_Button_Pressed)
-        {
-            g_object_unref (info);
-            return file_list;
-        }
-
-        file_name = g_file_info_get_name (info);
-        is_hidden = g_file_info_get_is_hidden (info);
-        type = g_file_info_get_file_type (info);
-
-        /* Hidden directory like '.mydir' will also be browsed if allowed. */
-        if (!is_hidden || (g_settings_get_boolean (MainSettings,
-                                                   "browse-show-hidden")
-                           && is_hidden))
-        {
-            if (type == G_FILE_TYPE_DIRECTORY)
-            {
-                if (recurse)
-                {
-                    /* Searching for files recursively. */
-                    GFile *child_dir = g_file_enumerator_get_child (dir_enumerator,
-                                                                    info);
-                    GFileEnumerator *childdir_enumerator;
-                    GError *child_error = NULL;
-                    childdir_enumerator = g_file_enumerate_children (child_dir,
-                                                                     G_FILE_ATTRIBUTE_STANDARD_NAME ","
-                                                                     G_FILE_ATTRIBUTE_STANDARD_TYPE ","
-                                                                     G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN,
-                                                                     G_FILE_QUERY_INFO_NONE,
-                                                                     NULL, &child_error);
-                    if (!childdir_enumerator)
-                    {
-                        gchar *child_path;
-                        gchar *display_path;
-
-                        child_path = g_file_get_path (child_dir);
-                        display_path = g_filename_display_name (child_path);
-
-                        Log_Print (LOG_ERROR,
-                                   _("Error opening directory ‘%s’: %s"),
-                                   display_path, child_error->message);
-
-                        g_free (display_path);
-                        g_free (child_path);
-                        g_error_free (child_error);
-                        g_object_unref (child_dir);
-                        g_object_unref (info);
-                        continue;
-                    }
-                    file_list = read_directory_recursively (file_list,
-                                                            childdir_enumerator,
-                                                            recurse);
-                    g_object_unref (child_dir);
-                    g_file_enumerator_close (childdir_enumerator, NULL,
-                                             &error);
-                    g_object_unref (childdir_enumerator);
-                }
-            }
-            else if (type == G_FILE_TYPE_REGULAR &&
-                ET_File_Description::Get(file_name)->IsSupported())
-            {
-                GFile *file = g_file_enumerator_get_child (dir_enumerator, info);
-                file_list = g_list_append (file_list, file);
-            }
-
-            // Just to not block X events
-            while (gtk_events_pending())
-                gtk_main_iteration();
-        }
-        g_object_unref (info);
-    }
-
-    if (error)
-    {
-        Log_Print (LOG_ERROR, _("Cannot read directory ‘%s’"), error->message);
-        g_error_free (error);
-    }
-
-    return file_list;
-}
-
-/*
- * Window with the 'STOP' button to stop recursion when reading directories
- */
-static void
-Open_Quit_Recursion_Function_Window (void)
-{
-    if (QuitRecursionWindow != NULL)
-        return;
-    QuitRecursionWindow = gtk_message_dialog_new (GTK_WINDOW (MainWindow),
-                                                  GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                  GTK_MESSAGE_OTHER,
-                                                  GTK_BUTTONS_NONE,
-                                                  "%s",
-                                                  _("Searching for audio files…"));
-    gtk_window_set_title (GTK_WINDOW (QuitRecursionWindow), _("Searching"));
-    gtk_dialog_add_button (GTK_DIALOG (QuitRecursionWindow), _("_Stop"),
-                           GTK_RESPONSE_CANCEL);
-
-    g_signal_connect (G_OBJECT (QuitRecursionWindow),"response",
-                      G_CALLBACK (et_on_quit_recursion_response), NULL);
-
-    gtk_widget_show_all(QuitRecursionWindow);
-}
-
-static void
-Destroy_Quit_Recursion_Function_Window (void)
-{
-    if (QuitRecursionWindow)
-    {
-        gtk_widget_destroy(QuitRecursionWindow);
-        QuitRecursionWindow = NULL;
-        /*Statusbar_Message(_("Recursive file search interrupted."),FALSE);*/
-    }
-}
-
-static void
-et_on_quit_recursion_response (GtkDialog *dialog, gint response_id,
-                               gpointer user_data)
-{
-    switch (response_id)
-    {
-        case GTK_RESPONSE_CANCEL:
-            Action_Main_Stop_Button_Pressed ();
-            Destroy_Quit_Recursion_Function_Window ();
-            break;
-        case GTK_RESPONSE_DELETE_EVENT:
-            Destroy_Quit_Recursion_Function_Window ();
-            break;
-        default:
-            g_assert_not_reached ();
-            break;
-    }
-}
 
 /*
  * To stop the recursive search within directories or saving files
  */
 void Action_Main_Stop_Button_Pressed (void)
 {
-    GAction *action;
-
-    action = g_action_map_lookup_action (G_ACTION_MAP (MainWindow), "stop");
-    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
-    Main_Stop_Button_Pressed = TRUE;
+    et_application_set_action_state(ET_APPLICATION_WINDOW(MainWindow), "stop", FALSE);
+    Main_Stop_Button_Pressed = true;
 }

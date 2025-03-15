@@ -17,7 +17,6 @@ After GTK+ 3
 Tagging features
 ----------------
 
-* Drop TagLib dependency and find an alternative MP4 tagging solution
 * Add MusicBrainz search
 ** Release-level search for applying to a collection of files
 ** Retrieve cover art from the Cover Art Archive

@@ -167,6 +167,7 @@ typedef struct
     GtkWidget *confirm_write_playlist_check;
     GtkWidget *confirm_unsaved_files_check;
     GtkWidget *scanner_dialog_startup_check;
+    GtkWidget *background_threads;
 
     GtkListStore *default_path_model;
     GtkListStore *file_player_model;
@@ -689,6 +690,10 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
     bind_boolean("confirm-write-playlist", priv->confirm_write_playlist_check);
     bind_boolean("confirm-when-unsaved-files", priv->confirm_unsaved_files_check);
 
+    /* background processing */
+    g_settings_bind (MainSettings, "background-threads",
+        priv->background_threads, "value", G_SETTINGS_BIND_DEFAULT);
+
     /* Properties of the scanner window */
     bind_boolean("scan-startup", priv->scanner_dialog_startup_check);
 
@@ -1039,6 +1044,7 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, confirm_write_playlist_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, confirm_unsaved_files_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, scanner_dialog_startup_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, background_threads);
     gtk_widget_class_bind_template_callback(widget_class, et_preferences_on_response);
     gtk_widget_class_bind_template_callback(widget_class, et_prefs_current_folder_changed);
 }

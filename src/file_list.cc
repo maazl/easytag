@@ -108,43 +108,6 @@ et_artist_album_file_list_free (GList *file_list)
 }
 
 /*
- * et_file_list_add:
- * Add a file to the "main" list. And get all information of the file.
- * The filename passed in should be in raw format, only convert it to UTF8 when
- * displaying it.
- */
-GList *
-et_file_list_add (GList *file_list,
-                  GFile *file,
-                  const gchar *root)
-{
-    g_return_val_if_fail (file != NULL, file_list);
-
-    GList *result;
-    GError *error = NULL;
-
-    /* Get description of the file */
-    ET_File* ETFile = xPtr<ET_File>::toCptr(xPtr<ET_File>(new ET_File(gString(g_file_get_path(file)))));
-    if (!ETFile->read_file(file, root, &error))
-    {   Log_Print (LOG_ERROR, _("Error reading tag from %s ‘%s’: %s"),
-                   ETFile->ETFileDescription->FileType, ETFile->FileNameNew()->full_name().get(), error->message);
-        g_clear_error(&error);
-    }
-    else if (ETFile->autofix()) /* apply automatic corrections */
-        Log_Print(LOG_INFO, _("Automatic corrections applied for file ‘%s’"), ETFile->FileNameNew()->full_name().get());
-
-    /* Add the item to the "main list" */
-    result = g_list_append(file_list, ETFile);
-
-    /* Add the item to the ArtistAlbum list (placed here to take advantage of previous changes) */
-    //ET_Add_File_To_Artist_Album_File_List(ETFile);
-
-    //ET_Debug_Print_File_List(ETCore->ETFileList,__FILE__,__LINE__,__FUNCTION__);
-
-    return result;
-}
-
-/*
  * Comparison function for sorting by ascending artist in the ArtistAlbumList.
  */
 static gint
