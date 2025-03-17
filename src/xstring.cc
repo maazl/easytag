@@ -109,6 +109,10 @@ bool xString::equals(const char* str, size_t len) const noexcept
 
 char* xString::alloc(size_t len)
 {	this->~xString();
+	if (!len)
+	{	++empty_str.RefCount;
+		return const_cast<char*>((Ptr = &empty_str)->C.data());
+	}
 	Ptr = new(len) storage<0>;
 	char* ptr = const_cast<char*>(Ptr->C.data());
 	ptr[len] = 0; // ensure terminating \0
@@ -347,6 +351,16 @@ bool xStringD0::equals(const char* str) const noexcept
 {	if (xStringD::get() == str)
 		return true;
 	return et_str_empty(str) ? empty() : !empty() && strcmp(xStringD::get(), str) == 0;
+}
+
+bool xStringD0::equals(const xStringD0& r) const noexcept
+{	const data<0>* lp = Ptr;
+	if (!lp)
+		lp = &empty_str;
+	const data<0>* rp = r.Ptr;
+	if (!rp)
+		rp = &empty_str;
+	return lp == rp;
 }
 
 bool xStringD0::equals(const char* str, size_t len) const noexcept

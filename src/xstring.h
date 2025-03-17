@@ -180,7 +180,7 @@ public:
 	/// Check if string is not null
 	constexpr explicit operator bool() const noexcept { return Ptr != nullptr; }
 	/// Check if string is null or empty
-	constexpr bool empty() const noexcept { return !Ptr || !*get(); }
+	constexpr bool empty() const noexcept { return !Ptr || Ptr == &empty_str; }
 	/// Compare for equality
 	bool equals(const char* str) const noexcept;
 	/// Compare for equality
@@ -467,13 +467,13 @@ class xStringD0 : public xStringD
 	/// Compare for equality
 	bool equals(const char* str) const noexcept;
 	/// Compare for equality
-	bool equals(const xStringD0& r) const noexcept { return equals(r.get()); }
+	bool equals(const xStringD0& r) const noexcept;
 	/// Compare for equality
 	bool equals(const char* str, std::size_t len) const noexcept;
 	/// Compare for equality
 	bool equals(const std::string& str) const noexcept { return equals(str.c_str(), str.length()); }
 	/// Compare for equality
-	friend bool operator==(const xStringD0& l, const xStringD0& r) noexcept { return l.equals(r.get()); }
+	friend bool operator==(const xStringD0& l, const xStringD0& r) noexcept { return l.equals(r); }
 	/// Compare for equality
 	friend bool operator==(const xStringD0& l, const char* r) noexcept { return l.equals(r); }
 	/// Compare for equality
