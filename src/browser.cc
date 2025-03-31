@@ -85,6 +85,13 @@ typedef struct
     GtkWidget *directory_view_menu;
     GtkTreeStore *directory_model;
 
+    /* directory icons */
+    GIcon *folder_icon;
+    GIcon *folder_open_icon;
+    GIcon *folder_readonly_icon;
+    GIcon *folder_open_readonly_icon;
+    GIcon *folder_unreadable_icon;
+
     GtkListStore *run_program_model;
 
     GtkWidget *open_directory_with_dialog;
@@ -118,7 +125,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (EtBrowser, et_browser, GTK_TYPE_BIN)
  * Whether to generate an icon with an indicaton that the directory is open
  * (being viewed) or closed (not yet viewed or read).
  */
-typedef enum
+typedef enum : char
 {
     ET_PATH_STATE_OPEN,
     ET_PATH_STATE_CLOSED
@@ -189,11 +196,11 @@ static void Browser_Album_List_Row_Selected (EtBrowser *self,
                                              GtkTreeSelection *selection);
 static void Browser_Album_List_Set_Row_Appearance (EtBrowser *self, GtkTreeIter *row);
 
-static gboolean check_for_subdir (const gchar *path);
+static gboolean check_for_subdir(GFile *dir);
 
 static GtkTreePath *Find_Child_Node (EtBrowser *self, GtkTreeIter *parent, gchar *searchtext);
 
-static GIcon *get_gicon_for_path (const gchar *path, EtPathState path_state);
+static const GIcon* get_gicon_for_path(EtBrowser *self, const gchar *path, EtPathState path_state);
 
 /* For window to rename a directory */
 static void Destroy_Rename_Directory_Window (EtBrowser *self);
@@ -1153,22 +1160,20 @@ et_browser_select_dir (EtBrowser *self,
                 == G_FILE_TYPE_DIRECTORY)
             {
                 /* It exists and is readable permission of parent directory is executable */
-                GIcon *icon;
                 GtkTreeIter iter;
 
                 /* Create a new node for this directory name. */
-                icon = get_gicon_for_path (path, ET_PATH_STATE_CLOSED);
+                const GIcon* icon = get_gicon_for_path (self, path, ET_PATH_STATE_CLOSED);
 
                 gtk_tree_store_insert_with_values (GTK_TREE_STORE (priv->directory_model),
                                                    &iter, &parentNode, 0,
                                                    TREE_COLUMN_DIR_NAME, parts[index],
                                                    TREE_COLUMN_FULL_PATH, path,
-                                                   TREE_COLUMN_HAS_SUBDIR, check_for_subdir (current_path),
+                                                   TREE_COLUMN_HAS_SUBDIR, check_for_subdir(directory),
                                                    TREE_COLUMN_SCANNED, TRUE,
                                                    TREE_COLUMN_ICON, icon, -1);
 
                 currentNode = iter;
-                g_object_unref (icon);
             }
             else
             {
@@ -2790,7 +2795,6 @@ Browser_Tree_Initialize (EtBrowser *self)
 #endif
     GtkTreeIter parent_iter;
     GtkTreeIter dummy_iter;
-    GIcon *drive_icon;
 
     priv = et_browser_get_instance_private (self);
 
@@ -2811,7 +2815,7 @@ Browser_Tree_Initialize (EtBrowser *self)
         gchar *path;
 
         mount = l->data;
-        drive_icon = g_mount_get_icon (mount);
+        GIcon* drive_icon = g_mount_get_icon (mount);
         name = g_mount_get_name (mount);
         root = g_mount_get_root (mount);
         path = g_file_get_path (root);
@@ -2839,7 +2843,7 @@ Browser_Tree_Initialize (EtBrowser *self)
     g_list_free_full (mounts, g_object_unref);
     g_object_unref (monitor);
 #else /* !G_OS_WIN32 */
-    drive_icon = get_gicon_for_path (G_DIR_SEPARATOR_S, ET_PATH_STATE_CLOSED);
+    const GIcon* drive_icon = get_gicon_for_path(self, G_DIR_SEPARATOR_S, ET_PATH_STATE_CLOSED);
     gtk_tree_store_insert_with_values (priv->directory_model, &parent_iter, NULL,
                                        G_MAXINT, TREE_COLUMN_DIR_NAME,
                                        G_DIR_SEPARATOR_S,
@@ -2850,8 +2854,6 @@ Browser_Tree_Initialize (EtBrowser *self)
                                        TREE_COLUMN_ICON, drive_icon, -1);
     /* Insert dummy node. */
     gtk_tree_store_append (priv->directory_model, &dummy_iter, &parent_iter);
-
-    g_object_unref (drive_icon);
 #endif /* !G_OS_WIN32 */
 }
 
@@ -3090,19 +3092,13 @@ Find_Child_Node (EtBrowser *self, GtkTreeIter *parentnode, gchar *childtext)
  *
  * Returns: %TRUE if subdirectories exist, %FALSE otherwise
  */
-static gboolean
-check_for_subdir (const gchar *path)
+static gboolean check_for_subdir(GFile *dir)
 {
-    GFile *dir;
-    GFileEnumerator *enumerator;
+    gboolean show_hidden = g_settings_get_boolean (MainSettings, "browse-show-hidden");
 
-    dir = g_file_new_for_path (path);
-    enumerator = g_file_enumerate_children (dir,
-                                            G_FILE_ATTRIBUTE_STANDARD_TYPE ","
-                                            G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN,
-                                            G_FILE_QUERY_INFO_NONE,
-                                            NULL, NULL);
-    g_object_unref (dir);
+    GFileEnumerator *enumerator = g_file_enumerate_children (dir,
+        show_hidden ? G_FILE_ATTRIBUTE_STANDARD_TYPE "," G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN : G_FILE_ATTRIBUTE_STANDARD_TYPE,
+        G_FILE_QUERY_INFO_NONE, NULL, NULL);
 
     if (enumerator)
     {
@@ -3111,10 +3107,8 @@ check_for_subdir (const gchar *path)
         while ((childinfo = g_file_enumerator_next_file (enumerator,
                                                          NULL, NULL)))
         {
-            if ((g_file_info_get_file_type (childinfo) ==
-                 G_FILE_TYPE_DIRECTORY) &&
-                (g_settings_get_boolean (MainSettings, "browse-show-hidden")
-                 || !g_file_info_get_is_hidden (childinfo)))
+            if (g_file_info_get_file_type(childinfo) == G_FILE_TYPE_DIRECTORY
+                && (show_hidden || !g_file_info_get_is_hidden(childinfo)))
             {
                 g_object_unref (childinfo);
                 g_file_enumerator_close (enumerator, NULL, NULL);
@@ -3142,75 +3136,46 @@ check_for_subdir (const gchar *path)
  *
  * Returns: an icon corresponding to the @path
  */
-static GIcon *
-get_gicon_for_path (const gchar *path, EtPathState path_state)
+static const GIcon* get_gicon_for_path(EtBrowser *self, const gchar *path, EtPathState path_state)
 {
-    GIcon *folder_icon;
-    GIcon *emblem_icon;
-    GIcon *emblemed_icon;
-    GEmblem *emblem;
-    GFile *file;
-    GFileInfo *info;
-    GError *error = NULL;
+	GFile *file;
+	GFileInfo *info;
+	GError *error = NULL;
 
-    switch (path_state)
-    {
-        case ET_PATH_STATE_OPEN:
-            folder_icon = g_themed_icon_new ("folder-open");
-            break;
-        case ET_PATH_STATE_CLOSED:
-            folder_icon = g_themed_icon_new ("folder");
-            break;
-        default:
-            g_assert_not_reached ();
-    }
+	bool can_read = false;
+	bool can_write = true;
 
-    file = g_file_new_for_path (path);
-    info = g_file_query_info (file, G_FILE_ATTRIBUTE_ACCESS_CAN_READ ","
-                              G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE,
-                              G_FILE_QUERY_INFO_NONE, NULL, &error);
+	file = g_file_new_for_path (path);
+	info = g_file_query_info (file, G_FILE_ATTRIBUTE_ACCESS_CAN_READ "," G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE,
+		G_FILE_QUERY_INFO_NONE, NULL, &error);
+	if (info == NULL)
+	{	g_warning(_("Error while querying path information: %s"), error->message);
+		g_clear_error(&error);
+	} else
+	{	can_read = g_file_info_get_attribute_boolean(info, G_FILE_ATTRIBUTE_ACCESS_CAN_READ);
+		can_write = g_file_info_get_attribute_boolean(info, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE);
+		g_object_unref (info);
+	}
+	g_object_unref (file);
 
-    if (info == NULL)
-    {
-        g_warning ("Error while querying path information: %s",
-                   error->message);
-        g_clear_error (&error);
-        info = g_file_info_new ();
-        g_file_info_set_attribute_boolean (info,
-                                           G_FILE_ATTRIBUTE_ACCESS_CAN_READ,
-                                           FALSE);
-    }
+	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-    if (!g_file_info_get_attribute_boolean (info,
-                                            G_FILE_ATTRIBUTE_ACCESS_CAN_READ))
-    {
-        emblem_icon = g_themed_icon_new ("emblem-unreadable");
-        emblem = g_emblem_new_with_origin (emblem_icon,
-                                           G_EMBLEM_ORIGIN_LIVEMETADATA);
-        emblemed_icon = g_emblemed_icon_new (folder_icon, emblem);
-        g_object_unref (folder_icon);
-        g_object_unref (emblem_icon);
-        g_object_unref (emblem);
-
-        folder_icon = emblemed_icon;
-    }
-    else if (!g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE))
-    {
-        emblem_icon = g_themed_icon_new ("emblem-readonly");
-        emblem = g_emblem_new_with_origin (emblem_icon,
-                                           G_EMBLEM_ORIGIN_LIVEMETADATA);
-        emblemed_icon = g_emblemed_icon_new (folder_icon, emblem);
-        g_object_unref (folder_icon);
-        g_object_unref (emblem_icon);
-        g_object_unref (emblem);
-
-        folder_icon = emblemed_icon;
-    }
-
-    g_object_unref (file);
-    g_object_unref (info);
-
-    return folder_icon;
+	switch (path_state)
+	{
+	case ET_PATH_STATE_CLOSED:
+		if (!can_read)
+			return priv->folder_unreadable_icon;
+		if (!can_write)
+			return priv->folder_readonly_icon;
+		return priv->folder_icon;
+	case ET_PATH_STATE_OPEN:
+		if (!can_write)
+			return priv->folder_open_readonly_icon;
+		return priv->folder_open_icon;
+	default:
+		g_assert_not_reached();
+		return NULL;
+	}
 }
 
 /*
@@ -3229,7 +3194,6 @@ expand_cb (EtBrowser *self, GtkTreeIter *iter, GtkTreePath *gtreePath, GtkTreeVi
     gboolean has_subdir = FALSE;
     GtkTreeIter currentIter;
     GtkTreeIter subNodeIter;
-    GIcon *icon;
 
     priv = et_browser_get_instance_private (self);
 
@@ -3273,11 +3237,10 @@ expand_cb (EtBrowser *self, GtkTreeIter *iter, GtkTreePath *gtreePath, GtkTreeVi
                 const gchar *dirname_utf8;
                 dirname_utf8 = g_file_info_get_display_name (childinfo);
 
-                has_subdir = check_for_subdir (fullpath_file);
+                has_subdir = check_for_subdir(child);
 
                 /* Select pixmap according permissions for the directory. */
-                icon = get_gicon_for_path (fullpath_file,
-                                           ET_PATH_STATE_CLOSED);
+                const GIcon* icon = get_gicon_for_path(self, fullpath_file, ET_PATH_STATE_CLOSED);
 
                 gtk_tree_store_insert_with_values (priv->directory_model,
                                                    &currentIter, iter,
@@ -3296,8 +3259,6 @@ expand_cb (EtBrowser *self, GtkTreeIter *iter, GtkTreePath *gtreePath, GtkTreeVi
                     /* Insert a dummy node. */
                     gtk_tree_store_append(priv->directory_model, &subNodeIter, &currentIter);
                 }
-
-                g_object_unref (icon);
             }
 
             g_free (fullpath_file);
@@ -3315,7 +3276,7 @@ expand_cb (EtBrowser *self, GtkTreeIter *iter, GtkTreePath *gtreePath, GtkTreeVi
     }
 
     g_object_unref (dir);
-    icon = get_gicon_for_path (parentPath, ET_PATH_STATE_OPEN);
+    const GIcon* icon = get_gicon_for_path(self, parentPath, ET_PATH_STATE_OPEN);
 
 #ifdef G_OS_WIN32
     // set open folder pixmap except on drive (depth == 0)
@@ -3338,7 +3299,6 @@ expand_cb (EtBrowser *self, GtkTreeIter *iter, GtkTreePath *gtreePath, GtkTreeVi
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(priv->directory_model),
                                          TREE_COLUMN_DIR_NAME, GTK_SORT_ASCENDING);
 
-    g_object_unref (icon);
     g_free(parentPath);
 }
 
@@ -3348,7 +3308,6 @@ collapse_cb (EtBrowser *self, GtkTreeIter *iter, GtkTreePath *treePath, GtkTreeV
     EtBrowserPrivate *priv;
     GtkTreeIter subNodeIter;
     gchar *path;
-    GIcon *icon;
     GFile *file;
     GFileInfo *fileinfo;
     GError *error = NULL;
@@ -3389,7 +3348,7 @@ collapse_cb (EtBrowser *self, GtkTreeIter *iter, GtkTreePath *treePath, GtkTreeV
 
     gtk_tree_model_get (GTK_TREE_MODEL (priv->directory_model), iter,
                         TREE_COLUMN_FULL_PATH, &path, -1);
-    icon = get_gicon_for_path (path, ET_PATH_STATE_OPEN);
+    const GIcon* icon = get_gicon_for_path(self, path, ET_PATH_STATE_OPEN);
     g_free (path);
 #ifdef G_OS_WIN32
     // set closed folder pixmap except on drive (depth == 0)
@@ -3422,8 +3381,6 @@ collapse_cb (EtBrowser *self, GtkTreeIter *iter, GtkTreePath *treePath, GtkTreeV
     {
         gtk_tree_store_append (priv->directory_model, &subNodeIter, iter);
     }
-
-    g_object_unref (icon);
 }
 
 static void on_visible_columns_changed(EtBrowser *self, const gchar *key, GSettings *settings)
@@ -3588,6 +3545,22 @@ create_browser (EtBrowser *self)
     g_signal_connect_swapped (priv->open_button, "clicked",
                               G_CALLBACK (File_Selection_Window_For_Directory),
                               gtk_bin_get_child (GTK_BIN (priv->entry_combo)));
+
+    /* Icons */
+    {   priv->folder_icon = g_themed_icon_new("folder");
+        priv->folder_open_icon = g_themed_icon_new("folder-open");
+        GIcon* emblem_icon = g_themed_icon_new("emblem-readonly");
+        GEmblem* emblem = g_emblem_new_with_origin(emblem_icon, G_EMBLEM_ORIGIN_LIVEMETADATA);
+        priv->folder_readonly_icon = g_emblemed_icon_new(priv->folder_icon, emblem);
+        priv->folder_open_readonly_icon = g_emblemed_icon_new(priv->folder_open_icon, emblem);
+        g_object_unref(emblem);
+        g_object_unref(emblem_icon);
+        emblem_icon = g_themed_icon_new("emblem-unreadable");
+        emblem = g_emblem_new_with_origin(emblem_icon, G_EMBLEM_ORIGIN_LIVEMETADATA);
+        priv->folder_unreadable_icon = g_emblemed_icon_new(priv->folder_icon, emblem);
+        g_object_unref(emblem);
+        g_object_unref(emblem_icon);
+    }
 
     /* The tree view */
     Browser_Tree_Initialize (self);
@@ -4634,6 +4607,12 @@ et_browser_finalize (GObject *object)
     g_free(priv->current_path_name);
     priv->current_path_name = NULL;
     g_clear_object (&priv->run_program_model);
+
+    g_object_unref(priv->folder_icon);
+    g_object_unref(priv->folder_open_icon);
+    g_object_unref(priv->folder_readonly_icon);
+    g_object_unref(priv->folder_open_readonly_icon);
+    g_object_unref(priv->folder_unreadable_icon);
 
     G_OBJECT_CLASS (et_browser_parent_class)->finalize (object);
 }
