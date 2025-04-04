@@ -229,7 +229,7 @@ on_apply_to_selection (GObject *object,
 
     priv = et_tag_area_get_instance_private (self);
 
-    window = ET_APPLICATION_WINDOW (MainWindow);
+    window = MainWindow;
 
     et_application_window_update_et_file_from_ui (window);
 
@@ -1306,9 +1306,8 @@ on_picture_add_button_clicked (GObject *object,
         g_slist_free_full (list, g_object_unref);
     }
 
-    et_application_window_update_et_file_from_ui (ET_APPLICATION_WINDOW (MainWindow));
-    et_application_window_display_et_file (ET_APPLICATION_WINDOW (MainWindow),
-                                           ETCore->ETFileDisplayed);
+    et_application_window_update_et_file_from_ui(MainWindow);
+    et_application_window_display_et_file(MainWindow, ETCore->ETFileDisplayed);
 
     gtk_widget_destroy(FileSelectionWindow);
 }
@@ -1766,12 +1765,11 @@ on_picture_clear_button_clicked (GObject *object,
         gtk_tree_row_reference_free ((GtkTreeRowReference*)l->data);
     }
 
-    et_application_window_update_et_file_from_ui (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_update_et_file_from_ui(MainWindow);
 
     if (ETCore->ETFileDisplayed)
     {
-        et_application_window_display_et_file (ET_APPLICATION_WINDOW (MainWindow),
-                                               ETCore->ETFileDisplayed);
+        et_application_window_display_et_file(MainWindow, ETCore->ETFileDisplayed);
     }
 
     g_list_free (refs);

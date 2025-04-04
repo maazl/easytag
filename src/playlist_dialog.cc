@@ -132,7 +132,7 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
 
     if (g_settings_get_boolean (MainSettings, "playlist-selected-only"))
     {
-        etfilelist = et_application_window_browser_get_selected_files (ET_APPLICATION_WINDOW (MainWindow));
+        etfilelist = et_application_window_browser_get_selected_files(MainWindow);
     }
     else
     {
@@ -428,7 +428,7 @@ write_button_clicked (EtPlaylistDialog *self)
     }
 
     // Path of the playlist file (may be truncated later if PLAYLIST_CREATE_IN_PARENT_DIR is TRUE)
-    temp = g_file_get_path (et_application_window_get_current_path (ET_APPLICATION_WINDOW (MainWindow)));
+    temp = g_file_get_path(et_application_window_get_current_path(MainWindow));
     playlist_path_utf8 = g_filename_display_name (temp);
     g_free (temp);
 
@@ -542,8 +542,7 @@ write_button_clicked (EtPlaylistDialog *self)
             gchar *msg;
             msg = g_strdup_printf (_("Wrote playlist file ‘%s’"),
                                    playlist_name_utf8);
-            et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
-                                                      msg, TRUE);
+            et_application_window_status_bar_message(MainWindow, msg, TRUE);
             g_free (msg);
         }
         g_object_unref (file);

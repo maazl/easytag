@@ -276,9 +276,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
     // Save changes of the 'File_Tag' item
     ETFile->apply_changes(nullptr, FileTag);
 
-    et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
-                                              _("Tag successfully scanned"),
-                                              TRUE);
+    et_application_window_status_bar_message(MainWindow, _("Tag successfully scanned"), TRUE);
     Log_Print (LOG_OK, _("Tag successfully scanned ‘%s’"), ETFile->FileNameNew()->file().get());
 }
 
@@ -653,9 +651,7 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
     // Save changes of the 'File_Name' item
     ETFile->apply_changes(FileName, nullptr);
 
-    et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
-                                              _("New filename successfully scanned"),
-                                              TRUE);
+    et_application_window_status_bar_message(MainWindow, _("New filename successfully scanned"), TRUE);
 
     Log_Print (LOG_OK, _("New filename successfully scanned ‘%s’"), ETFile->FileNameNew()->file().get());
 
@@ -683,7 +679,7 @@ Scan_Rename_File_Prefix_Path (EtScanDialog *self)
     string path_tmp;
     if (!g_path_is_absolute(filepath))
     {   // Current root path
-        path_tmp = gString(g_filename_display_name(et_application_window_get_current_path_name(ET_APPLICATION_WINDOW(MainWindow))));
+        path_tmp = gString(g_filename_display_name(et_application_window_get_current_path_name(MainWindow)));
         if (!G_IS_DIR_SEPARATOR(path_tmp.back()))
             path_tmp += G_DIR_SEPARATOR;
     }
@@ -1849,7 +1845,7 @@ et_scan_dialog_apply_changes (EtScanDialog *self)
 static void
 Scan_Option_Button (void)
 {
-    et_application_window_show_preferences_dialog_scanner (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_show_preferences_dialog_scanner(MainWindow);
 }
 
 
@@ -1864,7 +1860,7 @@ et_scan_dialog_scan_selected_files (EtScanDialog *self)
 
     g_return_if_fail (ETCore->ETFileDisplayedList != NULL);
 
-    window = ET_APPLICATION_WINDOW (MainWindow);
+    window = MainWindow;
     et_application_window_update_et_file_from_ui (window);
 
     /* Initialize status bar */

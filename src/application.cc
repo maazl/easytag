@@ -127,20 +127,18 @@ on_idle_init (EtApplication *self)
 
     if (priv->init_directory)
     {
-        et_application_window_select_dir (ET_APPLICATION_WINDOW (MainWindow),
-                                          priv->init_directory);
+        et_application_window_select_dir(MainWindow, priv->init_directory);
     }
     else
     {
-        et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
-                                                  _("Select a directory to browse"),
-                                                  FALSE);
+        et_application_window_status_bar_message(MainWindow,
+            _("Select a directory to browse"), FALSE);
         g_action_group_activate_action (G_ACTION_GROUP (MainWindow),
                                         "go-default", NULL);
     }
 
     /* Set sensitivity of buttons if the default directory is invalid. */
-    et_application_window_update_actions (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_update_actions(MainWindow);
 
     priv->idle_handler = 0;
 
@@ -173,10 +171,9 @@ common_init (EtApplication *self)
     ET_Core_Create ();
 
     /* The main window */
-    window = et_application_window_new (GTK_APPLICATION (self));
-    MainWindow = GTK_WIDGET (window);
+    MainWindow = window = et_application_window_new(GTK_APPLICATION(self));
 
-    gtk_widget_show (MainWindow);
+    gtk_widget_show(GTK_WIDGET(MainWindow));
 
     /* Starting messages */
     Log_Print (LOG_OK, _("Starting EasyTAG version %s…"), PACKAGE_VERSION);

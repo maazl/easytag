@@ -23,7 +23,7 @@
 #include <memory>
 using namespace std;
 
-GtkWidget *MainWindow;
+struct _EtApplicationWindow *MainWindow;
 GSettings *MainSettings;
 
 const auto foobar(xStringL("foobar.png"));

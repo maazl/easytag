@@ -631,9 +631,8 @@ et_browser_set_current_path_default (EtBrowser *self)
                           g_variant_new_bytestring (path));
     g_free (path);
 
-    et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
-                                              _("New default directory selected for browser"),
-                                              TRUE);
+    et_application_window_status_bar_message(MainWindow,
+        _("New default directory selected for browser"), TRUE);
 }
 
 /*
@@ -913,10 +912,10 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
     if (!pathName)
         return FALSE;
 
-    et_application_window_update_et_file_from_ui (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_update_et_file_from_ui(MainWindow);
 
     /* FIXME: Not clean to put this here. */
-    et_application_window_update_actions (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_update_actions(MainWindow);
 
     /* Check if all files have been saved before changing the directory */
     if (g_settings_get_boolean (MainSettings, "confirm-when-unsaved-files")
@@ -1022,7 +1021,7 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
     }else
     {
         /* As we don't use the function 'Read_Directory' we must add this function here */
-        et_application_window_update_actions (ET_APPLICATION_WINDOW (MainWindow));
+        et_application_window_update_actions(MainWindow);
     }
 
     first_read = FALSE;
@@ -1283,7 +1282,7 @@ Browser_List_Row_Selected (EtBrowser *self, GtkTreeSelection *selection)
             gtk_tree_model_get (GTK_TREE_MODEL (priv->file_model),
                                 &cursor_iter, LIST_FILE_POINTER,
                                 &cursor_et_file, -1);
-            et_application_window_select_file_by_et_file (ET_APPLICATION_WINDOW (MainWindow),
+            et_application_window_select_file_by_et_file(MainWindow,
                                                           cursor_et_file);
         }
         /* TODO: Clear the tag/file area if the cursor row was unselected, such
@@ -2109,7 +2108,7 @@ Browser_Artist_List_Load_Files (EtBrowser *self, ET_File *etfile_to_select)
         gtk_tree_model_get(GTK_TREE_MODEL(priv->artist_model), &iter,
                            ARTIST_ALBUM_LIST_POINTER, &AlbumList,
                            -1);
-        et_application_window_update_et_file_from_ui (ET_APPLICATION_WINDOW (MainWindow));
+        et_application_window_update_et_file_from_ui(MainWindow);
         Browser_Album_List_Load_Files (self, AlbumList,NULL);
     }
 }
@@ -2131,7 +2130,7 @@ Browser_Artist_List_Row_Selected (EtBrowser *self, GtkTreeSelection* selection)
     if(!gtk_tree_selection_get_selected(selection, NULL, &iter))
         return; // We might be called with no row selected
 
-    et_application_window_update_et_file_from_ui (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_update_et_file_from_ui(MainWindow);
 
     gtk_tree_model_get (GTK_TREE_MODEL (priv->artist_model), &iter,
                         ARTIST_ALBUM_LIST_POINTER, &AlbumList, -1);
@@ -2337,14 +2336,14 @@ Browser_Album_List_Load_Files (EtBrowser *self,
         gtk_tree_model_get(GTK_TREE_MODEL(priv->album_model), &iter,
                            ALBUM_ETFILE_LIST_POINTER, &etfilelist,
                            -1);
-        et_application_window_update_et_file_from_ui (ET_APPLICATION_WINDOW (MainWindow));
+        et_application_window_update_et_file_from_ui(MainWindow);
 
         /* Set the attached list as "Displayed List". */
         et_displayed_file_list_set (etfilelist);
         et_browser_load_file_list (self, etfilelist, NULL);
 
         /* Displays the first item. */
-        et_application_window_select_file_by_et_file (ET_APPLICATION_WINDOW (MainWindow),
+        et_application_window_select_file_by_et_file(MainWindow,
                                                       (ET_File *)etfilelist->data);
     }
 }
@@ -2368,7 +2367,7 @@ Browser_Album_List_Row_Selected (EtBrowser *self, GtkTreeSelection *selection)
     gtk_tree_model_get (GTK_TREE_MODEL (priv->album_model), &iter,
                        ALBUM_ETFILE_LIST_POINTER, &etfilelist, -1);
 
-    et_application_window_update_et_file_from_ui (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_update_et_file_from_ui(MainWindow);
 
     /* Set the attached list as "Displayed List". */
     et_displayed_file_list_set (etfilelist);
@@ -2376,7 +2375,7 @@ Browser_Album_List_Row_Selected (EtBrowser *self, GtkTreeSelection *selection)
     et_browser_load_file_list (self, etfilelist, NULL);
 
     /* Displays the first item. */
-    et_application_window_select_file_by_et_file (ET_APPLICATION_WINDOW (MainWindow),
+    et_application_window_select_file_by_et_file(MainWindow,
                                                   (ET_File *)etfilelist->data);
 }
 
@@ -2436,7 +2435,7 @@ et_browser_set_display_mode (EtBrowser *self,
 
     priv = et_browser_get_instance_private (self);
 
-    et_application_window_update_et_file_from_ui (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_update_et_file_from_ui(MainWindow);
 
     switch (mode)
     {
@@ -2459,8 +2458,7 @@ et_browser_set_display_mode (EtBrowser *self,
                     etfile = (ET_File *)etfilelist->data;
                 }
 
-                et_application_window_select_file_by_et_file (ET_APPLICATION_WINDOW (MainWindow),
-                                                              etfile);
+                et_application_window_select_file_by_et_file(MainWindow, etfile);
             }
             break;
         case ET_BROWSER_MODE_ARTIST:
@@ -2889,7 +2887,7 @@ et_browser_reload (EtBrowser *self)
     }
     g_free(current_path);
 
-    et_application_window_update_actions (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_update_actions(MainWindow);
 }
 
 /*
@@ -4101,7 +4099,7 @@ Rename_Directory (EtBrowser *self)
     // To update file path in the browser entry
     if (ETCore->ETFileDisplayedList)
     {
-        et_application_window_display_et_file (ET_APPLICATION_WINDOW (MainWindow),
+        et_application_window_display_et_file(MainWindow,
                                                ETCore->ETFileDisplayed);
     }else
     {
@@ -4118,8 +4116,7 @@ Rename_Directory (EtBrowser *self)
     g_free(tmp_path);
     g_free(tmp_path_utf8);
     g_free(directory_new_name_file);
-    et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
-                                              _("Directory renamed"), TRUE);
+    et_application_window_status_bar_message(MainWindow, _("Directory renamed"), TRUE);
 }
 
 static void
@@ -4267,8 +4264,7 @@ Run_Program_With_Directory (EtBrowser *self)
         Destroy_Run_Program_Tree_Window (self);
 
         msg = g_strdup_printf (_("Executed command ‘%s’"), program_name);
-        et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
-                                                  msg, TRUE);
+        et_application_window_status_bar_message(MainWindow, msg, TRUE);
 
         g_free (msg);
     }
@@ -4341,8 +4337,7 @@ Run_Program_With_Selected_Files (EtBrowser *self)
         Destroy_Run_Program_List_Window (self);
 
         msg = g_strdup_printf (_("Executed command ‘%s’"), program_name);
-        et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
-                                                  msg, TRUE);
+        et_application_window_status_bar_message(MainWindow, msg, TRUE);
 
         g_free (msg);
     }

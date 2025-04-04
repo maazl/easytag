@@ -55,7 +55,7 @@ using namespace std;
 
 /* Referenced in the header. */
 atomic<bool> Main_Stop_Button_Pressed(false);
-GtkWidget *MainWindow;
+struct _EtApplicationWindow *MainWindow;
 
 /* Used to force to hide the msgbox when saving tag */
 static gboolean SF_HideMsgbox_Write_Tag;
@@ -94,7 +94,7 @@ Save_Selected_Files_With_Answer (gboolean force_saving_files)
     gint toreturn;
     GList *etfilelist = NULL;
 
-    etfilelist = et_application_window_browser_get_selected_files (ET_APPLICATION_WINDOW (MainWindow));
+    etfilelist = et_application_window_browser_get_selected_files(MainWindow);
     toreturn = Save_List_Of_Files (etfilelist, force_saving_files);
     g_list_free (etfilelist);
 
@@ -123,7 +123,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
 
     g_return_val_if_fail (ETCore != NULL, FALSE);
 
-    window = ET_APPLICATION_WINDOW (MainWindow);
+    window = MainWindow;
 
     /* Save the current position in the list */
     etfile_save_position = ETCore->ETFileDisplayed;
@@ -282,11 +282,8 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
     et_application_set_action_state(window, "stop", FALSE);
 
     /* Return to the saved position in the list */
-    et_application_window_display_et_file (ET_APPLICATION_WINDOW (MainWindow),
-                                           etfile_save_position);
-    et_application_window_browser_select_file_by_et_file (ET_APPLICATION_WINDOW (MainWindow),
-                                                          etfile_save_position,
-                                                          TRUE);
+    et_application_window_display_et_file(MainWindow, etfile_save_position);
+    et_application_window_browser_select_file_by_et_file(MainWindow, etfile_save_position, TRUE);
 
     /* FIXME: Find out why this is a special case for the artist/album mode. */
     variant = g_action_get_state(g_action_map_lookup_action (G_ACTION_MAP(MainWindow), "file-artist-view"));
@@ -299,7 +296,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
     g_variant_unref (variant);
 
     /* To update state of command buttons */
-    et_application_window_update_actions (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_update_actions(window);
     et_application_window_browser_set_sensitive (window, TRUE);
     et_application_window_tag_area_set_sensitive (window, TRUE);
     et_application_window_file_area_set_sensitive (window, TRUE);
@@ -572,9 +569,7 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
                                filename_new.full_name().get(),
                                error->message);
 
-                    et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
-                                                              _("File(s) not renamed"),
-                                                              TRUE);
+                    et_application_window_status_bar_message(MainWindow, _("File(s) not renamed"), TRUE);
                     g_error_free (error);
                 }
 
@@ -611,12 +606,12 @@ Write_File_Tag (ET_File *ETFile, gboolean hide_msgbox)
     GError *error = NULL;
 
     const char* basename_utf8 = ETFile->FileNameCur()->file().get();
-    et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
+    et_application_window_status_bar_message(MainWindow,
         strprintf(_("Writing tag of ‘%s’"), basename_utf8).c_str(), TRUE);
 
     if (ETFile->save_file_tag(&error))
     {
-        et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
+        et_application_window_status_bar_message(MainWindow,
             strprintf(_("Wrote tag of ‘%s’"), basename_utf8).c_str(), TRUE);
         return TRUE;
     }
@@ -752,7 +747,7 @@ void ReplayGainWorker::OnAlbumCompleted(FileList::iterator first, FileList::iter
 	if (error)
 		return Log_Print(LOG_WARNING, _("Skip album gain because of previous errors."));
 
-	EtApplicationWindow* const window = ET_APPLICATION_WINDOW(MainWindow);
+	EtApplicationWindow* const window = MainWindow;
 
 	for (auto cur = first; cur != last; ++cur)
 	{	ET_File* file = cur->get();
@@ -772,7 +767,7 @@ void ReplayGainWorker::OnFileCompleted(FileList::iterator cur, string err, float
 {
 	ET_File* const file = cur->get();
 	const File_Name& file_name = *file->FileNameCur();
-	EtApplicationWindow* const window = ET_APPLICATION_WINDOW(MainWindow);
+	EtApplicationWindow* const window = MainWindow;
 
 	if (!err.empty())
 	{	Log_Print(LOG_ERROR, _("Failed to analyze file '%s': %s"), file_name.full_name().get(), err.c_str());
@@ -803,7 +798,7 @@ void ReplayGainWorker::FinishAlbum(FileList::iterator first, FileList::iterator 
 void ReplayGainWorker::Start()
 {
 	Main_Stop_Button_Pressed = false;
-	EtApplicationWindow* const window = ET_APPLICATION_WINDOW(MainWindow);
+	EtApplicationWindow* const window = MainWindow;
 	et_application_window_disable_command_actions(window, TRUE);
 	et_application_window_progress_set(window, 0, Files.size(), 0.);
 
@@ -860,7 +855,7 @@ end:
 
 void ReplayGainWorker::OnFinished(bool cancelled)
 {
-	EtApplicationWindow* const window = ET_APPLICATION_WINDOW(MainWindow);
+	EtApplicationWindow* const window = MainWindow;
 
 	if (cancelled)
 		et_application_window_status_bar_message (window, _("ReplayGain calculation stopped"), TRUE);
@@ -871,7 +866,7 @@ void ReplayGainWorker::OnFinished(bool cancelled)
 
 void ReplayGain_For_Selected_Files (void)
 {
-	GList *etfilelist = et_application_window_browser_get_selected_files(ET_APPLICATION_WINDOW(MainWindow));
+	GList *etfilelist = et_application_window_browser_get_selected_files(MainWindow);
 	if (!etfilelist)
 		return; // nothing to do
 
@@ -965,7 +960,7 @@ bool ReadDirectoryWorker::Start(gString&& path)
 	Instance = xPtr<ReadDirectoryWorker>(new ReadDirectoryWorker(move(path)));
 
 	// Set to unsensitive the Browser Area, to avoid to select another file while loading the first one
-	EtApplicationWindow* window = ET_APPLICATION_WINDOW(MainWindow);
+	EtApplicationWindow* window = MainWindow;
 
 	et_application_window_disable_command_actions(window, TRUE);
 	et_application_window_status_bar_message(window, _("Searching for audio files…"), FALSE);
@@ -1009,11 +1004,11 @@ void ReadDirectoryWorker::OnFileCompleted(xPtr<ET_File> ETFile, const char* erro
 	ETCore->ETFileList = g_list_prepend(ETCore->ETFileList, xPtr<ET_File>::toCptr(ETFile));
 
   /* Update the progress bar. */
-  et_application_window_progress_set(ET_APPLICATION_WINDOW(MainWindow), ++Instance->FilesCompleted, Instance->FilesTotal);
+  et_application_window_progress_set(MainWindow, ++Instance->FilesCompleted, Instance->FilesTotal);
 }
 
 void ReadDirectoryWorker::OnFinished()
-{	EtApplicationWindow* window = ET_APPLICATION_WINDOW(MainWindow);
+{	EtApplicationWindow* window = MainWindow;
 
 	et_application_window_progress_set(window, 0, 0);
 
@@ -1195,7 +1190,7 @@ gboolean Read_Directory(gString path_real)
 {
     g_return_val_if_fail (path_real != NULL, FALSE);
 
-    EtApplicationWindow *window = ET_APPLICATION_WINDOW (MainWindow);
+    EtApplicationWindow *window = MainWindow;
 
     /* Initialize browser list */
     et_application_window_browser_clear (window);
@@ -1208,7 +1203,7 @@ gboolean Read_Directory(gString path_real)
     /* Initialize file list */
     ET_Core_Free ();
     ET_Core_Create ();
-    et_application_window_update_actions (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_update_actions(window);
 
     return ReadDirectoryWorker::Start(move(path_real));
 }
@@ -1219,6 +1214,6 @@ gboolean Read_Directory(gString path_real)
  */
 void Action_Main_Stop_Button_Pressed (void)
 {
-    et_application_set_action_state(ET_APPLICATION_WINDOW(MainWindow), "stop", FALSE);
+    et_application_set_action_state(MainWindow, "stop", FALSE);
     Main_Stop_Button_Pressed = true;
 }

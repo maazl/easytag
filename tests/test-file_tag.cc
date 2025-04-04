@@ -21,7 +21,7 @@
 #include "misc.h"
 #include "picture.h"
 
-GtkWidget *MainWindow;
+struct _EtApplicationWindow *MainWindow;
 GSettings *MainSettings;
 
 static void

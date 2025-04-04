@@ -397,7 +397,7 @@ delete_file (ET_File *ETFile, gboolean multiple_files, GError **error)
 
             if (g_file_delete (cur_file, NULL, error))
             {
-                et_application_window_status_bar_message (ET_APPLICATION_WINDOW (MainWindow),
+                et_application_window_status_bar_message (MainWindow,
                     strprintf(_("File ‘%s’ deleted"), basename_utf8).c_str(), FALSE);
                 g_object_unref (cur_file);
                 g_assert (error == NULL || *error == NULL);

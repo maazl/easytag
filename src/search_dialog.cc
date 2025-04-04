@@ -91,7 +91,7 @@ Search_Result_List_Row_Selected (GtkTreeSelection *selection,
     }
 
     /* Unselect files in the main list before re-selecting them... */
-    et_application_window_browser_unselect_all (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_browser_unselect_all(MainWindow);
 
     for (l = selectedRows; l != NULL; l = g_list_next (l))
     {
@@ -101,14 +101,11 @@ Search_Result_List_Row_Selected (GtkTreeSelection *selection,
             gtk_tree_model_get(GTK_TREE_MODEL(priv->search_results_model), &currentFile, 
                                SEARCH_RESULT_POINTER, &ETFile, -1);
             /* Select the files (but don't display them to increase speed). */
-            et_application_window_browser_select_file_by_et_file (ET_APPLICATION_WINDOW (MainWindow),
-                                                                  ETFile,
-                                                                  TRUE);
+            et_application_window_browser_select_file_by_et_file(MainWindow, ETFile, TRUE);
             /* Display only the last file (to increase speed). */
             if (!selectedRows->next)
             {
-                et_application_window_select_file_by_et_file (ET_APPLICATION_WINDOW (MainWindow),
-                                                              ETFile);
+                et_application_window_select_file_by_et_file(MainWindow, ETFile);
             }
         }
     }

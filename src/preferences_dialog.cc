@@ -433,7 +433,7 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
     bind_boolean("file-changed-bold", priv->list_bold_radio);
     g_signal_connect_swapped (priv->list_bold_radio, "notify::active",
                               G_CALLBACK (et_application_window_browser_refresh_list),
-                              MainWindow);
+                              GTK_WIDGET(MainWindow));
 
     /*
      * File Settings

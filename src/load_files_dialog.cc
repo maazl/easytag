@@ -96,7 +96,7 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
     if ( !ETCore->ETFileList || !priv->file_content_view || !priv->file_name_view)
         return;
 
-    et_application_window_update_et_file_from_ui (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_update_et_file_from_ui(MainWindow);
 
     auto prepare_func = File_Name::prepare_func((EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"), ET_CONVERT_SPACES_NO_CHANGE);
 
@@ -136,7 +136,7 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
             {
                 EtScanDialog *dialog;
 
-                dialog = ET_SCAN_DIALOG (et_application_window_get_scan_dialog (ET_APPLICATION_WINDOW (MainWindow)));
+                dialog = ET_SCAN_DIALOG(et_application_window_get_scan_dialog(MainWindow));
 
                 if (dialog)
                 {
@@ -149,9 +149,8 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
 
     gtk_tree_path_free(currentPath);
 
-    et_application_window_browser_refresh_list (ET_APPLICATION_WINDOW (MainWindow));
-    et_application_window_display_et_file (ET_APPLICATION_WINDOW (MainWindow),
-                                           ETCore->ETFileDisplayed);
+    et_application_window_browser_refresh_list(MainWindow);
+    et_application_window_display_et_file(MainWindow, ETCore->ETFileDisplayed);
 }
 
 /*
@@ -992,8 +991,7 @@ create_load_files_dialog (EtLoadFilesDialog *self)
 
     /* Initial value. */
     gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (priv->file_chooser),
-                                              et_application_window_get_current_path (ET_APPLICATION_WINDOW (MainWindow)),
-                                              NULL);
+                                              et_application_window_get_current_path(MainWindow), NULL);
     
     /* Signals to 'select' the same row into the other list (to show the
      * corresponding filenames). */

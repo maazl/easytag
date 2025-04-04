@@ -20,7 +20,7 @@
 
 #include <glib/gstdio.h>
 
-GtkWidget *MainWindow;
+struct _EtApplicationWindow *MainWindow;
 GSettings *MainSettings;
 
 static void

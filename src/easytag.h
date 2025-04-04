@@ -33,7 +33,7 @@
 /* Variable to force to quit recursive functions (reading dirs) or stop saving files */
 extern std::atomic<bool> Main_Stop_Button_Pressed;
 
-extern GtkWidget *MainWindow;
+extern struct _EtApplicationWindow *MainWindow;
 
 #ifndef errno
 extern int errno;

@@ -86,8 +86,8 @@ et_artist_album_file_list_free (GList *file_list)
 
     /* Pointers are stored inside the artist/album list-stores, so free them
      * first. */
-    et_application_window_browser_clear_artist_model (ET_APPLICATION_WINDOW (MainWindow));
-    et_application_window_browser_clear_album_model (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_browser_clear_artist_model(MainWindow);
+    et_application_window_browser_clear_album_model(MainWindow);
 
     for (l = file_list; l != NULL; l = g_list_next (l))
     {
@@ -441,9 +441,9 @@ ET_Remove_File_From_File_List (ET_File *ETFile)
     }else
     {
         // Reinit the tag and file area
-        et_application_window_file_area_clear (ET_APPLICATION_WINDOW (MainWindow));
-        et_application_window_tag_area_clear (ET_APPLICATION_WINDOW (MainWindow));
-        et_application_window_update_actions (ET_APPLICATION_WINDOW (MainWindow));
+        et_application_window_file_area_clear(MainWindow);
+        et_application_window_tag_area_clear(MainWindow);
+        et_application_window_update_actions(MainWindow);
     }
 }
 
@@ -580,7 +580,7 @@ void et_file_list_update_directory_name(GList *file_list, const gchar *old_path,
 	g_return_if_fail (!et_str_empty (new_path));
 
 	ET_File::UpdateDirectoyNameArgs args(old_path, new_path,
-		et_application_window_get_current_path_name(ET_APPLICATION_WINDOW(MainWindow)));
+		et_application_window_get_current_path_name(MainWindow));
 
 	for (GList *filelist = g_list_first(file_list); filelist; filelist = g_list_next(filelist))
 	{

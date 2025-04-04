@@ -542,7 +542,7 @@ gboolean ET_File::rename_file(GError **error)
 	// Make absolute path of the file in file system notation.
 	gString raw_name(filename_from_display(FileName.New->full_name().get()));
 	raw_name = g_canonicalize_filename(raw_name.get(),
-		et_application_window_get_current_path_name(ET_APPLICATION_WINDOW(MainWindow)));
+		et_application_window_get_current_path_name(MainWindow));
 
 	gboolean rc = et_rename_file(FilePath, raw_name, error);
 	if (rc)
