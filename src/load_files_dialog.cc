@@ -149,7 +149,7 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
 
     gtk_tree_path_free(currentPath);
 
-    et_application_window_browser_refresh_list(MainWindow);
+    et_browser_refresh_list(MainWindow->browser());
     et_application_window_display_et_file(MainWindow, ETCore->ETFileDisplayed);
 }
 

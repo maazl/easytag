@@ -23,6 +23,7 @@
 
 #include "file.h"
 
+
 #define ET_TYPE_APPLICATION_WINDOW (et_application_window_get_type ())
 #define ET_APPLICATION_WINDOW(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_APPLICATION_WINDOW, EtApplicationWindow))
 
@@ -33,6 +34,8 @@ struct _EtApplicationWindow
 {
     /*< private >*/
     GtkApplicationWindow parent_instance;
+
+    struct _EtBrowser* browser();
 };
 
 struct _EtApplicationWindowClass
@@ -64,10 +67,6 @@ void et_application_window_tag_area_display_controls (EtApplicationWindow *self,
 GtkWidget * et_application_window_get_log_area (EtApplicationWindow *self);
 void et_application_window_show_preferences_dialog_scanner (EtApplicationWindow *self);
 void et_application_window_browser_toggle_display_mode (EtApplicationWindow *self);
-void et_application_window_browser_set_sensitive (EtApplicationWindow *self, gboolean sensitive);
-void et_application_window_browser_clear (EtApplicationWindow *self);
-void et_application_window_browser_clear_album_model (EtApplicationWindow *self);
-void et_application_window_browser_clear_artist_model (EtApplicationWindow *self);
 void et_application_window_search_dialog_clear (EtApplicationWindow *self);
 void et_application_window_select_dir (EtApplicationWindow *self, GFile *file);
 void et_application_window_select_file_by_et_file (EtApplicationWindow *self, ET_File *ETFile);
@@ -75,22 +74,9 @@ GFile * et_application_window_get_current_path (EtApplicationWindow *self);
 const gchar* et_application_window_get_current_path_name (EtApplicationWindow *self);
 GtkWidget * et_application_window_get_scan_dialog (EtApplicationWindow *self);
 void et_application_window_apply_changes (EtApplicationWindow *self);
-void et_application_window_browser_entry_set_text (EtApplicationWindow *self, const gchar *text);
-void et_application_window_browser_label_set_text (EtApplicationWindow *self, const gchar *text);
-ET_File * et_application_window_browser_get_et_file_from_path (EtApplicationWindow *self, GtkTreePath *path);
-ET_File * et_application_window_browser_get_et_file_from_iter (EtApplicationWindow *self, GtkTreeIter *iter);
-GList * et_application_window_browser_get_selected_files (EtApplicationWindow *self);
-GtkTreeSelection * et_application_window_browser_get_selection (EtApplicationWindow *self);
-GtkTreeViewColumn *et_application_window_browser_get_column_for_sort_mode (EtApplicationWindow *self, EtSortMode sort_mode);
-void et_application_window_browser_select_file_by_iter_string (EtApplicationWindow *self, const gchar *iter_string, gboolean select);
 void et_application_window_update_et_file_from_ui (EtApplicationWindow *self);
 void et_application_window_display_et_file (EtApplicationWindow *self, ET_File *ETFile, int columns = ~0);
-void et_application_window_browser_select_file_by_et_file (EtApplicationWindow *self, const ET_File *file, gboolean select);
-GtkTreePath * et_application_window_browser_select_file_by_et_file2 (EtApplicationWindow *self, const ET_File *file, gboolean select, GtkTreePath *start_path);
-ET_File * et_application_window_browser_select_file_by_dlm (EtApplicationWindow *self, const gchar *string, gboolean select);
 void et_application_window_browser_unselect_all (EtApplicationWindow *self);
-void et_application_window_browser_refresh_list (EtApplicationWindow *self);
-void et_application_window_browser_refresh_file_in_list (EtApplicationWindow *self, const ET_File *file);
 void et_application_window_scan_dialog_update_previews (EtApplicationWindow *self);
 /** Set progress bar value.
  * @param current current progress

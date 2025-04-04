@@ -101,7 +101,7 @@ Search_Result_List_Row_Selected (GtkTreeSelection *selection,
             gtk_tree_model_get(GTK_TREE_MODEL(priv->search_results_model), &currentFile, 
                                SEARCH_RESULT_POINTER, &ETFile, -1);
             /* Select the files (but don't display them to increase speed). */
-            et_application_window_browser_select_file_by_et_file(MainWindow, ETFile, TRUE);
+            et_browser_select_file_by_et_file(MainWindow->browser(), ETFile, TRUE);
             /* Display only the last file (to increase speed). */
             if (!selectedRows->next)
             {

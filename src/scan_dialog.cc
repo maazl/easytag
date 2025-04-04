@@ -1864,7 +1864,7 @@ et_scan_dialog_scan_selected_files (EtScanDialog *self)
     et_application_window_update_et_file_from_ui (window);
 
     /* Initialize status bar */
-    selfilelist = et_application_window_browser_get_selected_files (window);
+    selfilelist = et_browser_get_selected_files(window->browser());
     selectcount = g_list_length (selfilelist);
     et_application_window_progress_set(window, 0, selectcount);
 
@@ -1887,7 +1887,7 @@ et_scan_dialog_scan_selected_files (EtScanDialog *self)
     g_list_free (selfilelist);
 
     /* Refresh the whole list (faster than file by file) to show changes. */
-    et_application_window_browser_refresh_list (window);
+    et_browser_refresh_list(window->browser());
 
     /* Display the current file */
     et_application_window_display_et_file (window, ETCore->ETFileDisplayed);

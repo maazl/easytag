@@ -29,6 +29,7 @@
 #include <unistd.h>
 
 #include "application_window.h"
+#include "browser.h"
 #include "charset.h"
 #include "easytag.h"
 #include "log.h"
@@ -86,8 +87,8 @@ et_artist_album_file_list_free (GList *file_list)
 
     /* Pointers are stored inside the artist/album list-stores, so free them
      * first. */
-    et_application_window_browser_clear_artist_model(MainWindow);
-    et_application_window_browser_clear_album_model(MainWindow);
+    et_browser_clear_artist_model(MainWindow->browser());
+    et_browser_clear_album_model(MainWindow->browser());
 
     for (l = file_list; l != NULL; l = g_list_next (l))
     {

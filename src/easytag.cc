@@ -94,7 +94,7 @@ Save_Selected_Files_With_Answer (gboolean force_saving_files)
     gint toreturn;
     GList *etfilelist = NULL;
 
-    etfilelist = et_application_window_browser_get_selected_files(MainWindow);
+    etfilelist = et_browser_get_selected_files(MainWindow->browser());
     toreturn = Save_List_Of_Files (etfilelist, force_saving_files);
     g_list_free (etfilelist);
 
@@ -173,7 +173,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
 
     /* Set to unsensitive all command buttons (except Quit button) */
     et_application_window_disable_command_actions (window, FALSE);
-    et_application_window_browser_set_sensitive (window, FALSE);
+    et_browser_set_sensitive(window->browser(), FALSE);
     et_application_window_tag_area_set_sensitive (window, FALSE);
     et_application_window_file_area_set_sensitive (window, FALSE);
 
@@ -240,7 +240,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
             /* ET_Display_File_Data_To_UI ((ET_File *)l->data);
              * Use of 'currentPath' to try to increase speed. Indeed, in many
              * cases, the next file to select, is the next in the list. */
-            currentPath = et_application_window_browser_select_file_by_et_file2(window, ETFile, FALSE, currentPath);
+            currentPath = et_browser_select_file_by_et_file2(window->browser(), ETFile, FALSE, currentPath);
 
             et_application_window_progress_set(window, ++progress_bar_index, nb_files_to_save);
             /* Needed to refresh status bar */
@@ -257,7 +257,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
                 et_application_window_status_bar_message (window, _("Saving files was stopped"), TRUE);
                 /* To update state of command buttons */
                 et_application_window_update_actions (window);
-                et_application_window_browser_set_sensitive (window, TRUE);
+                et_browser_set_sensitive(window->browser(), TRUE);
                 et_application_window_tag_area_set_sensitive (window, TRUE);
                 et_application_window_file_area_set_sensitive (window, TRUE);
 
@@ -283,7 +283,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
 
     /* Return to the saved position in the list */
     et_application_window_display_et_file(MainWindow, etfile_save_position);
-    et_application_window_browser_select_file_by_et_file(MainWindow, etfile_save_position, TRUE);
+    et_browser_select_file_by_et_file(MainWindow->browser(), etfile_save_position, TRUE);
 
     /* FIXME: Find out why this is a special case for the artist/album mode. */
     variant = g_action_get_state(g_action_map_lookup_action (G_ACTION_MAP(MainWindow), "file-artist-view"));
@@ -297,7 +297,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
 
     /* To update state of command buttons */
     et_application_window_update_actions(window);
-    et_application_window_browser_set_sensitive (window, TRUE);
+    et_browser_set_sensitive(window->browser(), TRUE);
     et_application_window_tag_area_set_sensitive (window, TRUE);
     et_application_window_file_area_set_sensitive (window, TRUE);
 
@@ -307,7 +307,7 @@ Save_List_Of_Files (GList *etfilelist, gboolean force_saving_files)
     et_application_window_progress_set(window, 0, 0);
     et_application_window_status_bar_message (window, msg, TRUE);
     g_free(msg);
-    et_application_window_browser_refresh_list (window);
+    et_browser_refresh_list(window->browser());
     return TRUE;
 }
 
@@ -760,7 +760,7 @@ void ReplayGainWorker::OnAlbumCompleted(FileList::iterator first, FileList::iter
 			et_application_window_display_et_file(window, file, ET_COLUMN_REPLAYGAIN);
 	}
 	Log_Print(LOG_OK, _("ReplayGain of album is %.1f dB, peak %.2f"), album_gain, album_peak);
-	et_application_window_browser_refresh_list(window); // hmm, maybe a bit too much
+	et_browser_refresh_list(window->browser()); // hmm, maybe a bit too much
 }
 
 void ReplayGainWorker::OnFileCompleted(FileList::iterator cur, string err, float track_gain, float track_peak)
@@ -780,7 +780,7 @@ void ReplayGainWorker::OnFileCompleted(FileList::iterator cur, string err, float
 
 		if (ETCore->ETFileDisplayed == file)
 			et_application_window_display_et_file(window, file, ET_COLUMN_REPLAYGAIN);
-		et_application_window_browser_refresh_file_in_list(window, file);
+		et_browser_refresh_file_in_list(window->browser(), file);
 	}
 
 	CurrentDuration += GetFileDuration(*cur);
@@ -866,7 +866,7 @@ void ReplayGainWorker::OnFinished(bool cancelled)
 
 void ReplayGain_For_Selected_Files (void)
 {
-	GList *etfilelist = et_application_window_browser_get_selected_files(MainWindow);
+	GList *etfilelist = et_browser_get_selected_files(MainWindow->browser());
 	if (!etfilelist)
 		return; // nothing to do
 
@@ -1037,7 +1037,7 @@ void ReadDirectoryWorker::OnFinished()
 		et_application_window_file_area_clear(window);
 		et_application_window_tag_area_clear(window);
 
-		et_application_window_browser_label_set_text(window,
+		et_browser_label_set_text(window->browser(),
 			/* Translators: No files, as in "0 files". */ ("No files")); /* See in ET_Display_Filename_To_UI */
 
 		/* Prepare message for the status bar */
@@ -1193,7 +1193,7 @@ gboolean Read_Directory(gString path_real)
     EtApplicationWindow *window = MainWindow;
 
     /* Initialize browser list */
-    et_application_window_browser_clear (window);
+    et_browser_clear(window->browser());
     et_application_window_search_dialog_clear (window);
 
     /* Clear entry boxes  */

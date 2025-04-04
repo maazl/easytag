@@ -341,7 +341,7 @@ Cddb_Track_List_Row_Selected (EtCDDBDialog *self, GtkTreeSelection *selection)
                 gtk_tree_model_get (GTK_TREE_MODEL (priv->track_list_model),
                                     &currentFile, CDDB_TRACK_LIST_NAME,
                                     &text_path, -1);
-                etfile = et_application_window_browser_select_file_by_dlm(MainWindow, text_path, TRUE);
+                etfile = et_browser_select_file_by_dlm(MainWindow->browser(), text_path, TRUE);
                 gtk_list_store_set (priv->track_list_model, &currentFile,
                                     CDDB_TRACK_LIST_ETFILE, etfile, -1);
             }
@@ -349,7 +349,7 @@ Cddb_Track_List_Row_Selected (EtCDDBDialog *self, GtkTreeSelection *selection)
             {
                 text_path = gtk_tree_model_get_string_from_iter (GTK_TREE_MODEL (priv->track_list_model),
                                                                  &currentFile);
-                et_application_window_browser_select_file_by_iter_string(MainWindow, text_path, TRUE);
+                et_browser_select_file_by_iter_string(MainWindow->browser(), text_path, TRUE);
             }
 
             g_free (text_path);
@@ -1988,7 +1988,7 @@ Cddb_Set_Track_Infos_To_File_List (EtCDDBDialog *self)
     et_application_window_update_et_file_from_ui(MainWindow);
 
     /* FIXME: Hack! */
-    file_selection = et_application_window_browser_get_selection(MainWindow);
+    file_selection = et_browser_get_selection(MainWindow->browser());
     fileListModel = GTK_LIST_STORE (gtk_tree_view_get_model (gtk_tree_selection_get_tree_view (file_selection)));
     list_length = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->track_list_model), NULL);
 
@@ -2132,7 +2132,7 @@ Cddb_Set_Track_Infos_To_File_List (EtCDDBDialog *self)
             if (!etfile)
             {
                 fileIter = (GtkTreeIter*) file_iterlist->data;
-                etfile = et_application_window_browser_get_et_file_from_iter(MainWindow, fileIter);
+                etfile = et_browser_get_et_file_from_iter(MainWindow->browser(), fileIter);
             }
 
             /* Tag fields. */
@@ -2147,7 +2147,7 @@ Cddb_Set_Track_Infos_To_File_List (EtCDDBDialog *self)
             guint set_fields;
 
             fileIter = (GtkTreeIter*) file_iterlist->data;
-            etfile = et_application_window_browser_get_et_file_from_iter(MainWindow, fileIter);
+            etfile = et_browser_get_et_file_from_iter(MainWindow->browser(), fileIter);
 
             /* Tag fields. */
             set_fields = g_settings_get_flags (MainSettings, "cddb-set-fields");
@@ -2164,7 +2164,7 @@ Cddb_Set_Track_Infos_To_File_List (EtCDDBDialog *self)
     g_list_free_full (g_list_first (selectedrows),
                       (GDestroyNotify)gtk_tree_path_free);
 
-    et_application_window_browser_refresh_list(MainWindow);
+    et_browser_refresh_list(MainWindow->browser());
     et_application_window_display_et_file(MainWindow, ETCore->ETFileDisplayed);
 
     return TRUE;
@@ -2504,14 +2504,14 @@ et_cddb_dialog_search_from_selection (EtCDDBDialog *self)
 
     /* Number of selected files. */
     /* FIXME: Hack! */
-    file_selection = et_application_window_browser_get_selection(MainWindow);
+    file_selection = et_browser_get_selection(MainWindow->browser());
     n_files = gtk_tree_selection_count_selected_rows (file_selection);
 
     /* Either take the selected files, or use all files if no files are
      * selected. */
     if (n_files > 0)
     {
-        filelist = et_application_window_browser_get_selected_files(MainWindow);
+        filelist = et_browser_get_selected_files(MainWindow->browser());
     }
     else /* No rows selected, use the whole list */
     {
@@ -2526,7 +2526,7 @@ et_cddb_dialog_search_from_selection (EtCDDBDialog *self)
             {
                 ET_File *etfile;
 
-                etfile = et_application_window_browser_get_et_file_from_iter(MainWindow, &iter);
+                etfile = et_browser_get_et_file_from_iter(MainWindow->browser(), &iter);
                 filelist = g_list_prepend (filelist, etfile);
                 n_files++;
             } while (gtk_tree_model_iter_next (model, &iter));

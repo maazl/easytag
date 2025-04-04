@@ -132,7 +132,7 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
 
     if (g_settings_get_boolean (MainSettings, "playlist-selected-only"))
     {
-        etfilelist = et_application_window_browser_get_selected_files(MainWindow);
+        etfilelist = et_browser_get_selected_files(MainWindow->browser());
     }
     else
     {

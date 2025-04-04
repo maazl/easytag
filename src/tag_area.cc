@@ -24,6 +24,7 @@
 #include <glib/gi18n.h>
 
 #include "application_window.h"
+#include "browser.h"
 #include "charset.h"
 #include "easytag.h"
 #include "file_list.h"
@@ -233,7 +234,7 @@ on_apply_to_selection (GObject *object,
 
     et_application_window_update_et_file_from_ui (window);
 
-    etfilelist = et_application_window_browser_get_selected_files (window);
+    etfilelist = et_browser_get_selected_files(window->browser());
 
     if (object == G_OBJECT (priv->title_entry))
     {
@@ -524,7 +525,7 @@ on_apply_to_selection (GObject *object,
     g_list_free(etfilelist);
 
     /* Refresh the whole list (faster than file by file) to show changes. */
-    et_application_window_browser_refresh_list (window);
+    et_browser_refresh_list(window->browser());
 
     /* Display the current file (Needed when sequencing tracks) */
     et_application_window_display_et_file (window, ETCore->ETFileDisplayed);
