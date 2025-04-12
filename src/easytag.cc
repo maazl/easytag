@@ -915,7 +915,7 @@ class ReadDirectoryWorker : public xObj
 
 private:
 	static void OnDirCompleted(GFile* child_dir, const char* error);
-	static void OnFileCompleted(xPtr<ET_File> ETFile, const char* error, bool autofix);
+	static void OnFileCompleted(xPtr<ET_File> ETFile, const char* error);
 	static void OnFinished();
 
 	ReadDirectoryWorker(gString&& path);
@@ -993,15 +993,12 @@ void ReadDirectoryWorker::OnDirCompleted(GFile* child_dir, const char* error)
 	}
 }
 
-void ReadDirectoryWorker::OnFileCompleted(xPtr<ET_File> ETFile, const char* error, bool autofix)
+void ReadDirectoryWorker::OnFileCompleted(xPtr<ET_File> ETFile, const char* error)
 {	if (error)
 		Log_Print(LOG_ERROR, _("Error reading tag from %s ‘%s’: %s"),
 			ETFile->ETFileDescription->FileType, ETFile->FileNameNew()->full_name().get(), error);
-	else if (autofix)
+	else if (ETFile->autofix())
 		Log_Print(LOG_INFO, _("Automatic corrections applied for file ‘%s’"), ETFile->FileNameNew()->full_name().get());
-
-	/* Add the item to the "main list" */
-	ETCore->ETFileList = g_list_prepend(ETCore->ETFileList, xPtr<ET_File>::toCptr(ETFile));
 
   /* Update the progress bar. */
   et_application_window_progress_set(MainWindow, ++Instance->FilesCompleted, Instance->FilesTotal);
@@ -1145,13 +1142,11 @@ void ReadDirectoryWorker::ItemWorker()
 		if (!item.second)
 		{	/* Get description of the file */
 			xPtr<ET_File> ETFile(new ET_File(gString(g_file_get_path(item.first.get()))));
-			bool autofix = false;
 
-			if (ETFile->read_file(item.first.get(), RootPath, &error))
-				autofix = ETFile->autofix();
+			ETFile->read_file(item.first.get(), RootPath, &error);
 
-			gIdleAdd(new function<void()>([ETFile = move(ETFile), msg = xString(error ? error->message : nullptr), autofix]()
-				{	OnFileCompleted(move(ETFile), msg, autofix); }));
+			gIdleAdd(new function<void()>([ETFile = move(ETFile), msg = xString(error ? error->message : nullptr)]()
+				{	OnFileCompleted(move(ETFile), msg); }));
 		} else
 		{	// Searching for files recursively.
 			gObject<GFileEnumerator> childdir_enumerator(g_file_enumerate_children(item.first.get(),
