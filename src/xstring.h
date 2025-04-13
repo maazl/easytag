@@ -376,7 +376,7 @@ public:
 };
 
 
-/// Variant of \ref xString that treats \c nullptr as an empty string
+/// Variant of \ref xString that treats `nullptr` as an empty string
 class xString0 : public xString
 {public:
 	using xString::xString;
@@ -392,7 +392,7 @@ class xString0 : public xString
 	xString0& operator=(xString0&& r) = default;
 
 	/// Implicit conversion to C string.
-	constexpr operator const char*() const noexcept { return xString::get() ? xString::get() : ""; }
+	constexpr operator const char*() const noexcept { return xString::get() ? xString::get() : empty_str.C.data(); }
 	/// Explicit conversion to C string.
 	constexpr const char* get() const noexcept { return *this; }
 
@@ -431,7 +431,7 @@ class xString0 : public xString
 	/// @return Collation key or \c nullptr if the current instance is null.
 	/// @remarks The collation key is generated on the first call and cached.
 	/// Furthermore is is a file name collation key with special handling for numbers.
-	const gchar* collation_key() const { return empty() ? "" : xString::collation_key(); }
+	const gchar* collation_key() const { return empty() ? empty_str.C.data() : xString::collation_key(); }
 	/// Relational comparison (spaceship operator)
 	/// @details Compares the collation keys.
 	int compare(const xString0& r) const;
@@ -458,7 +458,7 @@ class xStringD0 : public xStringD
 	xStringD0& operator=(xStringD0&& r) = default;
 
 	/// Implicit conversion to C string.
-	constexpr operator const char*() const noexcept { return Ptr ? xStringD::get() : ""; }
+	constexpr operator const char*() const noexcept { return Ptr ? xStringD::get() : empty_str.C.data(); }
 	/// Explicit conversion to C string.
 	constexpr const char* get() const noexcept { return *this; }
 
@@ -497,7 +497,7 @@ class xStringD0 : public xStringD
 	/// @return Collation key or \c nullptr if the current instance is null.
 	/// @remarks The collation key is generated on the first call and cached.
 	/// Furthermore is is a file name collation key with special handling for numbers.
-	const gchar* collation_key() const { return empty() ? "" : xStringD::collation_key(); }
+	const gchar* collation_key() const { return empty() ? empty_str.C.data() : xStringD::collation_key(); }
 	/// Relational comparison (spaceship operator)
 	/// @details Compares the collation keys.
 	int compare(const xStringD0& r) const;

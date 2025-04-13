@@ -43,11 +43,11 @@ const xString::literal<0> xString::empty_str("");
 
 #ifndef NDEBUG
 void xString::header::checkstillused() const
-{	if ((RefCount & (std::numeric_limits<unsigned>::max() >> 1)) == 1) // ignore xStringD repository
+{	unsigned count = RefCount & (std::numeric_limits<unsigned>::max() >> 1); // ignore xStringD repository
+	if (count == 1) // ignore xStringD repository
 		return;
-	fprintf(stderr, "xString literal destroyed while in use. Use count %d, value '%s'\n",
-		RefCount.load(), static_cast<const storage<0>*>(this)->C.data());
-	std::abort();
+	g_error("xString literal destroyed while in use. Use count %u, value '%s'\n",
+		count, static_cast<const storage<0>*>(this)->C.data());
 }
 #endif
 
