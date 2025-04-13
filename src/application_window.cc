@@ -1531,6 +1531,11 @@ et_application_window_destroy(GtkWidget *object)
     self = ET_APPLICATION_WINDOW (object);
     priv = et_application_window_get_instance_private (self);
 
+    // For some magic reason this event always fires twice.
+    // => Ignore the 2nd call.
+    if (!priv->browser)
+        return;
+
     if (ETCore)
     {
         save_state (self);
@@ -1580,6 +1585,8 @@ et_application_window_destroy(GtkWidget *object)
     }
 
     GTK_WIDGET_CLASS (et_application_window_parent_class)->destroy (object);
+
+    priv->browser = NULL; // mark as destroyed
 }
 
 static void
