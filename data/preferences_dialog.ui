@@ -121,14 +121,6 @@
 									</object>
 								</child>
 								<child>
-									<object class="GtkCheckButton" id="browser_case_check">
-										<property name="label" translatable="yes">Sort files case-sensitively</property>
-										<property name="margin-left">12</property>
-										<property name="tooltip-text" translatable="yes">Whether file sorting is case-sensitive</property>
-										<property name="visible">True</property>
-									</object>
-								</child>
-								<child>
 									<object class="GtkGrid" id="browser_padding_grid">
 										<property name="column-spacing">12</property>
 										<property name="margin-left">12</property>

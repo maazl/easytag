@@ -5,6 +5,7 @@
     * Add support for original year and release year tag
     * Add support for sub title and media title tag
     * Add support for long description tag (not supported by ID3V2 tags)
+    * Add ASF/Windows Media support
     * Process directory scan and ReplayGain asynchronously
     * Speed up directory scan by at least an order of magnitude
     * Write comment to COMMENT rather than DESCRIPTION in Ogg files
@@ -18,8 +19,8 @@
       by double click in browser
     * Use current sort order as base for zebra background
     * Highlight changes in browser window
-    * Add columns with file information (size, bitrate, duration,...)
-    * Add ASF/Windows Media support
+    * Add columns with file information (size, bitrate, duration ...)
+    * Removed case sensitive sorting (buggy and slow)
     * Save memory (deduplicate tag and image data)
     * Optionally use similar Unicode replacement characters for reserved
       characters in file names

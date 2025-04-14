@@ -190,37 +190,33 @@ static gint CmpCreationDate(const ET_File* ETFile1, const ET_File* ETFile2)
  * requested case-sensitivity.
  *
  * @tparam V Field to compare
- * @tparam CS Whether the sorting should obey case
- * @tparam ST Whether to sort by track as second criterion
+ * @tparam SC Second comparer if this comparison returns equal
  * @param file1 1st file
  * @param file2 2nd file
  * @return An integer less than, equal to, or greater than zero, if str1 is
  * less than, equal to or greater than str2
  */
-template <xStringD0 File_Tag::*V, bool CS, bool ST>
-static gint CmpTagString2(const ET_File* file1, const ET_File* file2)
+template <xStringD0 File_Tag::*V, gint (*SC)(const ET_File* ETFile1, const ET_File* ETFile2) = nullptr>
+static gint CmpTagString(const ET_File* file1, const ET_File* file2)
 {
 	const xStringD0& str1 = file1->FileTagNew()->*V;
 	const xStringD0& str2 = file2->FileTagNew()->*V;
 
-	gint result;
-	if (CS)
-		result = str1.compare(str2);
-	else
-	{	if (!str2)
-			return !!str1;
-		if (!str1)
-			return -1;
-		if (strcmp(str1, str2) == 0)
-			goto second;
-		result = et_normalized_strcasecmp0(str1, str2);
-	}
+	gint result = str1.compare(str2);
 	if (result != 0)
 		return sign(result);
 
 	/* Secondary criterion. */
-second:
-	return 2 * (ST ? CmpDiscNumber(file1, file2) : CmpFilepath(file1, file2));
+#if __GNUC__ // work around for gcc bug fixed in 13
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Waddress"
+#endif
+	if (!SC)
+		return 0;
+#if __GNUC__ // work around for gcc bug fixed in 13
+#pragma GCC diagnostic pop
+#endif
+	return 2 * SC(file1, file2);
 }
 
 /*
@@ -300,13 +296,6 @@ static gint CmpRev(const ET_File *file1, const ET_File *file2)
 {	return F(file2, file1);
 }
 
-template <xStringD0 File_Tag::*V, bool R = false, bool ST = false>
-static gint (*CmpTagString())(const ET_File *file1, const ET_File *file2)
-{	return g_settings_get_boolean(MainSettings, "sort-case-sensitive")
-		? (R ? CmpRev<CmpTagString2<V,true,ST>> : CmpTagString2<V,true,ST>)
-		: (R ? CmpRev<CmpTagString2<V,false,ST>> : CmpTagString2<V,false,ST>);
-}
-
 /*
  * Get sort function by sort mode.
  */
@@ -323,33 +312,33 @@ gint (*ET_File::get_comp_func(EtSortMode sort_mode))(const ET_File *ETFile1, con
 	case ET_SORT_MODE_DESCENDING_FILENAME:
 		return CmpRev<CmpFilename>;
 	case ET_SORT_MODE_ASCENDING_TITLE:
-		return CmpTagString<&File_Tag::title, false>();
+		return CmpTagString<&File_Tag::title, CmpFilepath>;
 	case ET_SORT_MODE_DESCENDING_TITLE:
-		return CmpTagString<&File_Tag::title, true>();
+		return CmpRev<CmpTagString<&File_Tag::title, CmpFilepath>>;
 	case ET_SORT_MODE_ASCENDING_VERSION:
-		return CmpTagString<&File_Tag::version, false>();
+		return CmpTagString<&File_Tag::version, CmpFilepath>;
 	case ET_SORT_MODE_DESCENDING_VERSION:
-		return CmpTagString<&File_Tag::version, true>();
+		return CmpRev<CmpTagString<&File_Tag::version, CmpFilepath>>;
 	case ET_SORT_MODE_ASCENDING_SUBTITLE:
-		return CmpTagString<&File_Tag::subtitle, false, true>();
+		return CmpTagString<&File_Tag::subtitle, CmpDiscNumber>;
 	case ET_SORT_MODE_DESCENDING_SUBTITLE:
-		return CmpTagString<&File_Tag::subtitle, true, true>();
+		return CmpRev<CmpTagString<&File_Tag::subtitle, CmpDiscNumber>>;
 	case ET_SORT_MODE_ASCENDING_ARTIST:
-		return CmpTagString<&File_Tag::artist, false>();
+		return CmpTagString<&File_Tag::artist, CmpFilepath>;
 	case ET_SORT_MODE_DESCENDING_ARTIST:
-		return CmpTagString<&File_Tag::artist, true>();
+		return CmpRev<CmpTagString<&File_Tag::artist, CmpFilepath>>;
 	case ET_SORT_MODE_ASCENDING_ALBUM_ARTIST:
-		return CmpTagString<&File_Tag::album_artist, false, true>();
+		return CmpTagString<&File_Tag::album_artist, CmpDiscNumber>;
 	case ET_SORT_MODE_DESCENDING_ALBUM_ARTIST:
-		return CmpTagString<&File_Tag::album_artist, true, true>();
+		return CmpRev<CmpTagString<&File_Tag::album_artist, CmpDiscNumber>>;
 	case ET_SORT_MODE_ASCENDING_ALBUM:
-		return CmpTagString<&File_Tag::album, false, true>();
+		return CmpTagString<&File_Tag::album, CmpDiscNumber>;
 	case ET_SORT_MODE_DESCENDING_ALBUM:
-		return CmpTagString<&File_Tag::album, true, true>();
+		return CmpRev<CmpTagString<&File_Tag::album, CmpDiscNumber>>;
 	case ET_SORT_MODE_ASCENDING_DISC_SUBTITLE:
-		return CmpTagString<&File_Tag::disc_subtitle, false, true>();
+		return CmpTagString<&File_Tag::disc_subtitle, CmpDiscNumber>;
 	case ET_SORT_MODE_DESCENDING_DISC_SUBTITLE:
-		return CmpTagString<&File_Tag::disc_subtitle, true, true>();
+		return CmpRev<CmpTagString<&File_Tag::disc_subtitle, CmpDiscNumber>>;
 	case ET_SORT_MODE_ASCENDING_YEAR:
 		return CmpTagInt<&File_Tag::year>;
 	case ET_SORT_MODE_DESCENDING_YEAR:
@@ -367,37 +356,37 @@ gint (*ET_File::get_comp_func(EtSortMode sort_mode))(const ET_File *ETFile1, con
 	case ET_SORT_MODE_DESCENDING_TRACK_NUMBER:
 		return CmpRev<CmpTrackNumber>;
 	case ET_SORT_MODE_ASCENDING_GENRE:
-		return CmpTagString<&File_Tag::genre, false>();
+		return CmpTagString<&File_Tag::genre, CmpFilepath>;
 	case ET_SORT_MODE_DESCENDING_GENRE:
-		return CmpTagString<&File_Tag::genre, true>();
+		return CmpRev<CmpTagString<&File_Tag::genre, CmpFilepath>>;
 	case ET_SORT_MODE_ASCENDING_COMMENT:
-		return CmpTagString<&File_Tag::comment, false>();
+		return CmpTagString<&File_Tag::comment, CmpFilepath>;
 	case ET_SORT_MODE_DESCENDING_COMMENT:
-		return CmpTagString<&File_Tag::comment, true>();
+		return CmpRev<CmpTagString<&File_Tag::comment, CmpFilepath>>;
 	case ET_SORT_MODE_ASCENDING_COMPOSER:
-		return CmpTagString<&File_Tag::composer, false>();
+		return CmpTagString<&File_Tag::composer, CmpFilepath>;
 	case ET_SORT_MODE_DESCENDING_COMPOSER:
-		return CmpTagString<&File_Tag::composer, true>();
+		return CmpRev<CmpTagString<&File_Tag::composer, CmpFilepath>>;
 	case ET_SORT_MODE_ASCENDING_ORIG_ARTIST:
-		return CmpTagString<&File_Tag::orig_artist, false>();
+		return CmpTagString<&File_Tag::orig_artist, CmpFilepath>;
 	case ET_SORT_MODE_DESCENDING_ORIG_ARTIST:
-		return CmpTagString<&File_Tag::orig_artist, true>();
+		return CmpRev<CmpTagString<&File_Tag::orig_artist, CmpFilepath>>;
 	case ET_SORT_MODE_ASCENDING_ORIG_YEAR:
 		return CmpTagInt<&File_Tag::orig_year>;
 	case ET_SORT_MODE_DESCENDING_ORIG_YEAR:
 		return CmpRev<CmpTagInt<&File_Tag::orig_year>>;
 	case ET_SORT_MODE_ASCENDING_COPYRIGHT:
-		return CmpTagString<&File_Tag::copyright, false>();
+		return CmpTagString<&File_Tag::copyright, CmpFilepath>;
 	case ET_SORT_MODE_DESCENDING_COPYRIGHT:
-		return CmpTagString<&File_Tag::copyright, true>();
+		return CmpRev<CmpTagString<&File_Tag::copyright, CmpFilepath>>;
 	case ET_SORT_MODE_ASCENDING_URL:
-		return CmpTagString<&File_Tag::url, false>();
+		return CmpTagString<&File_Tag::url, CmpFilepath>;
 	case ET_SORT_MODE_DESCENDING_URL:
-		return CmpTagString<&File_Tag::url, true>();
+		return CmpRev<CmpTagString<&File_Tag::url, CmpFilepath>>;
 	case ET_SORT_MODE_ASCENDING_ENCODED_BY:
-		return CmpTagString<&File_Tag::encoded_by, false>();
+		return CmpTagString<&File_Tag::encoded_by, CmpFilepath>;
 	case ET_SORT_MODE_DESCENDING_ENCODED_BY:
-		return CmpTagString<&File_Tag::encoded_by, true>();
+		return CmpRev<CmpTagString<&File_Tag::encoded_by, CmpFilepath>>;
 	case ET_SORT_MODE_ASCENDING_CREATION_DATE:
 		return CmpCreationDate;
 	case ET_SORT_MODE_DESCENDING_CREATION_DATE:

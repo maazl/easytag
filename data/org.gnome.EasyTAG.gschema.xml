@@ -163,12 +163,6 @@
       <default>true</default>
     </key>
 
-    <key name="sort-case-sensitive" type="b">
-      <summary>Sort files case-sensitively</summary>
-      <description>Whether file sorting is case-sensitive</description>
-      <default>true</default>
-    </key>
-
     <key name="sort-mode" enum="org.gnome.EasyTAG.EtSortMode">
       <summary>How to sort audio files in the file list</summary>
       <description>Sort files in ascending or descending order for the selected type</description>

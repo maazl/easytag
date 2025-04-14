@@ -45,7 +45,6 @@ typedef struct
     GtkWidget *browser_subdirs_check;
     GtkWidget *browser_expand_subdirs_check;
     GtkWidget *browser_hidden_check;
-    GtkWidget *browser_case_check;
     GtkWidget *browser_max_lines_check;
     GtkWidget *browser_max_lines;
     GtkWidget *hide_fields_subtitle_check;
@@ -395,7 +394,6 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
 
     /* Browse hidden directories */
     bind_boolean("browse-show-hidden", priv->browser_hidden_check);
-    bind_boolean("sort-case-sensitive", priv->browser_case_check);
 
     /* Row max lines */
     bind_boolean("browse-limit-lines", priv->browser_max_lines_check);
@@ -924,7 +922,6 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_subdirs_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_expand_subdirs_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_hidden_check);
-    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_case_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_max_lines_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_max_lines);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_subtitle_check);

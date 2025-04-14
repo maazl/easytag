@@ -192,7 +192,10 @@ int xString::compare(const xString& r) const
 		return -1;
 	if (!r.Ptr)
 		return 1;
-	return strcmp(collation_key(), r.collation_key());
+	int result = strcmp(collation_key(), r.collation_key());
+	// Comparing collation keys sometimes compare equal for different strings
+	// use strcmp result in this case.
+	return result ? result : strcmp(*this, r);
 }
 
 
@@ -344,7 +347,10 @@ int xString0::compare(const xString0& r) const
 		return -1;
 	if (!*rc)
 		return 1;
-	return strcmp(collation_key(), r.collation_key());
+	int result = strcmp(collation_key(), r.collation_key());
+	// Comparing collation keys sometimes compare equal for different strings
+	// use strcmp result in this case.
+	return result ? result : strcmp(lc, rc);
 }
 
 bool xStringD0::equals(const char* str) const noexcept
@@ -376,5 +382,9 @@ int xStringD0::compare(const xStringD0& r) const
 		return -1;
 	if (!*rc)
 		return 1;
-	return strcmp(collation_key(), r.collation_key());
+	// deduplicated strings cannot be equal at this point
+	int result = strcmp(collation_key(), r.collation_key());
+	// but nevertheless collation keys sometimes compare equal
+	// use strcmp result in this case.
+	return result ? result : strcmp(lc, rc);
 }

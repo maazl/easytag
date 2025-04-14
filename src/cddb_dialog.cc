@@ -2425,18 +2425,24 @@ Cddb_Track_List_Sort_Func (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
         case SORT_LIST_NAME:
             gtk_tree_model_get(model, a, CDDB_TRACK_LIST_NAME, &text1, -1);
             gtk_tree_model_get(model, b, CDDB_TRACK_LIST_NAME, &text2, -1);
-            text1cp = g_utf8_collate_key_for_filename(text1, -1);
-            text2cp = g_utf8_collate_key_for_filename(text2, -1);
             // Must be the same rules as "ET_Comp_Func_Sort_File_By_Ascending_Filename" to be
             // able to sort in the same order files in cddb and in the file list.
-            ret = g_settings_get_boolean (MainSettings,
-                                          "sort-case-sensitive") ? strcmp (text1cp, text2cp)
-                                                                 : strcasecmp (text1cp, text2cp);
+            ret = strcmp(text1, text2); // fast path for equality
+            if (ret)
+            {
+                gchar* text1cp = g_utf8_collate_key_for_filename(text1, -1);
+                gchar* text2cp = g_utf8_collate_key_for_filename(text2, -1);
+                int ret2 = strcmp(text1cp, text2cp);
+                // Comparing collation keys sometimes compare equal for different strings
+                // use strcmp result in this case.
+                if (ret2 != 0)
+                    ret = ret2;
+                g_free(text1cp);
+                g_free(text2cp);
+            }
 
             g_free(text1);
             g_free(text2);
-            g_free(text1cp);
-            g_free(text2cp);
             break;
         default:
             g_assert_not_reached ();
