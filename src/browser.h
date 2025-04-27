@@ -23,8 +23,11 @@
 #include <gtk/gtk.h>
 
 #include "setting.h"
+#include "file.h"
 
-struct ET_File;
+#include <vector>
+
+
 struct File_Name;
 
 #define ET_TYPE_BROWSER (et_browser_get_type ())
@@ -35,8 +38,23 @@ typedef struct _EtBrowserClass EtBrowserClass;
 
 struct _EtBrowser
 {
-    /*< private >*/
-    GtkBin parent_instance;
+	/*< private >*/
+	GtkBin parent_instance;
+
+private:
+	bool has_file();
+	ET_File* current_file();
+
+public:
+	void load_file_list();
+	void clear();
+
+	bool has_prev();
+	bool has_next();
+	ET_File* select_first_file();
+	ET_File* select_last_file();
+	ET_File* select_prev_file();
+	ET_File* select_next_file();
 };
 
 struct _EtBrowserClass
@@ -51,44 +69,29 @@ void et_browser_show_open_directory_with_dialog (EtBrowser *self);
 void et_browser_show_open_files_with_dialog (EtBrowser *self);
 void et_browser_show_rename_directory_dialog (EtBrowser *self);
 
-typedef enum
+enum EtBrowserMode : int
 {
     ET_BROWSER_MODE_FILE,
-    ET_BROWSER_MODE_ARTIST
-} EtBrowserMode;
-
-/*
- * To number columns of ComboBox
- */
-enum
-{
-    MISC_COMBO_TEXT, // = 0 (First column)
-    MISC_COMBO_COUNT // = 1 (Number of columns in ComboBox)
+    ET_BROWSER_MODE_ARTIST,
+    ET_BROWSER_MODE_ARTIST_ALBUM
 };
-
-void et_browser_clear_album_model (EtBrowser *self);
-void et_browser_clear_artist_model (EtBrowser *self);
 
 void et_browser_select_dir (EtBrowser *self, GFile *file);
 void et_browser_reload (EtBrowser *self);
 void et_browser_collapse (EtBrowser *self);
 void et_browser_set_sensitive (EtBrowser *self, gboolean sensitive);
 
-void et_browser_load_file_list (EtBrowser *self, GList *etfilelist, const ET_File *etfile_to_select);
 void et_browser_refresh_list (EtBrowser *self);
 void et_browser_refresh_file_in_list (EtBrowser *self, const ET_File *ETFile);
-void et_browser_clear (EtBrowser *self);
+
 void et_browser_select_file_by_et_file (EtBrowser *self, const ET_File *ETFile, gboolean select_it);
 GtkTreePath * et_browser_select_file_by_et_file2 (EtBrowser *self, const ET_File *searchETFile, gboolean select_it, GtkTreePath *startPath);
 void et_browser_select_file_by_iter_string (EtBrowser *self, const gchar* stringiter, gboolean select_it);
 ET_File *et_browser_select_file_by_dlm (EtBrowser *self, const gchar* string, gboolean select_it);
-void et_browser_refresh_sort (EtBrowser *self);
 void et_browser_select_all (EtBrowser *self);
 void et_browser_unselect_all (EtBrowser *self);
 void et_browser_invert_selection (EtBrowser *self);
 void et_browser_remove_file (EtBrowser *self, const ET_File *ETFile);
-ET_File * et_browser_get_et_file_from_path (EtBrowser *self, GtkTreePath *path);
-ET_File * et_browser_get_et_file_from_iter (EtBrowser *self, GtkTreeIter *iter);
 
 void et_browser_entry_set_text (EtBrowser *self, const gchar *text);
 void et_browser_label_set_text (EtBrowser *self, const gchar *text);
@@ -115,9 +118,6 @@ const gchar* et_browser_get_current_path_name (EtBrowser *self);
 void et_browser_save_state(EtBrowser *self, GKeyFile* keyfile);
 void et_browser_restore_state(EtBrowser *self, GKeyFile* keyfile);
 
-GList * et_browser_get_selected_files (EtBrowser *self);
-GtkTreeSelection * et_browser_get_selection (EtBrowser *self);
-
-GtkTreeViewColumn * et_browser_get_column_for_sort_mode (EtBrowser *self, EtSortMode sort_mode);
+std::vector<xPtr<ET_File>> et_browser_get_selected_files(EtBrowser *self);
 
 #endif /* ET_BROWSER_H_ */

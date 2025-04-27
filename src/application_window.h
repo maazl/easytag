@@ -23,6 +23,7 @@
 
 #include "file.h"
 
+struct _EtBrowser;
 
 #define ET_TYPE_APPLICATION_WINDOW (et_application_window_get_type ())
 #define ET_APPLICATION_WINDOW(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_APPLICATION_WINDOW, EtApplicationWindow))
@@ -35,7 +36,20 @@ struct _EtApplicationWindow
     /*< private >*/
     GtkApplicationWindow parent_instance;
 
+    /// Access the browser instance.
     struct _EtBrowser* browser();
+
+    /// Get the file currently displayed in tag file/area or `nullptr` if none.
+    ET_File* get_displayed_file();
+    /// Replaces the currently edited file.
+    /// @param etfile New file to show. `nullptr` to clear the controls.
+    /// @details Any changes to the previous file are applied first.
+    /// @remarks This function is dedicated to the browser.
+    /// It does not change the browser's selection.
+    void change_displayed_file(ET_File* etfile);
+
+    /// Disable (`false`) / enable (`true`) all user widgets related to the currently displayed file.
+    void displayed_file_sensitive(bool sensitive);
 };
 
 struct _EtApplicationWindowClass
@@ -46,13 +60,6 @@ struct _EtApplicationWindowClass
 
 GType et_application_window_get_type (void);
 EtApplicationWindow *et_application_window_new (GtkApplication *application);
-File_Tag * et_application_window_tag_area_create_file_tag (EtApplicationWindow *self);
-void et_application_window_tag_area_clear (EtApplicationWindow *self);
-void et_application_window_tag_area_set_sensitive (EtApplicationWindow *self, gboolean sensitive);
-const gchar * et_application_window_file_area_get_filename (EtApplicationWindow *self);
-void et_application_window_file_area_set_file_fields (EtApplicationWindow *self, const ET_File *ETFile);
-void et_application_window_file_area_clear (EtApplicationWindow *self);
-void et_application_window_file_area_set_sensitive (EtApplicationWindow *self, gboolean sensitive);
 
 void et_application_set_action_state(EtApplicationWindow *self, const gchar *action_name, gboolean enabled);
 /** Disable buttons when saving files (do not disable Quit button). */
@@ -61,22 +68,26 @@ void et_application_window_disable_command_actions (EtApplicationWindow *self, g
  * the commands area and menu items in function of state of the "main list". */
 void et_application_window_update_actions (EtApplicationWindow *self);
 
+// TODO: unused?
 void et_application_window_set_busy_cursor (EtApplicationWindow *self);
 void et_application_window_set_normal_cursor (EtApplicationWindow *self);
-void et_application_window_tag_area_display_controls (EtApplicationWindow *self, const ET_File *ETFile);
+
 GtkWidget * et_application_window_get_log_area (EtApplicationWindow *self);
 void et_application_window_show_preferences_dialog_scanner (EtApplicationWindow *self);
-void et_application_window_browser_toggle_display_mode (EtApplicationWindow *self);
+void et_application_window_browser_update_display_mode (EtApplicationWindow *self);
 void et_application_window_search_dialog_clear (EtApplicationWindow *self);
-void et_application_window_select_dir (EtApplicationWindow *self, GFile *file);
 void et_application_window_select_file_by_et_file (EtApplicationWindow *self, ET_File *ETFile);
 GFile * et_application_window_get_current_path (EtApplicationWindow *self);
 const gchar* et_application_window_get_current_path_name (EtApplicationWindow *self);
 GtkWidget * et_application_window_get_scan_dialog (EtApplicationWindow *self);
 void et_application_window_apply_changes (EtApplicationWindow *self);
+/// Ssve changes in tag area to global file list.
 void et_application_window_update_et_file_from_ui (EtApplicationWindow *self);
-void et_application_window_display_et_file (EtApplicationWindow *self, ET_File *ETFile, int columns = ~0);
+/// Update tag area from current file.
+/// @param columns Only update this fields.
+void et_application_window_update_ui_from_et_file (EtApplicationWindow *self, EtColumn columns = (EtColumn)~0);
 void et_application_window_browser_unselect_all (EtApplicationWindow *self);
+
 void et_application_window_scan_dialog_update_previews (EtApplicationWindow *self);
 /** Set progress bar value.
  * @param current current progress

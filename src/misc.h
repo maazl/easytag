@@ -191,14 +191,19 @@ std::string et_track_number_to_string(unsigned track_number);
 /*
  * Combobox misc functions
  */
+
+/* To number columns of ComboBox */
+enum
+{
+    MISC_COMBO_TEXT, // = 0 (First column)
+    MISC_COMBO_COUNT // = 1 (Number of columns in ComboBox)
+};
+
 gboolean Add_String_To_Combo_List(GtkListStore *liststore, const gchar *string);
 
 gboolean et_variant_string_array_contains(GVariant* variant, const char* value);
 GVariant* et_variant_string_array_toggle(GVariant* variant, const char* value);
 GVariant* et_variant_string_array_set(GVariant* variant, const char* value, gboolean set);
-
-gboolean et_run_audio_player (GList *files, GError **error);
-gboolean et_run_program (const gchar *program_name, GList *args_list, GError **error);
 
 gboolean et_rename_file (const gchar *old_filename, const gchar *new_filename, GError **error);
 

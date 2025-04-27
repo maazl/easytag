@@ -40,7 +40,6 @@
 #include "log.h"
 #include "misc.h"
 #include "browser.h"
-#include "et_core.h"
 
 #include "win32/win32dep.h"
 

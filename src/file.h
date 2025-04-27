@@ -29,6 +29,13 @@
 #include "undo_list.h"
 #include "xptr.h"
 
+#include <vector>
+#include <atomic>
+
+
+enum EtBrowserMode : int;
+
+
 /*
  * Structure containing informations of the header of file
  * Nota: This struct was copied from an "MP3 structure", and will change later.
@@ -66,9 +73,25 @@ private:
 	UndoList<File_Tag>  FileTag;  ///< File tag data with change history
 	bool force_tag_save_;
 
-public:
-	bool activate_bg_color; // For browser list: alternating background due to sub directory change.
-	guint IndexKey;           /* Value used to display the position in the list (and in the BrowserList) - Must be renumered after resorting the list - This value varies when resorting list */
+	/// Key for Undo, strongly monotonic
+	static std::atomic<unsigned> ETUndoKey;
+
+	/// History list of file changes for undo/redo actions
+	static std::vector<xPtr<ET_File>> ETHistoryFileList;
+	/// Current redo index in ETHistoryFileList. Equals ETHistoryFileList.size() unless redo available.
+	static unsigned ETHistoryFileListRedo;
+
+#ifndef NDEBUG
+	static std::atomic<unsigned> Instances;
+#endif
+
+public: // injections from ET_FileList
+	bool activate_bg_color;       ///< For browser list: alternating background due to sub directory change.
+	/// Position in the global file list, intrusion from ET_FileList
+	/// @remarks Must be renumbered after resorting the list.
+	/// This value varies when resorting list and should not be used directly.
+	/// Use ET_FileList::visible_index to get a file's position.
+	unsigned IndexKey;
 
 private:
 	/// Populate FileSize and FileModificationTime
@@ -80,6 +103,9 @@ public:
 	ET_File(gString&& filepath);
 	ET_File(const gString& filepath) : ET_File(gString(g_strdup(filepath))) {}
 	~ET_File();
+#ifndef NDEBUG
+	static unsigned instances() { return Instances; }
+#endif
 
 	/// Currently saved file name
 	const File_Name* FileNameCur() const { return FileName.Cur; }
@@ -112,6 +138,23 @@ public:
 	/// Applies one redo to the ETFile data (to reload the previous data).
 	/// @return \c true if an undo had been applied.
 	bool redo();
+
+	/// Last used UndoKey.
+	/// @remarks All changes with keys larger than this value are done after the time of the function call.
+	static unsigned current_undo_key() { return ETUndoKey; }
+
+	/// \c TRUE if undo file list contains undo data.
+	static gboolean has_global_undo() { return ETHistoryFileListRedo > 0; }
+	/// \c TRUE if undo file list contains redo data.
+	static gboolean has_global_redo() { return ETHistoryFileListRedo < ETHistoryFileList.size(); }
+
+	/// Execute one 'undo' in the main undo list
+	static ET_File* global_undo();
+	/// Execute one 'redo' in the main undo list
+	static ET_File* global_redo();
+
+	/// Discard any global undo history
+	static void reset_undo_history() { ETHistoryFileListRedo = 0; ETHistoryFileList.clear(); }
 
 	bool is_filename_saved() const { return FileName.is_saved(); }
 	bool is_filetag_saved() const { return FileTag.is_saved() && !force_tag_save_; }
@@ -147,6 +190,7 @@ public:
 	bool update_directory_name(const UpdateDirectoyNameArgs& args);
 
 	static gint (*get_comp_func(EtSortMode sort_mode))(const ET_File *ETFile1, const ET_File *ETFile2);
+	static gint (*get_comp_func(EtBrowserMode browser_mode))(const ET_File *ETFile1, const ET_File *ETFile2);
 };
 
 #endif /* !ET_FILE_H_ */

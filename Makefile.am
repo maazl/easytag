@@ -50,7 +50,6 @@ easytag_SOURCES = \
 	src/dlm.c \
 	src/easytag.cc \
 	src/enums.c \
-	src/et_core.cc \
 	src/etflagsaction.cc \
 	src/file.cc \
 	src/file_area.cc \
@@ -111,7 +110,6 @@ easytag_headers = \
 	src/crc32.h \
 	src/dlm.h \
 	src/easytag.h \
-	src/et_core.h \
 	src/etflagsaction.h \
 	src/file.h \
 	src/file_area.h \

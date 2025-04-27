@@ -30,6 +30,8 @@
 #include "log.h"
 #include "misc.h"
 #include "setting.h"
+#include "file_list.h"
+#include "browser.h"
 
 typedef struct
 {
@@ -116,8 +118,8 @@ on_idle_init (EtApplication *self)
 
     priv = et_application_get_instance_private (self);
 
-    ET_Core_Free ();
-    ET_Core_Create ();
+    ET_File::reset_undo_history();
+    ET_FileList::clear();
 
     if (g_settings_get_boolean (MainSettings, "scan-startup"))
     {
@@ -127,7 +129,7 @@ on_idle_init (EtApplication *self)
 
     if (priv->init_directory)
     {
-        et_application_window_select_dir(MainWindow, priv->init_directory);
+        et_browser_select_dir(MainWindow->browser(), priv->init_directory);
     }
     else
     {
@@ -166,9 +168,6 @@ common_init (EtApplication *self)
 
     /* Load Config */
     Init_Config_Variables ();
-
-    /* Initialization */
-    ET_Core_Create ();
 
     /* The main window */
     MainWindow = window = et_application_window_new(GTK_APPLICATION(self));
@@ -449,8 +448,7 @@ et_application_open (GApplication *self,
     {
         if (activated)
         {
-            et_application_window_select_dir (ET_APPLICATION_WINDOW (window),
-                                              arg);
+            et_browser_select_dir(ET_APPLICATION_WINDOW(window)->browser(), arg);
         }
         else
         {
@@ -466,8 +464,7 @@ et_application_open (GApplication *self,
         {
             if (activated)
             {
-                et_application_window_select_dir (ET_APPLICATION_WINDOW (window),
-                                                  parent);
+                et_browser_select_dir(ET_APPLICATION_WINDOW(window)->browser(), parent);
             }
             else
             {
@@ -553,6 +550,14 @@ et_application_dispose (GObject *object)
         g_source_remove (priv->idle_handler);
         priv->idle_handler = 0;
     }
+
+    ET_File::reset_undo_history();
+    ET_FileList::clear();
+#ifndef NDEBUG
+    unsigned file_instances = ET_File::instances();
+    if (file_instances)
+    	g_warning("Memory leak: %u ET_File instances not released.", file_instances);
+#endif
 }
 
 static void

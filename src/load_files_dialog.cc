@@ -33,6 +33,7 @@
 #include "scan_dialog.h"
 #include "setting.h"
 #include "file_name.h"
+#include "file_list.h"
 
 using namespace std;
 
@@ -58,6 +59,8 @@ typedef struct
 G_DEFINE_TYPE_WITH_PRIVATE (EtLoadFilesDialog, et_load_files_dialog, GTK_TYPE_DIALOG)
 #undef et_load_files_dialog_get_instance_private
 #define et_load_files_dialog_get_instance_private(x) (EtLoadFilesDialogPrivate*)et_load_files_dialog_get_instance_private_(x)
+
+static void Clear_Files_List(EtLoadFilesDialog *self);
 
 enum
 {
@@ -93,7 +96,7 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
 
     priv = et_load_files_dialog_get_instance_private (self);
 
-    if ( !ETCore->ETFileList || !priv->file_content_view || !priv->file_name_view)
+    if (ET_FileList::empty() || !priv->file_content_view || !priv->file_name_view)
         return;
 
     et_application_window_update_et_file_from_ui(MainWindow);
@@ -150,7 +153,7 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
     gtk_tree_path_free(currentPath);
 
     et_browser_refresh_list(MainWindow->browser());
-    et_application_window_display_et_file(MainWindow, ETCore->ETFileDisplayed);
+    et_application_window_update_ui_from_et_file(MainWindow);
 }
 
 /*
@@ -173,6 +176,7 @@ on_response (GtkDialog *dialog, gint response_id, gpointer user_data)
             gtk_widget_hide (GTK_WIDGET (dialog));
             break;
         case GTK_RESPONSE_DELETE_EVENT:
+            Clear_Files_List(ET_LOAD_FILES_DIALOG(dialog));
             break;
         default:
             g_assert_not_reached ();
@@ -602,29 +606,37 @@ on_name_move_down_clicked (EtLoadFilesDialog *self,
     Load_Filename_List_Move_Down (priv->file_name_view);
 }
 
+static void Clear_Files_List(EtLoadFilesDialog *self)
+{
+	EtLoadFilesDialogPrivate* priv = et_load_files_dialog_get_instance_private (self);
+
+	// release ET_File references
+	gtk_tree_model_foreach(GTK_TREE_MODEL(priv->file_name_model),
+		[](GtkTreeModel* model, GtkTreePath* path, GtkTreeIter* iter, gpointer data)
+		{	ET_File* etfile;
+			gtk_tree_model_get(model, iter, LOAD_FILE_NAME_POINTER, &etfile, -1);
+			xPtr<ET_File>::fromCptr(etfile);
+			return FALSE;
+		}, NULL);
+
+	gtk_list_store_clear(priv->file_name_model);
+}
+
 /*
  * Load the names of the current list of files
  */
 static void
 Load_File_List (EtLoadFilesDialog *self)
 {
-    EtLoadFilesDialogPrivate *priv;
-    GList *l;
-    ET_File *etfile;
+	Clear_Files_List(self);
 
-    priv = et_load_files_dialog_get_instance_private (self);
+	EtLoadFilesDialogPrivate* priv = et_load_files_dialog_get_instance_private (self);
 
-    gtk_list_store_clear(priv->file_name_model);
-
-    for (l = ETCore->ETFileList; l != NULL; l = g_list_next (l))
-    {
-        etfile = (ET_File *)l->data;
-        gtk_list_store_insert_with_values (priv->file_name_model, NULL,
-                                           G_MAXINT, LOAD_FILE_NAME_TEXT,
-                                           ET_Remove_File_Extension(etfile->FileNameNew()->file()).c_str(),
-                                           LOAD_FILE_NAME_POINTER, l->data,
-                                           -1);
-    }
+	for (xPtr<ET_File> etfile : ET_FileList::all_files())
+		gtk_list_store_insert_with_values(priv->file_name_model, NULL, G_MAXINT,
+			LOAD_FILE_NAME_TEXT, ET_Remove_File_Extension(etfile->FileNameNew()->file()).c_str(),
+			LOAD_FILE_NAME_POINTER, xPtr<ET_File>::toCptr(etfile),
+			-1);
 }
 
 static void

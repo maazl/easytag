@@ -42,7 +42,9 @@
 #include <functional>
 #include <cmath>
 #include <limits>
+#include <unordered_map>
 #include <ctype.h>
+
 using namespace std;
 
 typedef struct
@@ -183,16 +185,16 @@ static gchar* text_view_get_text(GtkTextView* text_view)
 }
 
 template <class F>
-static void apply_field_to_selection(const F& value_to_set, GList *etfilelist,
+static void apply_field_to_selection(const F& value_to_set, const vector<xPtr<ET_File>>& etfilelist,
 	F File_Tag::* field)
-{	for (GList *l = etfilelist; l != NULL; l = g_list_next (l))
-	{	ET_File *etfile = (ET_File *)l->data;
+{	for (auto& l : etfilelist)
+	{	ET_File *etfile = l.get();
 		File_Tag *FileTag = new File_Tag(*etfile->FileTagNew());
 		FileTag->*field = value_to_set;
 		etfile->apply_changes(nullptr, FileTag);
 	}
 }
-static gchar* apply_field_to_selection(GtkWidget* widget, GList *etfilelist,
+static gchar* apply_field_to_selection(GtkWidget* widget, const vector<xPtr<ET_File>>& etfilelist,
 	xStringD0 File_Tag::*field, const gchar* nonempty_text, const gchar* empty_text)
 {	xStringD0 value;
 	value.assignNFC(gtk_entry_get_text(GTK_ENTRY(widget)));
@@ -202,7 +204,7 @@ static gchar* apply_field_to_selection(GtkWidget* widget, GList *etfilelist,
 	else
 		return g_strdup(empty_text);
 }
-static gchar* apply_field_to_selection(GtkWidget* widget, GList *etfilelist,
+static gchar* apply_field_to_selection(GtkWidget* widget, const vector<xPtr<ET_File>>& etfilelist,
 	float File_Tag::*field, const gchar* nonempty_text, const gchar* empty_text)
 {	const char* str = gtk_entry_get_text(GTK_ENTRY(widget));
 	float value = File_Tag::parse_float(str);
@@ -217,24 +219,16 @@ static void
 on_apply_to_selection (GObject *object,
                        EtTagArea *self)
 {
-    EtTagAreaPrivate *priv;
-    EtApplicationWindow *window;
-    GList *etfilelist;
-    GList *l;
-    const gchar *string_to_set;
-    gchar *msg = NULL;
-    ET_File *etfile;
-    File_Tag *FileTag;
+    EtApplicationWindow* window = MainWindow;
+    g_return_if_fail(window);
 
-    g_return_if_fail (ETCore->ETFileDisplayedList != NULL);
-
-    priv = et_tag_area_get_instance_private (self);
-
-    window = MainWindow;
+    EtTagAreaPrivate* priv = et_tag_area_get_instance_private(self);
 
     et_application_window_update_et_file_from_ui (window);
 
-    etfilelist = et_browser_get_selected_files(window->browser());
+    auto etfilelist = et_browser_get_selected_files(window->browser());
+
+    gchar *msg = NULL;
 
     if (object == G_OBJECT (priv->title_entry))
     {
@@ -273,7 +267,7 @@ on_apply_to_selection (GObject *object,
     }
     else if (object == G_OBJECT (priv->disc_number_entry))
     {
-        string_to_set = gtk_entry_get_text (GTK_ENTRY (priv->disc_number_entry));
+        const char* string_to_set = gtk_entry_get_text (GTK_ENTRY (priv->disc_number_entry));
         const char* separator = strchr(string_to_set, '/');
 
         xStringD0 disc_number, disc_total;
@@ -284,10 +278,10 @@ on_apply_to_selection (GObject *object,
         {   disc_number.assignNFC(string_to_set);
         }
 
-        for (l = etfilelist; l != NULL; l = g_list_next (l))
+        for (auto& l : etfilelist)
         {
-            etfile = (ET_File *)l->data;
-            FileTag = new File_Tag(*etfile->FileTagNew());
+            ET_File* etfile = l.get();
+            File_Tag* FileTag = new File_Tag(*etfile->FileTagNew());
             FileTag->disc_number = disc_number;
             FileTag->disc_total = disc_total;
             etfile->apply_changes(nullptr, FileTag);
@@ -318,10 +312,10 @@ on_apply_to_selection (GObject *object,
         if (et_str_empty(total))
             track.assignNFC(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->track_combo_entry)))));
 
-        for (l = etfilelist; l != NULL; l = g_list_next (l))
+        for (auto& l : etfilelist)
         {
-            etfile = (ET_File *)l->data;
-            FileTag = new File_Tag(*etfile->FileTagNew());
+            ET_File* etfile = l.get();
+            File_Tag* FileTag = new File_Tag(*etfile->FileTagNew());
 
             if (track)
                 FileTag->track = track;
@@ -339,85 +333,69 @@ on_apply_to_selection (GObject *object,
     else if (object == G_OBJECT (priv->track_sequence_button))
     {
         /* This part doesn't set the same track number to all files, but sequence the tracks.
-         * So we must browse the whole 'etfilelistfull' to get position of each selected file.
-         * Note : 'etfilelistfull' and 'etfilelist' must be sorted in the same order */
-        GList *etfilelistfull = NULL;
-        EtSortMode sort_mode;
-        xStringD0 last_path;
-        gint i = 0;
+         * So we must browse the whole file list to get position of each selected file. */
+        unordered_map<const char*, unsigned, xString::hasher, xString::equal> by_path;
 
-        /* FIX ME!: see to fill also the Total Track (it's a good idea?) */
-        etfilelistfull = ETCore->ETFileList;
+        // collect relevant paths
+        for (const ET_File* file : etfilelist)
+            by_path.emplace(file->FileNameNew()->path(), 0);
 
-        /* Sort 'etfilelistfull' and 'etfilelist' in the same order. */
-        sort_mode = (EtSortMode)g_settings_get_enum (MainSettings, "sort-mode");
-        etfilelist = ET_Sort_File_List (etfilelist, sort_mode);
-        etfilelistfull = ET_Sort_File_List (etfilelistfull, sort_mode);
-
-        while (etfilelist && etfilelistfull)
+        auto filelistiter = etfilelist.begin();
+        for (auto& fullfile : ET_FileList::all_files())
         {
-            // To get the path of the file
-            const File_Name *FileNameCur = ((ET_File *)etfilelistfull->data)->FileNameNew();
+            // Count files in the same path
+            auto iter = by_path.find(fullfile->FileNameNew()->path());
+            if (iter == by_path.end())
+                continue; // path not relevant
+            ++iter->second;
+
             // The ETFile in the selected file list
-            etfile = (ET_File*)etfilelist->data;
-
-            // Restart counter when entering a new directory
-            const xStringD0& path = FileNameCur->path();
-            if (last_path != path)
-            {
-                i = 0;
-                last_path = path;
-            }
-            ++i;
-
+            ET_File* etfile = filelistiter->get();
             // The file is in the selection?
-            if ( (ET_File *)etfilelistfull->data == etfile )
+            if (fullfile == etfile)
             {
-                FileTag = new File_Tag(*etfile->FileTagNew());
-                FileTag->track = et_track_number_to_string(i);
+                File_Tag* FileTag = new File_Tag(*etfile->FileTagNew());
+                FileTag->track = et_track_number_to_string(iter->second);
                 etfile->apply_changes(nullptr, FileTag);
 
-                if (!etfilelist->next) break;
-                etfilelist = g_list_next(etfilelist);
+                if (++filelistiter == etfilelist.end()) break;
             }
-
-            etfilelistfull = g_list_next(etfilelistfull);
         }
-        //msg = g_strdup_printf(_("All %d tracks numbered sequentially."), ETCore->ETFileSelectionList_Length);
         msg = g_strdup_printf (_("Selected tracks numbered sequentially"));
+
+        /* Display the current file (Needed when sequencing tracks) */
+        et_application_window_update_ui_from_et_file(window, ET_COLUMN_TRACK_NUMBER);
     }
     else if (object==G_OBJECT(priv->track_number_button))
     {
-        gchar *track_total = NULL;
+        unordered_map<const char*, unsigned, xString::hasher, xString::equal> by_path;
 
-        /* Used of Track and Total Track values */
-        for (l = etfilelist; l != NULL; l = g_list_next (l))
+        // collect relevant paths
+        for (const ET_File* file : etfilelist)
+            by_path.emplace(file->FileNameNew()->path(), 0);
+
+        for (auto& fullfile : ET_FileList::all_files())
+        {   // Count files in the same path
+            auto iter = by_path.find(fullfile->FileNameNew()->path());
+            if (iter != by_path.end())
+                ++iter->second;
+        }
+
+        // apply the changes
+        for (auto& etfile : etfilelist)
         {
-            etfile        = (ET_File *)l->data;
-            string track_string = et_track_number_to_string(et_file_list_get_n_files_in_path(ETCore->ETFileList, etfile->FileNameNew()->path()));
-
-            if (!track_total)
-            {
-                /* Just for the message below, and only the first directory. */
-                track_total = g_strdup(track_string.c_str());
-            }
-
-            FileTag = new File_Tag(*etfile->FileTagNew());
-            FileTag->track_total = track_string;
+            File_Tag* FileTag = new File_Tag(*etfile->FileTagNew());
+            FileTag->track = et_track_number_to_string(by_path.find(etfile->FileNameNew()->path())->second);
             etfile->apply_changes(nullptr, FileTag);
         }
 
-        if (!et_str_empty (track_total))
-        {
-            msg = g_strdup_printf (_("Selected files tagged with track like ‘xx/%s’"),
-                                   track_total);
-        }
+        if (by_path.size())
+            msg = g_strdup_printf(_("Selected files tagged with track like ‘xx/%u’"), by_path.begin()->second);
         else
-        {
             msg = g_strdup (_("Removed track number from selected files"));
-        }
 
-        g_free (track_total);
+        /* Display the current file (Needed when sequencing tracks) */
+        et_application_window_update_ui_from_et_file(window, ET_COLUMN_TRACK_NUMBER);
     }
     else if (object == G_OBJECT (gtk_bin_get_child (GTK_BIN (priv->genre_combo_entry))))
     {
@@ -505,10 +483,9 @@ on_apply_to_selection (GObject *object,
             } while (gtk_tree_model_iter_next(model, &iter));
         }
 
-        for (l = etfilelist; l != NULL; l = g_list_next (l))
+        for (auto& etfile : etfilelist)
         {
-            etfile = (ET_File *)l->data;
-            FileTag = new File_Tag(*etfile->FileTagNew());
+            File_Tag* FileTag = new File_Tag(*etfile->FileTagNew());
             FileTag->pictures = pics;
             etfile->apply_changes(nullptr, FileTag);
         }
@@ -522,13 +499,8 @@ on_apply_to_selection (GObject *object,
         }
     }
 
-    g_list_free(etfilelist);
-
     /* Refresh the whole list (faster than file by file) to show changes. */
     et_browser_refresh_list(window->browser());
-
-    /* Display the current file (Needed when sequencing tracks) */
-    et_application_window_display_et_file (window, ETCore->ETFileDisplayed);
 
     if (msg)
     {
@@ -1100,7 +1072,7 @@ PictureEntry_Clear (EtTagArea *self)
 }
 
 static void
-PictureEntry_Update(EtTagArea *self, const EtPicture& pic, gObject<GdkPixbuf> pixbuf, bool select_it)
+PictureEntry_Update(EtTagArea *self, const ET_File* etfile, const EtPicture& pic, gObject<GdkPixbuf> pixbuf, bool select_it)
 {
     EtTagAreaPrivate* priv = et_tag_area_get_instance_private (self);
 
@@ -1142,7 +1114,7 @@ PictureEntry_Update(EtTagArea *self, const EtPicture& pic, gObject<GdkPixbuf> pi
     GtkTreeIter iter1;
     gtk_list_store_insert_with_values(priv->images_model, &iter1, -1,
         PICTURE_COLUMN_SURFACE, surface,
-        PICTURE_COLUMN_TEXT,    pic.format_info(*ETCore->ETFileDisplayed).c_str(),
+        PICTURE_COLUMN_TEXT,    pic.format_info(*etfile).c_str(),
         PICTURE_COLUMN_DATA,    &pic, -1);
     if (select_it)
         gtk_tree_selection_select_iter(selection, &iter1);
@@ -1160,6 +1132,9 @@ static void
 load_picture_from_file (GFile *file,
                         EtTagArea *self)
 {
+    ET_File* etfile = MainWindow->get_displayed_file();
+    g_return_if_fail(etfile);
+
     GError *error = NULL;
 
     gObject<GFileInfo> info(g_file_query_info(file,
@@ -1203,7 +1178,7 @@ load_picture_from_file (GFile *file,
     pic.type = ET_PICTURE_TYPE_FRONT_COVER;
     // Behaviour following the tag type...
     // Only one picture of type ET_PICTURE_TYPE_FRONT_COVER supported for MP4
-    if (ETCore->ETFileDisplayed->ETFileDescription->support_multiple_pictures(ETCore->ETFileDisplayed))
+    if (etfile->ETFileDescription->support_multiple_pictures(etfile))
     {
         pic.description = filename_utf8;
 
@@ -1211,7 +1186,7 @@ load_picture_from_file (GFile *file,
             pic.type = EtPicture::type_from_filename(filename_utf8);
     }
 
-    PictureEntry_Update(self, pic, pixbuf, true);
+    PictureEntry_Update(self, etfile, pic, pixbuf, true);
 }
 
 /*
@@ -1232,7 +1207,8 @@ on_picture_add_button_clicked (GObject *object,
     self = ET_TAG_AREA (user_data);
     priv = et_tag_area_get_instance_private (self);
 
-    g_return_if_fail (ETCore->ETFileDisplayed);
+    ET_File* etfile = MainWindow->get_displayed_file();
+    g_return_if_fail (etfile);
 
     parent_window = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (object)));
 
@@ -1270,7 +1246,7 @@ on_picture_add_button_clicked (GObject *object,
                                  filter);
 
     // Behaviour following the tag type...
-    if (!ETCore->ETFileDisplayed->ETFileDescription->support_multiple_pictures(ETCore->ETFileDisplayed))
+    if (!etfile->ETFileDescription->support_multiple_pictures(etfile))
     {
         /* Only one file can be selected. */
         gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (FileSelectionWindow),
@@ -1287,7 +1263,7 @@ on_picture_add_button_clicked (GObject *object,
                                      FALSE);
 
     /* Starting directory (the same as the current file). */
-    init_dir = g_path_get_dirname (ETCore->ETFileDisplayed->FilePath);
+    init_dir = g_path_get_dirname(etfile->FilePath);
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (FileSelectionWindow),
                                          init_dir);
     g_free (init_dir);
@@ -1308,7 +1284,7 @@ on_picture_add_button_clicked (GObject *object,
     }
 
     et_application_window_update_et_file_from_ui(MainWindow);
-    et_application_window_display_et_file(MainWindow, ETCore->ETFileDisplayed);
+    et_application_window_update_ui_from_et_file(MainWindow, ET_COLUMN_IMAGE);
 
     gtk_widget_destroy(FileSelectionWindow);
 }
@@ -1336,6 +1312,9 @@ on_picture_properties_button_clicked (GObject *object,
 
     self = ET_TAG_AREA (user_data);
     priv = et_tag_area_get_instance_private (self);
+
+    ET_File* etfile = MainWindow->get_displayed_file();
+    g_return_if_fail(etfile);
 
     parent_window = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (object)));
 
@@ -1392,7 +1371,7 @@ on_picture_properties_button_clicked (GObject *object,
         g_object_unref (store);
 
         /* Behaviour following the tag type. */
-        if (!ETCore->ETFileDisplayed->ETFileDescription->support_multiple_pictures(ETCore->ETFileDisplayed))
+        if (!etfile->ETFileDescription->support_multiple_pictures(etfile))
         {
             /* Load picture type (only Front Cover!). */
             GtkTreeIter itertype;
@@ -1439,7 +1418,7 @@ on_picture_properties_button_clicked (GObject *object,
         gtk_entry_set_text(GTK_ENTRY(desc), pic->description);
 
         /* Behaviour following the tag type. */
-        if (!ETCore->ETFileDisplayed->ETFileDescription->support_multiple_pictures(ETCore->ETFileDisplayed))
+        if (!etfile->ETFileDescription->support_multiple_pictures(etfile))
         {
             gtk_widget_set_sensitive (GTK_WIDGET (desc), FALSE);
         }
@@ -1475,7 +1454,7 @@ on_picture_properties_button_clicked (GObject *object,
 
                 /* Update value in the PictureEntryView. */
                 gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-                    PICTURE_COLUMN_TEXT, pic->format_info(*ETCore->ETFileDisplayed).c_str(),
+                    PICTURE_COLUMN_TEXT, pic->format_info(*etfile).c_str(),
                     PICTURE_COLUMN_DATA, pic, -1);
             }
         }
@@ -1766,14 +1745,10 @@ on_picture_clear_button_clicked (GObject *object,
         gtk_tree_row_reference_free ((GtkTreeRowReference*)l->data);
     }
 
-    et_application_window_update_et_file_from_ui(MainWindow);
-
-    if (ETCore->ETFileDisplayed)
-    {
-        et_application_window_display_et_file(MainWindow, ETCore->ETFileDisplayed);
-    }
-
     g_list_free (refs);
+
+    et_application_window_update_et_file_from_ui (ET_APPLICATION_WINDOW (MainWindow));
+    et_application_window_update_ui_from_et_file (ET_APPLICATION_WINDOW (MainWindow), ET_COLUMN_IMAGE);
 }
 
 
@@ -2270,7 +2245,7 @@ static void et_tag_area_set_text_field(const gchar* value, GtkWidget* widget)
 }
 
 gboolean
-et_tag_area_display_et_file (EtTagArea *self, const ET_File *ETFile, int columns)
+et_tag_area_display_et_file (EtTagArea *self, const ET_File *ETFile, EtColumn columns)
 {
     EtTagAreaPrivate *priv;
     const File_Tag *FileTag;
@@ -2378,7 +2353,7 @@ et_tag_area_display_et_file (EtTagArea *self, const ET_File *ETFile, int columns
 			if (FileTag && FileTag->pictures.size())
 			{
 				for (const EtPicture& pic : FileTag->pictures)
-					PictureEntry_Update(self, pic, gObject<GdkPixbuf>(), false);
+					PictureEntry_Update(self, ETFile, pic, gObject<GdkPixbuf>(), false);
 
 				string s = strprintf(_("Images (%zu)"), FileTag->pictures.size());
 				gtk_notebook_set_tab_label_text (GTK_NOTEBOOK (priv->tag_notebook), page, s.c_str());

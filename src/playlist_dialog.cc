@@ -31,6 +31,7 @@
 #include "scan.h"
 #include "mask.h"
 #include "setting.h"
+#include "file_list.h"
 
 using namespace std;
 
@@ -80,8 +81,6 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
     GFile *parent;
     GFileOutputStream *ostream;
     GString *to_write;
-    GList *l;
-    GList *etfilelist = NULL;
     gchar *basedir;
     gchar *temp;
     EtPlaylistContent playlist_content;
@@ -130,22 +129,16 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
         g_string_free (to_write, TRUE);
     }
 
-    if (g_settings_get_boolean (MainSettings, "playlist-selected-only"))
-    {
-        etfilelist = et_browser_get_selected_files(MainWindow->browser());
-    }
-    else
-    {
-        etfilelist = ETCore->ETFileList;
-    }
+    const std::vector<xPtr<ET_File>>& etfilelist =
+        g_settings_get_boolean(MainSettings, "playlist-selected-only")
+        ?   et_browser_get_selected_files(MainWindow->browser())
+        :   ET_FileList::all_files();
 
-    for (l = etfilelist; l != NULL; l = g_list_next (l))
+    for (const ET_File* etfile : etfilelist)
     {
-        const ET_File *etfile;
         const gchar *filename;
         gint duration;
 
-        etfile = (ET_File *)l->data;
         filename = etfile->FilePath;
         duration = etfile->ETFileInfo.duration;
 
@@ -395,11 +388,6 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
         }
     }
 
-    if (g_settings_get_boolean (MainSettings, "playlist-selected-only"))
-    {
-        g_list_free (etfilelist);
-    }
-
     g_assert (error == NULL || *error == NULL);
     g_object_unref (ostream);
     g_free(basedir);
@@ -437,7 +425,8 @@ write_button_clicked (EtPlaylistDialog *self)
     {
         EtConvertSpaces convert_mode;
 
-        if (!ETCore->ETFileList)
+        ET_File* etfile = MainWindow->get_displayed_file();
+        if (!etfile)
             return;
 
         playlist_name = g_settings_get_string (MainSettings,
@@ -446,7 +435,7 @@ write_button_clicked (EtPlaylistDialog *self)
         /* Generate filename from tag of the current selected file (FIXME). */
         temp = filename_from_display (playlist_name);
         g_free (playlist_name);
-        playlist_basename_utf8 = et_evaluate_mask(ETCore->ETFileDisplayed, temp, FALSE);
+        playlist_basename_utf8 = et_evaluate_mask(etfile, temp, FALSE);
         g_free (temp);
 
         /* Replace Characters (with scanner). */

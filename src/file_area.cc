@@ -21,11 +21,11 @@
 #include "file_area.h"
 #include "file_name.h"
 #include "file_description.h"
+#include "file_list.h"
 
 #include <glib/gi18n.h>
 
 #include "charset.h"
-#include "et_core.h"
 #include "log.h"
 #include "setting.h"
 #include "tag_area.h"
@@ -291,8 +291,7 @@ et_file_area_set_file_fields (EtFileArea *self,
         ET_Remove_File_Extension(ETFile->FileNameNew()->file()).c_str());
 
     /* Show position of current file in list */
-    text = g_strdup_printf ("%u/%u:", ETFile->IndexKey,
-                            ETCore->ETFileDisplayedList_Length);
+    text = g_strdup_printf("%u/%u:", ET_FileList::visible_index(ETFile), ET_FileList::visible_size());
     gtk_label_set_text (GTK_LABEL (priv->index_label), text);
     g_object_unref (file);
     g_free (text);

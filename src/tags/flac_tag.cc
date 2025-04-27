@@ -29,7 +29,6 @@
 #include "flac_tag.h"
 #include "ogg_tag.h"
 #include "vcedit.h"
-#include "et_core.h"
 #include "id3_tag.h"
 #include "misc.h"
 #include "setting.h"

@@ -23,6 +23,10 @@
 
 #include <gtk/gtk.h>
 
+#ifdef __cplusplus
+#include "misc.h"
+#endif
+
 /* Categories to search in CDDB manual search. */
 typedef enum
 {
@@ -38,6 +42,10 @@ typedef enum
     ET_CDDB_SEARCH_CATEGORY_SOUNDTRACK = 1 << 9
 } EtCddbSearchCategory;
 
+#ifdef __cplusplus
+MAKE_FLAGS_ENUM(EtCddbSearchCategory);
+#endif
+
 /* Fields to use in CDDB manual search. */
 typedef enum
 {
@@ -46,6 +54,10 @@ typedef enum
     ET_CDDB_SEARCH_FIELD_TRACK = 1 << 2,
     ET_CDDB_SEARCH_FIELD_OTHER = 1 << 3
 } EtCddbSearchField;
+
+#ifdef __cplusplus
+MAKE_FLAGS_ENUM(EtCddbSearchField);
+#endif
 
 /* Fields to set from CDDB search results. */
 typedef enum
@@ -59,6 +71,10 @@ typedef enum
     ET_CDDB_SET_FIELD_GENRE = 1 << 6,
     ET_CDDB_SET_FIELD_FILENAME = 1 << 7
 } EtCddbSetField;
+
+#ifdef __cplusplus
+MAKE_FLAGS_ENUM(EtCddbSetField);
+#endif
 
 /* Character set for passing to iconv. */
 typedef enum
@@ -162,6 +178,10 @@ typedef enum
     ET_PROCESS_FIELD_ENCODED_BY      = 1 << 14,
     ET_PROCESS_FIELD_DESCRIPTION     = 1 << 15
 } EtProcessField;
+
+#ifdef __cplusplus
+MAKE_FLAGS_ENUM(EtProcessField);
+#endif
 
 typedef enum
 {
@@ -292,6 +312,10 @@ typedef enum
     ET_COLUMN_REPLAYGAIN      = 1 << 28,
     ET_COLUMN_DESCRIPTION     = 1 << 30
 } EtColumn;
+
+#ifdef __cplusplus
+MAKE_FLAGS_ENUM(EtColumn);
+#endif
 
 /* Additional options to be passed to iconv(). */
 typedef enum

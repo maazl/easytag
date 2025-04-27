@@ -21,8 +21,6 @@
 
 #include <gtk/gtk.h>
 
-#include "et_core.h"
-
 #define ET_TYPE_SEARCH_DIALOG (et_search_dialog_get_type ())
 #define ET_SEARCH_DIALOG(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_SEARCH_DIALOG, EtSearchDialog))
 

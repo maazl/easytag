@@ -37,12 +37,12 @@
 #include "browser.h"
 #include "log.h"
 #include "misc.h"
-#include "et_core.h"
 #include "crc32.h"
 #include "charset.h"
 #include "mask.h"
 #include "file_name.h"
 #include "file_tag.h"
+#include "file_list.h"
 
 #include <algorithm>
 #include <string>
@@ -479,7 +479,8 @@ Scan_Fill_Tag_Generate_Preview (EtScanDialog *self)
 
     priv = et_scan_dialog_get_instance_private (self);
 
-    if (!ETCore->ETFileDisplayedList
+    ET_File* etfile = MainWindow->get_displayed_file();
+    if (!etfile
         || gtk_notebook_get_current_page (GTK_NOTEBOOK (priv->notebook)) != ET_SCAN_MODE_FILL_TAG)
         return;
 
@@ -488,7 +489,7 @@ Scan_Fill_Tag_Generate_Preview (EtScanDialog *self)
         return;
 
     preview_text = g_strdup("");
-    fill_tag_list = Scan_Generate_New_Tag_From_Mask(ETCore->ETFileDisplayed, move(mask));
+    fill_tag_list = Scan_Generate_New_Tag_From_Mask(etfile, move(mask));
     for (l = fill_tag_list; l != NULL; l = g_list_next (l))
     {
         Scan_Mask_Item *mask_item = (Scan_Mask_Item*)l->data;
@@ -536,11 +537,9 @@ Scan_Rename_File_Generate_Preview (EtScanDialog *self)
 
     priv = et_scan_dialog_get_instance_private (self);
 
-    if (!ETCore->ETFileDisplayed || !priv->rename_combo
-        || !priv->rename_preview_label)
-    {
+    ET_File* etfile = MainWindow->get_displayed_file();
+    if (!etfile || !priv->rename_combo || !priv->rename_preview_label)
         return;
-    }
 
     if (gtk_notebook_get_current_page (GTK_NOTEBOOK (priv->notebook)) != ET_SCAN_MODE_RENAME_FILE)
         return;
@@ -549,7 +548,7 @@ Scan_Rename_File_Generate_Preview (EtScanDialog *self)
     if (!mask)
         return;
 
-    string preview_text = et_evaluate_mask(ETCore->ETFileDisplayed, mask, FALSE);
+    string preview_text = et_evaluate_mask(etfile, mask, FALSE);
 
     if (GTK_IS_LABEL (priv->rename_preview_label))
     {
@@ -664,7 +663,8 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
 static void
 Scan_Rename_File_Prefix_Path (EtScanDialog *self)
 {
-    if (!ETCore->ETFileDisplayed)
+    ET_File* etfile = MainWindow->get_displayed_file();
+    if (!etfile)
         return;
 
     EtScanDialogPrivate *priv = et_scan_dialog_get_instance_private (self);
@@ -675,7 +675,7 @@ Scan_Rename_File_Prefix_Path (EtScanDialog *self)
         return;
 
     // The path to prefix
-    const char* filepath = ETCore->ETFileDisplayed->FileNameCur()->path();
+    const char* filepath = etfile->FileNameCur()->path();
     string path_tmp;
     if (!g_path_is_absolute(filepath))
     {   // Current root path
@@ -1855,28 +1855,22 @@ et_scan_dialog_scan_selected_files (EtScanDialog *self)
     EtApplicationWindow *window;
     guint progress_bar_index = 0;
     guint selectcount;
-    GList *selfilelist = NULL;
-    GList *l;
-
-    g_return_if_fail (ETCore->ETFileDisplayedList != NULL);
 
     window = MainWindow;
     et_application_window_update_et_file_from_ui (window);
 
     /* Initialize status bar */
-    selfilelist = et_browser_get_selected_files(window->browser());
-    selectcount = g_list_length (selfilelist);
+    auto selfilelist = et_browser_get_selected_files(window->browser());
+    selectcount = selfilelist.size();
     et_application_window_progress_set(window, 0, selectcount);
 
     /* Set to unsensitive all command buttons (except Quit button) */
     et_application_window_disable_command_actions (window, FALSE);
 
-    for (l = selfilelist; l != NULL; l = g_list_next (l))
+    for (auto& l : selfilelist)
     {
-        ET_File *etfile = (ET_File*)l->data;
-
         /* Run the current scanner. */
-        Scan_Select_Mode_And_Run_Scanner (self, etfile);
+        Scan_Select_Mode_And_Run_Scanner(self, l.get());
 
         et_application_window_progress_set(window, ++progress_bar_index, selectcount);
         /* Needed to refresh status bar */
@@ -1884,13 +1878,13 @@ et_scan_dialog_scan_selected_files (EtScanDialog *self)
             gtk_main_iteration();
     }
 
-    g_list_free (selfilelist);
+    selfilelist.clear();
 
     /* Refresh the whole list (faster than file by file) to show changes. */
     et_browser_refresh_list(window->browser());
 
-    /* Display the current file */
-    et_application_window_display_et_file (window, ETCore->ETFileDisplayed);
+    /* Update the current file */
+    et_application_window_update_ui_from_et_file(window);
 
     /* To update state of command buttons */
     et_application_window_update_actions (window);

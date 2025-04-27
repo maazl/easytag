@@ -43,8 +43,18 @@
 #include "win32/win32dep.h"
 
 #include <cmath>
+#include <type_traits>
 using namespace std;
 
+
+atomic<unsigned> ET_File::ETUndoKey(0);
+
+vector<xPtr<ET_File>> ET_File::ETHistoryFileList;
+unsigned ET_File::ETHistoryFileListRedo = 0;
+
+#ifndef NDEBUG
+atomic<unsigned> ET_File::Instances;
+#endif
 
 /*
  * Create a new ET_File structure
@@ -57,8 +67,13 @@ ET_File::ET_File(gString&& filepath)
 ,	ETFileInfo{}
 ,	force_tag_save_(false)
 ,	activate_bg_color(false)
-,	IndexKey(0)
-{}
+,	IndexKey(~0) // invalid value
+{
+#ifndef NDEBUG
+	++Instances;
+	//fprintf(stderr, "ET_File(%p)::ET_File(%s)\n", this, FilePath.get());
+#endif
+}
 
 /*
  * Comparison function for sorting by ascending path.
@@ -420,11 +435,28 @@ gint (*ET_File::get_comp_func(EtSortMode sort_mode))(const ET_File *ETFile1, con
 	}
 }
 
+gint (*ET_File::get_comp_func(EtBrowserMode browser_mode))(const ET_File *ETFile1, const ET_File *ETFile2)
+{	switch (browser_mode)
+	{
+	default:
+		return nullptr;
+	case ET_BROWSER_MODE_ARTIST_ALBUM:
+		return CmpTagString<&File_Tag::artist, CmpTagString<&File_Tag::album>>;
+	case ET_BROWSER_MODE_ARTIST:
+		return CmpTagString<&File_Tag::artist>;
+	}
+}
+
+
 ET_File::~ET_File()
 {
 	/* Frees infos of ETFileInfo */
 	g_free(ETFileInfo.mpc_profile);
 	g_free(ETFileInfo.mpc_version);
+#ifndef NDEBUG
+	--Instances;
+	//fprintf(stderr, "ET_File(%p)::~ET_File(%s)\n", this, FilePath.get());
+#endif
 }
 
 bool ET_File::autofix()
@@ -432,22 +464,22 @@ bool ET_File::autofix()
   /*
    * Process the filename and tag to generate undo if needed...
    */
-  File_Name* FileName = new File_Name(*FileNameNew());
+  File_Name* fileName = new File_Name(*FileNameNew());
 
   /* Convert filename extension (lower/upper). */
-  FileName->format_extension();
+  fileName->format_extension();
 
   // Convert the illegal characters.
-  FileName->format_filepath();
+  fileName->format_filepath();
 
-  File_Tag* FileTag = new File_Tag(*FileTagNew());
-  FileTag->autofix();
+  File_Tag* fileTag = new File_Tag(*FileTagNew());
+  fileTag->autofix();
 
   /*
    * Generate undo for the file and the main undo list.
    * If no changes detected, FileName and FileTag item are deleted.
    */
-  return apply_changes(FileName, FileTag);
+  return apply_changes(fileName, fileTag);
 }
 
 
@@ -598,9 +630,6 @@ bool ET_File::read_file(GFile *file, const gchar *root, GError **error)
 	return rc;
 }
 
-/* Key for Undo */
-static atomic<unsigned> ETUndoKey(0);
-
 /*
  * Check if 'FileName' and 'FileTag' differ with those of 'ETFile'.
  * Manage undo feature for the ETFile and the main undo list.
@@ -638,7 +667,10 @@ bool ET_File::apply_changes(File_Name *fileName, File_Tag *fileTag)
 		FileTag.add(fileTag, undo_key);
 
 	if (undo_key)
-		ET_FileList::history_list_add(this);
+	{	// Add the item to the list (cut end of list from the current element)
+		ETHistoryFileList.erase(ETHistoryFileList.begin() + ETHistoryFileListRedo++, ETHistoryFileList.end());
+		ETHistoryFileList.emplace_back(this);
+	}
 
 	return true;
 }
@@ -686,6 +718,26 @@ bool ET_File::redo()
 		FileTag.redo();
 
 	return true;
+}
+
+ET_File* ET_File::global_undo()
+{
+	if (!has_global_undo())
+		return NULL;
+
+	ET_File* ETFile = ETHistoryFileList[--ETHistoryFileListRedo].get();
+	ETFile->undo();
+	return ETFile;
+}
+
+ET_File* ET_File::global_redo()
+{
+	if (!has_global_redo())
+		return NULL;
+
+	ET_File* ETFile = ETHistoryFileList[ETHistoryFileListRedo++].get();
+	ETFile->redo();
+	return ETFile;
 }
 
 ET_File::UpdateDirectoyNameArgs::UpdateDirectoyNameArgs(const gchar *old_path, const gchar *new_path, const gchar* root)

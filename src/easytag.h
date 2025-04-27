@@ -25,10 +25,13 @@
 
 #include <gtk/gtk.h>
 
-#include "et_core.h"
 #include "misc.h"
+#include "xptr.h"
 
 #include <atomic>
+#include <vector>
+
+class ET_File;
 
 /* Variable to force to quit recursive functions (reading dirs) or stop saving files */
 extern std::atomic<bool> Main_Stop_Button_Pressed;
@@ -55,5 +58,9 @@ void Action_Main_Stop_Button_Pressed (void);
 /* A flag to start/avoid a new reading while another one is running */
 bool IsReadingDirectory();
 gboolean Read_Directory(gString path);
+
+bool et_run_audio_player(std::vector<xPtr<ET_File>>::const_iterator from, std::vector<xPtr<ET_File>>::const_iterator to);
+gboolean et_run_program (const gchar *program_name, GList *args_list, GError **error);
+
 
 #endif /* __EASYTAG_H__ */

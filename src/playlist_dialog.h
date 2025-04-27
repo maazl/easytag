@@ -21,8 +21,6 @@
 
 #include <gtk/gtk.h>
 
-#include "et_core.h"
-
 #define ET_TYPE_PLAYLIST_DIALOG (et_playlist_dialog_get_type ())
 #define ET_PLAYLIST_DIALOG(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_PLAYLIST_DIALOG, EtPlaylistDialog))
 

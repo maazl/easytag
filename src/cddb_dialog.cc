@@ -46,6 +46,7 @@
 #include "charset.h"
 #include "file_name.h"
 #include "file_tag.h"
+#include "file_list.h"
 
 #include <cmath>
 using namespace std;
@@ -174,7 +175,7 @@ enum
     CDDB_TRACK_LIST_NAME,
     CDDB_TRACK_LIST_TIME,
     CDDB_TRACK_LIST_DATA,
-    CDDB_TRACK_LIST_ETFILE,
+    CDDB_TRACK_LIST_ETFILE, // xPtr<ET_File>
     CDDB_TRACK_LIST_COUNT
 };
 
@@ -336,14 +337,12 @@ Cddb_Track_List_Row_Selected (EtCDDBDialog *self, GtkTreeSelection *selection)
         {
             if (g_settings_get_boolean (MainSettings, "cddb-dlm-enabled"))
             {
-                ET_File *etfile;
-
                 gtk_tree_model_get (GTK_TREE_MODEL (priv->track_list_model),
                                     &currentFile, CDDB_TRACK_LIST_NAME,
                                     &text_path, -1);
-                etfile = et_browser_select_file_by_dlm(MainWindow->browser(), text_path, TRUE);
+                ET_File* etfile(et_browser_select_file_by_dlm(MainWindow->browser(), text_path, TRUE));
                 gtk_list_store_set (priv->track_list_model, &currentFile,
-                                    CDDB_TRACK_LIST_ETFILE, etfile, -1);
+                                    CDDB_TRACK_LIST_ETFILE, xPtr<ET_File>::toCptr(etfile), -1);
             }
             else
             {
@@ -424,13 +423,14 @@ Cddb_Album_List_Set_Row_Appearance (EtCDDBDialog *self, GtkTreeIter *row)
         {
             if (cddbalbum->other_version == TRUE)
             {
-                const GdkRGBA LIGHT_RED = { 1.0, 0.5, 0.5, 1.0 };
+                const constexpr GdkRGBA LIGHT_RED = { 1.0, 0.5, 0.5, 1.0 };
                 gtk_list_store_set(priv->album_list_model, row,
                                    CDDB_ALBUM_LIST_FONT_STYLE,       PANGO_STYLE_NORMAL,
                                    CDDB_ALBUM_LIST_FONT_WEIGHT,      PANGO_WEIGHT_NORMAL,
                                    CDDB_ALBUM_LIST_FOREGROUND_COLOR, &LIGHT_RED, -1);
             } else
             {
+                const constexpr GdkRGBA RED = {1.0, 0.0, 0.0, 1.0 };
                 gtk_list_store_set(priv->album_list_model, row,
                                    CDDB_ALBUM_LIST_FONT_STYLE,       PANGO_STYLE_NORMAL,
                                    CDDB_ALBUM_LIST_FONT_WEIGHT,      PANGO_WEIGHT_NORMAL,
@@ -450,7 +450,7 @@ Cddb_Album_List_Set_Row_Appearance (EtCDDBDialog *self, GtkTreeIter *row)
                                    CDDB_ALBUM_LIST_FOREGROUND_COLOR, NULL,-1);
             } else
             {
-                const GdkRGBA GREY = { 0.664, 0.664, 0.664, 1.0 };
+                const constexpr GdkRGBA GREY = { 0.664, 0.664, 0.664, 1.0 };
                 gtk_list_store_set(priv->album_list_model, row,
                                    CDDB_ALBUM_LIST_FONT_STYLE,       PANGO_STYLE_NORMAL,
                                    CDDB_ALBUM_LIST_FONT_WEIGHT,      PANGO_WEIGHT_NORMAL,
@@ -504,6 +504,14 @@ cddb_track_model_clear (EtCDDBDialog *self)
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->track_list_view));
 
     g_signal_handlers_block_by_func (selection, (gpointer)Cddb_Track_List_Row_Selected, self);
+
+    // Release ET_File references
+    gtk_tree_model_foreach(GTK_TREE_MODEL(priv->track_list_model), [](GtkTreeModel* model, GtkTreePath* path, GtkTreeIter* iter, gpointer data)
+    {   ET_File* etfile;
+        gtk_tree_model_get(model, iter, CDDB_TRACK_LIST_ETFILE, &etfile, -1);
+        xPtr<ET_File>::fromCptr(etfile);
+        return FALSE;
+    }, NULL);
 
     gtk_list_store_clear (priv->track_list_model);
 
@@ -1966,32 +1974,18 @@ Cddb_Set_Track_Infos_To_File_List (EtCDDBDialog *self)
     guint list_length;
     guint rows_to_loop = 0;
     guint selectedcount;
-    guint file_selectedcount;
-    guint counter = 0;
-    GList *file_iterlist = NULL;
-    GList *file_selectedrows;
     GList *selectedrows = NULL;
     gboolean CddbTrackList_Line_Selected;
     CddbTrackAlbum *cddbtrackalbum = NULL;
     GtkTreeSelection *selection = NULL;
-    GtkTreeSelection *file_selection = NULL;
-    GtkListStore *fileListModel;
     GtkTreePath *currentPath = NULL;
     GtkTreeIter  currentIter;
-    GtkTreeIter *fileIter;
-    gpointer iterptr;
-
-    g_return_val_if_fail (ETCore->ETFileDisplayedList != NULL, FALSE);
 
     priv = et_cddb_dialog_get_instance_private (self);
 
     et_application_window_update_et_file_from_ui(MainWindow);
 
-    /* FIXME: Hack! */
-    file_selection = et_browser_get_selection(MainWindow->browser());
-    fileListModel = GTK_LIST_STORE (gtk_tree_view_get_model (gtk_tree_selection_get_tree_view (file_selection)));
     list_length = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->track_list_model), NULL);
-
     // Take the selected files in the cddb track list, else the full list
     // Note : Just used to calculate "cddb_track_list_length" because
     // "GPOINTER_TO_INT(cddb_track_list->data)" doesn't return the number of the
@@ -2013,48 +2007,11 @@ Cddb_Set_Track_Infos_To_File_List (EtCDDBDialog *self)
         rows_to_loop = list_length;
     }
 
-    file_selectedcount = gtk_tree_selection_count_selected_rows (file_selection);
+    auto file_selection = et_browser_get_selected_files(MainWindow->browser());
+    /* No rows selected? Use the first x items in the list */
+    const vector<xPtr<ET_File>>& files = file_selection.size() ? file_selection : ET_FileList::all_files();
 
-    if (file_selectedcount > 0)
-    {
-        GList *l;
-
-        /* Rows are selected in the file list, apply tags to them only */
-        file_selectedrows = gtk_tree_selection_get_selected_rows(file_selection, NULL);
-
-        for (l = file_selectedrows; l != NULL; l = g_list_next (l))
-        {
-            counter++;
-            iterptr = g_malloc0(sizeof(GtkTreeIter));
-            if (gtk_tree_model_get_iter (GTK_TREE_MODEL (fileListModel),
-                                         (GtkTreeIter *)iterptr,
-                                         (GtkTreePath *)l->data))
-            {
-                file_iterlist = g_list_prepend (file_iterlist, iterptr);
-            }
-
-            if (counter == rows_to_loop) break;
-        }
-
-        /* Free the useless bit */
-        g_list_free_full (file_selectedrows,
-                          (GDestroyNotify)gtk_tree_path_free);
-
-    } else /* No rows selected, use the first x items in the list */
-    {
-        gtk_tree_model_get_iter_first(GTK_TREE_MODEL(fileListModel), &currentIter);
-
-        do
-        {
-            counter++;
-            iterptr = g_memdup(&currentIter, sizeof(GtkTreeIter));
-            file_iterlist = g_list_prepend (file_iterlist, iterptr);
-        } while (gtk_tree_model_iter_next(GTK_TREE_MODEL(fileListModel), &currentIter));
-
-        file_selectedcount = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(fileListModel), NULL);
-    }
-
-    if (file_selectedcount != rows_to_loop)
+    if (files.size() != rows_to_loop)
     {
         GtkWidget *msgdialog;
         gint response;
@@ -2076,15 +2033,15 @@ Cddb_Set_Track_Infos_To_File_List (EtCDDBDialog *self)
 
         if (response != GTK_RESPONSE_APPLY)
         {
-            g_list_free_full (file_iterlist, (GDestroyNotify)g_free);
+            g_list_free_full(g_list_first(selectedrows), (GDestroyNotify)gtk_tree_path_free);
             //gdk_window_raise(CddbWindow->window);
             return FALSE;
         }
     }
 
-    file_iterlist = g_list_reverse (file_iterlist);
-    //ET_Debug_Print_File_List (NULL, __FILE__, __LINE__, __FUNCTION__);
+    guint set_fields = g_settings_get_flags(MainSettings, "cddb-set-fields");
 
+    auto fileIter = files.begin();
     for (row=0; row < rows_to_loop; row++)
     {
         if (CddbTrackList_Line_Selected == FALSE)
@@ -2118,54 +2075,35 @@ Cddb_Set_Track_Infos_To_File_List (EtCDDBDialog *self)
         }
 
         /* Set values in the ETFile. */
+        ET_File *etfile = NULL;
+
         if (g_settings_get_boolean (MainSettings, "cddb-dlm-enabled"))
         {
-            ET_File *etfile = NULL;
-            guint set_fields;
-
             gtk_tree_model_get (GTK_TREE_MODEL (priv->track_list_model),
-                                &currentIter, CDDB_TRACK_LIST_ETFILE, &etfile,
-                                -1);
+                                &currentIter, CDDB_TRACK_LIST_ETFILE, &etfile, -1);
 
             /* If the row in the model does not already have an ET_File
              * associated with it, take one from the browser selection. */
             if (!etfile)
-            {
-                fileIter = (GtkTreeIter*) file_iterlist->data;
-                etfile = et_browser_get_et_file_from_iter(MainWindow->browser(), fileIter);
-            }
-
-            /* Tag fields. */
-            set_fields = g_settings_get_flags (MainSettings, "cddb-set-fields");
-
-            set_et_file_from_cddb_album (etfile, cddbtrackalbum, set_fields,
-                                         list_length);
+                etfile = fileIter->get();
         }
         else if (cddbtrackalbum)
         {
-            ET_File *etfile;
-            guint set_fields;
-
-            fileIter = (GtkTreeIter*) file_iterlist->data;
-            etfile = et_browser_get_et_file_from_iter(MainWindow->browser(), fileIter);
-
-            /* Tag fields. */
-            set_fields = g_settings_get_flags (MainSettings, "cddb-set-fields");
-
-            set_et_file_from_cddb_album (etfile, cddbtrackalbum, set_fields,
-                                         list_length);
+            etfile = fileIter->get();
         }
 
-        if(!file_iterlist->next) break;
-        file_iterlist = file_iterlist->next;
+        /* Tag fields. */
+        if (etfile)
+            set_et_file_from_cddb_album(etfile, cddbtrackalbum, set_fields, list_length);
+
+        if (++fileIter == files.end()) break;
     }
 
-    g_list_free_full (g_list_first (file_iterlist), (GDestroyNotify)g_free);
     g_list_free_full (g_list_first (selectedrows),
                       (GDestroyNotify)gtk_tree_path_free);
 
     et_browser_refresh_list(MainWindow->browser());
-    et_application_window_display_et_file(MainWindow, ETCore->ETFileDisplayed);
+    et_application_window_update_ui_from_et_file(MainWindow);
 
     return TRUE;
 }
@@ -2403,8 +2341,8 @@ Cddb_Track_List_Sort_Func (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
                            gpointer data)
 {
     gint sortcol = GPOINTER_TO_INT(data);
-    gchar *text1, *text1cp;
-    gchar *text2, *text2cp;
+    gchar *text1;
+    gchar *text2;
     gint num1;
     gint num2;
     gint ret = 0;
@@ -2492,53 +2430,23 @@ et_cddb_dialog_search_from_selection (EtCDDBDialog *self)
     guint cddb_server_port;
     gchar *cddb_server_cgi_path;
     gint   server_try = 0;
-    GString *query_string;
-    gchar *cddb_discid;
 
     guint total_frames = 150;   /* First offset is (almost) always 150 */
     guint disc_length  = 2;     /* and 2s elapsed before first track */
 
-    GtkTreeSelection *file_selection = NULL;
     guint n_files = 0;
     guint total_id;
     guint num_tracks;
 
-    GList *filelist = NULL;
-    GList *l;
-
     priv = et_cddb_dialog_get_instance_private (self);
-
-    /* Number of selected files. */
-    /* FIXME: Hack! */
-    file_selection = et_browser_get_selection(MainWindow->browser());
-    n_files = gtk_tree_selection_count_selected_rows (file_selection);
 
     /* Either take the selected files, or use all files if no files are
      * selected. */
-    if (n_files > 0)
-    {
-        filelist = et_browser_get_selected_files(MainWindow->browser());
-    }
-    else /* No rows selected, use the whole list */
-    {
-        GtkTreeIter iter;
-        GtkTreeModel *model;
-
-        model = gtk_tree_view_get_model (gtk_tree_selection_get_tree_view (file_selection));
-
-        if (gtk_tree_model_get_iter_first (model, &iter))
-        {
-            do
-            {
-                ET_File *etfile;
-
-                etfile = et_browser_get_et_file_from_iter(MainWindow->browser(), &iter);
-                filelist = g_list_prepend (filelist, etfile);
-                n_files++;
-            } while (gtk_tree_model_iter_next (model, &iter));
-
-            filelist = g_list_reverse (filelist);
-        }
+    auto filelist = et_browser_get_selected_files(MainWindow->browser());
+    n_files = filelist.size();
+    if (n_files == 0) /* No rows selected, use the whole list */
+    {   filelist = ET_FileList::all_files();
+        n_files = filelist.size();
     }
 
     if (n_files == 0)
@@ -2569,24 +2477,16 @@ et_cddb_dialog_search_from_selection (EtCDDBDialog *self)
     // Generate query string and compute discid from the list 'file_iterlist'
     total_id = 0;
     num_tracks = n_files;
-    query_string = g_string_new ("");
+    string query_string;
 
     /* FIXME: Split this out to a separate function. */
-    for (l = filelist; l != NULL; l = g_list_next (l))
+    for (const ET_File *etfile : filelist)
     {
-        const ET_File *etfile;
         gulong secs = 0;
 
-        etfile = (const ET_File *)l->data;
-
-        if (query_string->len > 0)
-        {
-            g_string_append_printf (query_string, "+%u", total_frames);
-        }
-        else
-        {
-            g_string_append_printf (query_string, "%u", total_frames);
-        }
+        if (query_string.length() > 0)
+            query_string += '+';
+        query_string += to_string(total_frames);
 
         secs = lround(etfile->ETFileInfo.duration);
         total_frames += secs * 75;
@@ -2599,12 +2499,11 @@ et_cddb_dialog_search_from_selection (EtCDDBDialog *self)
         }
     }
 
-    /* No need to free the contained ET_File *. */
-    g_list_free (filelist);
+    filelist.clear();
 
     /* Compute CddbId. */
-    cddb_discid = g_strdup_printf ("%08x", (guint)(((total_id % 0xFF) << 24) |
-                                           (disc_length << 8) | num_tracks));
+    char cddb_discid[10];
+    sprintf(cddb_discid, "%08x", (guint)(((total_id % 0xFF) << 24) | (disc_length << 8) | num_tracks));
 
 
     /* Delete previous album list. */
@@ -2672,7 +2571,7 @@ et_cddb_dialog_search_from_selection (EtCDDBDialog *self)
             uri = g_strdup_printf ("http://%s:%u%s?cmd=cddb+query+%s+%u+%s+%u&hello=noname+localhost+%s+%s&proto=6",
                                    cddb_server_name, cddb_server_port,
                                    cddb_server_cgi_path, cddb_discid,
-                                   num_tracks, query_string->str, disc_length,
+                                   num_tracks, query_string.c_str(), disc_length,
                                    PACKAGE_NAME, PACKAGE_VERSION);
             message = soup_message_new (SOUP_METHOD_GET, uri);
 
@@ -2707,8 +2606,6 @@ et_cddb_dialog_search_from_selection (EtCDDBDialog *self)
                 g_error_free (error);
                 g_free (cddb_server_name);
                 g_free (cddb_server_cgi_path);
-                g_string_free (query_string, TRUE);
-                g_free (cddb_discid);
                 g_object_unref (cancellable);
                 g_object_unref (message);
                 gtk_widget_set_sensitive (GTK_WIDGET (priv->stop_search_button),
@@ -2804,16 +2701,12 @@ et_cddb_dialog_search_from_selection (EtCDDBDialog *self)
         }
     }
 
-    g_string_free (query_string, TRUE);
-
     msg = g_strdup_printf (ngettext ("DiscID ‘%s’ gave one matching album",
                                      "DiscID ‘%s’ gave %u matching albums",
                                      g_list_length (priv->album_list)),
                            cddb_discid, g_list_length (priv->album_list));
     gtk_statusbar_push(GTK_STATUSBAR(priv->status_bar),priv->status_bar_context,msg);
     g_free(msg);
-
-    g_free(cddb_discid);
 
     gtk_widget_set_sensitive (GTK_WIDGET (priv->stop_search_button), FALSE);
 

@@ -47,7 +47,7 @@ void et_tag_area_update_controls (EtTagArea *self, const ET_File* file);
 void et_tag_area_clear (EtTagArea *self);
 void et_tag_area_title_grab_focus (EtTagArea *self);
 void et_tag_area_store_file_tag(EtTagArea *self, File_Tag *tag);
-gboolean et_tag_area_display_et_file (EtTagArea *self, const ET_File *ETFile, int columns);
+gboolean et_tag_area_display_et_file (EtTagArea *self, const ET_File *ETFile, EtColumn columns);
 gboolean et_tag_area_select_all_if_focused (EtTagArea *self, GtkWidget *focused);
 gboolean et_tag_area_unselect_all_if_focused (EtTagArea *self, GtkWidget *focused);
 

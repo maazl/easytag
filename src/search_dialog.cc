@@ -34,6 +34,7 @@
 #include "setting.h"
 #include "enums.h"
 #include "file_renderer.h"
+#include "file_list.h"
 
 using namespace std;
 
@@ -114,10 +115,6 @@ Search_Result_List_Row_Selected (GtkTreeSelection *selection,
 }
 
 /*
- * This function and the one below could do with improving
- * as we are looking up tag data twice (once when searching, once when adding to list)
- */
-/*
  * Search_File:
  * @search_button: the search button which was clicked
  * @user_data: the #EtSearchDialog which contains @search_button
@@ -132,7 +129,6 @@ Search_File (GtkWidget *search_button,
     EtSearchDialog *self;
     EtSearchDialogPrivate *priv;
     const gchar *string_to_search = NULL;
-    const ET_File *ETFile;
 
     self = ET_SEARCH_DIALOG (user_data);
     priv = et_search_dialog_get_instance_private (self);
@@ -162,10 +158,8 @@ Search_File (GtkWidget *search_button,
     gchar* string_to_search_normalized = normalize(string_to_search);
 
     GEnumClass *enum_class = (GEnumClass*)g_type_class_ref(ET_TYPE_SORT_MODE);
-    for (GList *l = ETCore->ETFileList; l != NULL; l = g_list_next (l))
+    for (const ET_File* ETFile : ET_FileList::all_files())
     {
-        ETFile = (ET_File *)l->data;
-
         // check for match
         gint match = 0;
         for (gint i = mincol; i < maxcol; i++)
