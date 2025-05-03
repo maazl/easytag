@@ -25,11 +25,15 @@
 
 #include "log.h"
 #include "application_window.h"
+#include "application.h"
 #include "easytag.h"
 #include "setting.h"
 #include "charset.h"
 
 #include "win32/win32dep.h"
+
+#include <functional>
+using namespace std;
 
 typedef struct
 {
@@ -266,129 +270,96 @@ get_icon_name_from_error_kind (EtLogAreaKind error_kind)
     }
 }
 
+static void DoLogPrint(EtLogAreaKind error_type, gchar* time, gchar* message)
+{
+	EtLogArea* self = ET_LOG_AREA(et_application_window_get_log_area(MainWindow));
+	EtLogAreaPrivate *priv = et_log_area_get_instance_private(self);
+
+	GtkTreeIter iter;
+	gtk_list_store_insert_with_values(priv->log_model, &iter, G_MAXINT,
+		LOG_ICON_NAME, get_icon_name_from_error_kind(error_type),
+		LOG_TIME_TEXT, time,
+		LOG_TEXT, message, -1);
+	Log_List_Set_Row_Visible (self, &iter);
+
+	static gboolean first_time = TRUE;
+	static gchar *file_path = NULL;
+	// Store also the messages in the log file.
+	if (!file_path)
+	{
+		gString cache_path(g_build_filename(g_get_user_cache_dir(), PACKAGE_TARNAME, NULL));
+
+		if (!g_file_test(cache_path, G_FILE_TEST_IS_DIR)
+			&& g_mkdir_with_parents(cache_path, S_IRWXU) == -1)
+		{	g_printerr ("%s", "Unable to create cache directory");
+			g_free(time);
+			g_free(message);
+			return;
+		}
+
+		file_path = g_build_filename(cache_path, LOG_FILE, NULL);
+	}
+
+	GFile* file = g_file_new_for_path(file_path);
+
+	/* On startup, the log is cleared. The log is then appended to for the
+	 * remainder of the application lifetime. */
+	GFileOutputStream *file_ostream;
+	GError *error = NULL;
+
+	if (first_time)
+		file_ostream = g_file_replace(file, NULL, FALSE, G_FILE_CREATE_NONE, NULL, &error);
+	else
+		file_ostream = g_file_append_to(file, G_FILE_CREATE_NONE, NULL, &error);
+
+	if (file_ostream)
+	{
+		string data = string(time) + " " + message + "\n";
+
+		gsize bytes_written;
+		if (!g_output_stream_write_all(G_OUTPUT_STREAM(file_ostream),
+			data.data(), data.length(), &bytes_written, NULL, &error))
+		{
+			g_debug("Only %" G_GSIZE_FORMAT " bytes out of %" G_GSIZE_FORMAT
+				"bytes of data were written", bytes_written, data.length());
+
+			/* To avoid recursion of Log_Print. */
+			g_warning("Error writing to the log file '%s' ('%s')", file_path, error->message);
+			g_error_free (error);
+		}
+		else
+			first_time = FALSE;
+
+		g_object_unref(file_ostream);
+	}
+	else
+	{
+		g_warning("Error opening output stream of file '%s' ('%s')", file_path, error->message);
+		g_error_free(error);
+	}
+
+	g_object_unref(file);
+	g_free(time);
+	g_free(message);
+}
+
 /*
  * Function to use anywhere in the application to send a message to the LogList
  */
 void
 Log_Print (EtLogAreaKind error_type, const gchar * const format, ...)
 {
-    EtLogArea *self;
-    EtLogAreaPrivate *priv;
-    va_list args;
-    gchar *string;
-    gchar *time;
-    GtkTreeIter iter;
-    static gboolean first_time = TRUE;
-    static gchar *file_path = NULL;
-    GFile *file;
-    GFileOutputStream *file_ostream;
-    GError *error = NULL;
+	gchar* time = Log_Format_Date();
 
-    self = ET_LOG_AREA(et_application_window_get_log_area(MainWindow));
+	va_list args;
+	va_start(args, format);
+	gchar* message = g_strdup_vprintf(format, args);
+	va_end(args);
 
-    g_return_if_fail (self != NULL);
-
-    priv = et_log_area_get_instance_private (self);
-
-    va_start (args, format);
-    string = g_strdup_vprintf (format, args);
-    va_end (args);
-
-    time = Log_Format_Date ();
-
-    gtk_list_store_insert_with_values (priv->log_model, &iter, G_MAXINT,
-                                       LOG_ICON_NAME,
-                                       get_icon_name_from_error_kind (error_type),
-                                       LOG_TIME_TEXT, time, LOG_TEXT,
-                                       string, -1);
-    Log_List_Set_Row_Visible (self, &iter);
-    g_free (time);
-
-    // Store also the messages in the log file.
-    if (!file_path)
-    {
-        gchar *cache_path = g_build_filename (g_get_user_cache_dir (),
-                                              PACKAGE_TARNAME, NULL);
-
-        if (!g_file_test (cache_path, G_FILE_TEST_IS_DIR))
-        {
-            gint result = g_mkdir_with_parents (cache_path, S_IRWXU);
-
-            if (result == -1)
-            {
-                g_printerr ("%s", "Unable to create cache directory");
-                g_free (cache_path);
-                g_free (string);
-
-                return;
-            }
-        }
-
-        file_path = g_build_filename (cache_path, LOG_FILE, NULL);
-        g_free (cache_path);
-    }
-
-    file = g_file_new_for_path (file_path);
-
-    /* On startup, the log is cleared. The log is then appended to for the
-     * remainder of the application lifetime. */
-    if (first_time)
-    {
-        file_ostream = g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE,
-                                       NULL, &error);
-    }
-    else
-    {
-        file_ostream = g_file_append_to (file, G_FILE_CREATE_NONE, NULL,
-                                         &error);
-    }
-
-    if (file_ostream)
-    {
-        GString *data;
-        gsize bytes_written;
-
-        time = Log_Format_Date ();
-        data = g_string_new (time);
-        g_free (time);
-
-        data = g_string_append_c (data, ' ');
-        data = g_string_append (data, string);
-        g_free (string);
-
-        data = g_string_append_c (data, '\n');
-
-        if (!g_output_stream_write_all (G_OUTPUT_STREAM (file_ostream),
-                                        data->str, data->len, &bytes_written,
-                                        NULL, &error))
-        {
-            g_debug ("Only %" G_GSIZE_FORMAT " bytes out of %" G_GSIZE_FORMAT
-                     "bytes of data were written", bytes_written, data->len);
-
-            /* To avoid recursion of Log_Print. */
-            g_warning ("Error writing to the log file '%s' ('%s')", file_path,
-                       error->message);
-
-            g_error_free (error);
-
-            g_string_free (data, TRUE);
-            g_object_unref (file_ostream);
-            g_object_unref (file);
-
-            return;
-        }
-
-        first_time = FALSE;
-
-        g_string_free (data, TRUE);
-    }
-    else
-    {
-        g_warning ("Error opening output stream of file '%s' ('%s')",
-                   file_path, error->message);
-        g_error_free (error);
-    }
-
-    g_object_unref (file_ostream);
-    g_object_unref (file);
+	if (std::this_thread::get_id() != MainThreadId)
+		// If invoked from a background thread dispatch to the main thread.
+		gIdleAdd(new function<void()>([error_type, time, message]()
+		{	DoLogPrint(error_type, time, message); }));
+	else
+		DoLogPrint(error_type, time, message);
 }

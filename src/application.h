@@ -20,6 +20,7 @@
 #define ET_APPLICATION_H_
 
 #include <gtk/gtk.h>
+#include <thread>
 
 #define ET_TYPE_APPLICATION (et_application_get_type ())
 #define ET_APPLICATION(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_APPLICATION, EtApplication))
@@ -38,6 +39,9 @@ struct _EtApplicationClass
     /*< private >*/
     GtkApplicationClass parent_class;
 };
+
+/// ID of the main thread that processes the GTK message loop.
+extern std::thread::id MainThreadId;
 
 GType et_application_get_type (void);
 EtApplication *et_application_new (void);

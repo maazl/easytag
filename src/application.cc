@@ -45,6 +45,8 @@ G_DEFINE_TYPE_WITH_PRIVATE (EtApplication, et_application, GTK_TYPE_APPLICATION)
 #undef et_application_get_instance_private
 #define et_application_get_instance_private(x) ((EtApplicationPrivate*)et_application_get_instance_private_(x))
 
+std::thread::id MainThreadId;
+
 static const GOptionEntry entries[] =
 {
     { "version", 'v', 0, G_OPTION_ARG_NONE, NULL,
@@ -586,6 +588,8 @@ et_application_init (EtApplication *self)
 static void
 et_application_class_init (EtApplicationClass *klass)
 {
+    MainThreadId = std::this_thread::get_id();
+
     GObjectClass *gobject_class;
     GApplicationClass *gapplication_class;
 
