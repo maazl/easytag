@@ -385,7 +385,7 @@ on_apply_to_selection (GObject *object,
         for (auto& etfile : etfilelist)
         {
             File_Tag* FileTag = new File_Tag(*etfile->FileTagNew());
-            FileTag->track = et_track_number_to_string(by_path.find(etfile->FileNameNew()->path())->second);
+            FileTag->track_total = et_track_number_to_string(by_path.find(etfile->FileNameNew()->path())->second);
             etfile->apply_changes(nullptr, FileTag);
         }
 
