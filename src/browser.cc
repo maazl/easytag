@@ -210,7 +210,6 @@ static GtkTreePath *Find_Child_Node (EtBrowser *self, GtkTreeIter *parent, gchar
 
 static const GIcon* get_gicon_for_path(EtBrowser *self, const gchar *path, EtPathState path_state);
 
-static ET_File *et_browser_get_et_file_from_path (EtBrowser *self, GtkTreePath *path);
 static GtkTreeViewColumn * et_browser_get_column_for_sort_mode (EtBrowser *self, EtSortMode sort_mode);
 
 /* For window to rename a directory */
@@ -518,11 +517,37 @@ vector<xPtr<ET_File>> et_browser_get_selected_files(EtBrowser *self)
     selfilelist = gtk_tree_selection_get_selected_rows (selection, NULL);
 
     for (GList* l = selfilelist; l != NULL; l = g_list_next (l))
-        files.emplace_back(et_browser_get_et_file_from_path(self, (GtkTreePath*)l->data));
+    {
+        GtkTreeIter iter;
+        if (!gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_model), &iter, (GtkTreePath*)l->data))
+            continue; // invalid selected path ???
+
+        ET_File *etfile;
+        gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter, LIST_FILE_POINTER, &etfile, -1);
+        files.emplace_back(etfile);
+    }
 
     g_list_free_full (selfilelist, (GDestroyNotify)gtk_tree_path_free);
 
     return files;
+}
+
+vector<ET_File*> et_browser_get_all_files(EtBrowser *self)
+{
+	EtBrowserPrivate* priv = et_browser_get_instance_private (self);
+
+	vector<ET_File*> files;
+	files.reserve(gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_model), NULL));
+
+	gtk_tree_model_foreach(GTK_TREE_MODEL(priv->file_model),
+		[](GtkTreeModel* model, GtkTreePath* path, GtkTreeIter* iter, gpointer data)
+		{	ET_File* etfile;
+			gtk_tree_model_get(model, iter, LIST_FILE_POINTER, &etfile, -1);
+			((vector<xPtr<ET_File>>*)data)->emplace_back(etfile);
+			return FALSE;
+		}, &files);
+
+	return files;
 }
 
 /*
@@ -1547,32 +1572,6 @@ et_browser_remove_file (EtBrowser *self,
 
     gtk_tree_path_free (currentPath);
 }
-
-/*
- * Get ETFile pointer of a file from a Tree Iter
- */
-static ET_File *
-et_browser_get_et_file_from_path (EtBrowser *self, GtkTreePath *path)
-{
-    EtBrowserPrivate *priv;
-    GtkTreeIter iter;
-
-    g_return_val_if_fail (ET_BROWSER (self), NULL);
-
-    priv = et_browser_get_instance_private (self);
-
-    if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->file_model), &iter,
-                                  path))
-    {
-        return NULL;
-    }
-
-    ET_File *etfile;
-    gtk_tree_model_get (GTK_TREE_MODEL (priv->file_model), &iter,
-                        LIST_FILE_POINTER, &etfile, -1);
-    return etfile;
-}
-
 
 /*
  * Select the specified file in the list, by its ETFile

@@ -119,5 +119,7 @@ void et_browser_save_state(EtBrowser *self, GKeyFile* keyfile);
 void et_browser_restore_state(EtBrowser *self, GKeyFile* keyfile);
 
 std::vector<xPtr<ET_File>> et_browser_get_selected_files(EtBrowser *self);
+/// Return all files in the currently visible order.
+std::vector<ET_File*> et_browser_get_all_files(EtBrowser *self);
 
 #endif /* ET_BROWSER_H_ */

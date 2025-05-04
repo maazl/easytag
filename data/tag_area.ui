@@ -59,7 +59,7 @@
                             <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">0</property>
-                                <property name="width">9</property>
+                                <property name="width">8</property>
                             </packing>
                         </child>
                         <child>
@@ -80,7 +80,7 @@
                             <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">1</property>
-                                <property name="width">9</property>
+                                <property name="width">8</property>
                             </packing>
                         </child>
                         <child>
@@ -101,7 +101,7 @@
                             <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">2</property>
-                                <property name="width">9</property>
+                                <property name="width">8</property>
                             </packing>
                         </child>
                         <child>
@@ -122,7 +122,7 @@
                             <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">3</property>
-                                <property name="width">9</property>
+                                <property name="width">8</property>
                             </packing>
                         </child>
                         <child>
@@ -143,7 +143,7 @@
                             <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">4</property>
-                                <property name="width">9</property>
+                                <property name="width">8</property>
                             </packing>
                         </child>
                         <child>
@@ -164,7 +164,7 @@
                             <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">5</property>
-                                <property name="width">9</property>
+                                <property name="width">8</property>
                             </packing>
                         </child>
                         <child>
@@ -185,7 +185,7 @@
                             <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">6</property>
-                                <property name="width">9</property>
+                                <property name="width">8</property>
                             </packing>
                         </child>
                         <child>
@@ -237,21 +237,6 @@
                             </packing>
                         </child>
                         <child>
-                            <object class="GtkButton" id="track_number_button">
-                                <property name="tooltip-text" translatable="yes">Set the number of files, in the same directory of the displayed file, to the selected tracks</property>
-                                <signal name="clicked" handler="on_apply_to_selection"/>
-                                <child>
-                                    <object class="GtkImage" id="track_number_image">
-                                        <property name="resource">/org/gnome/EasyTAG/images/sequence-track.png</property>
-                                    </object>
-                                </child>
-                            </object>
-                            <packing>
-                                <property name="left-attach">5</property>
-                                <property name="top-attach">7</property>
-                            </packing>
-                        </child>
-                        <child>
                             <object class="GtkEntry" id="track_total_entry">
                                 <property name="hexpand">True</property>
                                 <property name="secondary-icon-name">insert-text</property>
@@ -260,7 +245,7 @@
                                 <signal name="insert-text" handler="Insert_Only_Digit"/>
                             </object>
                             <packing>
-                                <property name="left-attach">6</property>
+                                <property name="left-attach">5</property>
                                 <property name="top-attach">7</property>
                             </packing>
                         </child>
@@ -269,7 +254,7 @@
                                 <property name="orientation">vertical</property>
                             </object>
                             <packing>
-                                <property name="left-attach">7</property>
+                                <property name="left-attach">6</property>
                                 <property name="top-attach">7</property>
                             </packing>
                         </child>
@@ -279,7 +264,7 @@
                                 <property name="label" translatable="yes">CD:</property>
                             </object>
                             <packing>
-                                <property name="left-attach">8</property>
+                                <property name="left-attach">7</property>
                                 <property name="top-attach">7</property>
                             </packing>
                         </child>
@@ -291,7 +276,7 @@
                                 <property name="width-chars">6</property>
                             </object>
                             <packing>
-                                <property name="left-attach">9</property>
+                                <property name="left-attach">8</property>
                                 <property name="top-attach">7</property>
                             </packing>
                         </child>
@@ -337,7 +322,7 @@
                             <packing>
                                 <property name="left-attach">4</property>
                                 <property name="top-attach">8</property>
-                                <property name="width">5</property>
+                                <property name="width">4</property>
                             </packing>
                         </child>
                         <child>
@@ -350,7 +335,7 @@
                                 <signal name="focus-out-event" handler="on_year_entry_focus_out_event"/>
                             </object>
                             <packing>
-                                <property name="left-attach">9</property>
+                                <property name="left-attach">8</property>
                                 <property name="top-attach">8</property>
                             </packing>
                         </child>
@@ -374,7 +359,7 @@
                             <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">9</property>
-                                <property name="width">9</property>
+                                <property name="width">8</property>
                             </packing>
                         </child>
                         <child>
@@ -396,7 +381,7 @@
                             <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">10</property>
-                                <property name="width">9</property>
+                                <property name="width">8</property>
                             </packing>
                         </child>
                         <child>
@@ -417,7 +402,7 @@
                             <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">11</property>
-                                <property name="width">9</property>
+                                <property name="width">8</property>
                             </packing>
                         </child>
                         <child>
@@ -439,7 +424,7 @@
                             <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">12</property>
-                                <property name="width">6</property>
+                                <property name="width">5</property>
                             </packing>
                         </child>
                         <child>
@@ -449,7 +434,7 @@
                                 <property name="tooltip-text" translatable="yes">Original year</property>
                             </object>
                             <packing>
-                                <property name="left-attach">7</property>
+                                <property name="left-attach">6</property>
                                 <property name="top-attach">12</property>
                                 <property name="width">2</property>
                             </packing>
@@ -464,7 +449,7 @@
                                 <signal name="focus-out-event" handler="on_year_entry_focus_out_event"/>
                             </object>
                             <packing>
-                                <property name="left-attach">9</property>
+                                <property name="left-attach">8</property>
                                 <property name="top-attach">12</property>
                             </packing>
                         </child>
@@ -486,7 +471,7 @@
                             <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">13</property>
-                                <property name="width">9</property>
+                                <property name="width">8</property>
                             </packing>
                         </child>
                         <child>
@@ -507,7 +492,7 @@
                             <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">14</property>
-                                <property name="width">9</property>
+                                <property name="width">8</property>
                             </packing>
                         </child>
                         <child>
@@ -528,7 +513,7 @@
                             <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">15</property>
-                                <property name="width">9</property>
+                                <property name="width">8</property>
                             </packing>
                         </child>
                         <child>
@@ -546,6 +531,7 @@
                         <child>
                             <object class="GtkEntry" id="track_gain_entry">
                                 <property name="width-chars">5</property>
+                                <property name="hexpand">True</property>
                                 <signal name="insert_text" handler="Insert_Only_Number"/>
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this track gain</property>
@@ -566,7 +552,7 @@
                             <packing>
                                 <property name="left-attach">3</property>
                                 <property name="top-attach">16</property>
-                                <property name="width">3</property>
+                                <property name="width">2</property>
                             </packing>
                         </child>
                         <child>
@@ -577,7 +563,7 @@
                                 <property name="visible">True</property>
                             </object>
                             <packing>
-                                <property name="left-attach">6</property>
+                                <property name="left-attach">5</property>
                                 <property name="top-attach">16</property>
                                 <property name="width">3</property>
                             </packing>
@@ -585,13 +571,14 @@
                         <child>
                             <object class="GtkEntry" id="track_peak_entry">
                                 <property name="width-chars">5</property>
+                                <property name="hexpand">True</property>
                                 <signal name="insert_text" handler="Insert_Only_Number"/>
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this track peak level</property>
                                 <property name="visible">True</property>
                             </object>
                             <packing>
-                                <property name="left-attach">9</property>
+                                <property name="left-attach">8</property>
                                 <property name="top-attach">16</property>
                             </packing>
                         </child>
@@ -610,6 +597,7 @@
                         <child>
                             <object class="GtkEntry" id="album_gain_entry">
                                 <property name="width-chars">5</property>
+                                <property name="hexpand">True</property>
                                 <signal name="insert_text" handler="Insert_Only_Number"/>
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this album gain</property>
@@ -630,7 +618,7 @@
                             <packing>
                                 <property name="left-attach">3</property>
                                 <property name="top-attach">17</property>
-                                <property name="width">3</property>
+                                <property name="width">2</property>
                             </packing>
                         </child>
                         <child>
@@ -641,7 +629,7 @@
                                 <property name="visible">True</property>
                             </object>
                             <packing>
-                                <property name="left-attach">6</property>
+                                <property name="left-attach">5</property>
                                 <property name="top-attach">17</property>
                                 <property name="width">3</property>
                             </packing>
@@ -649,13 +637,14 @@
                         <child>
                             <object class="GtkEntry" id="album_peak_entry">
                                 <property name="width-chars">5</property>
+                                <property name="hexpand">True</property>
                                 <signal name="insert_text" handler="Insert_Only_Number"/>
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this album peak level</property>
                                 <property name="visible">True</property>
                             </object>
                             <packing>
-                                <property name="left-attach">9</property>
+                                <property name="left-attach">8</property>
                                 <property name="top-attach">17</property>
                             </packing>
                         </child>

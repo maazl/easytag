@@ -127,7 +127,6 @@ typedef struct
 
     /* Mini buttons. */
     GtkWidget *track_sequence_button;
-    GtkWidget *track_number_button;
     GtkWidget *apply_image_toolitem;
     GtkWidget *apply_comment_toolitem;
 } EtTagAreaPrivate;
@@ -340,8 +339,13 @@ on_apply_to_selection (GObject *object,
         for (const ET_File* file : etfilelist)
             by_path.emplace(file->FileNameNew()->path(), 0);
 
+        // Collect track information to apply it together with total tracks below
+        // Each entry maps to the item with the same index in etfilelist.
+        vector<unsigned> track_no;
+        track_no.reserve(etfilelist.size());
+
         auto filelistiter = etfilelist.begin();
-        for (auto& fullfile : ET_FileList::all_files())
+        for (auto& fullfile : et_browser_get_all_files(window->browser()))
         {
             // Count files in the same path
             auto iter = by_path.find(fullfile->FileNameNew()->path());
@@ -349,50 +353,32 @@ on_apply_to_selection (GObject *object,
                 continue; // path not relevant
             ++iter->second;
 
+            if (filelistiter == etfilelist.end())
+                continue; // selection processed completely => only continue count totals
+
             // The ETFile in the selected file list
-            ET_File* etfile = filelistiter->get();
-            // The file is in the selection?
-            if (fullfile == etfile)
-            {
-                File_Tag* FileTag = new File_Tag(*etfile->FileTagNew());
-                FileTag->track = et_track_number_to_string(iter->second);
-                etfile->apply_changes(nullptr, FileTag);
+            ET_File* etfile = filelistiter++->get();
+            // The sequence of the files in etfilelist and et_browser_get_all_files is identical
+            // and the first is a subset of the latter, so a simple comparison to the next element
+            // is sufficient to join the lists.
+            if (fullfile != etfile)
+                continue; // skip files not in the selection
 
-                if (++filelistiter == etfilelist.end()) break;
-            }
-        }
-        msg = g_strdup_printf (_("Selected tracks numbered sequentially"));
-
-        /* Display the current file (Needed when sequencing tracks) */
-        et_application_window_update_ui_from_et_file(window, ET_COLUMN_TRACK_NUMBER);
-    }
-    else if (object==G_OBJECT(priv->track_number_button))
-    {
-        unordered_map<const char*, unsigned, xString::hasher, xString::equal> by_path;
-
-        // collect relevant paths
-        for (const ET_File* file : etfilelist)
-            by_path.emplace(file->FileNameNew()->path(), 0);
-
-        for (auto& fullfile : ET_FileList::all_files())
-        {   // Count files in the same path
-            auto iter = by_path.find(fullfile->FileNameNew()->path());
-            if (iter != by_path.end())
-                ++iter->second;
+            // remember the track number to be applied below.
+            track_no.push_back(iter->second);
         }
 
         // apply the changes
-        for (auto& etfile : etfilelist)
-        {
+        filelistiter = etfilelist.begin();
+        for (unsigned track : track_no)
+        {   ET_File* etfile = filelistiter++->get();
             File_Tag* FileTag = new File_Tag(*etfile->FileTagNew());
+            FileTag->track = et_track_number_to_string(track);
             FileTag->track_total = et_track_number_to_string(by_path.find(etfile->FileNameNew()->path())->second);
             etfile->apply_changes(nullptr, FileTag);
         }
 
-        if (by_path.size())
-            msg = g_strdup_printf(_("Selected files tagged with track like ‘xx/%u’"), by_path.begin()->second);
-        else
-            msg = g_strdup (_("Removed track number from selected files"));
+        msg = g_strdup_printf (_("Selected tracks numbered sequentially"));
 
         /* Display the current file (Needed when sequencing tracks) */
         et_application_window_update_ui_from_et_file(window, ET_COLUMN_TRACK_NUMBER);
@@ -1982,7 +1968,6 @@ et_tag_area_class_init (EtTagAreaClass *klass)
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, image_properties_toolitem);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, images_grid);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, images_model);
-    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_number_button);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_sequence_button);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, comment_grid);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, comment_text);
@@ -2050,7 +2035,7 @@ void et_tag_area_update_controls (EtTagArea *self, const ET_File* file)
     show_hide(ET_COLUMN_SUBTITLE, priv->subtitle_entry, priv->subtitle_label, nullptr);
     show_hide(ET_COLUMN_ALBUM_ARTIST, priv->album_artist_entry, priv->album_artist_label, nullptr);
     show_hide(ET_COLUMN_DISC_SUBTITLE, priv->disc_subtitle_entry, priv->disc_subtitle_label, nullptr);
-    show_hide(ET_COLUMN_TRACK_NUMBER, priv->track_total_entry, priv->track_number_button, priv->track_separator_label);
+    show_hide(ET_COLUMN_TRACK_NUMBER, priv->track_total_entry, priv->track_separator_label, nullptr);
     show_hide(ET_COLUMN_DISC_NUMBER, priv->disc_number_entry, priv->disc_number_label, priv->disc_separator);
     show_hide(ET_COLUMN_RELEASE_YEAR, priv->release_year_entry, priv->release_year_label, priv->year_separator);
     show_hide(ET_COLUMN_COMPOSER, priv->composer_entry, priv->composer_label, nullptr);
