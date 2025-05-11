@@ -1303,6 +1303,7 @@ static const GActionEntry actions[] =
     { "file-artist-view", on_action_radio, "s", "'file'",
       on_file_artist_view_change },
     { "collapse-tree", on_collapse_tree },
+    /* { "show-log", on_show_log }, Created from GSetting */
     { "reload-tree", on_reload_tree },
     { "reload-directory", on_reload_directory },
     /* { "browse-show-hidden", on_action_toggle, NULL, "true",
@@ -1423,6 +1424,9 @@ et_application_window_init (EtApplicationWindow *self)
     g_action_map_add_action_entries (G_ACTION_MAP (self), actions,
                                      G_N_ELEMENTS (actions), self);
 
+    action = g_settings_create_action (MainSettings, "log-show");
+    g_action_map_add_action (G_ACTION_MAP (self), action);
+    g_object_unref (action);
     action = g_settings_create_action (MainSettings, "browse-show-hidden");
     g_action_map_add_action (G_ACTION_MAP (self), action);
     g_object_unref (action);

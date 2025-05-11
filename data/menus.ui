@@ -594,6 +594,12 @@
             </submenu>
             <section>
                 <item>
+                    <attribute name="action">win.log-show</attribute>
+                    <attribute name="label" translatable="yes">Show the log</attribute>
+                </item>
+            </section>
+            <section>
+                <item>
                     <attribute name="accel">&lt;Primary&gt;&lt;Shift&gt;c</attribute>
                     <attribute name="action">win.collapse-tree</attribute>
                     <attribute name="label" translatable="yes">Collapse Tree</attribute>
