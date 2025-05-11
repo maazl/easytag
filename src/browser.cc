@@ -1317,6 +1317,8 @@ void EtBrowser::load_file_list()
 		if (etfile_to_select == i->get())
 		{	selected_iter = iter;
 			selected = true;
+			// update header
+			et_application_window_update_ui_from_et_file(MainWindow, (EtColumn)0);
 		}
 	}
 

@@ -68,7 +68,7 @@ void ET_FileList::calc_totals()
 	auto range = visible_range();
 	for (auto i = range.first; i != range.second; ++i)
 	{	TotalSize     += (*i)->FileSize;
-		TotalDuration -= (*i)->ETFileInfo.duration;
+		TotalDuration += (*i)->ETFileInfo.duration;
 	}
 }
 
@@ -112,22 +112,21 @@ void ET_FileList::set_visible_range(const xStringD0* artist, const xStringD0* al
 	{	Start = 0;
 		End = FileList.size();
 		BrowserMode = ET_BROWSER_MODE_FILE;
-		return; // mode file requires no update
-	}
+	} else
+	{	g_return_if_fail(ArtistAlbumIndex.size() || !FileList.size());
 
-	g_return_if_fail(ArtistAlbumIndex.size() || !FileList.size());
+		BrowserMode = !album ? ET_BROWSER_MODE_ARTIST : ET_BROWSER_MODE_ARTIST_ALBUM;
 
-	BrowserMode = !album ? ET_BROWSER_MODE_ARTIST : ET_BROWSER_MODE_ARTIST_ALBUM;
-
-	// adjust visible range
-	auto range = album ? matching_range(*artist, *album) : matching_range(*artist);
-	End = FileList.size();
-	if (range.first == range.second)
-		Start = End;
-	else
-	{	Start = range.first->Start;
-		if (range.second != ArtistAlbumIndex.end())
-			End = range.second->Start;
+		// adjust visible range
+		auto range = album ? matching_range(*artist, *album) : matching_range(*artist);
+		End = FileList.size();
+		if (range.first == range.second)
+			Start = End;
+		else
+		{	Start = range.first->Start;
+			if (range.second != ArtistAlbumIndex.end())
+				End = range.second->Start;
+		}
 	}
 
 	calc_totals();
@@ -135,7 +134,7 @@ void ET_FileList::set_visible_range(const xStringD0* artist, const xStringD0* al
 
 void ET_FileList::set_display_mode(EtBrowserMode mode)
 {
-	if (!mode == ET_BROWSER_MODE_FILE)
+	if (mode == ET_BROWSER_MODE_FILE)
 	{	Start = 0;
 		End = FileList.size();
 		BrowserMode = ET_BROWSER_MODE_FILE;
