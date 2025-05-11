@@ -72,7 +72,6 @@ typedef struct
     GtkWidget *disc_number_label;
     GtkWidget *disc_number_entry;
     GtkWidget *year_entry;
-    GtkWidget *year_separator;
     GtkWidget *release_year_label;
     GtkWidget *release_year_entry;
     GtkWidget *genre_combo_entry;
@@ -1927,11 +1926,9 @@ et_tag_area_class_init (EtTagAreaClass *klass)
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_combo_entry);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_separator_label);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_total_entry);
-    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, disc_separator);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, disc_number_label);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, disc_number_entry);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, year_entry);
-    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, year_separator);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, release_year_label);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, release_year_entry);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, genre_combo_entry);
@@ -2021,29 +2018,27 @@ void et_tag_area_update_controls (EtTagArea *self, const ET_File* file)
     if (file->ETFileDescription->unsupported_fields)
         hide |= file->ETFileDescription->unsupported_fields(file);
 
-    auto show_hide = [hide](guint col, GtkWidget* w1, GtkWidget* w2, GtkWidget* w3)
+    auto show_hide = [hide](guint col, GtkWidget* w1, GtkWidget* w2)
     {
         gboolean show = !(hide & col);
         gtk_widget_set_visible(w1, show);
         if (w2)
             gtk_widget_set_visible(w2, show);
-        if (w3)
-            gtk_widget_set_visible(w3, show);
     };
 
-    show_hide(ET_COLUMN_VERSION, priv->version_entry, priv->version_label, nullptr);
-    show_hide(ET_COLUMN_SUBTITLE, priv->subtitle_entry, priv->subtitle_label, nullptr);
-    show_hide(ET_COLUMN_ALBUM_ARTIST, priv->album_artist_entry, priv->album_artist_label, nullptr);
-    show_hide(ET_COLUMN_DISC_SUBTITLE, priv->disc_subtitle_entry, priv->disc_subtitle_label, nullptr);
-    show_hide(ET_COLUMN_TRACK_NUMBER, priv->track_total_entry, priv->track_separator_label, nullptr);
-    show_hide(ET_COLUMN_DISC_NUMBER, priv->disc_number_entry, priv->disc_number_label, priv->disc_separator);
-    show_hide(ET_COLUMN_RELEASE_YEAR, priv->release_year_entry, priv->release_year_label, priv->year_separator);
-    show_hide(ET_COLUMN_COMPOSER, priv->composer_entry, priv->composer_label, nullptr);
-    show_hide(ET_COLUMN_ORIG_ARTIST, priv->orig_artist_entry, priv->orig_artist_label, nullptr);
-    show_hide(ET_COLUMN_ORIG_YEAR, priv->orig_year_entry, priv->orig_year_label, nullptr);
-    show_hide(ET_COLUMN_COPYRIGHT, priv->copyright_entry, priv->copyright_label, nullptr);
-    show_hide(ET_COLUMN_URL, priv->url_entry, priv->url_label, nullptr);
-    show_hide(ET_COLUMN_ENCODED_BY, priv->encoded_by_entry, priv->encoded_by_label, nullptr);
+    show_hide(ET_COLUMN_VERSION, priv->version_entry, priv->version_label);
+    show_hide(ET_COLUMN_SUBTITLE, priv->subtitle_entry, priv->subtitle_label);
+    show_hide(ET_COLUMN_ALBUM_ARTIST, priv->album_artist_entry, priv->album_artist_label);
+    show_hide(ET_COLUMN_DISC_SUBTITLE, priv->disc_subtitle_entry, priv->disc_subtitle_label);
+    show_hide(ET_COLUMN_TRACK_NUMBER, priv->track_total_entry, priv->track_separator_label);
+    show_hide(ET_COLUMN_DISC_NUMBER, priv->disc_number_entry, priv->disc_number_label);
+    show_hide(ET_COLUMN_RELEASE_YEAR, priv->release_year_entry, priv->release_year_label);
+    show_hide(ET_COLUMN_COMPOSER, priv->composer_entry, priv->composer_label);
+    show_hide(ET_COLUMN_ORIG_ARTIST, priv->orig_artist_entry, priv->orig_artist_label);
+    show_hide(ET_COLUMN_ORIG_YEAR, priv->orig_year_entry, priv->orig_year_label);
+    show_hide(ET_COLUMN_COPYRIGHT, priv->copyright_entry, priv->copyright_label);
+    show_hide(ET_COLUMN_URL, priv->url_entry, priv->url_label);
+    show_hide(ET_COLUMN_ENCODED_BY, priv->encoded_by_entry, priv->encoded_by_label);
     gboolean show = !(hide & ET_COLUMN_REPLAYGAIN);
     gtk_widget_set_visible(priv->track_gain_label, show);
     gtk_widget_set_visible(priv->track_gain_entry, show);
@@ -2055,10 +2050,10 @@ void et_tag_area_update_controls (EtTagArea *self, const ET_File* file)
     gtk_widget_set_visible(priv->album_gain_unit, show);
     gtk_widget_set_visible(priv->album_peak_label, show);
     gtk_widget_set_visible(priv->album_peak_entry, show);
-    show_hide(ET_COLUMN_IMAGE, priv->images_grid, nullptr, nullptr);
-    show_hide(ET_COLUMN_DESCRIPTION, GTK_WIDGET(priv->description_scrolled), nullptr, nullptr);
+    show_hide(ET_COLUMN_IMAGE, priv->images_grid, nullptr);
+    show_hide(ET_COLUMN_DESCRIPTION, GTK_WIDGET(priv->description_scrolled), nullptr);
     guint multiline = -!g_settings_get_boolean(MainSettings, "tag-multiline-comment");
-    show_hide(multiline, priv->comment_grid, nullptr, nullptr);
+    show_hide(multiline, priv->comment_grid, nullptr);
 }
 
 void
