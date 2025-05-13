@@ -84,7 +84,7 @@ enum {
     EASYTAG_ID3_FIELD_LANGUAGE      = 0x0040
 };
 
-#define PEEK_MPEG_DATA_LEN 2048
+#define PEEK_MPEG_DATA_LEN 4096
 
 /**************
  * Prototypes *
@@ -497,48 +497,118 @@ static uint32_t read32u(const id3_byte_t* data)
 	return (((((data[0] << 8) | data[1]) << 8) | data[2]) << 8) | data[3];
 }
 
-static void get_audio_frame_header(ET_File_Info* info, const id3_byte_t* data, int len)
+namespace
 {
-	if (len < 4)
-		return;
+	struct frame_header
+	{
+		static const uint8_t brx[2][2][16];
+		static const int srx[3];
+		static const uint8_t xingoff[3];
 
-	static const uint8_t brx[2][2][16] =
+		uint8_t version;
+		uint8_t layer;
+		uint8_t bitrate;
+		uint8_t srate;
+		uint8_t mode;
+		uint8_t padding;
+
+		bool Fill(const id3_byte_t* sp)
+		{
+			if (sp[0] != 0xff || sp[1] < 0xe0)
+				return false;
+
+			version = (sp[1] >> 3) & 3;
+			layer = (sp[1] >> 1) & 3;
+			bitrate = (sp[2] >> 4) & 15;
+			srate = (sp[2] >> 2) & 3;
+			mode = (sp[3] >> 6) & 3;
+			padding = (sp[2] >> 1) & 1;
+			if (version == 1 || layer == 0 || bitrate == 15 || srate == 3
+				|| (layer == 2 && (mode == 3 ? bitrate > 10 : bitrate < 6 && (bitrate & 3))))
+				return false;
+
+			return true;
+		}
+
+		int Bitrate() const
+		{	if (version == 3 && layer == 3) // V1L1
+				return (bitrate << 5) * 1000;
+			else
+				return (version & 1 ? brx[0][layer & 1] : brx[1][layer < 3])[bitrate] * 8000;
+		}
+
+		int Samplerate() const
+		{	return srx[srate] / (4 - version);
+		}
+
+		int XingOffset() const
+		{	return xingoff[(version & 1) + (mode != 3)];
+		}
+
+		int FrameSamples() const
+		{	return layer == 3 ? 384 : layer == 1 && version != 3 ? 576 : 1152;
+		}
+
+		int FrameLength() const
+		{	int shift = (layer == 3) << 1; // Layer I => 2**2, 2**0 otherwise
+			return ((FrameSamples() >> (shift + 3)) * Bitrate() / Samplerate() + padding) << shift;
+		}
+
+		bool Matches(const frame_header& r) const
+		{	return version == r.version
+				&& layer == r.layer
+				&& srate == r.srate
+				&& mode == r.mode;
+		}
+	};
+
+	const uint8_t frame_header::brx[2][2][16] =
 	{	{	{ 0, 4, 6, 7, 8, 10, 12, 14, 16, 20, 24, 28, 32, 40, 48, 0 } // V1L2
 		,	{ 0, 4, 5, 6, 7,  8, 10, 12, 14, 16, 20, 24, 28, 32, 40, 0 } // V1L3
 		},
 		{	{ 0, 4, 6, 7, 8, 10, 12, 14, 16, 18, 20, 22, 24, 28, 32, 0 } // V2L1
 		,	{ 0, 1, 2, 3, 4,  5,  6,  7,  8, 10, 12, 14, 16, 18, 20, 0 } // V2L23
 	}	};
-	static const int srx[3] = { 44100, 48000, 32000 };
-	static const uint8_t xingoff[3] = { 9+1, 17+4, 32+4 };
+	const int frame_header::srx[3] = { 44100, 48000, 32000 };
+	const uint8_t frame_header::xingoff[3] = { 9+1, 17+4, 32+4 };
+}
+
+static void get_audio_frame_header(ET_File_Info* info, const id3_byte_t* data, int len)
+{
+	if (len < 4)
+		return;
 
 	// sync
 	const id3_byte_t* sp = data;
 	const id3_byte_t* spe = sp + len - 3;
+	frame_header hdr;
 	for (; sp != spe; ++sp)
-	{	if (sp[0] != 0xff || sp[1] < 0xe0)
+	{	if (!hdr.Fill(sp))
 			continue;
 
-		uint8_t version = (sp[1] >> 3) & 3;
-		uint8_t layer = (sp[1] >> 1) & 3;
-		uint8_t bitrate = (sp[2] >> 4) & 15;
-		uint8_t srate = (sp[2] >> 2) & 3;
-		uint8_t mode = (sp[3] >> 6) & 3;
-		if (version == 1 || layer == 0 || bitrate == 15 || srate == 3
-			|| (layer == 2 && (mode == 3 ? bitrate > 10 : bitrate < 6 && (bitrate & 3))))
-			continue;
+		// potential match
+		// check for 2 more frame headers to verify the match
+		const id3_byte_t* f2 = sp + hdr.FrameLength();
+		if (f2 < spe)
+		{	frame_header hdr2;
+			if (!hdr2.Fill(f2) || !hdr2.Matches(hdr))
+				continue;
+			bool vbr = hdr2.srate != hdr.srate;
+			f2 += hdr2.FrameLength();
+			if (f2 < spe && (!hdr2.Fill(f2) || !hdr2.Matches(hdr)))
+				continue;
+			if (vbr || hdr2.srate != hdr.srate)
+				info->variable_bitrate = TRUE;
+		}
 
-		info->version = !version ? 3 : 4 - version; // 3 := MPEG 2.5, low sampling rates
-		info->layer = 4 - layer;
-		if (version == 3 && layer == 3) // V1L1
-			info->bitrate = (bitrate << 5) * 1000;
-		else
-			info->bitrate = (version & 1 ? brx[0][layer & 1] : brx[1][layer < 3])[bitrate] * 8000;
-		info->samplerate = srx[srate] / (4 - version);
-		info->mode = mode;
+		info->version = !hdr.version ? 3 : 4 - hdr.version; // 3 := MPEG 2.5, low sampling rates
+		info->layer = 4 - hdr.layer;
+		info->bitrate = hdr.Bitrate();
+		info->samplerate = hdr.Samplerate();
+		info->mode = hdr.mode;
 
 		// detect Xing header
-		sp += xingoff[(version & 1) + (mode != 3)];
+		sp += hdr.XingOffset();
 		if (sp >= spe)
 			return;
 		if (sp[0] == 'X' && sp[1] == 'i' && sp[2] == 'n' && sp[3] == 'g')
@@ -556,8 +626,7 @@ static void get_audio_frame_header(ET_File_Info* info, const id3_byte_t* data, i
 			return;
 		uint32_t frames = read32u(sp);
 
-		uint32_t framesamp = layer == 3 ? 384 : layer == 1 && version != 3 ? 576 : 1152;
-		info->duration = (double)frames * framesamp / info->samplerate;
+		info->duration = (double)frames * hdr.FrameSamples() / info->samplerate;
 
 		return;
 	}
