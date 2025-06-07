@@ -162,8 +162,8 @@ typedef enum
 typedef enum
 {
     ET_PROCESS_FIELD_FILENAME        = 1 << 0,
-    ET_PROCESS_FIELD_VERSION         = 1 << 1,
-    ET_PROCESS_FIELD_TITLE           = 1 << 2,
+    ET_PROCESS_FIELD_TITLE           = 1 << 1,
+    ET_PROCESS_FIELD_VERSION         = 1 << 2,
     ET_PROCESS_FIELD_SUBTITLE        = 1 << 3,
     ET_PROCESS_FIELD_ARTIST          = 1 << 4,
     ET_PROCESS_FIELD_ALBUM_ARTIST    = 1 << 5,
