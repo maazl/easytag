@@ -38,16 +38,9 @@ public:
 	T* Cur;
 	T* New;
 
-private:
-	static void delete_all(T* start, T* end);
-
 public:
 	UndoList() : Cur(nullptr), New(nullptr) {}
-	~UndoList()
-	{	if (Cur != New)
-			delete_all(Cur, New);
-		delete_all(New, Cur);
-	}
+	~UndoList();
 
 	void add(T* item, unsigned undo_key);
 	bool is_saved() const { return Cur == New; }
@@ -61,22 +54,26 @@ public:
 };
 
 template <typename T>
-void UndoList<T>::delete_all(T* start, T* end)
-{	if (!start)
+UndoList<T>::~UndoList()
+{	if (Cur && !Cur->Prev && !Cur->Next)
+	{	delete Cur; // delete orphaned current item left by add when cutting list.
+		if (Cur == New)
+			return;
+	} else if (!New)
 		return;
-	T* i = start->Next;
-	while (i && i != end)
+	T* i = New->Next;
+	while (i)
 	{	T* n = i->Next;
 		delete i;
 		i = n;
 	}
-	i = start->Prev;
-	while (i && i != end)
+	i = New->Prev;
+	while (i)
 	{	T* n = i->Prev;
 		delete i;
 		i = n;
 	}
-	delete start;
+	delete New;
 }
 
 template <typename T>

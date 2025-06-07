@@ -1772,7 +1772,7 @@ et_browser_select_file_by_dlm (EtBrowser *self,
 
 bool EtBrowser::has_file()
 {
-	return memcmp(&et_browser_get_instance_private(this)->current_file, &invalid_iter, sizeof invalid_iter) != 0;
+	return !!et_browser_get_instance_private(this)->current_file.stamp;
 }
 
 ET_File* EtBrowser::current_file()

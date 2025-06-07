@@ -2120,9 +2120,9 @@ void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 			return;
 		const char* value = gtk_entry_get_text(GTK_ENTRY(widget));
 		// trim
-		while (*value == ' ') ++value;
+		while (isspace(*value)) ++value;
 		size_t len = strlen(value);
-		while (value[len-1] == ' ') --len;
+		while (len && isspace(value[len-1])) --len;
 		(FileTag->*field).assignNFC(value, len);
 	};
 
