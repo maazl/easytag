@@ -513,11 +513,13 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                     <object class="GtkGrid" id="fill_tags_grid">
                                         <property name="column-spacing">12</property>
                                         <property name="margin-left">12</property>
+                                        <property name="visible">True</property>
                                         <child>
                                             <object class="GtkCheckButton" id="process_filename_check">
                                                 <property name="label" translatable="yes">Filename</property>
                                                 <property name="name">filename</property>
                                                 <property name="tooltip-text" translatable="yes">Process filename</property>
+                                                <property name="visible">True</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -529,6 +531,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="label" translatable="yes">Title</property>
                                                 <property name="name">title</property>
                                                 <property name="tooltip-text" translatable="yes">Process title field</property>
+                                                <property name="visible">True</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">1</property>
@@ -540,6 +543,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="label" translatable="yes">Version</property>
                                                 <property name="name">version</property>
                                                 <property name="tooltip-text" translatable="yes">Process version field</property>
+                                                <property name="visible">True</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">2</property>
@@ -551,6 +555,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="label" translatable="yes">Subtitle</property>
                                                 <property name="name">subtitle</property>
                                                 <property name="tooltip-text" translatable="yes">Process subtitle field</property>
+                                                <property name="visible">True</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">3</property>
@@ -562,6 +567,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="label" translatable="yes">Artist</property>
                                                 <property name="name">artist</property>
                                                 <property name="tooltip-text" translatable="yes">Process artist field</property>
+                                                <property name="visible">True</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">4</property>
@@ -573,6 +579,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="label" translatable="yes">Album Artist</property>
                                                 <property name="name">album-artist</property>
                                                 <property name="tooltip-text" translatable="yes">Process album artist field</property>
+                                                <property name="visible">True</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">5</property>
@@ -584,6 +591,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="label" translatable="yes">Album</property>
                                                 <property name="name">album</property>
                                                 <property name="tooltip-text" translatable="yes">Process album field</property>
+                                                <property name="visible">True</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">6</property>
@@ -607,6 +615,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="label" translatable="yes">Genre</property>
                                                 <property name="name">genre</property>
                                                 <property name="tooltip-text" translatable="yes">Process genre field</property>
+                                                <property name="visible">True</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -618,6 +627,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="label" translatable="yes">Comment</property>
                                                 <property name="name">comment</property>
                                                 <property name="tooltip-text" translatable="yes">Process comment field</property>
+                                                <property name="visible">True</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">1</property>
@@ -640,6 +650,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="label" translatable="yes">Orig. Artist</property>
                                                 <property name="name">original-artist</property>
                                                 <property name="tooltip-text" translatable="yes">Process original artist field</property>
+                                                <property name="visible">True</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">3</property>
@@ -651,6 +662,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="label" translatable="yes">Copyright</property>
                                                 <property name="name">copyright</property>
                                                 <property name="tooltip-text" translatable="yes">Process copyright field</property>
+                                                <property name="visible">True</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">4</property>
@@ -662,6 +674,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="label" translatable="yes">URL</property>
                                                 <property name="name">url</property>
                                                 <property name="tooltip-text" translatable="yes">Process URL field</property>
+                                                <property name="visible">True</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">5</property>
@@ -673,6 +686,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                                 <property name="label" translatable="yes">Encoded By</property>
                                                 <property name="name">encoded-by</property>
                                                 <property name="tooltip-text" translatable="yes">Process encoded-by field</property>
+                                                <property name="visible">True</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">6</property>
