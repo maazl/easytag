@@ -1238,7 +1238,11 @@ Browser_List_Row_Selected (EtBrowser *self, GtkTreeSelection *selection)
     {
         ET_File *cursor_et_file = nullptr;
         if (gtk_tree_selection_iter_is_selected(selection, &cursor_iter))
-            gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &cursor_iter, LIST_FILE_POINTER, &cursor_et_file, -1);
+        {   gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &cursor_iter, LIST_FILE_POINTER, &cursor_et_file, -1);
+            priv->current_file = cursor_iter;
+        } else
+            priv->current_file = invalid_iter;
+
         /* Clears the tag/file area if the cursor row was unselected, such
          * as by inverting the selection or Ctrl-clicking. */
         MainWindow->change_displayed_file(cursor_et_file);
@@ -1672,14 +1676,10 @@ Browser_List_Select_File_By_Iter (EtBrowser *self,
     if (select_it)
     {
         GtkTreeSelection *selection = gtk_tree_view_get_selection (priv->file_view);
-
         if (selection)
-        {
             gtk_tree_selection_select_iter(selection, rowIter);
-        }
-
-        priv->current_file = *rowIter;
     }
+
     et_browser_set_row_visible (self, rowIter);
 }
 
@@ -1809,7 +1809,6 @@ ET_File* EtBrowser::select_first_file()
 	GtkTreeIter iter;
 	if (!gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->file_model), &iter))
 		return nullptr;
-	priv->current_file = iter;
 
 	Browser_List_Select_File_By_Iter(this, &iter, true);
 	return current_file();
