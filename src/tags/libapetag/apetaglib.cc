@@ -754,19 +754,31 @@ apetag_read_fp(apetag *mem_cnt, FILE * fp, const char *filename, int flag)
         }
         
         tagCount = ape2long(ape_footer.tagCount);
+        unsigned long sizeValue = ape2long(ape_footer.length);
         
-        end = buff + ape2long(ape_footer.length) - sizeof (ape_footer);
+        if (sizeValue > 0x20000 || tagCount > 1000
+            || ape_footer.reserved[0] || ape_footer.reserved[1] || ape_footer.reserved[2] || ape_footer.reserved[3]
+            || ape_footer.reserved[4] || ape_footer.reserved[5] || ape_footer.reserved[6] || ape_footer.reserved[7])
+        {
+            PRINT_ERR( "ERROR->libapetag->apetag_read_fp:ape_footer.length\n");
+            return ATL_INVLD;
+        }
+
+        end = buff + sizeValue - sizeof (ape_footer);
         
-        for (p = buff; p < end && tagCount--;) {
+        for (p = buff; p + 8 + 2 < end && tagCount--;) {
             /* 8 = sizeof( sizeValue+flags ) */
             unsigned long flags = ape2long (p + 4);
-            unsigned long sizeValue = ape2long(p);
+            sizeValue = ape2long(p);
             unsigned long sizeName;
             char *name = (char *)p + 8;
             char *value;
             
-            sizeName = strlen((char *)p + 8);
+            sizeName = strnlen((char *)p + 8, end - p - 8 - 1);
             value = (char *)p + sizeName + 8 + 1;
+            p += (sizeName + sizeValue + 8 + 1);
+            if (p >= end) // broken TAG?
+                break;
             if (apeTag2 == 1000 && value[sizeValue - 1] == '\0') {
                 libapetag_maloc_cont(mem_cnt, flags,
                              sizeName, name,
@@ -776,7 +788,6 @@ apetag_read_fp(apetag *mem_cnt, FILE * fp, const char *filename, int flag)
                              sizeName, name,
                              sizeValue, value);
             }
-            p += (sizeName + sizeValue + 8 + 1);
         }
         
         free(buff);

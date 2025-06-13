@@ -146,6 +146,7 @@ G_BEGIN_DECLS
 #define     ATL_MALOC     4    /**< can't allocate memory */
 #define     ATL_BADARG    5    /**< bad function argument */
 #define     ATL_NOINIT    6    /**< not inited struct by apetag_init */
+#define     ATL_INVLD     7    /**< invalid tag data */
 /** \} */
 
 /** 
