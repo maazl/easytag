@@ -465,6 +465,7 @@ on_apply_to_selection (GObject *object,
                 EtPicture* pic;
                 gtk_tree_model_get (model, &iter, PICTURE_COLUMN_DATA, &pic, -1);
                 pics.emplace_back(move(*pic));
+                delete pic;
             } while (gtk_tree_model_iter_next(model, &iter));
         }
 
@@ -2214,6 +2215,7 @@ void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 			{
 				gtk_tree_model_get (model, &iter, PICTURE_COLUMN_DATA, &pic, -1);
 				FileTag->pictures.emplace_back(move(*pic));
+				delete pic;
 			} while (gtk_tree_model_iter_next (model, &iter));
 		}
 	}

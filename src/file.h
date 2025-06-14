@@ -100,7 +100,7 @@ private:
 public:
 	/// Create file
 	/// @param filepath Full file path in file system encoding.
-	ET_File(gString&& filepath);
+	ET_File(gString&& filepath) noexcept;
 	ET_File(const gString& filepath) : ET_File(gString(g_strdup(filepath))) {}
 	~ET_File();
 #ifndef NDEBUG

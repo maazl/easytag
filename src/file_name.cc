@@ -320,11 +320,6 @@ void (*const File_Name::prepare_funcs[3][3])(std::string& filename_utf8, unsigne
 	}
 };
 
-File_Name::File_Name(const File_Name& r)
-:	Path(r.Path)
-,	File(r.File)
-{}
-
 File_Name::File_Name(const char* filename)
 {	// separate file name from path
 	const char* separator = strrchr(filename, G_DIR_SEPARATOR);

@@ -22,6 +22,7 @@
 
 #include "application.h"
 #include "xstring.h"
+#include "picture.h"
 
 int
 main (int argc, char *argv[])
@@ -39,6 +40,7 @@ main (int argc, char *argv[])
     status = g_application_run (G_APPLICATION (application), argc, argv);
     g_object_unref (application);
 
+    EtPicture::GarbageCollector();
     xStringD::garbage_collector();
 
     return status;

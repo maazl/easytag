@@ -73,9 +73,9 @@ struct File_Tag : public UndoList<File_Tag>::Intrusive
 	static constexpr float peak_epsilon = .005f;
 
 	/// Create empty tag
-	File_Tag();
-	/// Clone tag
-	File_Tag(const File_Tag& r);
+	File_Tag() noexcept;
+	File_Tag(const File_Tag&);
+	File_Tag(File_Tag&&) noexcept;
 	~File_Tag();
 
 	bool empty() const;    ///< check whether this instance contains no data

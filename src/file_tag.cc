@@ -30,45 +30,18 @@
 
 using namespace std;
 
-File_Tag::File_Tag()
+File_Tag::File_Tag() noexcept
 :	track_gain(numeric_limits<float>::quiet_NaN())
 ,	track_peak(numeric_limits<float>::quiet_NaN())
 ,	album_gain(numeric_limits<float>::quiet_NaN())
 ,	album_peak(numeric_limits<float>::quiet_NaN())
 {}
 
-File_Tag::File_Tag(const File_Tag& r)
-:	title(r.title)
-,	subtitle(r.subtitle)
-,	version(r.version)
-,	artist(r.artist)
-,	album_artist(r.album_artist)
-,	album(r.album)
-,	disc_subtitle(r.disc_subtitle)
-,	disc_number(r.disc_number)
-,	disc_total(r.disc_total)
-,	year(r.year)
-,	release_year(r.release_year)
-,	track(r.track)
-,	track_total(r.track_total)
-,	genre(r.genre)
-,	comment(r.comment)
-,	composer(r.composer)
-,	orig_artist(r.orig_artist)
-,	orig_year(r.orig_year)
-,	copyright(r.copyright)
-,	url(r.url)
-,	encoded_by(r.encoded_by)
-,	description(r.description)
-,	pictures(r.pictures)
-,	track_gain(r.track_gain)
-,	track_peak(r.track_peak)
-,	album_gain(r.album_gain)
-,	album_peak(r.album_peak)
-{}
+File_Tag::File_Tag(const File_Tag&) = default;
 
-File_Tag::~File_Tag()
-{}
+File_Tag::File_Tag(File_Tag&&) noexcept = default;
+
+File_Tag::~File_Tag() = default;
 
 string File_Tag::format_float(const char* fmt, float value)
 {	string ret(12, '\0');

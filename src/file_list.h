@@ -1,4 +1,5 @@
 /* EasyTAG - tag editor for audio files
+ * Copyright (C) 2022-2025  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -45,7 +46,7 @@ public:
 		unsigned Start;
 	public:
 		template<typename A, typename B>
-		index_entry(A&& a, B&& b, unsigned start = 0) : Artist(std::forward<A>(a)), Album(std::forward<B>(b)), Start(start) {}
+		index_entry(A&& a, B&& b, unsigned start = 0) noexcept : Artist(std::forward<A>(a)), Album(std::forward<B>(b)), Start(start) {}
 	};
 	typedef std::vector<index_entry> index_type;
 	typedef index_type::const_iterator index_iterator_type;
