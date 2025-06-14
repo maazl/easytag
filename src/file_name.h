@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2024  Marcel Müller
+ * Copyright (C) 2024-2025  Marcel Müller <github@maazl.de>
  * Copyright (C) 2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -40,7 +40,6 @@ private:
 	static void (*const prepare_funcs[3][3])(std::string&, unsigned);
 
 public:
-	File_Name(const File_Name& r);
 	/// Initialize from file name.
 	/// @param path Path of the file (UTF-8).
 	/// @remarks \a path may be relative or absolute.

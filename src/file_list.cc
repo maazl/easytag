@@ -163,7 +163,7 @@ void ET_FileList::set_display_mode(EtBrowserMode mode)
 			if (ArtistAlbumIndex.empty() || lastAlbum != tag->album || lastArtist != tag->artist)
 			{	lastArtist = tag->artist;
 				lastAlbum = tag->album;
-				ArtistAlbumIndex.emplace_back(index_entry(lastArtist, lastAlbum, i));
+				ArtistAlbumIndex.emplace_back(lastArtist, lastAlbum, i);
 			}
 			++i;
 		}

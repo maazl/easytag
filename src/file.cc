@@ -59,7 +59,7 @@ atomic<unsigned> ET_File::Instances;
 /*
  * Create a new ET_File structure
  */
-ET_File::ET_File(gString&& filepath)
+ET_File::ET_File(gString&& filepath) noexcept
 :	FilePath(move(filepath))
 ,	FileSize(0)
 ,	FileModificationTime(0)

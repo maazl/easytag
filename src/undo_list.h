@@ -29,18 +29,21 @@ public:
 		T* Prev;
 		unsigned UndoKey;
 		friend struct UndoList;
-		Intrusive(const Intrusive&) = delete;
-		void operator=(const Intrusive&) = delete;
 	protected:
-		Intrusive() : Next(nullptr), Prev(nullptr), UndoKey(0) {}
+		constexpr Intrusive() noexcept : Next(nullptr), Prev(nullptr), UndoKey(0) {}
+		constexpr Intrusive(const Intrusive&) noexcept : Intrusive() {}
+		constexpr Intrusive(Intrusive&& r) noexcept : Next(r.Next), Prev(r.Prev), UndoKey(r.UndoKey)
+		{	r.Prev = nullptr; r.Next = nullptr; }
 	};
 
 	T* Cur;
 	T* New;
 
 public:
-	UndoList() : Cur(nullptr), New(nullptr) {}
+	constexpr UndoList() noexcept : Cur(nullptr), New(nullptr) {}
+	UndoList(const UndoList&) = delete;
 	~UndoList();
+	void operator=(const UndoList&) = delete;
 
 	void add(T* item, unsigned undo_key);
 	bool is_saved() const { return Cur == New; }
