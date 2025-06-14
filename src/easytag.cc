@@ -265,7 +265,7 @@ gint Save_All_Files_With_Answer(gboolean force_saving_files)
  */
 gint Save_Selected_Files_With_Answer(gboolean force_saving_files)
 {
-    return Save_List_Of_Files(et_browser_get_selected_files(MainWindow->browser()), force_saving_files);
+    return Save_List_Of_Files(MainWindow->browser()->get_selected_files(), force_saving_files);
 }
 
 
@@ -824,7 +824,7 @@ void ReplayGainWorker::OnFinished(bool cancelled)
 
 void ReplayGain_For_Selected_Files (void)
 {
-	auto etfilelist = et_browser_get_selected_files(MainWindow->browser());
+	auto etfilelist = MainWindow->browser()->get_selected_files();
 	if (!etfilelist.size())
 		return; // nothing to do
 

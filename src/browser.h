@@ -1,4 +1,5 @@
 /* EasyTAG - tag editor for audio files
+ * Copyright (C) 2022-2025  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014-2015  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -55,6 +56,61 @@ public:
 	ET_File* select_last_file();
 	ET_File* select_prev_file();
 	ET_File* select_next_file();
+
+	GFile* get_current_path();
+	const gchar* get_current_path_name();
+
+	/// Return all selected files in the currently visible order.
+	std::vector<xPtr<ET_File>> get_selected_files();
+	/// Return current files in the visible order.
+	/// @remarks This function is recommended for context menu actions.
+	/// @remarks The current files are the same as the selected files
+	/// unless an emphasis for a context menu source has been set to a file that is NOT selected.
+	/// Otherwise only the file with the emphasis is returned.\n
+	/// The emphasis currently uses drag target emphasis because GTK TreeView
+	/// does not support setting the cursor without discarding the selection.
+	std::vector<xPtr<ET_File>> get_current_files();
+	/// Return all files in the currently visible order.
+	std::vector<ET_File*> get_all_files();
+
+	/// Return the focused file if a popup menu action is currently pending in the file view.
+	ET_File* popup_file();
+
+	// Actions ...
+
+	/// Select the directory corresponding to the 'path' in the tree browser,
+	/// but it doesn't read it! Check if path is correct before selecting it.
+	void select_dir(GFile *file);
+	void go_home();
+	/// Load predefined user directory
+	void go_special(GUserDirectory dir);
+	void go_parent();
+	void go_directory();
+	void load_default_dir();
+	void set_current_path_default();
+
+	void reload_directory();
+
+	void set_display_mode(EtBrowserMode mode);
+
+	void show_open_directory_with_dialog();
+	void show_rename_directory_dialog();
+
+	void show_open_files_with_dialog();
+
+	void run_player_for_album_list();
+	void run_player_for_artist_list();
+	void run_player_for_selection();
+
+	void remove_file(const ET_File *ETFile);
+
+	void select_all();
+	void unselect_all();
+	void invert_selection();
+
+	void collapse();
+
+	void reload();
 };
 
 struct _EtBrowserClass
@@ -65,9 +121,6 @@ struct _EtBrowserClass
 
 GType et_browser_get_type (void);
 EtBrowser *et_browser_new (void);
-void et_browser_show_open_directory_with_dialog (EtBrowser *self);
-void et_browser_show_open_files_with_dialog (EtBrowser *self);
-void et_browser_show_rename_directory_dialog (EtBrowser *self);
 
 enum EtBrowserMode : int
 {
@@ -76,9 +129,6 @@ enum EtBrowserMode : int
     ET_BROWSER_MODE_ARTIST_ALBUM
 };
 
-void et_browser_select_dir (EtBrowser *self, GFile *file);
-void et_browser_reload (EtBrowser *self);
-void et_browser_collapse (EtBrowser *self);
 void et_browser_set_sensitive (EtBrowser *self, gboolean sensitive);
 
 void et_browser_refresh_list (EtBrowser *self);
@@ -88,38 +138,11 @@ void et_browser_select_file_by_et_file (EtBrowser *self, const ET_File *ETFile, 
 GtkTreePath * et_browser_select_file_by_et_file2 (EtBrowser *self, const ET_File *searchETFile, gboolean select_it, GtkTreePath *startPath);
 void et_browser_select_file_by_iter_string (EtBrowser *self, const gchar* stringiter, gboolean select_it);
 ET_File *et_browser_select_file_by_dlm (EtBrowser *self, const gchar* string, gboolean select_it);
-void et_browser_select_all (EtBrowser *self);
-void et_browser_unselect_all (EtBrowser *self);
-void et_browser_invert_selection (EtBrowser *self);
-void et_browser_remove_file (EtBrowser *self, const ET_File *ETFile);
 
 void et_browser_entry_set_text (EtBrowser *self, const gchar *text);
 void et_browser_label_set_text (EtBrowser *self, const gchar *text);
 
-void et_browser_set_display_mode (EtBrowser *self, EtBrowserMode mode);
-
-void et_browser_go_home (EtBrowser *self);
-void et_browser_go_desktop (EtBrowser *self);
-void et_browser_go_documents (EtBrowser *self);
-void et_browser_go_downloads (EtBrowser *self);
-void et_browser_go_music (EtBrowser *self);
-void et_browser_go_parent (EtBrowser *self);
-
-void et_browser_run_player_for_album_list (EtBrowser *self);
-void et_browser_run_player_for_artist_list (EtBrowser *self);
-void et_browser_run_player_for_selection (EtBrowser *self);
-
-void et_browser_load_default_dir (EtBrowser *self);
-void et_browser_reload_directory (EtBrowser *self);
-void et_browser_set_current_path_default (EtBrowser *self);
-GFile * et_browser_get_current_path (EtBrowser *self);
-const gchar* et_browser_get_current_path_name (EtBrowser *self);
-
 void et_browser_save_state(EtBrowser *self, GKeyFile* keyfile);
 void et_browser_restore_state(EtBrowser *self, GKeyFile* keyfile);
-
-std::vector<xPtr<ET_File>> et_browser_get_selected_files(EtBrowser *self);
-/// Return all files in the currently visible order.
-std::vector<ET_File*> et_browser_get_all_files(EtBrowser *self);
 
 #endif /* ET_BROWSER_H_ */

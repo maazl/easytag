@@ -2007,7 +2007,7 @@ Cddb_Set_Track_Infos_To_File_List (EtCDDBDialog *self)
         rows_to_loop = list_length;
     }
 
-    auto file_selection = et_browser_get_selected_files(MainWindow->browser());
+    auto file_selection = MainWindow->browser()->get_selected_files();
     /* No rows selected? Use the first x items in the list */
     const vector<xPtr<ET_File>>& files = file_selection.size() ? file_selection : ET_FileList::all_files();
 
@@ -2442,7 +2442,7 @@ et_cddb_dialog_search_from_selection (EtCDDBDialog *self)
 
     /* Either take the selected files, or use all files if no files are
      * selected. */
-    auto filelist = et_browser_get_selected_files(MainWindow->browser());
+    auto filelist = MainWindow->browser()->get_selected_files();
     n_files = filelist.size();
     if (n_files == 0) /* No rows selected, use the whole list */
     {   filelist = ET_FileList::all_files();

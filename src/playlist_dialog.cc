@@ -131,7 +131,7 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
 
     const std::vector<xPtr<ET_File>>& etfilelist =
         g_settings_get_boolean(MainSettings, "playlist-selected-only")
-        ?   et_browser_get_selected_files(MainWindow->browser())
+        ?   MainWindow->browser()->get_selected_files()
         :   ET_FileList::all_files();
 
     for (const ET_File* etfile : etfilelist)

@@ -1,4 +1,5 @@
 /* EasyTAG - tag editor for audio files
+ * Copyright (C) 2022-2025  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014-2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -417,48 +418,6 @@ delete_file (ET_File *ETFile, gboolean multiple_files, GError **error)
 }
 
 static void
-on_open_with (GSimpleAction *action,
-              GVariant *variant,
-              gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self = ET_APPLICATION_WINDOW (user_data);
-
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_show_open_files_with_dialog (priv->browser);
-}
-
-static void
-on_run_player (GSimpleAction *action,
-               GVariant *variant,
-               gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self = ET_APPLICATION_WINDOW (user_data);
-
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_run_player_for_selection (priv->browser);
-}
-
-static void
-on_invert_selection (GSimpleAction *action,
-                     GVariant *variant,
-                     gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self = ET_APPLICATION_WINDOW (user_data);
-
-    priv = et_application_window_get_instance_private (self);
-
-    et_application_window_update_et_file_from_ui (self);
-
-    et_browser_invert_selection (priv->browser);
-    et_application_window_update_actions (self);
-}
-
-static void
 on_delete (GSimpleAction *action,
            GVariant *variant,
            gpointer user_data)
@@ -477,7 +436,7 @@ on_delete (GSimpleAction *action,
     priv = et_application_window_get_instance_private (self);
 
     /* Number of files to save */
-    auto selection = et_browser_get_selected_files(priv->browser);
+    auto selection = priv->browser->get_current_files();
     nb_files_to_delete = selection.size();
 
     /* Initialize status bar */
@@ -513,7 +472,7 @@ on_delete (GSimpleAction *action,
                 nb_files_deleted += saving_answer;
                 /* Remove file in the browser (corresponding line in the
                  * clist). */
-                et_browser_remove_file (priv->browser, ETFile);
+                priv->browser->remove_file(ETFile);
                 /* Remove file from file list. */
                 ET_FileList::remove_file(ETFile.get());
                 break;
@@ -569,7 +528,7 @@ on_undo_file_changes (GSimpleAction *action,
     et_application_window_update_et_file_from_ui (self);
 
     bool state = false;
-    for (auto& file : et_browser_get_selected_files(priv->browser))
+    for (auto& file : priv->browser->get_selected_files())
         state |= file->undo();
 
     /* Refresh the whole list (faster than file by file) to show changes. */
@@ -595,7 +554,7 @@ on_redo_file_changes (GSimpleAction *action,
     et_application_window_update_et_file_from_ui (self);
 
     bool state = false;
-    for (auto& file : et_browser_get_selected_files(priv->browser))
+    for (auto& file : priv->browser->get_selected_files())
         state |= file->redo();
 
     /* Refresh the whole list (faster than file by file) to show changes. */
@@ -651,68 +610,55 @@ on_find (GSimpleAction *action,
     }
 }
 
-static void
-on_select_all (GSimpleAction *action,
-               GVariant *variant,
-               gpointer user_data)
+static void on_select_all(GSimpleAction* action, GVariant* variant, gpointer user_data)
 {
-    EtApplicationWindow *self;
-    EtApplicationWindowPrivate *priv;
-    GtkWidget *focused;
+	EtApplicationWindow* self = ET_APPLICATION_WINDOW(user_data);
+	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
 
-    self = ET_APPLICATION_WINDOW (user_data);
-    priv = et_application_window_get_instance_private (self);
+	if (!priv->browser->popup_file())
+	{
+		/* Use the currently-focused widget and "select all" as appropriate.
+		 * https://bugzilla.gnome.org/show_bug.cgi?id=697515 */
+		GtkWidget* focused = gtk_window_get_focus(GTK_WINDOW(self));
 
-    /* Use the currently-focused widget and "select all" as appropriate.
-     * https://bugzilla.gnome.org/show_bug.cgi?id=697515 */
-    focused = gtk_window_get_focus (GTK_WINDOW (user_data));
+		if (GTK_IS_EDITABLE(focused))
+		{	gtk_editable_select_region (GTK_EDITABLE (focused), 0, -1);
+			return;
+		}
+		else if (et_tag_area_select_all_if_focused(ET_TAG_AREA(priv->tag_area), focused))
+			return;
+		/* Assume that other widgets should select all in the file view. */
+	}
 
-    if (GTK_IS_EDITABLE (focused))
-    {
-        gtk_editable_select_region (GTK_EDITABLE (focused), 0, -1);
-    }
-    else if (!et_tag_area_select_all_if_focused (ET_TAG_AREA (priv->tag_area),
-                                                 focused))
-    /* Assume that other widgets should select all in the file view. */
-    {
-        et_application_window_update_et_file_from_ui (self);
-
-        et_browser_select_all (priv->browser);
-        et_application_window_update_actions (self);
-    }
+	et_application_window_update_et_file_from_ui(self);
+	priv->browser->select_all();
+	et_application_window_update_actions(self);
 }
 
-static void
-on_unselect_all (GSimpleAction *action,
-                 GVariant *variant,
-                 gpointer user_data)
+static void on_unselect_all(GSimpleAction* action, GVariant* variant, gpointer user_data)
 {
-    EtApplicationWindow *self;
-    EtApplicationWindowPrivate *priv;
-    GtkWidget *focused;
+	EtApplicationWindow* self = ET_APPLICATION_WINDOW(user_data);
+	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
 
-    self = ET_APPLICATION_WINDOW (user_data);
-    priv = et_application_window_get_instance_private (self);
+	if (!priv->browser->popup_file())
+	{
+		GtkWidget* focused = gtk_window_get_focus(GTK_WINDOW(self));
 
-    focused = gtk_window_get_focus (GTK_WINDOW (user_data));
+		if (GTK_IS_EDITABLE (focused))
+		{
+			GtkEditable* editable = GTK_EDITABLE(focused);
+			gint pos = gtk_editable_get_position (editable);
+			gtk_editable_select_region (editable, 0, 0);
+			gtk_editable_set_position (editable, pos);
+			return;
+		}
+		else if (et_tag_area_unselect_all_if_focused(ET_TAG_AREA(priv->tag_area), focused))
+			return;
+		/* Assume that other widgets should unselect all in the file view. */
+	}
 
-    if (GTK_IS_EDITABLE (focused))
-    {
-        GtkEditable *editable;
-        gint pos;
-
-        editable = GTK_EDITABLE (focused);
-        pos = gtk_editable_get_position (editable);
-        gtk_editable_select_region (editable, 0, 0);
-        gtk_editable_set_position (editable, pos);
-    }
-    else if (!et_tag_area_unselect_all_if_focused (ET_TAG_AREA (priv->tag_area),
-                                                   focused))
-    /* Assume that other widgets should unselect all in the file view. */
-    {
-        self->change_displayed_file(nullptr);
-        et_browser_unselect_all (priv->browser);
-    }
+	self->change_displayed_file(nullptr);
+	priv->browser->unselect_all();
 }
 
 static void
@@ -771,7 +717,7 @@ on_remove_tags (GSimpleAction *action,
     et_application_window_update_et_file_from_ui (self);
 
     /* Initialize status bar */
-    auto etfilelist = et_browser_get_selected_files(priv->browser);
+    auto etfilelist = priv->browser->get_selected_files();
     selectcount = etfilelist.size();
     progress_bar_index = 0;
     et_application_window_progress_set(self, 0, selectcount);
@@ -813,29 +759,6 @@ on_preferences (GSimpleAction *action,
         priv->preferences_dialog = GTK_WIDGET (et_preferences_dialog_new (GTK_WINDOW (self)));
 
     gtk_widget_show (priv->preferences_dialog);
-}
-
-static void
-on_action_toggle (GSimpleAction *action,
-                  GVariant *variant,
-                  gpointer user_data)
-{
-    GVariant *state;
-
-    /* Toggle the current state. */
-    state = g_action_get_state (G_ACTION (action));
-    g_action_change_state (G_ACTION (action),
-                           g_variant_new_boolean (!g_variant_get_boolean (state)));
-    g_variant_unref (state);
-}
-
-static void
-on_action_radio (GSimpleAction *action,
-                 GVariant *variant,
-                 gpointer user_data)
-{
-    /* Set the action state to the just-activated state. */
-    g_action_change_state (G_ACTION (action), variant);
 }
 
 static void
@@ -883,115 +806,17 @@ on_file_artist_view_change (GSimpleAction *action,
                             GVariant *variant,
                             gpointer user_data)
 {
-    EtApplicationWindow *self;
-    EtApplicationWindowPrivate *priv;
-    const gchar *state;
-
-    self = ET_APPLICATION_WINDOW (user_data);
-    priv = et_application_window_get_instance_private (self);
-    state = g_variant_get_string (variant, NULL);
+    EtApplicationWindow* self = ET_APPLICATION_WINDOW(user_data);
 
     g_return_if_fail(!ET_FileList::empty());
 
     et_application_window_update_et_file_from_ui (self);
 
-    if (strcmp (state, "file") == 0)
-    {
-        et_browser_set_display_mode (priv->browser, ET_BROWSER_MODE_FILE);
-    }
-    else if (strcmp (state, "artist") == 0)
-    {
-        et_browser_set_display_mode (priv->browser, ET_BROWSER_MODE_ARTIST);
-    }
-    else
-    {
-        g_assert_not_reached ();
-    }
-
     g_simple_action_set_state (action, variant);
 
+    et_application_window_browser_update_display_mode(self);
+
     et_application_window_update_actions (ET_APPLICATION_WINDOW (user_data));
-}
-
-static void
-on_collapse_tree (GSimpleAction *action,
-                  GVariant *variant,
-                  gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self = ET_APPLICATION_WINDOW (user_data);
-
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_collapse (priv->browser);
-}
-
-static void
-on_reload_tree (GSimpleAction *action,
-                GVariant *variant,
-                gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self = ET_APPLICATION_WINDOW (user_data);
-
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_reload (priv->browser);
-}
-
-static void
-on_reload_directory (GSimpleAction *action,
-                     GVariant *variant,
-                     gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self = ET_APPLICATION_WINDOW (user_data);
-
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_reload_directory (priv->browser);
-}
-
-static void
-on_set_default_path (GSimpleAction *action,
-                     GVariant *variant,
-                     gpointer user_data)
-{
-    EtApplicationWindow *self;
-    EtApplicationWindowPrivate *priv;
-
-    self = ET_APPLICATION_WINDOW (user_data);
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_set_current_path_default (priv->browser);
-}
-
-static void
-on_rename_directory (GSimpleAction *action,
-                     GVariant *variant,
-                     gpointer user_data)
-{
-    EtApplicationWindow *self;
-    EtApplicationWindowPrivate *priv;
-
-    self = ET_APPLICATION_WINDOW (user_data);
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_show_rename_directory_dialog (priv->browser);
-}
-
-static void
-on_browse_directory (GSimpleAction *action,
-                     GVariant *variant,
-                     gpointer user_data)
-{
-    EtApplicationWindow *self;
-    EtApplicationWindowPrivate *priv;
-
-    self = ET_APPLICATION_WINDOW (user_data);
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_show_open_directory_with_dialog (priv->browser);
 }
 
 static void
@@ -1048,104 +873,6 @@ on_show_playlist (GSimpleAction *action,
         priv->playlist_dialog = GTK_WIDGET (et_playlist_dialog_new (GTK_WINDOW (self)));
         gtk_widget_show_all (priv->playlist_dialog);
     }
-}
-
-static void
-on_go_home (GSimpleAction *action,
-            GVariant *variant,
-            gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self;
-
-    self = ET_APPLICATION_WINDOW (user_data);
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_go_home (priv->browser);
-}
-
-static void
-on_go_desktop (GSimpleAction *action,
-               GVariant *variant,
-               gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self;
-
-    self = ET_APPLICATION_WINDOW (user_data);
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_go_desktop (priv->browser);
-}
-
-static void
-on_go_documents (GSimpleAction *action,
-                 GVariant *variant,
-                 gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self;
-
-    self = ET_APPLICATION_WINDOW (user_data);
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_go_documents (priv->browser);
-}
-
-static void
-on_go_downloads (GSimpleAction *action,
-                 GVariant *variant,
-                 gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self;
-
-    self = ET_APPLICATION_WINDOW (user_data);
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_go_downloads (priv->browser);
-}
-
-static void
-on_go_music (GSimpleAction *action,
-             GVariant *variant,
-             gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self;
-
-    self = ET_APPLICATION_WINDOW (user_data);
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_go_music (priv->browser);
-}
-
-static void
-on_go_parent (GSimpleAction *action,
-              GVariant *variant,
-              gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self;
-
-    self = ET_APPLICATION_WINDOW (user_data);
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_go_parent (priv->browser);
-}
-
-static void
-on_go_default (GSimpleAction *action,
-               GVariant *variant,
-               gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self;
-
-    self = ET_APPLICATION_WINDOW (user_data);
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_load_default_dir (priv->browser);
 }
 
 void EtApplicationWindow::change_displayed_file(ET_File *etfile)
@@ -1226,32 +953,6 @@ on_clear_log (GSimpleAction *action,
 }
 
 static void
-on_run_player_album (GSimpleAction *action,
-                     GVariant *variant,
-                     gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self = ET_APPLICATION_WINDOW (user_data);
-
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_run_player_for_album_list (priv->browser);
-}
-
-static void
-on_run_player_artist (GSimpleAction *action,
-                      GVariant *variant,
-                      gpointer user_data)
-{
-    EtApplicationWindowPrivate *priv;
-    EtApplicationWindow *self = ET_APPLICATION_WINDOW (user_data);
-
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_run_player_for_artist_list (priv->browser);
-}
-
-static void
 on_run_player_directory (GSimpleAction *action,
                          GVariant *variant,
                          gpointer user_data)
@@ -1274,70 +975,79 @@ static void on_fields_changed(EtApplicationWindow *self, const gchar *key, GSett
 	et_tag_area_update_controls(ET_TAG_AREA(priv->tag_area), priv->displayed_file);
 }
 
+template<void (EtBrowser::*F)()>
+static void on_browser(GSimpleAction* action, GVariant* variant, gpointer user_data)
+{	(et_application_window_get_instance_private(ET_APPLICATION_WINDOW(user_data))->browser->*F)();
+}
+
+template<GUserDirectory D>
+static void on_browser_go_special(GSimpleAction* action, GVariant* variant, gpointer user_data)
+{	et_application_window_get_instance_private(ET_APPLICATION_WINDOW(user_data))->browser->go_special(D);
+}
 
 static const GActionEntry actions[] =
 {
-    /* File menu. */
-    { "open-with", on_open_with },
-    { "run-player", on_run_player },
-    { "invert-selection", on_invert_selection },
-    { "delete", on_delete },
-    { "undo-file-changes", on_undo_file_changes },
-    { "redo-file-changes", on_redo_file_changes },
-    { "save", on_save },
-    { "save-force", on_save_force },
-    /* Edit menu. */
-    { "find", on_find },
-    { "select-all", on_select_all },
-    { "unselect-all", on_unselect_all },
-    { "undo-last-changes", on_undo_last_changes },
-    { "redo-last-changes", on_redo_last_changes },
-    { "remove-tags", on_remove_tags },
-    { "preferences", on_preferences },
-    /* View menu. */
-    { "scanner", on_action_toggle, NULL, "false", on_scanner_change },
-    /* { "scan-mode", on_action_radio, NULL, "false", on_scan_mode_change },
-     * Created from GSetting. */
-    /* { "sort-mode", on_action_radio, "s", "'ascending-filename'",
-     * on_sort_mode_change }, Created from GSetting */
-    { "file-artist-view", on_action_radio, "s", "'file'",
-      on_file_artist_view_change },
-    { "collapse-tree", on_collapse_tree },
-    /* { "show-log", on_show_log }, Created from GSetting */
-    { "reload-tree", on_reload_tree },
-    { "reload-directory", on_reload_directory },
-    /* { "browse-show-hidden", on_action_toggle, NULL, "true",
-      on_browse_show_hidden_change }, Created from GSetting. */
-    /* Browser menu. */
-    { "set-default-path", on_set_default_path },
-    { "rename-directory", on_rename_directory },
-    { "browse-directory", on_browse_directory },
-    /* { "browse-subdir", on_browse_subdir }, Created from GSetting. */
-    /* Miscellaneous menu. */
-    { "show-cddb", on_show_cddb },
-    { "show-load-filenames", on_show_load_filenames },
-    { "show-playlist", on_show_playlist },
-    { "replaygain", on_replaygain },
-    /* Go menu. */
-    { "go-home", on_go_home },
-    { "go-desktop", on_go_desktop },
-    { "go-documents", on_go_documents },
-    { "go-downloads", on_go_downloads },
-    { "go-music", on_go_music },
-    { "go-parent", on_go_parent },
-    { "go-default", on_go_default },
-    { "go-first", on_go_first },
-    { "go-previous", on_go_previous },
-    { "go-next", on_go_next },
-    { "go-last", on_go_last },
-    /* Popup menus. */
-    { "show-cddb-selection", on_show_cddb_selection },
-    { "clear-log", on_clear_log },
-    { "run-player-album", on_run_player_album },
-    { "run-player-artist", on_run_player_artist },
-    { "run-player-directory", on_run_player_directory },
-    /* Toolbar. */
-    { "stop", on_stop }
+	/* File menu. */
+	{ "open-with", on_browser<&EtBrowser::show_open_files_with_dialog> },
+	{ "run-player", on_browser<&EtBrowser::run_player_for_selection> },
+	{ "delete", on_delete },
+	{ "undo-file-changes", on_undo_file_changes },
+	{ "redo-file-changes", on_redo_file_changes },
+	{ "save", on_save },
+	{ "save-force", on_save_force },
+	/* Edit menu. */
+	{ "find", on_find },
+	{ "select-all", on_select_all },
+	{ "unselect-all", on_unselect_all },
+	{ "invert-selection", on_browser<&EtBrowser::invert_selection> },
+	{ "undo-last-changes", on_undo_last_changes },
+	{ "redo-last-changes", on_redo_last_changes },
+	{ "remove-tags", on_remove_tags },
+	{ "preferences", on_preferences },
+	/* View menu. */
+	{ "scanner", NULL, NULL, "false", on_scanner_change },
+	/* { "scan-mode", on_action_radio, NULL, "false", on_scan_mode_change },
+	 * Created from GSetting. */
+	/* { "sort-mode", on_action_radio, "s", "'ascending-filename'",
+	 * on_sort_mode_change }, Created from GSetting */
+	{ "file-artist-view", NULL, "s", "'file'", on_file_artist_view_change },
+	{ "collapse-tree", on_browser<&EtBrowser::collapse> },
+	/* { "show-log", on_show_log }, Created from GSetting */
+	{ "reload-tree", on_browser<&EtBrowser::reload> },
+	{ "reload-directory", on_browser<&EtBrowser::reload_directory> },
+	/* { "browse-show-hidden", on_action_toggle, NULL, "true",
+		on_browse_show_hidden_change }, Created from GSetting. */
+	/* Browser menu. */
+	{ "set-default-path", on_browser<&EtBrowser::set_current_path_default> },
+	{ "rename-directory", on_browser<&EtBrowser::show_rename_directory_dialog> },
+	{ "browse-directory", on_browser<&EtBrowser::show_open_directory_with_dialog> },
+	/* { "browse-subdir", on_browse_subdir }, Created from GSetting. */
+	/* Miscellaneous menu. */
+	{ "show-cddb", on_show_cddb },
+	{ "show-load-filenames", on_show_load_filenames },
+	{ "show-playlist", on_show_playlist },
+	{ "replaygain", on_replaygain },
+	/* Go menu. */
+	{ "go-home", on_browser<&EtBrowser::go_home> },
+	{ "go-desktop", on_browser_go_special<G_USER_DIRECTORY_DESKTOP> },
+	{ "go-documents", on_browser_go_special<G_USER_DIRECTORY_DOCUMENTS> },
+	{ "go-downloads", on_browser_go_special<G_USER_DIRECTORY_DOWNLOAD> },
+	{ "go-music", on_browser_go_special<G_USER_DIRECTORY_MUSIC> },
+	{ "go-parent", on_browser<&EtBrowser::go_parent> },
+	{ "go-default", on_browser<&EtBrowser::load_default_dir> },
+	{ "go-first", on_go_first },
+	{ "go-previous", on_go_previous },
+	{ "go-next", on_go_next },
+	{ "go-last", on_go_last },
+	/* Popup menus. */
+	{ "show-cddb-selection", on_show_cddb_selection },
+	{ "clear-log", on_clear_log },
+	{ "go-directory", on_browser<&EtBrowser::go_directory> },
+	{ "run-player-album", on_browser<&EtBrowser::run_player_for_album_list> },
+	{ "run-player-artist", on_browser<&EtBrowser::run_player_for_artist_list> },
+	{ "run-player-directory", on_run_player_directory },
+	/* Toolbar. */
+	{ "stop", on_stop }
 };
 
 static void
@@ -1642,11 +1352,11 @@ et_application_window_browser_update_display_mode (EtApplicationWindow *self)
 
     if (strcmp (g_variant_get_string (variant, NULL), "file") == 0)
     {
-        et_browser_set_display_mode (priv->browser, ET_BROWSER_MODE_FILE);
+        priv->browser->set_display_mode(ET_BROWSER_MODE_FILE);
     }
     else if (strcmp (g_variant_get_string (variant, NULL), "artist") == 0)
     {
-        et_browser_set_display_mode (priv->browser, ET_BROWSER_MODE_ARTIST);
+        priv->browser->set_display_mode(ET_BROWSER_MODE_ARTIST);
     }
     else
     {
@@ -1868,7 +1578,7 @@ et_application_window_get_current_path (EtApplicationWindow *self)
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_browser_get_current_path (priv->browser);
+    return priv->browser->get_current_path();
 }
 
 const gchar*
@@ -1880,7 +1590,7 @@ et_application_window_get_current_path_name (EtApplicationWindow *self)
 
     priv = et_application_window_get_instance_private (self);
 
-    return et_browser_get_current_path_name (priv->browser);
+    return priv->browser->get_current_path_name();
 }
 
 GtkWidget *
@@ -2066,7 +1776,7 @@ et_application_window_update_actions (EtApplicationWindow *self)
         et_application_set_action_state (self, "file-artist-view", TRUE);
 
         /* Check if one of the selected files has undo or redo data */
-        for (const xPtr<ET_File>& etfile : et_browser_get_selected_files(priv->browser))
+        for (const xPtr<ET_File>& etfile : priv->browser->get_selected_files())
         {
             has_undo |= etfile->has_undo_data();
             has_redo |= etfile->has_redo_data();
@@ -2165,12 +1875,10 @@ et_application_window_set_normal_cursor (EtApplicationWindow *self)
 void
 et_application_window_browser_unselect_all (EtApplicationWindow *self)
 {
-    EtApplicationWindowPrivate *priv;
+	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
 
-    priv = et_application_window_get_instance_private (self);
-
-    et_browser_unselect_all (priv->browser);
-    self->change_displayed_file(nullptr);
+	priv->browser->unselect_all();
+	self->change_displayed_file(nullptr);
 }
 
 static void

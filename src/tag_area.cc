@@ -224,7 +224,7 @@ on_apply_to_selection (GObject *object,
 
     et_application_window_update_et_file_from_ui (window);
 
-    auto etfilelist = et_browser_get_selected_files(window->browser());
+    auto etfilelist = window->browser()->get_selected_files();
 
     gchar *msg = NULL;
 
@@ -344,7 +344,7 @@ on_apply_to_selection (GObject *object,
         track_no.reserve(etfilelist.size());
 
         auto filelistiter = etfilelist.begin();
-        for (auto& fullfile : et_browser_get_all_files(window->browser()))
+        for (auto& fullfile : window->browser()->get_all_files())
         {
             // Count files in the same path
             auto iter = by_path.find(fullfile->FileNameNew()->path());

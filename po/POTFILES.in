@@ -22,9 +22,8 @@ src/application.cc
 src/application_window.cc
 src/browser.cc
 src/cddb_dialog.cc
-src/charset.c
+src/charset.cc
 src/easytag.cc
-src/et_core.cc
 src/file_area.cc
 src/file_description.cc
 src/file_list.cc

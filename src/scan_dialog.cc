@@ -1860,7 +1860,7 @@ et_scan_dialog_scan_selected_files (EtScanDialog *self)
     et_application_window_update_et_file_from_ui (window);
 
     /* Initialize status bar */
-    auto selfilelist = et_browser_get_selected_files(window->browser());
+    auto selfilelist = window->browser()->get_selected_files();
     selectcount = selfilelist.size();
     et_application_window_progress_set(window, 0, selectcount);
 

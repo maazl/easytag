@@ -1,4 +1,5 @@
 /* EasyTAG - tag editor for audio files
+ * Copyright (C) 2025  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014-2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -131,7 +132,7 @@ on_idle_init (EtApplication *self)
 
     if (priv->init_directory)
     {
-        et_browser_select_dir(MainWindow->browser(), priv->init_directory);
+        MainWindow->browser()->select_dir(priv->init_directory);
     }
     else
     {
@@ -450,7 +451,7 @@ et_application_open (GApplication *self,
     {
         if (activated)
         {
-            et_browser_select_dir(ET_APPLICATION_WINDOW(window)->browser(), arg);
+            ET_APPLICATION_WINDOW(window)->browser()->select_dir(arg);
         }
         else
         {
@@ -466,7 +467,7 @@ et_application_open (GApplication *self,
         {
             if (activated)
             {
-                et_browser_select_dir(ET_APPLICATION_WINDOW(window)->browser(), parent);
+                ET_APPLICATION_WINDOW(window)->browser()->select_dir(parent);
             }
             else
             {

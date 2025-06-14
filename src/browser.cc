@@ -98,6 +98,7 @@ typedef struct
 
     GtkWidget *open_files_with_dialog;
     GtkWidget *open_files_with_combobox;
+    ET_FileList::list_type *open_files_selected_files;
 
     /* The Rename Directory window. */
     GtkWidget *rename_directory_dialog;
@@ -188,7 +189,7 @@ static void et_browser_clear_artist_model(EtBrowser *self);
 
 static void Browser_Tree_Handle_Rename (EtBrowser *self,
                                         GtkTreeIter *parentnode,
-                                        const gchar *old_path,
+                                        gsize path_shift,
                                         const gchar *new_path);
 
 static void Browser_List_Select_File_By_Iter (EtBrowser *self,
@@ -245,77 +246,48 @@ static void et_browser_on_column_clicked (GtkTreeViewColumn *column,
  * Functions *
  *************/
 
+ET_File* EtBrowser::popup_file()
+{
+	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
+
+	GtkTreePath* tree_path;
+	gtk_tree_view_get_drag_dest_row(GTK_TREE_VIEW(priv->file_view), &tree_path, NULL);
+	if (!tree_path)
+		return nullptr;
+
+	GtkTreeIter iter;
+	gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_model), &iter, tree_path);
+	ET_File* etfile = nullptr;
+  gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter, LIST_FILE_POINTER, &etfile, -1);
+
+	gtk_tree_path_free(tree_path);
+	return etfile;
+}
+
 /*
  * Load home directory
  */
-void
-et_browser_go_home (EtBrowser *self)
+void EtBrowser::go_home()
 {
-    GFile *file;
-
-    file = g_file_new_for_path (g_get_home_dir ());
-    et_browser_select_dir (self, file);
-    g_object_unref (file);
+	GFile *file = g_file_new_for_path(g_get_home_dir());
+	select_dir(file);
+	g_object_unref(file);
 }
 
 /*
- * Load desktop directory
+ * Load user directory
  */
-void
-et_browser_go_desktop (EtBrowser *self)
+void EtBrowser::go_special(GUserDirectory dir)
 {
-    GFile *file;
-
-    file = g_file_new_for_path (g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP));
-    et_browser_select_dir (self, file);
-    g_object_unref (file);
+	GFile *file = g_file_new_for_path(g_get_user_special_dir(dir));
+	select_dir(file);
+	g_object_unref(file);
 }
-
-/*
- * Load documents directory
- */
-void
-et_browser_go_documents (EtBrowser *self)
-{
-    GFile *file;
-
-    file = g_file_new_for_path (g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS));
-    et_browser_select_dir (self, file);
-    g_object_unref (file);
-}
-
-/*
- * Load downloads directory
- */
-void
-et_browser_go_downloads (EtBrowser *self)
-{
-    GFile *file;
-
-    file = g_file_new_for_path (g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD));
-    et_browser_select_dir (self, file);
-    g_object_unref (file);
-}
-
-/*
- * Load music directory
- */
-void
-et_browser_go_music (EtBrowser *self)
-{
-    GFile *file;
-
-    file = g_file_new_for_path (g_get_user_special_dir (G_USER_DIRECTORY_MUSIC));
-    et_browser_select_dir (self, file);
-    g_object_unref (file);
-}
-
 
 /*
  * Load default directory
  */
-void
-et_browser_load_default_dir (EtBrowser *self)
+void EtBrowser::load_default_dir()
 {
     GFile **files;
     GVariant *default_path;
@@ -333,14 +305,12 @@ et_browser_load_default_dir (EtBrowser *self)
     g_free (files);
 }
 
-void
-et_browser_run_player_for_album_list (EtBrowser *self)
+void EtBrowser::run_player_for_album_list()
 {
-    EtBrowserPrivate *priv;
+    EtBrowserPrivate* priv = et_browser_get_instance_private(this);
     GtkTreeIter iter;
     GtkTreeSelection *selection;
 
-    priv = et_browser_get_instance_private (self);
     g_return_if_fail (priv->album_view != NULL);
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->album_view));
@@ -364,14 +334,12 @@ et_browser_run_player_for_album_list (EtBrowser *self)
     et_run_audio_player(range.first, range.second);
 }
 
-void
-et_browser_run_player_for_artist_list (EtBrowser *self)
+void EtBrowser::run_player_for_artist_list()
 {
-    EtBrowserPrivate *priv;
+    EtBrowserPrivate* priv = et_browser_get_instance_private(this);
     GtkTreeIter iter;
     GtkTreeSelection *selection;
 
-    priv = et_browser_get_instance_private (self);
     g_return_if_fail (priv->artist_view != NULL);
 
     selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->artist_view));
@@ -386,11 +354,10 @@ et_browser_run_player_for_artist_list (EtBrowser *self)
     et_run_audio_player(range.first, range.second);
 }
 
-void
-et_browser_run_player_for_selection (EtBrowser *self)
+void EtBrowser::run_player_for_selection()
 {
-    auto files = et_browser_get_selected_files(self);
-    et_run_audio_player(files.begin(), files.end());
+	auto files = get_current_files();
+	et_run_audio_player(files.begin(), files.end());
 }
 
 /*
@@ -398,31 +365,24 @@ et_browser_run_player_for_selection (EtBrowser *self)
  * Warning: return NULL if no row selected int the tree.
  * Remember to free the value returned from this function!
  */
-static gchar *
-Browser_Tree_Get_Path_Of_Selected_Node (EtBrowser *self)
+static gchar* Browser_Tree_Get_Path_Of_Current_Node(EtBrowser *self)
 {
-    EtBrowserPrivate *priv;
-    GtkTreeSelection *selection;
-    GtkTreeIter selectedIter;
-    gchar *path;
+	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-    priv = et_browser_get_instance_private (self);
+	GtkTreePath* tree_path;
+	gtk_tree_view_get_drag_dest_row(GTK_TREE_VIEW(priv->directory_view), &tree_path, NULL);
+	if (!tree_path) // not from context menu? => use current path
+		return g_strdup(priv->current_path_name);
 
-    g_return_val_if_fail (priv->directory_view != NULL, NULL);
+	GtkTreeIter currentIter;
+	gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->directory_model), &currentIter, tree_path);
+	gchar *path;
+	gtk_tree_model_get(GTK_TREE_MODEL(priv->directory_model), &currentIter,
+		TREE_COLUMN_FULL_PATH, &path, -1);
 
-    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->directory_view));
-    if (selection
-    && gtk_tree_selection_get_selected(selection, NULL, &selectedIter))
-    {
-        gtk_tree_model_get(GTK_TREE_MODEL(priv->directory_model), &selectedIter,
-                           TREE_COLUMN_FULL_PATH, &path, -1);
-        return path;
-    }else
-    {
-        return NULL;
-    }
+	gtk_tree_path_free(tree_path);
+	return path;
 }
-
 
 /*
  * Set the current path to be shown in the browser.
@@ -452,31 +412,17 @@ et_browser_set_current_path (EtBrowser *self,
 /*
  * Return the current path
  */
-GFile *
-et_browser_get_current_path (EtBrowser *self)
+GFile* EtBrowser::get_current_path()
 {
-    EtBrowserPrivate *priv;
-
-    g_return_val_if_fail (ET_BROWSER (self), NULL);
-
-    priv = et_browser_get_instance_private (self);
-
-    return priv->current_path;
+	return et_browser_get_instance_private(this)->current_path;
 }
 
 /*
  * Return the current path
  */
-const gchar*
-et_browser_get_current_path_name (EtBrowser *self)
+const gchar* EtBrowser::get_current_path_name ()
 {
-    EtBrowserPrivate *priv;
-
-    g_return_val_if_fail (ET_BROWSER (self), NULL);
-
-    priv = et_browser_get_instance_private (self);
-
-    return priv->current_path_name;
+	return et_browser_get_instance_private(this)->current_path_name;
 }
 
 void et_browser_save_state(EtBrowser *self, GKeyFile* keyfile)
@@ -495,46 +441,59 @@ void et_browser_restore_state(EtBrowser *self, GKeyFile* keyfile)
 		gtk_paned_set_position(priv->browser_paned, value);
 }
 
-/*
- * et_browser_get_selected_files:
- * @self: an #EtBrowser from which to get a list of selected files
- *
- * Get a list of #ET_File of the current selection of the #EtBrowser @self.
- *
- * Returns: list of the selected files in the browser
- */
-vector<xPtr<ET_File>> et_browser_get_selected_files(EtBrowser *self)
+vector<xPtr<ET_File>> EtBrowser::get_selected_files()
 {
-    EtBrowserPrivate *priv;
-    GtkTreeSelection *selection;
-    GList *selfilelist;
-    vector<xPtr<ET_File>> files;
+	GtkTreeSelection *selection;
+	GList *selfilelist;
+	vector<xPtr<ET_File>> files;
 
-    g_return_val_if_fail (ET_BROWSER (self), files);
+	EtBrowserPrivate *priv = et_browser_get_instance_private(this);
+	selection = gtk_tree_view_get_selection (priv->file_view);
+	selfilelist = gtk_tree_selection_get_selected_rows (selection, NULL);
 
-    priv = et_browser_get_instance_private (self);
-    selection = gtk_tree_view_get_selection (priv->file_view);
-    selfilelist = gtk_tree_selection_get_selected_rows (selection, NULL);
+	for (GList* l = selfilelist; l != NULL; l = g_list_next (l))
+	{
+		GtkTreeIter iter;
+		if (!gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_model), &iter, (GtkTreePath*)l->data))
+			continue; // invalid selected path ???
 
-    for (GList* l = selfilelist; l != NULL; l = g_list_next (l))
-    {
-        GtkTreeIter iter;
-        if (!gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_model), &iter, (GtkTreePath*)l->data))
-            continue; // invalid selected path ???
+		ET_File *etfile;
+		gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter, LIST_FILE_POINTER, &etfile, -1);
+		files.emplace_back(etfile);
+	}
 
-        ET_File *etfile;
-        gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter, LIST_FILE_POINTER, &etfile, -1);
-        files.emplace_back(etfile);
-    }
+	g_list_free_full (selfilelist, (GDestroyNotify)gtk_tree_path_free);
 
-    g_list_free_full (selfilelist, (GDestroyNotify)gtk_tree_path_free);
-
-    return files;
+	return files;
 }
 
-vector<ET_File*> et_browser_get_all_files(EtBrowser *self)
+vector<xPtr<ET_File>> EtBrowser::get_current_files()
 {
-	EtBrowserPrivate* priv = et_browser_get_instance_private (self);
+	EtBrowserPrivate *priv = et_browser_get_instance_private(this);
+	GtkTreePath* current;
+	gtk_tree_view_get_drag_dest_row(priv->file_view, &current, NULL);
+
+	GtkTreeSelection* selection = gtk_tree_view_get_selection(priv->file_view);
+	if (current == nullptr || gtk_tree_selection_path_is_selected(selection, current))
+	{	gtk_tree_path_free(current);
+		return get_selected_files();
+	}
+
+	vector<xPtr<ET_File>> files;
+	GtkTreeIter iter;
+	if (gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_model), &iter, current))
+	{	ET_File *etfile;
+		gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter, LIST_FILE_POINTER, &etfile, -1);
+		files.emplace_back(etfile);
+	}
+
+	gtk_tree_path_free(current);
+	return files;
+}
+
+vector<ET_File*> EtBrowser::get_all_files()
+{
+	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
 
 	vector<ET_File*> files;
 	files.reserve(gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_model), NULL));
@@ -553,47 +512,29 @@ vector<ET_File*> et_browser_get_all_files(EtBrowser *self)
 /*
  * Reload the current directory.
  */
-void
-et_browser_reload_directory (EtBrowser *self)
+void EtBrowser::reload_directory()
 {
-    EtBrowserPrivate *priv;
+	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
 
-    priv = et_browser_get_instance_private (self);
+	if (priv->directory_view && priv->current_path != NULL)
+	{
+		/* Unselect files, to automatically reload the file of the directory. */
+		gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->directory_view)));
 
-    if (priv->directory_view && priv->current_path != NULL)
-    {
-        /* Unselect files, to automatically reload the file of the directory. */
-        GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->directory_view));
-
-        if (selection)
-        {
-            gtk_tree_selection_unselect_all(selection);
-        }
-
-        et_browser_select_dir (self, priv->current_path);
-    }
+		select_dir(priv->current_path);
+	}
 }
 
 /*
  * Set the current path (selected node) in browser as default path (within config variable).
  */
-void
-et_browser_set_current_path_default (EtBrowser *self)
+void EtBrowser::set_current_path_default()
 {
-    EtBrowserPrivate *priv;
-    gchar *path;
+	gchar *path = Browser_Tree_Get_Path_Of_Current_Node(this);
+	g_settings_set_value(MainSettings, "default-path", g_variant_new_bytestring(path));
+	g_free(path);
 
-    g_return_if_fail (ET_BROWSER (self));
-
-    priv = et_browser_get_instance_private (self);
-
-    path = g_file_get_path (priv->current_path);
-    g_settings_set_value (MainSettings, "default-path",
-                          g_variant_new_bytestring (path));
-    g_free (path);
-
-    et_application_window_status_bar_message(MainWindow,
-        _("New default directory selected for browser"), TRUE);
+	et_application_window_status_bar_message(MainWindow, _("New default directory selected for browser"), TRUE);
 }
 
 /*
@@ -614,7 +555,7 @@ Browser_Entry_Activated (EtBrowser *self,
 
     file = g_file_parse_name (parse_name);
 
-    et_browser_select_dir (self, file);
+    self->select_dir(file);
 
     g_object_unref (file);
 }
@@ -639,22 +580,36 @@ et_browser_entry_set_text (EtBrowser *self, const gchar *text)
 /*
  * Button to go to parent directory
  */
-void
-et_browser_go_parent (EtBrowser *self)
+void EtBrowser::go_parent()
 {
-    GFile *parent;
-
-    parent = g_file_get_parent (et_browser_get_current_path (self));
+    GFile *parent = g_file_get_parent(get_current_path());
 
     if (parent)
     {
-        et_browser_select_dir (self, parent);
-        g_object_unref (parent);
+        select_dir(parent);
+        g_object_unref(parent);
     }
     else
     {
         g_debug ("%s", "No parent found for current browser path");
     }
+}
+
+/*
+ * Go to directory with popup
+ */
+void EtBrowser::go_directory()
+{
+	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
+
+	/* Unselect files, to automatically reload the file of the directory. */
+	gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->directory_view)));
+
+	gchar* path = Browser_Tree_Get_Path_Of_Current_Node(this);
+	GFile *file = g_file_new_for_path(path);
+	select_dir(file);
+	g_object_unref(file);
+	g_free(path);
 }
 
 /*
@@ -773,15 +728,14 @@ Browser_List_Key_Press (GtkWidget *list, GdkEvent *event, gpointer data)
 /*
  * Collapse (close) tree recursively up to the root node.
  */
-void
-et_browser_collapse (EtBrowser *self)
+void EtBrowser::collapse()
 {
     EtBrowserPrivate *priv;
 #ifndef G_OS_WIN32
     GtkTreePath *rootPath;
 #endif /* !G_OS_WIN32 */
 
-    priv = et_browser_get_instance_private (self);
+    priv = et_browser_get_instance_private (this);
 
     g_return_if_fail (priv->directory_view != NULL);
 
@@ -838,7 +792,7 @@ et_browser_set_row_visible (EtBrowser *self, GtkTreeIter *rowIter)
  * Triggers when a new node in the browser tree is selected
  * Do file-save confirmation, and then prompt the new dir to be loaded
  */
-static gboolean
+static void
 Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
 {
     EtBrowserPrivate *priv;
@@ -852,7 +806,7 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
     priv = et_browser_get_instance_private (self);
 
     if (!gtk_tree_selection_get_selected(selection, NULL, &selectedIter))
-        return TRUE;
+        return;
     selectedPath = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->directory_model), &selectedIter);
 
     /* Open the node */
@@ -863,15 +817,19 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
     }
     gtk_tree_path_free(selectedPath);
 
-    /* Don't start a new reading, if another one is running... */
     if (IsReadingDirectory())
-        return TRUE;
+    {	// cancel pending operation
+    	Action_Main_Stop_Button_Pressed();
+    	// wait for acknowledge
+    	do gtk_main_iteration();
+    		while(IsReadingDirectory());
+    }
 
     /* Browser_Tree_Set_Node_Visible (priv->directory_view, selectedPath); */
     gtk_tree_model_get(GTK_TREE_MODEL(priv->directory_model), &selectedIter,
                        TREE_COLUMN_FULL_PATH, &pathName, -1);
     if (!pathName)
-        return FALSE;
+        return;
 
     et_application_window_update_et_file_from_ui(MainWindow);
 
@@ -910,7 +868,7 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
                 if (Save_All_Files_With_Answer(FALSE)==-1)
                 {
                     g_free (pathName);
-                    return TRUE;
+                    return;
                 }
                 break;
             case GTK_RESPONSE_NO:
@@ -918,7 +876,7 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
             case GTK_RESPONSE_CANCEL:
             case GTK_RESPONSE_DELETE_EVENT:
                 g_free (pathName);
-                return TRUE;
+                return;
                 break;
             default:
                 g_assert_not_reached ();
@@ -989,7 +947,7 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
 
     g_object_unref (file);
     g_free(pathName);
-    return FALSE;
+    return;
 }
 
 
@@ -1036,16 +994,7 @@ et_browser_win32_get_drive_root (EtBrowser *self,
 }
 #endif /* G_OS_WIN32 */
 
-
-/*
- * et_browser_select_dir:
- *
- * Select the directory corresponding to the 'path' in the tree browser, but it
- * doesn't read it! Check if path is correct before selecting it.
- */
-void
-et_browser_select_dir (EtBrowser *self,
-                       GFile *file)
+void EtBrowser::select_dir(GFile *file)
 {
     EtBrowserPrivate *priv;
     gchar *current_path;
@@ -1056,14 +1005,14 @@ et_browser_select_dir (EtBrowser *self,
     gchar *nodeName;
     gchar *temp;
 
-    priv = et_browser_get_instance_private (self);
+    priv = et_browser_get_instance_private(this);
 
     g_return_if_fail (priv->directory_view != NULL);
 
     /* Don't check here if the path is valid. It will be done later when
      * selecting a node in the tree */
 
-    et_browser_set_current_path (self, file);
+    et_browser_set_current_path (this, file);
     current_path = g_file_get_path (file);
 
     parts = g_strsplit(current_path, G_DIR_SEPARATOR_S, 0);
@@ -1071,7 +1020,7 @@ et_browser_select_dir (EtBrowser *self,
 
     // Expand root node (fill parentNode and rootPath)
 #ifdef G_OS_WIN32
-    if (!et_browser_win32_get_drive_root (self, parts[0], &parentNode,
+    if (!et_browser_win32_get_drive_root (this, parts[0], &parentNode,
                                           &rootPath))
     {
         return;
@@ -1123,7 +1072,7 @@ et_browser_select_dir (EtBrowser *self,
                 GtkTreeIter iter;
 
                 /* Create a new node for this directory name. */
-                const GIcon* icon = get_gicon_for_path (self, path, ET_PATH_STATE_CLOSED);
+                const GIcon* icon = get_gicon_for_path (this, path, ET_PATH_STATE_CLOSED);
 
                 gtk_tree_store_insert_with_values (GTK_TREE_STORE (priv->directory_model),
                                                    &iter, &parentNode, 0,
@@ -1536,9 +1485,7 @@ et_browser_refresh_file_in_list (EtBrowser *self,
 /*
  * Remove a file from the list, by ETFile
  */
-void
-et_browser_remove_file (EtBrowser *self,
-                        const ET_File *searchETFile)
+void EtBrowser::remove_file(const ET_File *searchETFile)
 {
     EtBrowserPrivate *priv;
     gint row;
@@ -1550,7 +1497,7 @@ et_browser_remove_file (EtBrowser *self,
     if (searchETFile == NULL)
         return;
 
-    priv = et_browser_get_instance_private (self);
+    priv = et_browser_get_instance_private (this);
 
     // Go through the file list until it is found
     for (row=0; row < gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_model), NULL); row++)
@@ -1901,73 +1848,55 @@ et_browser_refresh_sort (EtBrowser *self)
 /*
  * Select all files on the file list
  */
-void
-et_browser_select_all (EtBrowser *self)
+void EtBrowser::select_all()
 {
-    EtBrowserPrivate *priv;
-    GtkTreeSelection *selection;
+	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
+	GtkTreeSelection* selection = gtk_tree_view_get_selection(priv->file_view);
 
-    g_return_if_fail (ET_BROWSER (self));
-
-    priv = et_browser_get_instance_private (self);
-    selection = gtk_tree_view_get_selection(priv->file_view);
-
-    if (selection)
-    {
-        /* Must block the select signal to avoid the selecting, one by one, of
-         * all files in the main files list. */
-        g_signal_handler_block (selection, priv->file_selected_handler);
-        gtk_tree_selection_select_all(selection);
-        g_signal_handler_unblock (selection, priv->file_selected_handler);
-    }
+	/* Must block the select signal to avoid the selecting, one by one, of
+	 * all files in the main files list. */
+	g_signal_handler_block(selection, priv->file_selected_handler);
+	gtk_tree_selection_select_all(selection);
+	g_signal_handler_unblock(selection, priv->file_selected_handler);
 }
 
 /*
  * Unselect all files on the file list
  */
-void
-et_browser_unselect_all (EtBrowser *self)
+void EtBrowser::unselect_all()
 {
-    GtkTreeSelection* selection = gtk_tree_view_get_selection(et_browser_get_instance_private(self)->file_view);
-    if (selection)
-        gtk_tree_selection_unselect_all (selection);
+	gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(et_browser_get_instance_private(this)->file_view));
 }
 
 /*
  * Invert the selection of the file list
  */
-void
-et_browser_invert_selection (EtBrowser *self)
+void EtBrowser::invert_selection()
 {
-    EtBrowserPrivate *priv;
-    GtkTreeIter iter;
-    GtkTreeSelection *selection;
-    gboolean valid;
+	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
+	GtkTreeIter iter;
 
-    priv = et_browser_get_instance_private (self);
+	g_return_if_fail(priv->file_model != NULL || priv->file_view != NULL);
 
-    g_return_if_fail (priv->file_model != NULL || priv->file_view != NULL);
+	et_application_window_update_et_file_from_ui(MainWindow);
 
-    selection = gtk_tree_view_get_selection(priv->file_view);
-    if (selection)
-    {
-        /* Must block the select signal to avoid selecting all files (one by
-         * one) in the main files list. */
-        g_signal_handler_block (selection, priv->file_selected_handler);
-        valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->file_model), &iter);
-        while (valid)
-        {
-            if (gtk_tree_selection_iter_is_selected(selection, &iter))
-            {
-                gtk_tree_selection_unselect_iter(selection, &iter);
-            } else
-            {
-                gtk_tree_selection_select_iter(selection, &iter);
-            }
-            valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_model), &iter);
-        }
-        g_signal_handler_unblock (selection, priv->file_selected_handler);
-    }
+	GtkTreeSelection* selection = gtk_tree_view_get_selection(priv->file_view);
+	if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->file_model), &iter))
+	{	// Must block the select signal to avoid selecting all files (one by one) in the main files list.
+		g_signal_handler_block(selection, priv->file_selected_handler);
+
+		do
+		{
+			if (gtk_tree_selection_iter_is_selected(selection, &iter))
+				gtk_tree_selection_unselect_iter(selection, &iter);
+			else
+				gtk_tree_selection_select_iter(selection, &iter);
+		} while (gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_model), &iter));
+
+		g_signal_handler_unblock (selection, priv->file_selected_handler);
+	}
+
+	et_application_window_update_actions(MainWindow);
 }
 
 // all file in range saved?
@@ -2221,11 +2150,9 @@ static void Browser_Album_List_Set_Row_Appearance(EtBrowser *self, GtkTreeIter& 
 		ALBUM_ROW_FOREGROUND, (unsaved && !bold ? &RED : NULL), -1);
 }
 
-void et_browser_set_display_mode(EtBrowser *self, EtBrowserMode mode)
+void EtBrowser::set_display_mode(EtBrowserMode mode)
 {
-	g_return_if_fail (ET_BROWSER (self));
-
-	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
+	EtBrowserPrivate *priv = et_browser_get_instance_private(this);
 
 	et_application_window_update_et_file_from_ui(MainWindow);
 
@@ -2241,12 +2168,12 @@ void et_browser_set_display_mode(EtBrowser *self, EtBrowserMode mode)
 
 		/* Display Tree Browser. */
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(priv->directory_album_artist_notebook), 0);
-		self->load_file_list();
+		load_file_list();
 		break;
 
 	case ET_BROWSER_MODE_ARTIST:
 		ET_FileList::set_display_mode(ET_BROWSER_MODE_ARTIST_ALBUM);
-		Browser_Artist_List_Load_Files(self);
+		Browser_Artist_List_Load_Files(this);
 
 		/* Display Artist + Album lists. */
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(priv->directory_album_artist_notebook), 1);
@@ -2276,45 +2203,47 @@ et_browser_set_sensitive (EtBrowser *self, gboolean sensitive)
 static void
 do_popup_menu (EtBrowser *self,
                GdkEventButton *event,
-               GtkTreeView *view,
+               GtkTreeView *treeview,
                GtkWidget *menu)
 {
-    gint button;
-    gint event_time;
+	gint button;
+	gint event_time;
 
-    if (event)
-    {
-        button = event->button;
-        event_time = event->time;
-    }
-    else
-    {
-        button = 0;
-        event_time = gtk_get_current_event_time ();
-    }
+	if (event) // invocation from mouse button
+	{	if (event->window == gtk_tree_view_get_bin_window(treeview))
+		{	GtkTreePath *tree_path;
+			if (gtk_tree_view_get_path_at_pos(treeview, event->x, event->y, &tree_path, NULL, NULL, NULL))
+			{	// We use drag target emphasis because GTK TreeView does not allow to set the cursor without destroying the selection.
+				gtk_tree_view_set_drag_dest_row(treeview, tree_path, GTK_TREE_VIEW_DROP_INTO_OR_BEFORE);
 
-    /* TODO: Add popup positioning function. */
-    gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, button,
-                    event_time);
+				// Hack for directory popup menu:
+				// The action run-player-directory is currently only supported for the selected directory.
+				EtBrowserPrivate* priv = et_browser_get_instance_private(self);
+				if (menu == priv->directory_view_menu)
+					et_application_set_action_state(MainWindow, "run-player-directory",
+						gtk_tree_selection_path_is_selected(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->directory_view)), tree_path));
+
+				gtk_tree_path_free (tree_path);
+			}
+		}
+
+		button = event->button;
+		event_time = event->time;
+	} else
+	{	button = 0;
+		event_time = gtk_get_current_event_time ();
+	}
+
+	/* TODO: Add popup positioning function. */
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, button, event_time);
 }
 
-static void
-select_row_for_button_press_event (GtkTreeView *treeview,
-                                   GdkEventButton *event)
+static void on_popup_closed(GtkTreeView *treeview)
 {
-    if (event->window == gtk_tree_view_get_bin_window (treeview))
-    {
-        GtkTreePath *tree_path;
-
-        if (gtk_tree_view_get_path_at_pos (treeview, event->x,
-                                           event->y, &tree_path, NULL,
-                                           NULL,NULL))
-        {
-            gtk_tree_selection_select_path (gtk_tree_view_get_selection (treeview),
-                                            tree_path);
-            gtk_tree_path_free (tree_path);
-        }
-    }
+	// Defer the deselection /after/ the action to allow get_current_files to
+	gIdleAdd(new function<void()>([treeview]()
+	{	gtk_tree_view_set_drag_dest_row(treeview, NULL, GTK_TREE_VIEW_DROP_INTO_OR_BEFORE);
+	}));
 }
 
 static gboolean
@@ -2376,15 +2305,7 @@ on_album_tree_button_press_event (GtkWidget *widget,
 {
     if (gdk_event_triggers_context_menu ((GdkEvent *)event))
     {
-        EtBrowserPrivate *priv;
-
-        priv = et_browser_get_instance_private (self);
-
-        if (GTK_IS_TREE_VIEW (widget))
-        {
-            select_row_for_button_press_event (GTK_TREE_VIEW (widget), event);
-        }
-
+        EtBrowserPrivate *priv = et_browser_get_instance_private(self);
         do_popup_menu (self, event, GTK_TREE_VIEW (priv->album_view),
                        priv->album_menu);
 
@@ -2401,15 +2322,7 @@ on_artist_tree_button_press_event (GtkWidget *widget,
 {
     if (gdk_event_triggers_context_menu ((GdkEvent *)event))
     {
-        EtBrowserPrivate *priv;
-
-        priv = et_browser_get_instance_private (self);
-
-        if (GTK_IS_TREE_VIEW (widget))
-        {
-            select_row_for_button_press_event (GTK_TREE_VIEW (widget), event);
-        }
-
+        EtBrowserPrivate *priv = et_browser_get_instance_private(self);
         do_popup_menu (self, event, GTK_TREE_VIEW (priv->artist_view),
                        priv->artist_menu);
 
@@ -2426,15 +2339,7 @@ on_directory_tree_button_press_event (GtkWidget *widget,
 {
     if (gdk_event_triggers_context_menu ((GdkEvent *)event))
     {
-        EtBrowserPrivate *priv;
-
-        priv = et_browser_get_instance_private (self);
-
-        if (GTK_IS_TREE_VIEW (widget))
-        {
-            select_row_for_button_press_event (GTK_TREE_VIEW (widget), event);
-        }
-
+        EtBrowserPrivate *priv = et_browser_get_instance_private(self);
         do_popup_menu (self, event, GTK_TREE_VIEW (priv->directory_view),
                        priv->directory_view_menu);
 
@@ -2454,15 +2359,7 @@ on_file_tree_button_press_event (GtkWidget *widget,
 {
     if (gdk_event_triggers_context_menu ((GdkEvent *)event))
     {
-        EtBrowserPrivate *priv;
-
-        priv = et_browser_get_instance_private (self);
-
-        if (GTK_IS_TREE_VIEW (widget))
-        {
-            select_row_for_button_press_event (GTK_TREE_VIEW (widget), event);
-        }
-
+        EtBrowserPrivate *priv = et_browser_get_instance_private(self);
         do_popup_menu (self, event, priv->file_view, priv->file_menu);
 
         return GDK_EVENT_STOP;
@@ -2618,35 +2515,20 @@ Browser_Tree_Initialize (EtBrowser *self)
  * et_browser_reload: Refresh the tree browser by destroying it and rebuilding it.
  * Opens tree nodes corresponding to the current path.
  */
-void
-et_browser_reload (EtBrowser *self)
+void EtBrowser::reload()
 {
-    EtBrowserPrivate *priv;
-    gchar *current_path = NULL;
-    GtkTreeSelection *selection;
+	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
 
-    priv = et_browser_get_instance_private (self);
+	/* Select again the memorized path without loading files */
+	GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->directory_view));
 
-    /* Memorize the current path to load it again at the end */
-    current_path = Browser_Tree_Get_Path_Of_Selected_Node (self);
+	g_signal_handlers_block_by_func(selection, (gpointer)Browser_Tree_Node_Selected, this);
+	Browser_Tree_Initialize(this);
+	// Restore previous selection
+	select_dir(priv->current_path);
+	g_signal_handlers_unblock_by_func(selection, (gpointer)(Browser_Tree_Node_Selected), this);
 
-    /* Select again the memorized path without loading files */
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->directory_view));
-
-    if (selection)
-    {
-        GFile *file;
-
-        g_signal_handlers_block_by_func (selection, (gpointer)Browser_Tree_Node_Selected, self);
-        Browser_Tree_Initialize (self);
-        file = g_file_new_for_path (current_path);
-        et_browser_select_dir (self, file);
-        g_object_unref (file);
-        g_signal_handlers_unblock_by_func (selection, (gpointer)(Browser_Tree_Node_Selected), self);
-    }
-    g_free(current_path);
-
-    et_application_window_update_actions(MainWindow);
+	et_application_window_update_actions(MainWindow);
 }
 
 /*
@@ -2667,8 +2549,6 @@ Browser_Tree_Rename_Directory (EtBrowser *self,
     GtkTreePath *childpath;
     GtkTreePath *parentpath;
     gchar *new_basename_utf8;
-    gchar *path;
-    GFile *file;
 
     if (!last_path || !new_path)
         return;
@@ -2726,16 +2606,12 @@ Browser_Tree_Rename_Directory (EtBrowser *self,
                        TREE_COLUMN_DIR_NAME,  new_basename_utf8,
                        TREE_COLUMN_FULL_PATH, new_path,
                        -1);
+    if (iter == priv->current_file)
+        // Update the variable of the current path
+        et_browser_set_current_path(self, gObject<GFile>(g_file_new_for_path(new_path)).get());
 
     /* Update fullpath of child nodes */
-    Browser_Tree_Handle_Rename (self, &iter, last_path, new_path);
-
-    /* Update the variable of the current path */
-    path = Browser_Tree_Get_Path_Of_Selected_Node (self);
-    file = g_file_new_for_path (path);
-    et_browser_set_current_path (self, file);
-    g_object_unref (file);
-    g_free(path);
+    Browser_Tree_Handle_Rename (self, &iter, strlen(last_path), new_path);
 
     g_strfreev(textsplit);
     g_free(new_basename_utf8);
@@ -2753,7 +2629,7 @@ Browser_Tree_Rename_Directory (EtBrowser *self,
 static void
 Browser_Tree_Handle_Rename (EtBrowser *self,
                             GtkTreeIter *parentnode,
-                            const gchar *old_path,
+                            gsize path_shift,
                             const gchar *new_path)
 {
     EtBrowserPrivate *priv;
@@ -2771,7 +2647,6 @@ Browser_Tree_Handle_Rename (EtBrowser *self,
     do
     {
         gchar *path;
-        gsize path_shift;
         gchar *path_new;
 
         gtk_tree_model_get(GTK_TREE_MODEL(priv->directory_model), &iter,
@@ -2780,11 +2655,14 @@ Browser_Tree_Handle_Rename (EtBrowser *self,
             continue;
 
         /* Graft the new path onto the old path. */
-        path_shift = strlen (old_path);
         path_new = g_strconcat (new_path, path + path_shift, NULL);
 
         gtk_tree_store_set(priv->directory_model, &iter,
                            TREE_COLUMN_FULL_PATH, path_new, -1);
+
+        if (iter == priv->current_file)
+            // Update the variable of the current path
+            et_browser_set_current_path(self, gObject<GFile>(g_file_new_for_path(path_new)).get());
 
         g_free(path_new);
         g_free(path);
@@ -2793,7 +2671,7 @@ Browser_Tree_Handle_Rename (EtBrowser *self,
         if (gtk_tree_model_iter_has_child (GTK_TREE_MODEL (priv->directory_model),
                                            &iter))
         {
-            Browser_Tree_Handle_Rename (self, &iter, old_path, new_path);
+            Browser_Tree_Handle_Rename(self, &iter, path_shift, new_path);
         }
 
     } while (gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->directory_model), &iter));
@@ -3326,6 +3204,7 @@ create_browser (EtBrowser *self)
                                                        "directory-menu"));
     priv->directory_view_menu = gtk_menu_new_from_model (menu_model);
     gtk_menu_attach_to_widget (GTK_MENU (priv->directory_view_menu), priv->directory_view, NULL);
+    g_signal_connect_swapped(priv->directory_view_menu, "hide", G_CALLBACK(on_popup_closed), priv->directory_view);
 
     /* The ScrollWindows with the Artist and Album Lists. */
     priv->artist_selected_handler = g_signal_connect_swapped(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->artist_view)),
@@ -3337,6 +3216,7 @@ create_browser (EtBrowser *self)
     priv->artist_menu = gtk_menu_new_from_model (menu_model);
     gtk_menu_attach_to_widget (GTK_MENU (priv->artist_menu), priv->artist_view,
                                NULL);
+    g_signal_connect_swapped(priv->artist_menu, "hide", G_CALLBACK(on_popup_closed), priv->artist_view);
 
     gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (priv->album_view),
                                           album_list_separator_func, NULL,
@@ -3351,6 +3231,7 @@ create_browser (EtBrowser *self)
     priv->album_menu = gtk_menu_new_from_model (menu_model);
     gtk_menu_attach_to_widget (GTK_MENU (priv->album_menu), priv->album_view,
                                NULL);
+    g_signal_connect_swapped(priv->album_menu, "hide", G_CALLBACK(on_popup_closed), priv->album_view);
 
     /* The file list */
     /* Add columns to tree view. See ET_FILE_LIST_COLUMN. */
@@ -3397,6 +3278,7 @@ create_browser (EtBrowser *self)
     priv->file_menu = gtk_menu_new_from_model (menu_model);
     gtk_menu_attach_to_widget (GTK_MENU (priv->file_menu), GTK_WIDGET(priv->file_view),
                                NULL);
+    g_signal_connect_swapped(priv->file_menu, "hide", G_CALLBACK(on_popup_closed), priv->file_view);
 
     g_object_unref (builder);
 
@@ -3478,10 +3360,9 @@ rename_directory_generate_preview (EtBrowser *self)
 /*
  * The window to Rename a directory into the browser.
  */
-void
-et_browser_show_rename_directory_dialog (EtBrowser *self)
+void EtBrowser::show_rename_directory_dialog()
 {
-    EtBrowserPrivate *priv;
+    EtBrowserPrivate* priv = et_browser_get_instance_private(this);
     GtkBuilder *builder;
     GtkWidget *label;
     GtkWidget *button;
@@ -3490,8 +3371,6 @@ et_browser_show_rename_directory_dialog (EtBrowser *self)
     gchar *basename;
     gchar *display_basename;
     gchar *string;
-
-    priv = et_browser_get_instance_private (self);
 
     if (priv->rename_directory_dialog != NULL)
     {
@@ -3538,7 +3417,7 @@ et_browser_show_rename_directory_dialog (EtBrowser *self)
     g_object_set_data_full (G_OBJECT (priv->rename_directory_dialog),
                             "Current_Directory", basename, g_free);
     g_signal_connect (priv->rename_directory_dialog, "response",
-                      G_CALLBACK (et_rename_directory_on_response), self);
+                      G_CALLBACK (et_rename_directory_on_response), this);
 
     string = g_strdup_printf (_("Rename the directory ‘%s’ to:"),
                               display_basename);
@@ -3561,8 +3440,7 @@ et_browser_show_rename_directory_dialog (EtBrowser *self)
                      priv->rename_directory_mask_toggle, "active",
                      G_SETTINGS_BIND_DEFAULT);
     g_signal_connect_swapped (priv->rename_directory_mask_toggle, "toggled",
-                              G_CALLBACK (Rename_Directory_With_Mask_Toggled),
-                              self);
+        G_CALLBACK(Rename_Directory_With_Mask_Toggled), this);
 
     /* The entry to enter the mask to apply. */
     priv->rename_directory_mask_entry = GTK_WIDGET (gtk_builder_get_object (builder,
@@ -3570,10 +3448,8 @@ et_browser_show_rename_directory_dialog (EtBrowser *self)
     gtk_widget_set_size_request(priv->rename_directory_mask_entry, 80, -1);
 
     /* Signal to generate preview (preview of the new directory). */
-    g_signal_connect_swapped (priv->rename_directory_mask_entry,
-                              "changed",
-                              G_CALLBACK (rename_directory_generate_preview),
-                              self);
+    g_signal_connect_swapped(priv->rename_directory_mask_entry, "changed",
+        G_CALLBACK(rename_directory_generate_preview), this);
 
     g_settings_bind (MainSettings, "rename-directory-default-mask",
                      priv->rename_directory_mask_entry, "text",
@@ -3856,7 +3732,7 @@ Rename_Directory (EtBrowser *self)
         et_application_window_update_ui_from_et_file(MainWindow, ET_COLUMN_FILEPATH);
     }else
     {
-        gchar *tmp = g_file_get_parse_name (et_browser_get_current_path (self));
+        gchar *tmp = g_file_get_parse_name(self->get_current_path());
         et_browser_entry_set_text (self, tmp);
         g_free (tmp);
     }
@@ -3892,17 +3768,12 @@ Rename_Directory_With_Mask_Toggled (EtBrowser *self)
  * Window where is typed the name of the program to run, which
  * receives the current directory as parameter.
  */
-void
-et_browser_show_open_directory_with_dialog (EtBrowser *self)
+void EtBrowser::show_open_directory_with_dialog()
 {
-    EtBrowserPrivate *priv;
+    EtBrowserPrivate* priv = et_browser_get_instance_private(this);
     GtkBuilder *builder;
     GtkWidget *button;
     gchar *current_directory = NULL;
-
-    g_return_if_fail (ET_BROWSER (self));
-
-    priv = et_browser_get_instance_private (self);
 
     if (priv->open_directory_with_dialog != NULL)
     {
@@ -3926,7 +3797,7 @@ et_browser_show_open_directory_with_dialog (EtBrowser *self)
     gtk_window_set_transient_for (GTK_WINDOW (priv->open_directory_with_dialog),
                                   GTK_WINDOW (MainWindow));
     g_signal_connect (priv->open_directory_with_dialog, "response",
-                      G_CALLBACK (et_run_program_tree_on_response), self);
+        G_CALLBACK(et_run_program_tree_on_response), this);
 
     /* The combobox to enter the program to run */
     priv->open_directory_with_combobox = GTK_WIDGET (gtk_builder_get_object (builder,
@@ -3938,10 +3809,8 @@ et_browser_show_open_directory_with_dialog (EtBrowser *self)
     gtk_list_store_clear (priv->run_program_model);
     Load_Run_Program_With_Directory_List (priv->run_program_model,
                                           MISC_COMBO_TEXT);
-    g_signal_connect_swapped (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->open_directory_with_combobox))),
-                              "activate",
-                              G_CALLBACK (Run_Program_With_Directory),
-                              self);
+    g_signal_connect_swapped(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->open_directory_with_combobox))), "activate",
+        G_CALLBACK(Run_Program_With_Directory), this);
 
     /* The button to Browse */
     button = GTK_WIDGET (gtk_builder_get_object (builder,
@@ -3958,8 +3827,7 @@ et_browser_show_open_directory_with_dialog (EtBrowser *self)
     button = gtk_dialog_get_widget_for_response (GTK_DIALOG (priv->open_directory_with_dialog),
                                                  GTK_RESPONSE_OK);
     g_signal_connect_swapped (button, "clicked",
-                              G_CALLBACK (Run_Program_With_Directory),
-                              self);
+        G_CALLBACK (Run_Program_With_Directory), this);
     g_signal_connect_swapped (gtk_bin_get_child (GTK_BIN (priv->open_directory_with_combobox)),
                               "changed",
                               G_CALLBACK (empty_entry_disable_widget),
@@ -4034,45 +3902,23 @@ Run_Program_With_Directory (EtBrowser *self)
 static void
 Run_Program_With_Selected_Files (EtBrowser *self)
 {
-    EtBrowserPrivate *priv;
-    gchar   *program_name;
-    GList   *selected_paths;
-    GList *l;
-    gListP<const char*> args_list;
-    GtkTreeIter iter;
-    gboolean program_ran;
-    GError *error = NULL;
+    EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-    priv = et_browser_get_instance_private (self);
-
-    if (!GTK_IS_COMBO_BOX (priv->open_files_with_combobox) || ET_FileList::empty())
+    if (!GTK_IS_COMBO_BOX(priv->open_files_with_combobox) || priv->open_files_selected_files->empty())
         return;
 
     // Program name to run
-    program_name = g_strdup (gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->open_files_with_combobox)))));
+    gchar* program_name = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->open_files_with_combobox)))));
 
     // List of files to pass as parameters
-    selected_paths = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(priv->file_view), NULL);
-
-    for (l = selected_paths; l != NULL; l = g_list_next (l))
-    {
-        if (gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->file_model), &iter,
-                                     (GtkTreePath *)l->data))
-        {
-            const ET_File *ETFile;
-
-            gtk_tree_model_get (GTK_TREE_MODEL (priv->file_model), &iter,
-                                LIST_FILE_POINTER, &ETFile, -1);
-
-            args_list = args_list.prepend(ETFile->FilePath.get());
-            //args_list = g_list_append(args_list,((File_Name *)ETFile->FileNameCur->data)->value_utf8);
-        }
-    }
-
+    gListP<const char*> args_list;
+    for (const auto& file : *priv->open_files_selected_files)
+        args_list = args_list.prepend(file->FilePath.get());
     args_list = args_list.reverse();
-    program_ran = et_run_program (program_name, args_list, &error);
 
-    g_list_free_full (selected_paths, (GDestroyNotify)gtk_tree_path_free);
+    GError *error = NULL;
+    gboolean program_ran = et_run_program(program_name, args_list, &error);
+
     g_list_free(args_list);
 
     if (program_ran)
@@ -4108,16 +3954,16 @@ Run_Program_With_Selected_Files (EtBrowser *self)
  * Window where is typed the name of the program to run, which
  * receives the current file as parameter.
  */
-void
-et_browser_show_open_files_with_dialog (EtBrowser *self)
+void EtBrowser::show_open_files_with_dialog()
 {
-    EtBrowserPrivate *priv;
     GtkBuilder *builder;
     GtkWidget *button;
 
-    g_return_if_fail (ET_BROWSER (self));
+    EtBrowserPrivate* priv = et_browser_get_instance_private(this);
 
-    priv = et_browser_get_instance_private (self);
+    // Freeze the currently selected files before the information is lost.
+    delete priv->open_files_selected_files; // discard old content if any
+    priv->open_files_selected_files = new ET_FileList::list_type(get_current_files());
 
     if (priv->open_files_with_dialog != NULL)
     {
@@ -4132,7 +3978,7 @@ et_browser_show_open_files_with_dialog (EtBrowser *self)
     gtk_window_set_transient_for (GTK_WINDOW (priv->open_files_with_dialog),
                                   GTK_WINDOW (MainWindow));
     g_signal_connect ((priv->open_files_with_dialog), "response",
-                      G_CALLBACK (et_run_program_list_on_response), self);
+        G_CALLBACK(et_run_program_list_on_response), this);
 
     /* The combobox to enter the program to run */
     priv->open_files_with_combobox = GTK_WIDGET (gtk_builder_get_object (builder,
@@ -4145,10 +3991,8 @@ et_browser_show_open_files_with_dialog (EtBrowser *self)
     /* History list */
     gtk_list_store_clear (priv->run_program_model);
     Load_Run_Program_With_File_List (priv->run_program_model, MISC_COMBO_TEXT);
-    g_signal_connect_swapped (gtk_bin_get_child (GTK_BIN (priv->open_files_with_combobox)),
-                              "activate",
-                              G_CALLBACK (Run_Program_With_Selected_Files),
-			                  self);
+    g_signal_connect_swapped (gtk_bin_get_child(GTK_BIN(priv->open_files_with_combobox)), "activate",
+        G_CALLBACK(Run_Program_With_Selected_Files), this);
 
     /* The button to Browse */
     button = GTK_WIDGET (gtk_builder_get_object (builder,
@@ -4163,8 +4007,7 @@ et_browser_show_open_files_with_dialog (EtBrowser *self)
     button = gtk_dialog_get_widget_for_response (GTK_DIALOG (priv->open_files_with_dialog),
                                                  GTK_RESPONSE_OK);
     g_signal_connect_swapped (button, "clicked",
-                              G_CALLBACK (Run_Program_With_Selected_Files),
-			                  self);
+        G_CALLBACK(Run_Program_With_Selected_Files), this);
     g_signal_connect_swapped (gtk_bin_get_child (GTK_BIN (priv->open_files_with_combobox)),
                               "changed",
                               G_CALLBACK (empty_entry_disable_widget),
@@ -4178,14 +4021,14 @@ et_browser_show_open_files_with_dialog (EtBrowser *self)
 static void
 Destroy_Run_Program_List_Window (EtBrowser *self)
 {
-    EtBrowserPrivate *priv;
+	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-    priv = et_browser_get_instance_private (self);
+	// discard saved selection
+	delete priv->open_files_selected_files;
+	priv->open_files_selected_files = nullptr;
 
-    if (priv->open_files_with_dialog)
-    {
-        gtk_widget_hide (priv->open_files_with_dialog);
-    }
+	if (priv->open_files_with_dialog)
+		gtk_widget_hide(priv->open_files_with_dialog);
 }
 
 /*
