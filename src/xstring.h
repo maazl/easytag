@@ -294,6 +294,8 @@ class xStringD : protected xString
 	static const data<0>* Init(const data<0>* ptr, GNormalizeMode mode);
 
 public:
+	static void garbage_collector();
+
 	/// Create \c xString with value \c nullptr.
 	constexpr xStringD() noexcept {}
 	/// Create \c xString with value \c nullptr.

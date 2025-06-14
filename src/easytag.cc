@@ -1083,6 +1083,7 @@ void ReadDirectoryWorker::ItemWorker()
 		{	if (item.second)
 			{	gIdleAdd(new function<void()>([]() { OnFinished(); }));
 				EtPicture::GarbageCollector(); // release orphaned images
+				xStringD::garbage_collector(); // ... and strings
 			}
 			return;
 		}

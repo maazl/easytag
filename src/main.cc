@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 
 #include "application.h"
+#include "xstring.h"
 
 int
 main (int argc, char *argv[])
@@ -37,6 +38,8 @@ main (int argc, char *argv[])
     application = et_application_new ();
     status = g_application_run (G_APPLICATION (application), argc, argv);
     g_object_unref (application);
+
+    xStringD::garbage_collector();
 
     return status;
 }

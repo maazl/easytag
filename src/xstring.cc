@@ -305,6 +305,19 @@ const xStringD::data<0>* xStringD::Init(const data<0>* ptr, GNormalizeMode mode)
 	return Init(ptr);
 }
 
+void xStringD::garbage_collector()
+{
+	lock_guard<mutex> lock(InstancesMutex);
+	auto p = Instances.begin();
+	while (p != Instances.end())
+	{	auto ptr = (storage<0>*)(data<0>*)*p;
+		if (ptr->RefCount == DedupRefCount)
+		{	p = Instances.erase(p);
+			delete ptr;
+		} else ++p;
+	}
+}
+
 bool xStringD::trim()
 {	if (!Ptr)
 		return false;
