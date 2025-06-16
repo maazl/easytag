@@ -22,7 +22,7 @@ configure
 /doc/easytag.1
 /doc/version.xml
 /doc/easytag.1
-/data/org.gnome.EasyTAG.gschema.valid
+/share/glib-2.0/schemas/gschemas.compiled
 /doc/version.xml
 /easytag
 /easytag-*.tar.xz

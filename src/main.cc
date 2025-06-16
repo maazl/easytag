@@ -24,6 +24,8 @@
 #include "xstring.h"
 #include "picture.h"
 
+#include <string>
+
 int
 main (int argc, char *argv[])
 {
@@ -35,6 +37,20 @@ main (int argc, char *argv[])
     bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
     bind_textdomain_codeset (PACKAGE_TARNAME, "UTF-8");
 #endif /* ENABLE_NLS */
+
+#ifndef NDEBUG
+    // Hack to allow locally modified schema files in debug mode w/o having to install it system wide.
+    const char* oldpath = getenv("XDG_DATA_DIRS");
+    if (oldpath)
+    {   std::string path = argv[0];
+        std::string::size_type p = path.rfind(G_DIR_SEPARATOR);
+        if (p != std::string::npos)
+            path.erase(p);
+        path += G_DIR_SEPARATOR_S "share" G_SEARCHPATH_SEPARATOR_S;
+        path += oldpath;
+        setenv("XDG_DATA_DIRS", path.c_str(), 1);
+    }
+#endif
 
     application = et_application_new ();
     status = g_application_run (G_APPLICATION (application), argc, argv);

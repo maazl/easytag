@@ -84,11 +84,11 @@ AC_DEFUN([AX_CHECK_ENABLE_DEBUG],[
       ],
       [info],[
         AC_MSG_RESULT(info)
-        CFLAGS="${CFLAGS} -g"
-        CXXFLAGS="${CXXFLAGS} -g"
-        FFLAGS="${FFLAGS} -g"
-        FCFLAGS="${FCFLAGS} -g"
-        OBJCFLAGS="${OBJCFLAGS} -g"
+        CFLAGS="${CFLAGS} -g -O2"
+        CXXFLAGS="${CXXFLAGS} -g -O2"
+        FFLAGS="${FFLAGS} -g -O2"
+        FCFLAGS="${FCFLAGS} -g -O2"
+        OBJCFLAGS="${OBJCFLAGS} -g -O2"
       ],
       [profile],[
         AC_MSG_RESULT(profile)
@@ -117,7 +117,7 @@ AC_DEFUN([AX_CHECK_ENABLE_DEBUG],[
 
     dnl Define various variables if debugging is disabled.
     dnl assert.h is a NOP if NDEBUG is defined, so define it by default.
-    AS_IF([test "x$enable_debug" = "xyes"],
+    AS_IF([test "x$enable_debug" = "xyes" || test "x$enable_debug" = "xinfo"],
       [m4_map_args_w(ax_enable_debug_vars, [AC_DEFINE(], [,[1],[Define if debugging is enabled])])],
       [m4_map_args_w(ax_disable_debug_vars, [AC_DEFINE(], [,[1],[Define if debugging is disabled])])])
     ax_enable_debug=$enable_debug

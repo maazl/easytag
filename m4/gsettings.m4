@@ -41,10 +41,10 @@ mostlyclean-am: clean-gsettings-schemas
 
 gsettings__enum_file = $(addsuffix .enums.xml,$(gsettings_ENUM_NAMESPACE))
 
-%.gschema.valid: %.gschema.xml $(gsettings__enum_file)
-	$(AM_V_GEN) $(GLIB_COMPILE_SCHEMAS) --dry-run $(addprefix --schema-file=,$(gsettings__enum_file)) --schema-file=$< && mkdir -p [$](@D) && touch [$]@
+share/glib-2.0/schemas/gschemas.compiled: $(gsettings_SCHEMAS) $(gsettings__enum_file)
+	$(AM_V_GEN) $(GLIB_COMPILE_SCHEMAS) $(addprefix --targetdir=, $(@D)) $(addprefix --schema-file=,$(gsettings__enum_file)) --schema-file=$<
 
-all-am: $(gsettings_SCHEMAS:.xml=.valid)
+all-am: share/glib-2.0/schemas/gschemas.compiled
 uninstall-am: uninstall-gsettings-schemas
 install-data-am: install-gsettings-schemas
 
@@ -68,7 +68,7 @@ uninstall-gsettings-schemas:
 	test -n "$(GSETTINGS_DISABLE_SCHEMAS_COMPILE)$(DESTDIR)" || $(GLIB_COMPILE_SCHEMAS) $(gsettingsschemadir)
 
 clean-gsettings-schemas:
-	rm -f $(gsettings_SCHEMAS:.xml=.valid) $(gsettings__enum_file)
+	rm -f share/glib-2.0/schemas/gschemas.compiled $(gsettings__enum_file)
 
 ifdef gsettings_ENUM_NAMESPACE
 $(gsettings__enum_file): $(gsettings_ENUM_FILES)

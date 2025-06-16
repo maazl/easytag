@@ -285,13 +285,12 @@ appdata_XML = $(appdata_in_files:.xml.in=.xml)
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
 desktop_in_files = data/org.gnome.EasyTAG.desktop.in
-$(desktop_in_files:.desktop.in=.desktop): data/.dstamp
+$(desktop_in_files:.desktop.in=.desktop): share/glib-2.0/schemas/gschemas.compiled
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 gsettings_ENUM_FILES = src/setting.h
 gsettings_ENUM_NAMESPACE = org.gnome.EasyTAG
 gsettings_SCHEMAS = data/org.gnome.EasyTAG.gschema.xml
-data/org.gnome.EasyTAG.gschema.valid: data/.dstamp
 @GSETTINGS_RULES@
 
 if ENABLE_MAN
@@ -589,7 +588,6 @@ DISTCLEANFILES = \
 check-local: test
 clean-local: clean-local-dstamp
 clean-local-dstamp:
-	-rm -f data/.dstamp
 	-rm -f tests/.dstamp
 
 @GENERATE_CHANGELOG_RULES@
