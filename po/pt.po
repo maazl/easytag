@@ -136,14 +136,13 @@ msgstr "Título"
 
 #: ../data/browser.ui.h:13 ../data/preferences_dialog.ui.h:83
 #: ../data/scan_dialog.ui.h:69
-#, fuzzy
 msgid "Version"
-msgstr "Versão:"
+msgstr "Versão"
 
 #: ../data/browser.ui.h:14 ../data/menus.ui.h:91
 #: ../data/preferences_dialog.ui.h:18 ../data/scan_dialog.ui.h:75
 #: ../data/search_dialog.ui.h:16
-msgid "Album Artist"
+msgid "Album artist"
 msgstr "Artista do álbum"
 
 #: ../data/browser.ui.h:15 ../data/menus.ui.h:93
@@ -453,7 +452,7 @@ msgid "Fill Tags"
 msgstr "Preencher etiquetas"
 
 #: ../data/cddb_dialog.ui.h:41
-msgid "Track Number"
+msgid "Track number"
 msgstr "Número de faixa"
 
 #: ../data/cddb_dialog.ui.h:42
@@ -5083,10 +5082,6 @@ msgstr "Ficheiro Opus"
 #: ../src/tags/wavpack_header.c:137
 msgid "Wavpack File"
 msgstr "Ficheiro WavPack"
-
-#, fuzzy
-#~ msgid "Album artist"
-#~ msgstr "Artista do álbum:"
 
 #, fuzzy
 #~ msgid "%S: album subtitle"

@@ -135,7 +135,7 @@ msgstr "ვერსია:"
 #: ../data/browser.ui.h:14 ../data/menus.ui.h:91
 #: ../data/preferences_dialog.ui.h:18 ../data/scan_dialog.ui.h:75
 #: ../data/search_dialog.ui.h:16
-msgid "Album Artist"
+msgid "Album artist"
 msgstr "ალბომი შემსრულებელი"
 
 #: ../data/browser.ui.h:15 ../data/menus.ui.h:93
@@ -433,7 +433,7 @@ msgid "Fill Tags"
 msgstr "ჭდეების შევსება"
 
 #: ../data/cddb_dialog.ui.h:41
-msgid "Track Number"
+msgid "Track number"
 msgstr "აუდიობილიკის ნომერი"
 
 #: ../data/cddb_dialog.ui.h:42
@@ -4830,6 +4830,3 @@ msgstr ""
 msgid "Wavpack File"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Album artist"
-#~ msgstr "ალბომის შემსრულებელი:"

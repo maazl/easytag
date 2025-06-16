@@ -341,7 +341,7 @@
                                             <object class="GtkTreeViewColumn" id="album_artist_column">
                                                 <property name="clickable">True</property>
                                                 <property name="resizable">True</property>
-                                                <property name="title" translatable="yes">Album Artist</property>
+                                                <property name="title" translatable="yes">Album artist</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="album_artist_renderer"/>
                                                 </child>

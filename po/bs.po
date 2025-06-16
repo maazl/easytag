@@ -145,7 +145,7 @@ msgstr "Izdanje:"
 #: ../data/browser.ui.h:14 ../data/menus.ui.h:91
 #: ../data/preferences_dialog.ui.h:18 ../data/scan_dialog.ui.h:75
 #: ../data/search_dialog.ui.h:16
-msgid "Album Artist"
+msgid "Album artist"
 msgstr "Izvođač albuma"
 
 #: ../data/browser.ui.h:15 ../data/menus.ui.h:93
@@ -452,7 +452,7 @@ msgstr "Popuni oznake"
 
 #: ../data/cddb_dialog.ui.h:41
 #, fuzzy
-msgid "Track Number"
+msgid "Track number"
 msgstr "Ime Trake"
 
 #: ../data/cddb_dialog.ui.h:42
@@ -5073,10 +5073,6 @@ msgstr "Opus datoteka"
 #: ../src/tags/wavpack_header.c:137
 msgid "Wavpack File"
 msgstr "Wavpack Datoteka"
-
-#, fuzzy
-#~ msgid "Album artist"
-#~ msgstr "Izvođač albuma:"
 
 #, fuzzy
 #~ msgid "%S: album subtitle"

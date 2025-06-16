@@ -612,7 +612,7 @@
                                 </child>
                                 <child>
                                     <object class="GtkCheckButton" id="fill_track_check">
-                                        <property name="label" translatable="yes">Track Number</property>
+                                        <property name="label" translatable="yes">Track number</property>
                                         <property name="name">track</property>
                                         <property name="visible">True</property>
                                         <signal name="toggled" handler="update_apply_button_sensitivity" swapped="true"/>

@@ -137,7 +137,7 @@ msgstr "バージョン:"
 #: ../data/browser.ui.h:14 ../data/menus.ui.h:91
 #: ../data/preferences_dialog.ui.h:18 ../data/scan_dialog.ui.h:75
 #: ../data/search_dialog.ui.h:16
-msgid "Album Artist"
+msgid "Album artist"
 msgstr "アルバムアーティスト"
 
 #: ../data/browser.ui.h:15 ../data/menus.ui.h:93
@@ -4907,10 +4907,6 @@ msgstr "Opus ファイル"
 #: ../src/tags/wavpack_header.c:137
 msgid "Wavpack File"
 msgstr "Wavpack ファイル"
-
-#, fuzzy
-#~ msgid "Album artist"
-#~ msgstr "アルバムアーティスト"
 
 #, fuzzy
 #~ msgid "%S: album subtitle"

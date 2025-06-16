@@ -141,7 +141,7 @@ msgstr "버전:"
 #: ../data/browser.ui.h:14 ../data/menus.ui.h:91
 #: ../data/preferences_dialog.ui.h:18 ../data/scan_dialog.ui.h:75
 #: ../data/search_dialog.ui.h:16
-msgid "Album Artist"
+msgid "Album artist"
 msgstr "앨범 음악가"
 
 #: ../data/browser.ui.h:15 ../data/menus.ui.h:93
@@ -445,7 +445,7 @@ msgid "Fill Tags"
 msgstr "태그 채우기"
 
 #: ../data/cddb_dialog.ui.h:41
-msgid "Track Number"
+msgid "Track number"
 msgstr "트랙 번호"
 
 #: ../data/cddb_dialog.ui.h:42
@@ -4954,10 +4954,6 @@ msgstr "Opus 파일"
 #: ../src/tags/wavpack_header.c:137
 msgid "Wavpack File"
 msgstr "Wavpack 파일"
-
-#, fuzzy
-#~ msgid "Album artist"
-#~ msgstr "앨범 음악가:"
 
 #, fuzzy
 #~ msgid "%S: album subtitle"

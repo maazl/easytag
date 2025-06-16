@@ -133,14 +133,13 @@ msgstr "曲名"
 
 #: ../data/browser.ui.h:13 ../data/preferences_dialog.ui.h:83
 #: ../data/scan_dialog.ui.h:69
-#, fuzzy
 msgid "Version"
-msgstr "版本："
+msgstr "版本"
 
 #: ../data/browser.ui.h:14 ../data/menus.ui.h:91
 #: ../data/preferences_dialog.ui.h:18 ../data/scan_dialog.ui.h:75
 #: ../data/search_dialog.ui.h:16
-msgid "Album Artist"
+msgid "Album artist"
 msgstr "專輯演唱者"
 
 #: ../data/browser.ui.h:15 ../data/menus.ui.h:93
@@ -443,7 +442,7 @@ msgid "Fill Tags"
 msgstr "標籤填入"
 
 #: ../data/cddb_dialog.ui.h:41
-msgid "Track Number"
+msgid "Track number"
 msgstr "曲目編號"
 
 #: ../data/cddb_dialog.ui.h:42
@@ -4894,10 +4893,6 @@ msgstr "Opus 檔案"
 #: ../src/tags/wavpack_header.c:137
 msgid "Wavpack File"
 msgstr "Wavpack 檔案"
-
-#, fuzzy
-#~ msgid "Album artist"
-#~ msgstr "專輯演唱者："
 
 #, fuzzy
 #~ msgid "%S: album subtitle"

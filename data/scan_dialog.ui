@@ -576,7 +576,7 @@ Use ‘/’ to make directories. If the first character is ‘/’, it is an abs
                                         </child>
                                         <child>
                                             <object class="GtkCheckButton" id="process_album_artist_check">
-                                                <property name="label" translatable="yes">Album Artist</property>
+                                                <property name="label" translatable="yes">Album artist</property>
                                                 <property name="name">album-artist</property>
                                                 <property name="tooltip-text" translatable="yes">Process album artist field</property>
                                                 <property name="visible">True</property>

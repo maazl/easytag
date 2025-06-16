@@ -143,7 +143,7 @@ msgstr "Version :"
 #: ../data/browser.ui.h:14 ../data/menus.ui.h:91
 #: ../data/preferences_dialog.ui.h:18 ../data/scan_dialog.ui.h:75
 #: ../data/search_dialog.ui.h:16
-msgid "Album Artist"
+msgid "Album artist"
 msgstr "Artista de l'album"
 
 #: ../data/browser.ui.h:15 ../data/menus.ui.h:93
@@ -5173,10 +5173,6 @@ msgstr "Fichièr Opus"
 #: ../src/tags/wavpack_header.c:137
 msgid "Wavpack File"
 msgstr "Fichièr Wavpack"
-
-#, fuzzy
-#~ msgid "Album artist"
-#~ msgstr "Artista de l'album :"
 
 #, fuzzy
 #~ msgid "%S: album subtitle"

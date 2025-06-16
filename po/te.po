@@ -137,7 +137,7 @@ msgstr "రూపాంతరం:"
 #: ../data/browser.ui.h:14 ../data/menus.ui.h:91
 #: ../data/preferences_dialog.ui.h:18 ../data/scan_dialog.ui.h:75
 #: ../data/search_dialog.ui.h:16
-msgid "Album Artist"
+msgid "Album artist"
 msgstr "ఆల్బమ్ కళాకారి"
 
 #: ../data/browser.ui.h:15 ../data/menus.ui.h:93
@@ -4931,10 +4931,6 @@ msgstr "Opus దస్త్రం"
 #: ../src/tags/wavpack_header.c:137
 msgid "Wavpack File"
 msgstr "Wavpack దస్త్రం"
-
-#, fuzzy
-#~ msgid "Album artist"
-#~ msgstr "ఆల్బమ్ కళాకారి:"
 
 #~ msgid "Clear the current selection"
 #~ msgstr "ప్రస్తుత ఎంపికను శుభ్రపరుచు"

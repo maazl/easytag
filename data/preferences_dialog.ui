@@ -174,7 +174,7 @@
 										</child>
 										<child>
 											<object class="GtkCheckButton" id="hide_fields_album_artist_check">
-												<property name="label" translatable="yes">Album Artist</property>
+												<property name="label" translatable="yes">Album artist</property>
 												<property name="name">album-artist</property>
 												<property name="visible">True</property>
 											</object>
@@ -724,7 +724,7 @@
 										</child>
 										<child>
 											<object class="GtkCheckButton" id="split_album_artist_check">
-												<property name="label" translatable="yes">Album Artist</property>
+												<property name="label" translatable="yes">Album artist</property>
 												<property name="name">album-artist</property>
 												<property name="tooltip-text" translatable="yes">Whether to split artist fields in Ogg comments</property>
 												<property name="visible">True</property>

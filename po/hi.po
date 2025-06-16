@@ -123,7 +123,7 @@ msgstr "शीर्षक"
 
 #: ../data/browser.ui.h:11 ../data/scan_dialog.ui.h:60
 #: ../data/search_dialog.ui.h:15
-msgid "Album Artist"
+msgid "Album artist"
 msgstr "एल्बम कलाकार"
 
 #: ../data/browser.ui.h:12 ../data/cddb_dialog.ui.h:40
@@ -389,7 +389,7 @@ msgid "Fill Tags"
 msgstr "टैग भरें"
 
 #: ../data/cddb_dialog.ui.h:41
-msgid "Track Number"
+msgid "Track number"
 msgstr "ट्रैक संख्या"
 
 #: ../data/cddb_dialog.ui.h:42

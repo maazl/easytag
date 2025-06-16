@@ -471,7 +471,7 @@ msgstr "Запълва етикет"
 
 #: ../data/cddb_dialog.ui.h:41
 #, fuzzy
-msgid "Track Number"
+msgid "Track number"
 msgstr "Име на песен"
 
 #: ../data/cddb_dialog.ui.h:42
