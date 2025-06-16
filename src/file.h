@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2022,2024  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2022-2025  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014,2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -189,7 +189,7 @@ public:
 	/// But only persisted file names are updated. Unsaved matches are ignored.
 	bool update_directory_name(const UpdateDirectoyNameArgs& args);
 
-	static gint (*get_comp_func(EtSortMode sort_mode))(const ET_File *ETFile1, const ET_File *ETFile2);
+	static gint (*get_comp_func(EtSortMode sort_order, gboolean desc))(const ET_File *ETFile1, const ET_File *ETFile2);
 	static gint (*get_comp_func(EtBrowserMode browser_mode))(const ET_File *ETFile1, const ET_File *ETFile2);
 };
 

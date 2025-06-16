@@ -147,455 +147,274 @@
                     <attribute name="target">artist</attribute>
                 </item>
             </section>
-            <submenu>
-                <attribute name="label" translatable="yes">Sort List by Tag</attribute>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by title</attribute>
-                        <attribute name="target">ascending-title</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by title</attribute>
-                        <attribute name="target">descending-title</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by version</attribute>
-                        <attribute name="target">ascending-version</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by version</attribute>
-                        <attribute name="target">descending-version</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by subtitle</attribute>
-                        <attribute name="target">ascending-subtitle</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by subtitle</attribute>
-                        <attribute name="target">descending-subtitle</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by artist</attribute>
-                        <attribute name="target">ascending-artist</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by artist</attribute>
-                        <attribute name="target">descending-artist</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by album artist</attribute>
-                        <attribute name="target">ascending-album-artist</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by album artist</attribute>
-                        <attribute name="target">descending-album-artist</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by album</attribute>
-                        <attribute name="target">ascending-album</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by album</attribute>
-                        <attribute name="target">descending-album</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by disc subtitle</attribute>
-                        <attribute name="target">ascending-disc-subtitle</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by disc subtitle</attribute>
-                        <attribute name="target">descending-disc-subtitle</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by track number</attribute>
-                        <attribute name="target">ascending-track-number</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by track number</attribute>
-                        <attribute name="target">descending-track-number</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by disc number</attribute>
-                        <attribute name="target">ascending-disc-number</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by disc number</attribute>
-                        <attribute name="target">descending-disc-number</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by year</attribute>
-                        <attribute name="target">ascending-year</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by year</attribute>
-                        <attribute name="target">descending-year</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by release year</attribute>
-                        <attribute name="target">ascending-release-year</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by release year</attribute>
-                        <attribute name="target">descending-release-year</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by genre</attribute>
-                        <attribute name="target">ascending-genre</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by genre</attribute>
-                        <attribute name="target">descending-genre</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by comment</attribute>
-                        <attribute name="target">ascending-comment</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by comment</attribute>
-                        <attribute name="target">descending-comment</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by composer</attribute>
-                        <attribute name="target">ascending-composer</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by composer</attribute>
-                        <attribute name="target">descending-composer</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by original artist</attribute>
-                        <attribute name="target">ascending-orig-artist</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by original artist</attribute>
-                        <attribute name="target">descending-orig-artist</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by original year</attribute>
-                        <attribute name="target">ascending-orig-year</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by original year</attribute>
-                        <attribute name="target">descending-orig-year</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by copyright</attribute>
-                        <attribute name="target">ascending-copyright</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by copyright</attribute>
-                        <attribute name="target">descending-copyright</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by URL</attribute>
-                        <attribute name="target">ascending-url</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by URL</attribute>
-                        <attribute name="target">descending-url</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by encoder name</attribute>
-                        <attribute name="target">ascending-encoded-by</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by encoder name</attribute>
-                        <attribute name="target">descending-encoded-by</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by ReplayGain</attribute>
-                        <attribute name="target">ascending-replaygain</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by ReplayGain</attribute>
-                        <attribute name="target">descending-replaygain</attribute>
-                    </item>
-                </section>
-            </submenu>
-            <submenu>
-                <attribute name="label" translatable="yes">Sort List by Property</attribute>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by file path</attribute>
-                        <attribute name="target">ascending-filepath</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by file path</attribute>
-                        <attribute name="target">descending-filepath</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by filename</attribute>
-                        <attribute name="target">ascending-filename</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by filename</attribute>
-                        <attribute name="target">descending-filename</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by creation date</attribute>
-                        <attribute name="target">ascending-creation-date</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by creation date</attribute>
-                        <attribute name="target">descending-creation-date</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by file type</attribute>
-                        <attribute name="target">ascending-file-type</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by file type</attribute>
-                        <attribute name="target">descending-file-type</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by file size</attribute>
-                        <attribute name="target">ascending-file-size</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by file size</attribute>
-                        <attribute name="target">descending-file-size</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by duration</attribute>
-                        <attribute name="target">ascending-file-duration</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by duration</attribute>
-                        <attribute name="target">descending-file-duration</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by bit rate</attribute>
-                        <attribute name="target">ascending-file-bitrate</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by bit rate</attribute>
-                        <attribute name="target">descending-file-bitrate</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by sample rate</attribute>
-                        <attribute name="target">ascending-file-samplerate</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by sample rate</attribute>
-                        <attribute name="target">descending-file-samplerate</attribute>
-                    </item>
-                </section>
-            </submenu>
-            <submenu>
-                <attribute name="label" translatable="yes">Visible columns</attribute>
+            <section>
+                <submenu>
+                    <attribute name="label" translatable="yes">Sort List by</attribute>
+                    <section>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Path</attribute>
+                            <attribute name="target">filepath</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Filename</attribute>
+                            <attribute name="target">filename</attribute>
+                        </item>
+                    </section>
+                    <section>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Title</attribute>
+                            <attribute name="target">title</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Version</attribute>
+                            <attribute name="target">version</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Subtitle</attribute>
+                            <attribute name="target">subtitle</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Artist</attribute>
+                            <attribute name="target">artist</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Album artist</attribute>
+                            <attribute name="target">album-artist</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Album</attribute>
+                            <attribute name="target">album</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Disc subtitle</attribute>
+                            <attribute name="target">disc-subtitle</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Disc number</attribute>
+                            <attribute name="target">disc-number</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Track number</attribute>
+                            <attribute name="target">track-number</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Year</attribute>
+                            <attribute name="target">year</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Release year</attribute>
+                            <attribute name="target">release-year</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Genre</attribute>
+                            <attribute name="target">genre</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Comment</attribute>
+                            <attribute name="target">comment</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Composer</attribute>
+                            <attribute name="target">composer</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Original artist</attribute>
+                            <attribute name="target">orig-artist</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Original year</attribute>
+                            <attribute name="target">orig-year</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Copyright</attribute>
+                            <attribute name="target">copyright</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">URL</attribute>
+                            <attribute name="target">url</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Encoded by</attribute>
+                            <attribute name="target">encoded-by</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">ReplayGain</attribute>
+                            <attribute name="target">replaygain</attribute>
+                        </item>
+                    </section>
+                    <section>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Creation date</attribute>
+                            <attribute name="target">creation-date</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">File type</attribute>
+                            <attribute name="target">file-type</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">File size</attribute>
+                            <attribute name="target">file-size</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Duration</attribute>
+                            <attribute name="target">file-duration</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Bit rate</attribute>
+                            <attribute name="target">file-bitrate</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.sort-order</attribute>
+                            <attribute name="label" translatable="yes">Samplerate</attribute>
+                            <attribute name="target">file-samplerate</attribute>
+                        </item>
+                    </section>
+                </submenu>
                 <item>
-                    <attribute name="action">win.visible-columns.filepath</attribute>
-                    <attribute name="label" translatable="yes">Path</attribute>
+                    <attribute name="action">win.sort-descending</attribute>
+                    <attribute name="label" translatable="yes">Sort descending</attribute>
                 </item>
-                <item>
-                    <attribute name="action">win.visible-columns.filename</attribute>
-                    <attribute name="label" translatable="yes">Filename</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.title</attribute>
-                    <attribute name="label" translatable="yes">Title</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.version</attribute>
-                    <attribute name="label" translatable="yes">Version</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.subtitle</attribute>
-                    <attribute name="label" translatable="yes">Subtitle</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.artist</attribute>
-                    <attribute name="label" translatable="yes">Artist</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.album-artist</attribute>
-                    <attribute name="label" translatable="yes">Album Artist</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.album</attribute>
-                    <attribute name="label" translatable="yes">Album</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.disc-subtitle</attribute>
-                    <attribute name="label" translatable="yes">Disc subtitle</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.year</attribute>
-                    <attribute name="label" translatable="yes">Year</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.release-year</attribute>
-                    <attribute name="label" translatable="yes">Release year</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.track-number</attribute>
-                    <attribute name="label" translatable="yes">Track</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.disc-number</attribute>
-                    <attribute name="label" translatable="yes">Disc</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.genre</attribute>
-                    <attribute name="label" translatable="yes">Genre</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.comment</attribute>
-                    <attribute name="label" translatable="yes">Comment</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.composer</attribute>
-                    <attribute name="label" translatable="yes">Composer</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.orig-artist</attribute>
-                    <attribute name="label" translatable="yes">Original Artist</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.orig-year</attribute>
-                    <attribute name="label" translatable="yes">Original year</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.copyright</attribute>
-                    <attribute name="label" translatable="yes">Copyright</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.url</attribute>
-                    <attribute name="label" translatable="yes">URL</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.encoded-by</attribute>
-                    <attribute name="label" translatable="yes">Encoded By</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.file-size</attribute>
-                    <attribute name="label" translatable="yes">File size</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.file-duration</attribute>
-                    <attribute name="label" translatable="yes">Duration</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.file-bitrate</attribute>
-                    <attribute name="label" translatable="yes">Bit rate</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.file-samplerate</attribute>
-                    <attribute name="label" translatable="yes">Samplerate</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.replaygain</attribute>
-                    <attribute name="label" translatable="yes">ReplayGain</attribute>
-                </item>
-            </submenu>
+                <submenu>
+                    <attribute name="label" translatable="yes">Visible columns</attribute>
+                    <section>
+                        <item>
+                            <attribute name="action">win.visible-columns.filepath</attribute>
+                            <attribute name="label" translatable="yes">Path</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.filename</attribute>
+                            <attribute name="label" translatable="yes">Filename</attribute>
+                        </item>
+                    </section>
+                    <section>
+                        <item>
+                            <attribute name="action">win.visible-columns.title</attribute>
+                            <attribute name="label" translatable="yes">Title</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.version</attribute>
+                            <attribute name="label" translatable="yes">Version</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.subtitle</attribute>
+                            <attribute name="label" translatable="yes">Subtitle</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.artist</attribute>
+                            <attribute name="label" translatable="yes">Artist</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.album-artist</attribute>
+                            <attribute name="label" translatable="yes">Album artist</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.album</attribute>
+                            <attribute name="label" translatable="yes">Album</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.disc-subtitle</attribute>
+                            <attribute name="label" translatable="yes">Disc subtitle</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.disc-number</attribute>
+                            <attribute name="label" translatable="yes">Disc number</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.track-number</attribute>
+                            <attribute name="label" translatable="yes">Track number</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.year</attribute>
+                            <attribute name="label" translatable="yes">Year</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.release-year</attribute>
+                            <attribute name="label" translatable="yes">Release year</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.genre</attribute>
+                            <attribute name="label" translatable="yes">Genre</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.comment</attribute>
+                            <attribute name="label" translatable="yes">Comment</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.composer</attribute>
+                            <attribute name="label" translatable="yes">Composer</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.orig-artist</attribute>
+                            <attribute name="label" translatable="yes">Original Artist</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.orig-year</attribute>
+                            <attribute name="label" translatable="yes">Original year</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.copyright</attribute>
+                            <attribute name="label" translatable="yes">Copyright</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.url</attribute>
+                            <attribute name="label" translatable="yes">URL</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.encoded-by</attribute>
+                            <attribute name="label" translatable="yes">Encoded By</attribute>
+                        </item>
+                    </section>
+                    <section>
+                        <item>
+                            <attribute name="action">win.visible-columns.file-size</attribute>
+                            <attribute name="label" translatable="yes">File size</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.file-duration</attribute>
+                            <attribute name="label" translatable="yes">Duration</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.file-bitrate</attribute>
+                            <attribute name="label" translatable="yes">Bit rate</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.file-samplerate</attribute>
+                            <attribute name="label" translatable="yes">Samplerate</attribute>
+                        </item>
+                        <item>
+                            <attribute name="action">win.visible-columns.replaygain</attribute>
+                            <attribute name="label" translatable="yes">ReplayGain</attribute>
+                        </item>
+                    </section>
+                </submenu>
+            </section>
             <section>
                 <item>
                     <attribute name="action">win.log-show</attribute>
@@ -861,453 +680,270 @@
         </section>
         <section>
             <submenu>
-                <attribute name="label" translatable="yes">Sort List by Tag</attribute>
+                <attribute name="label" translatable="yes">Sort List by</attribute>
                 <section>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by title</attribute>
-                        <attribute name="target">ascending-title</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Path</attribute>
+                        <attribute name="target">filepath</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by title</attribute>
-                        <attribute name="target">descending-title</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Filename</attribute>
+                        <attribute name="target">filename</attribute>
                     </item>
                 </section>
                 <section>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by version</attribute>
-                        <attribute name="target">ascending-version</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Title</attribute>
+                        <attribute name="target">title</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by version</attribute>
-                        <attribute name="target">descending-version</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by subtitle</attribute>
-                        <attribute name="target">ascending-subtitle</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Version</attribute>
+                        <attribute name="target">version</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by subtitle</attribute>
-                        <attribute name="target">descending-subtitle</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by artist</attribute>
-                        <attribute name="target">ascending-artist</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Subtitle</attribute>
+                        <attribute name="target">subtitle</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by artist</attribute>
-                        <attribute name="target">descending-artist</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by album artist</attribute>
-                        <attribute name="target">ascending-album-artist</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Artist</attribute>
+                        <attribute name="target">artist</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by album artist</attribute>
-                        <attribute name="target">descending-album-artist</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by album</attribute>
-                        <attribute name="target">ascending-album</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Album artist</attribute>
+                        <attribute name="target">album-artist</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by album</attribute>
-                        <attribute name="target">descending-album</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by disc subtitle</attribute>
-                        <attribute name="target">ascending-disc-subtitle</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Album</attribute>
+                        <attribute name="target">album</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by disc subtitle</attribute>
-                        <attribute name="target">descending-disc-subtitle</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by track number</attribute>
-                        <attribute name="target">ascending-track-number</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Disc subtitle</attribute>
+                        <attribute name="target">disc-subtitle</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by track number</attribute>
-                        <attribute name="target">descending-track-number</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by disc number</attribute>
-                        <attribute name="target">ascending-disc-number</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Disc number</attribute>
+                        <attribute name="target">disc-number</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by disc number</attribute>
-                        <attribute name="target">descending-disc-number</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by year</attribute>
-                        <attribute name="target">ascending-year</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Track number</attribute>
+                        <attribute name="target">track-number</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by year</attribute>
-                        <attribute name="target">descending-year</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Year</attribute>
+                        <attribute name="target">year</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Release year</attribute>
+                        <attribute name="target">release-year</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Genre</attribute>
+                        <attribute name="target">genre</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Comment</attribute>
+                        <attribute name="target">comment</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Composer</attribute>
+                        <attribute name="target">composer</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Original artist</attribute>
+                        <attribute name="target">orig-artist</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Original year</attribute>
+                        <attribute name="target">orig-year</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Copyright</attribute>
+                        <attribute name="target">copyright</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">URL</attribute>
+                        <attribute name="target">url</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Encoded by</attribute>
+                        <attribute name="target">encoded-by</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">ReplayGain</attribute>
+                        <attribute name="target">replaygain</attribute>
                     </item>
                 </section>
                 <section>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by release year</attribute>
-                        <attribute name="target">ascending-release-year</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Creation date</attribute>
+                        <attribute name="target">creation-date</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by release year</attribute>
-                        <attribute name="target">descending-release-year</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by genre</attribute>
-                        <attribute name="target">ascending-genre</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">File type</attribute>
+                        <attribute name="target">file-type</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by genre</attribute>
-                        <attribute name="target">descending-genre</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by comment</attribute>
-                        <attribute name="target">ascending-comment</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">File size</attribute>
+                        <attribute name="target">file-size</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by comment</attribute>
-                        <attribute name="target">descending-comment</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by composer</attribute>
-                        <attribute name="target">ascending-composer</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Duration</attribute>
+                        <attribute name="target">file-duration</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by composer</attribute>
-                        <attribute name="target">descending-composer</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by original artist</attribute>
-                        <attribute name="target">ascending-orig-artist</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Bit rate</attribute>
+                        <attribute name="target">file-bitrate</attribute>
                     </item>
                     <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by original artist</attribute>
-                        <attribute name="target">descending-orig-artist</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by original year</attribute>
-                        <attribute name="target">ascending-orig-year</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by original year</attribute>
-                        <attribute name="target">descending-orig-year</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by copyright</attribute>
-                        <attribute name="target">ascending-copyright</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by copyright</attribute>
-                        <attribute name="target">descending-copyright</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by URL</attribute>
-                        <attribute name="target">ascending-url</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by URL</attribute>
-                        <attribute name="target">descending-url</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by encoder name</attribute>
-                        <attribute name="target">ascending-encoded-by</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by encoder name</attribute>
-                        <attribute name="target">descending-encoded-by</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by ReplayGain</attribute>
-                        <attribute name="target">ascending-replaygain</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by ReplayGain</attribute>
-                        <attribute name="target">descending-replaygain</attribute>
+                        <attribute name="action">win.sort-order</attribute>
+                        <attribute name="label" translatable="yes">Samplerate</attribute>
+                        <attribute name="target">file-samplerate</attribute>
                     </item>
                 </section>
             </submenu>
-            <submenu>
-                <attribute name="label" translatable="yes">Sort List by Property</attribute>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by file path</attribute>
-                        <attribute name="target">ascending-filepath</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by file path</attribute>
-                        <attribute name="target">descending-filepath</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by filename</attribute>
-                        <attribute name="target">ascending-filename</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by filename</attribute>
-                        <attribute name="target">descending-filename</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by creation date</attribute>
-                        <attribute name="target">ascending-creation-date</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by creation date</attribute>
-                        <attribute name="target">descending-creation-date</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by file type</attribute>
-                        <attribute name="target">ascending-file-type</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by file type</attribute>
-                        <attribute name="target">descending-file-type</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by file size</attribute>
-                        <attribute name="target">ascending-file-size</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by file size</attribute>
-                        <attribute name="target">descending-file-size</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by duration</attribute>
-                        <attribute name="target">ascending-file-duration</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by duration</attribute>
-                        <attribute name="target">descending-file-duration</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by bit rate</attribute>
-                        <attribute name="target">ascending-file-bitrate</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by bit rate</attribute>
-                        <attribute name="target">descending-file-bitrate</attribute>
-                    </item>
-                </section>
-                <section>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Ascending by sample rate</attribute>
-                        <attribute name="target">ascending-file-samplerate</attribute>
-                    </item>
-                    <item>
-                        <attribute name="action">win.sort-mode</attribute>
-                        <attribute name="label" translatable="yes">Descending by sample rate</attribute>
-                        <attribute name="target">descending-file-samplerate</attribute>
-                    </item>
-                </section>
-            </submenu>
+            <item>
+                <attribute name="action">win.sort-descending</attribute>
+                <attribute name="label" translatable="yes">Sort descending</attribute>
+            </item>
             <submenu>
                 <attribute name="label" translatable="yes">Visible columns</attribute>
-                <item>
-                    <attribute name="action">win.visible-columns.filepath</attribute>
-                    <attribute name="label" translatable="yes">Path</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.filename</attribute>
-                    <attribute name="label" translatable="yes">Filename</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.title</attribute>
-                    <attribute name="label" translatable="yes">Title</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.version</attribute>
-                    <attribute name="label" translatable="yes">Version</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.subtitle</attribute>
-                    <attribute name="label" translatable="yes">Subtitle</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.artist</attribute>
-                    <attribute name="label" translatable="yes">Artist</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.album-artist</attribute>
-                    <attribute name="label" translatable="yes">Album Artist</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.album</attribute>
-                    <attribute name="label" translatable="yes">Album</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.disc-subtitle</attribute>
-                    <attribute name="label" translatable="yes">Disc subtitle</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.year</attribute>
-                    <attribute name="label" translatable="yes">Year</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.release-year</attribute>
-                    <attribute name="label" translatable="yes">Release year</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.track-number</attribute>
-                    <attribute name="label" translatable="yes">Track</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.disc-number</attribute>
-                    <attribute name="label" translatable="yes">Disc</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.genre</attribute>
-                    <attribute name="label" translatable="yes">Genre</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.comment</attribute>
-                    <attribute name="label" translatable="yes">Comment</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.composer</attribute>
-                    <attribute name="label" translatable="yes">Composer</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.orig-artist</attribute>
-                    <attribute name="label" translatable="yes">Original Artist</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.orig-year</attribute>
-                    <attribute name="label" translatable="yes">Original year</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.copyright</attribute>
-                    <attribute name="label" translatable="yes">Copyright</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.url</attribute>
-                    <attribute name="label" translatable="yes">URL</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.encoded-by</attribute>
-                    <attribute name="label" translatable="yes">Encoded By</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.file-size</attribute>
-                    <attribute name="label" translatable="yes">File size</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.file-duration</attribute>
-                    <attribute name="label" translatable="yes">Duration</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.file-bitrate</attribute>
-                    <attribute name="label" translatable="yes">Bit rate</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.file-samplerate</attribute>
-                    <attribute name="label" translatable="yes">Samplerate</attribute>
-                </item>
-                <item>
-                    <attribute name="action">win.visible-columns.replaygain</attribute>
-                    <attribute name="label" translatable="yes">ReplayGain</attribute>
-                </item>
+                <section>
+                    <item>
+                        <attribute name="action">win.visible-columns.filepath</attribute>
+                        <attribute name="label" translatable="yes">Path</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.filename</attribute>
+                        <attribute name="label" translatable="yes">Filename</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.visible-columns.title</attribute>
+                        <attribute name="label" translatable="yes">Title</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.version</attribute>
+                        <attribute name="label" translatable="yes">Version</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.subtitle</attribute>
+                        <attribute name="label" translatable="yes">Subtitle</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.artist</attribute>
+                        <attribute name="label" translatable="yes">Artist</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.album-artist</attribute>
+                        <attribute name="label" translatable="yes">Album artist</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.album</attribute>
+                        <attribute name="label" translatable="yes">Album</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.disc-subtitle</attribute>
+                        <attribute name="label" translatable="yes">Disc subtitle</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.disc-number</attribute>
+                        <attribute name="label" translatable="yes">Disc number</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.track-number</attribute>
+                        <attribute name="label" translatable="yes">Track number</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.year</attribute>
+                        <attribute name="label" translatable="yes">Year</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.release-year</attribute>
+                        <attribute name="label" translatable="yes">Release year</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.genre</attribute>
+                        <attribute name="label" translatable="yes">Genre</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.comment</attribute>
+                        <attribute name="label" translatable="yes">Comment</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.composer</attribute>
+                        <attribute name="label" translatable="yes">Composer</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.orig-artist</attribute>
+                        <attribute name="label" translatable="yes">Original Artist</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.orig-year</attribute>
+                        <attribute name="label" translatable="yes">Original year</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.copyright</attribute>
+                        <attribute name="label" translatable="yes">Copyright</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.url</attribute>
+                        <attribute name="label" translatable="yes">URL</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.encoded-by</attribute>
+                        <attribute name="label" translatable="yes">Encoded By</attribute>
+                    </item>
+                </section>
+                <section>
+                    <item>
+                        <attribute name="action">win.visible-columns.file-size</attribute>
+                        <attribute name="label" translatable="yes">File size</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.file-duration</attribute>
+                        <attribute name="label" translatable="yes">Duration</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.file-bitrate</attribute>
+                        <attribute name="label" translatable="yes">Bit rate</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.file-samplerate</attribute>
+                        <attribute name="label" translatable="yes">Samplerate</attribute>
+                    </item>
+                    <item>
+                        <attribute name="action">win.visible-columns.replaygain</attribute>
+                        <attribute name="label" translatable="yes">ReplayGain</attribute>
+                    </item>
+                </section>
             </submenu>
         </section>
     </menu>

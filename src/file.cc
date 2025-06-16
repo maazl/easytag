@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2022,2024  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2022-2025  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014,2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -314,121 +314,121 @@ static gint CmpRev(const ET_File *file1, const ET_File *file2)
 /*
  * Get sort function by sort mode.
  */
-gint (*ET_File::get_comp_func(EtSortMode sort_mode))(const ET_File *ETFile1, const ET_File *ETFile2)
+gint (*ET_File::get_comp_func(EtSortMode sort_order, gboolean desc))(const ET_File *ETFile1, const ET_File *ETFile2)
 {
-	switch (sort_mode)
+	switch (desc ? ~sort_order : sort_order)
 	{
-	case ET_SORT_MODE_ASCENDING_FILEPATH:
+	case ET_SORT_MODE_FILEPATH:
 		return CmpFilepath;
-	case ET_SORT_MODE_DESCENDING_FILEPATH:
+	case ~ET_SORT_MODE_FILEPATH:
 		return CmpRev<CmpFilepath>;
-	case ET_SORT_MODE_ASCENDING_FILENAME:
+	case ET_SORT_MODE_FILENAME:
 		return CmpFilename;
-	case ET_SORT_MODE_DESCENDING_FILENAME:
+	case ~ET_SORT_MODE_FILENAME:
 		return CmpRev<CmpFilename>;
-	case ET_SORT_MODE_ASCENDING_TITLE:
+	case ET_SORT_MODE_TITLE:
 		return CmpTagString<&File_Tag::title, CmpFilepath>;
-	case ET_SORT_MODE_DESCENDING_TITLE:
+	case ~ET_SORT_MODE_TITLE:
 		return CmpRev<CmpTagString<&File_Tag::title, CmpFilepath>>;
-	case ET_SORT_MODE_ASCENDING_VERSION:
+	case ET_SORT_MODE_VERSION:
 		return CmpTagString<&File_Tag::version, CmpFilepath>;
-	case ET_SORT_MODE_DESCENDING_VERSION:
+	case ~ET_SORT_MODE_VERSION:
 		return CmpRev<CmpTagString<&File_Tag::version, CmpFilepath>>;
-	case ET_SORT_MODE_ASCENDING_SUBTITLE:
+	case ET_SORT_MODE_SUBTITLE:
 		return CmpTagString<&File_Tag::subtitle, CmpDiscNumber>;
-	case ET_SORT_MODE_DESCENDING_SUBTITLE:
+	case ~ET_SORT_MODE_SUBTITLE:
 		return CmpRev<CmpTagString<&File_Tag::subtitle, CmpDiscNumber>>;
-	case ET_SORT_MODE_ASCENDING_ARTIST:
+	case ET_SORT_MODE_ARTIST:
 		return CmpTagString<&File_Tag::artist, CmpFilepath>;
-	case ET_SORT_MODE_DESCENDING_ARTIST:
+	case ~ET_SORT_MODE_ARTIST:
 		return CmpRev<CmpTagString<&File_Tag::artist, CmpFilepath>>;
-	case ET_SORT_MODE_ASCENDING_ALBUM_ARTIST:
+	case ET_SORT_MODE_ALBUM_ARTIST:
 		return CmpTagString<&File_Tag::album_artist, CmpDiscNumber>;
-	case ET_SORT_MODE_DESCENDING_ALBUM_ARTIST:
+	case ~ET_SORT_MODE_ALBUM_ARTIST:
 		return CmpRev<CmpTagString<&File_Tag::album_artist, CmpDiscNumber>>;
-	case ET_SORT_MODE_ASCENDING_ALBUM:
+	case ET_SORT_MODE_ALBUM:
 		return CmpTagString<&File_Tag::album, CmpDiscNumber>;
-	case ET_SORT_MODE_DESCENDING_ALBUM:
+	case ~ET_SORT_MODE_ALBUM:
 		return CmpRev<CmpTagString<&File_Tag::album, CmpDiscNumber>>;
-	case ET_SORT_MODE_ASCENDING_DISC_SUBTITLE:
+	case ET_SORT_MODE_DISC_SUBTITLE:
 		return CmpTagString<&File_Tag::disc_subtitle, CmpDiscNumber>;
-	case ET_SORT_MODE_DESCENDING_DISC_SUBTITLE:
+	case ~ET_SORT_MODE_DISC_SUBTITLE:
 		return CmpRev<CmpTagString<&File_Tag::disc_subtitle, CmpDiscNumber>>;
-	case ET_SORT_MODE_ASCENDING_YEAR:
+	case ET_SORT_MODE_YEAR:
 		return CmpTagInt<&File_Tag::year>;
-	case ET_SORT_MODE_DESCENDING_YEAR:
+	case ~ET_SORT_MODE_YEAR:
 		return CmpRev<CmpTagInt<&File_Tag::year>>;
-	case ET_SORT_MODE_ASCENDING_RELEASE_YEAR:
+	case ET_SORT_MODE_RELEASE_YEAR:
 		return CmpTagInt<&File_Tag::release_year>;
-	case ET_SORT_MODE_DESCENDING_RELEASE_YEAR:
+	case ~ET_SORT_MODE_RELEASE_YEAR:
 		return CmpRev<CmpTagInt<&File_Tag::release_year>>;
-	case ET_SORT_MODE_ASCENDING_DISC_NUMBER:
+	case ET_SORT_MODE_DISC_NUMBER:
 		return CmpDiscNumber;
-	case ET_SORT_MODE_DESCENDING_DISC_NUMBER:
+	case ~ET_SORT_MODE_DISC_NUMBER:
 		return CmpRev<CmpDiscNumber>;
-	case ET_SORT_MODE_ASCENDING_TRACK_NUMBER:
+	case ET_SORT_MODE_TRACK_NUMBER:
 		return CmpTrackNumber;
-	case ET_SORT_MODE_DESCENDING_TRACK_NUMBER:
+	case ~ET_SORT_MODE_TRACK_NUMBER:
 		return CmpRev<CmpTrackNumber>;
-	case ET_SORT_MODE_ASCENDING_GENRE:
+	case ET_SORT_MODE_GENRE:
 		return CmpTagString<&File_Tag::genre, CmpFilepath>;
-	case ET_SORT_MODE_DESCENDING_GENRE:
+	case ~ET_SORT_MODE_GENRE:
 		return CmpRev<CmpTagString<&File_Tag::genre, CmpFilepath>>;
-	case ET_SORT_MODE_ASCENDING_COMMENT:
+	case ET_SORT_MODE_COMMENT:
 		return CmpTagString<&File_Tag::comment, CmpFilepath>;
-	case ET_SORT_MODE_DESCENDING_COMMENT:
+	case ~ET_SORT_MODE_COMMENT:
 		return CmpRev<CmpTagString<&File_Tag::comment, CmpFilepath>>;
-	case ET_SORT_MODE_ASCENDING_COMPOSER:
+	case ET_SORT_MODE_COMPOSER:
 		return CmpTagString<&File_Tag::composer, CmpFilepath>;
-	case ET_SORT_MODE_DESCENDING_COMPOSER:
+	case ~ET_SORT_MODE_COMPOSER:
 		return CmpRev<CmpTagString<&File_Tag::composer, CmpFilepath>>;
-	case ET_SORT_MODE_ASCENDING_ORIG_ARTIST:
+	case ET_SORT_MODE_ORIG_ARTIST:
 		return CmpTagString<&File_Tag::orig_artist, CmpFilepath>;
-	case ET_SORT_MODE_DESCENDING_ORIG_ARTIST:
+	case ~ET_SORT_MODE_ORIG_ARTIST:
 		return CmpRev<CmpTagString<&File_Tag::orig_artist, CmpFilepath>>;
-	case ET_SORT_MODE_ASCENDING_ORIG_YEAR:
+	case ET_SORT_MODE_ORIG_YEAR:
 		return CmpTagInt<&File_Tag::orig_year>;
-	case ET_SORT_MODE_DESCENDING_ORIG_YEAR:
+	case ~ET_SORT_MODE_ORIG_YEAR:
 		return CmpRev<CmpTagInt<&File_Tag::orig_year>>;
-	case ET_SORT_MODE_ASCENDING_COPYRIGHT:
+	case ET_SORT_MODE_COPYRIGHT:
 		return CmpTagString<&File_Tag::copyright, CmpFilepath>;
-	case ET_SORT_MODE_DESCENDING_COPYRIGHT:
+	case ~ET_SORT_MODE_COPYRIGHT:
 		return CmpRev<CmpTagString<&File_Tag::copyright, CmpFilepath>>;
-	case ET_SORT_MODE_ASCENDING_URL:
+	case ET_SORT_MODE_URL:
 		return CmpTagString<&File_Tag::url, CmpFilepath>;
-	case ET_SORT_MODE_DESCENDING_URL:
+	case ~ET_SORT_MODE_URL:
 		return CmpRev<CmpTagString<&File_Tag::url, CmpFilepath>>;
-	case ET_SORT_MODE_ASCENDING_ENCODED_BY:
+	case ET_SORT_MODE_ENCODED_BY:
 		return CmpTagString<&File_Tag::encoded_by, CmpFilepath>;
-	case ET_SORT_MODE_DESCENDING_ENCODED_BY:
+	case ~ET_SORT_MODE_ENCODED_BY:
 		return CmpRev<CmpTagString<&File_Tag::encoded_by, CmpFilepath>>;
-	case ET_SORT_MODE_ASCENDING_CREATION_DATE:
+	case ET_SORT_MODE_CREATION_DATE:
 		return CmpCreationDate;
-	case ET_SORT_MODE_DESCENDING_CREATION_DATE:
+	case ~ET_SORT_MODE_CREATION_DATE:
 		return CmpRev<CmpCreationDate>;
-	case ET_SORT_MODE_ASCENDING_FILE_TYPE:
+	case ET_SORT_MODE_FILE_TYPE:
 		return CmpFileType;
-	case ET_SORT_MODE_DESCENDING_FILE_TYPE:
+	case ~ET_SORT_MODE_FILE_TYPE:
 		return CmpRev<CmpFileType>;
-	case ET_SORT_MODE_ASCENDING_FILE_SIZE:
+	case ET_SORT_MODE_FILE_SIZE:
 		return CmpFileSize;
-	case ET_SORT_MODE_DESCENDING_FILE_SIZE:
+	case ~ET_SORT_MODE_FILE_SIZE:
 		return CmpRev<CmpFileSize>;
-	case ET_SORT_MODE_ASCENDING_FILE_DURATION:
+	case ET_SORT_MODE_FILE_DURATION:
 		return CmpInfoNum<double,&ET_File_Info::duration>;
-	case ET_SORT_MODE_DESCENDING_FILE_DURATION:
+	case ~ET_SORT_MODE_FILE_DURATION:
 		return CmpRev<CmpInfoNum<double,&ET_File_Info::duration>>;
-	case ET_SORT_MODE_ASCENDING_FILE_BITRATE:
+	case ET_SORT_MODE_FILE_BITRATE:
 		return CmpInfoNum<gint,&ET_File_Info::bitrate>;
-	case ET_SORT_MODE_DESCENDING_FILE_BITRATE:
+	case ~ET_SORT_MODE_FILE_BITRATE:
 		return CmpRev<CmpInfoNum<gint,&ET_File_Info::bitrate>>;
-	case ET_SORT_MODE_ASCENDING_FILE_SAMPLERATE:
+	case ET_SORT_MODE_FILE_SAMPLERATE:
 		return CmpInfoNum<gint,&ET_File_Info::samplerate>;
-	case ET_SORT_MODE_DESCENDING_FILE_SAMPLERATE:
+	case ~ET_SORT_MODE_FILE_SAMPLERATE:
 		return CmpRev<CmpInfoNum<gint,&ET_File_Info::samplerate>>;
-	case ET_SORT_MODE_ASCENDING_REPLAYGAIN:
+	case ET_SORT_MODE_REPLAYGAIN:
 		return CmpTagFloat<&File_Tag::track_gain>;
-	case ET_SORT_MODE_DESCENDING_REPLAYGAIN:
+	case ~ET_SORT_MODE_REPLAYGAIN:
 		return CmpRev<CmpTagFloat<&File_Tag::track_gain>>;
 	default:
 		return nullptr;

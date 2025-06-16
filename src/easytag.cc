@@ -1,4 +1,5 @@
 /* EasyTAG - Tag editor for audio files
+ * Copyright (C) 2024-2025  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014-2015  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -682,12 +683,12 @@ ReplayGainWorker::ReplayGainWorker(vector<xPtr<ET_File>>&& files)
 	case ET_REPLAYGAIN_GROUPBY_DISC:
 		CompareLevel = 2;
 	case ET_REPLAYGAIN_GROUPBY_ALBUM:
-		mode = ET_SORT_MODE_ASCENDING_ALBUM;
+		mode = ET_SORT_MODE_ALBUM;
 		goto sort;
 	case ET_REPLAYGAIN_GROUPBY_FILEPATH:
-		mode = ET_SORT_MODE_ASCENDING_FILEPATH;
+		mode = ET_SORT_MODE_FILEPATH;
 	sort:
-		AlbumComparer = ET_File::get_comp_func(mode);
+		AlbumComparer = ET_File::get_comp_func(mode, FALSE);
 	default:;
 	}
 

@@ -163,10 +163,15 @@
       <default>true</default>
     </key>
 
-    <key name="sort-mode" enum="org.gnome.EasyTAG.EtSortMode">
-      <summary>How to sort audio files in the file list</summary>
-      <description>Sort files in ascending or descending order for the selected type</description>
-      <default>'ascending-track-number'</default>
+    <key name="sort-order" enum="org.gnome.EasyTAG.EtSortMode">
+      <summary>Sort order of audio files in the file list</summary>
+      <description>Primary sort column of audio files. There may be implicit secondary columns included in order to make the sort order deterministic.</description>
+      <default>'track-number'</default>
+    </key>
+
+    <key name="sort-descending" type="b">
+      <summary>Sort audio files in the file list in descending order.</summary>
+      <default>false</default>
     </key>
 
     <key name="visible-columns" flags="org.gnome.EasyTAG.EtColumn">

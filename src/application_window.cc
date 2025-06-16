@@ -1008,8 +1008,8 @@ static const GActionEntry actions[] =
 	{ "scanner", NULL, NULL, "false", on_scanner_change },
 	/* { "scan-mode", on_action_radio, NULL, "false", on_scan_mode_change },
 	 * Created from GSetting. */
-	/* { "sort-mode", on_action_radio, "s", "'ascending-filename'",
-	 * on_sort_mode_change }, Created from GSetting */
+	/* { "sort-order", on_action_radio, "s", "'filepath'",
+	 * on_sort_order_change }, Created from GSetting */
 	{ "file-artist-view", NULL, "s", "'file'", on_file_artist_view_change },
 	{ "collapse-tree", on_browser<&EtBrowser::collapse> },
 	/* { "show-log", on_show_log }, Created from GSetting */
@@ -1146,7 +1146,10 @@ et_application_window_init (EtApplicationWindow *self)
     action = g_settings_create_action (MainSettings, "scan-mode");
     g_action_map_add_action (G_ACTION_MAP (self), action);
     g_object_unref (action);
-    action = g_settings_create_action (MainSettings, "sort-mode");
+    action = g_settings_create_action (MainSettings, "sort-order");
+    g_action_map_add_action (G_ACTION_MAP (self), action);
+    g_object_unref (action);
+    action = g_settings_create_action (MainSettings, "sort-descending");
     g_action_map_add_action (G_ACTION_MAP (self), action);
     g_object_unref (action);
 

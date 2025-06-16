@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2022-2024  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2022-2025  Marcel Müller <github@maazl.de>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -132,36 +132,36 @@ public:
 
 // Static renderer instances
 const GenericColumnRenderer
-	R_Path(ET_SORT_MODE_ASCENDING_FILEPATH, [](const File_Name* file_name) { return string(file_name->path()); }),
-	R_File(ET_SORT_MODE_ASCENDING_FILENAME, [](const File_Name* file_name) { return string(file_name->file()); });
+	R_Path(ET_SORT_MODE_FILEPATH, [](const File_Name* file_name) { return string(file_name->path()); }),
+	R_File(ET_SORT_MODE_FILENAME, [](const File_Name* file_name) { return string(file_name->file()); });
 const TagColumnRenderer
-	R_Title(ET_SORT_MODE_ASCENDING_TITLE, &File_Tag::title),
-	R_Version(ET_SORT_MODE_ASCENDING_VERSION, &File_Tag::version),
-	R_Subtitle(ET_SORT_MODE_ASCENDING_SUBTITLE, &File_Tag::subtitle),
-	R_Artist(ET_SORT_MODE_ASCENDING_ARTIST, &File_Tag::artist),
-	R_AlbumArtist(ET_SORT_MODE_ASCENDING_ALBUM_ARTIST, &File_Tag::album_artist),
-	R_Album(ET_SORT_MODE_ASCENDING_ALBUM, &File_Tag::album),
-	R_DiscSubtitle(ET_SORT_MODE_ASCENDING_DISC_SUBTITLE, &File_Tag::disc_subtitle),
-	R_Year(ET_SORT_MODE_ASCENDING_YEAR, &File_Tag::year),
-	R_ReleaseYear(ET_SORT_MODE_ASCENDING_RELEASE_YEAR, &File_Tag::release_year);
+	R_Title(ET_SORT_MODE_TITLE, &File_Tag::title),
+	R_Version(ET_SORT_MODE_VERSION, &File_Tag::version),
+	R_Subtitle(ET_SORT_MODE_SUBTITLE, &File_Tag::subtitle),
+	R_Artist(ET_SORT_MODE_ARTIST, &File_Tag::artist),
+	R_AlbumArtist(ET_SORT_MODE_ALBUM_ARTIST, &File_Tag::album_artist),
+	R_Album(ET_SORT_MODE_ALBUM, &File_Tag::album),
+	R_DiscSubtitle(ET_SORT_MODE_DISC_SUBTITLE, &File_Tag::disc_subtitle),
+	R_Year(ET_SORT_MODE_YEAR, &File_Tag::year),
+	R_ReleaseYear(ET_SORT_MODE_RELEASE_YEAR, &File_Tag::release_year);
 const TagPartColumnRenderer
-	R_DiscNumber(ET_SORT_MODE_ASCENDING_DISC_NUMBER, &File_Tag::disc_number, &File_Tag::disc_total),
-	R_Track_Number(ET_SORT_MODE_ASCENDING_TRACK_NUMBER, &File_Tag::track, &File_Tag::track_total);
+	R_DiscNumber(ET_SORT_MODE_DISC_NUMBER, &File_Tag::disc_number, &File_Tag::disc_total),
+	R_Track_Number(ET_SORT_MODE_TRACK_NUMBER, &File_Tag::track, &File_Tag::track_total);
 const TagColumnRenderer
-	R_Genre(ET_SORT_MODE_ASCENDING_GENRE, &File_Tag::genre),
-	R_Comment(ET_SORT_MODE_ASCENDING_COMMENT, &File_Tag::comment),
-	R_Composer(ET_SORT_MODE_ASCENDING_COMPOSER, &File_Tag::composer),
-	R_OrigArtist(ET_SORT_MODE_ASCENDING_ORIG_ARTIST, &File_Tag::orig_artist),
-	R_OrigYear(ET_SORT_MODE_ASCENDING_ORIG_YEAR, &File_Tag::orig_year),
-	R_Copyright(ET_SORT_MODE_ASCENDING_COPYRIGHT, &File_Tag::copyright),
-	R_Url(ET_SORT_MODE_ASCENDING_URL, &File_Tag::url),
-	R_EncodedBy(ET_SORT_MODE_ASCENDING_ENCODED_BY, &File_Tag::encoded_by);
-const FileSizeColumnRenderer R_FileSize(ET_SORT_MODE_ASCENDING_FILE_SIZE);
-const FileDurationColumnRenderer R_FileDuration(ET_SORT_MODE_ASCENDING_FILE_DURATION);
-const BitrateColumnRenderer	R_Bitrate(ET_SORT_MODE_ASCENDING_FILE_BITRATE);
+	R_Genre(ET_SORT_MODE_GENRE, &File_Tag::genre),
+	R_Comment(ET_SORT_MODE_COMMENT, &File_Tag::comment),
+	R_Composer(ET_SORT_MODE_COMPOSER, &File_Tag::composer),
+	R_OrigArtist(ET_SORT_MODE_ORIG_ARTIST, &File_Tag::orig_artist),
+	R_OrigYear(ET_SORT_MODE_ORIG_YEAR, &File_Tag::orig_year),
+	R_Copyright(ET_SORT_MODE_COPYRIGHT, &File_Tag::copyright),
+	R_Url(ET_SORT_MODE_URL, &File_Tag::url),
+	R_EncodedBy(ET_SORT_MODE_ENCODED_BY, &File_Tag::encoded_by);
+const FileSizeColumnRenderer R_FileSize(ET_SORT_MODE_FILE_SIZE);
+const FileDurationColumnRenderer R_FileDuration(ET_SORT_MODE_FILE_DURATION);
+const BitrateColumnRenderer	R_Bitrate(ET_SORT_MODE_FILE_BITRATE);
 const FileInfoIntColumnRenderer
-	R_Samplerate(ET_SORT_MODE_ASCENDING_FILE_SAMPLERATE, &ET_File_Info::samplerate);
-const TagReplaygainRenderer R_Replaygain(ET_SORT_MODE_ASCENDING_REPLAYGAIN);
+	R_Samplerate(ET_SORT_MODE_FILE_SAMPLERATE, &ET_File_Info::samplerate);
+const TagReplaygainRenderer R_Replaygain(ET_SORT_MODE_REPLAYGAIN);
 
 string GenericColumnRenderer::RenderText(const ET_File* file, bool original) const
 {	return Getter(original ? file->FileNameCur() : file->FileNameNew());
@@ -277,7 +277,7 @@ const FileColumnRenderer* FileColumnRenderer::Get_Renderer(const gchar* column_i
 	if (!Renderers[0].first)
 	{	// first call => initialize and sort
 		for (auto& rdr : Renderers)
-			rdr.first = strchr(g_enum_get_value(ec, rdr.second->Column)->value_nick, '-') + 1;
+			rdr.first = g_enum_get_value(ec, rdr.second->Column)->value_nick;
 		sort(Renderers.begin(), Renderers.end(),
 			[](const itemtype& l, const itemtype& r) { return strcmp(l.first, r.first) < 0; });
 	}

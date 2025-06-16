@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2022  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2022-2025  Marcel Müller <github@maazl.de>
  * Copyright (C) 2013-2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -173,7 +173,7 @@ Search_File (GtkWidget *search_button,
                 continue;
             gchar* normalized = normalize(text.c_str());
             if (strstr(normalized, string_to_search_normalized) != nullptr)
-                match |= 1 << (rdr->Column >> 1);
+                match |= 1 << rdr->Column;
             g_free(normalized);
         }
 
@@ -219,7 +219,7 @@ static void set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkT
 	auto renderer = (const FileColumnRenderer*)data;
 	string text = renderer->RenderText(file);
 	FileColumnRenderer::SetText(GTK_CELL_RENDERER_TEXT(cell),
-		text.c_str(), false, flags & (1 << (renderer->Column >> 1)) ? FileColumnRenderer::HIGHLIGHT : FileColumnRenderer::NORMAL);
+		text.c_str(), false, flags & (1 << renderer->Column) ? FileColumnRenderer::HIGHLIGHT : FileColumnRenderer::NORMAL);
 }
 
 /*

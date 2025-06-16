@@ -68,7 +68,8 @@ typedef struct
     GtkTreeView *file_view;
     GtkWidget *file_menu;
     guint file_selected_handler;
-    EtSortMode file_sort_mode;
+    EtSortMode file_sort_order;
+    guint file_sort_descending_handler;
 
     GtkWidget *album_view;
     GtkWidget *album_menu;
@@ -211,7 +212,7 @@ static GtkTreePath *Find_Child_Node (EtBrowser *self, GtkTreeIter *parent, gchar
 
 static const GIcon* get_gicon_for_path(EtBrowser *self, const gchar *path, EtPathState path_state);
 
-static GtkTreeViewColumn * et_browser_get_column_for_sort_mode (EtBrowser *self, EtSortMode sort_mode);
+static GtkTreeViewColumn * et_browser_get_column_for_sort_order(EtBrowser *self, EtSortMode sort_order);
 
 /* For window to rename a directory */
 static void Destroy_Rename_Directory_Window (EtBrowser *self);
@@ -1239,7 +1240,9 @@ static void set_zebra(GtkTreeModel* model)
 	if (!gtk_tree_model_get_iter_first(model, &iter))
 		return;
 	ET_File* last = nullptr;
-	auto cmp = ET_File::get_comp_func((EtSortMode)g_settings_get_enum(MainSettings, "sort-mode"));
+	auto cmp = ET_File::get_comp_func(
+		(EtSortMode)g_settings_get_enum(MainSettings, "sort-order"),
+		g_settings_get_boolean(MainSettings, "sort-descending"));
 	bool activate_bg_color = false;
 	do
 	{	ET_File *file;
@@ -1832,7 +1835,7 @@ Browser_List_Sort_Func (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 }
 
 /*
- * Refresh the list sorting (call me after sort-mode has changed)
+ * Refresh the list sorting (call me after sort-* has changed)
  */
 static void
 et_browser_refresh_sort (EtBrowser *self)
@@ -1840,7 +1843,9 @@ et_browser_refresh_sort (EtBrowser *self)
 	g_return_if_fail (ET_BROWSER (self));
 	EtBrowserPrivate* priv = et_browser_get_instance_private (self);
 	gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(priv->file_model), 0, Browser_List_Sort_Func,
-		(gpointer)ET_File::get_comp_func((EtSortMode)g_settings_get_enum(MainSettings, "sort-mode")), NULL);
+		(gpointer)ET_File::get_comp_func(
+			(EtSortMode)g_settings_get_enum(MainSettings, "sort-order"),
+			g_settings_get_boolean(MainSettings, "sort-descending")), NULL);
 
 	set_zebra(GTK_TREE_MODEL(priv->file_model));
 }
@@ -2392,20 +2397,18 @@ on_file_tree_button_press_event (GtkWidget *widget,
         gtk_tree_model_get(model, &iter, LIST_FILE_POINTER, &selected, -1);
 
         // matching compare function
-        const gchar* id = gtk_buildable_get_name(GTK_BUILDABLE(column));
-        gchar* nick = g_strconcat("ascending-", id, NULL);
-        nick[strlen(nick) - 7] = 0; // strip "-column"
+        string nick = gtk_buildable_get_name(GTK_BUILDABLE(column));
+        nick = nick.substr(0, nick.length() - 7); // strip "-column"
         // Replace '_' by '-'
-        for (char* cp = nick; *cp; ++cp)
-        	if (*cp == '_')
-        		*cp = '-';
-        GEnumClass *enum_class = (GEnumClass*)g_type_class_ref(ET_TYPE_SORT_MODE);
-        GEnumValue* enum_value = g_enum_get_value_by_nick(enum_class, nick);
+        for (auto& c : nick)
+        	if (c == '_')
+        		c = '-';
+        GEnumClass* enum_class = (GEnumClass*)g_type_class_ref(ET_TYPE_SORT_MODE);
+        GEnumValue* enum_value = g_enum_get_value_by_nick(enum_class, nick.c_str());
         g_type_class_unref(enum_class);
-        g_free(nick);
         if (!enum_value)
             return GDK_EVENT_PROPAGATE;
-        auto cmp = ET_File::get_comp_func((EtSortMode)enum_value->value);
+        auto cmp = ET_File::get_comp_func((EtSortMode)enum_value->value, FALSE);
         if (!cmp)
             return GDK_EVENT_PROPAGATE;
 
@@ -2784,7 +2787,7 @@ static const GIcon* get_gicon_for_path(EtBrowser *self, const gchar *path, EtPat
 	info = g_file_query_info (file, G_FILE_ATTRIBUTE_ACCESS_CAN_READ "," G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE,
 		G_FILE_QUERY_INFO_NONE, NULL, &error);
 	if (info == NULL)
-	{	g_warning(_("Error while querying path information: %s"), error->message);
+	{	g_warning(_("Error while querying path information of '%s': %s"), path, error->message);
 		g_clear_error(&error);
 	} else
 	{	can_read = g_file_info_get_attribute_boolean(info, G_FILE_ATTRIBUTE_ACCESS_CAN_READ);
@@ -3024,35 +3027,29 @@ static void on_visible_columns_changed(EtBrowser *self, const gchar *key, GSetti
 }
 
 static void
-on_sort_mode_changed (EtBrowser *self, const gchar *key, GSettings *settings)
+on_sort_order_changed (EtBrowser *self, const gchar *key, GSettings *settings)
 {
     EtBrowserPrivate *priv;
-    EtSortMode sort_mode;
     GtkTreeViewColumn *column;
 
     priv = et_browser_get_instance_private (self);
 
-    sort_mode = (EtSortMode)g_settings_get_enum (settings, key);
-
     /* If the column to sort is different than the old sorted column. */
-    if (sort_mode / 2 != priv->file_sort_mode / 2)
+    if (strcmp(key, "sort-order") == 0)
     {
-        column = et_browser_get_column_for_sort_mode(self, priv->file_sort_mode);
+        column = et_browser_get_column_for_sort_order(self, priv->file_sort_order);
         if (column != NULL)
             gtk_tree_view_column_set_sort_indicator(column, FALSE);
+        priv->file_sort_order = (EtSortMode)g_settings_get_enum(settings, key);
     }
 
     /* New sort mode is for a column with a visible counterpart. */
-    column = et_browser_get_column_for_sort_mode(self, sort_mode);
+    column = et_browser_get_column_for_sort_order(self, priv->file_sort_order);
     if (column != NULL)
     {
-        /* Even is GTK_SORT_ASCENDING, odd is GTK_SORT_DESCENDING. */
-        gtk_tree_view_column_set_sort_order (column, sort_mode & 1 ? GTK_SORT_DESCENDING : GTK_SORT_ASCENDING);
-        gtk_tree_view_column_set_sort_indicator (column, TRUE);
+        gtk_tree_view_column_set_sort_order(column, g_settings_get_boolean(settings, "sort-descending") ? GTK_SORT_DESCENDING : GTK_SORT_ASCENDING);
+        gtk_tree_view_column_set_sort_indicator(column, TRUE);
     }
-
-    /* Store the new sort mode. */
-    priv->file_sort_mode = sort_mode;
 
     et_browser_refresh_sort (self);
 }
@@ -3145,7 +3142,7 @@ static void set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkT
 	string text = renderer->RenderText(file);
 	bool saved = file->is_saved();
 	bool changed = !saved
-		&& (renderer->Column < ET_SORT_MODE_ASCENDING_CREATION_DATE || renderer->Column >= ET_SORT_MODE_ASCENDING_REPLAYGAIN)
+		&& (renderer->Column < ET_SORT_MODE_CREATION_DATE || renderer->Column >= ET_SORT_MODE_REPLAYGAIN)
 		&& text != renderer->RenderText(file, true);
 	if (changed && text.length() == 0)
 		text = "\xe2\x90\xa0"; // ␠ Symbol for Space
@@ -3251,7 +3248,6 @@ create_browser (EtBrowser *self)
         gtk_tree_view_column_set_cell_data_func(column, renderer, &set_cell_data, (gpointer)rdr, NULL);
 
         // sort action
-        id.insert(0, "ascending-");
         GEnumValue* enum_value = g_enum_get_value_by_nick(enum_class, id.c_str());
         if (enum_value == NULL)
         	g_error("No sort mode with name %s found.", id.c_str());
@@ -3263,10 +3259,11 @@ create_browser (EtBrowser *self)
     g_signal_connect_swapped(MainSettings, "changed::visible-columns", G_CALLBACK(on_visible_columns_changed), self);
     on_visible_columns_changed(self, "visible-columns", MainSettings);
 
-    g_signal_connect_swapped (MainSettings, "changed::sort-mode", G_CALLBACK (on_sort_mode_changed), self);
+    g_signal_connect_swapped(MainSettings, "changed::sort-order", G_CALLBACK(on_sort_order_changed), self);
+    priv->file_sort_descending_handler = g_signal_connect_swapped(MainSettings, "changed::sort-descending", G_CALLBACK(on_sort_order_changed), self);
     // To sort list
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->file_model), 0, GTK_SORT_ASCENDING);
-    on_sort_mode_changed(self, "sort-mode", MainSettings);
+    on_sort_order_changed(self, "sort-order", MainSettings);
 
     priv->file_selected_handler = g_signal_connect_swapped (gtk_tree_view_get_selection (priv->file_view),
                                                             "changed",
@@ -3305,15 +3302,22 @@ create_browser (EtBrowser *self)
 static void
 et_browser_on_column_clicked (GtkTreeViewColumn *column, gpointer data)
 {
-    GEnumValue* ev = (GEnumValue*)data;
-    if (ev == NULL)
-        return;
+	GEnumValue* ev = (GEnumValue*)data;
+	if (ev == NULL)
+		return;
 
-    EtBrowser *self = ET_BROWSER(g_object_get_data(G_OBJECT(column), "browser"));
-    EtBrowserPrivate *priv = et_browser_get_instance_private (self);
-    gint value = ev->value + ((priv->file_sort_mode ^ ev->value) == 0);
-
-    g_settings_set_enum (MainSettings, "sort-mode", value);
+	EtBrowser *self = ET_BROWSER(g_object_get_data(G_OBJECT(column), "browser"));
+	EtBrowserPrivate *priv = et_browser_get_instance_private (self);
+	if (ev->value == priv->file_sort_order)
+		// change direction only
+		g_settings_set_boolean(MainSettings, "sort-descending",
+			!g_settings_get_boolean(MainSettings, "sort-descending"));
+	else
+	{	g_signal_handler_block(MainSettings, priv->file_sort_descending_handler);
+		g_settings_set_boolean(MainSettings, "sort-descending", FALSE);
+		g_signal_handler_unblock(MainSettings, priv->file_sort_descending_handler);
+		g_settings_set_enum(MainSettings, "sort-order", ev->value);
+	}
 }
 
 /*******************************
@@ -4148,24 +4152,23 @@ et_run_program_list_on_response (GtkDialog *dialog, gint response_id,
  * Returns: (transfer none): the tree view column corresponding to @sort_mode
  */
 static GtkTreeViewColumn *
-et_browser_get_column_for_sort_mode(EtBrowser *self, EtSortMode sort_mode)
+et_browser_get_column_for_sort_order(EtBrowser *self, EtSortMode sort_mode)
 {
     EtBrowserPrivate *priv = et_browser_get_instance_private(self);
 
     GEnumValue* ev = g_enum_get_value((GEnumClass*)g_type_class_ref(ET_TYPE_SORT_MODE), sort_mode);
-    /* remove ascending/descending, append "_column", replace '-' by '_' */
-    gchar* column_id = g_strconcat(strchr(ev->value_nick, '-') + 1, "_column", NULL);
-    for (char* cp = column_id; *cp != '_'; ++cp)
-    	if (*cp == '-')
-    		*cp = '_';
+    /* append "_column", replace '-' by '_' */
+    string column_id = string(ev->value_nick) + "_column";
+    for (auto& c : column_id)
+    	if (c == '-')
+    		c = '_';
 
     GtkTreeViewColumn *column;
     gint i = 0;
     while ((column = gtk_tree_view_get_column(priv->file_view, i++)) != NULL)
-    	if (strcmp(gtk_buildable_get_name(GTK_BUILDABLE(column)), column_id) == 0)
+    	if (strcmp(gtk_buildable_get_name(GTK_BUILDABLE(column)), column_id.c_str()) == 0)
     		break;
 
-    g_free(column_id);
     return column;
 }
 
