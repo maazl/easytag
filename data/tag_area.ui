@@ -5,6 +5,11 @@
             <column type="gchararray"/>
         </columns>
     </object>
+    <object class="GtkListStore" id="genre_combo_model2">
+        <columns>
+            <column type="gchararray"/>
+        </columns>
+    </object>
     <object class="GtkListStore" id="images_model">
         <columns>
             <column type="CairoSurface"/>
@@ -335,7 +340,7 @@
                                 <property name="has-entry">True</property>
                                 <property name="model">genre_combo_model</property>
                                 <property name="entry-text-column">0</property>
-                                <property name="wrap-width">2</property>
+                                <property name="wrap-width">4</property>
                             </object>
                             <packing>
                                 <property name="left-attach">1</property>

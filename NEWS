@@ -26,6 +26,7 @@
       characters in file names
     * Support for powerful pattern groups in scanner (see documentation)
     * Configurable multi value separator
+    * Add custom genres
 
     * Several fixes
 

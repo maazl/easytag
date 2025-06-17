@@ -43,6 +43,10 @@
 
 #include "win32/win32dep.h"
 
+#include <vector>
+
+using namespace std;
+
 /* Referenced in the header. */
 GSettings *MainSettings;
 
@@ -813,4 +817,43 @@ et_settings_flags_toggle_set (const GValue *value,
     g_type_class_unref (flags_class);
 
     return g_variant_builder_end (&builder);
+}
+
+gboolean et_settings_strv_text_get (GValue *value, GVariant *variant, gpointer user_data)
+{
+
+	const gchar** values = g_variant_get_strv(variant, NULL);
+	gchar* result = g_strjoinv("\n", (gchar**)values);
+	g_free(values);
+
+	g_value_take_string(value, result);
+	return TRUE;
+}
+
+GVariant* et_settings_strv_text_set (const GValue *value, const GVariantType *expected_type, gpointer user_data)
+{
+	gchar* text = g_value_dup_string(value);
+
+	vector<const gchar*> values;
+	gchar* parse = text;
+	while (true)
+	{	// trim and skip empty lines
+		while (isspace(*parse))
+			++parse;
+		if (!*parse)
+			break;
+		values.emplace_back(parse);
+		gchar* end = strchr(parse, '\n');
+		if (end)
+		{	*end = 0;
+			parse = end + 1;
+		} else
+			end = parse += strlen(parse);
+		while (isspace(*--end))
+			*end = 0;
+	}
+
+	GVariant* result = g_variant_new_strv(&values.front(), values.size());
+	g_free(text);
+	return result;
 }

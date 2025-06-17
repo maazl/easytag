@@ -350,6 +350,12 @@
       <default>false</default>
     </key>
 
+    <key name="tag-additional-genres" type="as">
+      <summary>Additional genres</summary>
+      <description>Additional custom genres for selection</description>
+      <default>[]</default>
+    </key>
+
     <key name="fill-convert-spaces" enum="org.gnome.EasyTAG.EtConvertSpaces">
       <summary>Convert spaces and underscores when filling tag fields</summary>
       <description>Whether to convert to spaces (and %20) or underscores when filling tag fields from filenames</description>

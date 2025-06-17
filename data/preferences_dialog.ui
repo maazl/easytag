@@ -572,6 +572,16 @@
 									</object>
 								</child>
 								<child>
+									<object class="GtkLabel" id="tags_fields_label">
+										<property name="halign">start</property>
+										<property name="label" translatable="yes">Particular fields</property>
+										<property name="visible">True</property>
+										<attributes>
+											<attribute name="weight" value="bold" />
+										</attributes>
+									</object>
+								</child>
+								<child>
 									<object class="GtkGrid" id="tags_padding_grid">
 										<property name="column-spacing">12</property>
 										<property name="margin-left">12</property>
@@ -599,6 +609,16 @@
 											</packing>
 										</child>
 										<child>
+											<object class="GtkBox" id="tags_disc_box">
+												<property name="hexpand">True</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">2</property>
+												<property name="top_attach">0</property>
+											</packing>
+										</child>
+										<child>
 											<object class="GtkCheckButton" id="tags_track_check">
 												<property name="label" translatable="yes">Pad the number of digits in the track field to:</property>
 												<property name="tooltip-text" translatable="yes">Whether the track number tag field should be padded with leading zeroes</property>
@@ -619,6 +639,39 @@
 												<property name="top_attach">1</property>
 											</packing>
 										</child>
+										<child>
+											<object class="GtkLabel" id="tags_additional_genres_label">
+												<property name="label" translatable="yes">Additional custom genres for selection:</property>
+												<property name="tooltip-text" translatable="yes">A set of additional genres to show within the genre combobox. Enter one per line.
+Note that this does not extend the ID3 genre numbers. The new genres are always stored as plain text and unsupported for ID3V1 tags.</property>
+												<property name="halign">start</property>
+												<property name="valign">start</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">0</property>
+												<property name="top_attach">2</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkScrolledWindow" id="tags_additional_genres_scrolled">
+												<property name="shadow-type">etched-in</property>
+												<property name="hexpand">True</property>
+												<property name="height-request">150</property>
+												<property name="visible">True</property>
+												<child>
+													<object class="GtkTextView" id="tags_additional_genres_text">
+														<property name="hexpand">True</property>
+														<property name="visible">True</property>
+													</object>
+												</child>
+											</object>	
+											<packing>
+												<property name="left_attach">1</property>
+												<property name="top_attach">2</property>
+												<property name="width">2</property>
+											</packing>
+										</child>
 									</object>
 								</child>
 								<child>
@@ -627,221 +680,6 @@
 										<property name="margin-left">12</property>
 										<property name="tooltip-text" translatable="yes">Whether the comment field should be raplaced by a tab with a text area</property>
 										<property name="visible">True</property>
-									</object>
-								</child>
-								<child>
-									<object class="GtkLabel" id="tags_splitting_label">
-										<property name="halign">start</property>
-										<property name="label" translatable="yes">Splitting</property>
-										<property name="margin-top">12</property>
-										<property name="visible">True</property>
-										<attributes>
-											<attribute name="weight" value="bold" />
-										</attributes>
-									</object>
-								</child>
-								<child>
-									<object class="GtkBox" id="split_delimiter_box">
-										<property name="margin-left">12</property>
-										<property name="spacing">12</property>
-										<property name="visible">True</property>
-										<child>
-											<object class="GtkLabel" id="split_delimiter_label">
-												<property name="label" translatable="yes">Delimiter for split</property>
-												<property name="tooltip-text" translatable="yes">When writing the text is spilt at this delimiter. When reading it is joined with this delimier.</property>
-												<property name="visible">True</property>
-											</object>
-										</child>
-										<child>
-											<object class="GtkEntry" id="split_delimiter">
-												<property name="width-chars">5</property>
-												<property name="visible">True</property>
-											</object>
-										</child>
-									</object>
-								</child>
-								<child>
-									<object class="GtkLabel" id="tags_splitting_description_label">
-										<property name="halign">start</property>
-										<property name="label" translatable="yes">For Vorbis tags, selected fields will be split and saved as separate tags</property>
-										<property name="margin-left">12</property>
-										<property name="visible">True</property>
-									</object>
-								</child>
-								<child>
-									<object class="GtkGrid" id="tags_splitting_grid">
-										<property name="column-spacing">18</property>
-										<property name="margin-left">12</property>
-										<property name="row-spacing">6</property>
-										<property name="visible">True</property>
-										<child>
-											<object class="GtkCheckButton" id="split_title_check">
-												<property name="label" translatable="yes">Title</property>
-												<property name="name">title</property>
-												<property name="tooltip-text" translatable="yes">Whether to split title fields in Ogg comments</property>
-												<property name="visible">True</property>
-											</object>
-											<packing>
-												<property name="left_attach">0</property>
-												<property name="top_attach">0</property>
-											</packing>
-										</child>
-										<child>
-											<object class="GtkCheckButton" id="split_version_check">
-												<property name="label" translatable="yes">Version</property>
-												<property name="name">version</property>
-												<property name="tooltip-text" translatable="yes">Whether to split version fields in Ogg comments</property>
-												<property name="visible">True</property>
-											</object>
-											<packing>
-												<property name="left_attach">1</property>
-												<property name="top_attach">0</property>
-											</packing>
-										</child>
-										<child>
-											<object class="GtkCheckButton" id="split_subtitle_check">
-												<property name="label" translatable="yes">Subtitle</property>
-												<property name="name">subtitle</property>
-												<property name="tooltip-text" translatable="yes">Whether to split subtitle fields in Ogg comments</property>
-												<property name="visible">True</property>
-											</object>
-											<packing>
-												<property name="left_attach">2</property>
-												<property name="top_attach">0</property>
-											</packing>
-										</child>
-										<child>
-											<object class="GtkCheckButton" id="split_artist_check">
-												<property name="label" translatable="yes">Artist</property>
-												<property name="name">artist</property>
-												<property name="tooltip-text" translatable="yes">Whether to split artist fields in Ogg comments</property>
-												<property name="visible">True</property>
-											</object>
-											<packing>
-												<property name="left_attach">3</property>
-												<property name="top_attach">0</property>
-											</packing>
-										</child>
-										<child>
-											<object class="GtkCheckButton" id="split_album_artist_check">
-												<property name="label" translatable="yes">Album artist</property>
-												<property name="name">album-artist</property>
-												<property name="tooltip-text" translatable="yes">Whether to split artist fields in Ogg comments</property>
-												<property name="visible">True</property>
-											</object>
-											<packing>
-												<property name="left_attach">4</property>
-												<property name="top_attach">0</property>
-											</packing>
-										</child>
-										<child>
-											<object class="GtkCheckButton" id="split_album_check">
-												<property name="label" translatable="yes">Album</property>
-												<property name="name">album</property>
-												<property name="tooltip-text" translatable="yes">Whether to split album fields in Ogg comments</property>
-												<property name="visible">True</property>
-											</object>
-											<packing>
-												<property name="left_attach">0</property>
-												<property name="top_attach">1</property>
-											</packing>
-										</child>
-										<child>
-											<object class="GtkCheckButton" id="split_disc_subtitle_check">
-												<property name="label" translatable="yes">Disc subtitle</property>
-												<property name="name">disc-subtitle</property>
-												<property name="tooltip-text" translatable="yes">Whether to split disc subtitle fields in Ogg comments</property>
-												<property name="visible">True</property>
-											</object>
-											<packing>
-												<property name="left_attach">1</property>
-												<property name="top_attach">1</property>
-											</packing>
-										</child>
-										<child>
-											<object class="GtkCheckButton" id="split_genre_check">
-												<property name="label" translatable="yes">Genre</property>
-												<property name="name">genre</property>
-												<property name="tooltip-text" translatable="yes">Whether to split genre fields in Ogg comments</property>
-												<property name="visible">True</property>
-											</object>
-											<packing>
-												<property name="left_attach">2</property>
-												<property name="top_attach">1</property>
-											</packing>
-										</child>
-										<child>
-											<object class="GtkCheckButton" id="split_comment_check">
-												<property name="label" translatable="yes">Comment</property>
-												<property name="name">comment</property>
-												<property name="tooltip-text" translatable="yes">Whether to split comment fields in Ogg comments</property>
-												<property name="visible">True</property>
-											</object>
-											<packing>
-												<property name="left_attach">3</property>
-												<property name="top_attach">1</property>
-											</packing>
-										</child>
-										<child>
-											<object class="GtkCheckButton" id="split_description_check">
-												<property name="label" translatable="yes">Description</property>
-												<property name="name">description</property>
-												<property name="tooltip-text" translatable="yes">Whether to split description fields in Ogg comments</property>
-												<property name="visible">True</property>
-											</object>
-											<packing>
-												<property name="left_attach">4</property>
-												<property name="top_attach">1</property>
-											</packing>
-										</child>
-										<child>
-											<object class="GtkCheckButton" id="split_composer_check">
-												<property name="label" translatable="yes">Composer</property>
-												<property name="name">composer</property>
-												<property name="tooltip-text" translatable="yes">Whether to split composer fields in Ogg comments</property>
-												<property name="visible">True</property>
-											</object>
-											<packing>
-												<property name="left_attach">0</property>
-												<property name="top_attach">2</property>
-											</packing>
-										</child>
-										<child>
-											<object class="GtkCheckButton" id="split_orig_artist_check">
-												<property name="label" translatable="yes">Original artist</property>
-												<property name="name">original-artist</property>
-												<property name="tooltip-text" translatable="yes">Whether to split original artist fields in Ogg comments</property>
-												<property name="visible">True</property>
-											</object>
-											<packing>
-												<property name="left_attach">1</property>
-												<property name="top_attach">2</property>
-											</packing>
-										</child>
-										<child>
-											<object class="GtkCheckButton" id="split_url_check">
-												<property name="label" translatable="yes">URL</property>
-												<property name="name">url</property>
-												<property name="tooltip-text" translatable="yes">Whether to split URL fields in Ogg comments</property>
-												<property name="visible">True</property>
-											</object>
-											<packing>
-												<property name="left_attach">2</property>
-												<property name="top_attach">2</property>
-											</packing>
-										</child>
-										<child>
-											<object class="GtkCheckButton" id="split_encoded_by_check">
-												<property name="label" translatable="yes">Encoded by</property>
-												<property name="name">encoded-by</property>
-												<property name="tooltip-text" translatable="yes">Whether to split encoded by fields in Ogg comments</property>
-												<property name="visible">True</property>
-											</object>
-											<packing>
-												<property name="left_attach">3</property>
-												<property name="top_attach">2</property>
-											</packing>
-										</child>
 									</object>
 								</child>
 							</object>
@@ -1226,6 +1064,235 @@
 						<child type="tab">
 							<object class="GtkLabel" id="id3_tags_tab_label">
 								<property name="label" translatable="yes">ID3 Tags</property>
+								<property name="visible">True</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkGrid" id="vorbis_grid">
+								<property name="border-width">12</property>
+								<property name="orientation">vertical</property>
+								<property name="row-spacing">6</property>
+								<property name="visible">True</property>
+								<child>
+									<object class="GtkLabel" id="tags_splitting_label">
+										<property name="halign">start</property>
+										<property name="label" translatable="yes">Splitting</property>
+										<property name="margin-top">12</property>
+										<property name="visible">True</property>
+										<attributes>
+											<attribute name="weight" value="bold" />
+										</attributes>
+									</object>
+								</child>
+								<child>
+									<object class="GtkBox" id="split_delimiter_box">
+										<property name="margin-left">12</property>
+										<property name="spacing">12</property>
+										<property name="visible">True</property>
+										<child>
+											<object class="GtkLabel" id="split_delimiter_label">
+												<property name="label" translatable="yes">Delimiter for split</property>
+												<property name="tooltip-text" translatable="yes">When writing the text is spilt at this delimiter. When reading it is joined with this delimier.</property>
+												<property name="visible">True</property>
+											</object>
+										</child>
+										<child>
+											<object class="GtkEntry" id="split_delimiter">
+												<property name="width-chars">5</property>
+												<property name="visible">True</property>
+											</object>
+										</child>
+									</object>
+								</child>
+								<child>
+									<object class="GtkLabel" id="tags_splitting_description_label">
+										<property name="halign">start</property>
+										<property name="label" translatable="yes">For Vorbis tags, selected fields will be split and saved as separate tags</property>
+										<property name="margin-left">12</property>
+										<property name="visible">True</property>
+									</object>
+								</child>
+								<child>
+									<object class="GtkGrid" id="tags_splitting_grid">
+										<property name="column-spacing">18</property>
+										<property name="margin-left">12</property>
+										<property name="row-spacing">6</property>
+										<property name="visible">True</property>
+										<child>
+											<object class="GtkCheckButton" id="split_title_check">
+												<property name="label" translatable="yes">Title</property>
+												<property name="name">title</property>
+												<property name="tooltip-text" translatable="yes">Whether to split title fields in Ogg comments</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">0</property>
+												<property name="top_attach">0</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="split_version_check">
+												<property name="label" translatable="yes">Version</property>
+												<property name="name">version</property>
+												<property name="tooltip-text" translatable="yes">Whether to split version fields in Ogg comments</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">1</property>
+												<property name="top_attach">0</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="split_subtitle_check">
+												<property name="label" translatable="yes">Subtitle</property>
+												<property name="name">subtitle</property>
+												<property name="tooltip-text" translatable="yes">Whether to split subtitle fields in Ogg comments</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">2</property>
+												<property name="top_attach">0</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="split_artist_check">
+												<property name="label" translatable="yes">Artist</property>
+												<property name="name">artist</property>
+												<property name="tooltip-text" translatable="yes">Whether to split artist fields in Ogg comments</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">3</property>
+												<property name="top_attach">0</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="split_album_artist_check">
+												<property name="label" translatable="yes">Album artist</property>
+												<property name="name">album-artist</property>
+												<property name="tooltip-text" translatable="yes">Whether to split artist fields in Ogg comments</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">4</property>
+												<property name="top_attach">0</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="split_album_check">
+												<property name="label" translatable="yes">Album</property>
+												<property name="name">album</property>
+												<property name="tooltip-text" translatable="yes">Whether to split album fields in Ogg comments</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">0</property>
+												<property name="top_attach">1</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="split_disc_subtitle_check">
+												<property name="label" translatable="yes">Disc subtitle</property>
+												<property name="name">disc-subtitle</property>
+												<property name="tooltip-text" translatable="yes">Whether to split disc subtitle fields in Ogg comments</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">1</property>
+												<property name="top_attach">1</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="split_genre_check">
+												<property name="label" translatable="yes">Genre</property>
+												<property name="name">genre</property>
+												<property name="tooltip-text" translatable="yes">Whether to split genre fields in Ogg comments</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">2</property>
+												<property name="top_attach">1</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="split_comment_check">
+												<property name="label" translatable="yes">Comment</property>
+												<property name="name">comment</property>
+												<property name="tooltip-text" translatable="yes">Whether to split comment fields in Ogg comments</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">3</property>
+												<property name="top_attach">1</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="split_description_check">
+												<property name="label" translatable="yes">Description</property>
+												<property name="name">description</property>
+												<property name="tooltip-text" translatable="yes">Whether to split description fields in Ogg comments</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">4</property>
+												<property name="top_attach">1</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="split_composer_check">
+												<property name="label" translatable="yes">Composer</property>
+												<property name="name">composer</property>
+												<property name="tooltip-text" translatable="yes">Whether to split composer fields in Ogg comments</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">0</property>
+												<property name="top_attach">2</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="split_orig_artist_check">
+												<property name="label" translatable="yes">Original artist</property>
+												<property name="name">original-artist</property>
+												<property name="tooltip-text" translatable="yes">Whether to split original artist fields in Ogg comments</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">1</property>
+												<property name="top_attach">2</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="split_url_check">
+												<property name="label" translatable="yes">URL</property>
+												<property name="name">url</property>
+												<property name="tooltip-text" translatable="yes">Whether to split URL fields in Ogg comments</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">2</property>
+												<property name="top_attach">2</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="split_encoded_by_check">
+												<property name="label" translatable="yes">Encoded by</property>
+												<property name="name">encoded-by</property>
+												<property name="tooltip-text" translatable="yes">Whether to split encoded by fields in Ogg comments</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">3</property>
+												<property name="top_attach">2</property>
+											</packing>
+										</child>
+									</object>
+								</child>
+							</object>
+						</child>
+						<child type="tab">
+							<object class="GtkLabel" id="vorbis_tags_tab_label">
+								<property name="label" translatable="yes">Vorbis Tags</property>
 								<property name="visible">True</property>
 							</object>
 						</child>

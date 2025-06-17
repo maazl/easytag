@@ -367,5 +367,7 @@ gboolean et_settings_flags_toggle_get (GValue *value, GVariant *variant,
 GVariant *et_settings_flags_toggle_set (const GValue *value,
                                         const GVariantType *expected_type,
                                         gpointer user_data);
+gboolean et_settings_strv_text_get (GValue *value, GVariant *variant, gpointer user_data);
+GVariant* et_settings_strv_text_set (const GValue *value, const GVariantType *expected_type, gpointer user_data);
 
 #endif /* ET_SETTINGS_H_ */

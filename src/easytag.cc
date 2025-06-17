@@ -1144,12 +1144,12 @@ gboolean Read_Directory(gString path_real)
 
     EtApplicationWindow *window = MainWindow;
 
+    /* Clear entry boxes  */
+    window->change_displayed_file(nullptr);
+
     /* Initialize browser list */
     window->browser()->clear();
     et_application_window_search_dialog_clear (window);
-
-    /* Clear entry boxes  */
-    window->change_displayed_file(nullptr);
 
     /* Initialize file list */
     ET_File::reset_undo_history();

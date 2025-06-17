@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2022-2024  Marcel Müller
+ * Copyright (C) 2022-2025  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014,2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -100,6 +100,8 @@ typedef struct
     GtkWidget *album_peak_entry;
 
     GtkListStore *genre_combo_model;
+    GtkListStore *genre_combo_model2;
+    bool genre_combo_model2_valid;
     GtkListStore *track_combo_model;
 
     /* Comment tab */
@@ -771,25 +773,27 @@ et_tag_field_connect_signals (GtkEntry *entry, EtTagArea *self, bool numeric = f
 /*
  * Load the genres list to the combo, and sorts it
  */
-static void
-populate_genre_combo (EtTagArea *self)
+static void populate_genre_combo(GtkListStore* model)
 {
-    EtTagAreaPrivate *priv;
-    gsize i;
+	gtk_list_store_insert_with_values(model, NULL, -1, GENRE_COLUMN_GENRE, "", -1);
 
-    priv = et_tag_area_get_instance_private (self);
+	for (const char* genre : id3_genres)
+		gtk_list_store_insert_with_values(model, NULL, -1, GENRE_COLUMN_GENRE, genre, -1);
+}
 
-    gtk_list_store_insert_with_values (priv->genre_combo_model, NULL,
-                                       -1, GENRE_COLUMN_GENRE, "", -1);
-    gtk_list_store_insert_with_values (priv->genre_combo_model, NULL,
-                                       -1, GENRE_COLUMN_GENRE, "Unknown", -1);
+/*
+ * Load the genres list to the 2nd combo
+ */
+static void populate_genre_combo2(GtkListStore* model)
+{
+	gtk_list_store_clear(model);
 
-    for (i = 0; i <= GENRE_MAX; i++)
-    {
-        gtk_list_store_insert_with_values (priv->genre_combo_model, NULL,
-                                           -1, GENRE_COLUMN_GENRE,
-                                           id3_genres[i], -1);
-    }
+	populate_genre_combo(model);
+
+	gchar** values = g_settings_get_strv(MainSettings, "tag-additional-genres");
+	for (gchar** value = values; *value; ++value)
+		gtk_list_store_insert_with_values(model, NULL, -1, GENRE_COLUMN_GENRE, *value, -1);
+	g_strfreev(values);
 }
 
 /*
@@ -827,42 +831,16 @@ tree_iter_alphabetical_sort (GtkTreeModel *model,
                              GtkTreeIter *b,
                              gpointer data)
 {
-    gchar *text1, *text1_folded;
-    gchar *text2, *text2_folded;
-    gint ret;
+	gchar* text1;
+	gchar* text2;
+	gtk_tree_model_get (model, a, GENRE_COLUMN_GENRE, &text1, -1);
+	gtk_tree_model_get (model, b, GENRE_COLUMN_GENRE, &text2, -1);
 
-    gtk_tree_model_get (model, a, GENRE_COLUMN_GENRE, &text1, -1);
-    gtk_tree_model_get (model, b, GENRE_COLUMN_GENRE, &text2, -1);
+	int ret = xStringD0(text1).compare(xStringD0(text2));
 
-    if (text1 == text2)
-    {
-        g_free (text1);
-        g_free (text2);
-        return 0;
-    }
-
-    if (text1 == NULL)
-    {
-        g_free (text2);
-        return -1;
-    }
-
-    if (text2 == NULL)
-    {
-        g_free (text1);
-        return 1;
-    }
-
-    text1_folded = g_utf8_casefold (text1, -1);
-    text2_folded = g_utf8_casefold (text2, -1);
-    ret = g_utf8_collate (text1_folded, text2_folded);
-
-    g_free (text1);
-    g_free (text2);
-    g_free (text1_folded);
-    g_free (text2_folded);
-
-    return ret;
+	g_free(text1);
+	g_free(text2);
+	return ret;
 }
 
 /*
@@ -1816,16 +1794,18 @@ create_tag_area (EtTagArea *self)
     gtk_entry_set_completion (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->genre_combo_entry))),
                               completion);
     g_object_unref (completion);
-    gtk_entry_completion_set_model (completion,
-                                    GTK_TREE_MODEL (priv->genre_combo_model));
     gtk_entry_completion_set_text_column (completion, 0);
     gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->genre_combo_model),
-                                     GENRE_COLUMN_GENRE,
-                                     tree_iter_alphabetical_sort, NULL, NULL);
+        GENRE_COLUMN_GENRE, tree_iter_alphabetical_sort, NULL, NULL);
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->genre_combo_model),
-                                          GENRE_COLUMN_GENRE,
-                                          GTK_SORT_ASCENDING);
-    populate_genre_combo (self);
+        GENRE_COLUMN_GENRE, GTK_SORT_ASCENDING);
+    populate_genre_combo (priv->genre_combo_model);
+    gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->genre_combo_model2),
+        GENRE_COLUMN_GENRE, tree_iter_alphabetical_sort, NULL, NULL);
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->genre_combo_model2),
+        GENRE_COLUMN_GENRE, GTK_SORT_ASCENDING);
+    g_signal_connect_swapped(MainSettings, "changed::tag-additional-genres",
+        G_CALLBACK((void (*)(bool*))[](bool* valid){ *valid = false; }), &priv->genre_combo_model2_valid);
 
     et_tag_field_connect_signals (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->genre_combo_entry))), self);
     gtk_entry_set_icon_tooltip_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->genre_combo_entry))),
@@ -1947,6 +1927,7 @@ et_tag_area_class_init (EtTagAreaClass *klass)
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, encoded_by_label);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, encoded_by_entry);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, genre_combo_model);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, genre_combo_model2);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_combo_model);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_gain_label);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_gain_entry);
@@ -2055,6 +2036,25 @@ void et_tag_area_update_controls (EtTagArea *self, const ET_File* file)
     show_hide(ET_COLUMN_DESCRIPTION, GTK_WIDGET(priv->description_scrolled), nullptr);
     guint multiline = -!g_settings_get_boolean(MainSettings, "tag-multiline-comment");
     show_hide(multiline, priv->comment_grid, nullptr);
+
+    // restrict combobox model for ID3V1
+    GtkEntryCompletion* completion = gtk_entry_get_completion(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->genre_combo_entry))));
+    GtkTreeModel* model = GTK_TREE_MODEL(priv->genre_combo_model);
+    if (!(hide & ET_COLUMN_TRACK_NUMBER)) // Only ID3V1 hides track total
+    {   if (!priv->genre_combo_model2_valid)
+        {   // disconnect model temporarily to avoid excessive updates
+            // Setting the model to NULL fails to hit the goal => use the constant ID3V1 model instead.
+            gtk_combo_box_set_model(GTK_COMBO_BOX(priv->genre_combo_entry), model);
+            gtk_entry_completion_set_model(completion, model);
+
+            populate_genre_combo2(priv->genre_combo_model2);
+            priv->genre_combo_model2_valid = true;
+        }
+        model = GTK_TREE_MODEL(priv->genre_combo_model2);
+    }
+
+    gtk_combo_box_set_model(GTK_COMBO_BOX(priv->genre_combo_entry), model);
+    gtk_entry_completion_set_model(completion, model);
 }
 
 void

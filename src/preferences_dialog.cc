@@ -1,5 +1,5 @@
 /* EasyTAG - Tag editor for audio files
- * Copyright (C) 2022  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2022-2025  Marcel Müller <github@maazl.de>
  * Copyright (C) 2013-2015  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -83,6 +83,8 @@ typedef struct
     GtkWidget *tags_disc_button;
     GtkWidget *tags_preserve_focus_check;
     GtkWidget *tags_multiline_comment;
+    GtkWidget *tags_additional_genres_text;
+
     GtkWidget *split_title_check;
     GtkWidget *split_subtitle_check;
     GtkWidget *split_artist_check;
@@ -483,6 +485,12 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
     bind_boolean("tag-preserve-focus", priv->tags_preserve_focus_check);
 
     bind_boolean("tag-multiline-comment", priv->tags_multiline_comment);
+
+    /* additional genres */
+    g_settings_bind_with_mapping (MainSettings, "tag-additional-genres",
+                                  gtk_text_view_get_buffer(GTK_TEXT_VIEW(priv->tags_additional_genres_text)),
+                                  "text", G_SETTINGS_BIND_DEFAULT,
+                                  et_settings_strv_text_get, et_settings_strv_text_set, NULL, NULL);
 
     /* Tag Splitting */
     g_settings_bind (MainSettings, "split-delimiter",
@@ -959,6 +967,7 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, tags_disc_button);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, tags_preserve_focus_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, tags_multiline_comment);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, tags_additional_genres_text);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_title_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_subtitle_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, split_artist_check);
