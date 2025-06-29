@@ -2211,40 +2211,16 @@ Cddb_Destroy_Window (EtCDDBDialog *self)
 
 static void
 init_search_field_check (GtkWidget *widget)
-{
-    g_object_set_data (G_OBJECT (widget), "flags-type",
-                       GSIZE_TO_POINTER (ET_TYPE_CDDB_SEARCH_FIELD));
-    g_object_set_data (G_OBJECT (widget), "flags-key",
-                       (gpointer) "cddb-search-fields");
-    g_settings_bind_with_mapping (MainSettings, "cddb-search-fields", widget,
-                                  "active", G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_flags_toggle_get,
-                                  et_settings_flags_toggle_set, widget, NULL);
+{	et_settings_bind_flags("cddb-search-fields", widget);
 }
 static void
 init_search_category_check (GtkWidget *widget)
-{
-    g_object_set_data (G_OBJECT (widget), "flags-type",
-                       GSIZE_TO_POINTER (ET_TYPE_CDDB_SEARCH_CATEGORY));
-    g_object_set_data (G_OBJECT (widget), "flags-key",
-                       (gpointer) "cddb-search-categories");
-    g_settings_bind_with_mapping (MainSettings, "cddb-search-categories",
-                                  widget, "active", G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_flags_toggle_get,
-                                  et_settings_flags_toggle_set, widget, NULL);
+{	et_settings_bind_flags("cddb-search-categories", widget);
 }
 
 static void
 init_set_field_check (GtkWidget *widget)
-{
-    g_object_set_data (G_OBJECT (widget), "flags-type",
-                       GSIZE_TO_POINTER (ET_TYPE_CDDB_SET_FIELD));
-    g_object_set_data (G_OBJECT (widget), "flags-key",
-                       (gpointer) "cddb-set-fields");
-    g_settings_bind_with_mapping (MainSettings, "cddb-set-fields", widget,
-                                  "active", G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_flags_toggle_get,
-                                  et_settings_flags_toggle_set, widget, NULL);
+{	et_settings_bind_flags("cddb-set-fields", widget);
 }
 
 static void
@@ -2308,13 +2284,10 @@ create_cddb_dialog (EtCDDBDialog *self)
     init_set_field_check (priv->genre_check);
 
     /* Check box to run the scanner. */
-    g_settings_bind (MainSettings, "cddb-run-scanner",
-                     priv->scanner_check, "active",
-                     G_SETTINGS_BIND_DEFAULT);
+    et_settings_bind_boolean("cddb-run-scanner", priv->scanner_check);
 
     /* Check box to use DLM (also used in the preferences window). */
-    g_settings_bind (MainSettings, "cddb-dlm-enabled", priv->dlm_check,
-                     "active", G_SETTINGS_BIND_DEFAULT);
+    et_settings_bind_boolean("cddb-dlm-enabled", priv->dlm_check);
 
     /* Status bar. */
     priv->status_bar_context = gtk_statusbar_get_context_id (GTK_STATUSBAR (priv->status_bar),

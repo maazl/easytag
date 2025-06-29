@@ -3440,9 +3440,7 @@ void EtBrowser::show_rename_directory_dialog()
     /* Rename directory : check box + entry + Status icon */
     priv->rename_directory_mask_toggle = GTK_WIDGET (gtk_builder_get_object (builder,
                                                                              "rename_mask_check"));
-    g_settings_bind (MainSettings, "rename-directory-with-mask",
-                     priv->rename_directory_mask_toggle, "active",
-                     G_SETTINGS_BIND_DEFAULT);
+    et_settings_bind_boolean("rename-directory-with-mask", priv->rename_directory_mask_toggle);
     g_signal_connect_swapped (priv->rename_directory_mask_toggle, "toggled",
         G_CALLBACK(Rename_Directory_With_Mask_Toggled), this);
 

@@ -1601,15 +1601,7 @@ et_scan_on_hide (GtkWidget *widget,
 
 static void
 init_process_field_check (GtkWidget *widget)
-{
-    g_object_set_data (G_OBJECT (widget), "flags-type",
-                       GSIZE_TO_POINTER (ET_TYPE_PROCESS_FIELD));
-    g_object_set_data (G_OBJECT (widget), "flags-key",
-                       (gpointer) "process-fields");
-    g_settings_bind_with_mapping (MainSettings, "process-fields", widget,
-                                  "active", G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_flags_toggle_get,
-                                  et_settings_flags_toggle_set, widget, NULL);
+{	et_settings_bind_flags("process-fields", widget);
 }
 
 static void
@@ -1628,12 +1620,8 @@ create_scan_dialog (EtScanDialog *self)
                               self);
 
     /* Mask Editor button */
-    g_settings_bind (MainSettings, "scan-mask-editor-show",
-                     priv->mask_editor_toggle, "active",
-                     G_SETTINGS_BIND_DEFAULT);
-
-    g_settings_bind (MainSettings, "scan-legend-show", priv->legend_toggle,
-                     "active", G_SETTINGS_BIND_DEFAULT);
+    et_settings_bind_boolean("scan-mask-editor-show", priv->mask_editor_toggle);
+    et_settings_bind_boolean("scan-legend-show", priv->legend_toggle);
 
     /* Signal to generate preview (preview of the new tag values). */
     g_signal_connect_swapped (gtk_bin_get_child (GTK_BIN (priv->fill_combo)),
@@ -1694,30 +1682,10 @@ create_scan_dialog (EtScanDialog *self)
                               G_CALLBACK (on_process_fields_changed), self);
 
     /* Group: character conversion */
-    g_settings_bind_with_mapping (MainSettings, "process-convert",
-                                  priv->convert_space_radio, "active",
-                                  G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_enum_radio_get,
-                                  et_settings_enum_radio_set,
-                                  priv->convert_space_radio, NULL);
-    g_settings_bind_with_mapping (MainSettings, "process-convert",
-                                  priv->convert_underscores_radio, "active",
-                                  G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_enum_radio_get,
-                                  et_settings_enum_radio_set,
-                                  priv->convert_underscores_radio, NULL);
-    g_settings_bind_with_mapping (MainSettings, "process-convert",
-                                  priv->convert_string_radio, "active",
-                                  G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_enum_radio_get,
-                                  et_settings_enum_radio_set,
-                                  priv->convert_string_radio, NULL);
-    g_settings_bind_with_mapping (MainSettings, "process-convert",
-                                  priv->convert_none_radio, "active",
-                                  G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_enum_radio_get,
-                                  et_settings_enum_radio_set,
-                                  priv->convert_none_radio, NULL);
+    et_settings_bind_radio("process-convert", priv->convert_space_radio);
+    et_settings_bind_radio("process-convert", priv->convert_underscores_radio);
+    et_settings_bind_radio("process-convert", priv->convert_string_radio);
+    et_settings_bind_radio("process-convert", priv->convert_none_radio);
     g_settings_bind (MainSettings, "process-convert-characters-from",
                      priv->convert_from_entry, "text",
                      G_SETTINGS_BIND_DEFAULT);
@@ -1725,50 +1693,17 @@ create_scan_dialog (EtScanDialog *self)
                      priv->convert_to_entry, "text", G_SETTINGS_BIND_DEFAULT);
 
     /* Group: capitalize, ... */
-    g_settings_bind (MainSettings, "process-detect-roman-numerals",
-                     priv->capitalize_roman_check, "active",
-                     G_SETTINGS_BIND_DEFAULT);
-    g_settings_bind_with_mapping (MainSettings, "process-capitalize",
-                                  priv->capitalize_all_radio, "active",
-                                  G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_enum_radio_get,
-                                  et_settings_enum_radio_set,
-                                  priv->capitalize_all_radio, NULL);
-    g_settings_bind_with_mapping (MainSettings, "process-capitalize",
-                                  priv->capitalize_lower_radio, "active",
-                                  G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_enum_radio_get,
-                                  et_settings_enum_radio_set,
-                                  priv->capitalize_lower_radio, NULL);
-    g_settings_bind_with_mapping (MainSettings, "process-capitalize",
-                                  priv->capitalize_first_radio, "active",
-                                  G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_enum_radio_get,
-                                  et_settings_enum_radio_set,
-                                  priv->capitalize_first_radio, NULL);
-    g_settings_bind_with_mapping (MainSettings, "process-capitalize",
-                                  priv->capitalize_first_style_radio, "active",
-                                  G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_enum_radio_get,
-                                  et_settings_enum_radio_set,
-                                  priv->capitalize_first_style_radio, NULL);
-    g_settings_bind_with_mapping (MainSettings, "process-capitalize",
-                                  priv->capitalize_none_radio, "active",
-                                  G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_enum_radio_get,
-                                  et_settings_enum_radio_set,
-                                  priv->capitalize_none_radio, NULL);
+    et_settings_bind_boolean("process-detect-roman-numerals", priv->capitalize_roman_check);
+    et_settings_bind_radio("process-capitalize", priv->capitalize_all_radio);
+    et_settings_bind_radio("process-capitalize", priv->capitalize_lower_radio);
+    et_settings_bind_radio("process-capitalize", priv->capitalize_first_radio);
+    et_settings_bind_radio("process-capitalize", priv->capitalize_first_style_radio);
+    et_settings_bind_radio("process-capitalize", priv->capitalize_none_radio);
 
     /* Group: insert/remove spaces */
-    g_settings_bind (MainSettings, "process-remove-spaces",
-                     priv->spaces_remove_radio, "active",
-                     G_SETTINGS_BIND_DEFAULT);
-    g_settings_bind (MainSettings, "process-insert-capital-spaces",
-                     priv->spaces_insert_radio, "active",
-                     G_SETTINGS_BIND_DEFAULT);
-    g_settings_bind (MainSettings, "process-remove-duplicate-spaces",
-                     priv->spaces_insert_one_radio, "active",
-                     G_SETTINGS_BIND_DEFAULT);
+    et_settings_bind_boolean("process-remove-spaces", priv->spaces_remove_radio);
+    et_settings_bind_boolean("process-insert-capital-spaces", priv->spaces_insert_radio);
+    et_settings_bind_boolean("process-remove-duplicate-spaces", priv->spaces_insert_one_radio);
     on_process_fields_changed (self, "process-fields", MainSettings);
 
     /*

@@ -246,16 +246,11 @@ create_search_dialog (EtSearchDialog *self)
     /* Set content of the clipboard if available. */
     gtk_editable_paste_clipboard (GTK_EDITABLE (gtk_bin_get_child (GTK_BIN (priv->search_string_combo))));
 
-    g_settings_bind (MainSettings, "search-filename",
-                     priv->search_filename_check, "active",
-                     G_SETTINGS_BIND_DEFAULT);
-    g_settings_bind (MainSettings, "search-tag", priv->search_tag_check,
-                     "active", G_SETTINGS_BIND_DEFAULT);
+    et_settings_bind_boolean("search-filename", priv->search_filename_check);
+    et_settings_bind_boolean("search-tag", priv->search_tag_check);
 
     /* Property of the search. */
-    g_settings_bind (MainSettings, "search-case-sensitive",
-                     priv->search_case_check, "active",
-                     G_SETTINGS_BIND_DEFAULT);
+    et_settings_bind_boolean("search-case-sensitive", priv->search_case_check);
 
     /* Button to run the search. */
     gtk_widget_grab_default (priv->search_find_button);

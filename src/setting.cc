@@ -549,6 +549,10 @@ Create_Easytag_Directory (void)
     }
 }
 
+void et_settings_bind_boolean(const char* setting, GtkWidget* widget)
+{	g_settings_bind(MainSettings, setting, widget, "active", G_SETTINGS_BIND_DEFAULT);
+}
+
 /*
  * et_settings_enum_get:
  * @value: the property value to be set (active item on combo box)
@@ -636,9 +640,7 @@ et_settings_enum_set (const GValue *value, const GVariantType *expected_type,
  *
  * Returns: %TRUE
  */
-gboolean
-et_settings_enum_radio_get (GValue *value, GVariant *variant,
-                            gpointer user_data)
+static gboolean et_settings_enum_radio_get(GValue *value, GVariant *variant, gpointer user_data)
 {
     const gchar *name;
     const gchar *setting;
@@ -666,10 +668,7 @@ et_settings_enum_radio_get (GValue *value, GVariant *variant,
  *
  * Returns: a new GVariant containing the mapped value, or %NULL upon failure
  */
-GVariant *
-et_settings_enum_radio_set (const GValue *value,
-                            const GVariantType *expected_type,
-                            gpointer user_data)
+static GVariant* et_settings_enum_radio_set(const GValue *value, const GVariantType *expected_type, gpointer user_data)
 {
     GVariant *variant = NULL;
     const gchar *name;
@@ -686,137 +685,60 @@ et_settings_enum_radio_set (const GValue *value,
     return variant;
 }
 
-/*
- * et_settings_flags_toggle_get:
- * @value: the property value to be set (active item on combo box)
- * @variant: the variant to set the @value from
- * @user_data: the #GType of the #GSettings flags
- *
- * Wrapper function to convert a flags-type GSettings key state into the active
- * toggle button.
- *
- * Returns: %TRUE if the mapping was successful, %FALSE otherwise
- */
-gboolean
-et_settings_flags_toggle_get (GValue *value, GVariant *variant, gpointer user_data)
-{
-    const gchar *name;
-    GType flags_type;
-    GFlagsClass *flags_class;
-    GVariantIter iter;
-    GFlagsValue *flags_value;
-    const gchar *nick;
-    guint flags = 0;
-
-    g_return_val_if_fail (user_data != NULL, FALSE);
-
-    name = gtk_widget_get_name (GTK_WIDGET (user_data));
-    flags_type = (GType)GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (user_data),
-                                                                       "flags-type"));
-    flags_class = (GFlagsClass*)g_type_class_ref (flags_type);
-
-    g_variant_iter_init (&iter, variant);
-
-    while (g_variant_iter_next (&iter, "&s", &nick))
-    {
-        flags_value = g_flags_get_value_by_nick (flags_class, nick);
-
-        if (flags_value)
-        {
-            flags |= flags_value->value;
-        }
-        else
-        {
-            g_warning ("Unable to lookup %s flags nick '%s' from GType",
-                       g_type_name (flags_type), nick);
-            g_type_class_unref (flags_class);
-            return FALSE;
-        }
-    }
-
-    flags_value = g_flags_get_value_by_nick (flags_class, name);
-    g_type_class_unref (flags_class);
-
-    /* TRUE if settings flag is set for this widget, which will make the widget
-     * active. */
-    g_value_set_boolean (value, flags & flags_value->value);
-    return TRUE;
+void et_settings_bind_radio(const char* setting, GtkWidget* widget)
+{	g_settings_bind_with_mapping(MainSettings, setting, widget, "active", G_SETTINGS_BIND_DEFAULT,
+		et_settings_enum_radio_get, et_settings_enum_radio_set, widget, NULL);
 }
 
-/*
- * et_settings_flags_toggle_set:
- * @value: the property value to set the @variant from
- * @expected_type: the expected type of the returned variant
- * @user_data: the widget associated with the changed setting
- *
- * Wrapper function to convert a boolean value into a string suitable for
- * storing into a flags-type GSettings key.
- *
- * Returns: a new GVariant containing the mapped value, or %NULL upon failure
- */
-GVariant *
-et_settings_flags_toggle_set (const GValue *value,
-                              const GVariantType *expected_type,
-                              gpointer user_data)
-{
-    const gchar *name;
-    GType flags_type;
-    GFlagsClass *flags_class;
-    GFlagsValue *flags_value;
-    guint mask;
-    GVariantBuilder builder;
-    const gchar *flags_key;
-    guint flags;
+struct enum_info
+{	const char* enum_nick;
+	const char* setting;
+};
 
-    g_return_val_if_fail (user_data != NULL, NULL);
+static gint strv_indexof(const gchar*const* strv, const char* value)
+{	if (strv)
+		for (const gchar*const* strvi = strv; *strvi; ++strvi)
+			if (strcmp(value, *strvi) == 0)
+				return strvi - strv;
+	return -1;
+}
 
-    name = gtk_widget_get_name (GTK_WIDGET (user_data));
-    flags_type = (GType)GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (user_data),
-                                                                       "flags-type"));
-    flags_class = (GFlagsClass*)g_type_class_ref (flags_type);
-    flags_value = g_flags_get_value_by_nick (flags_class, name);
-    mask = flags_class->mask;
+static gboolean flags_value_get(GValue *value, GVariant *variant, gpointer user_data)
+{	const enum_info* data = (enum_info*)user_data;
+	const gchar** values = g_variant_get_strv(variant, NULL);
+	g_value_set_boolean(value, values && strv_indexof(values, data->enum_nick) >= 0);
+	g_free(values);
+	return TRUE;
+}
 
-    if (!flags_value)
-    {
-        g_warning ("Unable to lookup %s flags value '%d' from GType",
-                   g_type_name (flags_type), g_value_get_boolean (value));
-        g_type_class_unref (flags_class);
-        return NULL;
-    }
+static GVariant* flags_value_set(const GValue *value, const GVariantType *variant_type, gpointer user_data)
+{	const enum_info* data = (enum_info*)user_data;
+	GVariant* variant = g_settings_get_value(MainSettings, data->setting);
+	gsize n;
+	const gchar** values = g_variant_get_strv(variant, &n);
+	GVariant* result = NULL;
+	gint p = strv_indexof(values, data->enum_nick);
+	if (g_value_get_boolean(value) ^ (p >= 0))
+	{	// value does not match
+		if (g_value_get_boolean(value))
+		{	// add value
+			values[n] = data->enum_nick;
+			result = g_variant_new_strv(values, n + 1);
+		} else
+		{	// remove value
+			copy(values + p + 1, values + n, values + p);
+			result = g_variant_new_strv(values, n - 1);
+		}
+	}
+	g_free(values);
+	g_variant_unref(variant);
+	return result;
+}
 
-    flags_key = (const gchar*)g_object_get_data (G_OBJECT (user_data), "flags-key");
-    flags = g_settings_get_flags (MainSettings, flags_key);
-
-    if (g_value_get_boolean (value))
-    {
-        flags |= flags_value->value;
-    }
-    else
-    {
-        flags &= (flags_value->value ^ mask);
-    }
-
-    g_variant_builder_init (&builder, expected_type);
-
-    while (flags)
-    {
-        flags_value = g_flags_get_first_value (flags_class, flags);
-
-        if (flags_value == NULL)
-        {
-            g_variant_builder_clear (&builder);
-            g_type_class_unref (flags_class);
-            return NULL;
-        }
-
-        g_variant_builder_add (&builder, "s", flags_value->value_nick);
-        flags &= ~flags_value->value;
-    }
-
-    g_type_class_unref (flags_class);
-
-    return g_variant_builder_end (&builder);
+void et_settings_bind_flags(const char* setting, GtkWidget* widget)
+{	g_settings_bind_with_mapping(MainSettings, setting, widget, "active",
+		G_SETTINGS_BIND_DEFAULT, flags_value_get, flags_value_set,
+		new enum_info { gtk_widget_get_name(widget), setting }, operator delete);
 }
 
 gboolean et_settings_strv_text_get (GValue *value, GVariant *variant, gpointer user_data)

@@ -357,17 +357,22 @@ gboolean et_settings_enum_get (GValue *value, GVariant *variant,
 GVariant *et_settings_enum_set (const GValue *value,
                                 const GVariantType *expected_type,
                                 gpointer user_data);
-gboolean et_settings_enum_radio_get (GValue *value, GVariant *variant,
-                                     gpointer user_data);
-GVariant *et_settings_enum_radio_set (const GValue *value,
-                                      const GVariantType *expected_type,
-                                      gpointer user_data);
-gboolean et_settings_flags_toggle_get (GValue *value, GVariant *variant,
-                                       gpointer user_data);
-GVariant *et_settings_flags_toggle_set (const GValue *value,
-                                        const GVariantType *expected_type,
-                                        gpointer user_data);
+/// Bind a checkbox to a boolean setting.
+/// @param setting Name of the boolean setting.
+/// @param widget Checkbox.
+void et_settings_bind_boolean(const char* setting, GtkWidget* widget);
+/// Bind a radio button to an enum setting.
+/// @param setting Name of the enum setting.
+/// @param widget Radio button.
+/// @details The enum value to bind is extracted from the widgets name.
+void et_settings_bind_radio(const char* setting, GtkWidget* widget);
+/// Bind a checkbox of a flags enum field.
+/// @param setting Name of the flags enum setting.
+/// @param widget Checkbox.
+/// @details The flag value to bind is extracted from the widgets name.
+void et_settings_bind_flags(const char* setting, GtkWidget* widget);
 gboolean et_settings_strv_text_get (GValue *value, GVariant *variant, gpointer user_data);
 GVariant* et_settings_strv_text_set (const GValue *value, const GVariantType *expected_type, gpointer user_data);
+
 
 #endif /* ET_SETTINGS_H_ */

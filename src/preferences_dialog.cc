@@ -307,66 +307,6 @@ et_preferences_id3v2_unicode_charset_set (const GValue *value,
     }
 }
 
-struct enum_info
-{	const char* enum_nick;
-	const char* setting;
-};
-
-static gint strv_indexof(const gchar*const* strv, const char* value)
-{	if (strv)
-		for (const gchar*const* strvi = strv; *strvi; ++strvi)
-			if (strcmp(value, *strvi) == 0)
-				return strvi - strv;
-	return -1;
-}
-
-static gboolean flags_value_get(GValue *value, GVariant *variant, gpointer user_data)
-{	const enum_info* data = (enum_info*)user_data;
-	const gchar** values = g_variant_get_strv(variant, NULL);
-	g_value_set_boolean(value, values && strv_indexof(values, data->enum_nick) >= 0);
-	g_free(values);
-	return TRUE;
-}
-
-static GVariant* flags_value_set(const GValue *value, const GVariantType *variant_type, gpointer user_data)
-{	const enum_info* data = (enum_info*)user_data;
-	GVariant* variant = g_settings_get_value(MainSettings, data->setting);
-	gsize n;
-	const gchar** values = g_variant_get_strv(variant, &n);
-	GVariant* result = NULL;
-	gint p = strv_indexof(values, data->enum_nick);
-	if (g_value_get_boolean(value) ^ (p >= 0))
-	{	// value does not match
-		if (g_value_get_boolean(value))
-		{	// add value
-			values[n] = data->enum_nick;
-			result = g_variant_new_strv(values, n + 1);
-		} else
-		{	// remove value
-			copy(values + p + 1, values + n, values + p);
-			result = g_variant_new_strv(values, n - 1);
-		}
-	}
-	g_free(values);
-	g_variant_unref(variant);
-	return result;
-}
-
-static void bind_flags_value(const char* setting, GtkWidget* widget)
-{	g_settings_bind_with_mapping(MainSettings, setting, widget, "active",
-		G_SETTINGS_BIND_DEFAULT, flags_value_get, flags_value_set,
-		new enum_info { gtk_widget_get_name(widget), setting }, operator delete);
-}
-
-static void bind_boolean(const char* setting, GtkWidget* widget)
-{	g_settings_bind(MainSettings, setting, widget, "active", G_SETTINGS_BIND_DEFAULT);
-}
-
-static void bind_radio(const char* setting, GtkWidget* widget)
-{	g_settings_bind_with_mapping(MainSettings, setting, widget, "active",
-		G_SETTINGS_BIND_DEFAULT, et_settings_enum_radio_get, et_settings_enum_radio_set, widget, NULL);
-}
-
 /*
  * The window for options
  */
@@ -386,51 +326,51 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
                       priv->default_path_button);
 
     /* Load directory on startup */
-    bind_boolean("load-on-startup", priv->browser_startup_check);
+    et_settings_bind_boolean("load-on-startup", priv->browser_startup_check);
 
     /* Browse subdirectories */
-    bind_boolean("browse-subdir", priv->browser_subdirs_check);
+    et_settings_bind_boolean("browse-subdir", priv->browser_subdirs_check);
 
     /* Open the node to show subdirectories */
-    bind_boolean("browse-expand-children", priv->browser_expand_subdirs_check);
+    et_settings_bind_boolean("browse-expand-children", priv->browser_expand_subdirs_check);
 
     /* Browse hidden directories */
-    bind_boolean("browse-show-hidden", priv->browser_hidden_check);
+    et_settings_bind_boolean("browse-show-hidden", priv->browser_hidden_check);
 
     /* Row max lines */
-    bind_boolean("browse-limit-lines", priv->browser_max_lines_check);
+    et_settings_bind_boolean("browse-limit-lines", priv->browser_max_lines_check);
     g_settings_bind (MainSettings, "browse-max-lines",
         priv->browser_max_lines, "value", G_SETTINGS_BIND_DEFAULT);
     g_settings_bind (MainSettings, "browse-limit-lines",
         priv->browser_max_lines, "sensitive", G_SETTINGS_BIND_GET);
 
-    bind_flags_value("hide-fields", priv->hide_fields_subtitle_check);
-    bind_flags_value("hide-fields", priv->hide_fields_album_artist_check);
-    bind_flags_value("hide-fields", priv->hide_fields_disc_subtitle_check);
-    bind_flags_value("hide-fields", priv->hide_fields_disc_number_check);
-    bind_flags_value("hide-fields", priv->hide_fields_release_year_check);
-    bind_flags_value("hide-fields", priv->hide_fields_description_check);
-    bind_flags_value("hide-fields", priv->hide_fields_composer_check);
-    bind_flags_value("hide-fields", priv->hide_fields_orig_artist_check);
-    bind_flags_value("hide-fields", priv->hide_fields_orig_year_check);
-    bind_flags_value("hide-fields", priv->hide_fields_copyright_check);
-    bind_flags_value("hide-fields", priv->hide_fields_url_check);
-    bind_flags_value("hide-fields", priv->hide_fields_encoded_by_check);
-    bind_flags_value("hide-fields", priv->hide_fields_replaygain);
+    et_settings_bind_flags("hide-fields", priv->hide_fields_subtitle_check);
+    et_settings_bind_flags("hide-fields", priv->hide_fields_album_artist_check);
+    et_settings_bind_flags("hide-fields", priv->hide_fields_disc_subtitle_check);
+    et_settings_bind_flags("hide-fields", priv->hide_fields_disc_number_check);
+    et_settings_bind_flags("hide-fields", priv->hide_fields_release_year_check);
+    et_settings_bind_flags("hide-fields", priv->hide_fields_description_check);
+    et_settings_bind_flags("hide-fields", priv->hide_fields_composer_check);
+    et_settings_bind_flags("hide-fields", priv->hide_fields_orig_artist_check);
+    et_settings_bind_flags("hide-fields", priv->hide_fields_orig_year_check);
+    et_settings_bind_flags("hide-fields", priv->hide_fields_copyright_check);
+    et_settings_bind_flags("hide-fields", priv->hide_fields_url_check);
+    et_settings_bind_flags("hide-fields", priv->hide_fields_encoded_by_check);
+    et_settings_bind_flags("hide-fields", priv->hide_fields_replaygain);
 
 #ifdef ENABLE_REPLAYGAIN
     gtk_widget_show(priv->replaygain_grid);
 #endif
 
     /* Show / hide log view. */
-    bind_boolean("log-show", priv->log_show_check);
+    et_settings_bind_boolean("log-show", priv->log_show_check);
    
     /* Show header information. */
-    bind_boolean("file-show-header", priv->header_show_check);
+    et_settings_bind_boolean("file-show-header", priv->header_show_check);
 
     /* Display color mode for changed files in list. */
     /* Set "new" Gtk+-2.0ish black/bold style for changed items. */
-    bind_boolean("file-changed-bold", priv->list_bold_radio);
+    et_settings_bind_boolean("file-changed-bold", priv->list_bold_radio);
     g_signal_connect_swapped (priv->list_bold_radio, "notify::active",
                               G_CALLBACK(et_browser_refresh_list),
                               MainWindow->browser());
@@ -439,42 +379,42 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
      * File Settings
      */
     /* File (name) Options */
-    bind_radio("rename-replace-illegal-chars", priv->file_name_replace_ascii);
-    bind_radio("rename-replace-illegal-chars", priv->file_name_replace_unicode);
-    bind_radio("rename-replace-illegal-chars", priv->file_name_replace_none);
+    et_settings_bind_radio("rename-replace-illegal-chars", priv->file_name_replace_ascii);
+    et_settings_bind_radio("rename-replace-illegal-chars", priv->file_name_replace_unicode);
+    et_settings_bind_radio("rename-replace-illegal-chars", priv->file_name_replace_none);
 
     /* Extension case (lower/upper?) */
-    bind_radio("rename-extension-mode", priv->name_lower_radio);
-    bind_radio("rename-extension-mode", priv->name_upper_radio);
-    bind_radio("rename-extension-mode", priv->name_no_change_radio);
+    et_settings_bind_radio("rename-extension-mode", priv->name_lower_radio);
+    et_settings_bind_radio("rename-extension-mode", priv->name_upper_radio);
+    et_settings_bind_radio("rename-extension-mode", priv->name_no_change_radio);
 
     /* Preserve modification time */
-    bind_boolean("file-preserve-modification-time", priv->file_preserve_check);
+    et_settings_bind_boolean("file-preserve-modification-time", priv->file_preserve_check);
 
     /* Change directory modification time */
-    bind_boolean("file-update-parent-modification-time", priv->file_parent_check);
+    et_settings_bind_boolean("file-update-parent-modification-time", priv->file_parent_check);
 
     /* Character Set for Filename */
-    bind_radio("rename-encoding", priv->file_encoding_try_alternative_radio);
-    bind_radio("rename-encoding", priv->file_encoding_transliterate_radio);
-    bind_radio("rename-encoding", priv->file_encoding_ignore_radio);
+    et_settings_bind_radio("rename-encoding", priv->file_encoding_try_alternative_radio);
+    et_settings_bind_radio("rename-encoding", priv->file_encoding_transliterate_radio);
+    et_settings_bind_radio("rename-encoding", priv->file_encoding_ignore_radio);
 
     /*
      * Tag Settings
      */
     /* Tag Options */
-    bind_boolean("tag-date-autocomplete", priv->tags_auto_date_check);
-    bind_boolean("tag-image-type-automatic", priv->tags_auto_image_type_check);
+    et_settings_bind_boolean("tag-date-autocomplete", priv->tags_auto_date_check);
+    et_settings_bind_boolean("tag-image-type-automatic", priv->tags_auto_image_type_check);
 
     /* Track formatting. */
-    bind_boolean("tag-number-padded", priv->tags_track_check);
+    et_settings_bind_boolean("tag-number-padded", priv->tags_track_check);
     g_settings_bind (MainSettings, "tag-number-length",
         priv->tags_track_button, "value", G_SETTINGS_BIND_DEFAULT);
     g_settings_bind (MainSettings, "tag-number-padded",
         priv->tags_track_button, "sensitive", G_SETTINGS_BIND_GET);
 
     /* Disc formatting. */
-    bind_boolean("tag-disc-padded", priv->tags_disc_check);
+    et_settings_bind_boolean("tag-disc-padded", priv->tags_disc_check);
     g_settings_bind (MainSettings, "tag-disc-length",
         priv->tags_disc_button, "value", G_SETTINGS_BIND_DEFAULT);
     g_settings_bind (MainSettings, "tag-disc-padded",
@@ -482,9 +422,9 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
     g_signal_emit_by_name (G_OBJECT (priv->tags_disc_check), "toggled");
 
     /* Tag field focus */
-    bind_boolean("tag-preserve-focus", priv->tags_preserve_focus_check);
+    et_settings_bind_boolean("tag-preserve-focus", priv->tags_preserve_focus_check);
 
-    bind_boolean("tag-multiline-comment", priv->tags_multiline_comment);
+    et_settings_bind_boolean("tag-multiline-comment", priv->tags_multiline_comment);
 
     /* additional genres */
     g_settings_bind_with_mapping (MainSettings, "tag-additional-genres",
@@ -495,40 +435,40 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
     /* Tag Splitting */
     g_settings_bind (MainSettings, "split-delimiter",
         priv->split_delimiter, "text", G_SETTINGS_BIND_DEFAULT);
-    bind_flags_value("ogg-split-fields", priv->split_title_check);
-    bind_flags_value("ogg-split-fields", priv->split_subtitle_check);
-    bind_flags_value("ogg-split-fields", priv->split_artist_check);
-    bind_flags_value("ogg-split-fields", priv->split_album_artist_check);
-    bind_flags_value("ogg-split-fields", priv->split_album_check);
-    bind_flags_value("ogg-split-fields", priv->split_disc_subtitle_check);
-    bind_flags_value("ogg-split-fields", priv->split_genre_check);
-    bind_flags_value("ogg-split-fields", priv->split_comment_check);
-    bind_flags_value("ogg-split-fields", priv->split_description_check);
-    bind_flags_value("ogg-split-fields", priv->split_composer_check);
-    bind_flags_value("ogg-split-fields", priv->split_orig_artist_check);
-    bind_flags_value("ogg-split-fields", priv->split_url_check);
-    bind_flags_value("ogg-split-fields", priv->split_encoded_by_check);
+    et_settings_bind_flags("ogg-split-fields", priv->split_title_check);
+    et_settings_bind_flags("ogg-split-fields", priv->split_subtitle_check);
+    et_settings_bind_flags("ogg-split-fields", priv->split_artist_check);
+    et_settings_bind_flags("ogg-split-fields", priv->split_album_artist_check);
+    et_settings_bind_flags("ogg-split-fields", priv->split_album_check);
+    et_settings_bind_flags("ogg-split-fields", priv->split_disc_subtitle_check);
+    et_settings_bind_flags("ogg-split-fields", priv->split_genre_check);
+    et_settings_bind_flags("ogg-split-fields", priv->split_comment_check);
+    et_settings_bind_flags("ogg-split-fields", priv->split_description_check);
+    et_settings_bind_flags("ogg-split-fields", priv->split_composer_check);
+    et_settings_bind_flags("ogg-split-fields", priv->split_orig_artist_check);
+    et_settings_bind_flags("ogg-split-fields", priv->split_url_check);
+    et_settings_bind_flags("ogg-split-fields", priv->split_encoded_by_check);
 
     /*
      * ID3 Tag Settings
      */
     /* Strip tag when fields (managed by EasyTAG) are empty */
-    bind_boolean("id3-strip-empty", priv->id3_strip_check);
+    et_settings_bind_boolean("id3-strip-empty", priv->id3_strip_check);
 
     /* Convert old ID3v2 tag version */
-    bind_boolean("id3v2-convert-old", priv->id3_v2_convert_check);
+    et_settings_bind_boolean("id3v2-convert-old", priv->id3_v2_convert_check);
 
     /* Use CRC32 */
-    bind_boolean("id3v2-crc32", priv->id3_v2_crc32_check);
+    et_settings_bind_boolean("id3v2-crc32", priv->id3_v2_crc32_check);
 
     /* Use Compression */
-    bind_boolean("id3v2-compression", priv->id3_v2_compression_check);
+    et_settings_bind_boolean("id3v2-compression", priv->id3_v2_compression_check);
 	
     /* Write Genre in text */
-    bind_boolean("id3v2-text-only-genre", priv->id3_v2_genre_check);
+    et_settings_bind_boolean("id3v2-text-only-genre", priv->id3_v2_genre_check);
 
     /* Write ID3v2 tag */
-    bind_boolean("id3v2-enabled", priv->id3_v2_check);
+    et_settings_bind_boolean("id3v2-enabled", priv->id3_v2_check);
     g_signal_connect (priv->id3_v2_check, "notify::active",
                       G_CALLBACK (notify_id3_settings_active), self);
 
@@ -571,15 +511,15 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
                       G_CALLBACK (notify_id3_settings_active), self);
 
     /* ID3v2 Additional iconv() options. */
-    bind_radio("id3v2-encoding-option", priv->id3_v2_none_radio);
-    bind_radio("id3v2-encoding-option", priv->id3_v2_transliterate_radio);
-    bind_radio("id3v2-encoding-option", priv->id3_v2_ignore_radio);
+    et_settings_bind_radio("id3v2-encoding-option", priv->id3_v2_none_radio);
+    et_settings_bind_radio("id3v2-encoding-option", priv->id3_v2_transliterate_radio);
+    et_settings_bind_radio("id3v2-encoding-option", priv->id3_v2_ignore_radio);
 
     /* Write ID3v1 tag */
-    bind_boolean("id3v1-enabled", priv->id3_v1_check);
+    et_settings_bind_boolean("id3v1-enabled", priv->id3_v1_check);
     g_signal_connect (priv->id3_v1_check, "notify::active",
                       G_CALLBACK (notify_id3_settings_active), self);
-    bind_boolean("id3v1-auto-add-remove", priv->id3_v1_auto_add_remove);
+    et_settings_bind_boolean("id3v1-auto-add-remove", priv->id3_v1_auto_add_remove);
 
     /* Id3V1 writing character set */
     Charset_Populate_Combobox (GTK_COMBO_BOX (priv->id3_v1_encoding_combo),
@@ -591,13 +531,13 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
                                   GSIZE_TO_POINTER (ET_TYPE_CHARSET), NULL);
 
     /* ID3V1 Additional iconv() options*/
-    bind_radio("id3v1-encoding-option", priv->id3_v1_none_radio);
-    bind_radio("id3v1-encoding-option", priv->id3_v1_transliterate_radio);
-    bind_radio("id3v1-encoding-option", priv->id3_v1_ignore_radio);
+    et_settings_bind_radio("id3v1-encoding-option", priv->id3_v1_none_radio);
+    et_settings_bind_radio("id3v1-encoding-option", priv->id3_v1_transliterate_radio);
+    et_settings_bind_radio("id3v1-encoding-option", priv->id3_v1_ignore_radio);
 
     /* Character Set for reading tag */
     /* "File Reading Charset" Check Button + Combo. */
-    bind_boolean("id3-override-read-encoding", priv->id3_read_encoding_check);
+    et_settings_bind_boolean("id3-override-read-encoding", priv->id3_read_encoding_check);
 
     Charset_Populate_Combobox (GTK_COMBO_BOX (priv->id3_read_encoding_combo),
                                g_settings_get_enum (MainSettings, "id3v1v2-charset"));
@@ -614,14 +554,14 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
      * ReplayGain
      */
 #ifdef ENABLE_REPLAYGAIN
-    bind_radio("replaygain-groupby", priv->replaygain_nogroup_radio);
-    bind_radio("replaygain-groupby", priv->replaygain_album_radio);
-    bind_radio("replaygain-groupby", priv->replaygain_disc_radio);
-    bind_radio("replaygain-groupby", priv->replaygain_filepath_radio);
+    et_settings_bind_radio("replaygain-groupby", priv->replaygain_nogroup_radio);
+    et_settings_bind_radio("replaygain-groupby", priv->replaygain_album_radio);
+    et_settings_bind_radio("replaygain-groupby", priv->replaygain_disc_radio);
+    et_settings_bind_radio("replaygain-groupby", priv->replaygain_filepath_radio);
 
-    bind_radio("replaygain-model", priv->replaygain_v1_radio);
-    bind_radio("replaygain-model", priv->replaygain_v2_radio);
-    bind_radio("replaygain-model", priv->replaygain_v15_radio);
+    et_settings_bind_radio("replaygain-model", priv->replaygain_v1_radio);
+    et_settings_bind_radio("replaygain-model", priv->replaygain_v2_radio);
+    et_settings_bind_radio("replaygain-model", priv->replaygain_v15_radio);
 #endif
 
     /*
@@ -632,31 +572,31 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
                                                             priv->scanner_grid);
 
     /* Character conversion for the 'Fill Tag' scanner (=> FTS...) */
-    bind_radio("fill-convert-spaces", priv->fts_underscore_p20_radio);
-    bind_radio("fill-convert-spaces", priv->fts_spaces_radio);
-    bind_radio("fill-convert-spaces", priv->fts_none_radio);
+    et_settings_bind_radio("fill-convert-spaces", priv->fts_underscore_p20_radio);
+    et_settings_bind_radio("fill-convert-spaces", priv->fts_spaces_radio);
+    et_settings_bind_radio("fill-convert-spaces", priv->fts_none_radio);
     /* TODO: No change tooltip. */
 
     /* Character conversion for the 'Rename File' scanner (=> RFS...) */
-    bind_radio("rename-convert-spaces", priv->rfs_underscore_p20_radio);
-    bind_radio("rename-convert-spaces", priv->rfs_spaces_radio);
-    bind_radio("rename-convert-spaces", priv->rfs_remove_radio);
+    et_settings_bind_radio("rename-convert-spaces", priv->rfs_underscore_p20_radio);
+    et_settings_bind_radio("rename-convert-spaces", priv->rfs_spaces_radio);
+    et_settings_bind_radio("rename-convert-spaces", priv->rfs_remove_radio);
 
     /* Character conversion for the 'Process Fields' scanner (=> PFS...) */
-    bind_boolean("process-uppercase-prepositions", priv->pfs_uppercase_prep_check);
+    et_settings_bind_boolean("process-uppercase-prepositions", priv->pfs_uppercase_prep_check);
 
     /* Other options */
-    bind_boolean("fill-overwrite-tag-fields", priv->overwrite_fields_check);
+    et_settings_bind_boolean("fill-overwrite-tag-fields", priv->overwrite_fields_check);
 
     /* Set a default comment text or CRC-32 checksum. */
-    bind_boolean("fill-set-default-comment", priv->default_comment_check);
+    et_settings_bind_boolean("fill-set-default-comment", priv->default_comment_check);
     g_settings_bind (MainSettings, "fill-set-default-comment",
         priv->default_comment_entry, "sensitive", G_SETTINGS_BIND_GET);
     g_settings_bind (MainSettings, "fill-default-comment",
         priv->default_comment_entry, "text", G_SETTINGS_BIND_DEFAULT);
 
     /* CRC32 comment. */
-    bind_boolean("fill-crc32-comment", priv->crc32_default_check);
+    et_settings_bind_boolean("fill-crc32-comment", priv->crc32_default_check);
 
     /* CDDB */
     /* 1st automatic search server. */
@@ -684,24 +624,24 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
         priv->cddb_manual_path_entry, "text", G_SETTINGS_BIND_DEFAULT);
 
     /* Track Name list (CDDB results). */
-    bind_boolean("cddb-follow-file", priv->cddb_follow_check);
+    et_settings_bind_boolean("cddb-follow-file", priv->cddb_follow_check);
 
     /* Check box to use DLM. */
-    bind_boolean("cddb-dlm-enabled", priv->cddb_dlm_check);
+    et_settings_bind_boolean("cddb-dlm-enabled", priv->cddb_dlm_check);
 
     /* Confirmation */
-    bind_boolean("confirm-write-tags", priv->confirm_write_check);
-    bind_boolean("confirm-rename-file", priv->confirm_rename_check);
-    bind_boolean("confirm-delete-file", priv->confirm_delete_check);
-    bind_boolean("confirm-write-playlist", priv->confirm_write_playlist_check);
-    bind_boolean("confirm-when-unsaved-files", priv->confirm_unsaved_files_check);
+    et_settings_bind_boolean("confirm-write-tags", priv->confirm_write_check);
+    et_settings_bind_boolean("confirm-rename-file", priv->confirm_rename_check);
+    et_settings_bind_boolean("confirm-delete-file", priv->confirm_delete_check);
+    et_settings_bind_boolean("confirm-write-playlist", priv->confirm_write_playlist_check);
+    et_settings_bind_boolean("confirm-when-unsaved-files", priv->confirm_unsaved_files_check);
 
     /* background processing */
     g_settings_bind (MainSettings, "background-threads",
         priv->background_threads, "value", G_SETTINGS_BIND_DEFAULT);
 
     /* Properties of the scanner window */
-    bind_boolean("scan-startup", priv->scanner_dialog_startup_check);
+    et_settings_bind_boolean("scan-startup", priv->scanner_dialog_startup_check);
 
     /* Load the default page */
     g_settings_bind (MainSettings, "preferences-page",

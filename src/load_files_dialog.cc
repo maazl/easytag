@@ -1023,9 +1023,7 @@ create_load_files_dialog (EtLoadFilesDialog *self)
     create_load_file_content_view_popup (self);
     create_load_file_name_view_popup (self);
 
-    g_settings_bind (MainSettings, "load-filenames-run-scanner",
-                     priv->file_scanner_check, "active",
-                     G_SETTINGS_BIND_DEFAULT);
+    et_settings_bind_boolean("load-filenames-run-scanner", priv->file_scanner_check);
 
     /* To initialize load button sensitivity. */
     g_signal_emit_by_name (G_OBJECT (priv->file_chooser), "file-set");

@@ -636,23 +636,14 @@ create_playlist_dialog (EtPlaylistDialog *self)
                      G_SETTINGS_BIND_DEFAULT | G_SETTINGS_BIND_INVERT_BOOLEAN);
 
     /* Playlist options */
-    g_settings_bind (MainSettings, "playlist-selected-only",
-                     priv->selected_files_check, "active",
-                     G_SETTINGS_BIND_DEFAULT);
-
-    g_settings_bind (MainSettings, "playlist-relative",
-                     priv->path_relative_radio, "active",
-                     G_SETTINGS_BIND_DEFAULT);
+    et_settings_bind_boolean("playlist-selected-only", priv->selected_files_check);
+    et_settings_bind_boolean("playlist-relative", priv->path_relative_radio);
 
     /* Create playlist in parent directory. */
-    g_settings_bind (MainSettings, "playlist-parent-directory",
-                     priv->playlist_parent_check, "active",
-                     G_SETTINGS_BIND_DEFAULT);
+    et_settings_bind_boolean("playlist-parent-directory", priv->playlist_parent_check);
 
     /* DOS Separator. */
-    g_settings_bind (MainSettings, "playlist-dos-separator",
-                     priv->playlist_dos_check, "active",
-                     G_SETTINGS_BIND_DEFAULT);
+    et_settings_bind_boolean("playlist-dos-separator", priv->playlist_dos_check);
 
     /* Playlist content */
     g_settings_bind (MainSettings, "playlist-default-mask",
@@ -664,24 +655,9 @@ create_playlist_dialog (EtPlaylistDialog *self)
     g_signal_connect (priv->content_mask_entry, "changed",
                       G_CALLBACK (entry_check_content_mask), NULL);
 
-    g_settings_bind_with_mapping (MainSettings, "playlist-content",
-                                  priv->content_filenames_radio, "active",
-                                  G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_enum_radio_get,
-                                  et_settings_enum_radio_set,
-                                  priv->content_filenames_radio, NULL);
-    g_settings_bind_with_mapping (MainSettings, "playlist-content",
-                                  priv->content_extended_radio, "active",
-                                  G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_enum_radio_get,
-                                  et_settings_enum_radio_set,
-                                  priv->content_extended_radio, NULL);
-    g_settings_bind_with_mapping (MainSettings, "playlist-content",
-                                  priv->content_extended_mask_radio, "active",
-                                  G_SETTINGS_BIND_DEFAULT,
-                                  et_settings_enum_radio_get,
-                                  et_settings_enum_radio_set,
-                                  priv->content_extended_mask_radio, NULL);
+    et_settings_bind_radio("playlist-content", priv->content_filenames_radio);
+    et_settings_bind_radio("playlist-content", priv->content_extended_radio);
+    et_settings_bind_radio("playlist-content", priv->content_extended_mask_radio);
 
     /* To initialize the mask status icon and visibility. */
     g_signal_emit_by_name (priv->name_mask_entry, "changed");
