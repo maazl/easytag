@@ -177,10 +177,9 @@ std::pair<I, bool> binary_find(I first, I last, const T& value, C comp)
 	return std::make_pair(first, false);
 }
 
-std::string Convert_Duration(long long duration);
-inline std::string Convert_Duration(double duration)
-{ return Convert_Duration(llround(duration)); }
 
+/// Convert file duration into a human readable format.
+std::string et_file_duration_to_string(double seconds);
 
 /*
  * Combobox misc functions

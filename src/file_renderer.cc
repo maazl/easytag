@@ -215,17 +215,7 @@ string FileSizeColumnRenderer::RenderText(const ET_File* file, bool original) co
 }
 
 string FileDurationColumnRenderer::RenderText(const ET_File* file, bool original) const
-{	gint duration = file->ETFileInfo.duration;
-	if (!duration)
-		return string();
-	char buf[20];
-	if (duration > 86400)
-		sprintf(buf, "%i %02i:%02i:%02i", duration /86400, duration / 3600 % 24, duration / 60 % 60, duration % 60);
-	else if (duration > 3600)
-		sprintf(buf, "%i:%02i:%02i", duration / 3600, duration / 60 % 60, duration % 60);
-	else
-		sprintf(buf, "%i:%02i", duration / 60, duration % 60);
-	return buf;
+{	return et_file_duration_to_string(file->ETFileInfo.duration);
 }
 
 string FileInfoIntColumnRenderer::RenderText(const ET_File* file, bool original) const

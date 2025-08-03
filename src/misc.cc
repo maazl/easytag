@@ -35,6 +35,7 @@
 
 #include <cmath>
 #include <atomic>
+#include <limits>
 using namespace std;
 
 string strprintf(const char* format, ...)
@@ -213,6 +214,19 @@ GVariant* et_variant_string_array_set(GVariant* variant, const char* value, gboo
 	return g_variant_new_strv(newvalue, next - newvalue);
 }
 
+string et_file_duration_to_string(double duration)
+{	string result;
+	if (duration > 0 && duration < numeric_limits<unsigned>::max())
+	{	unsigned d = duration + .5;
+		if (d > 86400)
+			sprintf(&result.assign(20, 0).front(), "%i %02i:%02i:%02i", d /86400, d / 3600 % 24, d / 60 % 60, d % 60);
+		else if (d > 3600)
+			sprintf(&result.assign(10, 0).front(), "%i:%02i:%02i", d / 3600, d / 60 % 60, d % 60);
+		else
+			sprintf(&result.assign(6, 0).front(), "%i:%02i", d / 60, d % 60);
+	}
+	return result;
+}
 
 /*
  * et_rename_file:

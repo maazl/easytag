@@ -28,11 +28,12 @@ misc_convert_duration (void)
 {
     static const struct
     {
-        const long long seconds;
+        const double seconds;
         const gchar *result;
     } times[] = 
     {
-        { 0, "0:00" },
+        { 0, "" },
+        { 0.1, "0:00" },
         { 10, "0:10" },
         { 100, "1:40" },
         { 1000, "16:40" },
@@ -44,7 +45,7 @@ misc_convert_duration (void)
 
     for (gsize i = 0; i < G_N_ELEMENTS (times); i++)
     {
-        std::string time = Convert_Duration (times[i].seconds);
+        std::string time = et_file_duration_to_string(times[i].seconds);
         g_assert_cmpstr (time.c_str(), ==, times[i].result);
     }
 }

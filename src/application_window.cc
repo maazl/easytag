@@ -1527,8 +1527,8 @@ et_header_fields_new_default (EtFileHeaderFields *fields, const ET_File *ETFile)
 
     /* Duration */
     fields->duration = strprintf("%s (%s)",
-        Convert_Duration(info->duration).c_str(),
-        Convert_Duration(ET_FileList::visible_total_duration()).c_str());
+        et_file_duration_to_string(info->duration).c_str(),
+        et_file_duration_to_string(ET_FileList::visible_total_duration()).c_str());
 }
 
 /*

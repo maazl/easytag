@@ -234,17 +234,9 @@ update_apply_button_sensitivity (EtCDDBDialog *self)
     priv = et_cddb_dialog_get_instance_private (self);
 
     /* If any field is set, enable the apply button. */
-    if (priv->apply_button
-        && gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->track_list_model),
-                                           NULL) > 0
-        && (g_settings_get_flags (MainSettings, "cddb-set-fields") != 0))
-    {
-        gtk_widget_set_sensitive (GTK_WIDGET (priv->apply_button), TRUE);
-    }
-    else
-    {
-        gtk_widget_set_sensitive (GTK_WIDGET (priv->apply_button), FALSE);
-    }
+    gtk_widget_set_sensitive(GTK_WIDGET(priv->apply_button),
+        gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->track_list_model), NULL) > 0
+        && (g_settings_get_flags(MainSettings, "cddb-set-fields") != 0));
 }
 
 static void
@@ -254,17 +246,10 @@ update_search_button_sensitivity (EtCDDBDialog *self)
 
     priv = et_cddb_dialog_get_instance_private (self);
 
-    if (priv->manual_search_button
-        && *(gtk_entry_get_text (GTK_ENTRY (priv->search_entry)))
-        && (g_settings_get_flags (MainSettings, "cddb-search-fields") != 0)
-        && (g_settings_get_flags (MainSettings, "cddb-search-categories") != 0))
-    {
-        gtk_widget_set_sensitive (GTK_WIDGET (priv->manual_search_button), TRUE);
-    }
-    else
-    {
-        gtk_widget_set_sensitive (GTK_WIDGET (priv->manual_search_button), FALSE);
-    }
+    gtk_widget_set_sensitive(GTK_WIDGET(priv->manual_search_button),
+        *(gtk_entry_get_text(GTK_ENTRY(priv->search_entry)))
+        && (g_settings_get_flags(MainSettings, "cddb-search-fields") != 0)
+        && (g_settings_get_flags(MainSettings, "cddb-search-categories") != 0));
 }
 
 /*
@@ -293,7 +278,7 @@ show_album_info (EtCDDBDialog *self, GtkTreeSelection *selection)
                             "disc ID: ‘%s’"),
                             cddbalbum->album ? cddbalbum->album : "",
                             cddbalbum->artist ? cddbalbum->artist : "",
-                            Convert_Duration((long long)cddbalbum->duration).c_str(),
+                            et_file_duration_to_string(cddbalbum->duration).c_str(),
                             cddbalbum->year ? cddbalbum->year : "",
                             cddbalbum->genre ? cddbalbum->genre : "",
                             cddbalbum->id ? cddbalbum->id : "");
@@ -547,7 +532,7 @@ Cddb_Load_Track_Album_List (EtCDDBDialog *self, GList *track_list)
                                                CDDB_TRACK_LIST_NAME,
                                                cddbtrackalbum->track_name,
                                                CDDB_TRACK_LIST_TIME,
-                                               Convert_Duration((long long)cddbtrackalbum->duration).c_str(),
+                                               et_file_duration_to_string(cddbtrackalbum->duration).c_str(),
                                                CDDB_TRACK_LIST_DATA,
                                                cddbtrackalbum,
                                                -1);
