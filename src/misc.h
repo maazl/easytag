@@ -80,7 +80,7 @@ public:
 	constexpr T* get() const noexcept { return Ptr; }
 	void reset() noexcept { this->~gObject(); Ptr = nullptr; }
 	gObject<T>& operator=(const gObject<T>& r) { if (Ptr != r.Ptr) { this->~gObject(); g_object_ref(Ptr = r.Ptr); } return *this; }
-	constexpr gObject<T>& operator=(gObject<T>&& r) noexcept { Ptr = r.release(); return *this; }
+	constexpr gObject<T>& operator=(gObject<T>&& r) noexcept { T* tmp = Ptr; Ptr = r.Ptr; r.Ptr = tmp; return *this; }
 };
 
 /** create unique pointer with explicit deleter
