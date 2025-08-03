@@ -1,5 +1,5 @@
 /* EasyTAG - Tag editor for audio files
- * Copyright (C) 2024  Marcel Müller
+ * Copyright (C) 2024-2025  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014-2015  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -181,12 +181,6 @@ std::string Convert_Duration(long long duration);
 inline std::string Convert_Duration(double duration)
 { return Convert_Duration(llround(duration)); }
 
-/// Pad the number with trailing zeros according to settings "tag-disc-padded", "tag-disc-length".
-std::string et_disc_number_to_string(const gchar* disc_number);
-/// Pad the number with trailing zeros according to settings "tag-number-padded", "tag-number-length".
-std::string et_track_number_to_string(const gchar* track_number);
-/// Pad the number with trailing zeros according to settings "tag-number-padded", "tag-number-length".
-std::string et_track_number_to_string(unsigned track_number);
 
 /*
  * Combobox misc functions

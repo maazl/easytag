@@ -570,10 +570,8 @@ void vorbis_tags::to_file_tags(File_Tag *FileTag)
 
 	/* Disc number and total discs. */
 	fetch_field(ET_VORBIS_COMMENT_FIELD_DISC_TOTAL, FileTag->disc_total);
-	FileTag->disc_total = et_disc_number_to_string(FileTag->disc_total);
-
 	fetch_field(ET_VORBIS_COMMENT_FIELD_DISC_NUMBER, FileTag->disc_number);
-	if (!et_str_empty(FileTag->disc_number))
+	if (!et_str_empty(FileTag->disc_number) && et_str_empty(FileTag->disc_total))
 		FileTag->disc_and_total(FileTag->disc_number);
 
 	fetch_field(ET_VORBIS_COMMENT_FIELD_DATE, FileTag->year);
@@ -581,10 +579,8 @@ void vorbis_tags::to_file_tags(File_Tag *FileTag)
 
 	/* Track number and total tracks. */
 	fetch_field(ET_VORBIS_COMMENT_FIELD_TRACK_TOTAL, FileTag->track_total);
-	FileTag->track_total = et_disc_number_to_string(FileTag->track_total);
-
 	fetch_field(ET_VORBIS_COMMENT_FIELD_TRACK_NUMBER, FileTag->track);
-	if (!et_str_empty(FileTag->track))
+	if (!et_str_empty(FileTag->track) && et_str_empty(FileTag->track_total))
 		FileTag->track_and_total(FileTag->track);
 
 	fetch_field(ET_VORBIS_COMMENT_FIELD_GENRE, FileTag->genre);

@@ -32,6 +32,7 @@
 #include "misc.h"
 #include "setting.h"
 #include "file_list.h"
+#include "file_tag.h"
 #include "browser.h"
 
 typedef struct
@@ -171,6 +172,7 @@ common_init (EtApplication *self)
 
     /* Load Config */
     Init_Config_Variables ();
+    File_Tag::init(MainSettings);
 
     /* The main window */
     MainWindow = window = et_application_window_new(GTK_APPLICATION(self));

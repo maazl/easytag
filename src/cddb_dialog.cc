@@ -1922,10 +1922,10 @@ set_et_file_from_cddb_album (ET_File * etfile,
 
         if ((set_fields & ET_CDDB_SET_FIELD_TRACK)
             && cddbtrackalbum->track_number)
-            FileTag->track = et_track_number_to_string(cddbtrackalbum->track_number);
+            FileTag->track = File_Tag::track_number_to_string(cddbtrackalbum->track_number);
 
         if (set_fields & ET_CDDB_SET_FIELD_TRACK_TOTAL)
-            FileTag->track_total = et_track_number_to_string(list_length);
+            FileTag->track_total = File_Tag::track_number_to_string(list_length);
 
         if ((set_fields & ET_CDDB_SET_FIELD_GENRE)
             && (cddbtrackalbum->cddbalbum->genre || cddbtrackalbum->cddbalbum->category))
@@ -1941,7 +1941,7 @@ set_et_file_from_cddb_album (ET_File * etfile,
     if (set_fields & ET_CDDB_SET_FIELD_FILENAME)
     {
         /* Build the filename with the path. */
-        string filename_generated_utf8 = et_track_number_to_string(cddbtrackalbum->track_number)
+        string filename_generated_utf8 = File_Tag::track_number_to_string(cddbtrackalbum->track_number)
             + " - " + cddbtrackalbum->track_name;
         File_Name::prepare_func((EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"), ET_CONVERT_SPACES_NO_CHANGE)(filename_generated_utf8, 0);
 

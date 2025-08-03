@@ -284,6 +284,7 @@ on_apply_to_selection (GObject *object,
             File_Tag* FileTag = new File_Tag(*etfile->FileTagNew());
             FileTag->disc_number = disc_number;
             FileTag->disc_total = disc_total;
+            FileTag->padnumbers();
             etfile->apply_changes(nullptr, FileTag);
         }
 
@@ -374,8 +375,8 @@ on_apply_to_selection (GObject *object,
         for (unsigned track : track_no)
         {   ET_File* etfile = filelistiter++->get();
             File_Tag* FileTag = new File_Tag(*etfile->FileTagNew());
-            FileTag->track = et_track_number_to_string(track);
-            FileTag->track_total = et_track_number_to_string(by_path.find(etfile->FileNameNew()->path())->second);
+            FileTag->track = File_Tag::track_number_to_string(track);
+            FileTag->track_total = File_Tag::track_number_to_string(by_path.find(etfile->FileNameNew()->path())->second);
             etfile->apply_changes(nullptr, FileTag);
         }
 
@@ -818,7 +819,7 @@ populate_track_combo (EtTagArea *self)
     {
         gtk_list_store_insert_with_values (priv->track_combo_model, NULL,
             G_MAXINT, TRACK_COLUMN_TRACK_NUMBER,
-            et_track_number_to_string(i).c_str(), -1);
+            File_Tag::track_number_to_string(i).c_str(), -1);
     }
 }
 
@@ -2138,25 +2139,18 @@ void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 
 	/* Disc number and total number of discs. */
 	if (gtk_widget_get_visible(priv->disc_number_entry))
-	{	string disc = gtk_entry_get_text(GTK_ENTRY(priv->disc_number_entry));
-		auto separator = disc.find('/');
-		if (separator != string::npos && disc.length() > separator + 1)
-		{	FileTag->disc_total = et_disc_number_to_string(disc.c_str() + separator + 1);
-			disc.erase(separator);
-		} else
-			FileTag->disc_total.reset();
-		FileTag->disc_number = et_disc_number_to_string(disc.c_str());
-	}
+		FileTag->disc_and_total(gtk_entry_get_text(GTK_ENTRY(priv->disc_number_entry)));
 
 	store_field(&File_Tag::year, priv->year_entry);
 	store_field(&File_Tag::release_year, priv->release_year_entry);
 
 	/* Track */
-	FileTag->track = et_track_number_to_string(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->track_combo_entry)))));
-
+	store_field(&File_Tag::track, gtk_bin_get_child(GTK_BIN(priv->track_combo_entry)));
 	/* Track Total */
 	if (gtk_widget_get_visible(priv->track_total_entry))
-		FileTag->track_total = et_track_number_to_string(gtk_entry_get_text(GTK_ENTRY(priv->track_total_entry)));
+		store_field(&File_Tag::track_total, priv->track_total_entry);
+
+	FileTag->padnumbers();
 
 	store_field(&File_Tag::genre, gtk_bin_get_child(GTK_BIN(priv->genre_combo_entry)));
 

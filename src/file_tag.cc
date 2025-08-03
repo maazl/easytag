@@ -273,11 +273,11 @@ void File_Tag::track_and_total(const char* value)
 	/* cut off the total tracks if present */
 	const char *field2 = strchr(value, '/');
 	if (field2)
-	{	track_total.assignNFC(et_disc_number_to_string(field2 + 1));
+	{	track_total.assignNFC(field2 + 1);
 		string field1(value, field2 - value);
-		track.assignNFC(et_disc_number_to_string(field1.c_str()));
+		track.assignNFC(field1);
 	} else
-	{	track.assignNFC(et_disc_number_to_string(value).c_str());
+	{	track.assignNFC(value);
 		track_total.reset();
 	}
 }
@@ -291,20 +291,61 @@ void File_Tag::disc_and_total(const char* value)
 	/* cut off the total discs if present */
 	const char *field2 = strchr(value, '/');
 	if (field2)
-	{	disc_total.assignNFC(et_disc_number_to_string(field2 + 1));
+	{	disc_total.assignNFC(field2 + 1);
 		string field1(value, field2 - value);
-		disc_number.assignNFC(et_disc_number_to_string(field1.c_str()));
+		disc_number.assignNFC(field1);
 	} else
-	{	disc_number.assignNFC(et_disc_number_to_string(value).c_str());
+	{	disc_number.assignNFC(value);
 		disc_total.reset();
 	}
 }
 
-static bool cmpassign(xStringD0& l, string r)
-{	if (l.equals(r))
+static unsigned pad_track_number;
+static unsigned pad_disc_number;
+
+static bool pad_number(xStringD0& field, unsigned len)
+{	if (field.empty())
 		return false;
-	l = r;
+	size_t numcnt = strspn(field, "0123456789");
+	if (field[numcnt] || numcnt >= len) // !entirely numbers or long enough?
+		return false;
+	field = string(len - numcnt, '0') + field.get();
 	return true;
+}
+
+string File_Tag::disc_number_to_string(unsigned disc_number)
+{	string ret;
+	if (!disc_number)
+		return ret;
+	ret = to_string(disc_number);
+	if (pad_disc_number)
+	{	int count = pad_disc_number - ret.length();
+		if (count > 0)
+			ret.insert(0, count, '0');
+	}
+	return ret;
+}
+
+string File_Tag::track_number_to_string(unsigned track_number)
+{	string ret;
+	if (!track_number)
+		return ret;
+	ret = to_string(track_number);
+	if (pad_track_number)
+	{	int count = pad_track_number - ret.length();
+		if (count > 0)
+			ret.insert(0, count, '0');
+	}
+	return ret;
+}
+
+bool File_Tag::padnumbers()
+{	bool changed = track.trim() | track_total.trim() | disc_number.trim() | disc_total.trim();
+	if (pad_track_number)
+		changed |= pad_number(track, pad_track_number) | pad_number(track_total, pad_track_number);
+	if (pad_disc_number)
+		changed |= pad_number(disc_number, pad_disc_number) | pad_number(disc_total, pad_disc_number);
+	return changed;
 }
 
 bool File_Tag::autofix()
@@ -315,12 +356,9 @@ bool File_Tag::autofix()
 		| album_artist.trim()
 		| album.trim()
 		| disc_subtitle.trim()
-		| cmpassign(disc_number, et_disc_number_to_string(disc_number))
-		| cmpassign(disc_total, et_disc_number_to_string(disc_total))
+		| padnumbers()
 		| year.trim()
 		| release_year.trim()
-		| cmpassign(track, et_track_number_to_string(track))
-		| cmpassign(track_total, et_track_number_to_string(track_total))
 		| genre.trim()
 		| comment.trim()
 		| description.trim()
@@ -330,4 +368,25 @@ bool File_Tag::autofix()
 		| copyright.trim()
 		| url.trim()
 		| encoded_by.trim();
+}
+
+static void update_settings(GSettings* settings, const gchar* key)
+{	if (strcmp(key, "tag-number-padded") == 0 || strcmp(key, "tag-number-length") == 0)
+		pad_track_number = g_settings_get_boolean(settings, "tag-number-padded")
+			? g_settings_get_uint(settings, "tag-number-length") : 0;
+	else if (strcmp(key, "tag-disc-padded") == 0 || strcmp(key, "tag-disc-length") == 0)
+		pad_disc_number = g_settings_get_boolean(settings, "tag-disc-padded")
+			? g_settings_get_uint(settings, "tag-disc-length") : 0;
+}
+
+void File_Tag::init(GSettings* settings)
+{
+	auto connect = [settings](const gchar* signal)
+	{	g_signal_connect(settings, signal, (GCallback)update_settings, NULL);
+		update_settings(settings, signal + 9); // key only
+	};
+	connect("changed::tag-number-padded");
+	connect("changed::tag-number-length");
+	connect("changed::tag-disc-padded");
+	connect("changed::tag-disc-length");
 }

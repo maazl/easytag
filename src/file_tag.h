@@ -107,6 +107,14 @@ struct File_Tag : public UndoList<File_Tag>::Intrusive
 	void track_and_total(const char* value);
 	void disc_and_total(const char* value);
 
+	/// Pad the number with trailing zeros according to settings "tag-disc-padded", "tag-disc-length".
+	static std::string disc_number_to_string(unsigned disc_number);
+	/// Pad the number with trailing zeros according to settings "tag-number-padded", "tag-number-length".
+	static std::string track_number_to_string(unsigned track_number);
+
+	/// Apply padding rules to track and disc numbers.
+	bool padnumbers();
+
 	// locale invariant format for ReplayGain values
 	static std::string format_float(const char* fmt, float value);
 	static float parse_float(const char* value);
@@ -123,6 +131,9 @@ struct File_Tag : public UndoList<File_Tag>::Intrusive
 	/// Apply automatic corrections
 	/// @return true if the operation made at least one change.
 	bool autofix();
+
+	/// Initialize class, must be called during startup.
+	static void init(GSettings* settings);
 };
 
 #endif /* !ET_FILE_TAG_H_ */
