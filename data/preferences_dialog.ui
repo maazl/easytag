@@ -166,6 +166,13 @@
 										<property name="row-spacing">6</property>
 										<property name="visible">True</property>
 										<child>
+											<object class="GtkCheckButton" id="hide_fields_version_check">
+												<property name="label" translatable="yes">Version</property>
+												<property name="name">version</property>
+												<property name="visible">True</property>
+											</object>
+										</child>
+										<child>
 											<object class="GtkCheckButton" id="hide_fields_subtitle_check">
 												<property name="label" translatable="yes">Subtitle</property>
 												<property name="name">subtitle</property>
@@ -197,13 +204,6 @@
 											<object class="GtkCheckButton" id="hide_fields_release_year_check">
 												<property name="label" translatable="yes">Release year</property>
 												<property name="name">release-year</property>
-												<property name="visible">True</property>
-											</object>
-										</child>
-										<child>
-											<object class="GtkCheckButton" id="hide_fields_description_check">
-												<property name="label" translatable="yes">Description</property>
-												<property name="name">description</property>
 												<property name="visible">True</property>
 											</object>
 											<packing>
@@ -286,6 +286,17 @@
 											<packing>
 												<property name="top_attach">2</property>
 												<property name="left_attach">2</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="hide_fields_description_check">
+												<property name="label" translatable="yes">Description</property>
+												<property name="name">description</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="top_attach">2</property>
+												<property name="left_attach">3</property>
 											</packing>
 										</child>
 									</object>

@@ -47,6 +47,7 @@ typedef struct
     GtkWidget *browser_hidden_check;
     GtkWidget *browser_max_lines_check;
     GtkWidget *browser_max_lines;
+    GtkWidget *hide_fields_version_check;
     GtkWidget *hide_fields_subtitle_check;
     GtkWidget *hide_fields_album_artist_check;
     GtkWidget *hide_fields_disc_subtitle_check;
@@ -344,6 +345,7 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
     g_settings_bind (MainSettings, "browse-limit-lines",
         priv->browser_max_lines, "sensitive", G_SETTINGS_BIND_GET);
 
+    et_settings_bind_flags("hide-fields", priv->hide_fields_version_check);
     et_settings_bind_flags("hide-fields", priv->hide_fields_subtitle_check);
     et_settings_bind_flags("hide-fields", priv->hide_fields_album_artist_check);
     et_settings_bind_flags("hide-fields", priv->hide_fields_disc_subtitle_check);
@@ -872,6 +874,7 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_hidden_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_max_lines_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_max_lines);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_version_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_subtitle_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_album_artist_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, hide_fields_disc_subtitle_check);
