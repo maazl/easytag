@@ -198,6 +198,13 @@ gboolean et_variant_string_array_contains(GVariant* variant, const char* value);
 GVariant* et_variant_string_array_toggle(GVariant* variant, const char* value);
 GVariant* et_variant_string_array_set(GVariant* variant, const char* value, gboolean set);
 
+inline bool operator==(const GtkTreeIter& l, const GtkTreeIter& r)
+{	// like gtkmm
+	return l.user_data == r.user_data
+		&& l.user_data2 == r.user_data2
+		&& l.user_data3 == r.user_data3;
+}
+
 gboolean et_rename_file (const gchar *old_filename, const gchar *new_filename, GError **error);
 
 /*
