@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#ifdef ENABLE_CDDB
+
 #include "cddb_dialog.h"
 
 #include <glib/gi18n.h>
@@ -2872,3 +2874,5 @@ et_cddb_dialog_new (void)
 
     return (EtCDDBDialog*)g_object_new (ET_TYPE_CDDB_DIALOG, "use-header-bar", use_header_bar, NULL);
 }
+
+#endif

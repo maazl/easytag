@@ -58,7 +58,9 @@ typedef struct
     GtkWidget *progress_bar;
     GtkWidget *status_bar;
 
+#ifdef ENABLE_CDDB
     GtkWidget *cddb_dialog;
+#endif
     GtkWidget *load_files_dialog;
     GtkWidget *playlist_dialog;
     GtkWidget *preferences_dialog;
@@ -299,6 +301,7 @@ et_application_window_tag_area_display_et_file (EtApplicationWindow *self,
     return et_tag_area_display_et_file (ET_TAG_AREA (priv->tag_area), ETFile, columns);
 }
 
+#ifdef ENABLE_CDDB
 static void
 et_application_window_show_cddb_dialog (EtApplicationWindow *self)
 {
@@ -316,6 +319,7 @@ et_application_window_show_cddb_dialog (EtApplicationWindow *self)
         gtk_widget_show_all (priv->cddb_dialog);
     }
 }
+#endif
 
 /*
  * Delete the file ETFile
@@ -819,17 +823,15 @@ on_file_artist_view_change (GSimpleAction *action,
     et_application_window_update_actions (ET_APPLICATION_WINDOW (user_data));
 }
 
+#ifdef ENABLE_CDDB
 static void
 on_show_cddb (GSimpleAction *action,
               GVariant *variant,
               gpointer user_data)
 {
-    EtApplicationWindow *self;
-
-    self = ET_APPLICATION_WINDOW (user_data);
-
-    et_application_window_show_cddb_dialog (self);
+    et_application_window_show_cddb_dialog(ET_APPLICATION_WINDOW(user_data));
 }
+#endif
 
 static void
 on_show_load_filenames (GSimpleAction *action,
@@ -925,6 +927,7 @@ static void on_go_last(GSimpleAction *action, GVariant *variant, gpointer user_d
 	self->change_displayed_file(priv->browser->select_last_file());
 }
 
+#ifdef ENABLE_CDDB
 static void
 on_show_cddb_selection (GSimpleAction *action,
                         GVariant *variant,
@@ -938,6 +941,7 @@ on_show_cddb_selection (GSimpleAction *action,
     et_application_window_show_cddb_dialog (self);
     et_cddb_dialog_search_from_selection (ET_CDDB_DIALOG (priv->cddb_dialog));
 }
+#endif
 
 static void
 on_clear_log (GSimpleAction *action,
@@ -1023,7 +1027,9 @@ static const GActionEntry actions[] =
 	{ "browse-directory", on_browser<&EtBrowser::show_open_directory_with_dialog> },
 	/* { "browse-subdir", on_browse_subdir }, Created from GSetting. */
 	/* Miscellaneous menu. */
+#ifdef ENABLE_CDDB
 	{ "show-cddb", on_show_cddb },
+#endif
 	{ "show-load-filenames", on_show_load_filenames },
 	{ "show-playlist", on_show_playlist },
 	{ "replaygain", on_replaygain },
@@ -1040,7 +1046,9 @@ static const GActionEntry actions[] =
 	{ "go-next", on_go_next },
 	{ "go-last", on_go_last },
 	/* Popup menus. */
+#ifdef ENABLE_CDDB
 	{ "show-cddb-selection", on_show_cddb_selection },
+#endif
 	{ "clear-log", on_clear_log },
 	{ "go-directory", on_browser<&EtBrowser::go_directory> },
 	{ "run-player-album", on_browser<&EtBrowser::run_player_for_album_list> },
@@ -1066,41 +1074,21 @@ et_application_window_destroy(GtkWidget *object)
 
     save_state (self);
 
-    if (priv->cddb_dialog)
-    {
-        gtk_widget_destroy (priv->cddb_dialog);
-        priv->cddb_dialog = NULL;
-    }
+    auto destroy = [](GtkWidget*& widget)
+    {   if (!widget)
+            return;
+        gtk_widget_destroy(widget);
+        widget = NULL;
+    };
 
-    if (priv->load_files_dialog)
-    {
-        gtk_widget_destroy (priv->load_files_dialog);
-        priv->load_files_dialog = NULL;
-    }
-
-    if (priv->playlist_dialog)
-    {
-        gtk_widget_destroy (priv->playlist_dialog);
-        priv->playlist_dialog = NULL;
-    }
-
-    if (priv->preferences_dialog)
-    {
-        gtk_widget_destroy (priv->preferences_dialog);
-        priv->preferences_dialog = NULL;
-    }
-
-    if (priv->scan_dialog)
-    {
-        gtk_widget_destroy (priv->scan_dialog);
-        priv->scan_dialog = NULL;
-    }
-
-    if (priv->search_dialog)
-    {
-        gtk_widget_destroy (priv->search_dialog);
-        priv->search_dialog = NULL;
-    }
+#ifdef ENABLE_CDDB
+    destroy(priv->cddb_dialog);
+#endif
+    destroy(priv->load_files_dialog);
+    destroy(priv->playlist_dialog);
+    destroy(priv->preferences_dialog);
+    destroy(priv->scan_dialog);
+    destroy(priv->search_dialog);
 
     if (priv->cursor)
     {
@@ -1231,6 +1219,9 @@ et_application_window_init (EtApplicationWindow *self)
 
     gtk_widget_show_all (GTK_WIDGET (main_vbox));
 
+#ifndef ENABLE_CDDB
+    gtk_widget_hide(GTK_WIDGET (gtk_builder_get_object (builder, "cddb_button")));
+#endif
 #ifndef ENABLE_REPLAYGAIN
     gtk_widget_hide(GTK_WIDGET (gtk_builder_get_object (builder, "replaygain_button")));
 #endif

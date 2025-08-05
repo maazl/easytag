@@ -20,6 +20,8 @@
 #ifndef ET_CDDB_DIALOG_H_
 #define ET_CDDB_DIALOG_H_
 
+#ifdef ENABLE_CDDB
+
 #include <gtk/gtk.h>
 
 #define ET_TYPE_CDDB_DIALOG (et_cddb_dialog_get_type ())
@@ -43,5 +45,7 @@ struct _EtCDDBDialogClass
 GType et_cddb_dialog_get_type (void);
 EtCDDBDialog *et_cddb_dialog_new (void);
 gboolean et_cddb_dialog_search_from_selection (EtCDDBDialog *self);
+
+#endif
 
 #endif /* ET_CDDB_H_ */
