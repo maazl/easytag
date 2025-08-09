@@ -221,7 +221,7 @@ float ReplayGain1::Gain() const
 
 void ReplayGain1::operator+=(const Result& right)
 {	const ReplayGain1& rg = dynamic_cast<const ReplayGain1&>(right);
-	if (rg.Maximum > Maximum)
+	if (rg.Maximum > Maximum && rg.Maximum <= ReplayGainAnalyzer::MaxPeak)
 		Maximum = rg.Maximum;
 	BlockCount += rg.BlockCount;
 	int* dp = Bins;
@@ -369,7 +369,7 @@ float ReplayGain2::Gain() const
 
 void ReplayGain2::operator+=(const Result& right)
 {	const ReplayGain2& rg = dynamic_cast<const ReplayGain2&>(right);
-	if (rg.Maximum > Maximum)
+	if (rg.Maximum > Maximum && rg.Maximum <= ReplayGainAnalyzer::MaxPeak)
 		Maximum = rg.Maximum;
 	Ljsum += rg.Ljsum;
 	Lj.insert(Lj.end(), rg.Lj.begin(), rg.Lj.end());

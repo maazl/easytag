@@ -731,10 +731,13 @@ void ReplayGainWorker::OnFileCompleted(FileListIterator cur, string err, float t
 	{	Log_Print(LOG_ERROR, _("Failed to analyze file '%s': %s"), file_name.full_name().get(), err.c_str());
 	} else
 	{	File_Tag* file_tag = new File_Tag(*file->FileTagNew());
+		Log_Print(LOG_OK, _("ReplayGain of file '%s' is %.1f dB, peak %.2f"), file_name.full_name().get(), track_gain, track_peak);
 		file_tag->track_gain = track_gain;
-		file_tag->track_peak = track_peak;
+		if (track_peak > ReplayGainAnalyzer::MaxPeak)
+			Log_Print(LOG_WARNING, _("Rejecting unreasonable large peak value %.1f. Possibly corrupted file '%s'."), track_peak, file_name.full_name().get());
+		else
+			file_tag->track_peak = track_peak;
 		file->apply_changes(nullptr, file_tag);
-		Log_Print(LOG_OK, _("ReplayGain of file '%s' is %.1f dB, peak %.2f"), file_name.full_name().get(), file_tag->track_gain, file_tag->track_peak);
 
 		if (MainWindow->get_displayed_file() == file)
 			et_application_window_update_ui_from_et_file(window, ET_COLUMN_REPLAYGAIN);

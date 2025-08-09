@@ -27,11 +27,12 @@
 #include <string>
 #include <memory>
 
-class ET_File;
-
 class ReplayGainAnalyzer
 {
 public:
+	/// Maximum reasonabla peak value. Higher values are rejected.
+	static constexpr const float MaxPeak = 2.;
+
 	struct Result
 	{	virtual ~Result() {}
 		/** Recommended gain adjust in dB. */
