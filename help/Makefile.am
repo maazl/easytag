@@ -6,6 +6,7 @@ HELP_FILES = \
 	cddb-search.page \
 	file-rename.page \
 	file-select.page \
+	fingerprint.page \
 	format-specifier.page \
 	image-delete.page \
 	image-export.page \

@@ -1,4 +1,4 @@
-3.0.0 - 2025-03-16 :
+3.0.0 - 2025-07-27 :
 ====================
 
     * Add support for RelpayGain tags including calculation
@@ -6,12 +6,13 @@
     * Add support for sub title and media title tag
     * Add support for long description tag (not supported by ID3V2 tags)
     * Add ASF/Windows Media support
-    * Process directory scan and ReplayGain asynchronously
+    * Add audio fingerprinting using AcoustID
+    * Process directory scan, ReplayGain & fingerprinting asynchronously
     * Speed up directory scan by at least an order of magnitude
+    * Allow ISO date values (not just year)
     * Write comment to COMMENT rather than DESCRIPTION in Ogg files
     * Allow multi line comments
     * Support Ogg version tag
-    * Allow ISO date values (not just year)
     * Added column with file path in browser
     * Option to hide unused fields
     * Option to hide columns

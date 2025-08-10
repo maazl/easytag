@@ -76,6 +76,11 @@ public:
 	/// Return the focused file if a popup menu action is currently pending in the file view.
 	ET_File* popup_file();
 
+	/// Get previous and next file that matches a predicate.
+	/// @return previous and next matching file or \c nullptr if no such file exists.
+	/// @remarks The current implementation needs to scan the entire model.
+	std::pair<ET_File*, ET_File*> prev_next_if(ET_File* file, bool (*predicate)(const ET_File*));
+
 	// Actions ...
 
 	/// Select the directory corresponding to the 'path' in the tree browser,

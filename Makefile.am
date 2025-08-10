@@ -11,6 +11,7 @@ AM_DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-mp4 \
 	--enable-nautilus-actions \
 	--enable-asf \
+	--enable-acoustid \
 	--enable-replaygain \
 	--enable-speex \
 	--enable-tests \
@@ -41,6 +42,8 @@ easytag_CXXFLAGS = \
 
 easytag_SOURCES = \
 	src/about.cc \
+	src/acoustid.cc \
+	src/acoustid_dialog.cc \
 	src/application.cc \
 	src/application_window.cc \
 	src/browser.cc \
@@ -102,6 +105,8 @@ nodist_easytag_SOURCES = \
 
 easytag_headers = \
 	src/about.h \
+	src/acoustid.h \
+	src/acoustid_dialog.h \
 	src/application.h \
 	src/application_window.h \
 	src/browser.h \

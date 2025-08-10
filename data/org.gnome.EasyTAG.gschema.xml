@@ -138,6 +138,43 @@
       <default>['title','artist','album','year','track','track-total','genre','filename']</default>
     </key>
 
+    <key name="acoustid-uri" type="s">
+      <summary>Acoustid URL</summary>
+      <description>URL of Acoustid lookup service</description>
+      <default>'https://api.acoustid.org/v2/lookup'</default>
+    </key>
+
+    <key name="acoustid-set-fields" flags="org.gnome.EasyTAG.EtCddbSetField">
+      <summary>The tag fields to set from maching AcoustID fingerprint result</summary>
+      <description>Which tag fields should be set when applying results from AcoustID fingerprinting.</description>
+      <default>['title','artist','album','year','track','track-total','disc','disc-total','album-artist']</default>
+    </key>
+
+    <key name="acoustid-use-first-year" type="b">
+      <summary>Use first release year from fingerprinting</summary>
+      <description>MusicBrainz data does not know when a track was originally recorded. It knows only about releses.
+Using this option takes the first release of a recording as year tag. The release year (if activated) always is set to the selected match.</description>
+      <default>true</default>
+    </key>
+
+    <key name="acoustid-discard-date" type="b">
+      <summary>Discard date information from MusicBrainz</summary>
+      <description>Metadata may contain an exact release day. With this option only the year component is assigned.</description>
+      <default>false</default>
+    </key>
+
+    <key name="acoustid-no-disc-total-01" type="b">
+      <summary>Do not clear field</summary>
+      <description>If a field is empty in the selected result the filed is not assigned on apply an the previous content is kept if any.</description>
+      <default>true</default>
+    </key>
+
+    <key name="acoustid-no-empty-fields" type="b">
+      <summary>Avoid 01/01 as disc number</summary>
+      <description>If a release consists of a single media only the disc number and disc total tags are cleared.</description>
+      <default>false</default>
+    </key>
+
     <key name="file-preserve-modification-time" type="b">
       <summary>Preserve modification time when writing files</summary>
       <description>Whether to preserve the existing modification time when editing files</description>
@@ -661,7 +698,7 @@
       <summary>Page to show in the preferences dialog</summary>
       <description>The page in the notebook of the preferences dialog</description>
       <default>0</default>
-      <range min="0" max="7" />
+      <range min="0" max="8" />
     </key>
 
   </schema>

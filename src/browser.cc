@@ -47,6 +47,7 @@
 #include "setting.h"
 #include "enums.h"
 #include "file_name.h"
+#include "acoustid_dialog.h"
 
 #include "win32/win32dep.h"
 
@@ -1904,6 +1905,31 @@ void EtBrowser::invert_selection()
 	et_application_window_update_actions(MainWindow);
 }
 
+pair<ET_File*, ET_File*> EtBrowser::prev_next_if(ET_File* file, bool (*predicate)(const ET_File*))
+{	pair<ET_File*, ET_File*> result(nullptr, nullptr);
+	if (!file) return result;
+
+	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
+	GtkTreeIter iter;
+	if (!gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->file_model), &iter))
+		return result;
+	do
+	{	gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter,
+			LIST_FILE_POINTER, &result.second, -1);
+		if (result.second == file)
+			file = nullptr;
+		else if (predicate(result.second))
+		{	if (file)
+				result.first = result.second;
+			else
+				return result;
+		}
+	} while (gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_model), &iter));
+
+	result.second = nullptr;
+	return result;
+}
+
 // all file in range saved?
 static bool any_unsaved(const ET_FileList::index_range_type& range)
 {	auto file_range = ET_FileList::to_file_range(range);
@@ -3052,6 +3078,14 @@ on_sort_order_changed (EtBrowser *self, const gchar *key, GSettings *settings)
     }
 
     et_browser_refresh_sort (self);
+
+#ifdef ENABLE_ACOUSTID
+    if (MainWindow)
+    {   auto ad = MainWindow->acoustid_dialog();
+        if (ad)
+            ad->update_button_sensitivity();
+    }
+#endif
 }
 
 /*

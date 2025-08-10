@@ -394,7 +394,7 @@ class xString0 : public xString
 	xString0& operator=(xString0&& r) = default;
 
 	/// Implicit conversion to C string.
-	constexpr operator const char*() const noexcept { return xString::get() ? xString::get() : empty_str.C.data(); }
+	constexpr operator const char*() const noexcept { return Ptr ? xString::get() : empty_str.C.data(); }
 	/// Explicit conversion to C string.
 	constexpr const char* get() const noexcept { return *this; }
 
@@ -444,7 +444,7 @@ class xString0 : public xString
 };
 
 
-/// Variant of \ref xString that treats \c nullptr as an empty string
+/// Variant of \ref xStringD that treats \c `nullptr` as an empty string
 class xStringD0 : public xStringD
 {public:
 	using xStringD::xStringD;

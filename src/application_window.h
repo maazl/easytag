@@ -25,6 +25,7 @@
 #include "file.h"
 
 struct _EtBrowser;
+struct _EtAcoustIDDialog;
 
 #define ET_TYPE_APPLICATION_WINDOW (et_application_window_get_type ())
 #define ET_APPLICATION_WINDOW(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_APPLICATION_WINDOW, EtApplicationWindow))
@@ -39,6 +40,10 @@ struct _EtApplicationWindow
 
     /// Access the browser instance.
     struct _EtBrowser* browser();
+#ifdef ENABLE_ACOUSTID
+    /// Access the acoustid dialog instance if already initialized.
+    struct _EtAcoustIDDialog* acoustid_dialog();
+#endif
 
     /// Get the file currently displayed in tag file/area or `nullptr` if none.
     ET_File* get_displayed_file();
@@ -75,6 +80,7 @@ void et_application_window_set_normal_cursor (EtApplicationWindow *self);
 
 GtkWidget * et_application_window_get_log_area (EtApplicationWindow *self);
 void et_application_window_show_preferences_dialog_scanner (EtApplicationWindow *self);
+/// Show the fingerprint dialog and update results with the specified file.
 void et_application_window_browser_update_display_mode (EtApplicationWindow *self);
 void et_application_window_search_dialog_clear (EtApplicationWindow *self);
 void et_application_window_select_file_by_et_file (EtApplicationWindow *self, ET_File *ETFile);

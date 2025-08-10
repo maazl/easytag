@@ -56,11 +56,7 @@ typedef enum
     ET_CDDB_SEARCH_FIELD_OTHER = 1 << 3
 } EtCddbSearchField;
 
-#ifdef __cplusplus
-MAKE_FLAGS_ENUM(EtCddbSearchField);
-#endif
-
-/* Fields to set from CDDB search results. */
+/* Fields to set from CDDB or AcoustID search results. */
 typedef enum
 {
     ET_CDDB_SET_FIELD_TITLE = 1 << 0,
@@ -70,12 +66,13 @@ typedef enum
     ET_CDDB_SET_FIELD_TRACK = 1 << 4,
     ET_CDDB_SET_FIELD_TRACK_TOTAL = 1 << 5,
     ET_CDDB_SET_FIELD_GENRE = 1 << 6,
-    ET_CDDB_SET_FIELD_FILENAME = 1 << 7
+    ET_CDDB_SET_FIELD_FILENAME = 1 << 7,
+    /* Additional fields for Musicbrainz only */
+    ET_CDDB_SET_FIELD_DISC = 1 << 8,
+    ET_CDDB_SET_FIELD_DISC_TOTAL = 1 << 9,
+    ET_CDDB_SET_FIELD_ALBUM_ARTIST = 1 << 10,
+    ET_CDDB_SET_FIELD_RELEASE_YEAR = 1 << 11
 } EtCddbSetField;
-
-#ifdef __cplusplus
-MAKE_FLAGS_ENUM(EtCddbSetField);
-#endif
 
 /* Character set for passing to iconv. */
 typedef enum
@@ -357,7 +354,7 @@ gboolean et_settings_enum_get (GValue *value, GVariant *variant,
 GVariant *et_settings_enum_set (const GValue *value,
                                 const GVariantType *expected_type,
                                 gpointer user_data);
-/// Bind a checkbox to a boolean setting.
+/// Bind a checkbox active state to a boolean setting.
 /// @param setting Name of the boolean setting.
 /// @param widget Checkbox.
 void et_settings_bind_boolean(const char* setting, GtkWidget* widget);

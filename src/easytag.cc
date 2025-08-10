@@ -40,6 +40,7 @@
 #include "replaygain.h"
 #include "file_name.h"
 #include "file_tag.h"
+#include "acoustid_dialog.h"
 #include "xptr.h"
 
 #include "win32/win32dep.h"
@@ -836,6 +837,7 @@ void ReplayGain_For_Selected_Files (void)
 }
 #endif
 
+
 class ReadDirectoryWorker : public xObj
 {
 	/// The currently running instance if any.
@@ -868,9 +870,9 @@ class ReadDirectoryWorker : public xObj
 	int FilesCompleted;
 
 private:
-	static void OnDirCompleted(GFile* child_dir, const char* error);
-	static void OnFileCompleted(xPtr<ET_File> ETFile, const char* error);
-	static void OnFinished();
+	void OnDirCompleted(GFile* child_dir, const char* error);
+	void OnFileCompleted(xPtr<ET_File> ETFile, const char* error);
+	void OnFinished();
 
 	ReadDirectoryWorker(gString&& path);
 	void DirScan(gObject<GFileEnumerator> dir_enumerator);
@@ -928,7 +930,7 @@ void ReadDirectoryWorker::OnDirCompleted(GFile* child_dir, const char* error)
 	else
 	{	gString child_path(g_file_get_path(child_dir));
 		gString display_path(g_filename_display_name(child_path));
-		if (Instance->DirCount)
+		if (DirCount)
 			Log_Print(LOG_ERROR, _("Error opening directory ‘%s’: %s"), display_path.get(), error);
 		else
 		{	// Message if the root directory doesn't exist...
@@ -955,7 +957,7 @@ void ReadDirectoryWorker::OnFileCompleted(xPtr<ET_File> ETFile, const char* erro
 		Log_Print(LOG_INFO, _("Automatic corrections applied for file ‘%s’"), ETFile->FileNameNew()->full_name().get());
 
   /* Update the progress bar. */
-  et_application_window_progress_set(MainWindow, ++Instance->FilesCompleted, Instance->FilesTotal);
+  et_application_window_progress_set(MainWindow, ++FilesCompleted, FilesTotal);
 }
 
 void ReadDirectoryWorker::OnFinished()
@@ -965,19 +967,18 @@ void ReadDirectoryWorker::OnFinished()
 
 	const gchar* msg;
 	gString msgBuffer;
-	unsigned count = Instance->ResultList.size();
+	unsigned count = ResultList.size();
 
 	if (Main_Stop_Button_Pressed)
 		msg = _("Directory scan aborted.");
 	else
 	{
 		ET_File::reset_undo_history();
-		ET_FileList::set_file_list(move(Instance->ResultList));
+		ET_FileList::set_file_list(move(ResultList));
 
 		if (count)
 		{	/* Load the list of file into the browser list widget */
 			et_application_window_browser_update_display_mode(window);
-			et_application_window_update_actions(window);
 
 			/* Prepare message for the status bar */
 			msg = msgBuffer = g_strdup_printf(g_settings_get_boolean(MainSettings, "browse-subdir")
@@ -1001,6 +1002,7 @@ void ReadDirectoryWorker::OnFinished()
 
 	/* Update sensitivity of buttons and menus */
 	Main_Stop_Button_Pressed = false;
+	et_application_window_update_actions(window);
 	et_application_window_status_bar_message(window, msg, FALSE);
 
 	Instance.reset();
@@ -1054,7 +1056,7 @@ void ReadDirectoryWorker::DirScan(gObject<GFileEnumerator> dir_enumerator)
 	}
 
 	if (error)
-	{	gIdleAdd(new function<void()>([msg = xString(error->message)]()
+	{	gIdleAdd(new function<void()>([this, msg = xString(error->message)]()
 			{	OnDirCompleted(nullptr, msg); }));
 		g_error_free(error);
 	}
@@ -1085,7 +1087,7 @@ void ReadDirectoryWorker::ItemWorker()
 
 		if (!item.first) // deadly termination pill
 		{	if (item.second)
-			{	gIdleAdd(new function<void()>([]() { OnFinished(); }));
+			{	gIdleAdd(new function<void()>([this]() { OnFinished(); }));
 				EtPicture::GarbageCollector(); // release orphaned images
 				xStringD::garbage_collector(); // ... and strings
 			}
@@ -1105,7 +1107,7 @@ void ReadDirectoryWorker::ItemWorker()
 				ResultList.emplace_back(ETFile);
 			}
 
-			gIdleAdd(new function<void()>([ETFile = move(ETFile), msg = xString(error ? error->message : nullptr)]()
+			gIdleAdd(new function<void()>([this, ETFile = move(ETFile), msg = xString(error ? error->message : nullptr)]()
 				{	OnFileCompleted(move(ETFile), msg); }));
 		} else
 		{	// Searching for files recursively.
@@ -1115,7 +1117,7 @@ void ReadDirectoryWorker::ItemWorker()
 			if (childdir_enumerator)
 				DirScan(move(childdir_enumerator));
 			else
-				gIdleAdd(new function<void()>([child_dir = move(item.first), msg = xString(error->message)]()
+				gIdleAdd(new function<void()>([this, child_dir = move(item.first), msg = xString(error->message)]()
 					{	OnDirCompleted(child_dir.get(), msg); }));
 
 			if (--DirCount == 0)
@@ -1149,6 +1151,12 @@ gboolean Read_Directory(gString path_real)
 
     /* Clear entry boxes  */
     window->change_displayed_file(nullptr);
+
+#ifdef ENABLE_ACOUSTID
+    auto ad = window->acoustid_dialog();
+    if (ad)
+        ad->reset();
+#endif
 
     /* Initialize browser list */
     window->browser()->clear();

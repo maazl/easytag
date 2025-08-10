@@ -1,6 +1,7 @@
 data/org.gnome.EasyTAG.appdata.xml.in
 data/org.gnome.EasyTAG.desktop.in
 data/easytag-nautilus.metainfo.xml.in
+[type: gettext/glade]data/acoustid_dialog.ui
 [type: gettext/glade]data/browser.ui
 [type: gettext/glade]data/browser_dialogs.ui
 [type: gettext/glade]data/cddb_dialog.ui
@@ -18,6 +19,8 @@ data/easytag-nautilus.metainfo.xml.in
 [type: gettext/gsettings]data/org.gnome.EasyTAG.gschema.xml
 nautilus-extension/nautilus-easytag.c
 src/about.cc
+src/acoustid_dialog.cc
+src/acoustid.cc
 src/application.cc
 src/application_window.cc
 src/browser.cc

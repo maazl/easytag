@@ -24,6 +24,12 @@
 #include "xstring.h"
 #include "picture.h"
 
+#if defined(ENABLE_ACOUSTID) || defined(ENABLE_REPLAYGAIN)
+extern "C" {
+#include <libavutil/log.h>
+}
+#endif
+
 #include <string>
 
 int
@@ -50,6 +56,11 @@ main (int argc, char *argv[])
         path += oldpath;
         setenv("XDG_DATA_DIRS", path.c_str(), 1);
     }
+#endif
+
+#if defined(ENABLE_ACOUSTID) || defined(ENABLE_REPLAYGAIN)
+    av_log_set_level(AV_LOG_ERROR);
+
 #endif
 
     application = et_application_new ();

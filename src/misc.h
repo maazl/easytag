@@ -177,6 +177,14 @@ std::pair<I, bool> binary_find(I first, I last, const T& value, C comp)
 	return std::make_pair(first, false);
 }
 
+/// simple GUID class
+struct Guid
+{	uint8_t Value[16];
+	static const Guid empty;
+	static Guid parse(const char* s);
+	gchar* toString() const;
+	friend bool operator==(const Guid& l, const Guid& r) { return memcmp(l.Value, r.Value, 16) == 0; }
+};
 
 /// Convert file duration into a human readable format.
 std::string et_file_duration_to_string(double seconds);

@@ -45,6 +45,9 @@
 #include "tag_area.h"
 #include "file_name.h"
 #include "file_tag.h"
+#include "acoustid_dialog.h"
+
+#include <algorithm>
 
 using namespace std;
 
@@ -58,6 +61,9 @@ typedef struct
     GtkWidget *progress_bar;
     GtkWidget *status_bar;
 
+#ifdef ENABLE_ACOUSTID
+    EtAcoustIDDialog *acoustid_dialog;
+#endif
 #ifdef ENABLE_CDDB
     GtkWidget *cddb_dialog;
 #endif
@@ -90,6 +96,12 @@ G_DEFINE_TYPE_WITH_PRIVATE (EtApplicationWindow, et_application_window, GTK_TYPE
 EtBrowser* EtApplicationWindow::browser()
 {	return et_application_window_get_instance_private(this)->browser;
 }
+
+#ifdef ENABLE_ACOUSTID
+EtAcoustIDDialog* EtApplicationWindow::acoustid_dialog()
+{	return et_application_window_get_instance_private(this)->acoustid_dialog;
+}
+#endif
 
 void EtApplicationWindow::displayed_file_sensitive(bool sensitive)
 {
@@ -833,6 +845,31 @@ on_show_cddb (GSimpleAction *action,
 }
 #endif
 
+	#ifdef ENABLE_ACOUSTID
+	static void on_show_acoustid (GSimpleAction *action, GVariant *variant, gpointer user_data)
+	 {
+		EtApplicationWindow* const window = ET_APPLICATION_WINDOW(user_data);
+		vector<xPtr<ET_File>> files = window->browser()->get_current_files();
+		if (files.empty())
+			return;
+		ET_File* current = files.front().get();
+		unsigned remaining = AcoustIDWorker::Feed(move(files));
+
+		EtApplicationWindowPrivate *priv = et_application_window_get_instance_private(window);
+
+		if (priv->acoustid_dialog)
+		{	priv->acoustid_dialog->current_file(current);
+			priv->acoustid_dialog->set_remaining_files(remaining);
+			gtk_widget_show(GTK_WIDGET(priv->acoustid_dialog));
+		} else
+		{	priv->acoustid_dialog = et_acoustid_dialog_new();
+			priv->acoustid_dialog->current_file(current);
+			priv->acoustid_dialog->set_remaining_files(remaining);
+			gtk_widget_show_all(GTK_WIDGET(priv->acoustid_dialog));
+		}
+	 }
+	#endif
+
 static void
 on_show_load_filenames (GSimpleAction *action,
                         GVariant *variant,
@@ -1027,6 +1064,9 @@ static const GActionEntry actions[] =
 	{ "browse-directory", on_browser<&EtBrowser::show_open_directory_with_dialog> },
 	/* { "browse-subdir", on_browse_subdir }, Created from GSetting. */
 	/* Miscellaneous menu. */
+#ifdef ENABLE_ACOUSTID
+	{ "show-acoustid", on_show_acoustid },
+#endif
 #ifdef ENABLE_CDDB
 	{ "show-cddb", on_show_cddb },
 #endif
@@ -1081,6 +1121,9 @@ et_application_window_destroy(GtkWidget *object)
         widget = NULL;
     };
 
+#ifdef ENABLE_ACOUSTID
+    destroy((GtkWidget*&)priv->acoustid_dialog);
+#endif
 #ifdef ENABLE_CDDB
     destroy(priv->cddb_dialog);
 #endif
@@ -1219,11 +1262,14 @@ et_application_window_init (EtApplicationWindow *self)
 
     gtk_widget_show_all (GTK_WIDGET (main_vbox));
 
+#ifndef ENABLE_ACOUSTID
+    gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(builder, "acoustid_button")));
+#endif
 #ifndef ENABLE_CDDB
-    gtk_widget_hide(GTK_WIDGET (gtk_builder_get_object (builder, "cddb_button")));
+    gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(builder, "cddb_button")));
 #endif
 #ifndef ENABLE_REPLAYGAIN
-    gtk_widget_hide(GTK_WIDGET (gtk_builder_get_object (builder, "replaygain_button")));
+    gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(builder, "replaygain_button")));
 #endif
     g_object_unref (builder);
 
@@ -1690,6 +1736,9 @@ et_application_window_disable_command_actions (EtApplicationWindow *self, gboole
     et_application_set_action_state (self, "save-force", FALSE);
     et_application_set_action_state (self, "undo-last-changes", FALSE);
     et_application_set_action_state (self, "redo-last-changes", FALSE);
+#ifdef ENABLE_ACOUSTID
+    et_application_set_action_state (self, "show-acoustid", FALSE);
+#endif
     et_application_set_action_state (self, "replaygain", FALSE);
 
     /* FIXME: "Scanner" menu commands */
@@ -1703,9 +1752,6 @@ et_application_window_update_actions (EtApplicationWindow *self)
 
     GtkDialog *dialog = GTK_DIALOG (et_application_window_get_scan_dialog (self));
 
-    /* Tool bar buttons (the others are covered by the menu) */
-    et_application_set_action_state (self, "stop", FALSE);
-
     if (ET_FileList::empty())
     {
         /* No file found */
@@ -1717,33 +1763,21 @@ et_application_window_update_actions (EtApplicationWindow *self)
         if (dialog)
             gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, FALSE);
 
+        et_application_window_disable_command_actions(self, FALSE);
+
         /* Menu commands */
-        et_application_set_action_state (self, "open-with", FALSE);
-        et_application_set_action_state (self, "invert-selection", FALSE);
-        et_application_set_action_state (self, "delete", FALSE);
-        /* FIXME: set_action_state (self, "sort-mode", FALSE); */
-        et_application_set_action_state (self, "go-previous", FALSE);
-        et_application_set_action_state (self, "go-next", FALSE);
-        et_application_set_action_state (self, "go-first", FALSE);
-        et_application_set_action_state (self, "go-last", FALSE);
-        et_application_set_action_state (self, "remove-tags", FALSE);
-        et_application_set_action_state (self, "undo-file-changes", FALSE);
-        et_application_set_action_state (self, "redo-file-changes", FALSE);
-        et_application_set_action_state (self, "save", FALSE);
-        et_application_set_action_state (self, "save-force", FALSE);
-        et_application_set_action_state (self, "undo-last-changes", FALSE);
-        et_application_set_action_state (self, "redo-last-changes", FALSE);
         et_application_set_action_state (self, "find", FALSE);
         et_application_set_action_state (self, "show-load-filenames", FALSE);
         et_application_set_action_state (self, "show-playlist", FALSE);
         et_application_set_action_state (self, "run-player", FALSE);
-        et_application_set_action_state (self, "replaygain", FALSE);
         /* FIXME set_action_state (self, "scan-mode", FALSE);*/
         et_application_set_action_state (self, "file-artist-view", FALSE);
 
         return;
     }else
     {
+        et_application_set_action_state (self, "stop", FALSE);
+
         gboolean has_undo = FALSE;
         gboolean has_redo = FALSE;
         //gboolean has_to_save = FALSE;
@@ -1765,6 +1799,9 @@ et_application_window_update_actions (EtApplicationWindow *self)
         et_application_set_action_state (self, "show-load-filenames", TRUE);
         et_application_set_action_state (self, "show-playlist", TRUE);
         et_application_set_action_state (self, "run-player", TRUE);
+#ifdef ENABLE_ACOUSTID
+        et_application_set_action_state (self, "show-acoustid", TRUE);
+#endif
         et_application_set_action_state (self, "replaygain", TRUE);
         /* FIXME set_action_state (self, "scan-mode", TRUE); */
         et_application_set_action_state (self, "file-artist-view", TRUE);

@@ -2,9 +2,6 @@
     <object class="GtkImage" id="replaygain_image">
         <property name="resource">/org/gnome/EasyTAG/images/replaygain.png</property>
     </object>
-    <object class="GtkImage" id="artist_view_image">
-        <property name="resource">/org/gnome/EasyTAG/images/artist-album.png</property>
-    </object>
     <object class="GtkImage" id="invert_selection_image">
         <property name="resource">/org/gnome/EasyTAG/images/invert-selection.png</property>
     </object>
@@ -143,7 +140,7 @@
                 <property name="action-name">win.file-artist-view</property>
                 <property name="action-target">'artist'</property>
                 <property name="label" translatable="yes">Artists and Albums</property>
-                <property name="icon-widget">artist_view_image</property>
+                <property name="icon-name">artist-album</property>
                 <property name="tooltip-text" translatable="yes">Browse artists and albums</property>
                 <property name="visible">True</property>
             </object>
@@ -169,6 +166,15 @@
                 <property name="icon-name">edit-find</property>
                 <property name="label" translatable="yes">_Find…</property>
                 <property name="tooltip-text" translatable="yes">Search filenames and tags</property>
+                <property name="visible">True</property>
+            </object>
+        </child>
+        <child>
+            <object class="GtkToolButton" id="acoustid_button">
+                <property name="action-name">win.show-acoustid</property>
+                <property name="icon-name">fingerprint</property>
+                <property name="label" translatable="yes">Fingerprint…</property>
+                <property name="tooltip-text" translatable="yes">Audio fingerprinting</property>
                 <property name="visible">True</property>
             </object>
         </child>

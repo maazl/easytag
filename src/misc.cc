@@ -51,6 +51,65 @@ string strprintf(const char* format, ...)
 }
 
 
+const constexpr Guid Guid::empty = {0};
+
+Guid Guid::parse(const char* s)
+{	Guid result = {0};
+	if (!s || !*s)
+		return result;
+
+	int i = 0;
+	for (; *s; ++s)
+	{	if (*s == '-')
+			continue;
+		uint8_t c = tolower(*s);
+		if (c >= '0' && c <= '9')
+			c -= '0';
+		else if (c >= 'a' && c <= 'f')
+			c -= 'a' - 10;
+		else
+			goto error;
+
+		if (i & 1)
+			c <<= 4;
+		result.Value[i << 1] |= c;
+	}
+
+	if (i == 32)
+		return result;
+error:
+	result = empty;
+
+	return result;
+}
+
+gchar* Guid::toString() const
+{	if (*this == empty)
+		return nullptr;
+
+	gchar* result = (gchar*)g_malloc(37);
+	gchar* dp = result;
+
+	auto store_nibble = [&dp](uint8_t value)
+	{	*dp++ = value + (value >= 10 ? 'a' - 10 : '0');
+	};
+
+	for (uint8_t c : Value)
+	{	store_nibble(c >> 4);
+		store_nibble(c & 0xf);
+		switch (dp - result)
+		{case 8:
+		 case 13:
+		 case 18:
+		 case 23:
+			*dp++ = '-';
+		}
+	}
+
+	return result;
+}
+
+
 guint gIdleAdd(std::function<void()>* func, gint priority)
 {	return g_idle_add_full(
 		priority,

@@ -1,0 +1,497 @@
+<interface domain="easytag">
+	<requires lib="gtk+" version="3.10" />
+	<object class="GtkListStore" id="results_list_model">
+		<columns>
+			<column type="gchararray" />
+			<column type="gchararray" />
+			<column type="gchararray" />
+			<column type="gchararray" />
+			<column type="gchararray" />
+			<column type="gchararray" />
+			<column type="gchararray" />
+			<column type="gchararray" />
+			<column type="gchararray" />
+			<column type="gchararray" />
+			<column type="gchararray" />
+			<column type="gint" />
+		</columns>
+	</object>
+	<template class="EtAcoustIDDialog" parent="GtkDialog">
+		<property name="title" translatable="yes">AcoustID fingerprint</property>
+		<signal name="delete-event" handler="gtk_widget_hide_on_delete" />
+		<child internal-child="vbox">
+			<object class="GtkBox" id="acoustid_vbox">
+				<property name="border-width">6</property>
+				<child>
+					<object class="GtkBox" id="file_box">
+						<property name="margin-top">6</property>
+						<property name="margin-left">12</property>
+						<property name="margin-right">12</property>
+						<property name="spacing">12</property>
+						<child>
+							<object class="GtkLabel" id="file_label">
+								<property name="label" translatable="yes">File:</property>
+								<attributes>
+									<attribute name="weight" value="bold" />
+								</attributes>
+							</object>
+						</child>
+						<child>
+							<object class="GtkLabel" id="file_path_label">
+								<property name="halign">start</property>
+								<property name="hexpand">True</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkLabel" id="duration_label">
+								<property name="halign">end</property>
+							</object>
+						</child>
+					</object>
+				</child>
+				<child>
+					<object class="GtkBox" id="label_box">
+						<property name="spacing">12</property>
+						<property name="margin-top">6</property>
+						<property name="margin-left">12</property>
+						<property name="margin-right">12</property>
+						<child>
+							<object class="GtkLabel" id="results_label">
+								<property name="halign">start</property>
+								<property name="label" translatable="yes">Results</property>
+								<attributes>
+									<attribute name="weight" value="bold" />
+								</attributes>
+							</object>
+						</child>
+						<child>
+							<object class="GtkLabel" id="remaining_label">
+								<property name="hexpand">True</property>
+								<property name="halign">end</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkButton" id="stop_button">
+								<property name="label" translatable="yes">Stop</property>
+								<property name="tooltip-text" translatable="yes">Stop the fingerprinting</property>
+								<signal name="clicked" handler="acoustid_stop" swapped="true" />
+							</object>
+						</child>
+					</object>
+				</child>
+				<child>
+					<object class="GtkScrolledWindow" id="results_scrolled">
+						<property name="expand">False</property>
+						<property name="margin-left">12</property>
+						<property name="margin-right">12</property>
+						<property name="margin-top">6</property>
+						<property name="min-content-height">200</property>
+						<property name="min-content-width">750</property>
+						<child>
+							<object class="GtkTreeView" id="results_view">
+								<property name="expand">False</property>
+								<property name="model">results_list_model</property>
+								<signal name="button-press-event" handler="on_results_button_press_event"/>
+								<child>
+									<object class="GtkTreeViewColumn" id="artist_column">
+										<property name="title" translatable="yes">Artist</property>
+										<property name="resizable">True</property>
+										<child>
+											<object class="GtkCellRendererText" id="artist_renderer" />
+											<attributes>
+												<attribute name="text">0</attribute>
+											</attributes>
+										</child>
+									</object>
+								</child>
+								<child>
+									<object class="GtkTreeViewColumn" id="title_column">
+										<property name="title" translatable="yes">Title</property>
+										<property name="resizable">True</property>
+										<child>
+											<object class="GtkCellRendererText" id="title_renderer" />
+											<attributes>
+												<attribute name="text">1</attribute>
+											</attributes>
+										</child>
+									</object>
+								</child>
+								<child>
+									<object class="GtkTreeViewColumn" id="album_column">
+										<property name="title" translatable="yes">Album</property>
+										<property name="resizable">True</property>
+										<child>
+											<object class="GtkCellRendererText" id="album_renderer" />
+											<attributes>
+												<attribute name="text">2</attribute>
+											</attributes>
+										</child>
+									</object>
+								</child>
+								<child>
+									<object class="GtkTreeViewColumn" id="album_artist_column">
+										<property name="title" translatable="yes">Album artist</property>
+										<child>
+											<object class="GtkCellRendererText" id="album_artist_renderer" />
+											<attributes>
+												<attribute name="text">3</attribute>
+											</attributes>
+										</child>
+									</object>
+								</child>
+								<child>
+									<object class="GtkTreeViewColumn" id="year_column">
+										<property name="title" translatable="yes">Year</property>
+										<property name="resizable">True</property>
+										<child>
+											<object class="GtkCellRendererText" id="year_renderer" />
+											<attributes>
+												<attribute name="text">4</attribute>
+											</attributes>
+										</child>
+									</object>
+								</child>
+								<child>
+									<object class="GtkTreeViewColumn" id="release_year_column">
+										<property name="title" translatable="yes">Rel. year</property>
+										<property name="resizable">True</property>
+										<child>
+											<object class="GtkCellRendererText" id="release_year_renderer" />
+											<attributes>
+												<attribute name="text">5</attribute>
+											</attributes>
+										</child>
+									</object>
+								</child>
+								<child>
+									<object class="GtkTreeViewColumn" id="track_number_column">
+										<property name="title" translatable="yes">Track</property>
+										<property name="resizable">True</property>
+										<child>
+											<object class="GtkCellRendererText" id="track_number_renderer" />
+											<attributes>
+												<attribute name="text">6</attribute>
+											</attributes>
+										</child>
+									</object>
+								</child>
+								<child>
+									<object class="GtkTreeViewColumn" id="disc_number_column">
+										<property name="title" translatable="yes">Disc</property>
+										<property name="resizable">True</property>
+										<child>
+											<object class="GtkCellRendererText" id="disc_number_renderer" />
+											<attributes>
+												<attribute name="text">7</attribute>
+											</attributes>
+										</child>
+									</object>
+								</child>
+								<child>
+									<object class="GtkTreeViewColumn" id="duration_column">
+										<property name="title" translatable="yes">Duration</property>
+										<property name="resizable">True</property>
+										<property name="alignment">1.0</property>
+										<child>
+											<object class="GtkCellRendererText" id="duration_renderer" />
+											<attributes>
+												<attribute name="text">8</attribute>
+											</attributes>
+										</child>
+									</object>
+								</child>
+								<child>
+									<object class="GtkTreeViewColumn" id="country_column">
+										<property name="title" translatable="yes">Country</property>
+										<property name="resizable">True</property>
+										<child>
+											<object class="GtkCellRendererText" id="country_renderer" />
+											<attributes>
+												<attribute name="text">9</attribute>
+											</attributes>
+										</child>
+									</object>
+								</child>
+								<child>
+									<object class="GtkTreeViewColumn" id="format_column">
+										<property name="title" translatable="yes">Format</property>
+										<property name="resizable">True</property>
+										<child>
+											<object class="GtkCellRendererText" id="format_renderer" />
+											<attributes>
+												<attribute name="text">10</attribute>
+											</attributes>
+										</child>
+									</object>
+								</child>
+								<child>
+									<object class="GtkTreeViewColumn" id="score_column">
+										<property name="title" translatable="yes">Score</property>
+										<property name="max-width">80</property>
+										<property name="fixed-width">80</property>
+										<property name="sizing">fixed</property>
+										<child>
+											<object class="GtkCellRendererProgress" id="score_renderer" />
+											<attributes>
+												<attribute name="value">11</attribute>
+											</attributes>
+										</child>
+									</object>
+								</child>
+								<child internal-child="selection">
+									<object class="GtkTreeSelection" id="results_selection">
+										<signal name="changed" handler="update_apply_button_sensitivity" swapped="true" />
+									</object>
+								</child>
+							</object>
+						</child>
+					</object>
+				</child>
+				<child>
+					<object class="GtkLabel" id="fill_tags_label">
+						<property name="halign">start</property>
+						<property name="label" translatable="yes">Fill Tags</property>
+						<property name="margin-left">12</property>
+						<property name="margin-top">12</property>
+						<attributes>
+							<attribute name="weight" value="bold" />
+						</attributes>
+					</object>
+				</child>
+				<child>
+					<object class="GtkGrid" id="fill_tags_grid">
+						<property name="column-spacing">12</property>
+						<property name="margin-left">12</property>
+						<property name="margin-top">6</property>
+						<property name="row-spacing">6</property>
+						<child>
+							<object class="GtkCheckButton" id="fill_title_check">
+								<property name="label" translatable="yes">Title</property>
+								<property name="name">title</property>
+								<signal name="toggled" handler="update_apply_button_sensitivity" swapped="true" />
+							</object>
+							<packing>
+								<property name="left-attach">0</property>
+								<property name="top-attach">0</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="fill_artist_check">
+								<property name="label" translatable="yes">Artist</property>
+								<property name="name">artist</property>
+								<signal name="toggled" handler="update_apply_button_sensitivity" swapped="true" />
+							</object>
+							<packing>
+								<property name="left-attach">1</property>
+								<property name="top-attach">0</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="fill_year_check">
+								<property name="label" translatable="yes">Year</property>
+								<property name="name">year</property>
+								<signal name="toggled" handler="update_apply_button_sensitivity" swapped="true" />
+							</object>
+							<packing>
+								<property name="left-attach">2</property>
+								<property name="top-attach">0</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="fill_track_check">
+								<property name="label" translatable="yes">Track number</property>
+								<property name="name">track</property>
+								<signal name="toggled" handler="update_apply_button_sensitivity" swapped="true" />
+							</object>
+							<packing>
+								<property name="left-attach">3</property>
+								<property name="top-attach">0</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="fill_disc_check">
+								<property name="label" translatable="yes">Disc number</property>
+								<property name="name">disc</property>
+								<signal name="toggled" handler="update_apply_button_sensitivity" swapped="true" />
+							</object>
+							<packing>
+								<property name="left-attach">4</property>
+								<property name="top-attach">0</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="fill_album_check">
+								<property name="label" translatable="yes">Album</property>
+								<property name="name">album</property>
+								<signal name="toggled" handler="update_apply_button_sensitivity" swapped="true" />
+							</object>
+							<packing>
+								<property name="left-attach">0</property>
+								<property name="top-attach">1</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="fill_album_artist_check">
+								<property name="label" translatable="yes">Album artist</property>
+								<property name="name">album-artist</property>
+								<signal name="toggled" handler="update_apply_button_sensitivity" swapped="true" />
+							</object>
+							<packing>
+								<property name="left-attach">1</property>
+								<property name="top-attach">1</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="fill_release_year_check">
+								<property name="label" translatable="yes">Release year</property>
+								<property name="name">release-year</property>
+								<signal name="toggled" handler="update_apply_button_sensitivity" swapped="true" />
+							</object>
+							<packing>
+								<property name="left-attach">2</property>
+								<property name="top-attach">1</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="fill_track_total_check">
+								<property name="label" translatable="yes">Number of tracks</property>
+								<property name="name">track-total</property>
+								<signal name="toggled" handler="update_apply_button_sensitivity" swapped="true" />
+							</object>
+							<packing>
+								<property name="left-attach">3</property>
+								<property name="top-attach">1</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="fill_disc_total_check">
+								<property name="label" translatable="yes">Number of discs</property>
+								<property name="name">disc-total</property>
+								<signal name="toggled" handler="update_apply_button_sensitivity" swapped="true" />
+							</object>
+							<packing>
+								<property name="left-attach">4</property>
+								<property name="top-attach">1</property>
+							</packing>
+						</child>
+					</object>
+				</child>
+				<child>
+					<object class="GtkLabel" id="options_label">
+						<property name="halign">start</property>
+						<property name="label" translatable="yes">Options</property>
+						<property name="margin-left">12</property>
+						<property name="margin-top">12</property>
+						<attributes>
+							<attribute name="weight" value="bold" />
+						</attributes>
+					</object>
+				</child>
+				<child>
+					<object class="GtkGrid" id="options_grid">
+						<property name="column-spacing">12</property>
+						<property name="margin-left">12</property>
+						<property name="margin-top">6</property>
+						<property name="row-spacing">6</property>
+						<child>
+							<object class="GtkCheckButton" id="first_year_check">
+								<property name="label" translatable="yes">Use first release year</property>
+								<property name="tooltip-text" translatable="yes">MusicBrainz data does not know when a track was originally recorded. It knows only about releses.
+Using this option takes the first release of a recording as year tag. The release year (if activated) always is set to the selected match.</property>
+							</object>
+							<packing>
+								<property name="left-attach">0</property>
+								<property name="top-attach">0</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="discard_date_check">
+								<property name="label" translatable="yes">Discard day and month</property>
+								<property name="tooltip-text" translatable="yes">Metadata may contain an exact release day. With this option only the year component is assigned.</property>
+							</object>
+							<packing>
+								<property name="left-attach">1</property>
+								<property name="top-attach">0</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="no_disc_total_01_check">
+								<property name="label" translatable="yes">Avoid 01/01 as disc number</property>
+								<property name="tooltip-text" translatable="yes">If a release consists of a single media only the disc number and disc total tags are cleared.</property>
+							</object>
+							<packing>
+								<property name="left-attach">0</property>
+								<property name="top-attach">1</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="no_empty_fields">
+								<property name="label" translatable="yes">Do not clear fields</property>
+								<property name="tooltip-text" translatable="yes">If a field is empty in the selected result the filed is not assigned on apply an the previous content is kept if any.</property>
+							</object>
+							<packing>
+								<property name="left-attach">1</property>
+								<property name="top-attach">1</property>
+							</packing>
+						</child>
+					</object>
+				</child>
+				<child>
+					<object class="GtkBox" id="status_box">
+						<property name="margin-left">12</property>
+						<property name="margin-top">6</property>
+						<property name="orientation">horizontal</property>
+						<property name="spacing">6</property>
+						<child>
+							<object class="GtkLabel" id="status_bar">
+								<property name="halign">start</property>
+								<property name="hexpand">True</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkButtonBox" id="button_box">
+								<property name="layout-style">end</property>
+								<property name="orientation">horizontal</property>
+								<property name="spacing">6</property>
+								<child>
+									<object class="GtkButton" id="prev_button">
+										<property name="label" translatable="yes">_Previous</property>
+										<property name="use-underline">True</property>
+										<property name="tooltip-text" translatable="yes">Move to previous file with fingerprint.</property>
+										<signal name="clicked" handler="acoustid_previous" swapped="true" />
+									</object>
+								</child>
+								<child>
+									<object class="GtkButton" id="apply_button">
+										<property name="label" translatable="yes">_Apply</property>
+										<property name="sensitive">False</property>
+										<property name="tooltip-text" translatable="yes">Apply the selected metadata to the file.</property>
+										<property name="use-underline">True</property>
+										<signal name="clicked" handler="acoustid_apply" swapped="true" />
+									</object>
+								</child>
+								<child>
+									<object class="GtkButton" id="apply_next_button">
+										<property name="label" translatable="yes">Apply _&amp; Next</property>
+										<property name="sensitive">False</property>
+										<property name="tooltip-text" translatable="yes">Apply the selected metadata to the file and move to the next file with fingerprint.</property>
+										<property name="use-underline">True</property>
+										<signal name="clicked" handler="acoustid_apply_next" swapped="true" />
+									</object>
+								</child>
+								<child>
+									<object class="GtkButton" id="next_button">
+										<property name="label" translatable="yes">_Next</property>
+										<property name="use-underline">True</property>
+										<property name="tooltip-text" translatable="yes">Move to next file with fingerprint.</property>
+										<signal name="clicked" handler="acoustid_next" swapped="true" />
+									</object>
+								</child>
+							</object>
+						</child>
+					</object>
+				</child>
+			</object>
+		</child>
+	</template>
+</interface>

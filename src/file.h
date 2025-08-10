@@ -28,6 +28,7 @@
 #include "misc.h"
 #include "undo_list.h"
 #include "xptr.h"
+#include "acoustid.h"
 
 #include <vector>
 #include <atomic>
@@ -65,7 +66,7 @@ public:
 	guint64 FileModificationTime; ///< Save modification time of the file
 
 	const ET_File_Description *ETFileDescription;
-	ET_File_Info      ETFileInfo; ///< Header infos: bitrate, duration, ...
+	ET_File_Info        ETFileInfo; ///< Header infos: bitrate, duration, ...
 	std::unique_ptr<gString[]> other; ///< NULL terminated array of other tags, used for Vorbis comments
 
 private:
@@ -92,6 +93,11 @@ public: // injections from ET_FileList
 	/// This value varies when resorting list and should not be used directly.
 	/// Use ET_FileList::visible_index to get a file's position.
 	unsigned IndexKey;
+
+#ifdef ENABLE_ACOUSTID
+public: // Injection from Acoustid
+	std::unique_ptr<const AcoustID::Matches> AcoustIDMatches;
+#endif
 
 private:
 	/// Populate FileSize and FileModificationTime

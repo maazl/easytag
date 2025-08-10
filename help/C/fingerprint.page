@@ -1,0 +1,87 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="guide" style="task"
+      id="fingerprint">
+
+  <info>
+    <link type="guide" xref="index#main" group="#first"/>
+    <revision pkgversion="3.0.0" date="2025-08-02" status="review"/>
+
+    <credit type="author">
+      <name>Marcel Müller</name>
+    </credit>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <desc>Fetch MusicBrainz metadata from AcoustID service.</desc>
+
+  </info>
+
+  <title>Audio <gui>fingerprinting</gui></title>
+
+  <p>EasyTAG includes support for the audio fingerprinting service of 
+  <link href="https://acoustid.org/">AcoustID</link>.
+  It allows to identify tracks by their sound only.</p>
+
+
+<section id="usage">
+  <title>Using audio fingerprinting</title>
+
+  <list type="numbered">
+    <item>
+      <p>Select one or more files in the file browser.</p>
+    </item>
+    <item>
+      <p>Use <gui>Miscellaneous</gui>, <gui>Fingerprint…</gui> from the main menu
+      or <gui>Fingerprint…</gui> from the context menu.</p>
+      <p>Now a dialog shows and the fingerprinting starts in background.
+      As soon as information is available for the first file it will show up in the dialog.</p>
+    </item>
+    <item>
+      <p>Select the entry that matches best.<br/>
+      If there is only one entry it is selected automatically.</p>
+    </item>
+    <item>
+      <p>Optionally adjust the tag fields that you want to overwrite and the options.</p>
+    </item>
+    <item>
+      <p>Hit <gui>Apply</gui> or <gui>Apply &amp; next</gui>.<br/>
+      This updates the file's tag with the selected information.</p>
+    </item>
+    <item>
+      <p>Use the <gui>Previous</gui> and <gui>Next</gui> button navigate to other files.
+      It will only stop at files that have been scheduled for audio fingerprinting.</p>
+    </item>
+  </list>
+
+  <p>Once the fingerprinting of a file completed the information is cached
+  until you change the selected directory in the tree.
+  Loading the diolog for these files again will immediately show the cached information.</p>
+
+</section>
+
+<section id="restrictions">
+  <title>Restrictions</title>
+
+  <list>
+    <item>
+      <p>The throughput of this service is restricted to one file every 3 seconds for license reasons.</p>
+    </item>
+    <item>
+      <p>Due to restrictions of the AcoustID service only the first 2 minutes of any track are taken into account.
+      This may lead to ambiguous matches if recordings have the same intro.</p>
+    </item>
+    <item>
+      <p>The MusicBrainz database does not know anything about the date of a recording.
+      It only knows about releases and release dates.
+      EasyTAG provides an option to take the <em>first</em> release of a recording as date.
+      This may not always hit the nail on the head.</p>
+    </item>
+    <item>
+      <p>There is no batch mode to apply results to many files.</p>
+    </item>
+  </list>
+
+</section>
+
+</page>

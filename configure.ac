@@ -172,8 +172,12 @@ AC_ARG_ENABLE([asf],
 AC_ARG_ENABLE([replaygain],
               [AS_HELP_STRING([--disable-replaygain], [Disable support for ReplayGain analysis (default=auto)])])
 
+AC_ARG_ENABLE([acoustid],
+              [AS_HELP_STRING([--disable-acoustid], [Disable Acoustid fingerprint support (default=auto)])])
+
 AC_ARG_ENABLE([cddb],
               [AS_HELP_STRING([--disable-cddb], [Disable CDDB support (default=auto)])])
+
 AC_ARG_ENABLE([nautilus_actions],
               [AS_HELP_STRING([--disable-nautilus-actions], [do not build the nautilus context menu actions (default=auto)])])
 
@@ -353,6 +357,20 @@ AS_IF([test "x$have_replaygain" != "xno"],
              [AC_MSG_ERROR([ReplayGain support requested but required dependencies ($REPLAYGAIN_DEPS) not found])])])
 
 dnl ################################################
+dnl # Acoustid
+dnl ################################################
+ACOUSTID_DEPS="libsoup-2.4 >= 2.42 json-glib-1.0 >= 1.4 libchromaprint >= 1.4"
+AS_IF([test "x$enable_acoustid" != "xno"],
+      [PKG_CHECK_EXISTS([$ACOUSTID_DEPS], [have_acoustid=yes], [have_acoustid=no])],
+      [have_acoustid=no])
+
+AS_IF([test "x$enable_acoustid" != "xno"],
+      [AC_DEFINE([ENABLE_ACOUSTID], [], [Define for Acoustid fingerprint support])],
+      [ACOUSTID_DEPS=""
+       AS_IF([test "x$enable_acoustid" = "xyes"],
+             [AC_MSG_ERROR([Acoustid support requested but required dependences ($ACOUSTID_DEPS) not found])])])
+
+dnl ################################################
 dnl # CDDB (libsoup)
 dnl ################################################
 CDDB_DEPS="libsoup-2.4 >= 2.42"
@@ -393,7 +411,7 @@ AC_SUBST([GTK_DEPRECATION_FLAGS],
          ["-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_3_14 -DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_3_14"])
 AC_SUBST([SOUP_DEPRECATION_FLAGS],
          ["-DSOUP_VERSION_MIN_REQUIRED=SOUP_VERSION_2_42 -DSOUP_VERSION_MAX_ALLOWED=SOUP_VERSION_2_42"])
-PKG_CHECK_MODULES([EASYTAG], [$CDDB_DEPS $GIO_DEPS $GTK_DEPS $OPUS_DEPS $OGG_DEPS $SPEEX_DEPS $FLAC_DEPS $ID3TAG_DEPS $TAGLIB_DEPS $WAVPACK_DEPS $REPLAYGAIN_DEPS])
+PKG_CHECK_MODULES([EASYTAG], [$CDDB_DEPS $GIO_DEPS $GTK_DEPS $OPUS_DEPS $OGG_DEPS $SPEEX_DEPS $FLAC_DEPS $ID3TAG_DEPS $TAGLIB_DEPS $WAVPACK_DEPS $REPLAYGAIN_DEPS $ACOUSTID_DEPS])
 
 dnl Set warning flags
 AX_COMPILER_FLAGS()
@@ -420,7 +438,6 @@ echo C++ Compiler ............: $CC $CXXFLAGS
 echo Compiler warnings .......: $WARN_CFLAGS
 echo C++ Compiler warnings ...: $WARN_CXXFLAGS
 echo Linker ..................: $CC $LDFLAGS $LIBS
-echo CDDB support ............: $have_cddb
 echo MP3 file support ........: $have_mp3
 echo ID3v2.3 tags support ....: $have_id3lib $ID3LIB_VERSION
 echo Ogg Vorbis file support .: $have_ogg
@@ -431,6 +448,8 @@ echo MP4 file support ........: $have_taglib_mp4
 echo WavPack support .........: $have_wavpack
 echo WMA/ASF file support ....: $have_taglib_asf
 echo ReplayGain support ......: $have_replaygain
+echo Acoustid support ........: $have_acoustid
+echo CDDB support ............: $have_cddb
 echo NLS/gettext .............: $USE_NLS
 echo Nautilus actions ........: $have_libnautilus_extension
 echo Tests during make check .: $testing_utilities

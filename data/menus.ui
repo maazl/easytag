@@ -476,6 +476,11 @@
         <submenu>
             <attribute name="label" translatable="yes">_Miscellaneous</attribute>
             <item>
+                <attribute name="accel">&lt;Alt&gt;F</attribute>
+                <attribute name="action">win.show-acoustid</attribute>
+                <attribute name="label" translatable="yes">_Fingerprint…</attribute>
+            </item>
+            <item>
                 <attribute name="accel">&lt;Primary&gt;b</attribute>
                 <attribute name="action">win.show-cddb</attribute>
                 <attribute name="label" translatable="yes">CDD_B Search…</attribute>
@@ -657,6 +662,10 @@
             </item>
         </section>
         <section>
+            <item>
+                <attribute name="action">win.show-acoustid</attribute>
+                <attribute name="label" translatable="yes">Fingerprint…</attribute>
+            </item>
             <item>
                 <attribute name="action">win.show-cddb-selection</attribute>
                 <attribute name="label" translatable="yes">CDDB Search Files…</attribute>
