@@ -13,18 +13,18 @@
 
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
 
-    <desc>Calculate ReplayGain information</desc>
+    <desc>Add ReplayGain information for homogeneous playback volume.</desc>
 
   </info>
 
-  <title><gui>ReplayGain</gui> information</title>
+  <title><gui>ReplayGain</gui> metadata</title>
 
   <p><link href="https://en.wikipedia.org/wiki/ReplayGain">ReplayGain</link>
   is a psychoacoustic model to equalize the loudness of different tracks
   during playback.</p>
 
-  <p>EasyTAG supports the calculation of ReplayGain information for all
-  supported file formats. You may also edit the replay gain values manually.
+  <p>EasyTAG supports the calculation of ReplayGain metadata for all
+  supported file formats. You may also edit the ReplayGain values manually.
   However, this is not recommended.</p>
 
 <section id="grouping">
@@ -113,27 +113,21 @@
     <item>
       <p>EasyTAG cannot modify the gain fields in the sideinfo blocks
       of MPEG audio files like tools like mp3gain can do. It is a tag editor
-      not a bit stream processor. Only the ReplayGain tags are updated to let
-      the player software adjust the loudness.</p>
+      not a bit stream processor. Only the ReplayGain tags are updated
+      in order to let player software adjust the loudness.</p>
     </item>
     <item>
       <p><em>MP4 files require Taglib library version 2.0 or above.</em>
       Older versions cannot access the ReplayGain tags.</p>
     </item>
     <item>
-      ReplayGain tags in MP4 files are stored in iTunes format only
+      <p>ReplayGain tags in MP4 files are stored in iTunes format only
       rather than an embedded ID3V2 tag as recommended by the ReplayGain
-      specification at hydrogenaudio. This is supported most widely.
+      specification at Hydrogenaudio. This is supported most widely.</p>
     </item>
     <item>
-      ReplayGain for WMA files uses the native custom tags like Loudgain does
-      rather than some embedded object with Vorbis comments which almost no library can read.
-    </item>
-    <item>
-      <p>EasyTag currently support <em>no asyncronuous operation</em>,
-      i.e. the UI gets blocked during time-consuming operations.
-      This causes the application to be quite unresponsive during
-      calculation of ReplayGain.</p>
+      <p>ReplayGain for WMA files uses the native custom tags like Loudgain does
+      rather than some embedded object with Vorbis comments which almost no library can read.</p>
     </item>
   </list>
 

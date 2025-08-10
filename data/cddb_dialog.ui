@@ -624,7 +624,7 @@
                                 </child>
                                 <child>
                                     <object class="GtkCheckButton" id="track_total_check">
-                                        <property name="label" translatable="yes">Number of Tracks</property>
+                                        <property name="label" translatable="yes">Number of tracks</property>
                                         <property name="name">track-total</property>
                                         <property name="visible">True</property>
                                         <signal name="toggled" handler="update_apply_button_sensitivity" swapped="true"/>

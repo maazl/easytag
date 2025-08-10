@@ -35,9 +35,9 @@
   default configuration is to save using a single field per entry. If the
   application that you are using supports multiple field of one type, you can
   configure EasyTAG to split fields when you save the file. Fields will
-  automatically be split whenever " - " occurs in the field. For example, in
-  the field "David Bowie - Queen", two fields would be saved: "David Bowie" and
-  "Queen".</p>
+  automatically be split whenever the configured delimiter, " - " by default
+  occurs in the field. For example, in the field "David Bowie - Queen",
+  two fields would be saved: "David Bowie" and "Queen".</p>
 
   <p>To split fields when you save the files:</p>
 
@@ -51,7 +51,8 @@
     </item>
     <item>
       <p>In <gui style="group">Splitting</gui> section, check the fields that
-      you want to be split into multiple fields when saving</p>
+      you want to be split into multiple fields when saving.</p>
+      <p>You can also adjust the split delimiter there.</p>
     </item>
   </steps>
 

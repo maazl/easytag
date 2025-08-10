@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: easytag easytag-2-2\n"
-"POT-Creation-Date: 2016-01-22 04:28+0000\n"
-"PO-Revision-Date: 2016-01-24 17:20+0100\n"
+"POT-Creation-Date: 2025-08-04 22:27+0200\n"
+"PO-Revision-Date: 2025-08-04 23:40+0200\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 2.3\n"
 
 #. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
 msgctxt "_"
@@ -25,7 +25,8 @@ msgid "translator-credits"
 msgstr ""
 "Christian Kirbach <Christian.Kirbach@gmail.com>, 2013, 2014, 2015\n"
 "Benjamin Steinwender <b@stbe.at>, 2014, 2015\n"
-"Mario Blättermann <mario.blaettermann@gmail.com>, 2016"
+"Mario Blättermann <mario.blaettermann@gmail.com>, 2016\n"
+"Marcel Müller, 2025"
 
 #. (itstool) path: credit/name
 #: C/cddb-search.page:12 C/file-rename.page:11 C/file-select.page:11
@@ -193,8 +194,8 @@ msgstr "Wählen Sie den Scanner <gui>Datei umbenennen</gui>."
 msgid ""
 "Using the <gui xref=\"format-specifier\">Legend</gui>, type in the structure "
 "that you would like to use for the file naming. For example, if you wish "
-"your files to be named <file>[artist] - [title].[extension]</file>, "
-"enter <input>%a - %t</input> into the renaming field."
+"your files to be named <file>[artist] - [title].[extension]</file>, enter "
+"<input>%a - %t</input> into the renaming field."
 msgstr ""
 "Wählen Sie die gewünschte Dateinamenstruktur basierend auf der <gui xref="
 "\"format-specifier\">Legende</gui>. Zum Beispiel: wenn Sie Ihre Dateien "
@@ -215,7 +216,7 @@ msgstr ""
 msgid "Close the <gui style=\"dialog\">Tag and Filename Scan</gui> dialog."
 msgstr ""
 "Schließen Sie das Dialogfenster <gui style=\"dialog\">Scan von "
-"Metainformationen und Dateinamen</gui>"
+"Metainformationen und Dateinamen</gui>."
 
 #. (itstool) path: item/p
 #: C/file-rename.page:52
@@ -260,6 +261,154 @@ msgstr ""
 "gewünschten Dateien auswählen, oder Sie können zuerst eine Datei auswählen "
 "und durch Drücken der <key>Umschalttaste</key> eine zweite Datei auswählen, "
 "um einen Bereich auszuwählen."
+
+#. (itstool) path: credit/name
+#: C/fingerprint.page:11 C/replaygain.page:11
+msgid "Marcel Müller"
+msgstr "Marcel Müller"
+
+#. (itstool) path: info/desc
+#: C/fingerprint.page:16
+msgid "Fetch MusicBrainz metadata from AcoustID service."
+msgstr "Lade MusicBrainz Metadaten über den AcoustID Dienst."
+
+#. (itstool) path: page/title
+#: C/fingerprint.page:20
+msgid "Audio <gui>fingerprinting</gui>"
+msgstr "Audio <gui>Fingerabdruck</gui>"
+
+#. (itstool) path: page/p
+#: C/fingerprint.page:22
+msgid ""
+"EasyTAG includes support for the audio fingerprinting service of <link href="
+"\"https://acoustid.org/\">AcoustID</link>. It allows to identify tracks by "
+"their sound only."
+msgstr ""
+"EasyTAG unterstützt den Audio Fingerabdruck-Dienst von <link href=\"https://"
+"acoustid.org/\">AcoustID</link>. Dieser ermöglicht, Titel alleine an ihrem "
+"Klang zu erkennen."
+
+#. (itstool) path: section/title
+#: C/fingerprint.page:28
+msgid "Using audio fingerprinting"
+msgstr "Benutzung der Fingerabdruckfunktion"
+
+#. (itstool) path: item/p
+#: C/fingerprint.page:32
+msgid "Select one or more files in the file browser."
+msgstr "Wählen sie eine oder mehrere Audiodateien in der Dateiliste."
+
+#. (itstool) path: item/p
+#: C/fingerprint.page:35
+msgid ""
+"Use <gui>Miscellaneous</gui>, <gui>Fingerprint…</gui> from the main menu or "
+"<gui>Fingerprint…</gui> from the context menu."
+msgstr ""
+"Benutzen sie <gui>Verschiedenes</gui>, <gui>Fingerabdruck …</gui> aus dem "
+"Hauptmenü oder <gui>Fingerabdruck …</gui> aus dem Kontextmenü."
+
+#. (itstool) path: item/p
+#: C/fingerprint.page:37
+msgid ""
+"Now a dialog shows and the fingerprinting starts in background. As soon as "
+"information is available for the first file it will show up in the dialog."
+msgstr ""
+"Damit erscheint ein Dialog und die Fingerabdruckberechnung startet im "
+"Hintergrund. Sobald Daten für die erste Datei vorliegen, werden sie im "
+"Dialog angezeigt."
+
+#. (itstool) path: item/p
+#: C/fingerprint.page:41
+msgid ""
+"Select the entry that matches best.<br/> If there is only one entry it is "
+"selected automatically."
+msgstr ""
+"Wählen Sie den am besten passenden Treffer<br/> Wenn es nur einen Treffer "
+"gibt, wird dieser automatisch ausgewählt."
+
+#. (itstool) path: item/p
+#: C/fingerprint.page:45
+msgid ""
+"Optionally adjust the tag fields that you want to overwrite and the options."
+msgstr "Passen Sie optional die zu schreibenden Felder und die Optionen an."
+
+#. (itstool) path: item/p
+#: C/fingerprint.page:48
+msgid ""
+"Hit <gui>Apply</gui> or <gui>Apply &amp; next</gui>.<br/> This updates the "
+"file's tag with the selected information."
+msgstr ""
+"Drücken Sie <gui>Übernehmen</gui> oder <gui>Übernehmen &amp; Weiter</gui>."
+"<br/> Das aktualisiert die Metadaten der Datei mit den gewählten "
+"Informationen."
+
+#. (itstool) path: item/p
+#: C/fingerprint.page:52
+msgid ""
+"Use the <gui>Previous</gui> and <gui>Next</gui> button navigate to other "
+"files. It will only stop at files that have been scheduled for audio "
+"fingerprinting."
+msgstr ""
+"Benutzen Sie <gui>Zurück</gui> und <gui>Weiter</gui>, um zu anderen Dateien "
+"zu gelangen. Es werden nur Dateien angezeigt, für die die "
+"Fingerabdruckberechnung bereits angestoßen wurde."
+
+#. (itstool) path: section/p
+#: C/fingerprint.page:57
+msgid ""
+"Once the fingerprinting of a file completed the information is cached until "
+"you change the selected directory in the tree. Loading the diolog for these "
+"files again will immediately show the cached information."
+msgstr ""
+"Wenn der Fingerabdruck einer Datei einmal berechnet wurde wird das Ergebnis "
+"behalten bis man im Verzeichnisbaum einen anderen Ordner wählt. Öffnet man "
+"den Dialog für diese Dateien erneut, erscheinen die zwischengespeicherten "
+"Informationen sofort."
+
+#. (itstool) path: section/title
+#: C/fingerprint.page:64 C/replaygain.page:110
+msgid "Restrictions"
+msgstr "Einschränkungen"
+
+#. (itstool) path: item/p
+#: C/fingerprint.page:68
+msgid ""
+"The throughput of this service is restricted to one file every 3 seconds for "
+"license reasons."
+msgstr ""
+"Der Durchsatz dieses Dienstes ist aus lizenzrechtlichen Gründen auf eine "
+"Datei je 3 Sekunden begrenzt."
+
+#. (itstool) path: item/p
+#: C/fingerprint.page:71
+msgid ""
+"Due to restrictions of the AcoustID service only the first 2 minutes of any "
+"track are taken into account. This may lead to ambiguous matches if "
+"recordings have the same intro."
+msgstr ""
+"Aufgrund von Restriktionen des AcoustID-Dienstes werden nur die ersten 2 "
+"Minuten jeder Datei berücksichtigt. Das kann zu Mehrdeutigkeiten führen, "
+"wenn Aufnahmen gleich beginnen."
+
+#. (itstool) path: item/p
+#: C/fingerprint.page:75
+msgid ""
+"The MusicBrainz database does not know anything about the date of a "
+"recording. It only knows about releases and release dates. EasyTAG provides "
+"an option to take the <em>first</em> release of a recording as date. This "
+"may not always hit the nail on the head."
+msgstr ""
+"Die MusicBrainz Datenbank kennt kein Aufnahmedatum. Sie kennt nur "
+"Veröffentlichungen und deren Datum. EasyTAG hat eine Option, um das Datum "
+"der <em>ersten</em> Veröffentlichung als Aufnahmedatum zu verwenden. Das "
+"trifft nicht immer ins Schwarze."
+
+#. (itstool) path: item/p
+#: C/fingerprint.page:81
+msgid "There is no batch mode to apply results to many files."
+msgstr ""
+"Es gibt keinen Batch-Modus, um Ergebnisse an mehrere Dateien automatisch "
+"zuzuweisen."
 
 #. (itstool) path: info/desc
 #: C/format-specifier.page:17
@@ -310,35 +459,21 @@ msgstr "Alben-Künstler"
 
 #. (itstool) path: td/p
 #: C/format-specifier.page:61
-msgid "Album title"
-msgstr "Albentitel"
-
-#. (itstool) path: td/p
-#: C/format-specifier.page:69
 msgid "Comment: this is the free-form comment field"
 msgstr "Kommentar: Das ist ein freies Kommentarfeld"
 
 #. (itstool) path: td/p
-#: C/format-specifier.page:77
-msgid "Composer: this is the creator of the track"
-msgstr "Komponist: Das ist der Erschaffer des Werkes"
-
-#. (itstool) path: td/p
-#: C/format-specifier.page:85
-msgid ""
-"Copyright holder: this is usually the artist, but it can also be the record "
-"label"
-msgstr ""
-"Urheberrechtsinhaber: Das ist für gewöhnlich der Künstler, aber es kann auch "
-"die Plattenfirma sein"
-
-#. (itstool) path: td/p
-#: C/format-specifier.page:94
+#: C/format-specifier.page:69
 msgid "Disc number"
 msgstr "CD-Nummer"
 
 #. (itstool) path: td/p
-#: C/format-specifier.page:102
+#: C/format-specifier.page:77
+msgid "Number of discs"
+msgstr "Anzahl der Medien"
+
+#. (itstool) path: td/p
+#: C/format-specifier.page:85
 msgid ""
 "Encoded by: this is usually the person who encoded the file, but the field "
 "is also used for the application that was used to encode the file"
@@ -347,12 +482,12 @@ msgstr ""
 "kann aber auch die Anwendung sein, die zum Kodieren der Datei verwendet wurde"
 
 #. (itstool) path: td/p
-#: C/format-specifier.page:112
+#: C/format-specifier.page:95
 msgid "Genre"
 msgstr "Genre"
 
 #. (itstool) path: td/p
-#: C/format-specifier.page:120
+#: C/format-specifier.page:103
 msgid ""
 "Ignored: this format specifier can only be used in <gui>Fill Tag</gui> to "
 "specify parts of the file name which should be ignored"
@@ -362,19 +497,33 @@ msgstr ""
 "ignoriert werden sollen"
 
 #. (itstool) path: td/p
-#: C/format-specifier.page:130
+#: C/format-specifier.page:113
+msgid "Track number"
+msgstr "Titelnummer"
+
+#. (itstool) path: td/p
+#: C/format-specifier.page:121
 msgid "Number of tracks: the total number of tracks on the medium"
 msgstr "Anzahl der Titel: Gesamtzahl der Albumtitel auf dem Medium"
 
 #. (itstool) path: td/p
-#: C/format-specifier.page:138
+#: C/format-specifier.page:129
 msgid "Original artist"
 msgstr "Originalkünstler"
 
 #. (itstool) path: td/p
-#: C/format-specifier.page:146
-msgid "Track number"
-msgstr "Titelnummer"
+#: C/format-specifier.page:137
+msgid "Composer: this is the creator of the track"
+msgstr "Komponist: Das ist der Erschaffer des Werkes"
+
+#. (itstool) path: td/p
+#: C/format-specifier.page:145
+msgid ""
+"Copyright holder: this is usually the artist, but it can also be the record "
+"label"
+msgstr ""
+"Urheberrechtsinhaber: Das ist für gewöhnlich der Künstler, aber es kann auch "
+"die Plattenfirma sein"
 
 #. (itstool) path: td/p
 #: C/format-specifier.page:154
@@ -383,20 +532,40 @@ msgstr "Titel"
 
 #. (itstool) path: td/p
 #: C/format-specifier.page:162
+msgid "Album title"
+msgstr "Albentitel"
+
+#. (itstool) path: td/p
+#: C/format-specifier.page:170
+msgid "Subtitle"
+msgstr "Untertitel"
+
+#. (itstool) path: td/p
+#: C/format-specifier.page:178
+msgid "Disc subtitle"
+msgstr "Medienuntertitel"
+
+#. (itstool) path: td/p
+#: C/format-specifier.page:186
 msgid "URL"
 msgstr "Adresse"
 
 #. (itstool) path: td/p
-#: C/format-specifier.page:170
-msgid "Number of discs"
-msgstr "Anzahl der Medien"
+#: C/format-specifier.page:194
+msgid "Original year"
+msgstr "Originaljahr"
 
 #. (itstool) path: td/p
-#: C/format-specifier.page:178
+#: C/format-specifier.page:202
 msgid "Year of recording, sometimes the date of release is used instead"
 msgstr ""
 "Jahr der Aufnahme, manchmal wird anstelle das Veröffentlichungsdatum "
 "verwendet"
+
+#. (itstool) path: td/p
+#: C/format-specifier.page:211
+msgid "Year of release"
+msgstr "Erscheinungsjahr"
 
 #. (itstool) path: info/desc
 #: C/image-delete.page:17
@@ -942,17 +1111,17 @@ msgid ""
 "default configuration is to save using a single field per entry. If the "
 "application that you are using supports multiple field of one type, you can "
 "configure EasyTAG to split fields when you save the file. Fields will "
-"automatically be split whenever \" - \" occurs in the field. For example, in "
-"the field \"David Bowie - Queen\", two fields would be saved: \"David Bowie"
-"\" and \"Queen\"."
+"automatically be split whenever the configured delimiter, \" - \" by default "
+"occurs in the field. For example, in the field \"David Bowie - Queen\", two "
+"fields would be saved: \"David Bowie\" and \"Queen\"."
 msgstr ""
 "Viele Anwendungen lesen Felder mit mehreren Werten nicht korrekt, deshalb "
 "wird per Vorgabe jeder Wert in einem einzelnen Feld gespeichert. Wenn die "
 "von Ihnen verwendete Anwendung mehrere Felder des selben Typs unterstützt, "
 "können Sie EasyTAG die Felder beim Speichern aufspalten lassen. Die Felder "
-"werden beim Vorkommen von » - « automatisch aufgespalten. Zum Beispiel wird "
-"das Feld »David Bowie - Queen« in die zwei Felder »David Bowie« und »Queen« "
-"aufgespalten."
+"werden beim Vorkommen des konfigurierten Trenners (standardmäßig » - «) "
+"automatisch aufgeteilt. Zum Beispiel wird das Feld »David Bowie - Queen« in "
+"die zwei Felder »David Bowie« und »Queen« aufgespalten."
 
 #. (itstool) path: page/p
 #: C/problems-ogg-split.page:42
@@ -968,10 +1137,275 @@ msgstr "Wählen Sie den Reiter <gui style=\"tab\">Metainformationen</gui>"
 #: C/problems-ogg-split.page:53
 msgid ""
 "In <gui style=\"group\">Splitting</gui> section, check the fields that you "
-"want to be split into multiple fields when saving"
+"want to be split into multiple fields when saving."
 msgstr ""
 "Im Bereich <gui style=\"group\">Trennen</gui> können Sie die beim Speichern "
 "aufzuspaltenden Felder auswählen."
+
+#. (itstool) path: item/p
+#: C/problems-ogg-split.page:55
+msgid "You can also adjust the split delimiter there."
+msgstr "Sie können dort auch den Trenner ändern."
+
+#. (itstool) path: info/desc
+#: C/replaygain.page:16
+msgid "Add ReplayGain information for homogeneous playback volume."
+msgstr ""
+"Füge ReplayGain Daten für eine gleichmäßige Wiedergabelautstärke hinzu."
+
+#. (itstool) path: page/title
+#: C/replaygain.page:20
+msgid "<gui>ReplayGain</gui> metadata"
+msgstr "<gui>ReplayGain</gui> Metadaten"
+
+#. (itstool) path: page/p
+#: C/replaygain.page:22
+msgid ""
+"<link href=\"https://en.wikipedia.org/wiki/ReplayGain\">ReplayGain</link> is "
+"a psychoacoustic model to equalize the loudness of different tracks during "
+"playback."
+msgstr ""
+"<link href=\"https://en.wikipedia.org/wiki/ReplayGain\">ReplayGain</link> "
+"ist ein psychoakustisches Modell, um die Lautstärke unterschiedlicher Titel "
+"anzugleichen."
+
+#. (itstool) path: page/p
+#: C/replaygain.page:26
+msgid ""
+"EasyTAG supports the calculation of ReplayGain metadata for all supported "
+"file formats. You may also edit the ReplayGain values manually. However, "
+"this is not recommended."
+msgstr ""
+"EasyTAG unterstützt die Berechnung von ReplayGain Daten in allen "
+"unterstützten Dateiformaten. Sie können die Werte auch manuell bearbeiten. "
+"Das ist aber nicht zu empfehlen."
+
+#. (itstool) path: section/title
+#: C/replaygain.page:31
+msgid "Grouping for album gain"
+msgstr "Gruppierung für Album-Werte"
+
+#. (itstool) path: section/p
+#: C/replaygain.page:33
+msgid ""
+"To avoid changes of the relative loudness while playing a complete album "
+"ReplayGain supports track level and album level values. For calculation of "
+"latter all files that belong to the same album are analyzed as one large "
+"block. <em>It is essential to select all files of an album at once in order "
+"to get this working.</em>"
+msgstr ""
+"Um Sprünge der Lautstärke während der Wiedergabe eines kompletten Albums zu "
+"vermeiden, hat ReplayGain Werte für einzelnen Titel und ganze Alben. Für die "
+"Berechnung letzterer werden alle Dateien eines Albums als en bloc "
+"analysiert. <em>Sie müssen immer alle Dateien eines Albums auf einmal "
+"selektieren, damit das funktioniert.</em>"
+
+#. (itstool) path: section/p
+#: C/replaygain.page:39
+msgid ""
+"EasyTAG uses the album title tag by default to group the files to analyze "
+"into albums. But you may chose another grouping mode in the preferences "
+"dialog."
+msgstr ""
+"EasyTAG nutzt standardmäßig das Album-Tag, um die Dateien eines Albums zu "
+"analysieren. Sie können aber eine andere Gruppierung in den Einstellungen "
+"wählen."
+
+#. (itstool) path: item/title
+#: C/replaygain.page:44
+msgid "<gui>Group by album</gui>"
+msgstr "<gui>Gruppierung nach Album</gui>"
+
+#. (itstool) path: item/p
+#: C/replaygain.page:45
+msgid ""
+"Only files with the same album title tag are analyzed together. If an album "
+"consists of multiple media all media will be analyzed together and get the "
+"same album gain value. This is the default."
+msgstr ""
+"Dateien mit demselben Albumtitel werden zusammen analysiert. Wenn ein Album "
+"aus mehreren Medien besteht, werden diese als ein Album betrachtet und "
+"bekommen dieselben Album-Werte. Das ist der Standard."
+
+#. (itstool) path: item/title
+#: C/replaygain.page:50
+msgid "<gui>Group by album and disc</gui>"
+msgstr "<gui>Gruppierung nach Album und Medium</gui>"
+
+#. (itstool) path: item/p
+#: C/replaygain.page:51
+msgid ""
+"The album title and the disc number is used to identify tracks that belong "
+"to the same album. If the tracks have no disc number tag the behavior is the "
+"same than <gui>Group by album</gui>."
+msgstr ""
+"Der Albumtitel und die Mediennummer werden zur Ermittlung der zu einem Album "
+"gehörigen Dateien benutzt. Sollten die Dateien keine Mediennummer haben, ist "
+"das Verhalten identisch mit <gui>Gruppierung nach Album</gui>."
+
+#. (itstool) path: item/title
+#: C/replaygain.page:56
+msgid "<gui>Group by file path</gui>"
+msgstr "<gui>Gruppierung nach Verzeichnis</gui>"
+
+#. (itstool) path: item/p
+#: C/replaygain.page:57
+msgid ""
+"Files that are in the same directory are analyzed together for the album "
+"gain. No tags are used during analysis."
+msgstr ""
+"Dateien im selben Verzeichnis werden gemeinsam analysiert, um die Album-"
+"Werte zu ermitteln. Die Metadaten spielen dafür keine Rolle."
+
+#. (itstool) path: item/title
+#: C/replaygain.page:61
+msgid "<gui>No grouping</gui>"
+msgstr "<gui>Keine Gruppierung</gui>"
+
+#. (itstool) path: item/p
+#: C/replaygain.page:62
+msgid ""
+"All selected files are considered to belong to the same album. Use this mode "
+"if you want to do the grouping of the files manually."
+msgstr ""
+"Alle selektierten Dateien werden als ein Album betrachtet. Nutzen Sie diesen "
+"Modus, um die Dateien manuell zu gruppieren."
+
+#. (itstool) path: section/title
+#: C/replaygain.page:70
+msgid "<gui>ReplayGain version</gui>"
+msgstr "<gui>ReplayGain Version</gui>"
+
+#. (itstool) path: section/p
+#: C/replaygain.page:72
+msgid "EasyTAG supports different versions of ReplayGain:"
+msgstr "EasyTAG unterstützt verschiedene ReplayGain Versionen:"
+
+#. (itstool) path: item/title
+#: C/replaygain.page:76
+msgid ""
+"<link href=\"https://wiki.hydrogenaud.io/index.php?"
+"title=ReplayGain_1.0_specification\">ReplayGain version 1.0</link>"
+msgstr ""
+"<link href=\"https://wiki.hydrogenaud.io/index.php?"
+"title=ReplayGain_1.0_specification\">ReplayGain Version 1.0</link>"
+
+#. (itstool) path: item/p
+#: C/replaygain.page:77
+msgid ""
+"This is the original standard by David Robinson in 2001. It models the equal-"
+"loudness contour of the human ear quite accurately. The drawback is the "
+"caclulation time required for analysis. Furthermore there is no "
+"specification how to handle multi channel audio. EasyTAG enhaces the "
+"standard slightly to support multiple channels."
+msgstr ""
+"Das ist die Originalversion von David Robinson aus dem Jahr 2001. Es "
+"modelliert die Hörkurve ziemlich genau. Der Nachteil ist die "
+"Berechnungsdauer. Zudem gibt es keine Spezifikation für dem Umgang mit "
+"Mehrkanalton. EasyTAG erweitert den Standard ein wenig, um mehrere Kanäle zu "
+"unterstützen."
+
+#. (itstool) path: item/title
+#: C/replaygain.page:84
+msgid ""
+"<link href=\"https://wiki.hydrogenaud.io/index.php?"
+"title=ReplayGain_2.0_specification\">ReplayGain version 2.0</link>"
+msgstr ""
+"<link href=\"https://wiki.hydrogenaud.io/index.php?"
+"title=ReplayGain_2.0_specification\">ReplayGain Version 2.0</link>"
+
+#. (itstool) path: item/p
+#: C/replaygain.page:85
+msgid ""
+"This version, also known as international standard ITU-R BS.1770.3 or "
+"EBU-128, is a simplified model that is much faster to calculate. It is used "
+"e.g. by broadcasting services. The newer standard also covers multi channel "
+"audio."
+msgstr ""
+"Diese Version kennt man unter dem internationalen Standard ITU-R BS.1770.3 "
+"bzw. EBU-128. Es ist ein vereinfachtes Modell, das schneller berechnet "
+"werden kann. Es wird z.B. für Radioausstrahlungen verwendet. Dieser Standard "
+"definiert auch den Umgang mit Mehrkanalton."
+
+#. (itstool) path: item/title
+#: C/replaygain.page:91
+msgid "<gui>Hybrid</gui> of version 1 and 2"
+msgstr "<gui>Hybrid</gui> zwischen Version 1 und 2"
+
+#. (itstool) path: item/p
+#: C/replaygain.page:92
+msgid ""
+"EasyTAG also supports a 3rd, even more sophisticated model. It combines the "
+"best of two worlds, i.e. the larger and overlapping time blocks and the "
+"multi channel handling of ReplayGain 2.0 with the more accurate equal-"
+"loudness contour of ReplayGain 1.0. The latter is significantly less "
+"sensitive to inaudible high frequency noise in some recordings. Calculation "
+"time is similar to version 1.0."
+msgstr ""
+"EasyTAG unterstützt eine dritte, ausgefeiltere Variante. Sie verbindet die "
+"größeren, überlappenden Blöcke und die Mehrkanalunterstützung von ReplayGain "
+"2.0 mit der präziseren Hörkurve von ReplayGain 1.0. Letztere ist deutlich "
+"weniger anfällig gegen unhörbare, hochfrequente Störsignale in einigen "
+"Aufnahmen. Die Geschwindigkeit ist vergleichbar mit Version 1.0."
+
+#. (itstool) path: section/p
+#: C/replaygain.page:101
+msgid ""
+"Since the ReplayGain calculation is always an approximation the result is "
+"sensitive to rounding differences. So when comaring to the results of other "
+"applications like mp3gain you may observe differences in the order of 0.1 "
+"dB. Given that 1 dB is roughly the smallest audible loudness deifference you "
+"can saflely ignore them."
+msgstr ""
+"Da die ReplayGain-Berechnung immer nur eine Näherung ist, kommt es zu "
+"Rundungsfehlern. Im Vergleich zu anderen Programmen wie mp3gain können "
+"Abweichungen in der Größenordnung von 0,1 dB auftreten. Berücksichtigt man, "
+"dass 1 dB in etwa der kleinste, wahrnehmbare Lautstärkeunterschied ist, kann "
+"man diese getrost vernachlässigen."
+
+#. (itstool) path: item/p
+#: C/replaygain.page:114
+msgid ""
+"EasyTAG cannot modify the gain fields in the sideinfo blocks of MPEG audio "
+"files like tools like mp3gain can do. It is a tag editor not a bit stream "
+"processor. Only the ReplayGain tags are updated in order to let player "
+"software adjust the loudness."
+msgstr ""
+"EasyTAG kann keine Änderungen an den Sideinfo-Blöcken von MPEG-Audio-Dateien "
+"durchführen wie mp3gain. Es ist eine Metadateneditor, kein "
+"Audiodatenberarbeiter. Es werden nur die ReplayGain Metadaten geschrieben, "
+"damit die Wiedergabesoftware die Lautstärke anpassen kann."
+
+#. (itstool) path: item/p
+#: C/replaygain.page:120
+msgid ""
+"<em>MP4 files require Taglib library version 2.0 or above.</em> Older "
+"versions cannot access the ReplayGain tags."
+msgstr ""
+"<em>Für MP4 Dateien wird die Taglib Bibliothek ab Version 2.0 benötigt.</em> "
+"Ältere Versionen erlauben keinen Zugriff auf die ReplayGain Metadaten."
+
+#. (itstool) path: item/p
+#: C/replaygain.page:124
+msgid ""
+"ReplayGain tags in MP4 files are stored in iTunes format only rather than an "
+"embedded ID3V2 tag as recommended by the ReplayGain specification at "
+"Hydrogenaudio. This is supported most widely."
+msgstr ""
+"ReplayGain Metadaten von MP4 Dateien werden im iTunes-Format gespeichert, "
+"nicht als eingebettete ID3V2 Metadaten wie es die Spezifikation von "
+"Hydrogenaudio empfiehlt. Das ist am verbreitetsten."
+
+#. (itstool) path: item/p
+#: C/replaygain.page:129
+msgid ""
+"ReplayGain for WMA files uses the native custom tags like Loudgain does "
+"rather than some embedded object with Vorbis comments which almost no "
+"library can read."
+msgstr ""
+"Die ReplayGain Metadaten von WMA-Dateien werden als benutzerspezifische Tags "
+"gespeichert wie das auch Loudgain tut und nicht als eingebettete Vorbis-"
+"Kommentare, die kaum ein Programm lesen kann."
 
 #. (itstool) path: info/desc
 #: C/scanner.page:18
@@ -1032,14 +1466,14 @@ msgstr ""
 #. (itstool) path: section/p
 #: C/scanner.page:42
 msgid ""
-"For example, if you keep your audio files using the <file>artist/"
-"album/01 track title.flac</file> directory structure and filenames, use the "
-"<input>%a/%b/%n %t</input> <em>format string</em> to extract the track "
-"number and title from the filename, the album title from the parent "
-"directory and the artist from the grandparent directory."
+"For example, if you keep your audio files using the <file>artist/album/01 "
+"track title.flac</file> directory structure and filenames, use the <input>%a/"
+"%T/%n %t</input> <em>format string</em> to extract the track number and "
+"title from the filename, the album title from the parent directory and the "
+"artist from the grandparent directory."
 msgstr ""
 "Wenn Sie beispielsweise für Ihre Audio-Dateien eine Verzeichnis- und "
-"Dateinamensstruktur der Form <file>Künstler/Album/01 Stück Titel.flac</file> "
+"Dateinamensstruktur der Form <file>Künstler/Album/01 Titel.flac</file> "
 "verwenden, können Sie mit der <em>Formatzeichenkette</em> <input>%a/%b/"
 "%n %t</input> die Stücknummer und den Titel aus dem Dateinamen erzeugen, den "
 "Albentitel aus dem Elternordner und den Künstler aus dem Großelternordner."
@@ -1076,7 +1510,7 @@ msgstr ""
 #: C/scanner.page:61
 msgid ""
 "For example, if you have a tagged file inside the <file>Music</file> "
-"directory, you can use the <input>%a/%b/%n %t</input> <em>format string</"
+"directory, you can use the <input>%a/%T/%n %t</input> <em>format string</"
 "em>, it will create the <file>Music/artist/album/01 track title.flac</file> "
 "file structure and filename. You will see a preview of the naming scheme "
 "below your specified format string."
@@ -1084,8 +1518,8 @@ msgstr ""
 "Beispielsweise haben Sie eine Datei innerhalb des Ordners <file>Musik</file> "
 "mit Tags versehen. Dann können Sie die <em>Formatzeichenkette</em> <input>%a/"
 "%b/%n %t</input> verwenden, um Dateistruktur und -name der Form <file>Musik/"
-"Künstler/Album/01 Stück Titel.flac</file> zu erzeugen. Sie sehen eine "
-"Vorschau des Benennungsschemas unterhalb der angegebenen Formatzeichenkette."
+"Künstler/Album/01 Titel.flac</file> zu erzeugen. Sie sehen eine Vorschau des "
+"Benennungsschemas unterhalb der angegebenen Formatzeichenkette."
 
 #. (itstool) path: section/p
 #: C/scanner.page:67
@@ -1225,7 +1659,7 @@ msgstr ""
 #. (itstool) path: item/p
 #: C/tag-capitalization.page:36
 msgid "Select the <gui style=\"tab\">Process Fields</gui> tab."
-msgstr "Wählen Sie den Reiter <gui style=\"tab\">Felder verarbeiten</gui>"
+msgstr "Wählen Sie den Reiter <gui style=\"tab\">Felder verarbeiten</gui>."
 
 #. (itstool) path: item/p
 #: C/tag-capitalization.page:39
@@ -1353,4 +1787,3 @@ msgstr ""
 "<gui>Künstler</gui>. Sie können einige dieser Felder mit <app>EasyTAG</app> "
 "bearbeiten. Die bearbeitbaren Felder sind vom Format der jeweiligen Datei "
 "abhängig."
-
