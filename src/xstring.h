@@ -25,6 +25,7 @@
 #include <cstdio>
 #include <utility>
 #include <limits>
+#include <string>
 
 #include <glib.h>
 
