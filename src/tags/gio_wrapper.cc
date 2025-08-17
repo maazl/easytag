@@ -129,14 +129,14 @@ GIO_InputStream::writeBlock (TagLib::ByteVector const &data)
 
 void
 GIO_InputStream::insert (TagLib::ByteVector const &data,
-                         TagLib::offset_t start,
+                         offset_t start,
                          size_t replace)
 {
     g_warning ("%s", "Trying to write to read-only file!");
 }
 
 void
-GIO_InputStream::removeBlock (TagLib::offset_t start, size_t len)
+GIO_InputStream::removeBlock (offset_t start, size_t len)
 {
     g_warning ("%s", "Trying to write to read-only file!");
 }
@@ -217,7 +217,7 @@ GIO_IOStream::writeBlock (TagLib::ByteVector const &data)
 
 void
 GIO_IOStream::insert (TagLib::ByteVector const &data,
-                      TagLib::offset_t start,
+                      offset_t start,
                       size_t replace)
 {
     if (error)
@@ -331,7 +331,7 @@ GIO_IOStream::insert (TagLib::ByteVector const &data,
 }
 
 void
-GIO_IOStream::removeBlock (TagLib::offset_t start, size_t len)
+GIO_IOStream::removeBlock (offset_t start, size_t len)
 {
     if (start + len >= (ulong)length ())
     {

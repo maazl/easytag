@@ -26,11 +26,18 @@
 #if defined(ENABLE_MP4) || defined(ENAMBLE_ASF)
 
 #include "../misc.h"
-#include <tiostream.h>
+#include <taglib/tiostream.h>
 #include <gio/gio.h>
 
 class GIO_Stream : public TagLib::IOStream
 {
+protected:
+#if TAGLIB_MAJOR_VERSION >= 2
+	typedef TagLib::offset_t offset_t;
+#else
+	typedef TagLib::ulong offset_t;
+#endif
+
 public:
     virtual ~GIO_Stream ();
     virtual TagLib::FileName name () const;
@@ -58,8 +65,8 @@ public:
     GIO_InputStream (GFile *file_);
     virtual TagLib::ByteVector readBlock (ulong length);
     virtual void writeBlock (TagLib::ByteVector const &data);
-    virtual void insert (TagLib::ByteVector const &data, TagLib::offset_t start = 0, size_t replace = 0);
-    virtual void removeBlock (TagLib::offset_t start = 0, size_t length = 0);
+    virtual void insert (TagLib::ByteVector const &data, offset_t start = 0, size_t replace = 0);
+    virtual void removeBlock (offset_t start = 0, size_t length = 0);
     virtual bool readOnly () const;
     virtual long int length ();
     virtual void truncate (long int length);
@@ -74,8 +81,8 @@ public:
     GIO_IOStream (GFile *file_);
     virtual TagLib::ByteVector readBlock (ulong length);
     virtual void writeBlock (TagLib::ByteVector const &data);
-    virtual void insert (TagLib::ByteVector const &data, TagLib::offset_t start = 0, size_t replace = 0);
-    virtual void removeBlock (TagLib::offset_t start = 0, size_t length = 0);
+    virtual void insert (TagLib::ByteVector const &data, offset_t start = 0, size_t replace = 0);
+    virtual void removeBlock (offset_t start = 0, size_t length = 0);
     virtual bool readOnly () const;
     virtual long int length ();
     virtual void truncate (long int length);
