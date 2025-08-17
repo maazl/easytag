@@ -36,10 +36,6 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [Package name for ge
 AS_IF([test "x$USE_NLS" != "xno"],
       [AC_DEFINE([ENABLE_NLS], [1], [Native Language support is enabled])])
 
-dnl AppData
-m4_ifdef([APPDATA_XML], [APPDATA_XML],
-         [AC_MSG_ERROR([appdata-tools is required for appdata-xml.m4])])
-
 dnl -------------------------------
 dnl Checks for programs.
 dnl -------------------------------
@@ -177,9 +173,6 @@ AC_ARG_ENABLE([acoustid],
 
 AC_ARG_ENABLE([cddb],
               [AS_HELP_STRING([--disable-cddb], [Disable CDDB support (default=auto)])])
-
-AC_ARG_ENABLE([nautilus_actions],
-              [AS_HELP_STRING([--disable-nautilus-actions], [do not build the nautilus context menu actions (default=auto)])])
 
 
 
@@ -384,23 +377,6 @@ AS_IF([test "x$enable_cddb" != "xno"],
        AS_IF([test "x$enable_cddb" = "xyes"],
              [AC_MSG_ERROR([CDDB support requested but required dependences ($CDDB_DEPS) not found])])])
 
-dnl ################################################
-dnl # Nautilus
-dnl ################################################
-NAUTILUS_DEPS="libnautilus-extension >= 3.0 gio-unix-2.0"
-AS_IF([test "x$enable_nautilus_actions" != "xno"],
-      [PKG_CHECK_EXISTS([$NAUTILUS_DEPS], [have_libnautilus_extension=yes], [have_libnautilus_extension=no])],
-      [have_libnautilus_extension=no])
-
-AS_IF([test "x$have_libnautilus_extension" = "xno"],
-      [NAUTILUS_DEPS=""
-       AS_IF([test "x$enable_nautilus_actions" = "xyes"],
-             [AC_MSG_ERROR([Nautilus Actions build requested but required dependencies ($NAUTILUS_DEPS) not found])])],
-      [PKG_CHECK_MODULES([NAUTILUS], [$NAUTILUS_DEPS])
-       NAUTILUS_EXTENSION_DIR=`$PKG_CONFIG --variable=extensiondir libnautilus-extension`
-       AC_SUBST([NAUTILUS_EXTENSION_DIR], [$NAUTILUS_EXTENSION_DIR])])
-
-AM_CONDITIONAL([ENABLE_NAUTILUS_ACTIONS], [test x"$have_libnautilus_extension" != x"no"])
 
 dnl Check the pkg-config dependencies
 GIO_DEPS="gio-2.0 >= 2.58.0"
@@ -451,7 +427,6 @@ echo ReplayGain support ......: $have_replaygain
 echo Acoustid support ........: $have_acoustid
 echo CDDB support ............: $have_cddb
 echo NLS/gettext .............: $USE_NLS
-echo Nautilus actions ........: $have_libnautilus_extension
 echo Tests during make check .: $testing_utilities
 echo Install prefix ..........: $prefix
 echo 

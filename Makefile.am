@@ -9,7 +9,6 @@ AM_DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-man \
 	--enable-mp3 \
 	--enable-mp4 \
-	--enable-nautilus-actions \
 	--enable-asf \
 	--enable-acoustid \
 	--enable-replaygain \
@@ -245,36 +244,6 @@ easytag-win32-installer.nsi: easytag-win32-installer.nsi.in Makefile
 		-e "s|\@PACKAGE_VERSION\@|$(PACKAGE_VERSION)|" \
 		-e "s|\@PREFIX\@|$(prefix)|" $< > $@
 
-if ENABLE_NAUTILUS_ACTIONS
-nautilus_extensiondir = $(NAUTILUS_EXTENSION_DIR)
-
-nautilus_extension_LTLIBRARIES = \
-	libnautilus-easytag.la
-
-libnautilus_easytag_la_SOURCES = \
-	nautilus-extension/nautilus-easytag.c
-
-libnautilus_easytag_la_CPPFLAGS = \
-	-I$(top_srcdir) \
-	-I$(top_builddir) \
-	-DLOCALEDIR=\"$(localedir)\" \
-	$(NAUTILUS_CFLAGS) \
-	$(GLIB_DEPRECATION_FLAGS) \
-	$(GTK_DEPRECATION_FLAGS)
-
-libnautilus_easytag_la_CFLAGS = \
-	$(WARN_CFLAGS)
-
-libnautilus_easytag_la_LDFLAGS = \
-	-module -avoid-version -no-undefined \
-	$(WARN_LDFLAGS)
-
-libnautilus_easytag_la_LIBADD = \
-	$(NAUTILUS_LIBS)
-
-nautilus_appdata_in_file = data/easytag-nautilus.metainfo.xml.in
-endif
-
 # Create a directory stamp in the build dir. Used to workaround the case where
 # a pattern rule is used for a target with a path that does not ordinarily
 # exist in the build dir.
@@ -282,9 +251,8 @@ endif
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_at)touch $@
 
-@APPDATA_XML_RULES@
 @INTLTOOL_XML_RULE@
-appdata_in_files = data/org.gnome.EasyTAG.appdata.xml.in $(nautilus_appdata_in_file)
+appdata_in_files = data/org.gnome.EasyTAG.appdata.xml.in
 appdata_XML = $(appdata_in_files:.xml.in=.xml)
 
 @INTLTOOL_DESKTOP_RULE@

@@ -15,7 +15,6 @@ config.h.in
 config.log
 config.status
 configure
-/data/easytag-nautilus.metainfo.xml
 /data/org.gnome.EasyTAG.appdata.valid
 /data/org.gnome.EasyTAG.appdata.xml
 /data/org.gnome.EasyTAG.desktop
@@ -35,10 +34,8 @@ configure
 /help/*/legal.xml
 !/help/C
 /INSTALL
-/libnautilus-easytag.la
 /libtool
 /org.gnome.EasyTAG.enums.xml
-/nautilus-extension/.deps
 /po/*.gmo
 /po/.intltool-merge-cache
 /po/Makefile.in.in

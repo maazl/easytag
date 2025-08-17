@@ -68,7 +68,6 @@ Installation
 * id3lib version greater than 3.7.12 (https://id3lib.sourceforge.net/) (Recommended: id3lib-3.8.3) (if not deactivated by './configure --disable-id3v23')
 * flac (https://xiph.org/flac/) (if not deactivated by './configure --disable-flac')
 * libogg and libvorbis (https://xiph.org/vorbis/) (if not deactivated by './configure --disable-ogg')
-* libnautilus-extension (https://wiki.gnome.org/Apps/Nautilus) (if not deactivated by ./configure --disable-nautilus-actions')
 * libsoup (https://wiki.gnome.org/Projects/libsoup) (if not deactivated for './configure --disable-cddb')
 * opus and opusfile (https://www.opus-codec.org/) (if not deactivated by './configure --disable-opus')
 * taglib >= 1.10 (https://taglib.org/) recommended >= 2.0 (if not deactivated by './configure --disable-mp4')
