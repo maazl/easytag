@@ -46,6 +46,13 @@ static constexpr int SampleRate = 48000;
 class ReplayGain : public ReplayGainAnalyzer::Result
 {
 protected:
+#if LIBAVCODEC_VERSION_MAJOR >= 60
+	using channel_layout_t = const AVChannelLayout&;
+#else
+	using channel_tayout_t = uint64_t;
+#endif
+
+protected:
 	const int BlockSize;
 	int BlockLevel;
 	int Channels = 0;
@@ -54,7 +61,8 @@ protected:
 	virtual void ProcessBlock() = 0;
 public:
 	ReplayGain(int blockSize) : BlockSize(blockSize), BlockLevel(blockSize) {}
-	virtual void Setup(uint64_t channel_layout) = 0;
+	virtual void Setup(channel_layout_t channel_layout) = 0;
+	int GetChannels() const { return Channels; }
 	void Feed(const float*const* data, int samples);
 	virtual float Peak() const { return Maximum; }
 };
@@ -109,7 +117,7 @@ protected:
 	virtual void ProcessBlock();
 public:
 	ReplayGain1(int blockSize = SampleRate * 50 / 1000);
-	virtual void Setup(uint64_t channel_layout);
+	virtual void Setup(channel_layout_t channel_layout);
 	virtual float Gain() const;
 	virtual void operator+=(const Result& r);
 };
@@ -118,15 +126,22 @@ ReplayGain1::ReplayGain1(int blockSize) : ReplayGain(blockSize)
 {	memset(Bins, 0, sizeof(Bins));
 }
 
-void ReplayGain1::Setup(uint64_t channel_layout)
-{	Channels = 0;
-	int center = -1;
+void ReplayGain1::Setup(channel_layout_t channel_layout)
+{	int center = -1;
+#if LIBAVCODEC_VERSION_MAJOR >= 60
+	Channels = channel_layout.nb_channels;
+	for (int ch = 0; ch < Channels; ++ch)
+		if (av_channel_layout_channel_from_index(&channel_layout, ch) == AV_CHAN_FRONT_CENTER)
+			center = ch;
+#else
+	Channels = 0;
 	for (uint64_t ch = 1; ch; ch <<= 1)
 		if (channel_layout & ch)
 		{	if (ch == AV_CH_FRONT_CENTER)
 				center = Channels;
 			++Channels;
 		}
+#endif
 
 	ChannelBuf.reset(new Channel[Channels]);
 	for (int ch = 0; ch < Channels; ++ch)
@@ -283,14 +298,34 @@ protected:
 	virtual void ProcessBlock();
 public:
 	ReplayGain2() : ReplayGain(BlockSize / 4), Lj(100) {}
-	virtual void Setup(uint64_t channel_layout);
+	virtual void Setup(channel_layout_t channel_layout);
 	virtual float Gain() const;
 	virtual void operator+=(const Result& r);
 };
 
-void ReplayGain2::Setup(uint64_t channel_layout)
-{	Channels = 0;
-	vector<float> gain;
+void ReplayGain2::Setup(channel_layout_t channel_layout)
+{	vector<float> gain;
+#if LIBAVCODEC_VERSION_MAJOR >= 60
+	Channels = channel_layout.nb_channels;
+	gain.reserve(Channels);
+	for (int ch = 0; ch < Channels; ++ch)
+		switch(av_channel_layout_channel_from_index(&channel_layout, ch))
+		{case AV_CHAN_FRONT_LEFT:
+		 case AV_CHAN_FRONT_RIGHT:
+		 case AV_CHAN_FRONT_CENTER:
+		 case AV_CHAN_FRONT_LEFT_OF_CENTER:
+		 case AV_CHAN_FRONT_RIGHT_OF_CENTER:
+			gain.emplace_back(1);
+			break;
+		 case AV_CHAN_LOW_FREQUENCY:
+		 case AV_CHAN_LOW_FREQUENCY_2:
+			gain.emplace_back(1);
+			break;
+		 default:
+			gain.emplace_back(M_SQRT2);
+		}
+#else
+	Channels = 0;
 	gain.reserve(10);
 	for (uint64_t ch = 1; ch; ch <<= 1)
 		if (channel_layout & ch)
@@ -302,6 +337,7 @@ void ReplayGain2::Setup(uint64_t channel_layout)
 				gain.emplace_back(M_SQRT2);
 			++Channels;
 		}
+#endif
 
 	ChannelBuf.reset(new Channel[Channels]);
 	for (int ch = 0; ch < Channels; ++ch)
@@ -424,30 +460,37 @@ found_stream:
 	if (rc)
 		return strprintf("Failed to open codec for stream #%u: %s", stream->index, avstrerr(rc));
 
+	// prepare resampler
+#if LIBAVCODEC_VERSION_MAJOR >= 60
+	SwrContext* swrp = NULL;
+	swr_alloc_set_opts2(&swrp, &codec->ch_layout, AV_SAMPLE_FMT_FLTP, SampleRate,
+		&codec->ch_layout, codec->sample_fmt, codec->sample_rate, 0, NULL);
+	auto swr = make_unique(swrp, [](SwrContext* ptr) { swr_free(&ptr); });
+#else
 	// some codecs do not set channel layout
 	if (codec->channel_layout == 0)
 		codec->channel_layout = av_get_default_channel_layout(codec->channels);
-
-	// prepare resampler
-	auto swr = make_unique(swr_alloc(), [](SwrContext* ptr) { swr_free(&ptr); });
-	av_opt_set_int(swr.get(), "in_channel_layout", codec->channel_layout, 0);
-	av_opt_set_int(swr.get(), "out_channel_layout", codec->channel_layout, 0);
-	av_opt_set_int(swr.get(), "in_sample_rate", codec->sample_rate, 0);
-	av_opt_set_int(swr.get(), "out_sample_rate", SampleRate, 0);
-	av_opt_set_sample_fmt(swr.get(), "in_sample_fmt", codec->sample_fmt, 0);
-	av_opt_set_sample_fmt(swr.get(), "out_sample_fmt", AV_SAMPLE_FMT_FLTP, 0);
+	auto swr = make_unique(swr_alloc_set_opts(NULL,
+			codec->channel_layout, AV_SAMPLE_FMT_FLTP, SampleRate,
+			codec->channel_layout, codec->sample_fmt, codec->sample_rate, 0, NULL),
+		[](SwrContext* ptr) { swr_free(&ptr); });
+#endif
 	rc = swr_init(swr.get());
 	if (rc < 0)
 		return string(_("Resampler has not been properly initialized: ")) + avstrerr(rc);
 
 	ReplayGain* acc = Factory(Model);
 	Last.reset(acc);
+#if LIBAVCODEC_VERSION_MAJOR >= 60
+	acc->Setup(codec->ch_layout);
+#else
 	acc->Setup(codec->channel_layout);
+#endif
 
 	// prepare to read data
 	auto frame = make_unique(av_frame_alloc(), [](AVFrame* ptr) { av_frame_free(&ptr); });
 
-	float* buffer[codec->channels];
+	float* buffer[acc->GetChannels()];
 	int buffersize = 0;
 	auto buffer_ptr = make_unique((float*)nullptr, [](float* ptr) { av_freep(&ptr); });
 
@@ -486,7 +529,7 @@ found_stream:
 
 			if (outsamples > buffersize)
 			{	buffer_ptr.reset();
-				rc = av_samples_alloc((uint8_t**)buffer, NULL, codec->channels, outsamples, AV_SAMPLE_FMT_FLTP, 0);
+				rc = av_samples_alloc((uint8_t**)buffer, NULL, acc->GetChannels(), outsamples, AV_SAMPLE_FMT_FLTP, 0);
 				if (rc < 0)
 					return string("Memory allocation error: ") + avstrerr(rc);
 				buffer_ptr.reset(buffer[0]);

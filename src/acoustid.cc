@@ -186,14 +186,19 @@ found_stream:
 	if (rc)
 		return strprintf("Failed to open codec for stream #%u: %s", stream->index, avstrerr(rc));
 
-	// some codecs do not set channel layout
-	if (codec->channel_layout == 0)
-		codec->channel_layout = av_get_default_channel_layout(codec->channels);
-
 	// prepare resampler
-	auto swr = make_unique(swr_alloc_set_opts(NULL, AV_CH_LAYOUT_MONO, AV_SAMPLE_FMT_S16, SampleRate,
+#if LIBAVCODEC_VERSION_MAJOR >= 60
+	const AVChannelLayout mono = AV_CHANNEL_LAYOUT_MONO;
+	SwrContext* swrp = NULL;
+	swr_alloc_set_opts2(&swrp, &mono, AV_SAMPLE_FMT_S16, SampleRate,
+		&codec->ch_layout, codec->sample_fmt, codec->sample_rate, 0, NULL);
+	auto swr = make_unique(swrp, [](SwrContext* ptr) { swr_free(&ptr); });
+#else
+	auto swr = make_unique(swr_alloc_set_opts(NULL,
+			AV_CH_LAYOUT_MONO, AV_SAMPLE_FMT_S16, SampleRate,
 			codec->channel_layout, codec->sample_fmt, codec->sample_rate, 0, NULL),
 		[](SwrContext* ptr) { swr_free(&ptr); });
+#endif
 	rc = swr_init(swr.get());
 	if (rc < 0)
 		return string(_("Resampler has not been properly initialized: ")) + avstrerr(rc);
