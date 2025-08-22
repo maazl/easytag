@@ -352,7 +352,7 @@ AS_IF([test "x$have_replaygain" != "xno"],
 dnl ################################################
 dnl # Acoustid
 dnl ################################################
-ACOUSTID_DEPS="libsoup-2.4 >= 2.42 json-glib-1.0 >= 1.4 libchromaprint >= 1.4"
+ACOUSTID_DEPS="libsoup-2.4 >= 2.42 json-glib-1.0 >= 1.4 libchromaprint >= 1.4 libavutil >= 56 libavcodec >= 58 libavformat >= 58 libswresample >= 3.5"
 AS_IF([test "x$enable_acoustid" != "xno"],
       [PKG_CHECK_EXISTS([$ACOUSTID_DEPS], [have_acoustid=yes], [have_acoustid=no])],
       [have_acoustid=no])
