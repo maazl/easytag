@@ -3322,6 +3322,19 @@ create_browser (EtBrowser *self)
     file = g_file_new_for_path (g_get_home_dir ());
     et_browser_set_current_path (self, file);
     g_object_unref (file);
+
+    // Use reasonable background highlight color for dark themes
+    // It is impossible to detect a dark theme without using deprecated APIs
+    GtkStyleContext* style = gtk_widget_get_style_context(GTK_WIDGET(self));
+    GdkRGBA color;
+    gtk_style_context_get_background_color(style, GTK_STATE_FLAG_NORMAL, &color);
+    double lBack = 0.2126*color.red + 0.7152*color.green + 0.0722*color.blue;
+    gtk_style_context_get_color(style, GTK_STATE_FLAG_NORMAL, &color);
+    double lFront = 0.2126*color.red + 0.7152*color.green + 0.0722*color.blue;
+    if (lBack < lFront)
+        FileColumnRenderer::ZebraColor = { 0.166, 0.166, 0.0, 1.0 };
+    else
+        FileColumnRenderer::ZebraColor = { 0.866, 0.933, 1.0, 1.0 };
 }
 
 /*

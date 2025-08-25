@@ -32,9 +32,10 @@ namespace
 {
 vector<pair<const char*, const FileColumnRenderer*>> Renderers;
 
-const GdkRGBA LIGHT_BLUE = { 0.866, 0.933, 1.0, 1.0 };
 const GdkRGBA RED = { 1., 0., 0., 1.0 };
 }
+
+GdkRGBA FileColumnRenderer::ZebraColor;
 
 FileColumnRenderer::FileColumnRenderer(EtSortMode col) : Column(col)
 {	Renderers.emplace_back(nullptr, this);
@@ -48,7 +49,7 @@ void FileColumnRenderer::SetText(GtkCellRendererText* renderer, const gchar* tex
 		"text", text,
 		"weight", (int)highlight > !bold ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL,
 		"foreground-rgba", (int)highlight > bold ? &RED : NULL,
-		"background-rgba", zebra ? &LIGHT_BLUE : NULL,
+		"background-rgba", zebra ? &ZebraColor : NULL,
 		NULL);
 }
 

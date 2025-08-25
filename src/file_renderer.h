@@ -38,6 +38,9 @@ public:
 		STRONGHIGHLIGHT
 	};
 	const EtSortMode Column;
+
+	static GdkRGBA ZebraColor;
+
 protected:
 	FileColumnRenderer(EtSortMode col);
 public:
