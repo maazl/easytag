@@ -48,6 +48,7 @@ src/tags/asf_tag.cc
 src/tags/flac_tag.cc
 src/tags/id3_tag.cc
 src/tags/id3v24_tag.cc
+src/tags/libapetag/info_mac.cc
 src/tags/mp4_tag.cc
 src/tags/ogg_tag.cc
 src/tags/opus_tag.cc

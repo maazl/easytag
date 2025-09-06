@@ -51,6 +51,17 @@ string strprintf(const char* format, ...)
 }
 
 
+void bswap(uint32_t& v)
+{	uint8_t* cp = (uint8_t*)&v;
+	swap(cp[0], cp[3]);
+	swap(cp[1], cp[2]);
+}
+
+void bswap(uint16_t& v)
+{	uint8_t* cp = (uint8_t*)&v;
+	swap(cp[0], cp[1]);
+}
+
 const constexpr Guid Guid::empty = {0};
 
 Guid Guid::parse(const char* s)

@@ -36,6 +36,9 @@ __attribute__ ((format(printf, 1, 2)))
 #endif
 ;
 
+void bswap(uint32_t& v);
+void bswap(uint16_t& v);
+
 template <typename T>
 constexpr inline int sign(T value) { return (value > 0) - (value < 0); }
 
