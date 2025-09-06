@@ -777,7 +777,7 @@ apetag_read_fp(apetag *mem_cnt, FILE * fp, const char *filename, int flag)
             sizeName = strnlen((char *)p + 8, end - p - 8 - 1);
             value = (char *)p + sizeName + 8 + 1;
             p += (sizeName + sizeValue + 8 + 1);
-            if (p >= end) // broken TAG?
+            if (p > end) // broken TAG?
                 break;
             if (apeTag2 == 1000 && value[sizeValue - 1] == '\0') {
                 libapetag_maloc_cont(mem_cnt, flags,
