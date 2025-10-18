@@ -21,24 +21,12 @@
 
 #include <cstdlib>
 #include <atomic>
-#include <array>
 #include <cstdio>
 #include <utility>
 #include <limits>
 #include <string>
 
 #include <glib.h>
-
-namespace
-{	template <std::size_t N, std::size_t ... I>
-	constexpr std::array<char, N> to_array_impl(const char (&a)[N], std::index_sequence<I...>) noexcept
-	{	return {{a[I]...}}; }
-}
-
-/// Initialize <tt>std::array\<const char, N></tt> from string literal of length \c N.
-template <std::size_t N>
-constexpr std::array<char, N> to_array(const char (&a)[N]) noexcept
-{	return to_array_impl(a, std::make_index_sequence<N>()); }
 
 
 /// Reference counted, immutable string class
@@ -61,47 +49,44 @@ protected:
 		header& operator=(const header&) = delete;
 		constexpr header() noexcept : CollationKey(nullptr), RefCount(1) {}
 		~header() { g_free(CollationKey); }
-		#ifndef NDEBUG
-		void checkstillused() const;
-		#endif
 	};
 
-	template <size_t L>
 	struct data
-	{	std::array<char, L+1> C;
-		constexpr data() {}
-		constexpr data(const char (&value)[L+1]) noexcept : C(to_array<L+1>(value)) {}
-		constexpr data(const data<L>& r) noexcept : C(r.C) {}
+	{	char C[1];
 	};
 
-	template <size_t L>
-	struct storage : public header, public data<L>
+	struct storage : public header, public data
 	{	void* operator new(std::size_t) = delete;
-		void* operator new(std::size_t, std::size_t len) { return (char*)malloc(offsetof(storage<0>, C) + len + 1); }
+		void* operator new(std::size_t, std::size_t len);
 		void operator delete(void* ptr) { free(ptr); }
-		using data<L>::data;
-		constexpr storage(const storage<L>& r) : header(), data<L>(r) {}
+		storage() {}
+		constexpr storage(const char (&value)[1]) noexcept;
 	};
 
 	/// The storage of this string instance. <em>Do not access content directly.</em>
-	/// @remarks Note that unless the pointer is \c nullptr it always points \em behind the storage instance,
+	/// @remarks Note that unless the pointer is \c nullptr it always points \em behind the header instance,
 	/// i.e. at the start of the character data. So the type is in fact <tt>const char*</tt>,
 	/// but this would cause problems with some \c constexpr functions.\n
 	/// Use RefCount to access the storage content and cast to <tt>const char*</tt> to get the C string.
-	const data<0>* Ptr;
+	const data* Ptr;
+
+	/// Static value with empty string.
+	/// @remarks This is automatically shared to deduplicate storage
+	/// when the value is set to a string with length 0.
+	static const storage empty_str;
 
 	/// Runtime typed factory for storage.
 	/// @details Validated \a len and constructs and initializes \c storage&lt;len&gt;\.
-	static storage<0>* Factory(const char* str, gssize len);
+	static storage* Factory(const char* str, gssize len);
 
 	/// Create \c xString from raw storage
-	constexpr xString(const data<0>* ptr) noexcept : Ptr(ptr) {}
+	constexpr xString(const data* ptr) noexcept : Ptr(ptr) {}
 
 private:
-	constexpr const header& Header() const noexcept { return static_cast<const storage<0>&>(*Ptr); }
-	constexpr const data<0>* AddRef() const noexcept { if (Ptr) ++Header().RefCount; return Ptr; }
-	static const data<0>* Init(const char* str, gssize len);
-	static const data<0>* Init(const char* str, gssize len, GNormalizeMode mode);
+	constexpr const header& Header() const noexcept { return static_cast<const storage&>(*Ptr); }
+	constexpr const data* AddRef() const noexcept { if (Ptr) ++Header().RefCount; return Ptr; }
+	static const data* Init(const char* str, gssize len);
+	static const data* Init(const char* str, gssize len, GNormalizeMode mode);
 
 public:
 	/// Proxy class to allow initialization from C/C++ string.
@@ -123,28 +108,6 @@ public:
 	{	bool operator()(const char* l, const char* r) const { return g_strcmp0(l, r) == 0; }
 	};
 
-	/// xString storage that avoids any dynamic allocation.
-	/// @remarks This is intended for static xString constants to avoid allocating storage.
-	/// The class should be used for static storage only.
-	/// <b>You must not have existing \c xString instances that refer to the literal
-	/// when this class goes out of scope.</b>\n
-	/// Typically you want to use \c xStringL to create \c xString literals.
-	template <std::size_t L>
-	class literal : public storage<L>
-	{
-	public:
-		constexpr literal(const char (&value)[L+1]) noexcept : storage<L>(value) {}
-		constexpr literal(const literal<L>& r) noexcept : storage<L>(r) {}
-		#ifndef NDEBUG
-		~literal() { this->checkstillused(); }
-		#endif
-		literal<L>& operator=(const literal&) = delete;
-	};
-	/// Static value with empty string.
-	/// @remarks This is automatically shared to deduplicate storage
-	/// when the value is set to a string with length 0.
-	static const literal<0> empty_str;
-
 	/// Create \c xString with value \c nullptr.
 	constexpr xString() noexcept : Ptr(nullptr) {}
 	/// Create \c xString with value \c nullptr.
@@ -154,9 +117,6 @@ public:
 	constexpr xString(const xString& r) noexcept : Ptr(r.AddRef()) {}
 	/// Move constructor
 	constexpr xString(xString&& r) noexcept : Ptr(r.Ptr) { r.Ptr = nullptr; }
-	/// Initialization from \c xString literal.
-	/// @remarks This constructor does not cause memory allocation.
-	constexpr xString(const header& r) noexcept : Ptr(&static_cast<const storage<0>&>(r)) { ++Header().RefCount; }
 	/// Initialization from raw C string storage.
 	/// @param len Length of the string excluding the termination 0.
 	/// @remarks Although this construction has a length property
@@ -176,7 +136,7 @@ public:
 	xString(const char* str, gssize len, GNormalizeMode mode) : Ptr(Init(str, len, mode)) {}
 	/// Destructor
 	/// @remarks It will free the storage if this is the last instance that owns the storage.
-	~xString() noexcept { if (Ptr && --Header().RefCount == 0) delete &static_cast<const storage<0>&>(*Ptr); }
+	~xString() noexcept { if (Ptr && --Header().RefCount == 0) delete &static_cast<const storage&>(*Ptr); }
 
 	/// Check if string is not null
 	constexpr explicit operator bool() const noexcept { return Ptr != nullptr; }
@@ -219,7 +179,7 @@ public:
 	constexpr unsigned use_count() const noexcept { return Ptr ? Header().RefCount.load() : 0; }
 
 	/// Implicit conversion to C string.
-	constexpr operator const char*() const noexcept { return &Ptr->C.at(0); }
+	constexpr operator const char*() const noexcept { return Ptr->C; }
 	/// Explicit conversion to C string.
 	constexpr const char* get() const noexcept { return *this; }
 
@@ -266,7 +226,7 @@ public:
 	/// Get collation key of the current string content.
 	/// @return Collation key or \c nullptr if the current instance is null.
 	/// @remarks The collation key is generated on the first call and cached.
-	/// Furthermore is is a file name collation key with special handling for numbers.
+	/// Furthermore it is a file name collation key with special handling for numbers.
 	const gchar* collation_key() const;
 	/// Relational comparison (spaceship operator)
 	/// @details Compares the collation keys.
@@ -274,25 +234,16 @@ public:
 	int compare(const xString& r) const;
 };
 
-/// Make \c xString literal from string literal.
-/// @details Example: \code{.cpp}
-/// const auto someConstant(xStringL("The value"));\endcode
-/// @remarks User defined \c xString literals would require C++20.
-template <std::size_t L>
-constexpr const xString::literal<L-1> xStringL(const char (&value)[L])
-{	return xString::literal<L-1>(value); }
-
-
 /// Variant of \ref xString with implicit deduplication.
 class xStringD : protected xString
 {	static const unsigned DedupRefCount = (std::numeric_limits<unsigned>::max() >> 1) + 1; // MSB only
 
-	static storage<0>* Factory(const char* str, gssize len);
+	static storage* Factory(const char* str, gssize len);
 
-	static const data<0>* Init(const char* str, gssize len);
-	static const data<0>* Init(const char* str, gssize len, GNormalizeMode mode);
-	static const data<0>* Init(const data<0>* ptr);
-	static const data<0>* Init(const data<0>* ptr, GNormalizeMode mode);
+	static const data* Init(const char* str, gssize len);
+	static const data* Init(const char* str, gssize len, GNormalizeMode mode);
+	static const data* Init(const data* ptr);
+	static const data* Init(const data* ptr, GNormalizeMode mode);
 
 public:
 	static void garbage_collector();
@@ -307,10 +258,7 @@ public:
 	/// Move constructor
 	constexpr xStringD(xStringD&& r) noexcept : xString(r) {}
 	/// Initialization from non-deduplicated \ref xString\.
-	xStringD(const xString& r) : xString(Init((const data<0>*)r.get())) {}
-	/// Initialization from \c xString literal.
-	/// @remarks This constructor does not cause memory allocation.
-	xStringD(const header& r) : xString(Init(&static_cast<const storage<0>&>(r))) {}
+	xStringD(const xString& r) : xString(Init((const data*)r.get())) {}
 	/// Initialization from raw C string storage.
 	/// @param len Length of the string excluding the termination 0.
 	/// @remarks Although this construction has a length property
@@ -328,7 +276,7 @@ public:
 	/// @remarks Normalization follows the rules of g_utf8_normalize.
 	xStringD(const char* str, gssize len, GNormalizeMode mode) : xString(Init(str, len, mode)) {}
 	/// Initialization from non-deduplicated \ref xString\.
-	xStringD(const xString& r, GNormalizeMode mode) : xString(Init((const data<0>*)r.get(), mode)) {}
+	xStringD(const xString& r, GNormalizeMode mode) : xString(Init((const data*)r.get(), mode)) {}
 
 	using xString::operator bool;
 	using xString::empty;
@@ -361,9 +309,6 @@ public:
 	/// Assign a new C string literal.
 	template<std::size_t N>
 	xStringD& operator=(const char (&str)[N]) { xStringD(str).swap(*this); return *this; }
-	/// Initialization from \c xString literal.
-	/// @remarks This constructor does not cause memory allocation.
-	xStringD& operator=(const header& r) { this->~xStringD(); Ptr = Init(&static_cast<const storage<0>&>(r)); return *this; }
 	/// Assign NFC normalized UTF-8 string.
 	/// @remarks Short cut for <tt>=xString(..., G_NORMALIZE_NFC)</tt>
 	void assignNFC(const xString& str) { xStringD(str, G_NORMALIZE_NFC).swap(*this); }
@@ -395,7 +340,7 @@ class xString0 : public xString
 	xString0& operator=(xString0&& r) = default;
 
 	/// Implicit conversion to C string.
-	constexpr operator const char*() const noexcept { return Ptr ? xString::get() : empty_str.C.data(); }
+	constexpr operator const char*() const noexcept { return Ptr ? xString::get() : empty_str.C; }
 	/// Explicit conversion to C string.
 	constexpr const char* get() const noexcept { return *this; }
 
@@ -434,7 +379,7 @@ class xString0 : public xString
 	/// @return Collation key or \c nullptr if the current instance is null.
 	/// @remarks The collation key is generated on the first call and cached.
 	/// Furthermore is is a file name collation key with special handling for numbers.
-	const gchar* collation_key() const { return empty() ? empty_str.C.data() : xString::collation_key(); }
+	const gchar* collation_key() const { return empty() ? empty_str.C : xString::collation_key(); }
 	/// Relational comparison (spaceship operator)
 	/// @details Compares the collation keys.
 	int compare(const xString0& r) const;
@@ -461,7 +406,7 @@ class xStringD0 : public xStringD
 	xStringD0& operator=(xStringD0&& r) = default;
 
 	/// Implicit conversion to C string.
-	constexpr operator const char*() const noexcept { return Ptr ? xStringD::get() : empty_str.C.data(); }
+	constexpr operator const char*() const noexcept { return Ptr ? xStringD::get() : empty_str.C; }
 	/// Explicit conversion to C string.
 	constexpr const char* get() const noexcept { return *this; }
 
@@ -500,7 +445,7 @@ class xStringD0 : public xStringD
 	/// @return Collation key or \c nullptr if the current instance is null.
 	/// @remarks The collation key is generated on the first call and cached.
 	/// Furthermore is is a file name collation key with special handling for numbers.
-	const gchar* collation_key() const { return empty() ? empty_str.C.data() : xStringD::collation_key(); }
+	const gchar* collation_key() const { return empty() ? empty_str.C : xStringD::collation_key(); }
 	/// Relational comparison (spaceship operator)
 	/// @details Compares the collation keys.
 	int compare(const xStringD0& r) const;

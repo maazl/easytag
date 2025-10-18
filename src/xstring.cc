@@ -39,26 +39,25 @@ unsigned xString::hasher::operator()(const char* s) const
 	return hash;
 }
 
-const xString::literal<0> xString::empty_str("");
-
-#ifndef NDEBUG
-void xString::header::checkstillused() const
-{	unsigned count = RefCount & (std::numeric_limits<unsigned>::max() >> 1); // ignore xStringD repository
-	if (count == 1) // ignore xStringD repository
-		return;
-	g_error("xString literal destroyed while in use. Use count %u, value '%s'\n",
-		count, static_cast<const storage<0>*>(this)->C.data());
+inline void* xString::storage::operator new(std::size_t, std::size_t len)
+{	// The unusual offsetof is required to allow constexpr downcasts from data to storage.
+	return malloc(offsetof(storage, C) + len + 1);
 }
-#endif
 
-xString::storage<0>* xString::Factory(const char* str, gssize len)
+inline constexpr xString::storage::storage(const char (&value)[1]) noexcept
+:	data{value[0]}
+{}
+
+const xString::storage xString::empty_str("");
+
+xString::storage* xString::Factory(const char* str, gssize len)
 {	len = len < 0 ? strlen(str) : strnlen(str, len); // real string length
-	storage<0>* ptr = new(len) storage<0>;
-	((char*)memcpy(const_cast<char*>(ptr->C.data()), str, len))[len] = 0;
+	storage* ptr = new(len) storage;
+	((char*)memcpy(const_cast<char*>(ptr->C), str, len))[len] = 0;
 	return ptr;
 }
 
-const xString::data<0>* xString::Init(const char* str, gssize len)
+const xString::data* xString::Init(const char* str, gssize len)
 {	if (!str)
 		return nullptr;
 	if (!len || !*str)
@@ -68,7 +67,7 @@ const xString::data<0>* xString::Init(const char* str, gssize len)
 	return Factory(str, len);
 }
 
-const xString::data<0>* xString::Init(const char* str, gssize len, GNormalizeMode mode)
+const xString::data* xString::Init(const char* str, gssize len, GNormalizeMode mode)
 {	if (!str)
 		return nullptr;
 	if (!len || !*str)
@@ -88,8 +87,8 @@ const xString::data<0>* xString::Init(const char* str, gssize len, GNormalizeMod
 		}
 	while (++cp != cpe && *cp);
 	// fast path
-	storage<0>* ptr = new(len) storage<0>;
-	((char*)memcpy(const_cast<char*>(ptr->C.data()), str, len))[len] = 0;
+	storage* ptr = new(len) storage;
+	((char*)memcpy(const_cast<char*>(ptr->C), str, len))[len] = 0;
 	return ptr;
 }
 
@@ -111,10 +110,10 @@ char* xString::alloc(size_t len)
 {	this->~xString();
 	if (!len)
 	{	++empty_str.RefCount;
-		return const_cast<char*>((Ptr = &empty_str)->C.data());
+		return const_cast<char*>((Ptr = &empty_str)->C);
 	}
-	Ptr = new(len) storage<0>;
-	char* ptr = const_cast<char*>(Ptr->C.data());
+	Ptr = new(len) storage;
+	char* ptr = const_cast<char*>(Ptr->C);
 	ptr[len] = 0; // ensure terminating \0
 	return ptr;
 }
@@ -137,7 +136,9 @@ bool xString::trim()
 		++start;
 	size_t len = strlen(start);
 	if (!len)
-	{	*this = empty_str;
+	{	this->~xString();
+		++empty_str.RefCount;
+		Ptr = &empty_str;
 		return true;
 	}
 	const char* end = start + len;
@@ -206,8 +207,8 @@ static unordered_set<const char*, xString::hasher, xString::equal> Instances;
 
 static mutex InstancesMutex;
 
-xString::storage<0>* xStringD::Factory(const char* str, gssize len)
-{	storage<0>* ptr;
+xString::storage* xStringD::Factory(const char* str, gssize len)
+{	storage* ptr;
 	unique_lock<mutex> lock(InstancesMutex, defer_lock_t());
 	unordered_set<const char*, hasher, equal>::iterator p;
 	if (len > 0 && str[len])
@@ -215,11 +216,11 @@ xString::storage<0>* xStringD::Factory(const char* str, gssize len)
 		// => Create null terminated string first.
 		ptr = xString::Factory(str, len);
 		lock.lock();
-		p = Instances.find(&ptr->C[0]);
+		p = Instances.find(ptr->C);
 		if (p != Instances.end())
 		{	delete ptr;
 		match:
-			ptr = (storage<0>*)(data<0>*)*p;
+			ptr = (storage*)(data*)*p;
 			++ptr->RefCount;
 			return ptr;
 		}
@@ -234,11 +235,11 @@ xString::storage<0>* xStringD::Factory(const char* str, gssize len)
 
 	// add previously unknown string
 	ptr->RefCount += DedupRefCount;
-		Instances.insert(p, &ptr->C[0]);
+		Instances.insert(p, ptr->C);
 	return ptr;
 }
 
-const xStringD::data<0>* xStringD::Init(const char* str, gssize len)
+const xStringD::data* xStringD::Init(const char* str, gssize len)
 {	if (!str)
 		return nullptr;
 	if (!len || !*str)
@@ -248,7 +249,7 @@ const xStringD::data<0>* xStringD::Init(const char* str, gssize len)
 	return Factory(str, len);
 }
 
-const xStringD::data<0>* xStringD::Init(const char* str, gssize len, GNormalizeMode mode)
+const xStringD::data* xStringD::Init(const char* str, gssize len, GNormalizeMode mode)
 {	if (!str)
 		return nullptr;
 	if (!len || !*str)
@@ -271,34 +272,34 @@ const xStringD::data<0>* xStringD::Init(const char* str, gssize len, GNormalizeM
 	return Factory(str, cp - str);
 }
 
-const xStringD::data<0>* xStringD::Init(const data<0>* ptr)
+const xStringD::data* xStringD::Init(const data* ptr)
 {	if (!ptr)
 		return ptr;
 
-	if (ptr->C[0] && (static_cast<const storage<0>&>(*ptr).RefCount & DedupRefCount) == 0) // empty or already deduplicated?
+	if (*ptr->C && (static_cast<const storage&>(*ptr).RefCount & DedupRefCount) == 0) // empty or already deduplicated?
 	{	lock_guard<mutex> lock(InstancesMutex);
-		auto p = Instances.insert(&ptr->C[0]);
+		auto p = Instances.insert(ptr->C);
 		if (p.second)
-		{	((const storage<0>*)ptr)->RefCount += DedupRefCount + 1;
+		{	((const storage*)ptr)->RefCount += DedupRefCount + 1;
 			return ptr;
 		}
-		ptr = (data<0>*)*(p.first);
+		ptr = (data*)*(p.first);
 	}
-	++((const storage<0>*)ptr)->RefCount;
+	++((const storage*)ptr)->RefCount;
 	return ptr;
 }
 
-const xStringD::data<0>* xStringD::Init(const data<0>* ptr, GNormalizeMode mode)
+const xStringD::data* xStringD::Init(const data* ptr, GNormalizeMode mode)
 {	if (!ptr)
 		return ptr;
 	// GLib has no check for already normalized UTF8 strings.
 	// So perform a _very rough check_ to avoid excessive allocations.
-	const char* cp = ptr->C.data();
+	const char* cp = ptr->C;
 	while(*cp)
 		if (*cp++ & 0x80)
-		{	gString s(g_utf8_normalize(ptr->C.data(), -1, mode));
+		{	gString s(g_utf8_normalize(ptr->C, -1, mode));
 			if (!s)
-				s = g_utf8_normalize(gString(Convert_Invalid_Utf8_String(ptr->C.data(), -1)), -1, mode);
+				s = g_utf8_normalize(gString(Convert_Invalid_Utf8_String(ptr->C, -1)), -1, mode);
 			return Factory(s, -1);
 		}
 	// fast path
@@ -310,7 +311,7 @@ void xStringD::garbage_collector()
 	lock_guard<mutex> lock(InstancesMutex);
 	auto p = Instances.begin();
 	while (p != Instances.end())
-	{	auto ptr = (storage<0>*)(data<0>*)*p;
+	{	auto ptr = (storage*)(data*)*p;
 		if (ptr->RefCount == DedupRefCount)
 		{	p = Instances.erase(p);
 			delete ptr;
@@ -328,7 +329,9 @@ bool xStringD::trim()
 		++start;
 	size_t len = strlen(start);
 	if (!len)
-	{	*this = empty_str;
+	{	this->~xString();
+		++empty_str.RefCount;
+		Ptr = &empty_str;
 		return true;
 	}
 	const char* end = start + len;
@@ -373,10 +376,10 @@ bool xStringD0::equals(const char* str) const noexcept
 }
 
 bool xStringD0::equals(const xStringD0& r) const noexcept
-{	const data<0>* lp = Ptr;
+{	const data* lp = Ptr;
 	if (!lp)
 		lp = &empty_str;
-	const data<0>* rp = r.Ptr;
+	const data* rp = r.Ptr;
 	if (!rp)
 		rp = &empty_str;
 	return lp == rp;

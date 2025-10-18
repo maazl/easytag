@@ -97,17 +97,6 @@ static void assignment()
 	g_assert_cmpstr(s2, ==, "xxx");
 }
 
-static void literal()
-{
-	const std::array<char, 4> a = to_array<4>("abc");
-	g_assert_cmpstr(&a[0], ==, "abc");
-
-	const auto c1 = xStringL("xxx");
-	xString s1 = c1;
-	g_assert_cmpuint(s1.use_count(), ==, 2);
-	g_assert_cmpstr(s1, ==, "xxx");
-}
-
 static void equality()
 {
 	xString s1;
@@ -178,7 +167,6 @@ int main(int argc, char** argv)
 
 	g_test_add_func ("/xstring/constructor", constructor);
 	g_test_add_func ("/xstring/assignment", assignment);
-	g_test_add_func ("/xstring/literal", literal);
 	g_test_add_func ("/xstring/equality", equality);
 	g_test_add_func ("/xstring/equality0", equality0);
 

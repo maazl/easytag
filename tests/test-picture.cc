@@ -26,8 +26,8 @@ using namespace std;
 struct _EtApplicationWindow *MainWindow;
 GSettings *MainSettings;
 
-const auto foobar(xStringL("foobar.png"));
-const auto baz(xStringL("baz.gif"));
+const xString foobar("foobar.png");
+const xString baz("baz.gif");
 
 static void
 picture_copy (void)
@@ -120,7 +120,7 @@ picture_format_from_data (void)
     unique_ptr<EtPicture> pic;
     for (gsize i = 0; i < G_N_ELEMENTS (pictures); i++)
     {
-        pic.reset(new EtPicture(ET_PICTURE_TYPE_FRONT_COVER, xString::empty_str, 0, 0,
+        pic.reset(new EtPicture(ET_PICTURE_TYPE_FRONT_COVER, "", 0, 0,
             pictures[i].data, strlen(pictures[i].data) + 1));
         g_assert_cmpint(pictures[i].format, ==, pic->Format());
     }
