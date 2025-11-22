@@ -55,6 +55,23 @@ using namespace TagLib;
 #include <taglib/mp4itemfactory.h>
 #include <taglib/tmap.h>
 
+/// Add support for ReplayGain tags
+static class CustomItemFactory : public MP4::ItemFactory
+{
+protected:
+	virtual Map<ByteVector, String> namePropertyMap() const;
+} ItemFactory;
+
+Map<ByteVector, String> CustomItemFactory::namePropertyMap() const
+{
+	auto map = MP4::ItemFactory::namePropertyMap();
+	map.insert("----:com.apple.iTunes:replaygain_track_gain", "REPLAYGAIN_TRACK_GAIN");
+	map.insert("----:com.apple.iTunes:replaygain_track_peak", "REPLAYGAIN_TRACK_PEAK");
+	map.insert("----:com.apple.iTunes:replaygain_album_gain", "REPLAYGAIN_ALBUM_GAIN");
+	map.insert("----:com.apple.iTunes:replaygain_album_peak", "REPLAYGAIN_ALBUM_PEAK");
+	return map;
+}
+#endif
 
 // registration
 const struct QuickTime_Description : ET_File_Description
@@ -75,25 +92,6 @@ M4B_Description(".m4b", _("MPEG4 File")),
 M4P_Description(".m4p", _("MPEG4 File")),
 M4V_Description(".m4v", _("MPEG4 File")),
 AAC_Description(".aac", _("AAC File")); // TODO .aac is typically ADTS rather than MPEG4
-
-
-/// Add support for ReplayGain tags
-static class CustomItemFactory : public MP4::ItemFactory
-{
-protected:
-	virtual Map<ByteVector, String> namePropertyMap() const;
-} ItemFactory;
-
-Map<ByteVector, String> CustomItemFactory::namePropertyMap() const
-{
-	auto map = MP4::ItemFactory::namePropertyMap();
-	map.insert("----:com.apple.iTunes:replaygain_track_gain", "REPLAYGAIN_TRACK_GAIN");
-	map.insert("----:com.apple.iTunes:replaygain_track_peak", "REPLAYGAIN_TRACK_PEAK");
-	map.insert("----:com.apple.iTunes:replaygain_album_gain", "REPLAYGAIN_ALBUM_GAIN");
-	map.insert("----:com.apple.iTunes:replaygain_album_peak", "REPLAYGAIN_ALBUM_PEAK");
-	return map;
-}
-#endif
 
 /*
  * Mp4_Tag_Read_File_Tag:
