@@ -58,6 +58,9 @@ main (int argc, char *argv[])
     }
 #endif
 
+    // register EtxString for use in glade files
+    g_type_ensure(et_xstring_get_type());
+
 #if defined(ENABLE_ACOUSTID) || defined(ENABLE_REPLAYGAIN)
     av_log_set_level(AV_LOG_ERROR);
 

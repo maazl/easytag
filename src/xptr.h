@@ -51,6 +51,8 @@ class alignas(8) xObj
 
 protected:
 	xObj() : RefCount(0) {}
+public:
+	unsigned use_count() const { return RefCount.load(std::memory_order_relaxed); }
 };
 
 /// Intrusive reference counted smart pointer for objects derived from xObj.

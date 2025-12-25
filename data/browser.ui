@@ -12,10 +12,9 @@
     </object>
     <object class="GtkTreeStore" id="directory_model">
         <columns>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gboolean"/>
-            <column type="gboolean"/>
+            <column type="EtxString"/>
+            <column type="EtxString"/>
+            <column type="gint"/>
             <column type="GIcon"/>
         </columns>
     </object>
@@ -114,7 +113,7 @@
                                                         <child>
                                                             <object class="GtkCellRendererPixbuf" id="directory_icon_renderer"/>
                                                             <attributes>
-                                                                <attribute name="gicon">4</attribute>
+                                                                <attribute name="gicon">3</attribute>
                                                             </attributes>
                                                         </child>
                                                         <child>

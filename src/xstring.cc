@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2024 Marcel Müller
+ * Copyright (C) 2024-2025 Marcel Müller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -27,6 +27,18 @@
 #include <unordered_set>
 #include <mutex>
 using namespace std;
+
+
+// integrate this type into GLIB
+// The type mapping matches all xString flavors since all of them share the same destructor and copy constructor.
+G_DEFINE_BOXED_TYPE_WITH_CODE(EtxString, et_xstring,
+	[](gpointer ptr) { return (gpointer)xString::addCptr(xString::fromCptr((const char*&)ptr)); },
+	[](gpointer ptr) { xString::fromCptr((const char*)ptr).~xString(); },
+	// This type conversion is FOR TEMPORARY OBJECTS ONLY to prevent string duplication.
+	g_value_register_transform_func(g_define_type_id, G_TYPE_STRING,
+		[](const GValue* src, GValue* dst) { g_value_set_static_string(dst, xString::fromCptr((const char*)g_value_get_boxed(src))); })
+	);
+
 
 unsigned xString::hasher::operator()(const char* s) const
 {	if (!s)

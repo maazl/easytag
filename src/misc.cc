@@ -21,6 +21,7 @@
 
 #include "misc.h"
 
+#include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <stdlib.h>
@@ -422,3 +423,55 @@ err:
     g_assert (error == NULL || *error != NULL);
     return FALSE;
 }
+
+/*// Replace dir separator by dot for more reasonable sort order
+static void ds2dot(gchar* cp)
+{	for (; *cp; ++cp)
+		if (G_IS_DIR_SEPARATOR(*cp))
+			*cp = '.';
+}
+
+PathCmp et_path_compare(const gchar* left, const gchar* right)
+{
+	size_t llen = strlen(left);
+	if (!llen)
+		return *right ? PathCmp::Less : PathCmp::Equal;
+	size_t rlen = strlen(right);
+	if (!rlen)
+		return PathCmp::Greater;
+	if (G_IS_DIR_SEPARATOR(left[llen - 1]))
+		--llen;
+	if (G_IS_DIR_SEPARATOR(right[rlen - 1]))
+		--rlen;
+	size_t clen = min(llen, rlen);
+#ifdef G_OS_WIN32
+	int cmp = strncasecmp(left, right, clen);
+#else
+	int cmp = strncmp(left, right, clen);
+#endif
+
+	// check for possible subdir relation.
+	if (!cmp)
+	{	if (llen == rlen)
+			return PathCmp::Equal;
+		if (llen < rlen)
+			return G_IS_DIR_SEPARATOR(right[clen]) ? PathCmp::IsSuperDir : PathCmp::Less;
+		else
+			return G_IS_DIR_SEPARATOR(left[clen]) ? PathCmp::IsSubDir : PathCmp::Greater;
+	}
+
+	// no prefix relation => need to do slow comparison for collation
+#ifdef G_OS_WIN32
+	gString ck1(g_utf8_strdown(left, clen));
+	gString ck2(g_utf8_strdown(right, clen));
+#else
+	gString ck1(g_filename_to_utf8(left, clen, NULL, &llen, NULL));
+	gString ck2(g_filename_to_utf8(right, clen, NULL, &rlen, NULL));
+#endif
+	ds2dot(ck1.get());
+	ds2dot(ck2.get());
+	ck1 = gString(g_utf8_collate_key_for_filename(ck1, -1));
+	ck2 = gString(g_utf8_collate_key_for_filename(ck2, -1));
+
+	return (PathCmp)sign(strcmp(ck1, ck2));
+}*/

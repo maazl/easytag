@@ -85,10 +85,12 @@ public:
 
 	/// Select the directory corresponding to the 'path' in the tree browser,
 	/// but it doesn't read it! Check if path is correct before selecting it.
-	void select_dir(GFile *file);
-	void go_home();
+	void select_dir(gString&& path);
+	void select_dir(const char* path) { select_dir(gString(g_strdup(path))); }
+	void select_dir(GFile *file) { select_dir(gString(g_file_get_path(file))); }
+	void go_home() { select_dir(g_get_home_dir()); }
 	/// Load predefined user directory
-	void go_special(GUserDirectory dir);
+	void go_special(GUserDirectory dir) { select_dir(g_get_user_special_dir(dir)); }
 	void go_parent();
 	void go_directory();
 	void load_default_dir();

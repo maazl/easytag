@@ -60,12 +60,12 @@ using gAlloc = std::unique_ptr<T, gAllocDeleter>;
 
 /// Managed GLIB string
 struct gString : gAlloc<gchar>
-{	constexpr gString() noexcept { }
+{	constexpr gString(nullptr_t = nullptr) noexcept { }
 	gString(gString&& r) noexcept : gAlloc<gchar>(std::move(r)) { }
 	explicit gString(gchar* ptr) noexcept : gAlloc<gchar>(ptr) { }
 	operator const gchar*() const noexcept { return get(); }
 	gString& operator=(gchar* ptr) noexcept { reset(ptr); return *this; }
-	using gAlloc<gchar>::operator=;
+	gString& operator=(gString&& r) noexcept { return (gString&)gAlloc<gchar>::operator=(std::move(r)); }
 };
 
 /// Managed GLIB object
@@ -216,7 +216,25 @@ inline bool operator==(const GtkTreeIter& l, const GtkTreeIter& r)
 		&& l.user_data3 == r.user_data3;
 }
 
+/// Remove all children including the one passed as \a start
+/// but keep nodes before start and at higher levels.
+inline void et_tree_store_remove_children(GtkTreeStore* model, GtkTreeIter* start)
+{	while (gtk_tree_store_remove(model, start));
+}
+
+
 gboolean et_rename_file (const gchar *old_filename, const gchar *new_filename, GError **error);
+
+/*// Compare two paths.
+/// @remarks The paths should be absolute and in file system representation.
+/// The function takes care of case insensitivity on Win32.
+enum class PathCmp
+{	Equal = 0,       ///< They are equal
+	Less = -1,       ///< \a left should be ordered before \a right
+	Greater = 1,     ///< \a left should be ordered after \a right
+	IsSuperDir = -2, ///< \a left should be ordered before \a right and is a super directory of right
+	IsSubDir = 2     ///< \a left should be ordered after \a right and is a sub directory of right
+} et_path_compare(const gchar* left, const gchar* right);*/
 
 /*
  * et_str_empty:
@@ -226,6 +244,6 @@ gboolean et_rename_file (const gchar *old_filename, const gchar *new_filename, G
  *
  * Returns: %TRUE is @str is either %NULL or "", %FALSE otherwise
  */
-inline gboolean et_str_empty (const gchar *str) { return !str || !str[0]; }
+inline bool et_str_empty(const gchar *str) { return !str || !str[0]; }
 
 #endif /* ET_MISC_H_ */

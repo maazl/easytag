@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2024 Marcel Müller
+ * Copyright (C) 2024-2025 Marcel Müller
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -27,12 +27,16 @@
 #include <string>
 
 #include <glib.h>
+#include <glib-object.h>
 
 
 /// Reference counted, immutable string class
 /// @remarks The stored string storage is shared on assignment or copying.\n
 /// Instances of this class are <em>binary compatible to <tt>const char* const</tt></em>,
 /// i.e. C strings. Of course, you must neither alter the value nor the pointer.
+/// @p The type may also be used in GLIB/GTK with the name "EtxString".
+/// It implicitly converts to G_TYPE_STRING. But the converted value
+/// remains only valid for the life time of the original xString instance.
 class xString
 {
 protected:
@@ -232,6 +236,13 @@ public:
 	/// @details Compares the collation keys.
 	/// Null strings are considered to be the smallest possible value.
 	int compare(const xString& r) const;
+
+	/// Statically cast C style pointer back to xString instance.
+	/// @remarks This is valid only if the C pointer has been retrieved from an xString instance before
+	/// and at least one active reference still exists.
+	static const xString& fromCptr(const char* const& cptr) noexcept { return *(const xString*)&cptr; }
+	/// Create a new C style pointer reference.
+	static constexpr const char* addCptr(const xString& r) noexcept { return r.AddRef()->C; }
 };
 
 /// Variant of \ref xString with implicit deduplication.
@@ -294,7 +305,7 @@ public:
 	using xString::get;
 
 	/// Swap value with another instance.
-	void swap(xStringD& r) noexcept { std::swap(Ptr, r.Ptr); }
+	void swap(xStringD& r) noexcept { xString::swap(r); }
 	/// Swap two instances.
 	friend void swap(xStringD& l, xStringD& r) noexcept { l.swap(r); }
 	using xString::reset;
@@ -321,6 +332,14 @@ public:
 	/// Remove trailing and leading whitespace
 	/// @return true if the operation caused a change.
 	bool trim();
+
+	using xString::compare;
+	/// Relational comparison (spaceship operator)
+	/// @details Compares the collation keys.
+	/// Null strings are considered to be the smallest possible value.
+	int compare(const xStringD& r) const { return xString::compare(r); }
+
+	using xString::collation_key;
 };
 
 
@@ -454,5 +473,7 @@ class xStringD0 : public xStringD
 	/// @return true if the operation caused a change.
 	bool trim() { return !empty() && xStringD::trim(); }
 };
+
+GType et_xstring_get_type();
 
 #endif

@@ -28,6 +28,8 @@
 
 #include "browser.h"
 #include "file_renderer.h"
+#include "xptr.h"
+#include "xlist.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
@@ -52,7 +54,21 @@
 #include "win32/win32dep.h"
 
 #include <functional>
+#include <deque>
+#include <vector>
+#include <algorithm>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 using namespace std;
+
+#define logworker(...)
+//#define logworker printf
+
+namespace
+{
+class ExpandDirectoryWorker;
+}
 
 typedef struct
 {
@@ -113,6 +129,8 @@ typedef struct
     gchar *current_path_name; ///< name of current_path in system encoding
     GtkTreeIter current_file; ///< The file currently visible in the file and tag area. Binary zero if none.
 
+    ExpandDirectoryWorker* DirectoryWorker;
+
 } EtBrowserPrivate;
 
 // learn correct return type for et_browser_get_instance_private
@@ -170,12 +188,11 @@ enum // artist_model
 
 enum // directory_model
 {
-    TREE_COLUMN_DIR_NAME,
-    TREE_COLUMN_FULL_PATH,
-    TREE_COLUMN_SCANNED,
-    TREE_COLUMN_HAS_SUBDIR,
-    TREE_COLUMN_ICON,
-    TREE_COLUMN_COUNT
+	TREE_COLUMN_DISPLAY_NAME, ///< Display name (xString)
+	TREE_COLUMN_FILE_NAME,    ///< Name in filesystem encoding (xString)
+	TREE_COLUMN_STATE,        ///< Node state (gint)
+	TREE_COLUMN_ICON,         ///< Icon to display (GIcon)
+	TREE_COLUMN_COUNT         ///< Number of columns
 };
 
 static const constexpr GdkRGBA RED = {1.0, 0.0, 0.0, 1.0 };
@@ -188,11 +205,6 @@ static const constexpr GtkTreeIter invalid_iter = { 0 };
 
 static void et_browser_clear_album_model(EtBrowser *self);
 static void et_browser_clear_artist_model(EtBrowser *self);
-
-static void Browser_Tree_Handle_Rename (EtBrowser *self,
-                                        GtkTreeIter *parentnode,
-                                        gsize path_shift,
-                                        const gchar *new_path);
 
 static void Browser_List_Select_File_By_Iter (EtBrowser *self,
                                               GtkTreeIter *iter,
@@ -207,11 +219,8 @@ static void Browser_Album_List_Row_Selected (EtBrowser *self,
                                              GtkTreeSelection *selection);
 static void Browser_Album_List_Set_Row_Appearance(EtBrowser *self, GtkTreeIter& iter, const xStringD0& artist);
 
-static gboolean check_for_subdir(GFile *dir);
-
-static GtkTreePath *Find_Child_Node (EtBrowser *self, GtkTreeIter *parent, gchar *searchtext);
-
 static const GIcon* get_gicon_for_path(EtBrowser *self, const gchar *path, EtPathState path_state);
+static const GIcon* get_gicon(EtBrowser *self, EtPathState path_state, bool can_read, bool can_write);
 
 static GtkTreeViewColumn * et_browser_get_column_for_sort_order(EtBrowser *self, EtSortMode sort_order);
 
@@ -243,6 +252,734 @@ static void et_run_program_list_on_response (GtkDialog *dialog,
 static void et_browser_on_column_clicked (GtkTreeViewColumn *column,
                                           gpointer data);
 
+namespace
+{
+
+/// Worker to expand a directory tree node in background and in parallel
+/// @details This worker also performs a deferred execution of select_dir.
+class ExpandDirectoryWorker : public xObj
+{	/// Maximum number of child nodes sent to the UI.
+	/// @remarks Choosing smaller numbers may increase perceived speed
+	/// but can also degrade performance of large directories due to memory fragmentation.
+	static constexpr const size_t PackageSize = 250;
+
+	/// Node to be inserted or updated in the tree model.
+	struct Node
+	{	/// Name of the directory in UTF-8. (obligatory)
+		xStringD DisplayName;
+		/// Name of the directory in file system encoding
+		/// @remarks In Windows this is always selfsame to @ref Name.
+		/// NULL in case of loading placeholder.
+		xStringD FileName;
+		/// Optional icon to show.
+		/// @remarks The instance has static lifetime.
+		const GIcon* Icon;
+
+		Node(const xStringD& dn, const xStringD& fn, const GIcon* icon) : DisplayName(dn), FileName(fn), Icon(icon) {}
+		/// DO NOT USE! @remarks Just to keep std::function closure happy.
+		[[deprecated]] Node(const Node&) : Icon(nullptr) { g_assert_not_reached(); }
+		Node(Node&&) = default;
+		void operator=(const Node&) = delete;
+		Node& operator=(Node&&) = default;
+	};
+
+	/// Action to take on a node and node state
+	enum Mode
+	{	NONE = 0,        ///< No action to take.
+		SUBDIRCHECK = 1, ///< The node will is checked for the existence of (visible) sub directories.
+		ADDSUBDIR = 2,   ///< New sub directories should be added.
+		POPULATE = 3,    ///< The node is populated with all children.
+	};
+
+	struct Entry : public xListObj<Entry>
+	{	/// Node to process
+		GtkTreeIter Iter;
+		/// Full path of the node in file system encoding
+		gString FullPath;
+		/// Action to perform
+		/// @remarks The value may change asynchronously if the node has been collapsed.
+		/// In this case \ref Iter is no longer valid and no more actions must be performed.
+		Mode Operation;
+
+		/// Sequence of nodes to insert or update.
+		vector<Node> Nodes;
+
+		Entry(const GtkTreeIter& iter, gString&& path, Mode operation) : Iter(iter), FullPath(move(path)), Operation(operation) {}
+	};
+
+	typedef xListOwn<Entry, default_delete<Entry>> EntryList;
+
+	/// Reusable literal.
+	const xStringD Loading;
+	/// Parent object.
+	EtBrowser* const Browser;
+
+private: // state - synchronized access only!
+	/// Current number of worker threads.
+	unsigned CurWorkers;
+	/// Maximum number of worker threads.
+	unsigned MaxWorkers;
+	/// Show hidden directories.
+	bool ShowHidden;
+	/// Kill all workers.
+	bool Kill = false;
+	/// Worker queue with nodes to process by the background workers.
+	EntryList ToDo;
+	/// Currently processed items of active workers.
+	EntryList InProgress;
+	/// Nodes to be processed by the UI thread.
+	EntryList UIQueue;
+
+	/// Synchronize access to the above data
+	mutex Sync;
+	condition_variable Cond;
+
+private: // Worker thread functions
+	/// Move the enumerator to the next matching directory.
+	GFileInfo* NextDir(GFileEnumerator* en);
+
+	/// Send \ref UpdateChildren to the UI thread.
+	/// @param item Work item where the update belongs to.
+	/// @return true unless item has been cancelled.
+	bool SendPacket(Entry* item);
+
+	/// Worker thread.
+	void ItemWorker();
+
+private: // Data for main thread only!
+	/// Optional directory to select.
+	/// @remarks Only one directory can be selected as target. Any subsequent request cancel the previous one.
+	/// If a path component of this path is expanded the next matching path component is also expanded unless it is the last one.
+	/// In the latter case the directory is loaded into the browser.
+	/// If a path component has no match, i.e. does not exist or is invisible, e.g. because it is hidden
+	/// the request is cancelled and nothing happens.
+	gString ExpandPath;
+
+private: // Event handlers and helpers in main thread ...
+	/// Reset the worker to it's initial state.
+	/// @details This will cancel any background worker and wait for it's termination.
+	void Reset();
+
+	/// Enqueue an asynchronous operation on a tree node.
+	void Enqueue(Entry* item);
+
+	/// @return 0 := unrelated
+	/// 1 := path1 is subdir of path2
+	/// 2 := exact match
+	static int IsSubDir(const gchar* path1, const gchar* path2);
+
+	static void HandleExpand(EtBrowserPrivate* priv, GtkTreeIter& iter, bool load);
+
+	/// Create top level node
+	void AddTopLevel(xStringD name, gString&& path, const GIcon* icon);
+
+	/// Process UI item: add or replace children.
+	/// @remarks item.Operation:
+	/// - SUBDIRCHECK Discard all children and place a "loading" marker.
+	/// - ADDSUBDIR Add the nodes in item.Nodes sorted by name.
+	/// - POPULATE Replace the children by item.Nodes.
+	void UpdateChildren(Entry& item);
+
+	/// UI worker. Process \ref UIQueue.
+	void UIWorker();
+
+	/// Cancel all work items that depend on that path.
+	void CancelPath(const gchar* path);
+
+public: // public API, main thread only
+	ExpandDirectoryWorker(EtBrowser* browser);
+	~ExpandDirectoryWorker();
+
+	/// Destroy the whole tree and populate the root node(s).
+	void Initialize();
+
+	/// Get the full path of a tree node.
+	static gchar* GetFullPath(GtkTreeModel *model, GtkTreeIter iter);
+
+	/// Search for a node matching a path.
+	/// @param fullPath Directory to search in the tree.
+	/// @param iter [out] Iterator to node matching \a fullPath.
+	/// @return \c true if \a iter is set to the mathing node.
+	bool FindNode(const char* fullPath, GtkTreeIter* iter);
+
+	/// Populate the children of a tree node in background.
+	static void Expand(EtBrowser* browser, GtkTreeIter* parent);
+	/// Close a node and discard its children.
+	static void Collapse(EtBrowser* browser, GtkTreeIter* parent);
+	/// Select a directory in the browser.
+	/// @details The function expands to the given path and once finished selects the target directory.
+	/// If a path component does not exist, only the existing parent components are expanded.
+	void SelectDir(gString&& path);
+	/// Get the full path name of the currently selected node.
+	/// @return NULL if no row selected in the tree.
+	/// @remarks This is not necessarily the current directory, especially when using the right mouse button.
+	/// Remember to free the value returned from this function!
+	gchar* GetCurrentNodePath();
+};
+
+ExpandDirectoryWorker::ExpandDirectoryWorker(EtBrowser* browser)
+:	Loading("loading…")
+,	Browser(browser)
+,	CurWorkers(0)
+,	MaxWorkers(0)
+,	ShowHidden(false)
+{}
+
+ExpandDirectoryWorker::~ExpandDirectoryWorker()
+{	Reset();
+}
+
+void ExpandDirectoryWorker::Enqueue(Entry* item)
+{	{	lock_guard<mutex> lock(Sync);
+		logworker("Enqueue(%p{{%i, %p}, %s, %u}) %u\n", item, item->Iter.stamp, item->Iter.user_data, item->FullPath.get(), item->Operation, CurWorkers);
+		Kill = false;
+
+		bool was_empty = ToDo.empty();
+		// place expand requests at the front to raise priority
+		if (item->Operation == POPULATE)
+		{	ToDo.push_front(*item);
+			ShowHidden = !!g_settings_get_boolean(MainSettings, "browse-show-hidden");
+			MaxWorkers = g_settings_get_uint(MainSettings, "background-threads");
+		} else
+			ToDo.push_back(*item);
+
+		// start more workers?
+		if (CurWorkers && !(!was_empty && CurWorkers < MaxWorkers))
+			return;
+		// yes
+		++CurWorkers;
+	}
+	thread(&ExpandDirectoryWorker::ItemWorker, ref(*this)).detach();
+}
+
+GFileInfo* ExpandDirectoryWorker::NextDir(GFileEnumerator* en)
+{	if (!en)
+		return nullptr;
+	while (true)
+	{	gObject<GFileInfo> childinfo(g_file_enumerator_next_file(en, NULL, NULL));
+		if (!childinfo)
+			return nullptr;
+
+		if (g_file_info_get_file_type(childinfo.get()) == G_FILE_TYPE_DIRECTORY
+			&& (ShowHidden || !g_file_info_get_is_hidden(childinfo.get())))
+			return childinfo.release();
+	}
+}
+
+bool ExpandDirectoryWorker::SendPacket(Entry* item)
+{	logworker("SendPacket({{%i, %p}, %s, %i, %zu})\n", item->Iter.stamp, item->Iter.user_data, item->FullPath.get(), item->Operation, item->Nodes.size());
+	sort(item->Nodes.begin(), item->Nodes.end(), [](const Node& l, const Node& r) { return l.DisplayName.compare(r.DisplayName) < 0; });
+	{	lock_guard<mutex> lock(Sync);
+		// remove from InProgress
+		item->detach();
+
+		if (!item->Operation)
+		{	delete item; // destroy item from synchronized context!
+			return false; // item is obsolete => discard
+		}
+		// Enqueue
+		bool was_empty = UIQueue.empty();
+		if (item->Operation == SUBDIRCHECK)
+			UIQueue.push_back(*item);
+		else
+			UIQueue.push_front(*item);
+		if (!was_empty)
+			return true;
+		// no pending UI worker => kick below
+	}
+	gIdleAdd(new function<void()>([this]()
+	{	UIWorker();
+	}));
+	return true;
+}
+
+void ExpandDirectoryWorker::ItemWorker()
+{	Entry* item = nullptr;
+	while (true)
+	{	{	lock_guard<mutex> lock(Sync);
+			delete item; // destroy remaining item from synchronized context if any
+
+			if (Kill || ToDo.empty()) // kill or nothing to do
+			{	// terminate this worker
+				if (--CurWorkers == 0)
+				{ g_assert(InProgress.empty());
+					if (Kill)
+						Cond.notify_all();
+				}
+				return;
+			}
+
+			// fetch next item
+			item = &ToDo.front();
+			item->detach();
+
+			InProgress.push_back(*item);
+		}
+		logworker("Item %p{{%i, %p}, %s, %u}\n", item, item->Iter.stamp, item->Iter.user_data, item->FullPath.get(), item->Operation);
+
+		// create enumerator
+		const char* attr = item->Operation == SUBDIRCHECK
+			? (ShowHidden
+				? G_FILE_ATTRIBUTE_STANDARD_TYPE
+				: G_FILE_ATTRIBUTE_STANDARD_TYPE "," G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN)
+			: (ShowHidden
+				? G_FILE_ATTRIBUTE_STANDARD_TYPE "," G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME "," G_FILE_ATTRIBUTE_STANDARD_NAME "," G_FILE_ATTRIBUTE_ACCESS_CAN_READ "," G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE
+				: G_FILE_ATTRIBUTE_STANDARD_TYPE "," G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME "," G_FILE_ATTRIBUTE_STANDARD_NAME "," G_FILE_ATTRIBUTE_ACCESS_CAN_READ "," G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE "," G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN);
+		gObject<GFileEnumerator> en(g_file_enumerate_children(gObject<GFile>(g_file_new_for_path(item->FullPath)).get(), attr, G_FILE_QUERY_INFO_NONE, NULL, NULL));
+
+		// do the work
+		if (item->Operation == POPULATE)
+			item->Nodes.reserve(PackageSize); // package size
+		while (true)
+		{	gObject<GFileInfo> childinfo(NextDir(en.get()));
+
+			if (!childinfo)
+			{	// end of enumeration
+				// send last packet?
+				// or no sub dirs found => remove dummy and mark as scanned
+				if (item->Nodes.size() || item->Operation == POPULATE)
+				{	SendPacket(item);
+					item = nullptr;
+				}
+				break;
+			} else if (item->Operation == SUBDIRCHECK)
+			{	// found subdir => add dummy node
+				item->Nodes.reserve(1);
+				item->Nodes.emplace_back(Loading, nullptr, nullptr);
+				SendPacket(item);
+				item = nullptr;
+				break;
+			} else if (item->Operation)
+			{	// add subdir
+				gboolean can_read = g_file_info_get_attribute_boolean(childinfo.get(), G_FILE_ATTRIBUTE_ACCESS_CAN_READ);
+				gboolean can_write = g_file_info_get_attribute_boolean(childinfo.get(), G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE);
+				xStringD display_name(g_file_info_get_display_name(childinfo.get()));
+#ifdef G_OS_WIN32
+				xStringD& name = display_name; // guaranteed to be identical on Windows
+#else
+				xStringD name(g_file_info_get_name(childinfo.get()));
+#endif
+				item->Nodes.emplace_back(display_name, name, get_gicon(Browser, ET_PATH_STATE_CLOSED, can_read, can_write));
+
+				// send packet?
+				if (item->Nodes.size() == item->Nodes.capacity())
+				{	Entry* item2 = new Entry(item->Iter, gString(g_strdup(item->FullPath)), ADDSUBDIR); // at least one packet sent => no overwrite next time
+					item2->Nodes.reserve(PackageSize); // next package size
+					{	lock_guard<mutex> lock(Sync);
+						InProgress.push_back(*item2);
+					}
+					bool cont = SendPacket(item);
+					item = item2;
+					if (!cont)
+						break; // item has been cancelled
+				}
+			}
+		}
+	}
+}
+
+int ExpandDirectoryWorker::IsSubDir(const gchar* path1, const gchar* path2)
+{	if (!path1 || !path2)
+		return 0;
+	size_t llen = strlen(path1);
+	size_t rlen = strlen(path2);
+	if (G_IS_DIR_SEPARATOR(path1[llen - 1]))
+		--llen;
+	if (G_IS_DIR_SEPARATOR(path2[rlen - 1]))
+		--rlen;
+	if (llen < rlen)
+		return 0;
+#ifdef G_OS_WIN32
+	int cmp = strncasecmp(path1, path2, rlen);
+#else
+	int cmp = strncmp(path1, path2, rlen);
+#endif
+	if (cmp)
+		return 0;
+	if (llen == rlen)
+		return 2;
+	if (G_IS_DIR_SEPARATOR(path1[rlen]))
+		return 1;
+	return 0;
+}
+
+void ExpandDirectoryWorker::HandleExpand(EtBrowserPrivate* priv, GtkTreeIter& iter, bool load)
+{
+	GtkTreePath* treePath = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->directory_model), &iter);
+	gtk_tree_view_expand_to_path(GTK_TREE_VIEW(priv->directory_view), treePath);
+
+	if (!load)
+		return;
+
+	// exact match => no more subdir to expand
+	// load the directory instead
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(priv->directory_view), treePath, NULL, TRUE, 0.5, 0.0);
+	/* Select the node to load the corresponding directory. */
+	gtk_tree_selection_select_path(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->directory_view)), treePath);
+	gtk_tree_path_free(treePath);
+}
+
+void ExpandDirectoryWorker::UpdateChildren(Entry& item)
+{	logworker("UpdateChildren(%p, %s, %zu, %i) %s\n", item.Iter.user_data, item.FullPath.get(), item.Nodes.size(), item.Operation, ExpandPath.get());
+
+	EtBrowserPrivate* const priv = et_browser_get_instance_private(Browser);
+	GtkTreeStore* const model = priv->directory_model;
+	const char* expandCheck = nullptr;
+	if (item.Operation != SUBDIRCHECK && ExpandPath && IsSubDir(ExpandPath, item.FullPath) == 1)
+	{	expandCheck = ExpandPath.get() + strlen(item.FullPath);
+		if (G_IS_DIR_SEPARATOR(*expandCheck))
+			++expandCheck;
+	}
+
+	// Update parent icon and state
+	GtkTreeIter childiter;
+	#ifdef G_OS_WIN32
+	// set open folder pixmap except on drive (depth == 0)
+	if (gtk_tree_model_iter_parent(GTK_TREE_MODEL(model), &childiter, parent))
+	#endif
+	// update the icon of the node to opened folder :-)
+	gtk_tree_store_set(model, &item.Iter,
+		TREE_COLUMN_ICON, get_gicon_for_path(Browser, item.FullPath, item.Operation == SUBDIRCHECK ? ET_PATH_STATE_CLOSED : ET_PATH_STATE_OPEN),
+		TREE_COLUMN_STATE, item.Operation | SUBDIRCHECK, -1);
+
+	gboolean more = gtk_tree_model_iter_children(GTK_TREE_MODEL(model), &childiter, &item.Iter);
+
+	gint insertpos = 0;
+	const char* fileName; // Filename of the next existing child in case of merge sort
+	if (item.Operation != ADDSUBDIR)
+		insertpos = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(model), &item.Iter); // always append
+	else if (more)
+		gtk_tree_model_get(GTK_TREE_MODEL(model), &childiter, TREE_COLUMN_FILE_NAME, &fileName, -1);
+
+	// Parallel iteration over existing children.
+	// In case of ADDSUBDIR this is a merge sort
+	// otherwise the nodes are overwritten in order of appearance when possible.
+	for (const Node& node : item.Nodes)
+	{	// Check for subdirs asynchronously
+		// or expand if it happens to be the part of the path to expand.
+		Mode submode = item.Operation == SUBDIRCHECK ? NONE : SUBDIRCHECK;;
+		int cmp = IsSubDir(expandCheck, node.FileName);
+		if (cmp == 2)
+		{	ExpandPath.reset();
+			expandCheck = nullptr;
+		} else if (cmp == 1)
+			submode = POPULATE;
+
+		if (item.Operation == ADDSUBDIR) // merge sort?
+		{	// move childiter forward until larger than node
+			while (more && node.FileName.compare(xString::fromCptr(fileName)) > 0)
+			{	more = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &childiter);
+				++insertpos;
+				if (more)
+					gtk_tree_model_get(GTK_TREE_MODEL(model), &childiter, TREE_COLUMN_FILE_NAME, &fileName, -1);
+			}
+			goto insert;
+		}
+		else if (!more)
+		{	// insert
+		insert:
+			gtk_tree_store_insert_with_values(model, &childiter, &item.Iter, insertpos,
+				TREE_COLUMN_DISPLAY_NAME, node.DisplayName.get(),
+				TREE_COLUMN_FILE_NAME, node.FileName.get(),
+				TREE_COLUMN_STATE, submode,
+				TREE_COLUMN_ICON, node.Icon, -1);
+			++insertpos;
+			// no need to update fileName here
+		} else
+		{	// update
+			gtk_tree_store_set(model, &childiter,
+				TREE_COLUMN_DISPLAY_NAME, node.DisplayName.get(),
+				TREE_COLUMN_FILE_NAME, node.FileName.get(),
+				TREE_COLUMN_STATE, submode,
+				TREE_COLUMN_ICON, node.Icon, -1);
+		}
+
+		if (cmp)
+			HandleExpand(priv, childiter, cmp == 2);
+
+		// check for children at next level or populate them immediately.
+		if (item.Operation != SUBDIRCHECK)
+			Enqueue(new Entry(childiter, gString(g_build_filename(item.FullPath, node.FileName.get(), NULL)), submode));
+
+		if (more && item.Operation != ADDSUBDIR)
+			more = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &childiter);
+	}
+
+	// discard additional entries if any and not merge mode
+	if (more && item.Operation != ADDSUBDIR)
+		et_tree_store_remove_children(model, &childiter);
+
+	logworker("~UpdateChildren(%p)\n", item.Iter.user_data);
+}
+
+void ExpandDirectoryWorker::UIWorker()
+{	logworker("UIWorker\n");
+	unsigned count = 0;
+	do
+	{	unique_ptr<Entry> item;
+		{	lock_guard<mutex> lock(Sync);
+			if (UIQueue.empty())
+				return;
+			item.reset(&UIQueue.front());
+			item->detach();
+		}
+
+		if (item->Operation) // invalidated?
+			UpdateChildren(*item);
+
+		count += item->Nodes.size();
+	} while (count < 300);
+	// reschedule to keep the queue responsive
+	gIdleAdd(new function<void()>([this]()
+	{	UIWorker();
+	}));
+}
+
+void ExpandDirectoryWorker::CancelPath(const gchar* path)
+{	logworker("CancelPath(%s)\n", path);
+	lock_guard<mutex> lock(Sync);
+	// discard not yet processed items
+	auto it = ToDo.begin();
+	while (it != ToDo.end())
+	{	auto cur = it++;
+		if (IsSubDir(cur->FullPath, path))
+		{	logworker("Cancel ToDo {%p, %s, %u}\n", cur->Iter.user_data, cur->FullPath.get(), cur->Operation);
+			delete &*cur;
+		}
+	}
+	// mark currently processed items as obsolete
+	for (it = InProgress.begin(); it != InProgress.end(); ++it)
+		if (IsSubDir(it->FullPath, path))
+		{	logworker("Cancel InProgress {%p, %s, %u}\n", it->Iter.user_data, it->FullPath.get(), it->Operation);
+			it->Operation = NONE;
+		}
+	// discard not yet processed UI items
+	it = UIQueue.begin();
+	while (it != UIQueue.end())
+	{	auto cur = it++;
+		if (IsSubDir(cur->FullPath, path))
+		{	logworker("Cancel UI {%p, %s, %u}\n", cur->Iter.user_data, cur->FullPath.get(), cur->Operation);
+			delete &*cur;
+		}
+	}
+}
+
+gchar* ExpandDirectoryWorker::GetFullPath(GtkTreeModel* model, GtkTreeIter iter)
+{	// collect path components.
+	vector<gchar*> components;
+	GtkTreeIter iter2; // gtk_tree_model_iter_parent dislikes aliasing
+	do
+	{	gchar* component;
+		gtk_tree_model_get(model, &iter, TREE_COLUMN_FILE_NAME, &component, -1);
+		if (component == nullptr)
+			return nullptr;
+		components.push_back(component);
+		iter2 = iter;
+	} while (gtk_tree_model_iter_parent(model, &iter, &iter2));
+
+	reverse(components.begin(), components.end());
+	components.push_back(nullptr);
+	return g_build_filenamev(&components.front());
+}
+
+bool ExpandDirectoryWorker::FindNode(const char* path, GtkTreeIter* iter)
+{	GtkTreeModel* model = GTK_TREE_MODEL(et_browser_get_instance_private(Browser)->directory_model);
+
+	gboolean more = gtk_tree_model_get_iter_first(model, iter);
+	// cannot use binary search here because the sort order by DISPLAY_NAME
+	// may not match FILE_NAME on Unix systems.
+	while (more)
+	{	const char *text;
+		gtk_tree_model_get(model, iter, TREE_COLUMN_FILE_NAME, &text, -1);
+		switch (IsSubDir(path, text))
+		{default:
+			more = gtk_tree_model_iter_next(model, iter);
+			continue;
+		 case 2:
+			return true;
+		 case 1:
+			path += strlen(text);
+			while (G_IS_DIR_SEPARATOR(*path)) ++path;
+			GtkTreeIter parent = *iter;
+			more = gtk_tree_model_iter_children(model, iter, &parent);
+		}
+	}
+	return false;
+}
+
+void ExpandDirectoryWorker::AddTopLevel(xStringD name, gString&& path, const GIcon* icon)
+{	EtBrowserPrivate* const priv = et_browser_get_instance_private(Browser);
+
+	GtkTreeIter iter;
+	gtk_tree_store_insert_with_values(priv->directory_model, &iter, NULL, -1,
+		TREE_COLUMN_DISPLAY_NAME, name.get(),
+		TREE_COLUMN_FILE_NAME, xStringD(path.get()).get(),
+		TREE_COLUMN_STATE, SUBDIRCHECK,
+		TREE_COLUMN_ICON, icon, -1);
+
+	Enqueue(new Entry(iter, move(path), SUBDIRCHECK));
+}
+
+void ExpandDirectoryWorker::Reset()
+{	unique_lock<mutex> lock(Sync);
+	Kill = true;
+	ToDo.clear();
+	UIQueue.clear();
+	for (Entry& item : InProgress)
+		item.Operation = NONE;
+
+	// wait until all workers died.
+	while (CurWorkers)
+		Cond.wait(lock);
+
+	InProgress.clear();
+}
+
+void ExpandDirectoryWorker::Initialize()
+{	EtBrowserPrivate* priv = et_browser_get_instance_private(Browser);
+
+	// Cancel any background worker before discarding the tree.
+	Reset();
+	gtk_tree_store_clear (priv->directory_model);
+
+#ifdef G_OS_WIN32
+	/* TODO: Connect to the monitor changed signals. */
+	GVolumeMonitor *monitor = g_volume_monitor_get ();
+	GList *mounts = g_volume_monitor_get_mounts (monitor);
+
+	for (GList *l = mounts; l != NULL; l = g_list_next (l))
+	{
+		GMount* mount = (GMount*)l->data;
+
+		AddTopLevel(xStringD(g_mount_get_name(mount)),
+			gString(g_file_get_path(gObject<GFile>(g_mount_get_root(mount)).get())),
+			gObject<GIcon>(g_mount_get_icon(mount)).get());
+	}
+
+	g_list_free_full (mounts, g_object_unref);
+	g_object_unref (monitor);
+#else /* !G_OS_WIN32 */
+	AddTopLevel(G_DIR_SEPARATOR_S, gString(g_strdup(G_DIR_SEPARATOR_S)),
+		get_gicon_for_path(Browser, G_DIR_SEPARATOR_S, ET_PATH_STATE_CLOSED));
+#endif /* !G_OS_WIN32 */
+}
+
+void ExpandDirectoryWorker::Expand(EtBrowser* browser, GtkTreeIter* parent)
+{	EtBrowserPrivate* const priv = et_browser_get_instance_private(browser);
+	Mode state;
+	gtk_tree_model_get(GTK_TREE_MODEL(priv->directory_model), parent,
+		TREE_COLUMN_STATE, &state, -1);
+	if (state == POPULATE)
+		return;
+
+	gtk_tree_store_set(priv->directory_model, parent, TREE_COLUMN_STATE, POPULATE, -1);
+	priv->DirectoryWorker->Enqueue(new Entry(*parent, gString(GetFullPath(GTK_TREE_MODEL(priv->directory_model), *parent)), POPULATE));
+}
+
+void ExpandDirectoryWorker::Collapse(EtBrowser* browser, GtkTreeIter* parent)
+{	EtBrowserPrivate* const priv = et_browser_get_instance_private(browser);
+	GtkTreeModel* model = GTK_TREE_MODEL(priv->directory_model);
+
+	gString parentPath(GetFullPath(model, *parent));
+	priv->DirectoryWorker->CancelPath(parentPath);
+	gObject<GFile> file(g_file_new_for_path(parentPath));
+	GError* error = nullptr;
+	gObject<GFileInfo> fileinfo(g_file_query_info(file.get(), G_FILE_ATTRIBUTE_ACCESS_CAN_READ,
+		G_FILE_QUERY_INFO_NONE, NULL, &error));
+	file.reset();
+	/* Insert dummy node only if directory exists. */
+	bool insertDummy = !error;
+	if (error)
+		g_error_free(error);
+
+	/* If the directory is not readable, do not delete its children. */
+	if (fileinfo && !g_file_info_get_attribute_boolean(fileinfo.get(), G_FILE_ATTRIBUTE_ACCESS_CAN_READ))
+		return;
+
+#ifdef G_OS_WIN32
+	// set closed folder pixmap except on drive (depth == 0)
+	const char* path = g_path_skip_root(parentPath);
+	if (path && !(path[0] && !(G_IS_DIR_SEPARATOR(path[0]) && !path[1])))
+		gtk_tree_store_set(priv->directory_model, parent,
+			TREE_COLUMN_STATE, SUBDIRCHECK, -1);
+	else
+#endif /* !G_OS_WIN32 */
+	// update the icon of the node to closed folder :-)
+	gtk_tree_store_set(priv->directory_model, parent,
+		TREE_COLUMN_STATE, SUBDIRCHECK,
+		TREE_COLUMN_ICON, get_gicon_for_path(browser, parentPath, ET_PATH_STATE_CLOSED), -1);
+
+	/* Insert dummy node only if directory exists. */
+	if (insertDummy)
+	{	Entry item(*parent, move(parentPath), SUBDIRCHECK);
+		item.Nodes.reserve(1);
+		item.Nodes.emplace_back(priv->DirectoryWorker->Loading, nullptr, nullptr);
+		priv->DirectoryWorker->UpdateChildren(item);
+	}
+}
+
+void ExpandDirectoryWorker::SelectDir(gString&& path)
+{	logworker("SelectDir(%s)\n", path.get());
+	EtBrowserPrivate* const priv = et_browser_get_instance_private(Browser);
+	GtkTreeModel* model = GTK_TREE_MODEL(priv->directory_model);
+
+	// try to find part of the path immediately.
+	GtkTreeIter currentNode;
+	if (!gtk_tree_model_get_iter_first(model, &currentNode))
+	{	g_message("%s", "priv->directory_model is empty");
+		return;
+	}
+
+	bool more;
+	ExpandPath = move(path);
+	do
+	{	gString nodePath(GetFullPath(model, currentNode));
+
+		int cmp = IsSubDir(ExpandPath, nodePath);
+		if (cmp)
+		{	Mode state; // get state BEFORE HandleExpand
+			gtk_tree_model_get(model, &currentNode, TREE_COLUMN_STATE, &state, -1);
+
+			// match found
+			if (cmp == 2)
+			{	HandleExpand(priv, currentNode, true);
+				ExpandPath.reset();
+				return; // done
+			} else
+				HandleExpand(priv, currentNode, false);
+
+			if (state != POPULATE)
+				return; // proceed asynchronously
+
+			// descend to next level
+			GtkTreeIter parent = currentNode;
+			more = gtk_tree_model_iter_children(model, &currentNode, &parent);
+		}
+		else
+			more = gtk_tree_model_iter_next(model, &currentNode);
+	} while (more);
+	// not found
+	ExpandPath.reset();
+}
+
+gchar* ExpandDirectoryWorker::GetCurrentNodePath()
+{
+	EtBrowserPrivate* priv = et_browser_get_instance_private(Browser);
+
+	GtkTreePath* tree_path;
+	gtk_tree_view_get_drag_dest_row(GTK_TREE_VIEW(priv->directory_view), &tree_path, NULL);
+	if (!tree_path) // not from context menu? => use current path
+		return g_strdup(priv->current_path_name);
+
+	GtkTreeIter currentIter;
+	gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->directory_model), &currentIter, tree_path);
+	gchar *path = GetFullPath(GTK_TREE_MODEL(priv->directory_model), currentIter);
+
+	gtk_tree_path_free(tree_path);
+	return path;
+}
+
+} // namespace
 
 /*************
  * Functions *
@@ -264,26 +1001,6 @@ ET_File* EtBrowser::popup_file()
 
 	gtk_tree_path_free(tree_path);
 	return etfile;
-}
-
-/*
- * Load home directory
- */
-void EtBrowser::go_home()
-{
-	GFile *file = g_file_new_for_path(g_get_home_dir());
-	select_dir(file);
-	g_object_unref(file);
-}
-
-/*
- * Load user directory
- */
-void EtBrowser::go_special(GUserDirectory dir)
-{
-	GFile *file = g_file_new_for_path(g_get_user_special_dir(dir));
-	select_dir(file);
-	g_object_unref(file);
 }
 
 /*
@@ -360,30 +1077,6 @@ void EtBrowser::run_player_for_selection()
 {
 	auto files = get_current_files();
 	et_run_audio_player(files.begin(), files.end());
-}
-
-/*
- * Get the path from the selected node (row) in the browser
- * Warning: return NULL if no row selected int the tree.
- * Remember to free the value returned from this function!
- */
-static gchar* Browser_Tree_Get_Path_Of_Current_Node(EtBrowser *self)
-{
-	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
-
-	GtkTreePath* tree_path;
-	gtk_tree_view_get_drag_dest_row(GTK_TREE_VIEW(priv->directory_view), &tree_path, NULL);
-	if (!tree_path) // not from context menu? => use current path
-		return g_strdup(priv->current_path_name);
-
-	GtkTreeIter currentIter;
-	gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->directory_model), &currentIter, tree_path);
-	gchar *path;
-	gtk_tree_model_get(GTK_TREE_MODEL(priv->directory_model), &currentIter,
-		TREE_COLUMN_FULL_PATH, &path, -1);
-
-	gtk_tree_path_free(tree_path);
-	return path;
 }
 
 /*
@@ -523,7 +1216,7 @@ void EtBrowser::reload_directory()
 		/* Unselect files, to automatically reload the file of the directory. */
 		gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->directory_view)));
 
-		select_dir(priv->current_path);
+		select_dir(priv->current_path_name);
 	}
 }
 
@@ -532,9 +1225,8 @@ void EtBrowser::reload_directory()
  */
 void EtBrowser::set_current_path_default()
 {
-	gchar *path = Browser_Tree_Get_Path_Of_Current_Node(this);
+	gString path(et_browser_get_instance_private(this)->DirectoryWorker->GetCurrentNodePath());
 	g_settings_set_value(MainSettings, "default-path", g_variant_new_bytestring(path));
-	g_free(path);
 
 	et_application_window_status_bar_message(MainWindow, _("New default directory selected for browser"), TRUE);
 }
@@ -607,11 +1299,7 @@ void EtBrowser::go_directory()
 	/* Unselect files, to automatically reload the file of the directory. */
 	gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->directory_view)));
 
-	gchar* path = Browser_Tree_Get_Path_Of_Current_Node(this);
-	GFile *file = g_file_new_for_path(path);
-	select_dir(file);
-	g_object_unref(file);
-	g_free(path);
+	select_dir(gString(priv->DirectoryWorker->GetCurrentNodePath()));
 }
 
 /*
@@ -732,36 +1420,18 @@ Browser_List_Key_Press (GtkWidget *list, GdkEvent *event, gpointer data)
  */
 void EtBrowser::collapse()
 {
-    EtBrowserPrivate *priv;
-#ifndef G_OS_WIN32
-    GtkTreePath *rootPath;
-#endif /* !G_OS_WIN32 */
-
-    priv = et_browser_get_instance_private (this);
-
+    EtBrowserPrivate *priv = et_browser_get_instance_private (this);
     g_return_if_fail (priv->directory_view != NULL);
 
     gtk_tree_view_collapse_all (GTK_TREE_VIEW (priv->directory_view));
 
 #ifndef G_OS_WIN32
     /* But keep the main directory opened */
-    rootPath = gtk_tree_path_new_first();
+    GtkTreePath *rootPath = gtk_tree_path_new_first();
     gtk_tree_view_expand_to_path (GTK_TREE_VIEW (priv->directory_view),
                                   rootPath);
     gtk_tree_path_free(rootPath);
 #endif /* !G_OS_WIN32 */
-}
-
-
-/*
- * Set a row (or node) visible in the TreeView (by scrolling the tree)
- */
-static void
-Browser_Tree_Set_Node_Visible (GtkWidget *directoryView, GtkTreePath *path)
-{
-    g_return_if_fail (directoryView != NULL || path != NULL);
-
-    gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(directoryView), path, NULL, TRUE, 0.5, 0.0);
 }
 
 
@@ -798,8 +1468,6 @@ static void
 Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
 {
     EtBrowserPrivate *priv;
-    gchar *pathName;
-    GFile *file;
     gchar *parse_name;
     static gboolean first_read = TRUE;
     GtkTreeIter selectedIter;
@@ -828,8 +1496,7 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
     }
 
     /* Browser_Tree_Set_Node_Visible (priv->directory_view, selectedPath); */
-    gtk_tree_model_get(GTK_TREE_MODEL(priv->directory_model), &selectedIter,
-                       TREE_COLUMN_FULL_PATH, &pathName, -1);
+    gString pathName(ExpandDirectoryWorker::GetFullPath(GTK_TREE_MODEL(priv->directory_model), selectedIter));
     if (!pathName)
         return;
 
@@ -868,18 +1535,13 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
         {
             case GTK_RESPONSE_YES:
                 if (Save_All_Files_With_Answer(FALSE)==-1)
-                {
-                    g_free (pathName);
                     return;
-                }
                 break;
             case GTK_RESPONSE_NO:
                 break;
             case GTK_RESPONSE_CANCEL:
             case GTK_RESPONSE_DELETE_EVENT:
-                g_free (pathName);
                 return;
-                break;
             default:
                 g_assert_not_reached ();
                 break;
@@ -887,11 +1549,11 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
     }
 
     /* Memorize the current path */
-    file = g_file_new_for_path (pathName);
-    et_browser_set_current_path (self, file);
+    gObject<GFile> file(g_file_new_for_path(pathName));
+    et_browser_set_current_path(self, file.get());
 
     /* Display the selected path into the BrowserEntry */
-    parse_name = g_file_get_parse_name (file);
+    parse_name = g_file_get_parse_name(file.get());
     gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->entry_combo))),
                         parse_name);
     g_free (parse_name);
@@ -905,8 +1567,7 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
         gboolean dir_loaded;
         GtkTreeIter parentIter;
 
-        dir_loaded = Read_Directory(gString(pathName));
-        pathName = NULL;
+        dir_loaded = Read_Directory(move(pathName));
 
         // If the directory can't be loaded, the directory musn't exist.
         // So we load the parent node and refresh the children
@@ -921,9 +1582,8 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
                 {
                     selectedPath = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->directory_model), &parentIter);
                     gtk_tree_selection_select_iter (selection, &parentIter);
-                    if (gtk_tree_model_iter_has_child (GTK_TREE_MODEL (priv->directory_model),
-                                                       &selectedIter) == FALSE
-                                                       && !g_file_query_exists (file, NULL))
+                    if (gtk_tree_model_iter_has_child(GTK_TREE_MODEL(priv->directory_model), &selectedIter) == FALSE
+                        && !g_file_query_exists(file.get(), NULL))
                     {
                         gtk_tree_view_collapse_row (GTK_TREE_VIEW (priv->directory_view),
                                                     selectedPath);
@@ -946,209 +1606,11 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
     }
 
     first_read = FALSE;
-
-    g_object_unref (file);
-    g_free(pathName);
     return;
 }
 
-
-#ifdef G_OS_WIN32
-static gboolean
-et_browser_win32_get_drive_root (EtBrowser *self,
-                                 gchar *drive,
-                                 GtkTreeIter *rootNode,
-                                 GtkTreePath **rootPath)
-{
-    EtBrowserPrivate *priv;
-    gint root_index;
-    gboolean found = FALSE;
-    GtkTreeIter parentNode;
-    gchar *nodeName;
-
-    priv = et_browser_get_instance_private (self);
-
-    gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->directory_model), &parentNode);
-
-    // Find root of path, ie: the drive letter
-    root_index = 0;
-
-    do
-    {
-        gtk_tree_model_get(GTK_TREE_MODEL(priv->directory_model), &parentNode,
-                           TREE_COLUMN_FULL_PATH, &nodeName, -1);
-        /* FIXME: Use something other than strncasecmp()! */
-        if (strncasecmp(drive,nodeName, strlen(drive)) == 0)
-        {
-            g_free(nodeName);
-            found = TRUE;
-            break;
-        }
-        root_index++;
-    } while (gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->directory_model), &parentNode));
-
-    if (!found) return FALSE;
-
-    *rootNode = parentNode;
-    *rootPath = gtk_tree_path_new_from_indices(root_index, -1);
-
-    return TRUE;
-}
-#endif /* G_OS_WIN32 */
-
-void EtBrowser::select_dir(GFile *file)
-{
-    EtBrowserPrivate *priv;
-    gchar *current_path;
-    GtkTreePath *rootPath = NULL;
-    GtkTreeIter parentNode, currentNode;
-    gint index = 1; // Skip the first token as it is NULL due to leading /
-    gchar **parts;
-    gchar *nodeName;
-    gchar *temp;
-
-    priv = et_browser_get_instance_private(this);
-
-    g_return_if_fail (priv->directory_view != NULL);
-
-    /* Don't check here if the path is valid. It will be done later when
-     * selecting a node in the tree */
-
-    et_browser_set_current_path (this, file);
-    current_path = g_file_get_path (file);
-
-    parts = g_strsplit(current_path, G_DIR_SEPARATOR_S, 0);
-    g_free (current_path);
-
-    // Expand root node (fill parentNode and rootPath)
-#ifdef G_OS_WIN32
-    if (!et_browser_win32_get_drive_root (this, parts[0], &parentNode,
-                                          &rootPath))
-    {
-        return;
-    }
-#else /* !G_OS_WIN32 */
-    if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->directory_model),
-                                        &parentNode))
-    {
-        g_message ("%s", "priv->directory_model is empty");
-        return;
-    }
-
-    rootPath = gtk_tree_path_new_first();
-#endif /* !G_OS_WIN32 */
-    if (rootPath)
-    {
-        gtk_tree_view_expand_to_path (GTK_TREE_VIEW (priv->directory_view),
-                                      rootPath);
-        gtk_tree_path_free(rootPath);
-    }
-
-    while (parts[index]) // it is NULL-terminated
-    {
-        if (*parts[index] == '\0')
-        {
-            index++;
-            continue;
-        }
-
-        if (!gtk_tree_model_iter_children(GTK_TREE_MODEL(priv->directory_model), &currentNode, &parentNode))
-        {
-            gchar *path, *parent_path;
-            GFile *directory;
-
-            gtk_tree_model_get (GTK_TREE_MODEL (priv->directory_model),
-                                &parentNode, TREE_COLUMN_FULL_PATH,
-                                &parent_path, -1);
-            path = g_build_filename (parent_path, parts[index], NULL);
-            g_free (parent_path);
-
-            directory = g_file_new_for_path (path);
-
-            /* As dir name was not found in any node, check whether it exists
-             * or not. */
-            if (g_file_query_file_type (directory, G_FILE_QUERY_INFO_NONE, NULL)
-                == G_FILE_TYPE_DIRECTORY)
-            {
-                /* It exists and is readable permission of parent directory is executable */
-                GtkTreeIter iter;
-
-                /* Create a new node for this directory name. */
-                const GIcon* icon = get_gicon_for_path (this, path, ET_PATH_STATE_CLOSED);
-
-                gtk_tree_store_insert_with_values (GTK_TREE_STORE (priv->directory_model),
-                                                   &iter, &parentNode, 0,
-                                                   TREE_COLUMN_DIR_NAME, parts[index],
-                                                   TREE_COLUMN_FULL_PATH, path,
-                                                   TREE_COLUMN_HAS_SUBDIR, check_for_subdir(directory),
-                                                   TREE_COLUMN_SCANNED, TRUE,
-                                                   TREE_COLUMN_ICON, icon, -1);
-
-                currentNode = iter;
-            }
-            else
-            {
-                g_object_unref (directory);
-                g_free (path);
-                break;
-            }
-
-            g_object_unref (directory);
-            g_free (path);
-        }
-
-        do
-        {
-            gtk_tree_model_get(GTK_TREE_MODEL(priv->directory_model), &currentNode,
-                               TREE_COLUMN_FULL_PATH, &temp, -1);
-            nodeName = g_path_get_basename(temp);
-            g_free(temp);
-#ifdef G_OS_WIN32
-            if (strcasecmp(parts[index],nodeName) == 0)
-#else /* !G_OS_WIN32 */
-            if (strcmp(parts[index],nodeName) == 0)
-#endif /* !G_OS_WIN32 */
-            {
-                g_free(nodeName);
-                break;
-            }
-            g_free(nodeName);
-
-            if (!gtk_tree_model_iter_next (GTK_TREE_MODEL (priv->directory_model),
-                                           &currentNode))
-            {
-                /* Path was not found in tree, such as when a hidden path was
-                 * passed in, but hidden paths are set to not be displayed. */
-                g_strfreev (parts);
-                return;
-            }
-        } while (1);
-
-        parentNode = currentNode;
-        rootPath = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->directory_model), &parentNode);
-        if (rootPath)
-        {
-            gtk_tree_view_expand_to_path (GTK_TREE_VIEW (priv->directory_view),
-                                          rootPath);
-            gtk_tree_path_free(rootPath);
-        }
-        index++;
-    }
-
-    rootPath = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->directory_model), &parentNode);
-    if (rootPath)
-    {
-        gtk_tree_view_expand_to_path (GTK_TREE_VIEW (priv->directory_view),
-                                      rootPath);
-        Browser_Tree_Set_Node_Visible (priv->directory_view, rootPath);
-        /* Select the node to load the corresponding directory. */
-        gtk_tree_selection_select_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->directory_view)),
-                                        rootPath);
-        gtk_tree_path_free(rootPath);
-    }
-
-    g_strfreev(parts);
-    return;
+void EtBrowser::select_dir(gString&& path)
+{	et_browser_get_instance_private(this)->DirectoryWorker->SelectDir(move(path));
 }
 
 /*
@@ -2465,82 +2927,6 @@ on_file_tree_button_press_event (GtkWidget *widget,
 }
 
 /*
- * Destroy the whole tree up to the root node
- */
-static void
-Browser_Tree_Initialize (EtBrowser *self)
-{
-    EtBrowserPrivate *priv;
-#ifdef G_OS_WIN32
-    GVolumeMonitor *monitor;
-    GList *mounts;
-    GList *l;
-#endif
-    GtkTreeIter parent_iter;
-    GtkTreeIter dummy_iter;
-
-    priv = et_browser_get_instance_private (self);
-
-    g_return_if_fail (priv->directory_model != NULL);
-
-    gtk_tree_store_clear (priv->directory_model);
-
-#ifdef G_OS_WIN32
-    /* TODO: Connect to the monitor changed signals. */
-    monitor = g_volume_monitor_get ();
-    mounts = g_volume_monitor_get_mounts (monitor);
-
-    for (l = mounts; l != NULL; l = g_list_next (l))
-    {
-        GMount *mount;
-        gchar *name;
-        GFile *root;
-        gchar *path;
-
-        mount = l->data;
-        GIcon* drive_icon = g_mount_get_icon (mount);
-        name = g_mount_get_name (mount);
-        root = g_mount_get_root (mount);
-        path = g_file_get_path (root);
-
-        gtk_tree_store_insert_with_values (priv->directory_model,
-                                           &parent_iter, NULL, G_MAXINT,
-                                           TREE_COLUMN_DIR_NAME,
-                                           name,
-                                           TREE_COLUMN_FULL_PATH,
-                                           path,
-                                           TREE_COLUMN_HAS_SUBDIR, TRUE,
-                                           TREE_COLUMN_SCANNED, FALSE,
-                                           TREE_COLUMN_ICON, drive_icon,
-                                           -1);
-        /* Insert dummy node. */
-        gtk_tree_store_append (priv->directory_model, &dummy_iter,
-                               &parent_iter);
-
-        g_free (path);
-        g_free (name);
-        g_object_unref (root);
-        g_object_unref (drive_icon);
-    }
-
-    g_list_free_full (mounts, g_object_unref);
-    g_object_unref (monitor);
-#else /* !G_OS_WIN32 */
-    const GIcon* drive_icon = get_gicon_for_path(self, G_DIR_SEPARATOR_S, ET_PATH_STATE_CLOSED);
-    gtk_tree_store_insert_with_values (priv->directory_model, &parent_iter, NULL,
-                                       G_MAXINT, TREE_COLUMN_DIR_NAME,
-                                       G_DIR_SEPARATOR_S,
-                                       TREE_COLUMN_FULL_PATH,
-                                       G_DIR_SEPARATOR_S,
-                                       TREE_COLUMN_HAS_SUBDIR, TRUE,
-                                       TREE_COLUMN_SCANNED, FALSE,
-                                       TREE_COLUMN_ICON, drive_icon, -1);
-    /* Insert dummy node. */
-    gtk_tree_store_append (priv->directory_model, &dummy_iter, &parent_iter);
-#endif /* !G_OS_WIN32 */
-}
-
-/*
  * et_browser_reload: Refresh the tree browser by destroying it and rebuilding it.
  * Opens tree nodes corresponding to the current path.
  */
@@ -2552,9 +2938,9 @@ void EtBrowser::reload()
 	GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->directory_view));
 
 	g_signal_handlers_block_by_func(selection, (gpointer)Browser_Tree_Node_Selected, this);
-	Browser_Tree_Initialize(this);
+	priv->DirectoryWorker->Initialize();
 	// Restore previous selection
-	select_dir(priv->current_path);
+	select_dir(priv->current_path_name);
 	g_signal_handlers_unblock_by_func(selection, (gpointer)(Browser_Tree_Node_Selected), this);
 
 	et_application_window_update_actions(MainWindow);
@@ -2566,228 +2952,35 @@ void EtBrowser::reload()
  * new_path:
  * Parameters are non-utf8!
  */
-static void
-Browser_Tree_Rename_Directory (EtBrowser *self,
-                               const gchar *last_path,
-                               const gchar *new_path)
+static void Browser_Tree_Rename_Directory (EtBrowser *self, const gchar *last_path, const gchar *new_path)
 {
-    EtBrowserPrivate *priv;
-    gchar **textsplit;
-    gint i;
-    GtkTreeIter  iter;
-    GtkTreePath *childpath;
-    GtkTreePath *parentpath;
-    gchar *new_basename_utf8;
+	if (!last_path || !new_path)
+		return;
 
-    if (!last_path || !new_path)
-        return;
+	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-    priv = et_browser_get_instance_private (self);
+	// Find the existing tree entry
+	GtkTreeIter iter;
+	if (!priv->DirectoryWorker->FindNode(last_path, &iter))
+	{	// ERROR! Could not find it!
+		gString text_utf8(g_filename_display_name (last_path));
+		g_critical("Error: Searching for %s, could not find node in tree.", text_utf8.get());
+		return;
+	}
 
-    /*
-     * Find the existing tree entry
-     */
-    textsplit = g_strsplit(last_path, G_DIR_SEPARATOR_S, 0);
-
+	/* Rename the on-screen node */
+	xStringD new_basename(gString(g_path_get_basename(new_path)).get());
 #ifdef G_OS_WIN32
-    if (!et_browser_win32_get_drive_root (self, textsplit[0], &iter,
-                                          &parentpath))
-    {
-        return;
-    }
-#else /* !G_OS_WIN32 */
-    parentpath = gtk_tree_path_new_first();
-#endif /* !G_OS_WIN32 */
-
-    for (i = 1; textsplit[i] != NULL; i++)
-    {
-        gboolean valid = gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->directory_model),
-                                                  &iter, parentpath);
-        if (valid)
-        {
-            childpath = Find_Child_Node (self, &iter, textsplit[i]);
-        }
-        else
-        {
-            childpath = NULL;
-        }
-
-        if (childpath == NULL)
-        {
-            // ERROR! Could not find it!
-            gchar *text_utf8 = g_filename_display_name (textsplit[i]);
-            g_critical ("Error: Searching for %s, could not find node %s in tree.",
-                        last_path, text_utf8);
-            g_strfreev(textsplit);
-            g_free(text_utf8);
-            return;
-        }
-        gtk_tree_path_free(parentpath);
-        parentpath = childpath;
-    }
-
-    gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->directory_model), &iter, parentpath);
-    gtk_tree_path_free(parentpath);
-
-    /* Rename the on-screen node */
-    new_basename_utf8 = g_filename_display_basename (new_path);
-    gtk_tree_store_set(priv->directory_model, &iter,
-                       TREE_COLUMN_DIR_NAME,  new_basename_utf8,
-                       TREE_COLUMN_FULL_PATH, new_path,
-                       -1);
-    if (iter == priv->current_file)
-        // Update the variable of the current path
-        et_browser_set_current_path(self, gObject<GFile>(g_file_new_for_path(new_path)).get());
-
-    /* Update fullpath of child nodes */
-    Browser_Tree_Handle_Rename (self, &iter, strlen(last_path), new_path);
-
-    g_strfreev(textsplit);
-    g_free(new_basename_utf8);
-}
-
-/*
- * Browser_Tree_Handle_Rename:
- * @self: an #EtBrowser
- * @parentnode: the parent node in a tree model containing directory paths
- * @old_path: (type filename): the old path, in GLib filename encoding
- * @new_path: (type filename): the new path, in GLib filename encoding
- *
- * Recursive function to update paths of all child nodes.
- */
-static void
-Browser_Tree_Handle_Rename (EtBrowser *self,
-                            GtkTreeIter *parentnode,
-                            gsize path_shift,
-                            const gchar *new_path)
-{
-    EtBrowserPrivate *priv;
-    GtkTreeIter iter;
-
-    priv = et_browser_get_instance_private (self);
-
-    /* If there are no children then nothing needs to be done! */
-    if (!gtk_tree_model_iter_children (GTK_TREE_MODEL (priv->directory_model),
-                                       &iter, parentnode))
-    {
-        return;
-    }
-
-    do
-    {
-        gchar *path;
-        gchar *path_new;
-
-        gtk_tree_model_get(GTK_TREE_MODEL(priv->directory_model), &iter,
-                           TREE_COLUMN_FULL_PATH, &path, -1);
-        if(path == NULL)
-            continue;
-
-        /* Graft the new path onto the old path. */
-        path_new = g_strconcat (new_path, path + path_shift, NULL);
-
-        gtk_tree_store_set(priv->directory_model, &iter,
-                           TREE_COLUMN_FULL_PATH, path_new, -1);
-
-        if (iter == priv->current_file)
-            // Update the variable of the current path
-            et_browser_set_current_path(self, gObject<GFile>(g_file_new_for_path(path_new)).get());
-
-        g_free(path_new);
-        g_free(path);
-
-        /* Recurse if necessary. */
-        if (gtk_tree_model_iter_has_child (GTK_TREE_MODEL (priv->directory_model),
-                                           &iter))
-        {
-            Browser_Tree_Handle_Rename(self, &iter, path_shift, new_path);
-        }
-
-    } while (gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->directory_model), &iter));
-
-}
-
-/*
- * Find the child node of "parentnode" that has text of "childtext
- * Returns NULL on failure
- */
-static GtkTreePath *
-Find_Child_Node (EtBrowser *self, GtkTreeIter *parentnode, gchar *childtext)
-{
-    EtBrowserPrivate *priv;
-    gint row;
-    GtkTreeIter iter;
-    gchar *text;
-    gchar *temp;
-
-    priv = et_browser_get_instance_private (self);
-
-    for (row=0; row < gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->directory_model), parentnode); row++)
-    {
-        if (row == 0)
-        {
-            if (gtk_tree_model_iter_children(GTK_TREE_MODEL(priv->directory_model), &iter, parentnode) == FALSE) return NULL;
-        } else
-        {
-            if (gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->directory_model), &iter) == FALSE)
-                return NULL;
-        }
-        gtk_tree_model_get(GTK_TREE_MODEL(priv->directory_model), &iter,
-                           TREE_COLUMN_FULL_PATH, &temp, -1);
-        text = g_path_get_basename(temp);
-        g_free(temp);
-        if(strcmp(childtext,text) == 0)
-        {
-            g_free(text);
-            return gtk_tree_model_get_path(GTK_TREE_MODEL(priv->directory_model), &iter);
-        }
-        g_free(text);
-
-    }
-
-    return NULL;
-}
-
-/*
- * check_for_subdir:
- * @path: (type filename): the path to test
- *
- * Check if @path has any subdirectories.
- *
- * Returns: %TRUE if subdirectories exist, %FALSE otherwise
- */
-static gboolean check_for_subdir(GFile *dir)
-{
-    gboolean show_hidden = g_settings_get_boolean (MainSettings, "browse-show-hidden");
-
-    GFileEnumerator *enumerator = g_file_enumerate_children (dir,
-        show_hidden ? G_FILE_ATTRIBUTE_STANDARD_TYPE "," G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN : G_FILE_ATTRIBUTE_STANDARD_TYPE,
-        G_FILE_QUERY_INFO_NONE, NULL, NULL);
-
-    if (enumerator)
-    {
-        GFileInfo *childinfo;
-
-        while ((childinfo = g_file_enumerator_next_file (enumerator,
-                                                         NULL, NULL)))
-        {
-            if (g_file_info_get_file_type(childinfo) == G_FILE_TYPE_DIRECTORY
-                && (show_hidden || !g_file_info_get_is_hidden(childinfo)))
-            {
-                g_object_unref (childinfo);
-                g_file_enumerator_close (enumerator, NULL, NULL);
-                g_object_unref (enumerator);
-                return TRUE;
-            }
-
-            g_object_unref (childinfo);
-        }
-
-        g_file_enumerator_close (enumerator, NULL, NULL);
-        g_object_unref (enumerator);
-    }
-
-    return FALSE;
+	const xStringD& new_basename_utf8 = new_basename; // always the same on Windows
+#else
+	xStringD new_basename_utf8(gString(g_filename_display_basename(new_path)).get());
+#endif
+	gtk_tree_store_set(priv->directory_model, &iter,
+		TREE_COLUMN_DISPLAY_NAME, new_basename_utf8.get(),
+		TREE_COLUMN_FILE_NAME, new_basename.get(), -1);
+	if (iter == priv->current_file)
+		// Update the variable of the current path
+		et_browser_set_current_path(self, gObject<GFile>(g_file_new_for_path(new_path)).get());
 }
 
 /*
@@ -2822,7 +3015,11 @@ static const GIcon* get_gicon_for_path(EtBrowser *self, const gchar *path, EtPat
 	}
 	g_object_unref (file);
 
-	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
+	return get_gicon(self, path_state, can_read, can_write);
+}
+
+static const GIcon* get_gicon(EtBrowser *self, EtPathState path_state, bool can_read, bool can_write)
+{	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
 	switch (path_state)
 	{
@@ -2840,211 +3037,6 @@ static const GIcon* get_gicon_for_path(EtBrowser *self, const gchar *path, EtPat
 		g_assert_not_reached();
 		return NULL;
 	}
-}
-
-/*
- * Open up a node on the browser tree
- * Scanning and showing all subdirectories
- */
-static void
-expand_cb (EtBrowser *self, GtkTreeIter *iter, GtkTreePath *gtreePath, GtkTreeView *tree)
-{
-    EtBrowserPrivate *priv;
-    GFile *dir;
-    GFileEnumerator *enumerator;
-    gchar *fullpath_file;
-    gchar *parentPath;
-    gboolean treeScanned;
-    gboolean has_subdir = FALSE;
-    GtkTreeIter currentIter;
-    GtkTreeIter subNodeIter;
-
-    priv = et_browser_get_instance_private (self);
-
-    g_return_if_fail (priv->directory_model != NULL);
-
-    gtk_tree_model_get(GTK_TREE_MODEL(priv->directory_model), iter,
-                       TREE_COLUMN_FULL_PATH, &parentPath,
-                       TREE_COLUMN_SCANNED,   &treeScanned, -1);
-
-    if (treeScanned)
-        return;
-
-    dir = g_file_new_for_path (parentPath);
-    enumerator = g_file_enumerate_children (dir,
-                                            G_FILE_ATTRIBUTE_STANDARD_TYPE ","
-                                            G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME ","
-                                            G_FILE_ATTRIBUTE_STANDARD_NAME ","
-                                            G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN,
-                                            G_FILE_QUERY_INFO_NONE,
-                                            NULL, NULL);
-
-    if (enumerator)
-    {
-        GFileInfo *childinfo;
-
-        while ((childinfo = g_file_enumerator_next_file (enumerator,
-                                                         NULL, NULL))
-               != NULL)
-        {
-            GFile *child;
-            gboolean isdir;
-
-            child = g_file_enumerator_get_child (enumerator, childinfo);
-            fullpath_file = g_file_get_path (child);
-            isdir = g_file_info_get_file_type (childinfo) == G_FILE_TYPE_DIRECTORY;
-
-            if (isdir &&
-                (g_settings_get_boolean (MainSettings, "browse-show-hidden")
-                 || !g_file_info_get_is_hidden (childinfo)))
-            {
-                const gchar *dirname_utf8;
-                dirname_utf8 = g_file_info_get_display_name (childinfo);
-
-                has_subdir = check_for_subdir(child);
-
-                /* Select pixmap according permissions for the directory. */
-                const GIcon* icon = get_gicon_for_path(self, fullpath_file, ET_PATH_STATE_CLOSED);
-
-                gtk_tree_store_insert_with_values (priv->directory_model,
-                                                   &currentIter, iter,
-                                                   G_MAXINT,
-                                                   TREE_COLUMN_DIR_NAME,
-                                                   dirname_utf8,
-                                                   TREE_COLUMN_FULL_PATH,
-                                                   fullpath_file,
-                                                   TREE_COLUMN_HAS_SUBDIR,
-                                                   !has_subdir,
-                                                   TREE_COLUMN_SCANNED, FALSE,
-                                                   TREE_COLUMN_ICON, icon, -1);
-
-                if (has_subdir)
-                {
-                    /* Insert a dummy node. */
-                    gtk_tree_store_append(priv->directory_model, &subNodeIter, &currentIter);
-                }
-            }
-
-            g_free (fullpath_file);
-            g_object_unref (childinfo);
-            g_object_unref (child);
-        }
-
-        g_file_enumerator_close (enumerator, NULL, NULL);
-        g_object_unref (enumerator);
-
-        /* Remove dummy node. */
-        gtk_tree_model_iter_children (GTK_TREE_MODEL (priv->directory_model),
-                                      &subNodeIter, iter);
-        gtk_tree_store_remove (priv->directory_model, &subNodeIter);
-    }
-
-    g_object_unref (dir);
-    const GIcon* icon = get_gicon_for_path(self, parentPath, ET_PATH_STATE_OPEN);
-
-#ifdef G_OS_WIN32
-    // set open folder pixmap except on drive (depth == 0)
-    if (gtk_tree_path_get_depth(gtreePath) > 1)
-    {
-        // update the icon of the node to opened folder :-)
-        gtk_tree_store_set(priv->directory_model, iter,
-                           TREE_COLUMN_SCANNED, TRUE,
-                           TREE_COLUMN_ICON, icon,
-                           -1);
-    }
-#else /* !G_OS_WIN32 */
-    // update the icon of the node to opened folder :-)
-    gtk_tree_store_set(priv->directory_model, iter,
-                       TREE_COLUMN_SCANNED, TRUE,
-                       TREE_COLUMN_ICON, icon,
-                       -1);
-#endif /* !G_OS_WIN32 */
-
-    gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(priv->directory_model),
-                                         TREE_COLUMN_DIR_NAME, GTK_SORT_ASCENDING);
-
-    g_free(parentPath);
-}
-
-static void
-collapse_cb (EtBrowser *self, GtkTreeIter *iter, GtkTreePath *treePath, GtkTreeView *tree)
-{
-    EtBrowserPrivate *priv;
-    GtkTreeIter subNodeIter;
-    gchar *path;
-    GFile *file;
-    GFileInfo *fileinfo;
-    GError *error = NULL;
-
-    priv = et_browser_get_instance_private (self);
-
-    g_return_if_fail (priv->directory_model != NULL);
-
-    gtk_tree_model_get (GTK_TREE_MODEL (priv->directory_model), iter,
-                        TREE_COLUMN_FULL_PATH, &path, -1);
-
-    /* If the directory is not readable, do not delete its children. */
-    file = g_file_new_for_path (path);
-    g_free (path);
-    fileinfo = g_file_query_info (file, G_FILE_ATTRIBUTE_ACCESS_CAN_READ,
-                                  G_FILE_QUERY_INFO_NONE, NULL, &error);
-    g_object_unref (file);
-
-    if (fileinfo)
-    {
-        if (!g_file_info_get_attribute_boolean (fileinfo,
-                                                G_FILE_ATTRIBUTE_ACCESS_CAN_READ))
-        {
-            g_object_unref (fileinfo);
-            return;
-        }
-
-        g_object_unref (fileinfo);
-    }
-
-    gtk_tree_model_iter_children(GTK_TREE_MODEL(priv->directory_model),
-                                 &subNodeIter, iter);
-    while (gtk_tree_model_iter_has_child(GTK_TREE_MODEL(priv->directory_model), iter))
-    {
-        gtk_tree_model_iter_children(GTK_TREE_MODEL(priv->directory_model), &subNodeIter, iter);
-        gtk_tree_store_remove(priv->directory_model, &subNodeIter);
-    }
-
-    gtk_tree_model_get (GTK_TREE_MODEL (priv->directory_model), iter,
-                        TREE_COLUMN_FULL_PATH, &path, -1);
-    const GIcon* icon = get_gicon_for_path(self, path, ET_PATH_STATE_OPEN);
-    g_free (path);
-#ifdef G_OS_WIN32
-    // set closed folder pixmap except on drive (depth == 0)
-    if(gtk_tree_path_get_depth(treePath) > 1)
-    {
-        // update the icon of the node to closed folder :-)
-        gtk_tree_store_set(priv->directory_model, iter,
-                           TREE_COLUMN_SCANNED, FALSE,
-                           TREE_COLUMN_ICON, icon, -1);
-    }
-#else /* !G_OS_WIN32 */
-    // update the icon of the node to closed folder :-)
-    gtk_tree_store_set(priv->directory_model, iter,
-                       TREE_COLUMN_SCANNED, FALSE,
-                       TREE_COLUMN_ICON, icon, -1);
-#endif /* !G_OS_WIN32 */
-
-    /* Insert dummy node only if directory exists. */
-    if (error)
-    {
-        /* Remove the parent (missing) directory from the tree. */
-        if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
-        {
-            gtk_tree_store_remove (priv->directory_model, iter);
-        }
-
-        g_error_free (error);
-    }
-    else
-    {
-        gtk_tree_store_append (priv->directory_model, &subNodeIter, iter);
-    }
 }
 
 static void on_visible_columns_changed(EtBrowser *self, const gchar *key, GSettings *settings)
@@ -3179,7 +3171,7 @@ static void set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkT
 		&& (renderer->Column < ET_SORT_MODE_CREATION_DATE || renderer->Column >= ET_SORT_MODE_REPLAYGAIN)
 		&& text != renderer->RenderText(file, true);
 	if (changed && text.length() == 0)
-		text = "\xe2\x90\xa0"; // ␠ Symbol for Space
+		text = "\xe2\x90\xa0"; // Symbol for Space
 	FileColumnRenderer::SetText(GTK_CELL_RENDERER_TEXT(cell),
 		text.c_str(), file->activate_bg_color, saved ? FileColumnRenderer::NORMAL : changed ? FileColumnRenderer::STRONGHIGHLIGHT : FileColumnRenderer::HIGHLIGHT);
 }
@@ -3187,9 +3179,10 @@ static void set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkT
 /*
  * Create item of the browser (Entry + Tree + List).
  */
-static void
-create_browser (EtBrowser *self)
+static void et_browser_init(EtBrowser *self)
 {
+    gtk_widget_init_template(GTK_WIDGET(self));
+
     EtBrowserPrivate *priv;
     gsize i;
     GtkBuilder *builder;
@@ -3226,7 +3219,8 @@ create_browser (EtBrowser *self)
     }
 
     /* The tree view */
-    Browser_Tree_Initialize (self);
+    priv->DirectoryWorker = new ExpandDirectoryWorker(self);
+    priv->DirectoryWorker->Initialize();
 
     /* Create popup menu on browser tree view. */
     builder = gtk_builder_new_from_resource ("/org/gnome/EasyTAG/menus.ui");
@@ -4158,6 +4152,7 @@ et_run_program_tree_on_response (GtkDialog *dialog, gint response_id,
             g_assert_not_reached ();
     }
 }
+
 /*
  * et_run_program_list_on_response:
  * @dialog: the dialog which emitted the response signal
@@ -4224,6 +4219,10 @@ et_browser_destroy (GtkWidget *widget)
 
     priv = et_browser_get_instance_private (ET_BROWSER (widget));
 
+    // cancel any incomplete jobs.
+    delete priv->DirectoryWorker;
+    priv->DirectoryWorker = nullptr;
+
     /* Save combobox history list before exit. */
     if (priv->entry_model)
     {
@@ -4259,13 +4258,6 @@ et_browser_finalize (GObject *object)
     G_OBJECT_CLASS (et_browser_parent_class)->finalize (object);
 }
 
-static void
-et_browser_init (EtBrowser *self)
-{
-    gtk_widget_init_template (GTK_WIDGET (self));
-    create_browser (self);
-}
-
 static
 void et_browser_class_init (EtBrowserClass *klass)
 {
@@ -4289,8 +4281,8 @@ void et_browser_class_init (EtBrowserClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, artist_view);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, directory_model);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, directory_view);
-    gtk_widget_class_bind_template_callback(widget_class, collapse_cb);
-    gtk_widget_class_bind_template_callback(widget_class, expand_cb);
+    gtk_widget_class_bind_template_callback_full(widget_class, "collapse_cb", G_CALLBACK(&ExpandDirectoryWorker::Collapse));
+    gtk_widget_class_bind_template_callback_full(widget_class, "expand_cb", G_CALLBACK(&ExpandDirectoryWorker::Expand));
     gtk_widget_class_bind_template_callback(widget_class, on_album_tree_button_press_event);
     gtk_widget_class_bind_template_callback(widget_class, on_artist_tree_button_press_event);
     gtk_widget_class_bind_template_callback(widget_class, on_directory_tree_button_press_event);
