@@ -18,19 +18,19 @@
         <file compressed="true" preprocess='xml-stripblanks'>toolbar.ui</file>
         <file compressed="true" preprocess='xml-stripblanks' alias="icons/scalable/actions/artist-album.svg">icons/scalable/artist-album.svg</file>
         <file compressed="true" preprocess='xml-stripblanks' alias="icons/scalable/actions/fingerprint.svg">icons/scalable/fingerprint.svg</file>
-        <file preprocess='to-pixdata'>images/all-lowercase.png</file>
-        <file preprocess='to-pixdata'>images/all-uppercase.png</file>
-        <file preprocess='to-pixdata'>images/artist.png</file>
-        <file preprocess='to-pixdata'>images/first-letter-uppercase.png</file>
-        <file preprocess='to-pixdata'>images/first-letter-uppercase-word.png</file>
-        <file preprocess='to-pixdata'>images/freedb.png</file>
-        <file preprocess='to-pixdata'>images/gnudb.png</file>
-        <file preprocess='to-pixdata'>images/invert-selection.png</file>
-        <file preprocess='to-pixdata'>images/mask.png</file>
-        <file preprocess='to-pixdata'>images/musicbrainz.png</file>
-        <file preprocess='to-pixdata'>images/red-lines.png</file>
-        <file preprocess='to-pixdata'>images/replaygain.png</file>
-        <file preprocess='to-pixdata'>images/sequence-track.png</file>
-        <file preprocess='to-pixdata'>images/unselect-all.png</file>
+        <file>images/all-lowercase.png</file>
+        <file>images/all-uppercase.png</file>
+        <file>images/artist-album.png</file>
+        <file>images/artist.png</file>
+        <file>images/first-letter-uppercase.png</file>
+        <file>images/first-letter-uppercase-word.png</file>
+        <file>images/freedb.png</file>
+        <file>images/gnudb.png</file>
+        <file>images/invert-selection.png</file>
+        <file>images/mask.png</file>
+        <file>images/musicbrainz.png</file>
+        <file>images/red-lines.png</file>
+        <file>images/sequence-track.png</file>
+        <file>images/unselect-all.png</file>
     </gresource>
 </gresources>
