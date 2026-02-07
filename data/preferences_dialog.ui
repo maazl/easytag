@@ -97,27 +97,56 @@
 									</object>
 								</child>
 								<child>
-									<object class="GtkCheckButton" id="browser_subdirs_check">
-										<property name="label" translatable="yes">Browse subdirectories</property>
+									<object class="GtkGrid" id="browser_options_grid">
+										<property name="column-spacing">12</property>
+										<property name="row-spacing">6</property>
 										<property name="margin-left">12</property>
-										<property name="tooltip-text" translatable="yes">Whether to search subdirectories for audio files when reading a directory in the browser</property>
 										<property name="visible">True</property>
-									</object>
-								</child>
-								<child>
-									<object class="GtkCheckButton" id="browser_expand_subdirs_check">
-										<property name="label" translatable="yes">Expand the subdirectories of the selected directory</property>
-										<property name="margin-left">12</property>
-										<property name="tooltip-text" translatable="yes">Whether to expand the subdirectories of a node in the directory browser when selecting it</property>
-										<property name="visible">True</property>
-									</object>
-								</child>
-								<child>
-									<object class="GtkCheckButton" id="browser_hidden_check">
-										<property name="label" translatable="yes">Search hidden directories</property>
-										<property name="margin-left">12</property>
-										<property name="tooltip-text" translatable="yes">Whether to show hidden directories when showing a directory in the browser</property>
-										<property name="visible">True</property>
+										<child>
+											<object class="GtkCheckButton" id="browser_expand_subdirs_check">
+												<property name="label" translatable="yes">Expand the subdirectories of the selected directory</property>
+												<property name="tooltip-text" translatable="yes">Whether to expand the subdirectories of a node in the directory browser when selecting it</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">0</property>
+												<property name="top_attach">0</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="browser_load_single_click_check">
+												<property name="label" translatable="yes">Load the selected path with single click</property>
+												<property name="tooltip-text" translatable="yes">Whether a double click or a single click is used to load a directory from the tree.</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">1</property>
+												<property name="top_attach">0</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="browser_subdirs_check">
+												<property name="label" translatable="yes">Browse subdirectories</property>
+												<property name="tooltip-text" translatable="yes">Whether to search subdirectories for audio files when reading a directory in the browser.
+													This option is also available in the toolbar.</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">0</property>
+												<property name="top_attach">1</property>
+											</packing>
+										</child>
+										<child>
+											<object class="GtkCheckButton" id="browser_hidden_check">
+												<property name="label" translatable="yes">Search hidden directories</property>
+												<property name="tooltip-text" translatable="yes">Whether to show hidden directories when showing a directory in the browser</property>
+												<property name="visible">True</property>
+											</object>
+											<packing>
+												<property name="left_attach">1</property>
+												<property name="top_attach">1</property>
+											</packing>
+										</child>
 									</object>
 								</child>
 								<child>

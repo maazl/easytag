@@ -107,6 +107,7 @@
                                                 <signal name="popup-menu" handler="on_directory_tree_popup_menu"/>
                                                 <signal name="row-collapsed" handler="collapse_cb" swapped="true"/>
                                                 <signal name="row-expanded" handler="expand_cb" swapped="true"/>
+                                                <signal name="row-activated" handler="Browser_Tree_Node_Selected" swapped="true"/>
                                                 <child>
                                                     <object class="GtkTreeViewColumn" id="directory_column">
                                                         <property name="sizing">autosize</property>
@@ -122,11 +123,6 @@
                                                                 <attribute name="text">0</attribute>
                                                             </attributes>
                                                         </child>
-                                                    </object>
-                                                </child>
-                                                <child internal-child="selection">
-                                                    <object class="GtkTreeSelection" id="directory_selection">
-                                                        <signal name="changed" handler="Browser_Tree_Node_Selected" swapped="true"/>
                                                     </object>
                                                 </child>
                                             </object>

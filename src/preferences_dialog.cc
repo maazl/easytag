@@ -44,6 +44,7 @@ typedef struct
     GtkWidget *browser_startup_check;
     GtkWidget *browser_subdirs_check;
     GtkWidget *browser_expand_subdirs_check;
+    GtkWidget *browser_load_single_click_check;
     GtkWidget *browser_hidden_check;
     GtkWidget *browser_max_lines_check;
     GtkWidget *browser_max_lines;
@@ -334,6 +335,8 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
 
     /* Open the node to show subdirectories */
     et_settings_bind_boolean("browse-expand-children", priv->browser_expand_subdirs_check);
+
+    et_settings_bind_boolean("browse-single-click", priv->browser_load_single_click_check);
 
     /* Browse hidden directories */
     et_settings_bind_boolean("browse-show-hidden", priv->browser_hidden_check);
@@ -871,6 +874,7 @@ et_preferences_dialog_class_init (EtPreferencesDialogClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_startup_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_subdirs_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_expand_subdirs_check);
+    gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_load_single_click_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_hidden_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_max_lines_check);
     gtk_widget_class_bind_template_child_private(widget_class, EtPreferencesDialog, browser_max_lines);

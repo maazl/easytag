@@ -1344,8 +1344,6 @@ Browser_Tree_Key_Press (GtkWidget *tree, GdkEvent *event, gpointer data)
 
         switch(kevent->keyval)
         {
-            case GDK_KEY_KP_Enter:    /* Enter key in Num Pad */
-            case GDK_KEY_Return:      /* 'Normal' Enter key */
             case GDK_KEY_t:           /* Expand/Collapse node */
             case GDK_KEY_T:           /* Expand/Collapse node */
                 if(gtk_tree_view_row_expanded(GTK_TREE_VIEW(tree), treePath))
@@ -1465,27 +1463,15 @@ et_browser_set_row_visible (EtBrowser *self, GtkTreeIter *rowIter)
  * Do file-save confirmation, and then prompt the new dir to be loaded
  */
 static void
-Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
+Browser_Tree_Node_Selected (EtBrowser *self, GtkTreePath* path, GtkTreeViewColumn* column, gpointer user_data)
 {
-    EtBrowserPrivate *priv;
+    EtBrowserPrivate *priv = et_browser_get_instance_private (self);
     gchar *parse_name;
     static gboolean first_read = TRUE;
-    GtkTreeIter selectedIter;
-    GtkTreePath *selectedPath;
-
-    priv = et_browser_get_instance_private (self);
-
-    if (!gtk_tree_selection_get_selected(selection, NULL, &selectedIter))
-        return;
-    selectedPath = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->directory_model), &selectedIter);
 
     /* Open the node */
     if (g_settings_get_boolean (MainSettings, "browse-expand-children"))
-    {
-        gtk_tree_view_expand_row (GTK_TREE_VIEW (priv->directory_view),
-                                  selectedPath, FALSE);
-    }
-    gtk_tree_path_free(selectedPath);
+        gtk_tree_view_expand_row(GTK_TREE_VIEW(priv->directory_view), path, FALSE);
 
     if (IsReadingDirectory())
     {	// cancel pending operation
@@ -1496,7 +1482,9 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
     }
 
     /* Browser_Tree_Set_Node_Visible (priv->directory_view, selectedPath); */
-    gString pathName(ExpandDirectoryWorker::GetFullPath(GTK_TREE_MODEL(priv->directory_model), selectedIter));
+    GtkTreeIter iter;
+    gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->directory_model), &iter, path);
+    gString pathName(ExpandDirectoryWorker::GetFullPath(GTK_TREE_MODEL(priv->directory_model), iter));
     if (!pathName)
         return;
 
@@ -1573,28 +1561,20 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreeSelection *selection)
         // So we load the parent node and refresh the children
         if (dir_loaded == FALSE)
         {
-            if (gtk_tree_selection_get_selected(selection, NULL, &selectedIter))
+            /* If the path could not be read, then it is possible that it
+             * has a subdirectory with readable permissions. In that case
+             * do not refresh the children. */
+            if (gtk_tree_model_iter_parent(GTK_TREE_MODEL(priv->directory_model),&parentIter,&iter) )
             {
-                /* If the path could not be read, then it is possible that it
-                 * has a subdirectory with readable permissions. In that case
-                 * do not refresh the children. */
-                if (gtk_tree_model_iter_parent(GTK_TREE_MODEL(priv->directory_model),&parentIter,&selectedIter) )
+                GtkTreePath* selectedPath = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->directory_model), &parentIter);
+                gtk_tree_selection_select_iter(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->directory_view)), &parentIter);
+                if (gtk_tree_model_iter_has_child(GTK_TREE_MODEL(priv->directory_model), &iter) == FALSE
+                    && !g_file_query_exists(file.get(), NULL))
                 {
-                    selectedPath = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->directory_model), &parentIter);
-                    gtk_tree_selection_select_iter (selection, &parentIter);
-                    if (gtk_tree_model_iter_has_child(GTK_TREE_MODEL(priv->directory_model), &selectedIter) == FALSE
-                        && !g_file_query_exists(file.get(), NULL))
-                    {
-                        gtk_tree_view_collapse_row (GTK_TREE_VIEW (priv->directory_view),
-                                                    selectedPath);
-                        if (g_settings_get_boolean (MainSettings,
-                                                    "browse-expand-children"))
-                        {
-                            gtk_tree_view_expand_row (GTK_TREE_VIEW (priv->directory_view),
-                                                      selectedPath, FALSE);
-                        }
-                        gtk_tree_path_free (selectedPath);
-                    }
+                    gtk_tree_view_collapse_row(GTK_TREE_VIEW(priv->directory_view), selectedPath);
+                    if (g_settings_get_boolean(MainSettings, "browse-expand-children"))
+                        gtk_tree_view_expand_row(GTK_TREE_VIEW(priv->directory_view), selectedPath, FALSE);
+                    gtk_tree_path_free (selectedPath);
                 }
             }
         }
@@ -3230,6 +3210,7 @@ static void et_browser_init(EtBrowser *self)
     priv->directory_view_menu = gtk_menu_new_from_model (menu_model);
     gtk_menu_attach_to_widget (GTK_MENU (priv->directory_view_menu), priv->directory_view, NULL);
     g_signal_connect_swapped(priv->directory_view_menu, "hide", G_CALLBACK(on_popup_closed), priv->directory_view);
+    g_settings_bind(MainSettings, "browse-single-click", priv->directory_view, "activate-on-single-click", G_SETTINGS_BIND_DEFAULT);
 
     /* The ScrollWindows with the Artist and Album Lists. */
     priv->artist_selected_handler = g_signal_connect_swapped(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->artist_view)),

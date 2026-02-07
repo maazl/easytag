@@ -14,6 +14,12 @@
       <default>b''</default>
     </key>
 
+    <key name="browse-single-click" type="b">
+      <summary>Load path with single click</summary>
+      <description>Whether a double click or a single click is used to load a directory from the tree.</description>
+      <default>true</default>
+    </key>
+
     <key name="browse-subdir" type="b">
       <summary>Browse subdirectories</summary>
       <description>Whether to search subdirectories for audio files when reading a directory in the browser</description>
