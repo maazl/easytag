@@ -43,8 +43,8 @@ public:
     virtual TagLib::FileName name () const;
     virtual bool isOpen () const;
     virtual void clear ();
-    virtual void seek (long int offset, TagLib::IOStream::Position p = TagLib::IOStream::Beginning);
-    virtual long int tell () const;
+    virtual void seek (offset_t offset, TagLib::IOStream::Position p = TagLib::IOStream::Beginning);
+    virtual offset_t tell () const;
 
     virtual const GError *getError() const;
 
@@ -68,8 +68,8 @@ public:
     virtual void insert (TagLib::ByteVector const &data, offset_t start = 0, size_t replace = 0);
     virtual void removeBlock (offset_t start = 0, size_t length = 0);
     virtual bool readOnly () const;
-    virtual long int length ();
-    virtual void truncate (long int length);
+    virtual offset_t length ();
+    virtual void truncate (offset_t length);
 
 private:
     GFileInputStream *stream; // owned by base class (seekable)
@@ -84,8 +84,8 @@ public:
     virtual void insert (TagLib::ByteVector const &data, offset_t start = 0, size_t replace = 0);
     virtual void removeBlock (offset_t start = 0, size_t length = 0);
     virtual bool readOnly () const;
-    virtual long int length ();
-    virtual void truncate (long int length);
+    virtual offset_t length ();
+    virtual void truncate (offset_t length);
 
 private:
     GFileIOStream *stream; // owned by base class (seekable)

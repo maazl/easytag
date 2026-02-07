@@ -59,7 +59,7 @@ GIO_Stream::clear ()
 }
 
 void
-GIO_Stream::seek (long int offset, TagLib::IOStream::Position p)
+GIO_Stream::seek (offset_t offset, TagLib::IOStream::Position p)
 {
     if (error)
         return;
@@ -85,7 +85,7 @@ GIO_Stream::seek (long int offset, TagLib::IOStream::Position p)
     g_seekable_seek (seekable, offset, type, NULL, &error);
 }
 
-long int
+GIO_Stream::offset_t
 GIO_Stream::tell () const
 {
     return g_seekable_tell (seekable);
@@ -147,7 +147,7 @@ GIO_InputStream::readOnly () const
     return true;
 }
 
-long int
+GIO_Stream::offset_t
 GIO_InputStream::length ()
 {
     if (error)
@@ -167,7 +167,7 @@ GIO_InputStream::length ()
 }
 
 void
-GIO_InputStream::truncate (long int len)
+GIO_InputStream::truncate (offset_t len)
 {
     g_warning ("%s", "Trying to truncate read-only file");
 }
@@ -256,7 +256,7 @@ GIO_IOStream::insert (TagLib::ByteVector const &data,
     seek (0);
 
     while (g_input_stream_read_all (istream, buffer,
-                                    MIN (G_N_ELEMENTS (buffer), start),
+                                    MIN ((offset_t)G_N_ELEMENTS(buffer), start),
                                     &r, NULL, &error) && r > 0)
     {
         gsize w;
@@ -395,7 +395,7 @@ GIO_IOStream::length ()
 }
 
 void
-GIO_IOStream::truncate (long int len)
+GIO_IOStream::truncate (offset_t len)
 {
     if (error)
     {
