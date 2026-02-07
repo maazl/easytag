@@ -42,6 +42,7 @@ mostlyclean-am: clean-gsettings-schemas
 gsettings__enum_file = $(addsuffix .enums.xml,$(gsettings_ENUM_NAMESPACE))
 
 share/glib-2.0/schemas/gschemas.compiled: $(gsettings_SCHEMAS) $(gsettings__enum_file)
+	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN) $(GLIB_COMPILE_SCHEMAS) $(addprefix --targetdir=, $(@D)) $(addprefix --schema-file=,$(gsettings__enum_file)) --schema-file=$<
 
 all-am: share/glib-2.0/schemas/gschemas.compiled
