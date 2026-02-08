@@ -1,4 +1,4 @@
-3.0.0 - 2025-07-27 :
+3.0.0 - 2026-02-07 :
 ====================
 
     * Add support for RelpayGain tags including calculation
@@ -14,13 +14,13 @@
     * Allow multi line comments
     * Support Ogg version tag
     * Added column with file path in browser
+    * Add columns with file information (size, bitrate, duration ...)
     * Option to hide unused fields
     * Option to hide columns
     * Option to select all files with some common property (not just album)
       by double click in browser
     * Use current sort order as base for zebra background
     * Highlight changes in browser window
-    * Add columns with file information (size, bitrate, duration ...)
     * Removed case sensitive sorting (buggy and slow)
     * Save memory (deduplicate tag and image data)
     * Optionally use similar Unicode replacement characters for reserved

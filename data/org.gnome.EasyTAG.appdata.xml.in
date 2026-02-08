@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2014 David King <amigadave@amigadave.com> -->
+<!-- Copyright 2026 Marcel Müller <github@maazl.de> -->
 <component type="desktop">
     <id>org.gnome.EasyTAG.desktop</id>
     <metadata_license>CC0-1.0</metadata_license>
@@ -8,28 +9,34 @@
 <!-- Name and summary taken from the desktop file. -->
     <_name>EasyTAG</_name>
     <_summary>Edit audio file metadata</_summary>
+    <developer_name>The EasyTAG developers</developer_name>
     <description>
         <_p>View and edit tags for MP3, MP2, MP4/AAC, FLAC, Ogg Opus, Ogg
-        Speex, Ogg Vorbis, MusePack, Monkey's Audio and WavPack files.</_p>
+        Speex, Ogg Vorbis, Windows Media, MusePack, Monkey's Audio and WavPack files.</_p>
         <_p>Look up albums in online databases, bulk edit tags, create
         playlists and rename a collection of files.</_p>
         <_p>A simple and nice GTK+ interface makes tagging easier under
         GNU/Linux and Windows.</_p>
     </description>
-    <url type="homepage">https://wiki.gnome.org/Apps/EasyTAG</url>
-    <url type="bugtracker">https://gitlab.gnome.org/GNOME/easytag/-/issues/</url>
-    <url type="help">https://help.gnome.org/users/easytag/stable/</url>
+    <!--url type="homepage">https://github.com/maazl/easytag</url-->
+    <url type="bugtracker">https://github.com/maazl/easytag/issues</url>
+    <!--url type="help">https://help.gnome.org/users/easytag/stable/</url-->
     <url type="translate">https://l10n.gnome.org/module/easytag/</url>
-    <url type="vcs-browser">https://gitlab.gnome.org/GNOME/easytag</url>
+    <url type="vcs-browser">https://github.com/maazl/easytag</url>
+    <launchable type="desktop-id">org.gnome.EasyTAG.desktop</launchable>
     <screenshots>
         <screenshot type="default">
-            <image>https://amigadave.com/temp/easytag-default.png</image>
+            <image>https://github.com/maazl/org.gnome.EasyTAG/blob/master/screenshots/default.png?raw=true</image>
         </screenshot>
     </screenshots>
     <kudos>
         <kudo>AppMenu</kudo>
         <kudo>ModernToolkit</kudo>
     </kudos>
-    <update_contact>amigadave@amigadave.com</update_contact>
+    <content_rating type="oars-1.1"/>
+    <releases>
+        <release version="3.0.0" date="2026-02-08"/>
+    </releases>
+    <update_contact>github@maazl.de</update_contact>
     <translation type="gettext">easytag</translation>
 </component>
