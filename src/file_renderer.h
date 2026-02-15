@@ -35,6 +35,7 @@ public:
 	enum Highlight : char
 	{	NORMAL,
 		HIGHLIGHT,
+		STRONG,
 		STRONGHIGHLIGHT
 	};
 	const EtSortMode Column;

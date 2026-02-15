@@ -43,12 +43,13 @@ FileColumnRenderer::FileColumnRenderer(EtSortMode col) : Column(col)
 }
 
 void FileColumnRenderer::SetText(GtkCellRendererText* renderer, const gchar* text, bool zebra, Highlight highlight)
-{
-	gboolean bold = g_settings_get_boolean (MainSettings, "file-changed-bold");
+{	int inv = highlight ^ STRONGHIGHLIGHT;
+	if (highlight && inv && g_settings_get_boolean(MainSettings, "file-changed-bold"))
+		highlight = (Highlight)inv;
 	g_object_set(renderer,
 		"text", text,
-		"weight", (int)highlight > !bold ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL,
-		"foreground-rgba", (int)highlight > bold ? &RED : NULL,
+		"weight", highlight & STRONG ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL,
+		"foreground-rgba", highlight & HIGHLIGHT ? &RED : NULL,
 		"background-rgba", zebra ? &ZebraColor : NULL,
 		NULL);
 }

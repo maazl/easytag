@@ -219,7 +219,7 @@ static void set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkT
 	auto renderer = (const FileColumnRenderer*)data;
 	string text = renderer->RenderText(file);
 	FileColumnRenderer::SetText(GTK_CELL_RENDERER_TEXT(cell),
-		text.c_str(), false, flags & (1 << renderer->Column) ? FileColumnRenderer::HIGHLIGHT : FileColumnRenderer::NORMAL);
+		text.c_str(), false, flags & (1 << renderer->Column) ? FileColumnRenderer::STRONG : FileColumnRenderer::NORMAL);
 }
 
 /*
