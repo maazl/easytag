@@ -304,7 +304,7 @@ Using this option takes the first release of a recording as year tag. The releas
     <key name="id3v2-crc32" type="b">
       <summary>Use CRC-32 in ID3v2 tags</summary>
       <description>Whether to embed a CRC-32 checksum of the audio file data in ID3v2 tags</description>
-      <default>true</default>
+      <default>false</default>
     </key>
 
     <key name="id3v2-text-only-genre" type="b">
