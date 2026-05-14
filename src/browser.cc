@@ -606,16 +606,17 @@ int ExpandDirectoryWorker::IsSubDir(const gchar* path1, const gchar* path2)
 void ExpandDirectoryWorker::HandleExpand(EtBrowserPrivate* priv, GtkTreeIter& iter, bool load)
 {
 	GtkTreePath* treePath = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->directory_model), &iter);
-	gtk_tree_view_expand_to_path(GTK_TREE_VIEW(priv->directory_view), treePath);
+	GtkTreeView* treeView = GTK_TREE_VIEW(priv->directory_view);
+	gtk_tree_view_expand_to_path(treeView, treePath);
 
-	if (!load)
-		return;
-
-	// exact match => no more subdir to expand
-	// load the directory instead
-	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(priv->directory_view), treePath, NULL, TRUE, 0.5, 0.0);
-	/* Select the node to load the corresponding directory. */
-	gtk_tree_selection_select_path(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->directory_view)), treePath);
+	if (load)
+	{	// exact match => no more subdir to expand
+		// load the directory instead
+		gtk_tree_view_scroll_to_cell(treeView, treePath, NULL, TRUE, 0.5, 0.0);
+		// Select the node and load the corresponding directory.
+		gtk_tree_selection_select_path(gtk_tree_view_get_selection(treeView), treePath);
+		gtk_tree_view_row_activated(treeView, treePath, NULL);
+	}
 	gtk_tree_path_free(treePath);
 }
 
