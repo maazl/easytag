@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2024  Marcel Müller
+ * Copyright (C) 2024-2026  Marcel Müller
  * Copyright (C) 2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -28,6 +28,37 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
+
+
+UpdateDirectoyNameArgs::UpdateDirectoyNameArgs(const gchar *old_path, const gchar *new_path, const gchar* root)
+:	OldPathRelUTF8(nullptr)
+,	NewPathRelUTF8(nullptr)
+, RelationToCurrentRoot(et_is_path_related(old_path, root))
+{
+	size_t path_len = strlen(old_path);
+	if (path_len && G_IS_DIR_SEPARATOR(old_path[path_len - 1]))
+		--path_len;
+	OldPath = g_strndup(old_path, path_len);
+	OldPathUTF8 = g_utf8_normalize(gString(g_filename_display_name(OldPath)), -1, G_NORMALIZE_NFC);
+
+	path_len = strlen(new_path);
+	if (path_len && G_IS_DIR_SEPARATOR(new_path[path_len - 1]))
+		--path_len;
+	NewPath = g_strndup(new_path, path_len);
+	NewPathUTF8 = g_utf8_normalize(gString(g_filename_display_name(NewPath)), -1, G_NORMALIZE_NFC);
+
+	if (!et_str_empty(root))
+	{	gString rootUTF8(g_utf8_normalize(gString(g_filename_display_name(root)), -1, G_NORMALIZE_NFC));
+		path_len = strlen(rootUTF8);
+		if (path_len && G_IS_DIR_SEPARATOR(rootUTF8[path_len - 1]))
+			--path_len;
+		if (strncmp(OldPathUTF8, rootUTF8, path_len) == 0 && G_IS_DIR_SEPARATOR(OldPathUTF8[path_len]))
+			OldPathRelUTF8 = OldPathUTF8 + path_len + 1;
+		if (strncmp(NewPathUTF8, rootUTF8, path_len) == 0 && G_IS_DIR_SEPARATOR(NewPathUTF8[path_len]))
+			NewPathRelUTF8 = NewPathUTF8 + path_len + 1;
+	}
+}
+
 
 /* FAT has additional restrictions on the last character of a filename.
  * https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247%28v=vs.85%29.aspx#naming_conventions */
@@ -331,6 +362,19 @@ File_Name::File_Name(const char* filename)
 	}
 }
 
+gString File_Name::full_name() const
+{	if (Path.empty())
+		return gString(g_strdup(File));
+	return gString(g_strconcat(Path, G_DIR_SEPARATOR_S, File.get(), NULL));
+}
+
+bool File_Name::update_directory_name(const UpdateDirectoyNameArgs& args)
+{	if (!args.OldPathRelUTF8 || !(et_is_path_related(Path, args.OldPathRelUTF8) & PATH_SUBDIR))
+		return false;
+	Path = gString(g_strconcat(args.NewPathRelUTF8, Path.get() + strlen(args.OldPathRelUTF8), NULL)).get();
+	return true;
+}
+
 gString File_Name::generate_name(const char* new_filepath, bool keep_path) const
 {	// keep extension
 	gString np(g_strconcat(new_filepath, ET_Get_File_Extension(File.get()), NULL));
@@ -340,12 +384,6 @@ gString File_Name::generate_name(const char* new_filepath, bool keep_path) const
 	// else: Just add the extension.
 
 	return np;
-}
-
-gString File_Name::full_name() const
-{	if (Path.empty())
-		return gString(g_strdup(File));
-	return gString(g_strconcat(Path, G_DIR_SEPARATOR_S, File.get(), NULL));
 }
 
 /* Convert filename extension (lower/upper/no change). */

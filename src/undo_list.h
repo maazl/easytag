@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2024  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2024-2026  Marcel Müller <github@maazl.de>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -19,16 +19,17 @@
 #ifndef ET_UNDO_LIST_H_
 #define ET_UNDO_LIST_H_
 
-/// List of versions of a item
-template <typename T>
-class UndoList
+#include <functional>
+
+/// Type erasure part of UndoList
+class UndoListBase
 {
 public:
 	class Intrusive
-	{	T* Next;
-		T* Prev;
+	{	Intrusive* Next;
+		Intrusive* Prev;
 		unsigned UndoKey;
-		friend struct UndoList;
+		friend class UndoListBase;
 	protected:
 		constexpr Intrusive() noexcept : Next(nullptr), Prev(nullptr), UndoKey(0) {}
 		constexpr Intrusive(const Intrusive&) noexcept : Intrusive() {}
@@ -36,80 +37,45 @@ public:
 		{	r.Prev = nullptr; r.Next = nullptr; }
 	};
 
-	T* Cur;
-	T* New;
+protected:
+	Intrusive* Cur;
+	Intrusive* New;
+
+	constexpr UndoListBase() noexcept : Cur(nullptr), New(nullptr) {}
+	UndoListBase(const UndoListBase&) = delete;
+	void operator=(const UndoListBase&) = delete;
+
+	void add(Intrusive* item, unsigned undo_key, void (*del)(Intrusive*));
+	void foreach(std::function<void(Intrusive*)> func) const;
 
 public:
-	constexpr UndoList() noexcept : Cur(nullptr), New(nullptr) {}
-	UndoList(const UndoList&) = delete;
-	~UndoList();
-	void operator=(const UndoList&) = delete;
+	bool mark_saved() noexcept;
+	bool is_saved() const noexcept { return Cur == New; }
 
-	void add(T* item, unsigned undo_key);
-	bool is_saved() const { return Cur == New; }
-	bool mark_saved();
+	unsigned undo_key() const noexcept { return New && New->Prev ? New->UndoKey : 0; }
+	unsigned redo_key() const noexcept { return New && New->Next ? New->Next->UndoKey : 0; }
 
-	unsigned undo_key() const { return New && New->Prev ? New->UndoKey : 0; }
-	unsigned redo_key() const { return New && New->Next ? New->Next->UndoKey : 0; }
-
-	bool undo() { if (!New || !New->Prev) return false; New = New->Prev; return true; }
-	bool redo() { if (!New || !New->Next) return false; New = New->Next; return true; }
+	bool undo() noexcept { if (!New || !New->Prev) return false; New = New->Prev; return true; }
+	bool redo() noexcept { if (!New || !New->Next) return false; New = New->Next; return true; }
 };
 
+/// List of versions of a item
+/// @remarks This specialization adds type safety
+/// and removes the need for the destructor of Intrusive to be virtual.
 template <typename T>
-UndoList<T>::~UndoList()
-{	if (Cur && !Cur->Prev && !Cur->Next)
-	{	delete Cur; // delete orphaned current item left by add when cutting list.
-		if (Cur == New)
-			return;
-	} else if (!New)
-		return;
-	T* i = New->Next;
-	while (i)
-	{	T* n = i->Next;
-		delete i;
-		i = n;
-	}
-	i = New->Prev;
-	while (i)
-	{	T* n = i->Prev;
-		delete i;
-		i = n;
-	}
-	delete New;
-}
+class UndoList : public UndoListBase
+{	typedef UndoListBase base;
 
-template <typename T>
-void UndoList<T>::add(T* item, unsigned undo_key)
-{	// Initial call?
-	if (New)
-	{	item->UndoKey = undo_key;
-		/* How it works : Cut the list after the current item, then append the new item to the list.
-		 * The cut items are discarded unless they are referenced by the current (saved) state. */
-		T* cut_list = New->Next;
-		while (cut_list)
-		{	T* n = cut_list->Next;
-			if (cut_list != Cur)
-				delete cut_list;
-			else
-				cut_list->Prev = cut_list->Next = nullptr;
-			cut_list = n;
-		}
+	static void delete_item(Intrusive* i) { delete (T*)i; }
+public:
+	T* Cur() const noexcept { return (T*)base::Cur; }
+	T* New() const noexcept { return (T*)base::New; }
 
-		item->Prev = New;
-		New->Next = item;
-	}
-	New = item;
-}
+public:
+	void foreach(std::function<void(T*)> func) const { base::foreach([func](Intrusive* i) { func((T*)i); }); }
+	~UndoList() {	base::foreach(&delete_item); }
 
-template <typename T>
-bool UndoList<T>::mark_saved()
-{	if (Cur == New)
-		return false;
-	if (Cur && !Cur->Prev && !Cur->Next)
-		delete Cur; // delete orphaned current item left by add when cutting list.
-	Cur = New;
-	return true;
-}
+	void add(T* item, unsigned undo_key) { base::add(item, undo_key, &delete_item); }
+};
 
 #endif

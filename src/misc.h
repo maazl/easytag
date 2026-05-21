@@ -1,5 +1,5 @@
 /* EasyTAG - Tag editor for audio files
- * Copyright (C) 2024-2025  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2024-2026  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014-2015  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -74,6 +74,7 @@ class gObject
 {	T* Ptr;
 public:
 	constexpr T* release() noexcept { T* ptr = Ptr; Ptr = nullptr; return ptr; }
+	void swap(gObject<T>& r) { std::swap(Ptr, r.Ptr); }
 	constexpr gObject(nullptr_t = nullptr) noexcept : Ptr(nullptr) {}
 	constexpr explicit gObject(T* ptr) noexcept : Ptr(ptr) {}
 	gObject(const gObject<T>& r) : Ptr(r.Ptr) { g_object_ref(Ptr); }
@@ -82,6 +83,7 @@ public:
 	constexpr explicit operator bool() const noexcept { return Ptr != nullptr; }
 	constexpr T* get() const noexcept { return Ptr; }
 	void reset() noexcept { this->~gObject(); Ptr = nullptr; }
+	void reset(T* ptr) noexcept { gObject(ptr).swap(*this); }
 	gObject<T>& operator=(const gObject<T>& r) { if (Ptr != r.Ptr) { this->~gObject(); g_object_ref(Ptr = r.Ptr); } return *this; }
 	constexpr gObject<T>& operator=(gObject<T>&& r) noexcept { T* tmp = Ptr; Ptr = r.Ptr; r.Ptr = tmp; return *this; }
 };
@@ -224,6 +226,23 @@ inline void et_tree_store_remove_children(GtkTreeStore* model, GtkTreeIter* star
 
 
 gboolean et_rename_file (const gchar *old_filename, const gchar *new_filename, GError **error);
+
+/// Return value of path relation comparison.
+/// @remarks The enum values allow checks for 'is sub/super dir or equal'
+/// by bitwise operations: &amp; PATH_SUBDIR is true when sub directory or equal,
+/// &amp; PATH_SUPERDIR is true when super directory or equal.
+enum PathRel : char
+{	PATH_UNRELATED = 0, ///< The compared directories are unrelated.
+	PATH_SUBDIR = 1,    ///< The first directory is a sub directory of the second.
+	PATH_SUPERDIR = 2,  ///< The second directory is a sub directory of the first.
+	PATH_EQUAL = 3      ///< The directories are identical.
+};
+/// Check whether two paths are related.
+/// @return Relation of the path arguments, see \ref PathRel.
+/// @remarks The paths should be absolute and in file system representation.
+/// However it should work for \e normalized UTF-8 as well.
+/// The function takes care of case insensitivity on Win32.
+PathRel et_is_path_related(const gchar* path1, const gchar* path2);
 
 /*// Compare two paths.
 /// @remarks The paths should be absolute and in file system representation.

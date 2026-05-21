@@ -30,6 +30,7 @@
 
 struct File_Name;
 enum EtBrowserMode : int;
+struct UpdateDirectoyNameArgs;
 
 class ET_FileList
 {
@@ -160,11 +161,10 @@ public:
 	/// Returns: \c true if all files have been saved, \c false otherwise.
 	static bool check_all_saved();
 
-	/// Update path of file names after directory rename
-	/// @param file_list this pointer
-	/// @param old_path Old <em>relative</em> path with respect to current root.
-	/// @param new_path New <em>relative</em> path with respect to current root.
-	static void update_directory_name(const gchar *old_path, const gchar *new_path);
+	/// Notify about a directory rename operation.
+	/// @returns \c true if the operation caused a change.
+	/// @remarks This is basically a find and replace operation.
+	static void update_directory_name(const UpdateDirectoyNameArgs& args);
 	/// Remove a file from the list.
 	static void remove_file(ET_File *etfile);
 };

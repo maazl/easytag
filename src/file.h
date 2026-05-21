@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2022-2025  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2022-2026  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014,2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -114,14 +114,14 @@ public:
 #endif
 
 	/// Currently saved file name
-	const File_Name* FileNameCur() const { return FileName.Cur; }
+	const File_Name* FileNameCur() const { return FileName.Cur(); }
 	/// Current, possibly unsaved file name
-	const File_Name* FileNameNew() const { return FileName.New; }
+	const File_Name* FileNameNew() const { return FileName.New(); }
 
 	/// Currently saved tag data
-	const File_Tag* FileTagCur() const { return FileTag.Cur; }
+	const File_Tag* FileTagCur() const { return FileTag.Cur(); }
 	/// Current, possibly unsaved tag data
-	const File_Tag* FileTagNew() const { return FileTag.New; }
+	const File_Tag* FileTagNew() const { return FileTag.New(); }
 
 	bool read_file(GFile *file, const gchar *root, GError **error);
 
@@ -177,22 +177,9 @@ public:
 	gboolean save_file_tag(GError **error);
 	gboolean rename_file(GError **error);
 
-	struct UpdateDirectoyNameArgs
-	{	gString OldPath; ///< Old name in file system encoding
-		gString NewPath; ///< New name in file system encoding
-		gString OldPathUTF8; ///< Old name as normalized UTF-8
-		gString NewPathUTF8; ///< New name as normalized UTF-8
-		const char* OldPathRelUTF8; ///< Old name relative to root as UTF-8 if applicable
-		const char* NewPathRelUTF8; ///< New name relative to root as UTF-8 if applicable
-		/// @param old_path Absolute path of the previous directory name in file system encoding.
-		/// @param new_path Absolute path of the new directory name in file system encoding.
-		/// @param root Current root path if any.
-		UpdateDirectoyNameArgs(const gchar *old_path, const gchar *new_path, const gchar* root);
-	};
 	/// Notify about a directory rename operation.
 	/// @returns \c true if the operation caused a change.
 	/// @remarks This is basically a find and replace operation.
-	/// But only persisted file names are updated. Unsaved matches are ignored.
 	bool update_directory_name(const UpdateDirectoyNameArgs& args);
 
 	static gint (*get_comp_func(EtSortMode sort_order, gboolean desc))(const ET_File *ETFile1, const ET_File *ETFile2);

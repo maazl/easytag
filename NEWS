@@ -1,3 +1,9 @@
+3.0.1 - 2026-05-15 :
+====================
+
+    * Fix loading directories on selection.
+    * Fix directory rename.
+
 3.0.0 - 2026-02-07 :
 ====================
 

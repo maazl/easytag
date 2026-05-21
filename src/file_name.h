@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2024-2025  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2024-2026  Marcel Müller <github@maazl.de>
  * Copyright (C) 2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -28,6 +28,20 @@
 #include "xstring.h"
 #include <string>
 
+struct UpdateDirectoyNameArgs
+{	gString OldPath; ///< Old name in file system encoding
+	gString NewPath; ///< New name in file system encoding
+	gString OldPathUTF8; ///< Old name as normalized UTF-8
+	gString NewPathUTF8; ///< New name as normalized UTF-8
+	const char* OldPathRelUTF8; ///< Old name relative to root as UTF-8 if applicable
+	const char* NewPathRelUTF8; ///< New name relative to root as UTF-8 if applicable
+	PathRel RelationToCurrentRoot; ///< How is the renamed directory related to the currently loaded root.
+	/// @param old_path Absolute path of the previous directory name in file system encoding.
+	/// @param new_path Absolute path of the new directory name in file system encoding.
+	/// @param root Current root path if any.
+	UpdateDirectoyNameArgs(const gchar *old_path, const gchar *new_path, const gchar* root);
+};
+
 /**
  * Item of the FileNameList list, all UTF-8.
  */
@@ -54,6 +68,11 @@ public:
 	const xStringD0& file() const { return File; }
 	/// Get file name with relative path (UTF-8).
 	gString full_name() const;
+
+	/// Notify about a directory rename operation.
+	/// @returns \c true if the operation caused a change.
+	/// @remarks This is basically a find and replace operation.
+	bool update_directory_name(const UpdateDirectoyNameArgs& args);
 
 	/// Create new file path by applying a new path and file name.
 	/// @param new_filepath new UTF-8 file name <em>w/o extension</em> and path to apply to \a current.

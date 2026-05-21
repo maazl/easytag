@@ -370,7 +370,7 @@ EtPicture::EtPicture(GFile *file, GError **error)
         size = 60000;
     {
         gchar *buffer = (gchar*)g_malloc (size);
-        ostream = gObject<GOutputStream>(g_memory_output_stream_new(buffer, size, g_realloc, g_free));
+        ostream.reset(g_memory_output_stream_new(buffer, size, g_realloc, g_free));
         g_seekable_seek(G_SEEKABLE(ostream.get()), offsetof(Data, Bytes), G_SEEK_SET, NULL, NULL);
     }
 

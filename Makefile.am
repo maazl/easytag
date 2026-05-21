@@ -96,6 +96,7 @@ easytag_SOURCES = \
 	src/tags/wavpack_private.c \
 	src/tags/wavpack_tag.cc \
 	src/win32/win32dep.c \
+	src/undo_list.cc \
 	src/xlist.cc \
 	src/xptr.cc \
 	src/xstring.cc

@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2022-2025  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2022-2026  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014,2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -508,7 +508,7 @@ gboolean ET_File::save_file_tag(GError **error)
         state = (*ETFileDescription->write_file_tag)(this, error);
     else
         Log_Print (LOG_ERROR, "Saving unsupported for %s (%s).",
-            ETFileDescription->FileType, FileName.Cur->full_name().get());
+            ETFileDescription->FileType, FileName.Cur()->full_name().get());
 
     /* Update properties for the file. */
     if (fileinfo)
@@ -561,7 +561,7 @@ gboolean ET_File::save_file_tag(GError **error)
 gboolean ET_File::rename_file(GError **error)
 {
 	// Make absolute path of the file in file system notation.
-	gString raw_name(filename_from_display(FileName.New->full_name().get()));
+	gString raw_name(filename_from_display(FileName.New()->full_name().get()));
 	raw_name = g_canonicalize_filename(raw_name.get(),
 		et_application_window_get_current_path_name(MainWindow));
 
@@ -639,7 +639,7 @@ bool ET_File::apply_changes(File_Name *fileName, File_Tag *fileTag)
 	/*
 	 * Detect changes of filename and generate the filename undo list
 	 */
-	if (fileName && FileName.New && *FileName.New == *fileName)
+	if (fileName && FileName.New() && *FileName.New() == *fileName)
 	{	delete fileName;
 		fileName = nullptr;
 	}
@@ -647,7 +647,7 @@ bool ET_File::apply_changes(File_Name *fileName, File_Tag *fileTag)
 	/*
 	 * Detect changes in tag data and generate the tag undo list
 	 */
-	if (fileTag && FileTag.New && *FileTag.New == *fileTag)
+	if (fileTag && FileTag.New() && *FileTag.New() == *fileTag)
 	{	delete fileTag;
 		fileTag = nullptr;
 	}
@@ -659,7 +659,7 @@ bool ET_File::apply_changes(File_Name *fileName, File_Tag *fileTag)
 	 * Generate main undo (file history of modifications)
 	 */
 	guint undo_key = 0;
-	if ((fileName && FileName.New) || (fileTag && FileTag.New))
+	if ((fileName && FileName.New()) || (fileTag && FileTag.New()))
 		undo_key = ++ETUndoKey;
 	if (fileName)
 		FileName.add(fileName, undo_key);
@@ -740,52 +740,17 @@ ET_File* ET_File::global_redo()
 	return ETFile;
 }
 
-ET_File::UpdateDirectoyNameArgs::UpdateDirectoyNameArgs(const gchar *old_path, const gchar *new_path, const gchar* root)
-:	OldPathRelUTF8(nullptr)
-,	NewPathRelUTF8(nullptr)
-{
-	size_t path_len = strlen(old_path);
-	if (path_len && G_IS_DIR_SEPARATOR(old_path[path_len - 1]))
-		--path_len;
-	OldPath = g_strndup(old_path, path_len);
-	OldPathUTF8 = g_filename_display_name(OldPath);
-
-	path_len = strlen(new_path);
-	if (path_len && G_IS_DIR_SEPARATOR(new_path[path_len - 1]))
-		--path_len;
-	NewPath = g_strndup(new_path, path_len);
-	NewPathUTF8 = g_filename_display_name(NewPath);
-
-	if (!et_str_empty(root))
-	{	gString rootUTF8(g_filename_display_name(root));
-		path_len = strlen(rootUTF8);
-		if (path_len && G_IS_DIR_SEPARATOR(rootUTF8[path_len - 1]))
-			--path_len;
-		if (strncmp(OldPathUTF8, rootUTF8, path_len) == 0 && G_IS_DIR_SEPARATOR(OldPathUTF8[path_len]))
-			OldPathRelUTF8 = OldPathUTF8 + path_len + 1;
-		if (strncmp(NewPathUTF8, rootUTF8, path_len) == 0 && G_IS_DIR_SEPARATOR(NewPathUTF8[path_len]))
-			NewPathRelUTF8 = NewPathUTF8 + path_len + 1;
-	}
-}
-
 bool ET_File::update_directory_name(const UpdateDirectoyNameArgs& args)
-{
-	return false;
+{	bool changed = false;
 
-  /*TODO: for (gListP<File_Name*> filenamelist = file->FileNameList; filenamelist; filenamelist = filenamelist->next)
-  {
-      const char* path = filenamelist->data->Path;
+	if (et_is_path_related(FilePath, args.OldPath) == PATH_SUBDIR)
+	{	FilePath.reset(g_strconcat(args.NewPath, FilePath.get() + strlen(args.OldPath), NULL));
+		changed = true;
+	}
 
-      if (strncmp(path, old_path, old_path_len) == 0
-          // Check for '/' at the end of path
-          && (path[old_path_len] == 0 || path[old_path_len] == G_DIR_SEPARATOR))
-      {   // Replace path of filename.
-          size_t path_len = strlen(path);
-          xString newpath;
-          char* cp = newpath.alloc(path_len - old_path_len + new_path_len);
-          memcpy(cp, new_path, new_path_len);
-          memcpy(cp + new_path_len, path + old_path_len, path_len - old_path_len);
-      }
-  }*/
-
+	if (args.RelationToCurrentRoot == PATH_SUBDIR)
+		FileName.foreach([&args, &changed](File_Name* file_name)
+		{	changed |= file_name->update_directory_name(args);
+		});
+	return changed;
 }

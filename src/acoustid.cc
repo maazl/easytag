@@ -557,7 +557,7 @@ void AcoustIDImpl::AnalyzeFile(ET_File& file, GCancellable* cancel)
 	}
 
 	if (cancel)
-		Cancel = gObject<GCancellable>((GCancellable*)g_object_ref(cancel));
+		Cancel.reset((GCancellable*)g_object_ref(cancel));
 
 	Duration = file.ETFileInfo.duration;
 	result = CalcFingerprint(file.FilePath);
@@ -675,7 +675,7 @@ AcoustIDWorker::AcoustIDWorker()
 void AcoustIDWorker::Run()
 {	xPtr<ET_File> lastfile;
 	while (true)
-	{	ET_File* file;
+	{	ET_File* file = nullptr;
 		unsigned remaining;
 		{	lock_guard<mutex> lock(Mtx);
 			if (Files.size())

@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2022-2025  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2022-2026  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -126,7 +126,7 @@ typedef struct
     GtkWidget *rename_directory_preview_label;
 
     GFile *current_path;
-    gchar *current_path_name; ///< name of current_path in system encoding
+    gchar *current_path_name; ///< Full name of current_path in system encoding
     GtkTreeIter current_file; ///< The file currently visible in the file and tag area. Binary zero if none.
 
     ExpandDirectoryWorker* DirectoryWorker;
@@ -225,7 +225,6 @@ static const GIcon* get_gicon(EtBrowser *self, EtPathState path_state, bool can_
 static GtkTreeViewColumn * et_browser_get_column_for_sort_order(EtBrowser *self, EtSortMode sort_order);
 
 /* For window to rename a directory */
-static void Destroy_Rename_Directory_Window (EtBrowser *self);
 static void Rename_Directory_With_Mask_Toggled (EtBrowser *self);
 
 /* For window to run a program with the directory */
@@ -362,11 +361,6 @@ private: // Event handlers and helpers in main thread ...
 
 	/// Enqueue an asynchronous operation on a tree node.
 	void Enqueue(Entry* item);
-
-	/// @return 0 := unrelated
-	/// 1 := path1 is subdir of path2
-	/// 2 := exact match
-	static int IsSubDir(const gchar* path1, const gchar* path2);
 
 	static void HandleExpand(EtBrowserPrivate* priv, GtkTreeIter& iter, bool load);
 
@@ -578,31 +572,6 @@ void ExpandDirectoryWorker::ItemWorker()
 	}
 }
 
-int ExpandDirectoryWorker::IsSubDir(const gchar* path1, const gchar* path2)
-{	if (!path1 || !path2)
-		return 0;
-	size_t llen = strlen(path1);
-	size_t rlen = strlen(path2);
-	if (G_IS_DIR_SEPARATOR(path1[llen - 1]))
-		--llen;
-	if (G_IS_DIR_SEPARATOR(path2[rlen - 1]))
-		--rlen;
-	if (llen < rlen)
-		return 0;
-#ifdef G_OS_WIN32
-	int cmp = strncasecmp(path1, path2, rlen);
-#else
-	int cmp = strncmp(path1, path2, rlen);
-#endif
-	if (cmp)
-		return 0;
-	if (llen == rlen)
-		return 2;
-	if (G_IS_DIR_SEPARATOR(path1[rlen]))
-		return 1;
-	return 0;
-}
-
 void ExpandDirectoryWorker::HandleExpand(EtBrowserPrivate* priv, GtkTreeIter& iter, bool load)
 {
 	GtkTreePath* treePath = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->directory_model), &iter);
@@ -626,7 +595,7 @@ void ExpandDirectoryWorker::UpdateChildren(Entry& item)
 	EtBrowserPrivate* const priv = et_browser_get_instance_private(Browser);
 	GtkTreeStore* const model = priv->directory_model;
 	const char* expandCheck = nullptr;
-	if (item.Operation != SUBDIRCHECK && ExpandPath && IsSubDir(ExpandPath, item.FullPath) == 1)
+	if (item.Operation != SUBDIRCHECK && ExpandPath && et_is_path_related(ExpandPath, item.FullPath) == PATH_SUBDIR)
 	{	expandCheck = ExpandPath.get() + strlen(item.FullPath);
 		if (G_IS_DIR_SEPARATOR(*expandCheck))
 			++expandCheck;
@@ -659,11 +628,11 @@ void ExpandDirectoryWorker::UpdateChildren(Entry& item)
 	{	// Check for subdirs asynchronously
 		// or expand if it happens to be the part of the path to expand.
 		Mode submode = item.Operation == SUBDIRCHECK ? NONE : SUBDIRCHECK;;
-		int cmp = IsSubDir(expandCheck, node.FileName);
-		if (cmp == 2)
+		PathRel cmp = et_is_path_related(expandCheck, node.FileName);
+		if (cmp == PATH_EQUAL)
 		{	ExpandPath.reset();
 			expandCheck = nullptr;
-		} else if (cmp == 1)
+		} else if (cmp == PATH_SUBDIR)
 			submode = POPULATE;
 
 		if (item.Operation == ADDSUBDIR) // merge sort?
@@ -695,8 +664,8 @@ void ExpandDirectoryWorker::UpdateChildren(Entry& item)
 				TREE_COLUMN_ICON, node.Icon, -1);
 		}
 
-		if (cmp)
-			HandleExpand(priv, childiter, cmp == 2);
+		if (cmp & PATH_SUBDIR)
+			HandleExpand(priv, childiter, cmp == PATH_EQUAL);
 
 		// check for children at next level or populate them immediately.
 		if (item.Operation != SUBDIRCHECK)
@@ -743,14 +712,14 @@ void ExpandDirectoryWorker::CancelPath(const gchar* path)
 	auto it = ToDo.begin();
 	while (it != ToDo.end())
 	{	auto cur = it++;
-		if (IsSubDir(cur->FullPath, path))
+		if (et_is_path_related(cur->FullPath, path) & PATH_SUBDIR)
 		{	logworker("Cancel ToDo {%p, %s, %u}\n", cur->Iter.user_data, cur->FullPath.get(), cur->Operation);
 			delete &*cur;
 		}
 	}
 	// mark currently processed items as obsolete
 	for (it = InProgress.begin(); it != InProgress.end(); ++it)
-		if (IsSubDir(it->FullPath, path))
+		if (et_is_path_related(it->FullPath, path) & PATH_SUBDIR)
 		{	logworker("Cancel InProgress {%p, %s, %u}\n", it->Iter.user_data, it->FullPath.get(), it->Operation);
 			it->Operation = NONE;
 		}
@@ -758,7 +727,7 @@ void ExpandDirectoryWorker::CancelPath(const gchar* path)
 	it = UIQueue.begin();
 	while (it != UIQueue.end())
 	{	auto cur = it++;
-		if (IsSubDir(cur->FullPath, path))
+		if (et_is_path_related(cur->FullPath, path) & PATH_SUBDIR)
 		{	logworker("Cancel UI {%p, %s, %u}\n", cur->Iter.user_data, cur->FullPath.get(), cur->Operation);
 			delete &*cur;
 		}
@@ -792,13 +761,13 @@ bool ExpandDirectoryWorker::FindNode(const char* path, GtkTreeIter* iter)
 	while (more)
 	{	const char *text;
 		gtk_tree_model_get(model, iter, TREE_COLUMN_FILE_NAME, &text, -1);
-		switch (IsSubDir(path, text))
+		switch (et_is_path_related(path, text))
 		{default:
 			more = gtk_tree_model_iter_next(model, iter);
 			continue;
-		 case 2:
+		 case PATH_EQUAL:
 			return true;
-		 case 1:
+		 case PATH_SUBDIR:
 			path += strlen(text);
 			while (G_IS_DIR_SEPARATOR(*path)) ++path;
 			GtkTreeIter parent = *iter;
@@ -936,13 +905,13 @@ void ExpandDirectoryWorker::SelectDir(gString&& path)
 	do
 	{	gString nodePath(GetFullPath(model, currentNode));
 
-		int cmp = IsSubDir(ExpandPath, nodePath);
-		if (cmp)
+		PathRel cmp = et_is_path_related(ExpandPath, nodePath);
+		if (cmp & PATH_SUBDIR)
 		{	Mode state; // get state BEFORE HandleExpand
 			gtk_tree_model_get(model, &currentNode, TREE_COLUMN_STATE, &state, -1);
 
 			// match found
-			if (cmp == 2)
+			if (cmp == PATH_EQUAL)
 			{	HandleExpand(priv, currentNode, true);
 				ExpandPath.reset();
 				return; // done
@@ -2928,43 +2897,6 @@ void EtBrowser::reload()
 }
 
 /*
- * Renames a directory
- * last_path:
- * new_path:
- * Parameters are non-utf8!
- */
-static void Browser_Tree_Rename_Directory (EtBrowser *self, const gchar *last_path, const gchar *new_path)
-{
-	if (!last_path || !new_path)
-		return;
-
-	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
-
-	// Find the existing tree entry
-	GtkTreeIter iter;
-	if (!priv->DirectoryWorker->FindNode(last_path, &iter))
-	{	// ERROR! Could not find it!
-		gString text_utf8(g_filename_display_name (last_path));
-		g_critical("Error: Searching for %s, could not find node in tree.", text_utf8.get());
-		return;
-	}
-
-	/* Rename the on-screen node */
-	xStringD new_basename(gString(g_path_get_basename(new_path)).get());
-#ifdef G_OS_WIN32
-	const xStringD& new_basename_utf8 = new_basename; // always the same on Windows
-#else
-	xStringD new_basename_utf8(gString(g_filename_display_basename(new_path)).get());
-#endif
-	gtk_tree_store_set(priv->directory_model, &iter,
-		TREE_COLUMN_DISPLAY_NAME, new_basename_utf8.get(),
-		TREE_COLUMN_FILE_NAME, new_basename.get(), -1);
-	if (iter == priv->current_file)
-		// Update the variable of the current path
-		et_browser_set_current_path(self, gObject<GFile>(g_file_new_for_path(new_path)).get());
-}
-
-/*
  * get_gicon_for_path:
  * @path: (type filename): path to create icon for
  * @path_state: whether the icon should be shown open or closed
@@ -3389,388 +3321,257 @@ rename_directory_generate_preview (EtBrowser *self)
  */
 void EtBrowser::show_rename_directory_dialog()
 {
-    EtBrowserPrivate* priv = et_browser_get_instance_private(this);
-    GtkBuilder *builder;
-    GtkWidget *label;
-    GtkWidget *button;
-    GFile *parent;
-    gchar *parent_path;
-    gchar *basename;
-    gchar *display_basename;
-    gchar *string;
+	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
 
-    if (priv->rename_directory_dialog != NULL)
-    {
-        gtk_window_present(GTK_WINDOW(priv->rename_directory_dialog));
-        return;
-    }
+	if (priv->rename_directory_dialog != NULL)
+		return gtk_window_present(GTK_WINDOW(priv->rename_directory_dialog));
 
-    /* We get the full path but we musn't display the parent directories */
-    parent = g_file_get_parent (priv->current_path);
+	gString basename;
+	gString parent_path;
+	{	/* We get the full path but we musn't display the parent directories */
+		gString full_path(priv->DirectoryWorker->GetCurrentNodePath());
+		if (!full_path)
+			return;
 
-    if (!parent)
-    {
-        return;
-    }
+		gObject<GFile> file(g_file_new_for_path(full_path));
+		basename = g_file_get_basename(file.get());
+		if (!basename)
+			return;
 
-    parent_path = g_file_get_path (parent);
-    g_object_unref (parent);
+		file.reset(g_file_get_parent(file.get()));
+		if (!file)
+			return;
+		parent_path = g_file_get_path(file.get());
+		file.reset();
+		if (!parent_path)
+			return;
+	}
 
-    if (!parent_path)
-    {
-        return;
-    }
+	gString display_basename(g_filename_display_name(basename));
 
-    basename = g_file_get_basename (priv->current_path);
+	gObject<GtkBuilder> builder(gtk_builder_new_from_resource ("/org/gnome/EasyTAG/browser_dialogs.ui"));
 
-    if (!basename)
-    {
-        return;
-    }
+	priv->rename_directory_dialog = GTK_WIDGET(gtk_builder_get_object(builder.get(), "rename_directory_dialog"));
 
-    display_basename = g_filename_display_name (basename);
+	gtk_window_set_transient_for(GTK_WINDOW(priv->rename_directory_dialog), GTK_WINDOW(MainWindow));
 
-    builder = gtk_builder_new_from_resource ("/org/gnome/EasyTAG/browser_dialogs.ui");
+	/* We attach useful data to the combobox */
+	g_object_set_data_full(G_OBJECT(priv->rename_directory_dialog), "Parent_Directory", parent_path.release(), g_free);
+	g_object_set_data_full(G_OBJECT(priv->rename_directory_dialog), "Current_Directory", basename.release(), g_free);
+	g_signal_connect(priv->rename_directory_dialog, "response", G_CALLBACK(et_rename_directory_on_response), this);
 
-    priv->rename_directory_dialog = GTK_WIDGET (gtk_builder_get_object (builder,
-                                                                        "rename_directory_dialog"));
+	{	gString string(g_strdup_printf(_("Rename the directory ‘%s’ to:"), display_basename.get()));
+		GtkLabel* label = GTK_LABEL(gtk_builder_get_object(builder.get(), "rename_label"));
+		gtk_label_set_label(label, string);
+		gtk_label_set_line_wrap(label, TRUE);
+	}
 
-    gtk_window_set_transient_for (GTK_WINDOW (priv->rename_directory_dialog),
-                                  GTK_WINDOW (MainWindow));
+	/* The entry to rename the directory. */
+	priv->rename_directory_entry = GTK_WIDGET(gtk_builder_get_object(builder.get(), "rename_entry"));
+	/* Set the directory into the combobox */
+	gtk_entry_set_text(GTK_ENTRY(priv->rename_directory_entry), display_basename);
+	display_basename.reset();
 
-    /* We attach useful data to the combobox */
-    g_object_set_data_full (G_OBJECT (priv->rename_directory_dialog),
-                            "Parent_Directory", parent_path, g_free);
-    g_object_set_data_full (G_OBJECT (priv->rename_directory_dialog),
-                            "Current_Directory", basename, g_free);
-    g_signal_connect (priv->rename_directory_dialog, "response",
-                      G_CALLBACK (et_rename_directory_on_response), this);
+	/* Rename directory : check box + entry + Status icon */
+	priv->rename_directory_mask_toggle = GTK_WIDGET(gtk_builder_get_object(builder.get(), "rename_mask_check"));
+	et_settings_bind_boolean("rename-directory-with-mask", priv->rename_directory_mask_toggle);
+	g_signal_connect_swapped(priv->rename_directory_mask_toggle, "toggled", G_CALLBACK(Rename_Directory_With_Mask_Toggled), this);
 
-    string = g_strdup_printf (_("Rename the directory ‘%s’ to:"),
-                              display_basename);
-    label = GTK_WIDGET (gtk_builder_get_object (builder, "rename_label"));
-    gtk_label_set_label (GTK_LABEL (label), string);
-    g_free (string);
-    gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	/* The entry to enter the mask to apply. */
+	priv->rename_directory_mask_entry = GTK_WIDGET(gtk_builder_get_object(builder.get(), "rename_mask_entry"));
+	gtk_widget_set_size_request(priv->rename_directory_mask_entry, 80, -1);
 
-    /* The entry to rename the directory. */
-    priv->rename_directory_entry = GTK_WIDGET (gtk_builder_get_object (builder,
-                                                                       "rename_entry"));
-    /* Set the directory into the combobox */
-    gtk_entry_set_text (GTK_ENTRY (priv->rename_directory_entry),
-                        display_basename);
+	/* Signal to generate preview (preview of the new directory). */
+	g_signal_connect_swapped(priv->rename_directory_mask_entry, "changed", G_CALLBACK(rename_directory_generate_preview), this);
 
-    /* Rename directory : check box + entry + Status icon */
-    priv->rename_directory_mask_toggle = GTK_WIDGET (gtk_builder_get_object (builder,
-                                                                             "rename_mask_check"));
-    et_settings_bind_boolean("rename-directory-with-mask", priv->rename_directory_mask_toggle);
-    g_signal_connect_swapped (priv->rename_directory_mask_toggle, "toggled",
-        G_CALLBACK(Rename_Directory_With_Mask_Toggled), this);
+	g_settings_bind(MainSettings, "rename-directory-default-mask", priv->rename_directory_mask_entry, "text", G_SETTINGS_BIND_DEFAULT);
 
-    /* The entry to enter the mask to apply. */
-    priv->rename_directory_mask_entry = GTK_WIDGET (gtk_builder_get_object (builder,
-                                                                            "rename_mask_entry"));
-    gtk_widget_set_size_request(priv->rename_directory_mask_entry, 80, -1);
+	/* Mask status icon. Signal connection to check if mask is correct to the mask entry. */
+	g_signal_connect(priv->rename_directory_mask_entry, "changed", G_CALLBACK(entry_check_mask), NULL);
 
-    /* Signal to generate preview (preview of the new directory). */
-    g_signal_connect_swapped(priv->rename_directory_mask_entry, "changed",
-        G_CALLBACK(rename_directory_generate_preview), this);
+	/* Preview label. */
+	priv->rename_directory_preview_label = GTK_WIDGET(gtk_builder_get_object(builder.get(), "rename_preview_label"));
+	/* Button to save: to rename directory */
+	GtkWidget* button = gtk_dialog_get_widget_for_response(GTK_DIALOG(priv->rename_directory_dialog), GTK_RESPONSE_APPLY);
+	g_signal_connect_swapped(priv->rename_directory_entry, "changed", G_CALLBACK(empty_entry_disable_widget), G_OBJECT(button));
 
-    g_settings_bind (MainSettings, "rename-directory-default-mask",
-                     priv->rename_directory_mask_entry, "text",
-                     G_SETTINGS_BIND_DEFAULT);
+	gtk_widget_show_all(priv->rename_directory_dialog);
 
-    /* Mask status icon. Signal connection to check if mask is correct to the
-     * mask entry. */
-    g_signal_connect (priv->rename_directory_mask_entry, "changed",
-                      G_CALLBACK (entry_check_mask), NULL);
+	/* To initialize the 'Use mask' check button state. */
+	g_signal_emit_by_name(priv->rename_directory_mask_toggle, "toggled");
 
-    /* Preview label. */
-    priv->rename_directory_preview_label = GTK_WIDGET (gtk_builder_get_object (builder,
-                                                                               "rename_preview_label"));
-    /* Button to save: to rename directory */
-    button = gtk_dialog_get_widget_for_response (GTK_DIALOG (priv->rename_directory_dialog),
-                                                 GTK_RESPONSE_APPLY);
-    g_signal_connect_swapped (priv->rename_directory_entry,
-                              "changed",
-                              G_CALLBACK (empty_entry_disable_widget),
-                              G_OBJECT (button));
-
-    g_object_unref (builder);
-
-    gtk_widget_show_all (priv->rename_directory_dialog);
-
-    /* To initialize the 'Use mask' check button state. */
-    g_signal_emit_by_name (G_OBJECT (priv->rename_directory_mask_toggle),
-                           "toggled");
-
-    /* To initialize PreviewLabel + MaskStatusIconBox. */
-    g_signal_emit_by_name (priv->rename_directory_mask_entry, "changed");
-
-    g_free (display_basename);
+	/* To initialize PreviewLabel + MaskStatusIconBox. */
+	g_signal_emit_by_name(priv->rename_directory_mask_entry, "changed");
 }
 
-static void
-Destroy_Rename_Directory_Window (EtBrowser *self)
+static bool Rename_Directory_Error(const char* message, const char* title, const char* secondary_text = nullptr)
 {
-    EtBrowserPrivate *priv;
+	GtkWidget *msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
+		GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_MESSAGE_ERROR,
+		GTK_BUTTONS_CLOSE,
+		"%s",
+		message);
+	gtk_window_set_title(GTK_WINDOW(msgdialog), title);
+	if (secondary_text)
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(msgdialog), "%s", secondary_text);
 
-    priv = et_browser_get_instance_private (self);
-
-    if (priv->rename_directory_dialog)
-    {
-        gtk_widget_destroy(priv->rename_directory_dialog);
-        priv->rename_directory_preview_label = NULL;
-        priv->rename_directory_dialog = NULL;
-    }
+	gtk_dialog_run(GTK_DIALOG(msgdialog));
+	gtk_widget_destroy(msgdialog);
+	return false;
 }
 
-static void
-Rename_Directory (EtBrowser *self)
+static bool Rename_Directory(EtBrowser *self)
 {
-    EtBrowserPrivate *priv;
-    gchar *directory_parent;
-    gchar *directory_last_name;
-    string directory_new_name;
-    gchar *directory_new_name_file;
-    gchar *last_path;
-    gchar *last_path_utf8;
-    gchar *new_path;
-    gchar *new_path_utf8;
-    gchar *tmp_path;
-    gchar *tmp_path_utf8;
-    gint   fd_tmp;
+	EtBrowserPrivate* priv = et_browser_get_instance_private (self);
+	g_return_val_if_fail(priv->rename_directory_dialog != NULL, false);
 
-    priv = et_browser_get_instance_private (self);
+	const gchar* directory_parent = (const gchar*)g_object_get_data(G_OBJECT(priv->rename_directory_dialog),"Parent_Directory");
+	const gchar* directory_last_name = (const gchar*)g_object_get_data(G_OBJECT(priv->rename_directory_dialog),"Current_Directory");
 
-    g_return_if_fail (priv->rename_directory_dialog != NULL);
+	string directory_new_name;
 
-    directory_parent    = (gchar*)g_object_get_data(G_OBJECT(priv->rename_directory_dialog),"Parent_Directory");
-    directory_last_name = (gchar*)g_object_get_data(G_OBJECT(priv->rename_directory_dialog),"Current_Directory");
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->rename_directory_mask_toggle)))
+	{
+		/* Renamed from mask. */
+		gString mask(g_settings_get_string(MainSettings, "rename-directory-default-mask"));
+		// TODO the current file may not even be part of the directory to rename.
+		directory_new_name = et_evaluate_mask(MainWindow->get_displayed_file(), mask, FALSE);
+	}
+	else
+	{
+		/* Renamed 'manually'. */
+		directory_new_name = gtk_entry_get_text(GTK_ENTRY(priv->rename_directory_entry));
+	}
 
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->rename_directory_mask_toggle)))
-    {
-        /* Renamed from mask. */
-        gString mask(g_settings_get_string(MainSettings, "rename-directory-default-mask"));
-        // TODO the current file may not even be part of the directory to rename.
-        directory_new_name = et_evaluate_mask(MainWindow->get_displayed_file(), mask, FALSE);
-    }
-    else
-    {
-        /* Renamed 'manually'. */
-        directory_new_name = gtk_entry_get_text(GTK_ENTRY(priv->rename_directory_entry));
-    }
+	/* Check if a name for the directory have been supplied */
+	if (directory_new_name.empty())
+		return Rename_Directory_Error(_("You must type a directory name"), _("Directory Name Error"));
 
-    /* Check if a name for the directory have been supplied */
-    if (directory_new_name.empty())
-    {
-        GtkWidget *msgdialog;
+	/* Check that we can write the new directory name */
+	gString directory_new_name_file(filename_from_display(directory_new_name.c_str()));
+	if (!directory_new_name_file)
+		return Rename_Directory_Error(
+			gString(g_strdup_printf(_("Could not convert ‘%s’ into filename encoding"), directory_new_name.c_str())),
+			_("Directory Name Error"),
+			_("Please use another name."));
 
-        msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           "%s",
-                                           _("You must type a directory name"));
-        gtk_window_set_title(GTK_WINDOW(msgdialog),_("Directory Name Error"));
+	/* If the directory name haven't been changed, we do nothing! */
+	if (directory_last_name && directory_new_name_file
+		&& strcmp(directory_last_name, directory_new_name_file) == 0)
+		return true;
 
-        gtk_dialog_run(GTK_DIALOG(msgdialog));
-        gtk_widget_destroy(msgdialog);
-        return;
-    }
+	/* Build the current and new absolute paths */
+	UpdateDirectoyNameArgs args(
+		gString(g_build_filename(directory_parent, directory_last_name, NULL)),
+		gString(g_build_filename (directory_parent, directory_new_name_file.get(), NULL)),
+		priv->current_path_name);
 
-    /* Check that we can write the new directory name */
-    directory_new_name_file = filename_from_display(directory_new_name.c_str());
-    if (!directory_new_name_file)
-    {
-        GtkWidget *msgdialog;
+	/* TODO: Replace with g_file_move(). */
+	/* Check if the new directory name doesn't already exists, and detect if
+	 * it's only a case change (needed for vfat) */
+	if (g_file_test(args.NewPath, G_FILE_TEST_IS_DIR))
+	{
+		if (strcasecmp(args.NewPath, args.OldPath) != 0)
+		{
+			// TODO
+			//        // The same directory already exists. So we ask if we want to move the files
+			//        msg = g_strdup_printf(_("The directory already exists!\n(%s)\nDo you want "
+			//            "to move the files?"),new_path_utf8);
+			//        msgbox = msg_box_new(_("Confirm"),
+			//                             GTK_WINDOW(MainWindow),
+			//                             NULL,
+			//                             GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+			//                             msg,
+			//                             GTK_STOCK_DIALOG_QUESTION,
+			//                             GTK_STOCK_NO,  GTK_RESPONSE_NO,
+			//                             GTK_STOCK_YES, GTK_RESPONSE_YES,
+			//                             NULL);
+			//        g_free(msg);
+			//        response = gtk_dialog_run(GTK_DIALOG(msgbox));
+			//        gtk_widget_destroy(msgbox);
+			//
+			//        switch (response)
+			//        {
+			//            case GTK_STOCK_YES:
+			//                // Here we must rename all files with the new location, and remove the directory
+			//
+			//                Rename_File ()
+			//
+			//                break;
+			//            case BUTTON_NO:
+			//                break;
+			//        }
 
-        msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-                                           GTK_DIALOG_MODAL  | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           _("Could not convert ‘%s’ into filename encoding"),
-                                           directory_new_name.c_str());
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (msgdialog),
-                                                  _("Please use another name."));
-        gtk_window_set_title(GTK_WINDOW(msgdialog),_("Directory Name Error"));
+			return Rename_Directory_Error(
+				gString(g_strdup_printf(_("The directory name ‘%s’ already exists."), args.NewPathUTF8.get())),
+				_("Rename File Error"));
+		}
+	}
 
-        gtk_dialog_run(GTK_DIALOG(msgdialog));
-        gtk_widget_destroy(msgdialog);
-        g_free(directory_new_name_file);
-    }
+	/* Temporary path (useful when changing only string case) */
+	gString tmp_path(g_strdup_printf("%s.XXXXXX", args.OldPath.get()));
+	gString tmp_path_utf8(g_filename_display_name(tmp_path));
 
-    /* If the directory name haven't been changed, we do nothing! */
-    if (directory_last_name && directory_new_name_file
-    && strcmp(directory_last_name,directory_new_name_file)==0)
-    {
-        Destroy_Rename_Directory_Window (self);
-        g_free(directory_new_name_file);
-        return;
-    }
+	gint fd_tmp = g_mkstemp(tmp_path.get());
+	if (fd_tmp >= 0)
+	{
+		/* TODO: handle error. */
+		g_close (fd_tmp, NULL);
+		g_unlink (tmp_path);
+	}
 
-    /* Build the current and new absolute paths */
-    last_path = g_build_filename (directory_parent, directory_last_name, NULL);
-    last_path_utf8 = g_filename_display_name (last_path);
-    new_path = g_build_filename (directory_parent, directory_new_name_file,
-                                 NULL);
-    new_path_utf8 = g_filename_display_name (new_path);
+	/* Rename the directory from 'last name' to 'tmp name' */
+	if (g_rename(args.OldPath, tmp_path) != 0)
+		return Rename_Directory_Error(
+			gString(g_strdup_printf(_("Cannot rename directory '%s' to '%s'"), args.OldPathUTF8.get(), tmp_path_utf8.get())),
+			_("Rename Directory Error"),
+			g_strerror(errno));
 
-    /* TODO: Replace with g_file_move(). */
-    /* Check if the new directory name doesn't already exists, and detect if
-     * it's only a case change (needed for vfat) */
-    if (g_file_test (new_path, G_FILE_TEST_IS_DIR))
-    {
-        GtkWidget *msgdialog;
-        //gint response;
+	/* Rename the directory from 'tmp name' to 'new name' (final name) */
+	if (g_rename(tmp_path, args.NewPath) != 0)
+		return Rename_Directory_Error(
+			gString(g_strdup_printf(_("Cannot rename directory '%s' to '%s"), tmp_path_utf8.get(), args.NewPathUTF8.get())),
+			_("Rename Directory Error"),
+			g_strerror(errno));
 
-        if (strcasecmp(last_path,new_path) != 0)
-        {
-    // TODO
-    //        // The same directory already exists. So we ask if we want to move the files
-    //        msg = g_strdup_printf(_("The directory already exists!\n(%s)\nDo you want "
-    //            "to move the files?"),new_path_utf8);
-    //        msgbox = msg_box_new(_("Confirm"),
-    //                             GTK_WINDOW(MainWindow),
-    //                             NULL,
-    //                             GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-    //                             msg,
-    //                             GTK_STOCK_DIALOG_QUESTION,
-    //                             GTK_STOCK_NO,  GTK_RESPONSE_NO,
-	//                             GTK_STOCK_YES, GTK_RESPONSE_YES,
-    //                             NULL);
-    //        g_free(msg);
-    //        response = gtk_dialog_run(GTK_DIALOG(msgbox));
-    //        gtk_widget_destroy(msgbox);
-    //
-    //        switch (response)
-    //        {
-    //            case GTK_STOCK_YES:
-    //                // Here we must rename all files with the new location, and remove the directory
-    //
-    //                Rename_File ()
-    //
-    //                break;
-    //            case BUTTON_NO:
-    //                break;
-    //        }
+	// DONE! => Now update the UI
+	et_application_window_status_bar_message(MainWindow, _("Directory renamed"), TRUE);
 
-            msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-                                               GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                               GTK_MESSAGE_ERROR,
-                                               GTK_BUTTONS_CLOSE,
-                                               "%s",
-                                               "Cannot rename file");
-            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (msgdialog),
-                                                      _("The directory name ‘%s’ already exists."),new_path_utf8);
-            gtk_window_set_title(GTK_WINDOW(msgdialog),_("Rename File Error"));
+	// Find the existing tree entry
+	GtkTreeIter iter;
+	if (!priv->DirectoryWorker->FindNode(args.OldPath, &iter))
+	{	// ERROR! Could not find it!
+		g_critical("Error: Searching for %s, could not find node in tree.", args.OldPathUTF8.get());
+	} else
+	{	/* Rename the on-screen node */
+		xStringD new_basename(directory_new_name_file.get());
+		#ifdef G_OS_WIN32
+		const xStringD& new_basename_utf8 = new_basename; // always the same on Windows
+		#else
+		xStringD new_basename_utf8(directory_new_name.c_str());
+		#endif
+		gtk_tree_store_set(priv->directory_model, &iter,
+			TREE_COLUMN_DISPLAY_NAME, new_basename_utf8.get(),
+			TREE_COLUMN_FILE_NAME, new_basename.get(), -1);
+		// Since the nodes have no full path no recursive traversal is required.
+	}
 
-            gtk_dialog_run(GTK_DIALOG(msgdialog));
-            gtk_widget_destroy(msgdialog);
+	if ((args.RelationToCurrentRoot & PATH_SUPERDIR)
+		&& priv->current_file.stamp)
+	{	// Update the variable of the current path
+		gString new_current_path(ExpandDirectoryWorker::GetFullPath(GTK_TREE_MODEL(priv->directory_model), priv->current_file));
+		et_browser_set_current_path(self, gObject<GFile>(g_file_new_for_path(new_current_path)).get());
+	}
+	if (args.RelationToCurrentRoot)
+		// Update File_Name instances if they belong to the renamed directory
+		ET_FileList::update_directory_name(args);
+	if ((args.RelationToCurrentRoot == PATH_SUBDIR)
+		&& MainWindow->get_displayed_file())
+		// To update file path in the browser entry
+		et_application_window_update_ui_from_et_file(MainWindow, ET_COLUMN_FILEPATH);
 
-            g_free(directory_new_name_file);
-            g_free(last_path);
-            g_free(last_path_utf8);
-            g_free(new_path);
-            g_free(new_path_utf8);
-
-            return;
-        }
-    }
-
-    /* Temporary path (useful when changing only string case) */
-    tmp_path = g_strdup_printf("%s.XXXXXX",last_path);
-    tmp_path_utf8 = g_filename_display_name (tmp_path);
-
-    if ((fd_tmp = g_mkstemp (tmp_path)) >= 0)
-    {
-        /* TODO: handle error. */
-        g_close (fd_tmp, NULL);
-        g_unlink (tmp_path);
-    }
-
-    /* Rename the directory from 'last name' to 'tmp name' */
-    if (g_rename (last_path, tmp_path) != 0)
-    {
-        GtkWidget *msgdialog;
-
-        msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           "Cannot rename directory '%s' to '%s'",
-                                           last_path_utf8,
-                                           tmp_path_utf8);
-        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(msgdialog),"%s",g_strerror(errno));
-        gtk_window_set_title(GTK_WINDOW(msgdialog),_("Rename Directory Error"));
-
-        gtk_dialog_run(GTK_DIALOG(msgdialog));
-        gtk_widget_destroy(msgdialog);
-
-        g_free(directory_new_name_file);
-        g_free(last_path);
-        g_free(last_path_utf8);
-        g_free(new_path);
-        g_free(new_path_utf8);
-        g_free(tmp_path);
-        g_free(tmp_path_utf8);
-
-        return;
-    }
-
-    /* Rename the directory from 'tmp name' to 'new name' (final name) */
-    if (g_rename (tmp_path, new_path) != 0)
-    {
-        GtkWidget *msgdialog;
-
-        msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           "Cannot rename directory '%s' to '%s",
-                                           tmp_path_utf8,
-                                           new_path_utf8);
-        gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(msgdialog),"%s",g_strerror(errno));
-        gtk_window_set_title(GTK_WINDOW(msgdialog),_("Rename Directory Error"));
-
-        gtk_dialog_run(GTK_DIALOG(msgdialog));
-        gtk_widget_destroy(msgdialog);
-
-        g_free(directory_new_name_file);
-        g_free(last_path);
-        g_free(last_path_utf8);
-        g_free(new_path);
-        g_free(new_path_utf8);
-        g_free(tmp_path);
-        g_free(tmp_path_utf8);
-
-        return;
-    }
-
-    ET_FileList::update_directory_name(last_path, new_path);
-    Browser_Tree_Rename_Directory (self, last_path, new_path);
-
-    // To update file path in the browser entry
-    ET_File* file = MainWindow->get_displayed_file();
-    if (file)
-    {
-        et_application_window_update_ui_from_et_file(MainWindow, ET_COLUMN_FILEPATH);
-    }else
-    {
-        gchar *tmp = g_file_get_parse_name(self->get_current_path());
-        et_browser_entry_set_text (self, tmp);
-        g_free (tmp);
-    }
-
-    Destroy_Rename_Directory_Window (self);
-    g_free(last_path);
-    g_free(last_path_utf8);
-    g_free(new_path);
-    g_free(new_path_utf8);
-    g_free(tmp_path);
-    g_free(tmp_path_utf8);
-    g_free(directory_new_name_file);
-    et_application_window_status_bar_message(MainWindow, _("Directory renamed"), TRUE);
+	return true;
 }
 
 static void
@@ -4087,22 +3888,14 @@ static void
 et_rename_directory_on_response (GtkDialog *dialog, gint response_id,
                                  gpointer user_data)
 {
-    EtBrowser *self;
+	EtBrowser *self = ET_BROWSER(user_data);
+	if (response_id == GTK_RESPONSE_APPLY && !Rename_Directory(self))
+		return;
 
-    self = ET_BROWSER (user_data);
-
-    switch (response_id)
-    {
-        case GTK_RESPONSE_APPLY:
-            Rename_Directory (self);
-            break;
-        case GTK_RESPONSE_CANCEL:
-        case GTK_RESPONSE_DELETE_EVENT:
-            Destroy_Rename_Directory_Window (self);
-            break;
-        default:
-            g_assert_not_reached ();
-    }
+	EtBrowserPrivate *priv = et_browser_get_instance_private(self);
+	gtk_widget_destroy(priv->rename_directory_dialog);
+	priv->rename_directory_preview_label = NULL;
+	priv->rename_directory_dialog = NULL;
 }
 
 /*

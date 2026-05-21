@@ -1,4 +1,5 @@
 /* EasyTAG - tag editor for audio files
+ * Copyright (C) 2022-2026  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014-2016  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -42,6 +43,7 @@
 #include <algorithm>
 
 using namespace std;
+
 
 vector<xPtr<ET_File>> ET_FileList::FileList;
 
@@ -241,14 +243,8 @@ void ET_FileList::remove_file(ET_File *etfile)
  * Function used to update path of filenames into list after renaming a parent directory
  * (for ex: "/mp3/old_path/file.mp3" to "/mp3/new_path/file.mp3"
  */
-void ET_FileList::update_directory_name(const gchar *old_path, const gchar *new_path)
+void ET_FileList::update_directory_name(const UpdateDirectoyNameArgs& args)
 {
-	g_return_if_fail (!et_str_empty (old_path));
-	g_return_if_fail (!et_str_empty (new_path));
-
-	ET_File::UpdateDirectoyNameArgs args(old_path, new_path,
-		et_application_window_get_current_path_name(MainWindow));
-
 	for (auto& file : FileList)
 		file->update_directory_name(args);
 }

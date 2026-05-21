@@ -1,4 +1,5 @@
 /* EasyTAG - Tag editor for audio files
+ * Copyright (C) 2022-2026  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014-2015  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -422,6 +423,41 @@ err:
     g_object_unref (file_new);
     g_assert (error == NULL || *error != NULL);
     return FALSE;
+}
+
+static void find_first_different_utf8_path_char(const char*& c1, const char*& c2)
+{
+	const char* s1 = c1;
+	const char* s2 = c2;
+ci_match:
+	while (*c1 == *c2)
+	{	if (!*c1)
+			return;
+		++c1, ++c2;
+	}
+#ifdef G_OS_WIN32
+	// found a different character
+	// sync to UTF-8 char
+	c1 = g_utf8_find_prev_char(s1, c1 + 1);
+	if (!c1)
+		c1 = s1;
+	c2 = c1 - s1 + s2;
+	// and check whether it matches case insensitive
+	if (g_unichar_tolower(g_utf8_get_char(c1)) != g_unichar_tolower(g_utf8_get_char(c2)))
+		return;
+	c1 = g_utf8_next_char(c1);
+	c2 = g_utf8_next_char(c2);
+	goto ci_match;
+#endif
+}
+
+PathRel et_is_path_related(const gchar* path1, const gchar* path2)
+{	if (!path1 || !path2)
+		return PATH_UNRELATED;
+	find_first_different_utf8_path_char(path1, path2);
+	while (G_IS_DIR_SEPARATOR(*path1)) ++path1;
+	while (G_IS_DIR_SEPARATOR(*path2)) ++path2;
+	return (PathRel)(!*path1 * PATH_SUPERDIR + !*path2 * PATH_SUBDIR);
 }
 
 /*// Replace dir separator by dot for more reasonable sort order
