@@ -88,6 +88,8 @@ public:
 	void select_dir(gString&& path);
 	void select_dir(const char* path) { select_dir(gString(g_strdup(path))); }
 	void select_dir(GFile *file) { select_dir(gString(g_file_get_path(file))); }
+	/// Open directory selection dialog.
+	void select_dir();
 	void go_home() { select_dir(g_get_home_dir()); }
 	/// Load predefined user directory
 	void go_special(GUserDirectory dir) { select_dir(g_get_user_special_dir(dir)); }

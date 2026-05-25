@@ -65,6 +65,7 @@
                         <property name="label" translatable="yes">_Open</property>
                         <property name="tooltip-text" translatable="yes">Select a directory to browse</property>
                         <property name="use-underline">True</property>
+                        <property name="action-name">win.select-dir</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>

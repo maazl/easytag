@@ -3056,11 +3056,11 @@ File_Selection_Window_For_File (GtkWidget *entry)
                                 GTK_FILE_CHOOSER_ACTION_OPEN);
 }
 
-static void
-File_Selection_Window_For_Directory (GtkWidget *entry)
+void EtBrowser::select_dir()
 {
-    open_file_selection_dialog (entry, _("Select Directory"),
-                                GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+	EtBrowserPrivate *priv = et_browser_get_instance_private(this);
+	open_file_selection_dialog(gtk_bin_get_child(GTK_BIN(priv->entry_combo)),
+		_("Select Directory"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 }
 
 static gboolean
@@ -3110,10 +3110,6 @@ static void et_browser_init(EtBrowser *self)
     g_signal_connect_swapped (gtk_bin_get_child (GTK_BIN (priv->entry_combo)),
                               "activate", G_CALLBACK (Browser_Entry_Activated),
                               self);
-    /* The button to select a directory to browse. */
-    g_signal_connect_swapped (priv->open_button, "clicked",
-                              G_CALLBACK (File_Selection_Window_For_Directory),
-                              gtk_bin_get_child (GTK_BIN (priv->entry_combo)));
 
     /* Icons */
     {   priv->folder_icon = g_themed_icon_new("folder");

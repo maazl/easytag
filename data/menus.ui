@@ -507,6 +507,11 @@
             <attribute name="label" translatable="yes">_Go</attribute>
             <section>
             <item>
+                <attribute name="accel">&lt;Primary&gt;o</attribute>
+                <attribute name="action">win.select-dir</attribute>
+                <attribute name="label" translatable="yes">_Select Directory…</attribute>
+            </item>
+            <item>
                 <attribute name="accel">&lt;Alt&gt;Home</attribute>
                 <attribute name="action">win.go-home</attribute>
                 <attribute name="label" translatable="yes">_Home Directory</attribute>

@@ -1074,6 +1074,7 @@ static const GActionEntry actions[] =
 	{ "show-playlist", on_show_playlist },
 	{ "replaygain", on_replaygain },
 	/* Go menu. */
+	{ "select-dir", on_browser<&EtBrowser::select_dir> },
 	{ "go-home", on_browser<&EtBrowser::go_home> },
 	{ "go-desktop", on_browser_go_special<G_USER_DIRECTORY_DESKTOP> },
 	{ "go-documents", on_browser_go_special<G_USER_DIRECTORY_DOCUMENTS> },
