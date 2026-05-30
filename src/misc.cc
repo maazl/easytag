@@ -427,9 +427,11 @@ err:
 
 static void find_first_different_utf8_path_char(const char*& c1, const char*& c2)
 {
+#ifdef G_OS_WIN32
 	const char* s1 = c1;
 	const char* s2 = c2;
 ci_match:
+#endif
 	while (*c1 == *c2)
 	{	if (!*c1)
 			return;

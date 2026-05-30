@@ -646,7 +646,7 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
     }
 
     /* Build the filename with the full path or relative to old path */
-    File_Name *FileName = new File_Name(ETFile->FileNameNew()->generate_name(filename_generated_utf8.c_str(), false));
+    File_Name *FileName = ETFile->FileNameNew()->generate_name(filename_generated_utf8.c_str(), false);
     // Save changes of the 'File_Name' item
     ETFile->apply_changes(FileName, nullptr);
 
@@ -838,7 +838,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
 
             Scan_Process_Fields_Functions (self, s);
 
-            FileName = new File_Name(st_filename->generate_name(s.c_str(), true));
+            FileName = st_filename->generate_name(s.c_str(), true);
         }
     }
 

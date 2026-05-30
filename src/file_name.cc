@@ -375,7 +375,7 @@ bool File_Name::update_directory_name(const UpdateDirectoyNameArgs& args)
 	return true;
 }
 
-gString File_Name::generate_name(const char* new_filepath, bool keep_path) const
+File_Name* File_Name::generate_name(const char* new_filepath, bool keep_path) const
 {	// keep extension
 	gString np(g_strconcat(new_filepath, ET_Get_File_Extension(File.get()), NULL));
 
@@ -383,7 +383,7 @@ gString File_Name::generate_name(const char* new_filepath, bool keep_path) const
 		np = g_strconcat(Path, G_DIR_SEPARATOR_S, np.get(), NULL);
 	// else: Just add the extension.
 
-	return np;
+	return new File_Name(np);
 }
 
 /* Convert filename extension (lower/upper/no change). */

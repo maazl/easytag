@@ -42,51 +42,48 @@
         <property name="border-width">2</property>
         <property name="visible">True</property>
         <child>
-            <object class="GtkGrid" id="browser_grid">
-                <property name="column-spacing">6</property>
-                <property name="row-spacing">6</property>
+            <object class="GtkPaned" id="browser_paned">
+                <property name="orientation">horizontal</property>
+                <property name="wide-handle">True</property>
                 <property name="visible">True</property>
                 <child>
-                    <object class="GtkComboBox" id="entry_combo">
-                        <property name="has-entry">True</property>
-                        <property name="model">entry_model</property>
-                        <property name="entry-text-column">0</property>
-                        <property name="hexpand">True</property>
-                        <property name="tooltip-text" translatable="yes">Choose a directory to show in the browser</property>
+                    <object class="GtkGrid" id="directory_grid">
+                        <property name="column-spacing">6</property>
+                        <property name="row-spacing">6</property>
                         <property name="visible">True</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkButton" id="open_button">
-                        <property name="label" translatable="yes">_Open</property>
-                        <property name="tooltip-text" translatable="yes">Select a directory to browse</property>
-                        <property name="use-underline">True</property>
-                        <property name="action-name">win.select-dir</property>
-                        <property name="visible">True</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkLabel" id="files_label">
-                        <property name="label" translatable="yes">No files</property>
-                        <property name="visible">True</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">2</property>
-                        <property name="top-attach">0</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkPaned" id="browser_paned">
-                        <property name="orientation">horizontal</property>
-                        <property name="visible">True</property>
+                        <child>
+                            <object class="GtkComboBox" id="entry_combo">
+                                <property name="has-entry">True</property>
+                                <property name="model">entry_model</property>
+                                <property name="entry-text-column">0</property>
+                                <property name="hexpand">True</property>
+                                <property name="tooltip-text" translatable="yes">Choose a directory to show in the browser</property>
+                                <property name="visible">True</property>
+                                <signal name="changed" handler="Browser_Entry_Activated" swapped="true"/>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry" id="entry_combo_entry">
+                                    <signal name="activate" handler="Browser_Entry_Activated" swapped="true"/>
+                                  </object>
+                                </child>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="open_button">
+                                <property name="label" translatable="yes">_Open</property>
+                                <property name="tooltip-text" translatable="yes">Select a directory to browse</property>
+                                <property name="use-underline">True</property>
+                                <property name="action-name">win.select-dir</property>
+                                <property name="visible">True</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">0</property>
+                            </packing>
+                        </child>
                         <child>
                             <object class="GtkNotebook" id="directory_album_artist_notebook">
                                 <property name="show-border">False</property>
@@ -256,8 +253,56 @@
                                 </child>
                             </object>
                             <packing>
-                                <property name="resize">True</property>
-                                <property name="shrink">False</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">1</property>
+                                <property name="width">2</property>
+                            </packing>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="resize">True</property>
+                        <property name="shrink">False</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkGrid" id="browser_grid">
+                        <property name="column-spacing">6</property>
+                        <property name="row-spacing">6</property>
+                        <property name="visible">True</property>
+                        <child>
+                            <object class="GtkLabel" id="title_label">
+                                <property name="label" translatable="yes">Path:</property>
+                                <property name="margin-left">6</property>
+                                <property name="visible">True</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkEntry" id="path_entry">
+                                <property name="hexpand">True</property>
+                                <property name="tooltip-text" translatable="yes">Path of the currently selected file</property>
+                                <property name="secondary-icon-name">insert-text</property>
+                                <property name="secondary-icon-tooltip-text" translatable="yes">Apply path to selected files</property>
+                                <property name="visible">True</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkLabel" id="files_label">
+                                <property name="label" translatable="yes">No files</property>
+                                <property name="tooltip-text" translatable="yes">Number of files in the same directory</property>
+                                <property name="margin-right">6</property>
+                                <property name="visible">True</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">2</property>
+                                <property name="top-attach">0</property>
                             </packing>
                         </child>
                         <child>
@@ -553,13 +598,13 @@
                                     </object>
                                 </child>
                             </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">1</property>
+                                <property name="width">3</property>
+                            </packing>
                         </child>
                     </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                        <property name="width">3</property>
-                    </packing>
                 </child>
             </object>
         </child>

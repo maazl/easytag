@@ -76,6 +76,10 @@ public:
 	/// Return the focused file if a popup menu action is currently pending in the file view.
 	ET_File* popup_file();
 
+	/// Get the path of the currently selected file.
+	/// @remarks Strictly speaking this should be part on the tag area.
+	const gchar* get_file_path();
+
 	/// Get previous and next file that matches a predicate.
 	/// @return previous and next matching file or \c nullptr if no such file exists.
 	/// @remarks The current implementation needs to scan the entire model.
@@ -83,8 +87,7 @@ public:
 
 	// Actions ...
 
-	/// Select the directory corresponding to the 'path' in the tree browser,
-	/// but it doesn't read it! Check if path is correct before selecting it.
+	/// Select the directory corresponding to the 'path' in the browser.
 	void select_dir(gString&& path);
 	void select_dir(const char* path) { select_dir(gString(g_strdup(path))); }
 	void select_dir(GFile *file) { select_dir(gString(g_file_get_path(file))); }
@@ -111,6 +114,7 @@ public:
 	void run_player_for_artist_list();
 	void run_player_for_selection();
 
+	void display_et_file_path(const ET_File *ETFile);
 	void remove_file(const ET_File *ETFile);
 
 	void select_all();
@@ -147,9 +151,6 @@ void et_browser_select_file_by_et_file (EtBrowser *self, const ET_File *ETFile, 
 GtkTreePath * et_browser_select_file_by_et_file2 (EtBrowser *self, const ET_File *searchETFile, gboolean select_it, GtkTreePath *startPath);
 void et_browser_select_file_by_iter_string (EtBrowser *self, const gchar* stringiter, gboolean select_it);
 ET_File *et_browser_select_file_by_dlm (EtBrowser *self, const gchar* string, gboolean select_it);
-
-void et_browser_entry_set_text (EtBrowser *self, const gchar *text);
-void et_browser_label_set_text (EtBrowser *self, const gchar *text);
 
 void et_browser_save_state(EtBrowser *self, GKeyFile* keyfile);
 void et_browser_restore_state(EtBrowser *self, GKeyFile* keyfile);

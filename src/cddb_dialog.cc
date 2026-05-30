@@ -1932,7 +1932,7 @@ set_et_file_from_cddb_album (ET_File * etfile,
             + " - " + cddbtrackalbum->track_name;
         File_Name::prepare_func((EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"), ET_CONVERT_SPACES_NO_CHANGE)(filename_generated_utf8, 0);
 
-        FileName = new File_Name(etfile->FileNameNew()->generate_name(filename_generated_utf8.c_str(), true));
+        FileName = etfile->FileNameNew()->generate_name(filename_generated_utf8.c_str(), true);
     }
 
     etfile->apply_changes(FileName, FileTag);

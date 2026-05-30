@@ -102,6 +102,11 @@ typedef struct
     GtkWidget *directory_view_menu;
     GtkTreeStore *directory_model;
 
+    /// Path of the currently selected file.
+    /// @remarks Strictly speaking this belongs to the tag area,
+    /// but for design issues it is part of the browser window.
+    GtkWidget *path_entry;
+
     /* directory icons */
     GIcon *folder_icon;
     GIcon *folder_open_icon;
@@ -346,7 +351,7 @@ private: // Worker thread functions
 	void ItemWorker();
 
 private: // Data for main thread only!
-	/// Optional directory to select.
+	/// Optional directory to select in file system encoding.
 	/// @remarks Only one directory can be selected as target. Any subsequent request cancel the previous one.
 	/// If a path component of this path is expanded the next matching path component is also expanded unless it is the last one.
 	/// In the latter case the directory is loaded into the browser.
@@ -363,6 +368,8 @@ private: // Event handlers and helpers in main thread ...
 	void Enqueue(Entry* item);
 
 	static void HandleExpand(EtBrowserPrivate* priv, GtkTreeIter& iter, bool load);
+
+	static void SelectDirFailed(const char* path);
 
 	/// Create top level node
 	void AddTopLevel(xStringD name, gString&& path, const GIcon* icon);
@@ -589,6 +596,19 @@ void ExpandDirectoryWorker::HandleExpand(EtBrowserPrivate* priv, GtkTreeIter& it
 	gtk_tree_path_free(treePath);
 }
 
+void ExpandDirectoryWorker::SelectDirFailed(const char* path)
+{
+	// Message if the directory doesn't exist...
+	GtkWidget *msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
+		GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_MESSAGE_ERROR,
+		GTK_BUTTONS_CLOSE,
+		_("Cannot read directory ‘%s’"),
+		gString(g_filename_display_name(path)).get());
+	gtk_dialog_run(GTK_DIALOG(msgdialog));
+	gtk_widget_destroy(msgdialog);
+}
+
 void ExpandDirectoryWorker::UpdateChildren(Entry& item)
 {	logworker("UpdateChildren(%p, %s, %zu, %i) %s\n", item.Iter.user_data, item.FullPath.get(), item.Nodes.size(), item.Operation, ExpandPath.get());
 
@@ -689,7 +709,12 @@ void ExpandDirectoryWorker::UIWorker()
 	{	unique_ptr<Entry> item;
 		{	lock_guard<mutex> lock(Sync);
 			if (UIQueue.empty())
+			{	if (ExpandPath && InProgress.empty() && ToDo.empty() && !Kill)
+				{	SelectDirFailed(ExpandPath);
+					ExpandPath.reset();
+				}
 				return;
+			}
 			item.reset(&UIQueue.front());
 			item->detach();
 		}
@@ -928,7 +953,9 @@ void ExpandDirectoryWorker::SelectDir(gString&& path)
 		else
 			more = gtk_tree_model_iter_next(model, &currentNode);
 	} while (more);
+
 	// not found
+	SelectDirFailed(ExpandPath);
 	ExpandPath.reset();
 }
 
@@ -971,6 +998,10 @@ ET_File* EtBrowser::popup_file()
 
 	gtk_tree_path_free(tree_path);
 	return etfile;
+}
+
+const gchar* EtBrowser::get_file_path()
+{	return gtk_entry_get_text(GTK_ENTRY(et_browser_get_instance_private(this)->path_entry));
 }
 
 /*
@@ -1202,43 +1233,21 @@ void EtBrowser::set_current_path_default()
 }
 
 /*
- * When you press the key 'enter' in the BrowserEntry to validate the text (browse the directory)
+ * When you press the key 'enter' in the BrowserEntry or select a value from the popup.
  */
-static void
-Browser_Entry_Activated (EtBrowser *self,
-                         GtkEntry *entry)
+static void Browser_Entry_Activated(EtBrowser *self, GtkWidget* sender)
 {
-    EtBrowserPrivate *priv;
-    const gchar *parse_name;
-    GFile *file;
+	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-    priv = et_browser_get_instance_private (self);
+	// Accept changed signal from ComboBox only when a popup entry is selected.
+	if (priv->entry_combo == sender
+		&& gtk_combo_box_get_active(GTK_COMBO_BOX(priv->entry_combo)) < 0)
+		return;
 
-    parse_name = gtk_entry_get_text (entry);
-    Add_String_To_Combo_List (GTK_LIST_STORE (priv->entry_model), parse_name);
+	const gchar *parse_name = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->entry_combo))));
+	Add_String_To_Combo_List(GTK_LIST_STORE(priv->entry_model), parse_name);
 
-    file = g_file_parse_name (parse_name);
-
-    self->select_dir(file);
-
-    g_object_unref (file);
-}
-
-/*
- * Set a text into the BrowserEntry (and don't activate it)
- */
-void
-et_browser_entry_set_text (EtBrowser *self, const gchar *text)
-{
-    EtBrowserPrivate *priv;
-
-    priv = et_browser_get_instance_private (self);
-
-    if (!text || !priv->entry_combo)
-        return;
-
-    gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->entry_combo))),
-                        text);
+	self->select_dir(parse_name);
 }
 
 /*
@@ -1270,22 +1279,6 @@ void EtBrowser::go_directory()
 	gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->directory_view)));
 
 	select_dir(gString(priv->DirectoryWorker->GetCurrentNodePath()));
-}
-
-/*
- * Set a text into the priv->files_label
- */
-void
-et_browser_label_set_text (EtBrowser *self, const gchar *text)
-{
-    EtBrowserPrivate *priv;
-
-    g_return_if_fail (ET_BROWSER (self));
-    g_return_if_fail (text != NULL);
-
-    priv = et_browser_get_instance_private (self);
-
-    gtk_label_set_text (GTK_LABEL (priv->files_label), text);
 }
 
 /*
@@ -1897,6 +1890,28 @@ et_browser_refresh_file_in_list (EtBrowser *self,
 	}
 }
 
+void EtBrowser::display_et_file_path(const ET_File *ETFile)
+{
+	EtBrowserPrivate *priv = et_browser_get_instance_private(this);
+	if (!ETFile)
+	{	gtk_entry_set_text(GTK_ENTRY(priv->path_entry), "");
+		gtk_label_set_text(GTK_LABEL(priv->files_label),
+			/* Translators: No files, as in "0 files". */ _("No files"));
+		return;
+	}
+
+	// Set the path to the file into BrowserEntry
+	const xStringD0& dirname_utf8 = ETFile->FileNameNew()->path();
+  gtk_entry_set_text(GTK_ENTRY(priv->path_entry), dirname_utf8);
+
+	// And refresh the number of files in this directory
+	unsigned n_files = 0;
+	for (const ET_File* file : ET_FileList::all_files())
+		if (file->FileNameNew()->path() == dirname_utf8)
+			++n_files;
+	string text = strprintf(ngettext("One file", "%u files", n_files), n_files);
+	gtk_label_set_text(GTK_LABEL(priv->files_label), text.c_str());
+}
 
 /*
  * Remove a file from the list, by ETFile
@@ -3107,10 +3122,6 @@ static void et_browser_init(EtBrowser *self)
     /* History list */
     Load_Path_Entry_List (priv->entry_model, MISC_COMBO_TEXT);
 
-    g_signal_connect_swapped (gtk_bin_get_child (GTK_BIN (priv->entry_combo)),
-                              "activate", G_CALLBACK (Browser_Entry_Activated),
-                              self);
-
     /* Icons */
     {   priv->folder_icon = g_themed_icon_new("folder");
         priv->folder_open_icon = g_themed_icon_new("folder-open");
@@ -4052,6 +4063,7 @@ void et_browser_class_init (EtBrowserClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, artist_view);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, directory_model);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, directory_view);
+    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, path_entry);
     gtk_widget_class_bind_template_callback_full(widget_class, "collapse_cb", G_CALLBACK(&ExpandDirectoryWorker::Collapse));
     gtk_widget_class_bind_template_callback_full(widget_class, "expand_cb", G_CALLBACK(&ExpandDirectoryWorker::Expand));
     gtk_widget_class_bind_template_callback(widget_class, on_album_tree_button_press_event);

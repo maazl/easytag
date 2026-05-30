@@ -74,13 +74,13 @@ public:
 	/// @remarks This is basically a find and replace operation.
 	bool update_directory_name(const UpdateDirectoyNameArgs& args);
 
-	/// Create new file path by applying a new path and file name.
+	/// Create new File_Name by applying a new path and file name.
 	/// @param new_filepath new UTF-8 file name <em>w/o extension</em> and path to apply to \a current.
 	/// If the path is absolute it will completely replace the file path.
 	/// @param keep_path Keep the current \ref Path.
-	/// @return Generated file path with (current) extension.
+	/// @return New File_Name instance with (current) extension.
 	/// @remarks The result of this function is typically passed to the constructor.
-	gString generate_name(const char* new_filepath, bool keep_path) const;
+	File_Name* generate_name(const char* new_filepath, bool keep_path) const;
 
 	/// Convert filename extension (lower/upper/no change)
 	/// @return true if the operation made a change.

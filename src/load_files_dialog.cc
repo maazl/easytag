@@ -129,7 +129,7 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
             prepare_func(list_text_tmp, 0);
 
             /* Build the filename with the path */
-            FileName = new File_Name(ETFile->FileNameNew()->generate_name(list_text_tmp.c_str(), true));
+            FileName = ETFile->FileNameNew()->generate_name(list_text_tmp.c_str(), true);
             // Save changes of the 'File_Name' item
             ETFile->apply_changes(FileName, nullptr);
 

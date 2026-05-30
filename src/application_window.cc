@@ -116,9 +116,6 @@ ET_File* EtApplicationWindow::get_displayed_file()
 }
 
 
-static const gchar* et_application_window_file_area_get_filename(EtApplicationWindow *self);
-static void et_application_window_file_area_set_file_fields(EtApplicationWindow *self, const ET_File *ETFile);
-
 /* Used to force to hide the msgbox when deleting file */
 static gboolean SF_HideMsgbox_Delete_File;
 /* To remember which button was pressed when deleting file */
@@ -298,19 +295,6 @@ on_paned_notify_position (EtApplicationWindow *self,
     priv = et_application_window_get_instance_private (self);
 
     priv->paned_position = gtk_paned_get_position (priv->hpaned);
-}
-
-static gboolean
-et_application_window_tag_area_display_et_file (EtApplicationWindow *self,
-                                                const ET_File *ETFile, EtColumn columns)
-{
-    EtApplicationWindowPrivate *priv;
-
-    g_return_val_if_fail (ET_APPLICATION_WINDOW (self), FALSE);
-
-    priv = et_application_window_get_instance_private (self);
-
-    return et_tag_area_display_et_file (ET_TAG_AREA (priv->tag_area), ETFile, columns);
 }
 
 #ifdef ENABLE_CDDB
@@ -1213,6 +1197,7 @@ et_application_window_init (EtApplicationWindow *self)
 
     /* The two panes: BrowserArea on the left, FileArea+TagArea on the right */
     priv->hpaned = GTK_PANED(gtk_paned_new (GTK_ORIENTATION_HORIZONTAL));
+    gtk_paned_set_wide_handle(priv->hpaned, TRUE);
 
     /* Browser (Tree + File list + Entry) */
     priv->browser = et_browser_new ();
@@ -1452,8 +1437,9 @@ et_application_window_create_file_name_from_ui (EtApplicationWindow *self,
                                                 const ET_File *ETFile)
 {
     g_return_val_if_fail(ETFile != NULL, nullptr);
+    EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
 
-    const gchar *filename_utf8 = et_application_window_file_area_get_filename (self);
+    const gchar *filename_utf8 = et_file_area_get_filename(ET_FILE_AREA(priv->file_area));
     if (et_str_empty(filename_utf8))
     {
         /* Keep the 'last' filename (if a 'blank' filename was entered in the
@@ -1461,12 +1447,30 @@ et_application_window_create_file_name_from_ui (EtApplicationWindow *self,
         return nullptr;
     }
 
-    gString filename(filename_from_display(filename_utf8));
+    // add file path
+    string filename_new;
+    unsigned start = 0;
+    const gchar* filepath_utf8 = priv->browser->get_file_path();
+    if (!*filepath_utf8)
+    	filename_new = filename_utf8;
+    else
+    {	filename_new = filepath_utf8;
+    	if (!G_IS_DIR_SEPARATOR(filename_new.back()))
+    		filename_new += G_DIR_SEPARATOR;
+    	start = filename_new.size();
+    	filename_new += filename_utf8;
+    }
+
+    /* Regenerate the new filename (without path). */
+    File_Name::prepare_func((EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"),
+        (EtConvertSpaces)g_settings_get_enum(MainSettings, "rename-convert-spaces"))(filename_new, start);
+
+    gString filename(filename_from_display(filename_new.c_str()));
     if (!filename)
     {
         /* If conversion fails... */
         GtkWidget *msgdialog;
-        gchar *filename_escaped_utf8 = g_strescape(filename_utf8, NULL);
+        gchar *filename_escaped_utf8 = g_strescape(filename_new.c_str(), NULL);
         msgdialog = gtk_message_dialog_new (GTK_WINDOW (self),
                                             GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                             GTK_MESSAGE_ERROR,
@@ -1484,12 +1488,7 @@ et_application_window_create_file_name_from_ui (EtApplicationWindow *self,
         return nullptr;
     }
 
-    /* Regenerate the new filename (without path). */
-    string filename_new(filename_utf8);
-    File_Name::prepare_func((EtFilenameReplaceMode)g_settings_get_enum(MainSettings, "rename-replace-illegal-chars"),
-        (EtConvertSpaces)g_settings_get_enum(MainSettings, "rename-convert-spaces"))(filename_new, 0);
-
-    return new File_Name(ETFile->FileNameNew()->generate_name(filename_new.c_str(), true));
+    return ETFile->FileNameNew()->generate_name(filename_new.c_str(), false);
 }
 
 void
@@ -1517,26 +1516,6 @@ et_application_window_update_et_file_from_ui (EtApplicationWindow *self)
     if (et_file->apply_changes(FileName, fileTag))
         /* Refresh file into browser list */
         et_browser_refresh_file_in_list(priv->browser, et_file);
-}
-
-static void
-et_application_window_display_file_name (EtApplicationWindow *self,
-                                         const ET_File *ETFile)
-{
-	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
-	g_return_if_fail (ETFile != NULL);
-
-	// Set the path to the file into BrowserEntry (dirbrowser)
-	const xStringD0& dirname_utf8 = ETFile->FileNameNew()->path();
-	et_browser_entry_set_text(priv->browser, dirname_utf8);
-
-	// And refresh the number of files in this directory
-	unsigned n_files = 0;
-	for (const ET_File* file : ET_FileList::all_files())
-		if (file->FileNameNew()->path() == dirname_utf8)
-			++n_files;
-	string text = strprintf(ngettext("One file", "%u files", n_files), n_files);
-	et_browser_label_set_text(priv->browser, text.c_str());
 }
 
 /*
@@ -1578,6 +1557,7 @@ void et_application_window_update_ui_from_et_file(EtApplicationWindow *self, EtC
 
     if (!priv->displayed_file || !priv->displayed_file->FileNameCur()) // For the case where ETFile is an "empty" structure.
     {	// Reinit the tag and file area
+    	priv->browser->display_et_file_path(nullptr);
     	et_file_area_clear(ET_FILE_AREA(priv->file_area));
     	et_tag_area_clear(ET_TAG_AREA(priv->tag_area));
     	return;
@@ -1586,14 +1566,15 @@ void et_application_window_update_ui_from_et_file(EtApplicationWindow *self, EtC
     const ET_File_Description *description = priv->displayed_file->ETFileDescription;
 
     /* Display position in list + show/hide icon if file writable/read_only (cur_filename) */
-    et_application_window_file_area_set_file_fields (self, priv->displayed_file);
+    et_file_area_set_file_fields(ET_FILE_AREA(priv->file_area), priv->displayed_file);
 
     /* Display filename (and his path) (value in FileNameNew) */
-    if (columns & ET_COLUMN_FILENAME)
-        et_application_window_display_file_name (self, priv->displayed_file);
+    if (columns & ET_COLUMN_FILEPATH)
+    	priv->browser->display_et_file_path(priv->displayed_file);
 
     /* Display tag data */
-    et_application_window_tag_area_display_et_file (self, priv->displayed_file, columns);
+    if (columns & ~ET_COLUMN_FILEPATH)
+    	et_tag_area_display_et_file(ET_TAG_AREA(priv->tag_area), priv->displayed_file, columns);
 
     /* Display controls in tag area */
     et_tag_area_update_controls(ET_TAG_AREA(priv->tag_area), priv->displayed_file);
@@ -1664,31 +1645,6 @@ et_application_window_apply_changes (EtApplicationWindow *self)
     {
         et_search_dialog_apply_changes (ET_SEARCH_DIALOG (priv->search_dialog));
     }
-}
-
-static const gchar *
-et_application_window_file_area_get_filename (EtApplicationWindow *self)
-{
-    EtApplicationWindowPrivate *priv;
-
-    g_return_val_if_fail (ET_APPLICATION_WINDOW (self), NULL);
-
-    priv = et_application_window_get_instance_private (self);
-
-    return et_file_area_get_filename (ET_FILE_AREA (priv->file_area));
-}
-
-static void
-et_application_window_file_area_set_file_fields (EtApplicationWindow *self,
-                                                 const ET_File *ETFile)
-{
-    EtApplicationWindowPrivate *priv;
-
-    g_return_if_fail (ET_APPLICATION_WINDOW (self));
-
-    priv = et_application_window_get_instance_private (self);
-
-    et_file_area_set_file_fields (ET_FILE_AREA (priv->file_area), ETFile);
 }
 
 void

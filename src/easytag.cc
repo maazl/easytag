@@ -289,44 +289,6 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
     /* Save the current displayed data */
 
     /*
-     * Check if file was changed by an external program
-     */
-    /*stat(filename_cur,&statbuf);
-    if (ETFile->FileModificationTime != statbuf.st_mtime)
-    {
-        // File was changed
-        GtkWidget *msgbox = NULL;
-        gint response;
-
-        msg = g_strdup_printf(_("The file '%s' was changed by an external program.\nDo you want to continue?"),basename_cur_utf8);
-        msgbox = msg_box_new(_("Write File"),
-                             GTK_WINDOW(MainWindow),
-                             NULL,
-                             GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                             msg,
-                             GTK_STOCK_DIALOG_WARNING,
-                             GTK_STOCK_NO,  GTK_RESPONSE_NO,
-                             GTK_STOCK_YES, GTK_RESPONSE_YES,
-                             NULL);
-        g_free(msg);
-
-        response = gtk_dialog_run(GTK_DIALOG(msgbox));
-        gtk_widget_destroy(msgbox);
-
-        switch (response)
-        {
-            case GTK_RESPONSE_YES:
-                break;
-            case GTK_RESPONSE_NO:
-            case GTK_RESPONSE_NONE:
-                stop_loop = -1;
-                return stop_loop;
-                break;
-        }
-    }*/
-
-
-    /*
      * First part: write tag information (artist, title,...)
      */
     // Note : the option 'force_saving_files' is only used to save tags
@@ -988,9 +950,6 @@ void ReadDirectoryWorker::OnFinished()
 		} else
 		{	/* Clear entry boxes */
 			window->change_displayed_file(nullptr);
-
-			et_browser_label_set_text(window->browser(),
-				/* Translators: No files, as in "0 files". */ _("No files")); /* See in ET_Display_Filename_To_UI */
 
 			/* Prepare message for the status bar */
 			if (g_settings_get_boolean (MainSettings, "browse-subdir"))
