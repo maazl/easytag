@@ -1,5 +1,8 @@
-3.0.1 - 2026-05-15 :
+3.0.1 - 2026-05-31 :
 ====================
+
+    * Allow editing (relative) file path.
+    * Move "Open" action into "Go" menu to save space and add Ctrl-O shortcut.
 
     * Fix loading directories on selection.
     * Fix directory rename.

@@ -47,9 +47,9 @@
                 <property name="wide-handle">True</property>
                 <property name="visible">True</property>
                 <child>
-                    <object class="GtkGrid" id="directory_grid">
-                        <property name="column-spacing">6</property>
-                        <property name="row-spacing">6</property>
+                    <object class="GtkBox" id="directory_grid">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
                         <property name="visible">True</property>
                         <child>
                             <object class="GtkComboBox" id="entry_combo">
@@ -66,23 +66,6 @@
                                   </object>
                                 </child>
                             </object>
-                            <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">0</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkButton" id="open_button">
-                                <property name="label" translatable="yes">_Open</property>
-                                <property name="tooltip-text" translatable="yes">Select a directory to browse</property>
-                                <property name="use-underline">True</property>
-                                <property name="action-name">win.select-dir</property>
-                                <property name="visible">True</property>
-                            </object>
-                            <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">0</property>
-                            </packing>
                         </child>
                         <child>
                             <object class="GtkNotebook" id="directory_album_artist_notebook">
@@ -252,11 +235,6 @@
                                     </object>
                                 </child>
                             </object>
-                            <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">1</property>
-                                <property name="width">2</property>
-                            </packing>
                         </child>
                     </object>
                     <packing>

@@ -73,7 +73,6 @@ class ExpandDirectoryWorker;
 typedef struct
 {
     GtkWidget *files_label;
-    GtkWidget *open_button;
     GtkPaned *browser_paned;
 
     GtkWidget *entry_combo;
@@ -1310,14 +1309,7 @@ Browser_Tree_Key_Press (GtkWidget *tree, GdkEvent *event, gpointer data)
             case GDK_KEY_t:           /* Expand/Collapse node */
             case GDK_KEY_T:           /* Expand/Collapse node */
                 if(gtk_tree_view_row_expanded(GTK_TREE_VIEW(tree), treePath))
-                    gtk_tree_view_collapse_row(GTK_TREE_VIEW(tree), treePath);
-                else
-                    gtk_tree_view_expand_row(GTK_TREE_VIEW(tree), treePath, FALSE);
-
-                gtk_tree_path_free(treePath);
-                return TRUE;
-                break;
-
+                    goto collapse;
             case GDK_KEY_e:           /* Expand node */
             case GDK_KEY_E:           /* Expand node */
                 gtk_tree_view_expand_row(GTK_TREE_VIEW(tree), treePath, FALSE);
@@ -1327,6 +1319,7 @@ Browser_Tree_Key_Press (GtkWidget *tree, GdkEvent *event, gpointer data)
 
             case GDK_KEY_c:           /* Collapse node */
             case GDK_KEY_C:           /* Collapse node */
+            collapse:
                 gtk_tree_view_collapse_row(GTK_TREE_VIEW(tree), treePath);
                 gtk_tree_path_free(treePath);
                 return TRUE;
@@ -2654,7 +2647,6 @@ et_browser_set_sensitive (EtBrowser *self, gboolean sensitive)
     gtk_widget_set_sensitive (GTK_WIDGET (priv->file_view), sensitive);
     gtk_widget_set_sensitive (GTK_WIDGET (priv->artist_view), sensitive);
     gtk_widget_set_sensitive (GTK_WIDGET (priv->album_view), sensitive);
-    gtk_widget_set_sensitive (GTK_WIDGET (priv->open_button), sensitive);
     gtk_widget_set_sensitive (GTK_WIDGET (priv->files_label), sensitive);
 }
 
@@ -4050,7 +4042,6 @@ void et_browser_class_init (EtBrowserClass *klass)
 
     gtk_widget_class_set_template_from_resource(widget_class, "/org/gnome/EasyTAG/browser.ui");
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, files_label);
-    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, open_button);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, browser_paned);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, entry_model);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, entry_combo);
