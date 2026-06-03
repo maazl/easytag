@@ -235,6 +235,14 @@ gboolean Add_String_To_Combo_List (GtkListStore *liststore, const gchar *str)
 #endif
 }
 
+GtkCellRenderer* et_column_get_cell_renderer(GtkTreeViewColumn* column, guint index)
+{
+	GList* renderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(column));
+	gpointer renderer = g_list_nth_data(renderers, index);
+	g_list_free(renderers);
+	return GTK_CELL_RENDERER(renderer);
+}
+
 gboolean et_variant_string_array_contains(GVariant* variant, const char* value)
 {	if (!variant)
 		return FALSE;

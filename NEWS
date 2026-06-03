@@ -1,6 +1,8 @@
 3.0.1 - 2026-05-15 :
 ====================
 
+    * Allow sorting fingerprint results.
+
     * Fix loading directories on selection.
     * Fix directory rename.
 

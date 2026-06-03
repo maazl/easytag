@@ -36,6 +36,7 @@
 #include <mutex>
 #include <atomic>
 #include <algorithm>
+#include <limits>
 
 using namespace std;
 
@@ -47,7 +48,7 @@ typedef struct
 	GtkLabel* remaining_label;
 	GtkWidget *stop_button;
 
-	GtkWidget *results_view;
+	GtkTreeView* results_view;
 	GtkListStore *results_list_model;
 
 	GtkWidget *fill_title_check;
@@ -102,20 +103,37 @@ static void update_apply_button_sensitivity(EtAcoustIDDialog *self)
 {
 	auto priv = et_acoustid_dialog_get_instance_private(self);
 	gboolean active = g_settings_get_flags(MainSettings, "acoustid-set-fields")
-		&& gtk_tree_selection_get_selected(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->results_view)), NULL, NULL);
+		&& gtk_tree_selection_get_selected(gtk_tree_view_get_selection(priv->results_view), NULL, NULL);
 	gtk_widget_set_sensitive(priv->apply_button, active);
 	active &= gtk_widget_get_sensitive(priv->next_button);
 	gtk_widget_set_sensitive(priv->apply_next_button, active);
 }
 
-static string acoustid_format_track_disc(unsigned position, unsigned count, string (*pad)(unsigned number))
+static string acoustid_format_track_disc(guint64 value, string (*pad)(unsigned number))
 {
 	string result;
-	if (position)
-		result += pad(position);
-	if (count)
-		(result += '/') += pad(count);
+	if (value)
+	{	unsigned position = (unsigned)(value >> 32);
+		unsigned count = (unsigned)(value & numeric_limits<unsigned>::max());
+		if (position)
+			result += pad(position);
+		if (count)
+			(result += '/') += pad(count);
+	}
 	return result;
+}
+
+static void set_index_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkTreeModel* model, GtkTreeIter* iter, gpointer data)
+{	gint col = gtk_tree_view_column_get_sort_column_id(column);
+	guint64 value;
+	gtk_tree_model_get(model, iter, col, &value, -1);
+	g_object_set(G_OBJECT(cell), "text", acoustid_format_track_disc(value, (string (*)(unsigned))data).c_str(), NULL);
+}
+
+static void set_duration(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkTreeModel* model, GtkTreeIter* iter, gpointer data)
+{	gdouble value;
+	gtk_tree_model_get(model, iter, (gint)ResultsList::DURATION, &value, -1);
+	g_object_set(G_OBJECT(cell), "text", et_file_duration_to_string(value).c_str(), NULL);
 }
 
 static void acoustid_refresh_dialog(EtAcoustIDDialog *self)
@@ -168,7 +186,6 @@ static void acoustid_refresh_dialog(EtAcoustIDDialog *self)
 			unsigned count = recording->release_count;
 			if (count)
 			{	string rel_year = recording->first_release().toString();
-				string duration = et_file_duration_to_string(recording->duration);
 				for (const AcoustID::Release* release = recording->releases.get(); count--; ++release)
 					gtk_list_store_insert_with_values(priv->results_list_model, NULL, -1,
 						ResultsList::ARTIST, recording->artist.get(),
@@ -177,9 +194,9 @@ static void acoustid_refresh_dialog(EtAcoustIDDialog *self)
 						ResultsList::ALBUM_ARTIST, release->artist.get(),
 						ResultsList::YEAR, rel_year.c_str(),
 						ResultsList::RELEASE_YEAR, release->date.toString().c_str(),
-						ResultsList::TRACK, acoustid_format_track_disc(release->track, release->track_count, &File_Tag::track_number_to_string).c_str(),
-						ResultsList::DISC, acoustid_format_track_disc(release->medium, release->medium_count, &File_Tag::disc_number_to_string).c_str(),
-						ResultsList::DURATION, duration.c_str(),
+						ResultsList::TRACK, ((guint64)release->track << 32) | release->track_count,
+						ResultsList::DISC, ((guint64)release->medium << 32) | release->medium_count,
+						ResultsList::DURATION, recording->duration,
 						ResultsList::COUNTRY, release->country,
 						ResultsList::FORMAT, release->format.get(),
 						ResultsList::SCORE, (gint)(recording->score * 100 + .5), -1);
@@ -187,14 +204,14 @@ static void acoustid_refresh_dialog(EtAcoustIDDialog *self)
 				gtk_list_store_insert_with_values(priv->results_list_model, NULL, -1,
 					ResultsList::ARTIST, recording->artist.get(),
 					ResultsList::TITLE, title,
-					ResultsList::DURATION, et_file_duration_to_string(recording->duration).c_str(),
+					ResultsList::DURATION, recording->duration,
 					ResultsList::SCORE, (gint)(recording->score * 100 + .5), -1);
 
 		}
 
 		GtkTreeIter iter;
 		if (recording_count == 1 && gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->results_list_model), &iter))
-			gtk_tree_selection_select_iter(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->results_view)), &iter);
+			gtk_tree_selection_select_iter(gtk_tree_view_get_selection(priv->results_view), &iter);
 	}
 	gtk_label_set_text(GTK_LABEL(priv->status_bar), msg);
 
@@ -217,7 +234,8 @@ static bool apply_row(EtAcoustIDDialog *self, GtkTreeIter* iter)
 	if (!fields)
 		return false;
 
-	gchar *artist, *title, *album, *album_artist, *year, *rel_year, *track, *disc;
+	gchar *artist, *title, *album, *album_artist, *year, *rel_year;
+	guint64 track, disc;
 	gtk_tree_model_get(GTK_TREE_MODEL(priv->results_list_model), iter,
 		ResultsList::ARTIST, &artist,
 		ResultsList::TITLE, &title,
@@ -265,23 +283,20 @@ static bool apply_row(EtAcoustIDDialog *self, GtkTreeIter* iter)
 		} else if (!no_empty)
 			assign(tag->release_year, nullptr, ET_COLUMN_RELEASE_YEAR);
 	}
-	char* total = strchr(track, '/');
-	if (total)
-		*total++ = 0;
-	if ((fields & ET_CDDB_SET_FIELD_TRACK) && (!no_empty || *track))
-		assign(tag->track, track, ET_COLUMN_TRACK_NUMBER);
-	if ((fields & ET_CDDB_SET_FIELD_TRACK_TOTAL) && (!no_empty || total))
-		assign(tag->track_total, total, ET_COLUMN_TRACK_NUMBER);
-	total = strchr(disc, '/');
-	if (total)
-	{	*total++ = 0;
-		if (atoi(total) == 1 && g_settings_get_boolean(MainSettings, "acoustid-no-disc-total-01"))
-			*disc = 0, total = nullptr;
+	unsigned value = (unsigned)(track >> 32);
+	if ((fields & ET_CDDB_SET_FIELD_TRACK) && (!no_empty || value))
+		assign(tag->track, to_string(value).c_str(), ET_COLUMN_TRACK_NUMBER);
+	value = (unsigned)(track & numeric_limits<unsigned>::max());
+	if ((fields & ET_CDDB_SET_FIELD_TRACK_TOTAL) && (!no_empty || value))
+		assign(tag->track_total, to_string(value).c_str(), ET_COLUMN_TRACK_NUMBER);
+	if (disc != 0x100000001ULL || !g_settings_get_boolean(MainSettings, "acoustid-no-disc-total-01"))
+	{	value = (unsigned)(disc >> 32);
+		if ((fields & ET_CDDB_SET_FIELD_DISC) && (!no_empty || value))
+			assign(tag->disc_number, to_string(value).c_str(), ET_COLUMN_DISC_NUMBER);
+		value = (unsigned)(disc & numeric_limits<unsigned>::max());
+		if ((fields & ET_CDDB_SET_FIELD_DISC_TOTAL) && (!no_empty || disc))
+			assign(tag->disc_total, to_string(value).c_str(), ET_COLUMN_DISC_NUMBER);
 	}
-	if ((fields & ET_CDDB_SET_FIELD_DISC) && (!no_empty || *disc))
-		assign(tag->disc_number, disc, ET_COLUMN_DISC_NUMBER);
-	if ((fields & ET_CDDB_SET_FIELD_DISC_TOTAL) && (!no_empty || total))
-		assign(tag->disc_total, total, ET_COLUMN_DISC_NUMBER);
 
 	bool changed = priv->current_file->apply_changes(nullptr, tag);
 
@@ -291,8 +306,6 @@ static bool apply_row(EtAcoustIDDialog *self, GtkTreeIter* iter)
 	g_free(album_artist);
 	g_free(year);
 	g_free(rel_year);
-	g_free(track);
-	g_free(disc);
 
 	if (!changed)
 		return false;
@@ -322,7 +335,7 @@ static void acoustid_apply(EtAcoustIDDialog *self)
 	auto priv = et_acoustid_dialog_get_instance_private(self);
 
 	GtkTreeIter iter;
-	if (!gtk_tree_selection_get_selected(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->results_view)), NULL, &iter))
+	if (!gtk_tree_selection_get_selected(gtk_tree_view_get_selection(priv->results_view), NULL, &iter))
 		return;
 
 	apply_row(self, &iter);
@@ -401,6 +414,14 @@ static void et_acoustid_dialog_init(EtAcoustIDDialog *self)
 	et_settings_bind_boolean("acoustid-discard-date", priv->discard_date_check);
 	et_settings_bind_boolean("acoustid-no-disc-total-01", priv->no_disc_total_01_check);
 	et_settings_bind_boolean("acoustid-no-empty-fields", priv->no_empty_fields);
+
+	// Set custom cell renderer
+	GtkTreeViewColumn* column = gtk_tree_view_get_column(priv->results_view, (gint)ResultsList::TRACK);
+	gtk_tree_view_column_set_cell_data_func(column, et_column_get_cell_renderer(column), &set_index_data, (gpointer)&File_Tag::track_number_to_string, NULL);
+	column = gtk_tree_view_get_column(priv->results_view, (gint)ResultsList::DISC);
+	gtk_tree_view_column_set_cell_data_func(column, et_column_get_cell_renderer(column), &set_index_data, (gpointer)&File_Tag::disc_number_to_string, NULL);
+	column = gtk_tree_view_get_column(priv->results_view, (gint)ResultsList::DURATION);
+	gtk_tree_view_column_set_cell_data_func(column, et_column_get_cell_renderer(column), &set_duration, NULL, NULL);
 
 	AcoustIDWorker::RegisterEvents(onFileUpdated, onFinished, self);
 }

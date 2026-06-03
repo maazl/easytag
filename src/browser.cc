@@ -3190,11 +3190,10 @@ static void et_browser_init(EtBrowser *self)
         g_object_set_data (G_OBJECT (column), "browser", self);
 
         // rendering method
-        GtkCellRenderer* renderer = GTK_CELL_RENDERER(GTK_CELL_LAYOUT_GET_IFACE(column)->get_cells(GTK_CELL_LAYOUT(column))->data);
         auto rdr = FileColumnRenderer::Get_Renderer(id.c_str());
         if (!rdr)
         	g_error("No renderer with name %s found.", id.c_str());
-        gtk_tree_view_column_set_cell_data_func(column, renderer, &set_cell_data, (gpointer)rdr, NULL);
+        gtk_tree_view_column_set_cell_data_func(column, et_column_get_cell_renderer(column), &set_cell_data, (gpointer)rdr, NULL);
 
         // sort action
         GEnumValue* enum_value = g_enum_get_value_by_nick(enum_class, id.c_str());

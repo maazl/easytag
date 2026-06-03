@@ -8,9 +8,9 @@
 			<column type="gchararray" />
 			<column type="gchararray" />
 			<column type="gchararray" />
-			<column type="gchararray" />
-			<column type="gchararray" />
-			<column type="gchararray" />
+			<column type="guint64" />
+			<column type="guint64" />
+			<column type="gdouble" />
 			<column type="gchararray" />
 			<column type="gchararray" />
 			<column type="gint" />
@@ -96,6 +96,7 @@
 									<object class="GtkTreeViewColumn" id="artist_column">
 										<property name="title" translatable="yes">Artist</property>
 										<property name="resizable">True</property>
+										<property name="sort-column-id">0</property>
 										<child>
 											<object class="GtkCellRendererText" id="artist_renderer" />
 											<attributes>
@@ -108,6 +109,7 @@
 									<object class="GtkTreeViewColumn" id="title_column">
 										<property name="title" translatable="yes">Title</property>
 										<property name="resizable">True</property>
+										<property name="sort-column-id">1</property>
 										<child>
 											<object class="GtkCellRendererText" id="title_renderer" />
 											<attributes>
@@ -120,6 +122,7 @@
 									<object class="GtkTreeViewColumn" id="album_column">
 										<property name="title" translatable="yes">Album</property>
 										<property name="resizable">True</property>
+										<property name="sort-column-id">2</property>
 										<child>
 											<object class="GtkCellRendererText" id="album_renderer" />
 											<attributes>
@@ -131,6 +134,8 @@
 								<child>
 									<object class="GtkTreeViewColumn" id="album_artist_column">
 										<property name="title" translatable="yes">Album artist</property>
+										<property name="resizable">True</property>
+										<property name="sort-column-id">3</property>
 										<child>
 											<object class="GtkCellRendererText" id="album_artist_renderer" />
 											<attributes>
@@ -143,6 +148,7 @@
 									<object class="GtkTreeViewColumn" id="year_column">
 										<property name="title" translatable="yes">Year</property>
 										<property name="resizable">True</property>
+										<property name="sort-column-id">4</property>
 										<child>
 											<object class="GtkCellRendererText" id="year_renderer" />
 											<attributes>
@@ -155,6 +161,7 @@
 									<object class="GtkTreeViewColumn" id="release_year_column">
 										<property name="title" translatable="yes">Rel. year</property>
 										<property name="resizable">True</property>
+										<property name="sort-column-id">5</property>
 										<child>
 											<object class="GtkCellRendererText" id="release_year_renderer" />
 											<attributes>
@@ -167,6 +174,7 @@
 									<object class="GtkTreeViewColumn" id="track_number_column">
 										<property name="title" translatable="yes">Track</property>
 										<property name="resizable">True</property>
+										<property name="sort-column-id">6</property>
 										<child>
 											<object class="GtkCellRendererText" id="track_number_renderer" />
 											<attributes>
@@ -179,6 +187,7 @@
 									<object class="GtkTreeViewColumn" id="disc_number_column">
 										<property name="title" translatable="yes">Disc</property>
 										<property name="resizable">True</property>
+										<property name="sort-column-id">7</property>
 										<child>
 											<object class="GtkCellRendererText" id="disc_number_renderer" />
 											<attributes>
@@ -192,6 +201,7 @@
 										<property name="title" translatable="yes">Duration</property>
 										<property name="resizable">True</property>
 										<property name="alignment">1.0</property>
+										<property name="sort-column-id">8</property>
 										<child>
 											<object class="GtkCellRendererText" id="duration_renderer" />
 											<attributes>
@@ -204,6 +214,7 @@
 									<object class="GtkTreeViewColumn" id="country_column">
 										<property name="title" translatable="yes">Country</property>
 										<property name="resizable">True</property>
+										<property name="sort-column-id">9</property>
 										<child>
 											<object class="GtkCellRendererText" id="country_renderer" />
 											<attributes>
@@ -216,6 +227,7 @@
 									<object class="GtkTreeViewColumn" id="format_column">
 										<property name="title" translatable="yes">Format</property>
 										<property name="resizable">True</property>
+										<property name="sort-column-id">10</property>
 										<child>
 											<object class="GtkCellRendererText" id="format_renderer" />
 											<attributes>
@@ -230,6 +242,7 @@
 										<property name="max-width">80</property>
 										<property name="fixed-width">80</property>
 										<property name="sizing">fixed</property>
+										<property name="sort-column-id">11</property>
 										<child>
 											<object class="GtkCellRendererProgress" id="score_renderer" />
 											<attributes>

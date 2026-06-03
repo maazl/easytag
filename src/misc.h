@@ -207,6 +207,9 @@ enum
 
 gboolean Add_String_To_Combo_List(GtkListStore *liststore, const gchar *string);
 
+/// Get cell renderer of a column
+GtkCellRenderer* et_column_get_cell_renderer(GtkTreeViewColumn* column, guint index = 0);
+
 gboolean et_variant_string_array_contains(GVariant* variant, const char* value);
 GVariant* et_variant_string_array_toggle(GVariant* variant, const char* value);
 GVariant* et_variant_string_array_set(GVariant* variant, const char* value, gboolean set);
