@@ -3537,7 +3537,7 @@ static bool Rename_Directory(EtBrowser *self)
 	/* Rename the directory from 'tmp name' to 'new name' (final name) */
 	if (g_rename(tmp_path, args.NewPath) != 0)
 		return Rename_Directory_Error(
-			gString(g_strdup_printf(_("Cannot rename directory '%s' to '%s"), tmp_path_utf8.get(), args.NewPathUTF8.get())),
+			gString(g_strdup_printf(_("Cannot rename directory '%s' to '%s'"), tmp_path_utf8.get(), args.NewPathUTF8.get())),
 			_("Rename Directory Error"),
 			g_strerror(errno));
 

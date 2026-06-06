@@ -127,8 +127,7 @@
 										<child>
 											<object class="GtkCheckButton" id="browser_subdirs_check">
 												<property name="label" translatable="yes">Browse subdirectories</property>
-												<property name="tooltip-text" translatable="yes">Whether to search subdirectories for audio files when reading a directory in the browser.
-													This option is also available in the toolbar.</property>
+												<property name="tooltip-text" translatable="yes">Whether to search subdirectories for audio files when reading a directory in the browser. This option is also available in the toolbar.</property>
 												<property name="visible">True</property>
 											</object>
 											<packing>

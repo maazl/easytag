@@ -20,7 +20,6 @@ configure
 /data/org.gnome.EasyTAG.desktop
 /doc/easytag.1
 /doc/version.xml
-/doc/easytag.1
 /share/glib-2.0/schemas/gschemas.compiled
 /doc/version.xml
 /easytag
@@ -37,6 +36,7 @@ configure
 /libtool
 /org.gnome.EasyTAG.enums.xml
 /po/*.gmo
+/po/*.mo
 /po/.intltool-merge-cache
 /po/Makefile.in.in
 /po/POTFILES

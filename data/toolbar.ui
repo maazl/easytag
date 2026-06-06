@@ -51,7 +51,7 @@
                 <property name="action-name">win.reload-directory</property>
                 <property name="icon-name">view-refresh</property>
                 <property name="label" translatable="yes">Reload Directory</property>
-                <property name="tooltip-text" translatable="yes">Reload Directory</property>
+                <property name="tooltip-text" translatable="yes">Reload the current directory and all files in it.</property>
                 <property name="visible">True</property>
             </object>
         </child>
@@ -60,7 +60,7 @@
                 <property name="action-name">win.browse-subdir</property>
                 <property name="icon-name">go-down</property>
                 <property name="label" translatable="yes">Browse Subdirectories</property>
-                <property name="tooltip-text" translatable="yes">Browse Subdirectories</property>
+                <property name="tooltip-text" translatable="yes">Whether to search subdirectories for audio files when reading a directory in the browser.</property>
                 <property name="visible">True</property>
             </object>
         </child>
