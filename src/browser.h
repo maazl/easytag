@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2022-2025  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2022-2026  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014-2015  David King <amigadave@amigadave.com>
  * Copyright (C) 2000-2003  Jerome Couderc <easytag@gmail.com>
  *
@@ -76,10 +76,6 @@ public:
 	/// Return the focused file if a popup menu action is currently pending in the file view.
 	ET_File* popup_file();
 
-	/// Get the path of the currently selected file.
-	/// @remarks Strictly speaking this should be part on the tag area.
-	const gchar* get_file_path();
-
 	/// Get previous and next file that matches a predicate.
 	/// @return previous and next matching file or \c nullptr if no such file exists.
 	/// @remarks The current implementation needs to scan the entire model.
@@ -114,7 +110,6 @@ public:
 	void run_player_for_artist_list();
 	void run_player_for_selection();
 
-	void display_et_file_path(const ET_File *ETFile);
 	void remove_file(const ET_File *ETFile);
 
 	void select_all();

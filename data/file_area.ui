@@ -5,12 +5,12 @@
         <child>
             <object class="GtkGrid" id="file_grid">
                 <property name="border-width">6</property>
+                <property name="row-spacing">2</property>
                 <property name="column-spacing">6</property>
-                <property name="row-spacing">6</property>
                 <property name="visible">True</property>
                 <child>
                     <object class="GtkLabel" id="file_label">
-                        <property name="halign">start</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">File</property>
                         <property name="visible">True</property>
                         <attributes>
@@ -20,29 +20,55 @@
                     <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">0</property>
-                        <property name="width">2</property>
                     </packing>
                 </child>
                 <child>
                     <object class="GtkLabel" id="index_label">
-                        <property name="label" translatable="yes">0/0:</property>
-                        <property name="margin-left">12</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="files_label">
+                        <property name="xalign">1</property>
+                        <property name="label" translatable="yes">No files</property>
+                        <property name="tooltip-text" translatable="yes">Number of files in the same directory</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">0</property>
                     </packing>
                 </child>
                 <child>
                     <object class="GtkEntry" id="name_entry">
                         <property name="hexpand">True</property>
+                        <property name="tooltip-text" translatable="yes">Name of the currently selected file</property>
                         <property name="visible">True</property>
                         <signal name="populate-popup" handler="on_entry_populate_popup"/>
                     </object>
                     <packing>
-                        <property name="left-attach">1</property>
+                        <property name="left-attach">0</property>
                         <property name="top-attach">1</property>
+                        <property name="width">3</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkEntry" id="path_entry">
+                        <property name="hexpand">True</property>
+                        <property name="tooltip-text" translatable="yes">Path of the currently selected file relative to the current root.</property>
+                        <property name="secondary-icon-name">insert-text</property>
+                        <property name="secondary-icon-tooltip-text" translatable="yes">Apply path to selected files</property>
+                        <property name="visible">True</property>
+                        <signal name="populate-popup" handler="on_entry_populate_popup"/>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                        <property name="width">3</property>
                     </packing>
                 </child>
                 <child>
@@ -191,10 +217,16 @@
                     <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">3</property>
-                        <property name="width">2</property>
+                        <property name="width">3</property>
                     </packing>
                 </child>
             </object>
         </child>
     </template>
+          <object class="GtkSizeGroup">
+            <widgets>
+              <widget name="file_label"/>
+              <widget name="files_label"/>
+            </widgets>
+          </object>
 </interface>

@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EasyTAG master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-06 14:25+0200\n"
-"PO-Revision-Date: 2026-06-06 14:28+0200\n"
+"POT-Creation-Date: 2026-06-06 14:33+0200\n"
+"PO-Revision-Date: 2026-06-06 14:35+0200\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -86,7 +86,7 @@ msgid "Results"
 msgstr "Ergebnisse"
 
 #: ../data/acoustid_dialog.ui.h:4 ../data/cddb_dialog.ui.h:7
-#: ../data/toolbar.ui.h:38
+#: ../data/toolbar.ui.h:39
 msgid "Stop"
 msgstr "Stop"
 
@@ -468,7 +468,7 @@ msgstr "Vorschau der Ordnerumbenennung"
 msgid "_Rename"
 msgstr "_Umbenennen"
 
-#: ../data/cddb_dialog.ui.h:1 ../data/toolbar.ui.h:35
+#: ../data/cddb_dialog.ui.h:1 ../data/toolbar.ui.h:36
 msgid "CDDB Search"
 msgstr "CDDB-Suche"
 
@@ -796,7 +796,7 @@ msgstr "Rückgängig für Datei"
 msgid "Redo for File"
 msgstr "Wiederholen für Datei"
 
-#: ../data/menus.ui.h:10 ../data/toolbar.ui.h:22
+#: ../data/menus.ui.h:10 ../data/toolbar.ui.h:23
 msgid "_Save Files"
 msgstr "Dateien _speichern"
 
@@ -808,7 +808,7 @@ msgstr "Speichern von Dateien _erzwingen"
 msgid "_Edit"
 msgstr "_Bearbeiten"
 
-#: ../data/menus.ui.h:13 ../data/toolbar.ui.h:30
+#: ../data/menus.ui.h:13 ../data/toolbar.ui.h:31
 msgid "_Find…"
 msgstr "_Suchen …"
 
@@ -820,7 +820,7 @@ msgstr "Alle auswählen"
 msgid "Unselect All"
 msgstr "Alle abwählen"
 
-#: ../data/menus.ui.h:16 ../data/toolbar.ui.h:28
+#: ../data/menus.ui.h:16 ../data/toolbar.ui.h:29
 msgid "Invert File Selection"
 msgstr "Dateiauswahl umkehren"
 
@@ -832,7 +832,7 @@ msgstr "Rückgängig"
 msgid "Redo"
 msgstr "Wiederholen"
 
-#: ../data/menus.ui.h:19 ../data/toolbar.ui.h:16
+#: ../data/menus.ui.h:19 ../data/toolbar.ui.h:17
 msgid "_Remove Tags"
 msgstr "Metainformationen ent_fernen"
 
@@ -860,11 +860,11 @@ msgstr "Dateien und Ordner umbenennen"
 msgid "Process Fields"
 msgstr "Felder verarbeiten"
 
-#: ../data/menus.ui.h:27 ../data/toolbar.ui.h:24
+#: ../data/menus.ui.h:27 ../data/toolbar.ui.h:25
 msgid "Directory Tree"
 msgstr "Ordnerbaum"
 
-#: ../data/menus.ui.h:28 ../data/toolbar.ui.h:26
+#: ../data/menus.ui.h:28 ../data/toolbar.ui.h:27
 msgid "Artists and Albums"
 msgstr "Künstler und Alben"
 
@@ -959,7 +959,7 @@ msgstr "CDD_B-Dateisuche …"
 msgid "Load Filenames From a Text File…"
 msgstr "Dateinamen aus Textdatei laden …"
 
-#: ../data/menus.ui.h:76 ../data/toolbar.ui.h:36
+#: ../data/menus.ui.h:76 ../data/toolbar.ui.h:37
 msgid "Generate Playlist…"
 msgstr "Wiedergabeliste erzeugen …"
 
@@ -1043,7 +1043,7 @@ msgstr "Unterordner durchsuchen"
 msgid "Invert Selection"
 msgstr "Auswahl umkehren"
 
-#: ../data/menus.ui.h:98 ../data/toolbar.ui.h:32
+#: ../data/menus.ui.h:98 ../data/toolbar.ui.h:33
 msgid "Fingerprint…"
 msgstr "Fingerabdruck…"
 
@@ -2869,77 +2869,85 @@ msgstr "Letzte Datei"
 
 #: ../data/toolbar.ui.h:10
 msgid "Reload the current directory and all files in it."
-msgstr ""
+msgstr "Das aktuelle Verzeichnis und alle Dateien darin neu laden."
 
 #: ../data/toolbar.ui.h:12
+msgid ""
+"Whether to search subdirectories for audio files when reading a directory in "
+"the browser."
+msgstr ""
+"Legt fest, ob Unterordner nach Audiodateien durchsucht werden, wenn ein "
+"Ordner in den Baum eingelesen wird."
+
+#: ../data/toolbar.ui.h:13
 msgid "_Show Scanner"
 msgstr "_Scanner anzeigen"
 
-#: ../data/toolbar.ui.h:13
+#: ../data/toolbar.ui.h:14
 msgid "Show scanner"
 msgstr "Scanner anzeigen"
 
-#: ../data/toolbar.ui.h:14
+#: ../data/toolbar.ui.h:15
 msgid "Calculate Replay_Gain"
 msgstr "Berechne Replay_Gain"
 
-#: ../data/toolbar.ui.h:15
+#: ../data/toolbar.ui.h:16
 msgid "Analyze selected files with ReplayGain and update the tags accordingly"
 msgstr "Analysiere merkierte Dateien mit ReplayGain und aktualisiere Tags"
 
-#: ../data/toolbar.ui.h:17
+#: ../data/toolbar.ui.h:18
 msgid "Remove tags"
 msgstr "Metainformationen entfernen"
 
-#: ../data/toolbar.ui.h:18
+#: ../data/toolbar.ui.h:19
 msgid "_Undo"
 msgstr "_Rückgängig"
 
-#: ../data/toolbar.ui.h:19
+#: ../data/toolbar.ui.h:20
 msgid "Undo for file"
 msgstr "Rückgängig für Datei"
 
-#: ../data/toolbar.ui.h:20
+#: ../data/toolbar.ui.h:21
 msgid "R_edo"
 msgstr "_Wiederholen"
 
-#: ../data/toolbar.ui.h:21
+#: ../data/toolbar.ui.h:22
 msgid "Redo for file"
 msgstr "Wiederholen für Datei"
 
-#: ../data/toolbar.ui.h:23
+#: ../data/toolbar.ui.h:24
 msgid "Save changes to selected files"
 msgstr "Änderungen in die ausgewählten Dateien speichern"
 
-#: ../data/toolbar.ui.h:25
+#: ../data/toolbar.ui.h:26
 msgid "Browse directory tree"
 msgstr "Ordnerbaum durchsuchen"
 
-#: ../data/toolbar.ui.h:27
+#: ../data/toolbar.ui.h:28
 msgid "Browse artists and albums"
 msgstr "Künstler und Alben durchsuchen"
 
-#: ../data/toolbar.ui.h:29
+#: ../data/toolbar.ui.h:30
 msgid "Invert file selection"
 msgstr "Dateiauswahl umkehren"
 
-#: ../data/toolbar.ui.h:31
+#: ../data/toolbar.ui.h:32
 msgid "Search filenames and tags"
 msgstr "Dateinamen und Metainformationen suchen"
 
-#: ../data/toolbar.ui.h:33
+#: ../data/toolbar.ui.h:34
 msgid "Audio fingerprinting"
 msgstr "Audio-Fingerabdruck"
 
-#: ../data/toolbar.ui.h:34
+#: ../data/toolbar.ui.h:35
 msgid "CDDB Search…"
 msgstr "CDDB-Suche …"
 
-#: ../data/toolbar.ui.h:37
+#: ../data/toolbar.ui.h:38
 msgid "Generate a playlist"
 msgstr "Eine Wiedergabeliste erzeugen"
 
-#: ../data/toolbar.ui.h:39
+#: ../data/toolbar.ui.h:40
 msgid "Stop the current action"
 msgstr "Aktuellen Befehl abbrechen"
 

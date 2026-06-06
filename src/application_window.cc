@@ -53,11 +53,11 @@ using namespace std;
 
 typedef struct
 {
-    EtBrowser *browser;
+    EtBrowser* browser;
 
-    GtkWidget *file_area;
+    EtFileArea* file_area;
     GtkWidget *log_area;
-    GtkWidget *tag_area;
+    EtTagArea* tag_area;
     GtkWidget *progress_bar;
     GtkWidget *status_bar;
 
@@ -625,7 +625,7 @@ static void on_select_all(GSimpleAction* action, GVariant* variant, gpointer use
 		{	gtk_editable_select_region (GTK_EDITABLE (focused), 0, -1);
 			return;
 		}
-		else if (et_tag_area_select_all_if_focused(ET_TAG_AREA(priv->tag_area), focused))
+		else if (et_tag_area_select_all_if_focused(priv->tag_area, focused))
 			return;
 		/* Assume that other widgets should select all in the file view. */
 	}
@@ -652,7 +652,7 @@ static void on_unselect_all(GSimpleAction* action, GVariant* variant, gpointer u
 			gtk_editable_set_position (editable, pos);
 			return;
 		}
-		else if (et_tag_area_unselect_all_if_focused(ET_TAG_AREA(priv->tag_area), focused))
+		else if (et_tag_area_unselect_all_if_focused(priv->tag_area, focused))
 			return;
 		/* Assume that other widgets should unselect all in the file view. */
 	}
@@ -917,7 +917,7 @@ void EtApplicationWindow::change_displayed_file(ET_File *etfile)
 	et_application_window_scan_dialog_update_previews(this);
 
 	if (!g_settings_get_boolean(MainSettings, "tag-preserve-focus"))
-		et_tag_area_title_grab_focus(ET_TAG_AREA(priv->tag_area));
+		et_tag_area_title_grab_focus(priv->tag_area);
 }
 
 /* Go to the first item of the list */
@@ -997,7 +997,7 @@ on_stop (GSimpleAction *action,
 static void on_fields_changed(EtApplicationWindow *self, const gchar *key, GSettings *settings)
 {
 	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
-	et_tag_area_update_controls(ET_TAG_AREA(priv->tag_area), priv->displayed_file);
+	et_tag_area_update_controls(priv->tag_area, priv->displayed_file);
 }
 
 template<void (EtBrowser::*F)()>
@@ -1195,13 +1195,23 @@ et_application_window_init (EtApplicationWindow *self)
 
     gtk_box_pack_start (GTK_BOX (main_vbox), toolbar, FALSE, FALSE, 0);
 
+    /* Vertical pane for Browser Area + Log */
+    priv->vpaned = GTK_PANED (gtk_paned_new (GTK_ORIENTATION_VERTICAL));
+    gtk_paned_set_wide_handle(priv->vpaned, TRUE);
+    priv->browser = et_browser_new ();
+    gtk_paned_pack1 (priv->vpaned, GTK_WIDGET(priv->browser), TRUE, FALSE);
+
+    /* Log */
+    priv->log_area = et_log_area_new ();
+    gtk_paned_pack2 (priv->vpaned, priv->log_area, FALSE, FALSE);
+
     /* The two panes: BrowserArea on the left, FileArea+TagArea on the right */
     priv->hpaned = GTK_PANED(gtk_paned_new (GTK_ORIENTATION_HORIZONTAL));
+    gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET(priv->hpaned), TRUE, TRUE, 0);
     gtk_paned_set_wide_handle(priv->hpaned, TRUE);
 
     /* Browser (Tree + File list + Entry) */
-    priv->browser = et_browser_new ();
-    gtk_paned_pack1 (priv->hpaned, GTK_WIDGET(priv->browser), TRUE, TRUE);
+    gtk_paned_pack1 (priv->hpaned, GTK_WIDGET(priv->vpaned), TRUE, TRUE);
 
     /* Vertical box for FileArea + TagArea */
     grid = gtk_grid_new ();
@@ -1210,27 +1220,18 @@ et_application_window_init (EtApplicationWindow *self)
     gtk_paned_pack2 (priv->hpaned, grid, FALSE, FALSE);
 
     /* File */
-    priv->file_area = et_file_area_new ();
-    gtk_container_add (GTK_CONTAINER (grid), priv->file_area);
+    priv->file_area = (EtFileArea*)g_object_new(ET_TYPE_FILE_AREA, NULL);
+    gtk_container_add(GTK_CONTAINER(grid), GTK_WIDGET(priv->file_area));
 
     /* Tag */
-    priv->tag_area = et_tag_area_new ();
-    gtk_container_add (GTK_CONTAINER (grid), priv->tag_area);
+    priv->tag_area = et_tag_area_new();
+    gtk_container_add(GTK_CONTAINER(grid), GTK_WIDGET(priv->tag_area));
 
     restore_state (self);
     /* Update the stored paned position whenever it is changed (after configure
      * and windows state events have been processed). */
     g_signal_connect_swapped (priv->hpaned, "notify::position",
                               G_CALLBACK (on_paned_notify_position), self);
-
-    /* Vertical pane for Browser Area + FileArea + TagArea */
-    priv->vpaned = GTK_PANED (gtk_paned_new (GTK_ORIENTATION_VERTICAL));
-    gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET(priv->vpaned), TRUE, TRUE, 0);
-    gtk_paned_pack1 (priv->vpaned, GTK_WIDGET(priv->hpaned), TRUE, FALSE);
-
-    /* Log */
-    priv->log_area = et_log_area_new ();
-    gtk_paned_pack2 (priv->vpaned, priv->log_area, FALSE, FALSE);
 
     /* Horizontal box for Status bar + Progress bar */
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -1439,7 +1440,7 @@ et_application_window_create_file_name_from_ui (EtApplicationWindow *self,
     g_return_val_if_fail(ETFile != NULL, nullptr);
     EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
 
-    const gchar *filename_utf8 = et_file_area_get_filename(ET_FILE_AREA(priv->file_area));
+    const gchar *filename_utf8 = priv->file_area->get_file_name();
     if (et_str_empty(filename_utf8))
     {
         /* Keep the 'last' filename (if a 'blank' filename was entered in the
@@ -1450,7 +1451,7 @@ et_application_window_create_file_name_from_ui (EtApplicationWindow *self,
     // add file path
     string filename_new;
     unsigned start = 0;
-    const gchar* filepath_utf8 = priv->browser->get_file_path();
+    const gchar* filepath_utf8 = priv->file_area->get_file_path();
     if (!*filepath_utf8)
     	filename_new = filename_utf8;
     else
@@ -1507,7 +1508,7 @@ et_application_window_update_et_file_from_ui (EtApplicationWindow *self)
     File_Name* FileName = et_application_window_create_file_name_from_ui(self, et_file);
 
     File_Tag* fileTag = new File_Tag(*et_file->FileTagNew()); // clone
-    et_tag_area_store_file_tag(ET_TAG_AREA(priv->tag_area), fileTag);
+    et_tag_area_store_file_tag(priv->tag_area, fileTag);
 
     /*
      * Generate undo for the file and the main undo list.
@@ -1519,36 +1520,6 @@ et_application_window_update_et_file_from_ui (EtApplicationWindow *self)
 }
 
 /*
- * "Default" way to display File Info to the user interface.
- */
-static void
-et_header_fields_new_default (EtFileHeaderFields *fields, const ET_File *ETFile)
-{
-    const ET_File_Info *info = &ETFile->ETFileInfo;
-
-    fields->description = ETFile->ETFileDescription->FileType;
-
-    /* Bitrate */
-    fields->bitrate = strprintf(info->variable_bitrate ? _("~%d kb/s") : _("%d kb/s"), (info->bitrate + 500) / 1000);
-
-    /* Samplerate */
-    fields->samplerate = strprintf(_("%d Hz"), info->samplerate);
-
-    /* Mode */
-    fields->mode = strprintf("%d", info->mode);
-
-    /* Size */
-    fields->size = strprintf("%s (%s)",
-        gString(g_format_size(ETFile->FileSize)).get(),
-        gString(g_format_size(ET_FileList::visible_total_bytes())).get());
-
-    /* Duration */
-    fields->duration = strprintf("%s (%s)",
-        et_file_duration_to_string(info->duration).c_str(),
-        et_file_duration_to_string(ET_FileList::visible_total_duration()).c_str());
-}
-
-/*
  * Display information of the file (Position + Header + Tag) to the user interface.
  */
 void et_application_window_update_ui_from_et_file(EtApplicationWindow *self, EtColumn columns)
@@ -1557,36 +1528,20 @@ void et_application_window_update_ui_from_et_file(EtApplicationWindow *self, EtC
 
     if (!priv->displayed_file || !priv->displayed_file->FileNameCur()) // For the case where ETFile is an "empty" structure.
     {	// Reinit the tag and file area
-    	priv->browser->display_et_file_path(nullptr);
-    	et_file_area_clear(ET_FILE_AREA(priv->file_area));
-    	et_tag_area_clear(ET_TAG_AREA(priv->tag_area));
+    	priv->file_area->clear();
+    	et_tag_area_clear(priv->tag_area);
     	return;
     }
 
-    const ET_File_Description *description = priv->displayed_file->ETFileDescription;
-
-    /* Display position in list + show/hide icon if file writable/read_only (cur_filename) */
-    et_file_area_set_file_fields(ET_FILE_AREA(priv->file_area), priv->displayed_file);
-
-    /* Display filename (and his path) (value in FileNameNew) */
-    if (columns & ET_COLUMN_FILEPATH)
-    	priv->browser->display_et_file_path(priv->displayed_file);
+    /* Display file data */
+    priv->file_area->display_et_file(priv->displayed_file, columns);
 
     /* Display tag data */
-    if (columns & ~ET_COLUMN_FILEPATH)
-    	et_tag_area_display_et_file(ET_TAG_AREA(priv->tag_area), priv->displayed_file, columns);
+    if (columns & ~(ET_COLUMN_FILEPATH|ET_COLUMN_FILENAME))
+    	et_tag_area_display_et_file(priv->tag_area, priv->displayed_file, columns);
 
     /* Display controls in tag area */
-    et_tag_area_update_controls(ET_TAG_AREA(priv->tag_area), priv->displayed_file);
-
-    /* Display file data, header data and file type */
-    EtFileHeaderFields fields;
-    et_header_fields_new_default(&fields, priv->displayed_file); // some defaults...
-
-    if (description->display_file_info_to_ui)
-        (*description->display_file_info_to_ui)(&fields, priv->displayed_file);
-
-    et_file_area_set_header_fields(ET_FILE_AREA(priv->file_area), &fields);
+    et_tag_area_update_controls(priv->tag_area, priv->displayed_file);
 
     et_application_window_status_bar_message(self, strprintf(_("File: ‘%s’"), priv->displayed_file->FileNameCur()->full_name().get()).c_str(), FALSE);
 }

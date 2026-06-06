@@ -1,4 +1,5 @@
 /* EasyTAG - tag editor for audio files
+ * Copyright (C) 2023-2026  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -41,8 +42,8 @@ struct _EtTagAreaClass
     GtkBinClass parent_class;
 };
 
-GType et_tag_area_get_type (void);
-GtkWidget * et_tag_area_new (void);
+GType et_tag_area_get_type();
+EtTagArea* et_tag_area_new();
 void et_tag_area_update_controls (EtTagArea *self, const ET_File* file);
 void et_tag_area_clear (EtTagArea *self);
 void et_tag_area_title_grab_focus (EtTagArea *self);
@@ -51,6 +52,7 @@ gboolean et_tag_area_display_et_file (EtTagArea *self, const ET_File *ETFile, Et
 gboolean et_tag_area_select_all_if_focused (EtTagArea *self, GtkWidget *focused);
 gboolean et_tag_area_unselect_all_if_focused (EtTagArea *self, GtkWidget *focused);
 
-void on_entry_populate_popup (GtkEntry *entry, GtkWidget *menu, EtTagArea *self);
+void et_tag_field_connect_signals(GtkEntry *entry, EtTagArea *self, bool numeric = false);
+void on_entry_populate_popup(GtkEntry *entry, GtkWidget *menu, EtTagArea *self);
 
 #endif /* ET_TAG_AREA_H_ */

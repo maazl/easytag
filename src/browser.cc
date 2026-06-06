@@ -30,6 +30,7 @@
 #include "file_renderer.h"
 #include "xptr.h"
 #include "xlist.h"
+#include "tag_area.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
@@ -48,7 +49,6 @@
 #include "misc.h"
 #include "setting.h"
 #include "enums.h"
-#include "file_name.h"
 #include "acoustid_dialog.h"
 
 #include "win32/win32dep.h"
@@ -72,7 +72,6 @@ class ExpandDirectoryWorker;
 
 typedef struct
 {
-    GtkWidget *files_label;
     GtkWidget *open_button;
     GtkPaned *browser_paned;
 
@@ -101,11 +100,6 @@ typedef struct
     GtkWidget *directory_view; /* Tree of directories. */
     GtkWidget *directory_view_menu;
     GtkTreeStore *directory_model;
-
-    /// Path of the currently selected file.
-    /// @remarks Strictly speaking this belongs to the tag area,
-    /// but for design issues it is part of the browser window.
-    GtkWidget *path_entry;
 
     /* directory icons */
     GIcon *folder_icon;
@@ -1000,10 +994,6 @@ ET_File* EtBrowser::popup_file()
 	return etfile;
 }
 
-const gchar* EtBrowser::get_file_path()
-{	return gtk_entry_get_text(GTK_ENTRY(et_browser_get_instance_private(this)->path_entry));
-}
-
 /*
  * Load default directory
  */
@@ -1890,29 +1880,6 @@ et_browser_refresh_file_in_list (EtBrowser *self,
 	}
 }
 
-void EtBrowser::display_et_file_path(const ET_File *ETFile)
-{
-	EtBrowserPrivate *priv = et_browser_get_instance_private(this);
-	if (!ETFile)
-	{	gtk_entry_set_text(GTK_ENTRY(priv->path_entry), "");
-		gtk_label_set_text(GTK_LABEL(priv->files_label),
-			/* Translators: No files, as in "0 files". */ _("No files"));
-		return;
-	}
-
-	// Set the path to the file into BrowserEntry
-	const xStringD0& dirname_utf8 = ETFile->FileNameNew()->path();
-  gtk_entry_set_text(GTK_ENTRY(priv->path_entry), dirname_utf8);
-
-	// And refresh the number of files in this directory
-	unsigned n_files = 0;
-	for (const ET_File* file : ET_FileList::all_files())
-		if (file->FileNameNew()->path() == dirname_utf8)
-			++n_files;
-	string text = strprintf(ngettext("One file", "%u files", n_files), n_files);
-	gtk_label_set_text(GTK_LABEL(priv->files_label), text.c_str());
-}
-
 /*
  * Remove a file from the list, by ETFile
  */
@@ -2655,7 +2622,6 @@ et_browser_set_sensitive (EtBrowser *self, gboolean sensitive)
     gtk_widget_set_sensitive (GTK_WIDGET (priv->artist_view), sensitive);
     gtk_widget_set_sensitive (GTK_WIDGET (priv->album_view), sensitive);
     gtk_widget_set_sensitive (GTK_WIDGET (priv->open_button), sensitive);
-    gtk_widget_set_sensitive (GTK_WIDGET (priv->files_label), sensitive);
 }
 
 static void
@@ -4048,7 +4014,6 @@ void et_browser_class_init (EtBrowserClass *klass)
     widget_class->destroy = et_browser_destroy;
 
     gtk_widget_class_set_template_from_resource(widget_class, "/org/gnome/EasyTAG/browser.ui");
-    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, files_label);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, open_button);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, browser_paned);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, entry_model);
@@ -4062,7 +4027,6 @@ void et_browser_class_init (EtBrowserClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, artist_view);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, directory_model);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, directory_view);
-    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, path_entry);
     gtk_widget_class_bind_template_callback_full(widget_class, "collapse_cb", G_CALLBACK(&ExpandDirectoryWorker::Collapse));
     gtk_widget_class_bind_template_callback_full(widget_class, "expand_cb", G_CALLBACK(&ExpandDirectoryWorker::Expand));
     gtk_widget_class_bind_template_callback(widget_class, on_album_tree_button_press_event);

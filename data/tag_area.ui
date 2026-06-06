@@ -25,7 +25,7 @@
     <template class="EtTagArea" parent="GtkBin">
         <child>
             <object class="GtkNotebook" id="tag_notebook">
-                <property name="border-width">2</property>
+                <property name="show-border">False</property>
                 <child type="action-start">
                     <object class="GtkBox" id="tag_label_box">
                         <child>
@@ -43,7 +43,7 @@
                 </child>
                 <child>
                     <object class="GtkGrid" id="common_grid">
-                        <property name="border-width">2</property>
+                        <property name="border-width">6</property>
                         <property name="column-spacing">2</property>
                         <property name="row-spacing">2</property>
                         <child>
@@ -225,6 +225,11 @@
                                 <property name="entry-text-column">0</property>
                                 <property name="hexpand">True</property>
                                 <property name="wrap-width">3</property>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry">
+                                    <property name="max_length">6</property>
+                                  </object>
+                                </child>
                             </object>
                             <packing>
                                 <property name="left-attach">2</property>
@@ -246,6 +251,7 @@
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this number of tracks</property>
                                 <property name="width-chars">4</property>
+                                <property name="max_length">6</property>
                                 <signal name="insert-text" handler="Insert_Only_Digit"/>
                             </object>
                             <packing>
@@ -269,6 +275,7 @@
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this disc number</property>
                                 <property name="width-chars">6</property>
+                                <property name="max_length">13</property>
                             </object>
                             <packing>
                                 <property name="left-attach">6</property>
@@ -291,6 +298,7 @@
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this year</property>
                                 <property name="width-chars">6</property>
+                                <property name="max_length">16</property>
                                 <signal name="activate" handler="on_year_entry_activate"/>
                                 <signal name="focus-out-event" handler="on_year_entry_focus_out_event"/>
                             </object>
@@ -317,6 +325,7 @@
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this release year</property>
                                 <property name="width-chars">6</property>
+                                <property name="max_length">16</property>
                                 <signal name="activate" handler="on_year_entry_activate"/>
                                 <signal name="focus-out-event" handler="on_year_entry_focus_out_event"/>
                             </object>
@@ -430,6 +439,7 @@
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this original year</property>
                                 <property name="width-chars">6</property>
+                                <property name="max_length">16</property>
                                 <signal name="activate" handler="on_year_entry_activate"/>
                                 <signal name="focus-out-event" handler="on_year_entry_focus_out_event"/>
                             </object>
@@ -521,6 +531,7 @@
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this track gain</property>
                                 <property name="visible">True</property>
+                                <property name="max_length">16</property>
                             </object>
                             <packing>
                                 <property name="left-attach">1</property>
@@ -560,6 +571,7 @@
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this track peak level</property>
                                 <property name="visible">True</property>
+                                <property name="max_length">16</property>
                             </object>
                             <packing>
                                 <property name="left-attach">6</property>
@@ -586,6 +598,7 @@
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this album gain</property>
                                 <property name="visible">True</property>
+                                <property name="max_length">16</property>
                             </object>
                             <packing>
                                 <property name="left-attach">1</property>
@@ -625,6 +638,7 @@
                                 <property name="secondary-icon-name">insert-text</property>
                                 <property name="secondary-icon-tooltip-text" translatable="yes">Tag selected files with this album peak level</property>
                                 <property name="visible">True</property>
+                                <property name="max_length">16</property>
                             </object>
                             <packing>
                                 <property name="left-attach">6</property>
@@ -639,7 +653,7 @@
                     </object>
                 </child>
                 <child>
-                    <object class="GtkGrid" id="images_grid">
+                    <object class="GtkBox" id="images_box">
                         <property name="orientation">vertical</property>
                         <child>
                             <object class="GtkToolbar" id="images_toolbar">
@@ -689,7 +703,6 @@
                         </child>
                         <child>
                             <object class="GtkScrolledWindow" id="images_scrolled">
-                                <property name="shadow-type">etched-in</property>
                                 <property name="tooltip-text" translatable="yes">You can use drag and drop to add an image</property>
                                 <child>
                                     <object class="GtkTreeView" id="images_view">
@@ -708,7 +721,9 @@
                                                     </attributes>
                                                 </child>
                                                 <child>
-                                                    <object class="GtkCellRendererText" id="images_text_renderer"/>
+                                                    <object class="GtkCellRendererText" id="images_text_renderer">
+                                                        <property name="xpad">6</property>
+                                                    </object>
                                                     <attributes>
                                                         <attribute name="text">1</attribute>
                                                     </attributes>
@@ -733,7 +748,7 @@
                     </object>
                 </child>
                 <child>
-                    <object class="GtkGrid" id="comment_grid">
+                    <object class="GtkBox" id="comment_box">
                         <property name="orientation">vertical</property>
                         <child>
                             <object class="GtkToolbar" id="comment_toolbar">
@@ -751,9 +766,10 @@
                         </child>
                         <child>
                             <object class="GtkScrolledWindow" id="comment_scrolled">
-                                <property name="shadow-type">etched-in</property>
                                 <child>
                                     <object class="GtkTextView" id="comment_text">
+                                        <property name="margin-start">6</property>
+                                        <property name="margin-end">6</property>
                                         <property name="expand">True</property>
                                         <signal name="focus-out-event" handler="on_comment_focus_out"/>
                                     </object>
@@ -769,7 +785,8 @@
                 </child>
                 <child>
                     <object class="GtkScrolledWindow" id="description_scrolled">
-                        <property name="shadow-type">etched-in</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
                         <child>
                             <object class="GtkTextView" id="description_text">
                             </object>

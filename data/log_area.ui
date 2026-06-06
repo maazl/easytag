@@ -1,16 +1,17 @@
 <interface domain="easytag">
     <requires lib="gtk+" version="3.10"/>
     <template class="EtLogArea" parent="GtkBin">
-        <property name="border-width">2</property>
         <property name="visible">True</property>
         <child>
-            <object class="GtkGrid" id="log_grid">
+            <object class="GtkBox" id="log_box">
                 <property name="orientation">vertical</property>
-                <property name="row-spacing">6</property>
+                <property name="spacing">6</property>
                 <property name="visible">True</property>
                 <child>
                     <object class="GtkLabel" id="log_label">
                         <property name="halign">start</property>
+                        <property name="margin-top">2</property>
+                        <property name="margin-start">6</property>
                         <property name="label" translatable="yes">Log</property>
                         <property name="visible">True</property>
                         <attributes>
@@ -21,9 +22,7 @@
                 <child>
                     <object class="GtkScrolledWindow" id="log_scrolled">
                         <property name="expand">True</property>
-                        <property name="margin-left">12</property>
-                        <property name="min-content-height">64</property>
-                        <property name="shadow-type">etched-in</property>
+                        <property name="min-content-height">54</property>
                         <property name="visible">True</property>
                         <child>
                             <object class="GtkTreeView" id="log_view">
@@ -34,7 +33,9 @@
                                     <object class="GtkTreeViewColumn" id="log_icon_column">
                                         <property name="sizing">autosize</property>
                                         <child>
-                                            <object class="GtkCellRendererPixbuf" id="log_icon_renderer"/>
+                                            <object class="GtkCellRendererPixbuf" id="log_icon_renderer">
+                                                <property name="xpad">4</property>
+                                            </object>
                                             <attributes>
                                                 <attribute name="icon-name">0</attribute>
                                             </attributes>
@@ -46,7 +47,9 @@
                                             </attributes>
                                         </child>
                                         <child>
-                                            <object class="GtkCellRendererText" id="log_text_renderer"/>
+                                            <object class="GtkCellRendererText" id="log_text_renderer">
+                                                <property name="xpad">6</property>
+                                            </object>
                                             <attributes>
                                                 <attribute name="text">2</attribute>
                                             </attributes>

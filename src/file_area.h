@@ -1,4 +1,5 @@
 /* EasyTAG - tag editor for audio files
+ * Copyright (C) 2022-2026  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,21 +20,36 @@
 #ifndef ET_FILE_AREA_H_
 #define ET_FILE_AREA_H_
 
+#include "setting.h"
+
+#include <glib.h>
 #include <gtk/gtk.h>
+#include <cstddef>
 
 struct EtFileHeaderFields;
 struct ET_File;
 
+GType et_file_area_get_type();
 #define ET_TYPE_FILE_AREA (et_file_area_get_type ())
-#define ET_FILE_AREA(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_FILE_AREA, EtFileArea))
+#define ET_FILE_AREA(object) (G_TYPE_CHECK_INSTANCE_CAST((object), ET_TYPE_FILE_AREA, EtFileArea))
 
 typedef struct _EtFileArea EtFileArea;
 typedef struct _EtFileAreaClass EtFileAreaClass;
 
 struct _EtFileArea
-{
-    /*< private >*/
-    GtkBin parent_instance;
+{private:
+	/*< private >*/
+	GtkBin parent_instance;
+
+	/// Get default header fields w/o specific tag handler.
+	static void default_header_fields(EtFileHeaderFields& fields, const ET_File& ETFile);
+	void set_header_fields(const EtFileHeaderFields& fields);
+public:
+	void clear();
+	/// Update file area controls from file instance
+	void display_et_file(const ET_File *ETFile, EtColumn columns);
+	const gchar* get_file_name();
+	const gchar* get_file_path();
 };
 
 struct _EtFileAreaClass
@@ -41,12 +57,5 @@ struct _EtFileAreaClass
     /*< private >*/
     GtkBinClass parent_class;
 };
-
-GType et_file_area_get_type (void);
-GtkWidget * et_file_area_new (void);
-void et_file_area_clear (EtFileArea *self);
-void et_file_area_set_header_fields (EtFileArea *self, const EtFileHeaderFields *fields);
-void et_file_area_set_file_fields (EtFileArea *self, const ET_File *ETFile);
-const gchar * et_file_area_get_filename (EtFileArea *self);
 
 #endif /* ET_FILE_AREA_H_ */

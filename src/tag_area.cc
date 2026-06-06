@@ -1,5 +1,5 @@
 /* EasyTAG - tag editor for audio files
- * Copyright (C) 2022-2025  Marcel Müller <github@maazl.de>
+ * Copyright (C) 2022-2026  Marcel Müller <github@maazl.de>
  * Copyright (C) 2014,2015  David King <amigadave@amigadave.com>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -105,7 +105,7 @@ typedef struct
     GtkListStore *track_combo_model;
 
     /* Comment tab */
-    GtkWidget *comment_grid;
+    GtkWidget *comment_box;
     GtkTextView *comment_text;
 
     /* Description tab */
@@ -121,7 +121,7 @@ typedef struct
     GtkWidget *image_properties_toolitem;
 
     /* Notebook tabs. */
-    GtkWidget *images_grid;
+    GtkWidget *images_box;
 
     /* Image treeview model. */
     GtkListStore *images_model;
@@ -215,59 +215,62 @@ static gchar* apply_field_to_selection(GtkWidget* widget, const vector<xPtr<ET_F
 		return g_strdup(empty_text);
 }
 
-static void
-on_apply_to_selection (GObject *object,
-                       EtTagArea *self)
+static void on_apply_to_selection(GtkWidget *object, GTypeInstance *context)
 {
     EtApplicationWindow* window = MainWindow;
     g_return_if_fail(window);
 
-    EtTagAreaPrivate* priv = et_tag_area_get_instance_private(self);
-
     et_application_window_update_et_file_from_ui (window);
 
-    auto etfilelist = window->browser()->get_selected_files();
+    EtTagAreaPrivate* priv;
 
+    auto etfilelist = window->browser()->get_selected_files();
     gchar *msg = NULL;
 
-    if (object == G_OBJECT (priv->title_entry))
+    if (!G_TYPE_CHECK_INSTANCE_TYPE(context, ET_TYPE_TAG_AREA))
+    {	// the only way that context does NOT refer to TagArea is the file path entry
+    	goto finish;
+    } else
+    	priv = et_tag_area_get_instance_private(ET_TAG_AREA(context));
+
+    if (object == priv->title_entry)
     {
-        msg = apply_field_to_selection(priv->title_entry, etfilelist, &File_Tag::title,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::title,
             _("Selected files tagged with title ‘%s’"), _("Removed title from selected files"));
     }
-    else if (object == G_OBJECT (priv->version_entry))
+    else if (object == priv->version_entry)
     {
-        msg = apply_field_to_selection(priv->version_entry, etfilelist, &File_Tag::version,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::version,
             _("Selected files tagged with version ‘%s’"), _("Removed version from selected files"));
     }
-    else if (object == G_OBJECT (priv->subtitle_entry))
+    else if (object == priv->subtitle_entry)
     {
-        msg = apply_field_to_selection(priv->subtitle_entry, etfilelist, &File_Tag::subtitle,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::subtitle,
             _("Selected files tagged with subtitle ‘%s’"), _("Removed subtitle from selected files"));
     }
-    else if (object == G_OBJECT (priv->artist_entry))
+    else if (object == priv->artist_entry)
     {
-        msg = apply_field_to_selection(priv->artist_entry, etfilelist, &File_Tag::artist,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::artist,
             _("Selected files tagged with artist ‘%s’"), _("Removed artist from selected files"));
     }
-    else if (object == G_OBJECT (priv->album_artist_entry))
+    else if (object == priv->album_artist_entry)
     {
-        msg = apply_field_to_selection(priv->album_artist_entry, etfilelist, &File_Tag::album_artist,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::album_artist,
             _("Selected files tagged with album artist ‘%s’"), _("Removed album artist from selected files"));
     }
-    else if (object == G_OBJECT (priv->album_entry))
+    else if (object == priv->album_entry)
     {
-        msg = apply_field_to_selection(priv->album_entry, etfilelist, &File_Tag::album,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::album,
             _("Selected files tagged with album ‘%s’"), _("Removed album name from selected files"));
     }
-    else if (object == G_OBJECT (priv->disc_subtitle_entry))
+    else if (object == priv->disc_subtitle_entry)
     {
-        msg = apply_field_to_selection(priv->disc_subtitle_entry, etfilelist, &File_Tag::disc_subtitle,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::disc_subtitle,
             _("Selected files tagged with disc subtitle ‘%s’"), _("Removed disc subtitle from selected files"));
     }
-    else if (object == G_OBJECT (priv->disc_number_entry))
+    else if (object == priv->disc_number_entry)
     {
-        const char* string_to_set = gtk_entry_get_text (GTK_ENTRY (priv->disc_number_entry));
+        const char* string_to_set = gtk_entry_get_text(GTK_ENTRY(object));
         const char* separator = strchr(string_to_set, '/');
 
         xStringD0 disc_number, disc_total;
@@ -293,21 +296,21 @@ on_apply_to_selection (GObject *object,
         else
             msg = g_strdup (_("Removed disc number from selected files"));
     }
-    else if (object == G_OBJECT (priv->year_entry))
+    else if (object == priv->year_entry)
     {
-        msg = apply_field_to_selection(priv->year_entry, etfilelist, &File_Tag::year,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::year,
             _("Selected files tagged with year ‘%s’"), _("Removed year from selected files"));
     }
-    else if (object == G_OBJECT (priv->release_year_entry))
+    else if (object == priv->release_year_entry)
     {
-        msg = apply_field_to_selection(priv->release_year_entry, etfilelist, &File_Tag::release_year,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::release_year,
             _("Selected files tagged with release year ‘%s’"), _("Removed release year from selected files"));
     }
-    else if (object == G_OBJECT (priv->track_total_entry))
+    else if (object == priv->track_total_entry)
     {
         /* Used of Track and Total Track values */
         xStringD0 track, total;
-        total.assignNFC(gtk_entry_get_text(GTK_ENTRY(priv->track_total_entry)));
+        total.assignNFC(gtk_entry_get_text(GTK_ENTRY(object)));
         // We apply the TrackEntry field to all others files only if it is to delete
         // the field (string=""). Else we don't overwrite the track number
         if (et_str_empty(total))
@@ -331,7 +334,7 @@ on_apply_to_selection (GObject *object,
         else
             msg = g_strdup_printf (_("Selected files tagged with track like ‘xx’"));
     }
-    else if (object == G_OBJECT (priv->track_sequence_button))
+    else if (object == priv->track_sequence_button)
     {
         /* This part doesn't set the same track number to all files, but sequence the tracks.
          * So we must browse the whole file list to get position of each selected file. */
@@ -385,17 +388,17 @@ on_apply_to_selection (GObject *object,
         /* Display the current file (Needed when sequencing tracks) */
         et_application_window_update_ui_from_et_file(window, ET_COLUMN_TRACK_NUMBER);
     }
-    else if (object == G_OBJECT (gtk_bin_get_child (GTK_BIN (priv->genre_combo_entry))))
+    else if (object == gtk_bin_get_child(GTK_BIN(priv->genre_combo_entry)))
     {
-        msg = apply_field_to_selection(gtk_bin_get_child(GTK_BIN(priv->genre_combo_entry)), etfilelist, &File_Tag::genre,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::genre,
             _("Selected files tagged with genre ‘%s’"), _("Removed genre from selected files"));
     }
-    else if (object == G_OBJECT (priv->comment_entry))
+    else if (object == priv->comment_entry)
     {
-        msg = apply_field_to_selection(priv->comment_entry, etfilelist, &File_Tag::comment,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::comment,
             _("Selected files tagged with comment ‘%s’"), _("Removed comment from selected files"));
     }
-    else if (object == G_OBJECT (priv->apply_comment_toolitem))
+    else if (object == priv->apply_comment_toolitem)
     {
         xStringD0 text(gString(text_view_get_text(priv->comment_text)).get());
         apply_field_to_selection(text, etfilelist, &File_Tag::comment);
@@ -403,57 +406,57 @@ on_apply_to_selection (GObject *object,
             ? g_strdup_printf(_("Selected files tagged with comment ‘%s’"), text.get())
             : g_strdup(_("Removed comment from selected files"));
     }
-    else if (object == G_OBJECT (priv->composer_entry))
+    else if (object == priv->composer_entry)
     {
-        msg = apply_field_to_selection(priv->composer_entry, etfilelist, &File_Tag::composer,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::composer,
             _("Selected files tagged with composer ‘%s’"), _("Removed composer from selected files"));
     }
-    else if (object == G_OBJECT (priv->orig_artist_entry))
+    else if (object == priv->orig_artist_entry)
     {
-        msg = apply_field_to_selection(priv->orig_artist_entry, etfilelist, &File_Tag::orig_artist,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::orig_artist,
             _("Selected files tagged with original artist ‘%s’"), _("Removed original artist from selected files"));
     }
-    else if (object == G_OBJECT (priv->orig_year_entry))
+    else if (object == priv->orig_year_entry)
     {
-        msg = apply_field_to_selection(priv->orig_year_entry, etfilelist, &File_Tag::orig_year,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::orig_year,
             _("Selected files tagged with original year ‘%s’"), _("Removed original year from selected files"));
     }
-    else if (object == G_OBJECT (priv->copyright_entry))
+    else if (object == priv->copyright_entry)
     {
-        msg = apply_field_to_selection(priv->copyright_entry, etfilelist, &File_Tag::copyright,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::copyright,
             _("Selected files tagged with copyright ‘%s’"), _("Removed copyright from selected files"));
     }
-    else if (object == G_OBJECT (priv->url_entry))
+    else if (object == priv->url_entry)
     {
-        msg = apply_field_to_selection(priv->url_entry, etfilelist, &File_Tag::url,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::url,
             _("Selected files tagged with URL ‘%s’"), _("Removed URL from selected files"));
     }
-    else if (object == G_OBJECT (priv->encoded_by_entry))
+    else if (object == priv->encoded_by_entry)
     {
-        msg = apply_field_to_selection(priv->encoded_by_entry, etfilelist, &File_Tag::encoded_by,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::encoded_by,
             _("Selected files tagged with encoder name ‘%s’"), _("Removed encoder name from selected files"));
     }
-    else if (object == G_OBJECT (priv->track_gain_entry))
+    else if (object == priv->track_gain_entry)
     {
-        msg = apply_field_to_selection(priv->track_gain_entry, etfilelist, &File_Tag::track_gain,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::track_gain,
             _("Selected files tagged with track gain ‘%s’"), _("Removed track gain from selected files"));
     }
-    else if (object == G_OBJECT (priv->track_peak_entry))
+    else if (object == priv->track_peak_entry)
     {
-        msg = apply_field_to_selection(priv->track_peak_entry, etfilelist, &File_Tag::track_peak,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::track_peak,
             _("Selected files tagged with track peak level ‘%s’"), _("Removed track peak level from selected files"));
     }
-    else if (object == G_OBJECT (priv->album_gain_entry))
+    else if (object == priv->album_gain_entry)
     {
-        msg = apply_field_to_selection(priv->album_gain_entry, etfilelist, &File_Tag::album_gain,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::album_gain,
             _("Selected files tagged with album gain ‘%s’"), _("Removed album gain from selected files"));
     }
-    else if (object == G_OBJECT (priv->album_peak_entry))
+    else if (object == priv->album_peak_entry)
     {
-        msg = apply_field_to_selection(priv->album_peak_entry, etfilelist, &File_Tag::album_peak,
+        msg = apply_field_to_selection(object, etfilelist, &File_Tag::album_peak,
             _("Selected files tagged with album peak level ‘%s’"), _("Removed album peak level from selected files"));
     }
-    else if (object == G_OBJECT (priv->apply_image_toolitem))
+    else if (object == priv->apply_image_toolitem)
     {
         vector<EtPicture> pics;
         GtkTreeModel *model;
@@ -488,6 +491,7 @@ on_apply_to_selection (GObject *object,
         }
     }
 
+finish:
     /* Refresh the whole list (faster than file by file) to show changes. */
     et_browser_refresh_list(window->browser());
 
@@ -503,12 +507,12 @@ on_apply_to_selection (GObject *object,
 }
 
 static void
-on_entry_icon_release (GtkEntry *entry,
+on_entry_icon_release (GtkWidget *entry,
                        GtkEntryIconPosition icon_pos,
                        GdkEvent *event,
-                       EtTagArea *self)
+                       GTypeInstance *self)
 {
-    on_apply_to_selection (G_OBJECT (entry), self);
+    on_apply_to_selection (entry, self);
 }
 
 static void
@@ -592,129 +596,60 @@ Convert_Remove_All_Text (GtkWidget *entry)
     gtk_entry_set_text (GTK_ENTRY (entry), "");
 }
 
-static void
-on_apply_to_selection_menu_item (GObject *entry,
-                                 GtkMenuItem *menu_item)
+static void on_apply_to_selection_menu_item(GtkWidget *entry, GtkMenuItem *menu_item)
 {
-    EtTagArea *self = (EtTagArea*)g_object_get_data (G_OBJECT (menu_item), "tag-area");
-
-    on_apply_to_selection (entry, self);
+	on_apply_to_selection(entry, (GTypeInstance*)g_object_get_data(G_OBJECT(menu_item), "tag-area"));
 }
 
 /* TODO: Support populate-all and do not assume the widget is a GtkMenu.
  * Popup menu attached to all entries of tag + filename + rename combobox.
  * Displayed when pressing the right mouse button and contains functions to process ths strings.
  */
-void
-on_entry_populate_popup (GtkEntry *entry, GtkWidget *menu, EtTagArea *self)
+void on_entry_populate_popup(GtkEntry *entry, GtkWidget *menu, EtTagArea *self)
 {
-    GtkWidget *menu_item;
-    GtkWidget *label;
+	GtkMenuShell* menu_shell = GTK_MENU_SHELL(menu);
 
-    /* Menu items */
-    menu_item = gtk_menu_item_new_with_label (_("Tag selected files with this field"));
-    label = gtk_bin_get_child (GTK_BIN (menu_item));
-    gtk_accel_label_set_accel (GTK_ACCEL_LABEL (label), GDK_KEY_Return,
-                               GDK_CONTROL_MASK);
-    g_object_set_data (G_OBJECT (menu_item), "tag-area", self);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    g_signal_connect_swapped (menu_item, "activate",
-                              G_CALLBACK (on_apply_to_selection_menu_item),
-                              G_OBJECT (entry));
+	auto add_item = [menu_shell, entry](const gchar* label, GCallback action)
+	{	GtkWidget *mi = gtk_menu_item_new_with_label(label);
+		gtk_menu_shell_append(menu_shell, mi);
+		g_signal_connect_swapped(mi, "activate", action, G_OBJECT(entry));
+		return mi;
+	};
 
-    menu_item = gtk_separator_menu_item_new ();
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+	/* Menu items */
+	GtkImageType type;
+	g_object_get(G_OBJECT(entry), "secondary-icon-storage-type", &type, NULL);
+	if (type != GTK_IMAGE_EMPTY)
+	{	GtkWidget* menu_item = add_item(_("Tag selected files with this field"), G_CALLBACK(on_apply_to_selection_menu_item));
+		GtkWidget* label = gtk_bin_get_child(GTK_BIN(menu_item));
+		gtk_accel_label_set_accel(GTK_ACCEL_LABEL(label), GDK_KEY_Return, GDK_CONTROL_MASK);
+		g_object_set_data (G_OBJECT(menu_item), "tag-area", self);
+	}
 
-    menu_item = gtk_menu_item_new_with_label (_("Convert ‘_’ and ‘%20’ to spaces"));
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    g_signal_connect_swapped (menu_item, "activate",
-                              G_CALLBACK (Convert_P20_And_Underscore_Into_Spaces),
-                              G_OBJECT (entry));
+	gtk_menu_shell_append(menu_shell, gtk_separator_menu_item_new());
 
-    menu_item = gtk_menu_item_new_with_label (_("Convert spaces to underscores"));
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    g_signal_connect_swapped (menu_item, "activate",
-                              G_CALLBACK (Convert_Space_Into_Underscore),
-                              G_OBJECT (entry));
+	if (!g_object_get_data(G_OBJECT(entry), "EntryPopupType"))
+	{
+		add_item(_("Convert ‘_’ and ‘%20’ to spaces"), G_CALLBACK(Convert_P20_And_Underscore_Into_Spaces));
+		add_item(_("Convert spaces to underscores"), G_CALLBACK(Convert_Space_Into_Underscore));
 
-    menu_item = gtk_separator_menu_item_new ();
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+		gtk_menu_shell_append(menu_shell, gtk_separator_menu_item_new());
 
-    menu_item = gtk_menu_item_new_with_label (_("All uppercase"));
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    g_signal_connect_swapped (menu_item, "activate",
-                              G_CALLBACK (Convert_All_Uppercase),
-                              G_OBJECT (entry));
+		add_item(_("All uppercase"), G_CALLBACK(Convert_All_Uppercase));
+		add_item(_("All lowercase"), G_CALLBACK(Convert_All_Lowercase));
+		add_item(_("First letter uppercase"), G_CALLBACK(Convert_Letter_Uppercase));
+		add_item(_("First letter uppercase of each word"), G_CALLBACK(Convert_First_Letters_Uppercase));
 
-    menu_item = gtk_menu_item_new_with_label (_("All lowercase"));
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    g_signal_connect_swapped (menu_item, "activate",
-                              G_CALLBACK (Convert_All_Lowercase),
-                              G_OBJECT (entry));
+		gtk_menu_shell_append(menu_shell, gtk_separator_menu_item_new());
 
-    menu_item = gtk_menu_item_new_with_label (_("First letter uppercase"));
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    g_signal_connect_swapped (menu_item, "activate",
-                              G_CALLBACK (Convert_Letter_Uppercase),
-                              G_OBJECT (entry));
+		add_item(_("Remove spaces"), G_CALLBACK(Convert_Remove_Space));
+		add_item(_("Insert space before uppercase letter"), G_CALLBACK(Convert_Insert_Space));
+		add_item(_("Remove duplicate spaces or underscores"), G_CALLBACK(Convert_Only_One_Space));
+	}
 
-    menu_item = gtk_menu_item_new_with_label (_("First letter uppercase of each word"));
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    g_signal_connect_swapped (menu_item, "activate",
-                              G_CALLBACK (Convert_First_Letters_Uppercase),
-                              G_OBJECT (entry));
+	add_item(_("Remove all text"), G_CALLBACK(Convert_Remove_All_Text));
 
-    menu_item = gtk_separator_menu_item_new ();
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-
-    menu_item = gtk_menu_item_new_with_label (_("Remove spaces"));
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    g_signal_connect_swapped (menu_item, "activate",
-                              G_CALLBACK (Convert_Remove_Space),
-                              G_OBJECT (entry));
-
-    menu_item = gtk_menu_item_new_with_label (_("Insert space before uppercase letter"));
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    g_signal_connect_swapped (menu_item, "activate",
-                              G_CALLBACK (Convert_Insert_Space),
-                              G_OBJECT (entry));
-
-    menu_item = gtk_menu_item_new_with_label (_("Remove duplicate spaces or underscores"));
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    g_signal_connect_swapped (menu_item, "activate",
-                              G_CALLBACK (Convert_Only_One_Space),
-                              G_OBJECT (entry));
-
-    menu_item = gtk_menu_item_new_with_label (_("Remove all text"));
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    g_signal_connect_swapped (menu_item, "activate",
-                              G_CALLBACK (Convert_Remove_All_Text),
-                              G_OBJECT (entry));
-
-    gtk_widget_show_all (menu);
-}
-
-/** Reduced context menu for numeric fields. */
-static void
-on_entry_populate_popup2 (GtkEntry *entry,
-                         GtkWidget *menu,
-                         EtTagArea *self)
-{
-    GtkWidget *menu_item;
-    GtkWidget *label;
-
-    /* Menu items */
-    menu_item = gtk_menu_item_new_with_label (_("Tag selected files with this field"));
-    label = gtk_bin_get_child (GTK_BIN (menu_item));
-    gtk_accel_label_set_accel (GTK_ACCEL_LABEL (label), GDK_KEY_Return,
-                               GDK_CONTROL_MASK);
-    g_object_set_data (G_OBJECT (menu_item), "tag-area", self);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    g_signal_connect_swapped (menu_item, "activate",
-                              G_CALLBACK (on_apply_to_selection_menu_item),
-                              G_OBJECT (entry));
-
-    gtk_widget_show_all (menu);
+	gtk_widget_show_all(menu);
 }
 
 /*
@@ -741,10 +676,7 @@ et_tag_field_on_key_press_event (GtkEntry *entry, GdkEventKey *event,
         case GDK_KEY_KP_Enter:
         case GDK_KEY_ISO_Enter:
             if ((event->state & modifiers) == GDK_CONTROL_MASK)
-            {
-                on_apply_to_selection (G_OBJECT (entry),
-                                       ET_TAG_AREA (user_data));
-            }
+                on_apply_to_selection(GTK_WIDGET(entry), (GTypeInstance*)user_data);
             return TRUE;
         default:
             return FALSE;
@@ -758,8 +690,7 @@ et_tag_field_on_key_press_event (GtkEntry *entry, GdkEventKey *event,
  * Connect the GtkWidget::key-press-event and GtkEntry::icon-release signals
  * of @entry to appropriate handlers for tag entry fields.
  */
-static void
-et_tag_field_connect_signals (GtkEntry *entry, EtTagArea *self, bool numeric = false)
+void et_tag_field_connect_signals(GtkEntry *entry, EtTagArea *self, bool numeric)
 {
     g_signal_connect_after (entry, "key-press-event",
                             G_CALLBACK (et_tag_field_on_key_press_event),
@@ -767,8 +698,9 @@ et_tag_field_connect_signals (GtkEntry *entry, EtTagArea *self, bool numeric = f
     g_signal_connect (entry, "icon-release",
                       G_CALLBACK (on_entry_icon_release),
                       self);
-    g_signal_connect (entry, "populate-popup",
-                      G_CALLBACK (numeric ? on_entry_populate_popup2 : on_entry_populate_popup), self);
+    if (numeric)
+    	g_object_set_data(G_OBJECT(entry), "EntryPopupType", GINT_TO_POINTER(numeric));
+    g_signal_connect(entry, "populate-popup", G_CALLBACK(on_entry_populate_popup), self);
 }
 
 /*
@@ -995,7 +927,7 @@ static gboolean on_comment_focus_out(GtkWidget* widget, GdkEventFocus* event, gp
 {
 	EtTagAreaPrivate *priv = et_tag_area_get_instance_private(ET_TAG_AREA(user_data));
 
-	if (gtk_widget_get_visible(priv->comment_grid))
+	if (gtk_widget_get_visible(priv->comment_box))
 	{
 		if (widget == GTK_WIDGET(priv->comment_text))
 		{
@@ -1775,8 +1707,8 @@ create_tag_area (EtTagArea *self)
     /* FIXME should allow to type only something like : 1/3. */
     et_tag_field_connect_signals (GTK_ENTRY (priv->disc_number_entry), self, true);
     /* Year */
-    et_tag_field_connect_signals (GTK_ENTRY (priv->year_entry), self);
-    et_tag_field_connect_signals (GTK_ENTRY (priv->release_year_entry), self);
+    et_tag_field_connect_signals (GTK_ENTRY (priv->year_entry), self, true);
+    et_tag_field_connect_signals (GTK_ENTRY (priv->release_year_entry), self, true);
 
     /* Track and Track total */
     populate_track_combo (self);
@@ -1818,7 +1750,7 @@ create_tag_area (EtTagArea *self)
     /* Translators: Original Artist / Performer. Please try to keep this string
      * as short as possible, as it must fit into a narrow column. */
     et_tag_field_connect_signals (GTK_ENTRY (priv->orig_artist_entry), self);
-    et_tag_field_connect_signals (GTK_ENTRY (priv->orig_year_entry), self);
+    et_tag_field_connect_signals (GTK_ENTRY (priv->orig_year_entry), self, true);
     et_tag_field_connect_signals (GTK_ENTRY (priv->copyright_entry), self);
     et_tag_field_connect_signals (GTK_ENTRY (priv->url_entry), self);
     et_tag_field_connect_signals (GTK_ENTRY (priv->encoded_by_entry), self);
@@ -1946,10 +1878,10 @@ et_tag_area_class_init (EtTagAreaClass *klass)
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, remove_image_toolitem);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, save_image_toolitem);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, image_properties_toolitem);
-    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, images_grid);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, images_box);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, images_model);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, track_sequence_button);
-    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, comment_grid);
+    gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, comment_box);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, comment_text);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, apply_comment_toolitem);
     gtk_widget_class_bind_template_child_private (widget_class, EtTagArea, description_scrolled);
@@ -1978,10 +1910,9 @@ et_tag_area_class_init (EtTagAreaClass *klass)
  *
  * Returns: a new #EtTagArea
  */
-GtkWidget *
-et_tag_area_new (void)
+EtTagArea* et_tag_area_new()
 {
-    return (GtkWidget*)g_object_new (ET_TYPE_TAG_AREA, NULL);
+    return (EtTagArea*)g_object_new (ET_TYPE_TAG_AREA, NULL);
 }
 
 /*
@@ -2033,10 +1964,10 @@ void et_tag_area_update_controls (EtTagArea *self, const ET_File* file)
     gtk_widget_set_visible(priv->album_gain_unit, show);
     gtk_widget_set_visible(priv->album_peak_label, show);
     gtk_widget_set_visible(priv->album_peak_entry, show);
-    show_hide(ET_COLUMN_IMAGE, priv->images_grid, nullptr);
+    show_hide(ET_COLUMN_IMAGE, priv->images_box, nullptr);
     show_hide(ET_COLUMN_DESCRIPTION, GTK_WIDGET(priv->description_scrolled), nullptr);
     guint multiline = -!g_settings_get_boolean(MainSettings, "tag-multiline-comment");
-    show_hide(multiline, priv->comment_grid, nullptr);
+    show_hide(multiline, priv->comment_box, nullptr);
 
     // restrict combobox model for ID3V1
     GtkEntryCompletion* completion = gtk_entry_get_completion(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(priv->genre_combo_entry))));
@@ -2193,7 +2124,7 @@ void et_tag_area_store_file_tag(EtTagArea *self, File_Tag* FileTag)
 		FileTag->description = gString(text_view_get_text(priv->description_text)).get();
 
 	/* Picture */
-	if (gtk_widget_get_visible(priv->images_grid))
+	if (gtk_widget_get_visible(priv->images_box))
 	{
 		EtPicture *pic;
 		GtkTreeModel *model;
@@ -2276,7 +2207,7 @@ et_tag_area_display_et_file (EtTagArea *self, const ET_File *ETFile, EtColumn co
     	et_tag_area_set_text_field(FileTag->genre, gtk_bin_get_child(GTK_BIN(priv->genre_combo_entry)));
     if (columns & ET_COLUMN_COMMENT)
     {	et_tag_area_set_text_field(FileTag->comment, priv->comment_entry);
-    	if (gtk_widget_get_visible(priv->comment_grid))
+    	if (gtk_widget_get_visible(priv->comment_box))
     	{	GtkTextBuffer* buffer = gtk_text_view_get_buffer(priv->comment_text);
     		if (!et_str_empty(FileTag->comment))
     			gtk_text_buffer_set_text(buffer, FileTag->comment, -1);
