@@ -550,12 +550,12 @@
                 <attribute name="label" translatable="yes">_First File</attribute>
             </item>
             <item>
-                <attribute name="accel">Page_Up</attribute>
+                <attribute name="accel">&lt;Primary&gt;Up</attribute>
                 <attribute name="action">win.go-previous</attribute>
                 <attribute name="label" translatable="yes">Previous File</attribute>
             </item>
             <item>
-                <attribute name="accel">Page_Down</attribute>
+                <attribute name="accel">&lt;Primary&gt;Down</attribute>
                 <attribute name="action">win.go-next</attribute>
                 <attribute name="label" translatable="yes">_Next File</attribute>
             </item>
