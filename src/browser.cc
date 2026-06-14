@@ -628,11 +628,8 @@ void ExpandDirectoryWorker::UpdateChildren(Entry& item)
 
 	gboolean more = gtk_tree_model_iter_children(GTK_TREE_MODEL(model), &childiter, &item.Iter);
 
-	gint insertpos = 0;
-	const char* fileName; // Filename of the next existing child in case of merge sort
-	if (item.Operation != ADDSUBDIR)
-		insertpos = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(model), &item.Iter); // always append
-	else if (more)
+	const char* fileName = nullptr; // Filename of the next existing child in case of merge sort
+	if (more && item.Operation == ADDSUBDIR)
 		gtk_tree_model_get(GTK_TREE_MODEL(model), &childiter, TREE_COLUMN_FILE_NAME, &fileName, -1);
 
 	// Parallel iteration over existing children.
@@ -653,7 +650,6 @@ void ExpandDirectoryWorker::UpdateChildren(Entry& item)
 		{	// move childiter forward until larger than node
 			while (more && node.FileName.compare(xString::fromCptr(fileName)) > 0)
 			{	more = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &childiter);
-				++insertpos;
 				if (more)
 					gtk_tree_model_get(GTK_TREE_MODEL(model), &childiter, TREE_COLUMN_FILE_NAME, &fileName, -1);
 			}
@@ -662,20 +658,29 @@ void ExpandDirectoryWorker::UpdateChildren(Entry& item)
 		else if (!more)
 		{	// insert
 		insert:
-			gtk_tree_store_insert_with_values(model, &childiter, &item.Iter, insertpos,
-				TREE_COLUMN_DISPLAY_NAME, node.DisplayName.get(),
-				TREE_COLUMN_FILE_NAME, node.FileName.get(),
-				TREE_COLUMN_STATE, submode,
-				TREE_COLUMN_ICON, node.Icon, -1);
-			++insertpos;
-			// no need to update fileName here
-		} else
-		{	// update
-			gtk_tree_store_set(model, &childiter,
-				TREE_COLUMN_DISPLAY_NAME, node.DisplayName.get(),
-				TREE_COLUMN_FILE_NAME, node.FileName.get(),
-				TREE_COLUMN_STATE, submode,
-				TREE_COLUMN_ICON, node.Icon, -1);
+			// Emulate not existing insert_before_with_values:
+			// Block signals, insert_before, set values, unblock signals, manually raise row-inserted.
+			g_signal_handlers_block_matched(model, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, priv->directory_view);
+			GtkTreeIter inserted;
+			if (more && item.Operation == ADDSUBDIR)
+				gtk_tree_store_insert_before(model, &inserted, &item.Iter, &childiter);
+			else
+				gtk_tree_store_append(model, &inserted, &item.Iter);
+			childiter = inserted;
+		} // else just update
+
+		gtk_tree_store_set(model, &childiter,
+			TREE_COLUMN_DISPLAY_NAME, node.DisplayName.get(),
+			TREE_COLUMN_FILE_NAME, node.FileName.get(),
+			TREE_COLUMN_STATE, submode,
+			TREE_COLUMN_ICON, node.Icon, -1);
+
+		if (!more || item.Operation == ADDSUBDIR)
+		{	// continue insert emulation above => raise row_inserted
+			g_signal_handlers_unblock_matched(model, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, priv->directory_view);
+			GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(model), &childiter);
+			gtk_tree_model_row_inserted(GTK_TREE_MODEL(model), path, &childiter);
+			gtk_tree_path_free(path);
 		}
 
 		if (cmp & PATH_SUBDIR)
@@ -685,7 +690,7 @@ void ExpandDirectoryWorker::UpdateChildren(Entry& item)
 		if (item.Operation != SUBDIRCHECK)
 			Enqueue(new Entry(childiter, gString(g_build_filename(item.FullPath, node.FileName.get(), NULL)), submode));
 
-		if (more && item.Operation != ADDSUBDIR)
+		if (more)
 			more = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &childiter);
 	}
 
