@@ -63,7 +63,7 @@
 using namespace std;
 
 #define logworker(...)
-//#define logworker printf
+//#define logworker(a...) fprintf(stderr, a)
 
 namespace
 {
@@ -462,7 +462,7 @@ GFileInfo* ExpandDirectoryWorker::NextDir(GFileEnumerator* en)
 }
 
 bool ExpandDirectoryWorker::SendPacket(Entry* item)
-{	logworker("SendPacket({{%i, %p}, %s, %i, %zu})\n", item->Iter.stamp, item->Iter.user_data, item->FullPath.get(), item->Operation, item->Nodes.size());
+{	logworker("SendPacket(%p{{%p}, %s, %i, %zu})\n", item, item->Iter.user_data, item->FullPath.get(), item->Operation, item->Nodes.size());
 	sort(item->Nodes.begin(), item->Nodes.end(), [](const Node& l, const Node& r) { return l.DisplayName.compare(r.DisplayName) < 0; });
 	{	lock_guard<mutex> lock(Sync);
 		// remove from InProgress
@@ -474,10 +474,20 @@ bool ExpandDirectoryWorker::SendPacket(Entry* item)
 		}
 		// Enqueue
 		bool was_empty = UIQueue.empty();
-		if (item->Operation == SUBDIRCHECK)
+		switch (item->Operation)
+		{case SUBDIRCHECK:
 			UIQueue.push_back(*item);
-		else
+			break;
+		 case ADDSUBDIR: // this items need to be placed behind POPULATE
+			if (!UIQueue.empty())
+			{	auto it = UIQueue.begin();
+				while (it->Operation == POPULATE && (++it)->has_next());
+				UIQueue.insert(it, *item);
+				break;
+			}
+		 default:
 			UIQueue.push_front(*item);
+		}
 		if (!was_empty)
 			return true;
 		// no pending UI worker => kick below
@@ -604,7 +614,7 @@ void ExpandDirectoryWorker::SelectDirFailed(const char* path)
 }
 
 void ExpandDirectoryWorker::UpdateChildren(Entry& item)
-{	logworker("UpdateChildren(%p, %s, %zu, %i) %s\n", item.Iter.user_data, item.FullPath.get(), item.Nodes.size(), item.Operation, ExpandPath.get());
+{	logworker("UpdateChildren(%p{{%p}, %s, %zu, %i}) %s\n", &item, item.Iter.user_data, item.FullPath.get(), item.Nodes.size(), item.Operation, ExpandPath.get());
 
 	EtBrowserPrivate* const priv = et_browser_get_instance_private(Browser);
 	GtkTreeStore* const model = priv->directory_model;
@@ -668,6 +678,10 @@ void ExpandDirectoryWorker::UpdateChildren(Entry& item)
 				gtk_tree_store_append(model, &inserted, &item.Iter);
 			childiter = inserted;
 		} // else just update
+		else
+		{	logworker("overwrite");
+
+		}
 
 		gtk_tree_store_set(model, &childiter,
 			TREE_COLUMN_DISPLAY_NAME, node.DisplayName.get(),
@@ -698,7 +712,7 @@ void ExpandDirectoryWorker::UpdateChildren(Entry& item)
 	if (more && item.Operation != ADDSUBDIR)
 		et_tree_store_remove_children(model, &childiter);
 
-	logworker("~UpdateChildren(%p)\n", item.Iter.user_data);
+	logworker("~UpdateChildren(%p)\n", &item);
 }
 
 void ExpandDirectoryWorker::UIWorker()

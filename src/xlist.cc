@@ -60,3 +60,13 @@ void xListBase::push_back(xListObjBase& item) noexcept
 	}
 }
 
+void xListBase::insert(iterator_base before, xListObjBase& item) noexcept
+{	g_assert(!item.Next); // Node must not be attached.
+	if (this == &*before) // append?
+		return push_back(item);
+	item.next(*before);
+	item.Prev = before->Prev;
+	before->prev(item);
+	item.prev().Next = before->Prev;
+}
+

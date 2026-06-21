@@ -104,6 +104,9 @@ protected:
 		constexpr explicit iterator_base(::xListObjBase* ptr = nullptr) noexcept : Ptr(ptr) {}
 		void inc() noexcept { Ptr = &Ptr->next(); }
 		void dec() noexcept { Ptr = &Ptr->prev(); }
+	public:
+		::xListObjBase& operator*() { return *Ptr; }
+		::xListObjBase* operator->() { return Ptr; }
 	};
 
 public:
@@ -112,6 +115,7 @@ protected:
 	void assert_not_empty() const noexcept { g_assert(!empty()); }
 	void push_front(xListObjBase& item) noexcept;
 	void push_back(xListObjBase& item) noexcept;
+	void insert(iterator_base before, xListObjBase& item) noexcept;
 	constexpr void clear() noexcept { Prev = Next = 0; }
 	using xListObjBase::prev;
 	using xListObjBase::next;
@@ -171,6 +175,7 @@ public:
 	constexpr const_iterator cend() const noexcept { return end(); }
 	void push_front(reference item) noexcept { xListBase::push_front(item); }
 	void push_back(reference item) noexcept { xListBase::push_back(item); }
+	iterator insert(iterator where, reference item) noexcept { xListBase::insert(where, item); return iterator(item); }
 };
 
 /// Intrusive doubly linked list that owns its content.
