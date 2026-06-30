@@ -1,10 +1,14 @@
-3.0.1 - 2026-05-15 :
+3.0.1 - 2026-06-30 :
 ====================
 
     * Allow sorting fingerprint results.
+    * Allow editing of relative file path.
+    * Do not redefine PgUp/Down to prev/next file. Use Ctrl-Up/Down instead.
 
     * Fix loading directories on selection.
+    * Fix selection of first/last/previous/next file
     * Fix directory rename.
+    * Fix view of large directories in the tree.
 
 3.0.0 - 2026-02-07 :
 ====================

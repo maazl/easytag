@@ -205,9 +205,18 @@ static const constexpr GtkTreeIter invalid_iter = { 0 };
 static void et_browser_clear_album_model(EtBrowser *self);
 static void et_browser_clear_artist_model(EtBrowser *self);
 
+enum class SelectAction : unsigned char
+{	ScrollTo = 1,
+	SetCursor = 2,
+	Select = 4,
+	ClearSelection = 8,
+
+	SelectAndScroll = 5,
+	ReplaceSelectionAndScroll = 15
+};
 static void Browser_List_Select_File_By_Iter (EtBrowser *self,
                                               GtkTreeIter *iter,
-                                              gboolean select_it);
+                                              SelectAction select_it);
 
 static void Browser_Artist_List_Row_Selected (EtBrowser *self,
                                               GtkTreeSelection *selection);
@@ -1408,26 +1417,25 @@ void EtBrowser::collapse()
 /*
  * Set a row visible in the file list (by scrolling the list)
  */
-static void
-et_browser_set_row_visible (EtBrowser *self, GtkTreeIter *rowIter)
+static void et_browser_set_row_visible(EtBrowser *self, GtkTreeIter *rowIter, SelectAction action)
 {
-    EtBrowserPrivate *priv;
+	if (!rowIter)
+		return;
 
-    /*
-     * TODO: Make this only scroll to the row if it is not visible
-     * (like in easytag GTK1)
-     * See function gtk_tree_view_get_visible_rect() ??
-     */
-    GtkTreePath *rowPath;
+	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-    priv = et_browser_get_instance_private (self);
+	GtkTreePath* rowPath = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->file_model), rowIter);
 
-    g_return_if_fail (rowIter != NULL);
+	if ((unsigned char)action & (unsigned char)SelectAction::SetCursor)
+		gtk_tree_view_set_cursor(priv->file_view, rowPath, NULL, FALSE);
 
-    rowPath = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->file_model),
-                                       rowIter);
-    gtk_tree_view_scroll_to_cell (priv->file_view, rowPath, NULL, FALSE, 0, 0);
-    gtk_tree_path_free (rowPath);
+	if ((unsigned char)action & (unsigned char)SelectAction::ScrollTo)
+		/* TODO: Make this only scroll to the row if it is not visible
+		 * (like in easytag GTK1)
+		 * See function gtk_tree_view_get_visible_rect() ?? */
+		gtk_tree_view_scroll_to_cell(priv->file_view, rowPath, NULL, FALSE, 0, 0);
+
+	gtk_tree_path_free (rowPath);
 }
 
 /*
@@ -1701,7 +1709,7 @@ void EtBrowser::load_file_list()
 		gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &selected_iter, LIST_FILE_POINTER, &etfile_to_select, -1);
 			MainWindow->change_displayed_file(etfile_to_select);
 	}
-	Browser_List_Select_File_By_Iter(this, &selected_iter, TRUE);
+	Browser_List_Select_File_By_Iter(this, &selected_iter, SelectAction::SelectAndScroll);
 
 	set_zebra(GTK_TREE_MODEL(priv->file_model));
 }
@@ -1991,8 +1999,8 @@ et_browser_select_file_by_et_file2 (EtBrowser *self,
             // It is the good file?
             if (currentETFile == searchETFile)
             {
-                Browser_List_Select_File_By_Iter (self, &currentIter,
-                                                  select_it);
+                Browser_List_Select_File_By_Iter(self, &currentIter,
+                    select_it ? SelectAction::SelectAndScroll : SelectAction::ScrollTo);
                 return startPath;
             }
         }
@@ -2011,8 +2019,8 @@ et_browser_select_file_by_et_file2 (EtBrowser *self,
 
             if (currentETFile == searchETFile)
             {
-                Browser_List_Select_File_By_Iter (self, &currentIter,
-                                                  select_it);
+                Browser_List_Select_File_By_Iter(self, &currentIter,
+                    select_it ? SelectAction::SelectAndScroll : SelectAction::ScrollTo);
                 return currentPath;
                 //break;
             }
@@ -2028,23 +2036,26 @@ et_browser_select_file_by_et_file2 (EtBrowser *self,
 /*
  * Select the specified file in the list, by an iter
  */
-static void
-Browser_List_Select_File_By_Iter (EtBrowser *self,
-                                  GtkTreeIter *rowIter,
-                                  gboolean select_it)
+static void Browser_List_Select_File_By_Iter(EtBrowser *self, GtkTreeIter *rowIter, SelectAction select_it)
 {
-    EtBrowserPrivate *priv;
+	if ((unsigned char)select_it & (unsigned char)SelectAction::ScrollTo)
+		et_browser_set_row_visible(self, rowIter, select_it);
 
-    priv = et_browser_get_instance_private (self);
+	EtBrowserPrivate* priv = et_browser_get_instance_private (self);
 
-    if (select_it)
-    {
-        GtkTreeSelection *selection = gtk_tree_view_get_selection (priv->file_view);
-        if (selection)
-            gtk_tree_selection_select_iter(selection, rowIter);
-    }
-
-    et_browser_set_row_visible (self, rowIter);
+	if ((unsigned char)select_it & (unsigned char)SelectAction::Select)
+	{	GtkTreeSelection *selection = gtk_tree_view_get_selection(priv->file_view);
+		if ((unsigned char)select_it & (unsigned char)SelectAction::ClearSelection)
+		{	if (gtk_tree_selection_count_selected_rows(selection) == 1
+				&& gtk_tree_selection_iter_is_selected(selection, rowIter))
+				rowIter = nullptr;
+			else
+				gtk_tree_selection_unselect_all(selection);
+		}
+		if (rowIter)
+			gtk_tree_selection_select_iter(selection, rowIter);
+	} else if ((unsigned char)select_it & (unsigned char)SelectAction::ClearSelection)
+		gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(priv->file_view));
 }
 
 /*
@@ -2077,7 +2088,7 @@ et_browser_select_file_by_iter_string (EtBrowser *self,
                 //g_signal_handlers_unblock_by_func(G_OBJECT(selection),G_CALLBACK(Browser_List_Row_Selected),NULL);
             }
         }
-        et_browser_set_row_visible (self, &iter);
+        et_browser_set_row_visible(self, &iter, SelectAction::ScrollTo);
     }
 }
 
@@ -2129,7 +2140,7 @@ et_browser_select_file_by_dlm (EtBrowser *self,
                 g_signal_handler_unblock(selection, priv->file_selected_handler);
             }
         }
-        et_browser_set_row_visible (self, &iter2);
+        et_browser_set_row_visible(self, &iter2, SelectAction::ScrollTo);
     }
     return retval;
 }
@@ -2174,7 +2185,7 @@ ET_File* EtBrowser::select_first_file()
 	if (!gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->file_model), &iter))
 		return nullptr;
 
-	Browser_List_Select_File_By_Iter(this, &iter, true);
+	Browser_List_Select_File_By_Iter(this, &iter, SelectAction::ReplaceSelectionAndScroll);
 	return current_file();
 }
 
@@ -2191,7 +2202,7 @@ ET_File* EtBrowser::select_last_file()
 	gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_model), &iter, path);
 	gtk_tree_path_free(path);
 
-	Browser_List_Select_File_By_Iter(this, &iter, true);
+	Browser_List_Select_File_By_Iter(this, &iter, SelectAction::ReplaceSelectionAndScroll);
 	return current_file();
 }
 
@@ -2204,7 +2215,7 @@ ET_File* EtBrowser::select_prev_file()
 	if (!gtk_tree_model_iter_previous(GTK_TREE_MODEL(priv->file_model), &iter))
 		return nullptr;
 
-	Browser_List_Select_File_By_Iter(this, &iter, true);
+	Browser_List_Select_File_By_Iter(this, &iter, SelectAction::ReplaceSelectionAndScroll);
 	return current_file();
 }
 
@@ -2217,7 +2228,7 @@ ET_File* EtBrowser::select_next_file()
 	if (!gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_model), &iter))
 		return nullptr;
 
-	Browser_List_Select_File_By_Iter(this, &iter, true);
+	Browser_List_Select_File_By_Iter(this, &iter, SelectAction::ReplaceSelectionAndScroll);
 	return current_file();
 }
 
@@ -2858,7 +2869,7 @@ on_file_tree_button_press_event (GtkWidget *widget,
         {   ET_File *file;
             gtk_tree_model_get(model, &iter, LIST_FILE_POINTER, &file, -1);
             if (abs(cmp(selected, file)) != 1)
-                Browser_List_Select_File_By_Iter(self, &iter, TRUE);
+                Browser_List_Select_File_By_Iter(self, &iter, SelectAction::SelectAndScroll);
         } while (gtk_tree_model_iter_next(model, &iter));
         g_signal_handler_unblock(selection, priv->file_selected_handler);
 
