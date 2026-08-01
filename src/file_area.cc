@@ -30,6 +30,9 @@
 #include "log.h"
 #include "setting.h"
 #include "tag_area.h"
+#include "easytag.h"
+#include "application_window.h"
+#include "browser.h"
 
 #include <string>
 using namespace std;
@@ -156,12 +159,12 @@ void EtFileArea::default_header_fields(EtFileHeaderFields& fields, const ET_File
 	/* Size */
 	fields.size = strprintf("%s (%s)",
 		gString(g_format_size(ETFile.FileSize)).get(),
-		gString(g_format_size(ET_FileList::visible_total_bytes())).get());
+		gString(g_format_size(MainWindow->browser()->file_list().visible_total_bytes())).get());
 
 	/* Duration */
 	fields.duration = strprintf("%s (%s)",
 		et_file_duration_to_string(info->duration).c_str(),
-		et_file_duration_to_string(ET_FileList::visible_total_duration()).c_str());
+		et_file_duration_to_string(MainWindow->browser()->file_list().visible_total_duration()).c_str());
 }
 
 /* Toggle visibility of the small status icon if filename is read-only or not
@@ -171,6 +174,7 @@ void EtFileArea::display_et_file(const ET_File *ETFile, EtColumn columns)
 {
 	g_return_if_fail (ETFile != NULL);
 	EtFileAreaPrivate* priv = et_file_area_get_instance_private(this);
+	ET_FileList& fileList = MainWindow->browser()->file_list();
 
 	/* Set new filename into name_entry/name_path. */
 	if (columns & ET_COLUMN_FILENAME)
@@ -182,14 +186,15 @@ void EtFileArea::display_et_file(const ET_File *ETFile, EtColumn columns)
 
 		// And refresh the number of files in this directory
 		unsigned n_files = 0;
-		for (const ET_File* file : ET_FileList::all_files())
+		for (const ET_File* file : fileList.all_files())
 			if (file->FileNameNew()->path() == dirname_utf8)
 				++n_files;
 		gtk_label_set_text(priv->files_label, strprintf(ngettext("One file", "%u files", n_files), n_files).c_str());
 	}
 
 	/* Show position of current file in list */
-	gtk_label_set_text(priv->index_label, strprintf("%u/%u", ET_FileList::visible_index(ETFile), ET_FileList::visible_size()).c_str());
+	gtk_label_set_text(priv->index_label, fileList.empty() ? ""
+		: strprintf("%u/%u", fileList.visible_index(ETFile) + 1, fileList.visible_size()).c_str());
 
 	/* Display file data, header data and file type */
 	EtFileHeaderFields fields;

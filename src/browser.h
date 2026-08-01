@@ -30,6 +30,7 @@
 
 
 struct File_Name;
+class ET_FileList;
 
 #define ET_TYPE_BROWSER (et_browser_get_type ())
 #define ET_BROWSER(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_BROWSER, EtBrowser))
@@ -43,11 +44,10 @@ struct _EtBrowser
 	GtkBin parent_instance;
 
 private:
-	bool has_file();
 	ET_File* current_file();
 
 public:
-	void load_file_list();
+	void reload_file_list(bool keep_selection);
 	void clear();
 
 	bool has_prev();
@@ -60,6 +60,8 @@ public:
 	GFile* get_current_path();
 	const gchar* get_current_path_name();
 
+	ET_FileList& file_list();
+	bool empty();
 	/// Return all selected files in the currently visible order.
 	std::vector<xPtr<ET_File>> get_selected_files();
 	/// Return current files in the visible order.
@@ -110,7 +112,7 @@ public:
 	void run_player_for_artist_list();
 	void run_player_for_selection();
 
-	void remove_file(const ET_File *ETFile);
+	void remove_file(ET_File *ETFile);
 
 	void select_all();
 	void unselect_all();
@@ -132,9 +134,10 @@ EtBrowser *et_browser_new (void);
 
 enum EtBrowserMode : int
 {
-    ET_BROWSER_MODE_FILE,
-    ET_BROWSER_MODE_ARTIST,
-    ET_BROWSER_MODE_ARTIST_ALBUM
+	ET_BROWSER_MODE_NONE, ///< invalid mode
+	ET_BROWSER_MODE_FILE,
+	ET_BROWSER_MODE_ARTIST,
+	ET_BROWSER_MODE_ARTIST_ALBUM
 };
 
 void et_browser_set_sensitive (EtBrowser *self, gboolean sensitive);
@@ -143,7 +146,6 @@ void et_browser_refresh_list (EtBrowser *self);
 void et_browser_refresh_file_in_list (EtBrowser *self, const ET_File *ETFile);
 
 void et_browser_select_file_by_et_file (EtBrowser *self, const ET_File *ETFile, gboolean select_it);
-GtkTreePath * et_browser_select_file_by_et_file2 (EtBrowser *self, const ET_File *searchETFile, gboolean select_it, GtkTreePath *startPath);
 void et_browser_select_file_by_iter_string (EtBrowser *self, const gchar* stringiter, gboolean select_it);
 ET_File *et_browser_select_file_by_dlm (EtBrowser *self, const gchar* string, gboolean select_it);
 

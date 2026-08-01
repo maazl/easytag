@@ -158,7 +158,7 @@ Search_File (GtkWidget *search_button,
     gchar* string_to_search_normalized = normalize(string_to_search);
 
     GEnumClass *enum_class = (GEnumClass*)g_type_class_ref(ET_TYPE_SORT_MODE);
-    for (const ET_File* ETFile : ET_FileList::all_files())
+    for (const ET_File* ETFile : MainWindow->browser()->file_list().all_files())
     {
         // check for match
         gint match = 0;

@@ -123,7 +123,7 @@ on_idle_init (EtApplication *self)
     priv = et_application_get_instance_private (self);
 
     ET_File::reset_undo_history();
-    ET_FileList::clear();
+    MainWindow->browser()->file_list().clear();
 
     if (g_settings_get_boolean (MainSettings, "scan-startup"))
     {
@@ -557,7 +557,6 @@ et_application_dispose (GObject *object)
     }
 
     ET_File::reset_undo_history();
-    ET_FileList::clear();
 #ifndef NDEBUG
     unsigned file_instances = ET_File::instances();
     if (file_instances)

@@ -1053,7 +1053,7 @@ load_picture_from_file (GFile *file,
 
         /* Picture file not opened */
         msgdialog = gtk_message_dialog_new (GTK_WINDOW (MainWindow),
-                                            GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                            GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                             GTK_MESSAGE_ERROR,
                                             GTK_BUTTONS_CLOSE,
                                             _("Cannot open file ‘%s’"),
@@ -1795,13 +1795,13 @@ create_tag_area (EtTagArea *self)
 
     /* Activate Drag'n'Drop for the priv->images_view. */
     gtk_drag_dest_set (GTK_WIDGET (priv->images_view),
-                       GTK_DEST_DEFAULT_HIGHLIGHT | GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
+                       GTK_DEST_DEFAULT_HIGHLIGHT + GTK_DEST_DEFAULT_MOTION + GTK_DEST_DEFAULT_DROP,
                        drops, sizeof(drops) / sizeof(GtkTargetEntry),
                        GDK_ACTION_COPY);
 
     /* Activate Drag'n'Drop for the add_image_toolitem. */
     gtk_drag_dest_set (GTK_WIDGET (priv->add_image_toolitem),
-                       GTK_DEST_DEFAULT_HIGHLIGHT | GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
+                       GTK_DEST_DEFAULT_HIGHLIGHT + GTK_DEST_DEFAULT_MOTION + GTK_DEST_DEFAULT_DROP,
                        drops, sizeof(drops) / sizeof(GtkTargetEntry),
                        GDK_ACTION_COPY);
 }

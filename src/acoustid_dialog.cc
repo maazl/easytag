@@ -255,7 +255,7 @@ static bool apply_row(EtAcoustIDDialog *self, GtkTreeIter* iter)
 	auto assign = [&toUpdate](xStringD0& target, const char* value, EtColumn col)
 	{	if (target != value)
 		{	target = value;
-			toUpdate = toUpdate | col;
+			toUpdate = toUpdate + col;
 	}	};
 
 	if ((fields & ET_CDDB_SET_FIELD_ARTIST) && (!no_empty || *artist))

@@ -634,7 +634,7 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
     {
         GtkWidget *msgdialog;
         msgdialog = gtk_message_dialog_new (GTK_WINDOW (self),
-                             GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                             GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                              GTK_MESSAGE_ERROR,
                              GTK_BUTTONS_CLOSE,
                              _("Could not convert filename ‘%s’ into system filename encoding"),

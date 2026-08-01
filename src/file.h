@@ -87,12 +87,12 @@ private:
 #endif
 
 public: // injections from ET_FileList
-	bool activate_bg_color;       ///< For browser list: alternating background due to sub directory change.
 	/// Position in the global file list, intrusion from ET_FileList
 	/// @remarks Must be renumbered after resorting the list.
 	/// This value varies when resorting list and should not be used directly.
 	/// Use ET_FileList::visible_index to get a file's position.
 	unsigned IndexKey;
+	bool activate_bg_color; ///< For browser list: alternating background due to sub directory change.
 
 #ifdef ENABLE_ACOUSTID
 public: // Injection from Acoustid

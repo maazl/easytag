@@ -500,7 +500,7 @@ et_preferences_dialog_init (EtPreferencesDialog *self)
 
     g_settings_bind (MainSettings, "id3v2-enable-unicode",
                      priv->id3_v2_other_radio, "active",
-                     G_SETTINGS_BIND_DEFAULT | G_SETTINGS_BIND_INVERT_BOOLEAN);
+                     G_SETTINGS_BIND_DEFAULT + G_SETTINGS_BIND_INVERT_BOOLEAN);
     g_signal_connect (priv->id3_v2_unicode_radio, "notify::active",
                       G_CALLBACK (notify_id3_settings_active), self);
 
@@ -784,8 +784,7 @@ Check_DefaultPathToMp3 (EtPreferencesDialog *self)
 
             path_utf8 = g_file_info_get_display_name (fileinfo);
             msgdialog = gtk_message_dialog_new (GTK_WINDOW (self),
-                                                GTK_DIALOG_MODAL
-                                                | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                                 GTK_MESSAGE_ERROR,
                                                 GTK_BUTTONS_CLOSE,
                                                 "%s",

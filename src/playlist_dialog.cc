@@ -132,7 +132,7 @@ write_playlist (EtPlaylistDialog *self, GFile *file, GError **error)
     const std::vector<xPtr<ET_File>>& etfilelist =
         g_settings_get_boolean(MainSettings, "playlist-selected-only")
         ?   MainWindow->browser()->get_selected_files()
-        :   ET_FileList::all_files();
+        :   MainWindow->browser()->file_list().all_files();
 
     for (const ET_File* etfile : etfilelist)
     {
@@ -514,7 +514,7 @@ write_button_clicked (EtPlaylistDialog *self)
         {
             // Writing fails...
             msgdialog = gtk_message_dialog_new (GTK_WINDOW (self),
-                                               GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                                GTK_MESSAGE_ERROR,
                                                GTK_BUTTONS_CLOSE,
                                                _("Cannot write playlist file ‘%s’"),
@@ -633,7 +633,7 @@ create_playlist_dialog (EtPlaylistDialog *self)
                      priv->name_mask_entry, "text", G_SETTINGS_BIND_DEFAULT);
     g_settings_bind (MainSettings, "playlist-use-mask",
                      priv->name_directory_radio, "active",
-                     G_SETTINGS_BIND_DEFAULT | G_SETTINGS_BIND_INVERT_BOOLEAN);
+                     G_SETTINGS_BIND_DEFAULT + G_SETTINGS_BIND_INVERT_BOOLEAN);
 
     /* Playlist options */
     et_settings_bind_boolean("playlist-selected-only", priv->selected_files_check);

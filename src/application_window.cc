@@ -343,7 +343,7 @@ delete_file (ET_File *ETFile, gboolean multiple_files, GError **error)
         {
             GtkWidget *message_area;
             msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-                                               GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                                GTK_MESSAGE_QUESTION,
                                                GTK_BUTTONS_NONE,
                                                _("Do you really want to delete the file ‘%s’?"),
@@ -361,7 +361,7 @@ delete_file (ET_File *ETFile, gboolean multiple_files, GError **error)
         }else
         {
             msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-                                               GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                                GTK_MESSAGE_QUESTION,
                                                GTK_BUTTONS_NONE,
                                                _("Do you really want to delete the file ‘%s’?"),
@@ -430,10 +430,10 @@ on_delete (GSimpleAction *action,
     gint   nb_files_deleted = 0;
     GError *error = NULL;
 
-    g_return_if_fail(!ET_FileList::empty());
-
     self = ET_APPLICATION_WINDOW (user_data);
     priv = et_application_window_get_instance_private (self);
+
+    g_return_if_fail(!priv->browser->empty());
 
     /* Number of files to save */
     auto selection = priv->browser->get_current_files();
@@ -472,9 +472,7 @@ on_delete (GSimpleAction *action,
                 nb_files_deleted += saving_answer;
                 /* Remove file in the browser (corresponding line in the
                  * clist). */
-                priv->browser->remove_file(ETFile);
-                /* Remove file from file list. */
-                ET_FileList::remove_file(ETFile.get());
+                priv->browser->remove_file(ETFile.get());
                 break;
             case 0:
                 /* Distinguish between the file being skipped, and there being
@@ -518,12 +516,10 @@ on_undo_file_changes (GSimpleAction *action,
                       GVariant *variant,
                       gpointer user_data)
 {
-    EtApplicationWindow *self;
-
-    g_return_if_fail(!ET_FileList::empty());
-
-    self = ET_APPLICATION_WINDOW (user_data);
+    EtApplicationWindow* self = ET_APPLICATION_WINDOW (user_data);
     EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
+
+    g_return_if_fail(!priv->browser->empty());
 
     et_application_window_update_et_file_from_ui (self);
 
@@ -544,12 +540,10 @@ on_redo_file_changes (GSimpleAction *action,
                       GVariant *variant,
                       gpointer user_data)
 {
-    EtApplicationWindow *self;
-
-    g_return_if_fail(!ET_FileList::empty());
-
-    self = ET_APPLICATION_WINDOW (user_data);
+    EtApplicationWindow* self = ET_APPLICATION_WINDOW (user_data);
     EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
+
+    g_return_if_fail(!priv->browser->empty());
 
     et_application_window_update_et_file_from_ui (self);
 
@@ -704,15 +698,13 @@ on_remove_tags (GSimpleAction *action,
                 GVariant *variant,
                 gpointer user_data)
 {
-    EtApplicationWindow *self;
+    EtApplicationWindow* self = ET_APPLICATION_WINDOW(user_data);
+    EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
     File_Tag *FileTag;
     gint progress_bar_index;
     gint selectcount;
 
-    g_return_if_fail(!ET_FileList::empty());
-
-    self = ET_APPLICATION_WINDOW (user_data);
-    EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
+    g_return_if_fail(!priv->browser->empty());
 
     et_application_window_update_et_file_from_ui (self);
 
@@ -806,9 +798,10 @@ on_file_artist_view_change (GSimpleAction *action,
                             GVariant *variant,
                             gpointer user_data)
 {
-    EtApplicationWindow* self = ET_APPLICATION_WINDOW(user_data);
+    EtApplicationWindow* self = ET_APPLICATION_WINDOW (user_data);
+    EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
 
-    g_return_if_fail(!ET_FileList::empty());
+    g_return_if_fail(!priv->browser->empty());
 
     et_application_window_update_et_file_from_ui (self);
 
@@ -816,7 +809,7 @@ on_file_artist_view_change (GSimpleAction *action,
 
     et_application_window_browser_update_display_mode(self);
 
-    et_application_window_update_actions (ET_APPLICATION_WINDOW (user_data));
+    et_application_window_update_actions (self);
 }
 
 #ifdef ENABLE_CDDB
@@ -982,8 +975,9 @@ on_run_player_directory (GSimpleAction *action,
                          GVariant *variant,
                          gpointer user_data)
 {
-    auto range = ET_FileList::visible_range();
-    et_run_audio_player(range.first, range.second);
+	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(ET_APPLICATION_WINDOW(user_data));
+	auto range = priv->browser->file_list().visible_range();
+	et_run_audio_player(range.first, range.second);
 }
 
 static void
@@ -1415,10 +1409,11 @@ void
 et_application_window_select_file_by_et_file (EtApplicationWindow *self,
                                               ET_File *ETFile)
 {
-	if (ET_FileList::empty())
+	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
+
+	if (priv->browser->empty())
 		return;
 
-	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
 	/* Display the item */
 	et_browser_select_file_by_et_file(priv->browser, ETFile, TRUE);
 	/* select the file */
@@ -1473,7 +1468,7 @@ et_application_window_create_file_name_from_ui (EtApplicationWindow *self,
         GtkWidget *msgdialog;
         gchar *filename_escaped_utf8 = g_strescape(filename_new.c_str(), NULL);
         msgdialog = gtk_message_dialog_new (GTK_WINDOW (self),
-                                            GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                            GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                             GTK_MESSAGE_ERROR,
                                             GTK_BUTTONS_CLOSE,
                                             _("Could not convert filename ‘%s’ to system filename encoding"),
@@ -1664,7 +1659,7 @@ et_application_window_update_actions (EtApplicationWindow *self)
 
     GtkDialog *dialog = GTK_DIALOG (et_application_window_get_scan_dialog (self));
 
-    if (ET_FileList::empty())
+    if (priv->browser->empty())
     {
         /* No file found */
 
@@ -1855,13 +1850,14 @@ et_application_window_quit (EtApplicationWindow *self)
     /* If you change the displayed data and quit immediately */
     et_application_window_update_et_file_from_ui (self);
 
+    EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
     /* Check if all files have been saved before exit */
     if (g_settings_get_boolean (MainSettings, "confirm-when-unsaved-files")
-        && !ET_FileList::check_all_saved())
+        && !priv->browser->file_list().check_all_saved())
     {
         /* Some files haven't been saved */
         msgbox = gtk_message_dialog_new (GTK_WINDOW (self),
-                                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                          GTK_MESSAGE_QUESTION,
                                          GTK_BUTTONS_NONE,
                                          "%s",

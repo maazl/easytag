@@ -80,7 +80,6 @@ typedef struct
 
     GtkWidget *directory_album_artist_notebook;
 
-    GtkListStore *file_model;
     GtkTreeView *file_view;
     GtkWidget *file_menu;
     guint file_selected_handler;
@@ -128,6 +127,7 @@ typedef struct
     gchar *current_path_name; ///< Full name of current_path in system encoding
     GtkTreeIter current_file; ///< The file currently visible in the file and tag area. Binary zero if none.
 
+    EtFileList* file_list;
     ExpandDirectoryWorker* DirectoryWorker;
 
 } EtBrowserPrivate;
@@ -214,6 +214,7 @@ enum class SelectAction : unsigned char
 	SelectAndScroll = 5,
 	ReplaceSelectionAndScroll = 15
 };
+MAKE_FLAGS_ENUM(SelectAction);
 static void Browser_List_Select_File_By_Iter (EtBrowser *self,
                                               GtkTreeIter *iter,
                                               SelectAction select_it);
@@ -232,6 +233,8 @@ static const GIcon* get_gicon(EtBrowser *self, EtPathState path_state, bool can_
 
 static GtkTreeViewColumn * et_browser_get_column_for_sort_order(EtBrowser *self, EtSortMode sort_order);
 
+static void on_sort_order_changed(EtBrowser *self, const gchar *key, GSettings *settings);
+
 /* For window to rename a directory */
 static void Rename_Directory_With_Mask_Toggled (EtBrowser *self);
 
@@ -243,8 +246,6 @@ static void Run_Program_With_Directory (EtBrowser *self);
 static void Destroy_Run_Program_List_Window (EtBrowser *self);
 
 static void empty_entry_disable_widget (GtkWidget *widget, GtkEntry *entry);
-
-static void et_browser_refresh_sort (EtBrowser *self);
 
 static void et_rename_directory_on_response (GtkDialog *dialog,
                                              gint response_id,
@@ -613,7 +614,7 @@ void ExpandDirectoryWorker::SelectDirFailed(const char* path)
 {
 	// Message if the directory doesn't exist...
 	GtkWidget *msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-		GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_MESSAGE_ERROR,
 		GTK_BUTTONS_CLOSE,
 		_("Cannot read directory ‘%s’"),
@@ -1014,12 +1015,9 @@ ET_File* EtBrowser::popup_file()
 		return nullptr;
 
 	GtkTreeIter iter;
-	gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_model), &iter, tree_path);
-	ET_File* etfile = nullptr;
-  gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter, LIST_FILE_POINTER, &etfile, -1);
-
+	gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_list), &iter, tree_path);
 	gtk_tree_path_free(tree_path);
-	return etfile;
+	return priv->file_list->from_iter(iter);
 }
 
 /*
@@ -1066,7 +1064,7 @@ void EtBrowser::run_player_for_album_list()
 
     gchar* artist;
     gtk_tree_model_get(GTK_TREE_MODEL(priv->artist_model), &iter, ARTIST_NAME, &artist, -1);
-    auto range = ET_FileList::to_file_range(ET_FileList::matching_range(xStringD0(artist), xStringD0(album)));
+    auto range = priv->file_list->to_file_range(priv->file_list->matching_range(xStringD0(artist), xStringD0(album)));
     g_free(artist);
 
     et_run_audio_player(range.first, range.second);
@@ -1086,7 +1084,7 @@ void EtBrowser::run_player_for_artist_list()
 
     gchar* artist;
     gtk_tree_model_get(GTK_TREE_MODEL(priv->artist_model), &iter, ARTIST_NAME, &artist, -1);
-    auto range = ET_FileList::to_file_range(ET_FileList::matching_range(xStringD0(artist)));
+    auto range = priv->file_list->to_file_range(priv->file_list->matching_range(xStringD0(artist)));
     g_free(artist);
 
     et_run_audio_player(range.first, range.second);
@@ -1155,6 +1153,14 @@ void et_browser_restore_state(EtBrowser *self, GKeyFile* keyfile)
 		gtk_paned_set_position(priv->browser_paned, value);
 }
 
+ET_FileList& EtBrowser::file_list()
+{	return *et_browser_get_instance_private(this)->file_list;
+}
+
+bool EtBrowser::empty()
+{	return file_list().empty();
+}
+
 vector<xPtr<ET_File>> EtBrowser::get_selected_files()
 {
 	GtkTreeSelection *selection;
@@ -1168,12 +1174,10 @@ vector<xPtr<ET_File>> EtBrowser::get_selected_files()
 	for (GList* l = selfilelist; l != NULL; l = g_list_next (l))
 	{
 		GtkTreeIter iter;
-		if (!gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_model), &iter, (GtkTreePath*)l->data))
+		if (!gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_list), &iter, (GtkTreePath*)l->data))
 			continue; // invalid selected path ???
 
-		ET_File *etfile;
-		gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter, LIST_FILE_POINTER, &etfile, -1);
-		files.emplace_back(etfile);
+		files.emplace_back(priv->file_list->from_iter(iter));
 	}
 
 	g_list_free_full (selfilelist, (GDestroyNotify)gtk_tree_path_free);
@@ -1195,31 +1199,20 @@ vector<xPtr<ET_File>> EtBrowser::get_current_files()
 
 	vector<xPtr<ET_File>> files;
 	GtkTreeIter iter;
-	if (gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_model), &iter, current))
-	{	ET_File *etfile;
-		gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter, LIST_FILE_POINTER, &etfile, -1);
-		files.emplace_back(etfile);
-	}
+	if (gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_list), &iter, current))
+		files.emplace_back(priv->file_list->from_iter(iter));
 
 	gtk_tree_path_free(current);
 	return files;
 }
 
 vector<ET_File*> EtBrowser::get_all_files()
-{
-	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
-
+{	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
+	auto range = priv->file_list->visible_range();
 	vector<ET_File*> files;
-	files.reserve(gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_model), NULL));
-
-	gtk_tree_model_foreach(GTK_TREE_MODEL(priv->file_model),
-		[](GtkTreeModel* model, GtkTreePath* path, GtkTreeIter* iter, gpointer data)
-		{	ET_File* etfile;
-			gtk_tree_model_get(model, iter, LIST_FILE_POINTER, &etfile, -1);
-			((vector<xPtr<ET_File>>*)data)->emplace_back(etfile);
-			return FALSE;
-		}, &files);
-
+	files.reserve(range.second - range.first);
+	for (auto i = range.first; i != range.second; ++i)
+		files.emplace_back(i->get());
 	return files;
 }
 
@@ -1424,16 +1417,13 @@ static void et_browser_set_row_visible(EtBrowser *self, GtkTreeIter *rowIter, Se
 
 	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-	GtkTreePath* rowPath = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->file_model), rowIter);
+	GtkTreePath* rowPath = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->file_list), rowIter);
 
-	if ((unsigned char)action & (unsigned char)SelectAction::SetCursor)
+	if (action->*SelectAction::SetCursor)
 		gtk_tree_view_set_cursor(priv->file_view, rowPath, NULL, FALSE);
 
-	if ((unsigned char)action & (unsigned char)SelectAction::ScrollTo)
-		/* TODO: Make this only scroll to the row if it is not visible
-		 * (like in easytag GTK1)
-		 * See function gtk_tree_view_get_visible_rect() ?? */
-		gtk_tree_view_scroll_to_cell(priv->file_view, rowPath, NULL, FALSE, 0, 0);
+	if (action->*SelectAction::ScrollTo)
+		gtk_tree_view_scroll_to_cell (priv->file_view, rowPath, NULL, FALSE, 0, 0);
 
 	gtk_tree_path_free (rowPath);
 }
@@ -1475,13 +1465,13 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreePath* path, GtkTreeViewColum
 
     /* Check if all files have been saved before changing the directory */
     if (g_settings_get_boolean (MainSettings, "confirm-when-unsaved-files")
-        && !ET_FileList::check_all_saved())
+        && !priv->file_list->check_all_saved())
     {
         GtkWidget *msgdialog;
         gint response;
 
         msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                            GTK_MESSAGE_QUESTION,
                                            GTK_BUTTONS_NONE,
                                            "%s",
@@ -1606,12 +1596,11 @@ Browser_List_Row_Selected (EtBrowser *self, GtkTreeSelection *selection)
         return;
     }
 
-    if (gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->file_model),
-                                 &cursor_iter, cursor_path))
+    if (gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_list), &cursor_iter, cursor_path))
     {
         ET_File *cursor_et_file = nullptr;
         if (gtk_tree_selection_iter_is_selected(selection, &cursor_iter))
-        {   gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &cursor_iter, LIST_FILE_POINTER, &cursor_et_file, -1);
+        {   cursor_et_file = priv->file_list->from_iter(cursor_iter);
             priv->current_file = cursor_iter;
         } else
             priv->current_file = invalid_iter;
@@ -1629,89 +1618,72 @@ Browser_List_Row_Selected (EtBrowser *self, GtkTreeSelection *selection)
 }
 
 /*
- * Empty model, disabling Browser_List_Row_Selected () during clear because it
- * is called and causes crashes otherwise.
- */
-static void
-et_browser_clear_file_model (EtBrowser *self)
-{
-	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
-
-	// release ET_File references
-	gtk_tree_model_foreach(GTK_TREE_MODEL(priv->file_model),
-		[](GtkTreeModel* model, GtkTreePath* path, GtkTreeIter* iter, gpointer data)
-		{	ET_File* etfile;
-			gtk_tree_model_get(model, iter, LIST_FILE_POINTER, &etfile, -1);
-			xPtr<ET_File>::fromCptr(etfile);
-			return FALSE;
-		}, NULL);
-
-	GtkTreeSelection* selection = gtk_tree_view_get_selection(priv->file_view);
-	g_signal_handler_block(selection, priv->file_selected_handler);
-
-	priv->current_file = invalid_iter;
-	gtk_list_store_clear (priv->file_model);
-	gtk_tree_view_columns_autosize (priv->file_view);
-
-	g_signal_handler_unblock (selection, priv->file_selected_handler);
-}
-
-/** Change background color of item depending of equality according to the current sort order. */
-static void set_zebra(GtkTreeModel* model)
-{
-	GtkTreeIter iter;
-	if (!gtk_tree_model_get_iter_first(model, &iter))
-		return;
-	ET_File* last = nullptr;
-	auto cmp = ET_File::get_comp_func(
-		(EtSortMode)g_settings_get_enum(MainSettings, "sort-order"),
-		g_settings_get_boolean(MainSettings, "sort-descending"));
-	bool activate_bg_color = false;
-	do
-	{	ET_File *file;
-		gtk_tree_model_get(model, &iter, LIST_FILE_POINTER, &file, -1);
-		file->activate_bg_color = activate_bg_color ^= last && abs(cmp(last, file)) == 1;
-		last = file;
-	} while (gtk_tree_model_iter_next(model, &iter));
-}
-
-/*
  * Loads the current visible range of ET_FileList into the browser list.
  */
-void EtBrowser::load_file_list()
+void EtBrowser::reload_file_list(bool keep_selection)
 {
 	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
 
-	et_browser_clear_file_model(this);
+	// disconnect TreeView to do bulk update
+	ET_FileList::list_type selected_files;
+	if (keep_selection)
+		selected_files = get_selected_files();
+	GtkTreeSelection* selection = gtk_tree_view_get_selection(priv->file_view);
+	g_signal_handler_block(selection, priv->file_selected_handler);
+	// clear event queue first to avoid late update events.
+	gtk_tree_selection_unselect_all(selection);
+	while (gtk_events_pending())
+		gtk_main_iteration();
+	gtk_tree_view_set_model(priv->file_view, nullptr);
 
-	auto range = ET_FileList::visible_range();
-	ET_File* etfile_to_select = MainWindow->get_displayed_file();
-	bool selected = false;
-	GtkTreeIter selected_iter;
-	for (auto i = range.first; i != range.second; ++i)
-	{
-		GtkTreeIter iter;
-		gtk_list_store_insert_with_values(priv->file_model, &iter, G_MAXINT, LIST_FILE_POINTER, xPtr<ET_File>::toCptr(*i), -1);
+	// restore model connection and selection
+	gtk_tree_view_set_model(priv->file_view, GTK_TREE_MODEL(priv->file_list));
 
-		if (etfile_to_select == i->get())
-		{	selected_iter = iter;
-			selected = true;
+	// restore sort marker
+	GtkTreeViewColumn* column = et_browser_get_column_for_sort_order(this, priv->file_sort_order);
+	if (column != NULL)
+	{	gtk_tree_view_column_set_sort_order(column, g_settings_get_boolean(MainSettings, "sort-descending") ? GTK_SORT_DESCENDING : GTK_SORT_ASCENDING);
+		gtk_tree_view_column_set_sort_indicator(column, TRUE);
+	}
+
+	GtkTreePath* path = gtk_tree_path_new_from_indices(0, -1);
+	gint* index = gtk_tree_path_get_indices(path);
+	if (keep_selection)
+	{	for (const ET_File* i : selected_files)
+		{	*index = priv->file_list->visible_index(i);
+			gtk_tree_selection_select_path(selection, path);
+		}
+		if (priv->file_list->from_iter(priv->current_file))
+			et_browser_set_row_visible(this, &priv->current_file, SelectAction::ScrollTo + SelectAction::SetCursor);
+	} else
+	{	ET_File* etfile_to_select = priv->file_list->is_valid(MainWindow->get_displayed_file());
+		// validate file
+		if (etfile_to_select)
 			// update header
 			et_application_window_update_ui_from_et_file(MainWindow, (EtColumn)0);
+		// If no file to select, use the first one in browser sort order.
+		else
+		{	etfile_to_select = (*priv->file_list)[0];
+			if (etfile_to_select)
+				// change current file
+				MainWindow->change_displayed_file(etfile_to_select);
+		}
+		if (etfile_to_select)
+		{	GtkTreeIter iter;
+			if (priv->file_list->to_iter(iter, etfile_to_select))
+				Browser_List_Select_File_By_Iter(this, &iter, SelectAction::SelectAndScroll);
 		}
 	}
+	gtk_tree_path_free(path);
+	g_signal_handler_unblock(selection, priv->file_selected_handler);
 
-	// If no file to select, use the first one in browser sort order.
-	if (!selected)
-	{	if (!gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->file_model), &selected_iter))
-			return; // no files
-		// change current file
-		gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &selected_iter, LIST_FILE_POINTER, &etfile_to_select, -1);
-			MainWindow->change_displayed_file(etfile_to_select);
+#ifdef ENABLE_ACOUSTID
+	if (MainWindow)
+	{	auto ad = MainWindow->acoustid_dialog();
+		if (ad)
+			ad->update_button_sensitivity();
 	}
-	Browser_List_Select_File_By_Iter(this, &selected_iter, SelectAction::SelectAndScroll);
-
-	set_zebra(GTK_TREE_MODEL(priv->file_model));
+#endif
 }
 
 
@@ -1725,8 +1697,7 @@ void et_browser_refresh_list(EtBrowser *self)
 	g_return_if_fail(ET_BROWSER(self));
 	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-	if (ET_FileList::empty() || !priv->file_view
-		|| gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_model), NULL) == 0)
+	if (priv->file_list->empty() || !priv->file_view)
 		return;
 
 	// When displaying Artist + Album lists => refresh also rows color
@@ -1767,110 +1738,39 @@ void et_browser_refresh_list(EtBrowser *self)
  *  - Refresh filename is file saved,
  *  - Change color is something change on the file
  */
-void
-et_browser_refresh_file_in_list (EtBrowser *self,
-                                 const ET_File *ETFile)
+void et_browser_refresh_file_in_list(EtBrowser *self, const ET_File *file)
 {
-    EtBrowserPrivate *priv;
-    GList *selectedRow = NULL;
-    GVariant *variant;
-    GtkTreeSelection *selection;
-    GtkTreeIter selectedIter;
-    const ET_File *etfile;
-    gboolean row_found = FALSE;
-    gboolean valid;
+	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-    g_return_if_fail (ET_BROWSER (self));
+	if (priv->file_list->empty() || !priv->file_view || !file)
+		return;
 
-    priv = et_browser_get_instance_private (self);
+	bool row_found = priv->file_list->is_valid(file);
+	// Error somewhere...
+	if (!row_found)
+		return;
 
-    if (ET_FileList::empty() || !priv->file_view || !ETFile ||
-        gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_model), NULL) == 0)
-    {
-        return;
-    }
-
-    // Search the row of the modified file to update it (when found: row_found=TRUE)
-    // 1/3. Get position of ETFile in ETFileList
-    if (row_found == FALSE)
-    {
-        valid = gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(priv->file_model), &selectedIter, NULL, ET_FileList::visible_index(ETFile));
-        if (valid)
-        {
-            gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &selectedIter,
-                           LIST_FILE_POINTER, &etfile, -1);
-            if (ETFile == etfile)
-            {
-                row_found = TRUE;
-            }
-        }
-    }
-
-    // 2/3. Try with the selected file in list (works only if we select the same file)
-    if (row_found == FALSE)
-    {
-        selection = gtk_tree_view_get_selection (priv->file_view);
-        selectedRow = gtk_tree_selection_get_selected_rows(selection, NULL);
-        if (selectedRow && selectedRow->data != NULL)
-        {
-            valid = gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_model), &selectedIter,
-                                    (GtkTreePath*) selectedRow->data);
-            if (valid)
-            {
-                gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &selectedIter,
-                                   LIST_FILE_POINTER, &etfile, -1);
-                if (ETFile == etfile)
-                {
-                    row_found = TRUE;
-                }
-            }
-        }
-
-        g_list_free_full (selectedRow, (GDestroyNotify)gtk_tree_path_free);
-    }
-
-    // 3/3. Fails, now we browse the full list to find it
-    if (row_found == FALSE)
-    {
-        valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->file_model), &selectedIter);
-        while (valid)
-        {
-            gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &selectedIter,
-                               LIST_FILE_POINTER, &etfile, -1);
-            if (ETFile == etfile)
-            {
-                row_found = TRUE;
-                break;
-            } else
-            {
-                valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_model), &selectedIter);
-            }
-        }
-    }
-
-    // Error somewhere...
-    if (row_found == FALSE)
-        return;
-
-    // Displayed the filename and refresh other fields
-    GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->file_model), &selectedIter);
-    gtk_tree_model_row_changed(GTK_TREE_MODEL(priv->file_model), path, &selectedIter);
-    gtk_tree_path_free(path);
+	// Displayed the filename and refresh other fields
+	GtkTreeIter selectedIter;
+	priv->file_list->to_iter(selectedIter, file);
+	GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->file_list), &selectedIter);
+	gtk_tree_model_row_changed(GTK_TREE_MODEL(priv->file_list), path, &selectedIter);
+	gtk_tree_path_free(path);
 
 	/* When displaying Artist + Album lists => refresh also rows color. */
-	variant = g_action_group_get_action_state(G_ACTION_GROUP(MainWindow), "file-artist-view");
+	GVariant* variant = g_action_group_get_action_state(G_ACTION_GROUP(MainWindow), "file-artist-view");
 	if (strcmp(g_variant_get_string(variant, NULL), "artist") != 0)
 	{	g_variant_unref(variant);
 		return;
 	}
 	g_variant_unref(variant);
 
-	auto album_range = ET_FileList::artist_album_index_find(ETFile);
+	auto album_range = priv->file_list->artist_album_index_find(file);
 	if (album_range.first == album_range.second)
 		return;
 
 	xStringD0 matchingArtist;
-	valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->artist_model), &selectedIter);
+	gboolean valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->artist_model), &selectedIter);
 	while (valid)
 	{	gchar *artist;
 		gtk_tree_model_get(GTK_TREE_MODEL(priv->artist_model), &selectedIter, ARTIST_NAME, &artist, -1);
@@ -1910,126 +1810,27 @@ et_browser_refresh_file_in_list (EtBrowser *self,
 /*
  * Remove a file from the list, by ETFile
  */
-void EtBrowser::remove_file(const ET_File *searchETFile)
+void EtBrowser::remove_file(ET_File *searchETFile)
 {
-    EtBrowserPrivate *priv;
-    gint row;
-    GtkTreePath *currentPath = NULL;
-    GtkTreeIter currentIter;
-    ET_File *currentETFile;
-    gboolean valid;
+	if (searchETFile == NULL)
+		return;
 
-    if (searchETFile == NULL)
-        return;
+	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
 
-    priv = et_browser_get_instance_private (this);
-
-    // Go through the file list until it is found
-    for (row=0; row < gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_model), NULL); row++)
-    {
-        if (row == 0)
-            currentPath = gtk_tree_path_new_first();
-        else
-            gtk_tree_path_next(currentPath);
-
-        valid = gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_model), &currentIter, currentPath);
-        if (valid)
-        {
-            gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &currentIter,
-                               LIST_FILE_POINTER, &currentETFile, -1);
-
-            if (currentETFile == searchETFile)
-            {
-                // release file
-                xPtr<ET_File>::fromCptr(currentETFile);
-                gtk_list_store_remove(priv->file_model, &currentIter);
-                break;
-            }
-        }
-    }
-
-    gtk_tree_path_free (currentPath);
+	priv->file_list->remove_file(searchETFile);
 }
 
 /*
  * Select the specified file in the list, by its ETFile
  */
-void
-et_browser_select_file_by_et_file (EtBrowser *self,
-                                   const ET_File *file,
-                                   gboolean select_it)
+void et_browser_select_file_by_et_file(EtBrowser *self, const ET_File *file, gboolean select_it)
 {
-	GtkTreePath* currentPath = et_browser_select_file_by_et_file2(self, file, select_it, NULL);
-	if (currentPath)
-		gtk_tree_path_free(currentPath);
-}
-/*
- * Select the specified file in the list, by its ETFile
- *  - startPath : if set : starting path to try increase speed
- *  - returns allocated "currentPath" to free
- */
-GtkTreePath *
-et_browser_select_file_by_et_file2 (EtBrowser *self,
-                                    const ET_File *searchETFile,
-                                    gboolean select_it,
-                                    GtkTreePath *startPath)
-{
-    EtBrowserPrivate *priv;
-    gint row;
-    GtkTreePath *currentPath = NULL;
-    GtkTreeIter currentIter;
-    ET_File *currentETFile;
-    gboolean valid;
+	g_return_if_fail(file != NULL);
 
-    g_return_val_if_fail (searchETFile != NULL, NULL);
-
-    priv = et_browser_get_instance_private (self);
-
-    // If the path is used, we try the next item (to increase speed), as it is correct in many cases...
-    if (startPath)
-    {
-        // Try the next path
-        gtk_tree_path_next(startPath);
-        valid = gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->file_model),
-                                         &currentIter, startPath);
-        if (valid)
-        {
-            gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &currentIter,
-                               LIST_FILE_POINTER, &currentETFile, -1);
-            // It is the good file?
-            if (currentETFile == searchETFile)
-            {
-                Browser_List_Select_File_By_Iter(self, &currentIter,
-                    select_it ? SelectAction::SelectAndScroll : SelectAction::ScrollTo);
-                return startPath;
-            }
-        }
-    }
-
-    // Else, we try the whole list...
-    // Go through the file list until it is found
-    currentPath = gtk_tree_path_new_first();
-    for (row=0; row < gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_model), NULL); row++)
-    {
-        valid = gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_model), &currentIter, currentPath);
-        if (valid)
-        {
-            gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &currentIter,
-                               LIST_FILE_POINTER, &currentETFile, -1);
-
-            if (currentETFile == searchETFile)
-            {
-                Browser_List_Select_File_By_Iter(self, &currentIter,
-                    select_it ? SelectAction::SelectAndScroll : SelectAction::ScrollTo);
-                return currentPath;
-                //break;
-            }
-        }
-        gtk_tree_path_next(currentPath);
-    }
-    gtk_tree_path_free(currentPath);
-
-    return NULL;
+	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
+	GtkTreeIter currentIter;
+	priv->file_list->to_iter(currentIter, file);
+	Browser_List_Select_File_By_Iter(self, &currentIter, select_it ? SelectAction::SelectAndScroll : SelectAction::ScrollTo);
 }
 
 
@@ -2038,14 +1839,14 @@ et_browser_select_file_by_et_file2 (EtBrowser *self,
  */
 static void Browser_List_Select_File_By_Iter(EtBrowser *self, GtkTreeIter *rowIter, SelectAction select_it)
 {
-	if ((unsigned char)select_it & (unsigned char)SelectAction::ScrollTo)
+	if (select_it->*SelectAction::ScrollTo)
 		et_browser_set_row_visible(self, rowIter, select_it);
 
 	EtBrowserPrivate* priv = et_browser_get_instance_private (self);
 
-	if ((unsigned char)select_it & (unsigned char)SelectAction::Select)
+	if (select_it->*SelectAction::Select)
 	{	GtkTreeSelection *selection = gtk_tree_view_get_selection(priv->file_view);
-		if ((unsigned char)select_it & (unsigned char)SelectAction::ClearSelection)
+		if (select_it->*SelectAction::ClearSelection)
 		{	if (gtk_tree_selection_count_selected_rows(selection) == 1
 				&& gtk_tree_selection_iter_is_selected(selection, rowIter))
 				rowIter = nullptr;
@@ -2054,7 +1855,7 @@ static void Browser_List_Select_File_By_Iter(EtBrowser *self, GtkTreeIter *rowIt
 		}
 		if (rowIter)
 			gtk_tree_selection_select_iter(selection, rowIter);
-	} else if ((unsigned char)select_it & (unsigned char)SelectAction::ClearSelection)
+	} else if (select_it->*SelectAction::ClearSelection)
 		gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(priv->file_view));
 }
 
@@ -2062,34 +1863,12 @@ static void Browser_List_Select_File_By_Iter(EtBrowser *self, GtkTreeIter *rowIt
  * Select the specified file in the list, by a string representation of an iter
  * e.g. output of gtk_tree_model_get_string_from_iter()
  */
-void
-et_browser_select_file_by_iter_string (EtBrowser *self,
-                                       const gchar* stringIter,
-                                       gboolean select_it)
+void et_browser_select_file_by_iter_string(EtBrowser *self, const gchar* stringIter, gboolean select_it)
 {
-    EtBrowserPrivate *priv;
-    GtkTreeIter iter;
-
-    priv = et_browser_get_instance_private (self);
-
-    g_return_if_fail (priv->file_model != NULL || priv->file_view != NULL);
-
-    if (gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(priv->file_model), &iter, stringIter))
-    {
-        if (select_it)
-        {
-            GtkTreeSelection *selection = gtk_tree_view_get_selection(priv->file_view);
-
-            // FIX ME : Why signal was blocked if selected? Don't remember...
-            if (selection)
-            {
-                //g_signal_handlers_block_by_func(G_OBJECT(selection),G_CALLBACK(Browser_List_Row_Selected),NULL);
-                gtk_tree_selection_select_iter(selection, &iter);
-                //g_signal_handlers_unblock_by_func(G_OBJECT(selection),G_CALLBACK(Browser_List_Row_Selected),NULL);
-            }
-        }
-        et_browser_set_row_visible(self, &iter, SelectAction::ScrollTo);
-    }
+	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
+	GtkTreeIter iter;
+	if (gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(priv->file_list), &iter, stringIter))
+		Browser_List_Select_File_By_Iter(self, &iter, select_it ? SelectAction::SelectAndScroll : SelectAction::ScrollTo);
 }
 
 /*
@@ -2101,88 +1880,58 @@ et_browser_select_file_by_dlm (EtBrowser *self,
                                const gchar* string,
                                gboolean select_it)
 {
-    EtBrowserPrivate *priv;
-    GtkTreeIter iter;
-    GtkTreeIter iter2;
-    GtkTreeSelection *selection;
-    ET_File *current_etfile = NULL, *retval = NULL;
-    int max = 0, cur;
+	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-    priv = et_browser_get_instance_private (self);
+	int max = 0, cur;
+	ET_File* retval = nullptr;
 
-    g_return_val_if_fail (priv->file_model != NULL || priv->file_view != NULL, NULL);
+	for (auto range = priv->file_list->visible_range(); range.first != range.second; ++range.first)
+	{	ET_File* current_etfile = range.first->get();
+		const xStringD0& current_title = current_etfile->FileTagNew()->title;
+		if ((cur = dlm((current_title ? current_title : current_etfile->FileNameNew()->file().get()), string)) > max) // See "dlm.c"
+		{	max = cur;
+			retval = current_etfile;
+		}
+	}
 
-    if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->file_model),
-                                       &iter))
-    {
-        do
-        {
-            gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter,
-                               LIST_FILE_POINTER, &current_etfile, -1);
-            const xStringD0& current_title = current_etfile->FileTagNew()->title;
+	if (retval)
+	{	GtkTreeIter iter;
+		priv->file_list->to_iter(iter, retval);
+		if (select_it)
+		{	GtkTreeSelection* selection = gtk_tree_view_get_selection(priv->file_view);
+			g_signal_handler_block(selection, priv->file_selected_handler);
+			gtk_tree_selection_select_iter(selection, &iter);
+			g_signal_handler_unblock(selection, priv->file_selected_handler);
+		}
+		et_browser_set_row_visible(self, &iter, SelectAction::ScrollTo);
+	}
 
-            if ((cur = dlm((current_title ? current_title : current_etfile->FileNameNew()->file().get()), string)) > max) // See "dlm.c"
-            {
-                max = cur;
-                iter2 = iter;
-                retval = current_etfile;
-            }
-
-        } while (gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_model), &iter));
-
-        if (select_it)
-        {
-            selection = gtk_tree_view_get_selection(priv->file_view);
-            if (selection)
-            {
-                g_signal_handler_block(selection, priv->file_selected_handler);
-                gtk_tree_selection_select_iter(selection, &iter2);
-                g_signal_handler_unblock(selection, priv->file_selected_handler);
-            }
-        }
-        et_browser_set_row_visible(self, &iter2, SelectAction::ScrollTo);
-    }
-    return retval;
-}
-
-bool EtBrowser::has_file()
-{
-	return !!et_browser_get_instance_private(this)->current_file.stamp;
+	return retval;
 }
 
 ET_File* EtBrowser::current_file()
 {
-	if (!has_file())
-		return nullptr;
 	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
-	ET_File* etfile;
-	gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &priv->current_file, LIST_FILE_POINTER, &etfile, -1);
-	return etfile;
+	return priv->file_list->from_iter(priv->current_file);
 }
 
 bool EtBrowser::has_prev()
-{
-	if (!has_file())
-		return false;
-	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
+{	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
 	GtkTreeIter iter = priv->current_file;
-	return !!gtk_tree_model_iter_previous(GTK_TREE_MODEL(priv->file_model), &iter);
+	return !!gtk_tree_model_iter_previous(GTK_TREE_MODEL(priv->file_list), &iter);
 }
 
 bool EtBrowser::has_next()
-{
-	if (!has_file())
-		return false;
-	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
+{	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
 	GtkTreeIter iter = priv->current_file;
-	return !!gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_model), &iter);
+	return !!gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_list), &iter);
 }
 
 ET_File* EtBrowser::select_first_file()
 {
 	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
 	GtkTreeIter iter;
-	if (!gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->file_model), &iter))
+	if (!gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->file_list), &iter))
 		return nullptr;
 
 	Browser_List_Select_File_By_Iter(this, &iter, SelectAction::ReplaceSelectionAndScroll);
@@ -2192,14 +1941,14 @@ ET_File* EtBrowser::select_first_file()
 ET_File* EtBrowser::select_last_file()
 {
 	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
-	GtkTreeIter iter;
 
 	// get last iter
-	gint rows = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_model), NULL);
+	gint rows = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(priv->file_list), NULL);
 	if (rows == 0)
 		return nullptr;
 	GtkTreePath* path = gtk_tree_path_new_from_indices(rows - 1, -1);
-	gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_model), &iter, path);
+	GtkTreeIter iter;
+	gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->file_list), &iter, path);
 	gtk_tree_path_free(path);
 
 	Browser_List_Select_File_By_Iter(this, &iter, SelectAction::ReplaceSelectionAndScroll);
@@ -2208,11 +1957,9 @@ ET_File* EtBrowser::select_last_file()
 
 ET_File* EtBrowser::select_prev_file()
 {
-	if (!has_file())
-		return nullptr;
 	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
 	GtkTreeIter iter = priv->current_file;
-	if (!gtk_tree_model_iter_previous(GTK_TREE_MODEL(priv->file_model), &iter))
+	if (!gtk_tree_model_iter_previous(GTK_TREE_MODEL(priv->file_list), &iter))
 		return nullptr;
 
 	Browser_List_Select_File_By_Iter(this, &iter, SelectAction::ReplaceSelectionAndScroll);
@@ -2221,11 +1968,9 @@ ET_File* EtBrowser::select_prev_file()
 
 ET_File* EtBrowser::select_next_file()
 {
-	if (!has_file())
-		return nullptr;
 	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
 	GtkTreeIter iter = priv->current_file;
-	if (!gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_model), &iter))
+	if (!gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_list), &iter))
 		return nullptr;
 
 	Browser_List_Select_File_By_Iter(this, &iter, SelectAction::ReplaceSelectionAndScroll);
@@ -2237,42 +1982,18 @@ ET_File* EtBrowser::select_next_file()
  */
 void EtBrowser::clear()
 {
-	et_browser_clear_file_model(this);
+	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
+	GtkTreeSelection* selection = gtk_tree_view_get_selection(priv->file_view);
+	g_signal_handler_block(selection, priv->file_selected_handler);
+	// clear event queue first to avoid late update events.
+	gtk_tree_selection_unselect_all(selection);
+	while (gtk_events_pending())
+		gtk_main_iteration();
+	gtk_tree_view_set_model(priv->file_view, nullptr);
+	g_signal_handler_unblock(selection, priv->file_selected_handler);
+
 	et_browser_clear_artist_model(this);
 	et_browser_clear_album_model(this);
-}
-
-/*
- * Intelligently sort the file list based on the current sorting method
- * see also 'ET_Sort_File_List'
- */
-static gint
-Browser_List_Sort_Func (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
-                        gpointer data)
-{
-    ET_File *ETFile1;
-    ET_File *ETFile2;
-
-    gtk_tree_model_get(model, a, LIST_FILE_POINTER, &ETFile1, -1);
-    gtk_tree_model_get(model, b, LIST_FILE_POINTER, &ETFile2, -1);
-
-    return ((gint (*)(const ET_File*, const ET_File*))data)(ETFile1, ETFile2);
-}
-
-/*
- * Refresh the list sorting (call me after sort-* has changed)
- */
-static void
-et_browser_refresh_sort (EtBrowser *self)
-{
-	g_return_if_fail (ET_BROWSER (self));
-	EtBrowserPrivate* priv = et_browser_get_instance_private (self);
-	gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(priv->file_model), 0, Browser_List_Sort_Func,
-		(gpointer)ET_File::get_comp_func(
-			(EtSortMode)g_settings_get_enum(MainSettings, "sort-order"),
-			g_settings_get_boolean(MainSettings, "sort-descending")), NULL);
-
-	set_zebra(GTK_TREE_MODEL(priv->file_model));
 }
 
 /*
@@ -2306,12 +2027,10 @@ void EtBrowser::invert_selection()
 	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
 	GtkTreeIter iter;
 
-	g_return_if_fail(priv->file_model != NULL || priv->file_view != NULL);
-
 	et_application_window_update_et_file_from_ui(MainWindow);
 
 	GtkTreeSelection* selection = gtk_tree_view_get_selection(priv->file_view);
-	if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->file_model), &iter))
+	if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->file_list), &iter))
 	{	// Must block the select signal to avoid selecting all files (one by one) in the main files list.
 		g_signal_handler_block(selection, priv->file_selected_handler);
 
@@ -2321,7 +2040,7 @@ void EtBrowser::invert_selection()
 				gtk_tree_selection_unselect_iter(selection, &iter);
 			else
 				gtk_tree_selection_select_iter(selection, &iter);
-		} while (gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_model), &iter));
+		} while (gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_list), &iter));
 
 		g_signal_handler_unblock (selection, priv->file_selected_handler);
 	}
@@ -2335,11 +2054,10 @@ pair<ET_File*, ET_File*> EtBrowser::prev_next_if(ET_File* file, bool (*predicate
 
 	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
 	GtkTreeIter iter;
-	if (!gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->file_model), &iter))
+	if (!gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->file_list), &iter))
 		return result;
 	do
-	{	gtk_tree_model_get(GTK_TREE_MODEL(priv->file_model), &iter,
-			LIST_FILE_POINTER, &result.second, -1);
+	{	result.second = priv->file_list->from_iter(iter);
 		if (result.second == file)
 			file = nullptr;
 		else if (predicate(result.second))
@@ -2348,19 +2066,10 @@ pair<ET_File*, ET_File*> EtBrowser::prev_next_if(ET_File* file, bool (*predicate
 			else
 				return result;
 		}
-	} while (gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_model), &iter));
+	} while (gtk_tree_model_iter_next(GTK_TREE_MODEL(priv->file_list), &iter));
 
 	result.second = nullptr;
 	return result;
-}
-
-// all file in range saved?
-static bool any_unsaved(const ET_FileList::index_range_type& range)
-{	auto file_range = ET_FileList::to_file_range(range);
-	for (auto i = file_range.first; i < file_range.second; ++i)
-		if (!i->get()->is_saved())
-			return true;
-	return false;
 }
 
 /// Hide tooltip if no ellipsis.
@@ -2451,12 +2160,12 @@ static void Browser_Artist_List_Load_Files(EtBrowser *self)
 	// Iterate over blocks of the same artist
 	g_signal_handler_block(selection, priv->artist_selected_handler);
 
-	for (auto range = ET_FileList::index_range_type(ET_FileList::artist_album_index().begin(), ET_FileList::artist_album_index().begin());
-		range.first != ET_FileList::artist_album_index().end(); range.first = range.second)
+	for (auto range = ET_FileList::index_range_type(priv->file_list->artist_album_index().begin(), priv->file_list->artist_album_index().begin());
+		range.first != priv->file_list->artist_album_index().end(); range.first = range.second)
 	{
 		// propagate end to end of artist and aggregate some data
-		while (++range.second != ET_FileList::artist_album_index().end() && range.second->Artist == range.first->Artist);
-		bool unsaved = any_unsaved(range);
+		while (++range.second != priv->file_list->artist_album_index().end() && range.second->Artist == range.first->Artist);
+		bool unsaved = priv->file_list->any_unsaved_in_range(range);
 
 		// Insert a line for each artist
 		GtkTreeIter iter;
@@ -2464,13 +2173,13 @@ static void Browser_Artist_List_Load_Files(EtBrowser *self)
 			ARTIST_PIXBUF, pixbuf,
 			ARTIST_NAME, range.first->Artist.get(),
 			ARTIST_NUM_ALBUMS, (unsigned)(range.second - range.first),
-			ARTIST_NUM_FILES, ET_FileList::files_in_range(range),
+			ARTIST_NUM_FILES, priv->file_list->files_in_range(range),
 			ARTIST_FONT_WEIGHT, (unsaved && bold ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL),
 			ARTIST_ROW_FOREGROUND, (unsaved && !bold ? &RED : NULL),
 			-1);
 
 		// Select the first line if we weren't asked to select anything
-		if (!path && (!etfile || ET_FileList::is_in_range(range, etfile)))
+		if (!path && (!etfile || priv->file_list->is_in_range(range, etfile)))
 		{
 			gtk_tree_selection_select_iter(selection, &iter);
 
@@ -2502,7 +2211,7 @@ Browser_Artist_List_Row_Selected (EtBrowser *self, GtkTreeSelection* selection)
 
 	gchar* artist;
 	gtk_tree_model_get(GTK_TREE_MODEL(priv->artist_model), &iter, ARTIST_NAME, &artist, -1);
-	auto range = ET_FileList::matching_range(xStringD0(artist));
+	auto range = priv->file_list->matching_range(xStringD0(artist));
 	g_free(artist);
 
 	Browser_Album_List_Load_Files(self, range);
@@ -2516,9 +2225,9 @@ static void Browser_Artist_List_Set_Row_Appearance(EtBrowser *self, GtkTreeIter&
 	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
 	// Change the style (red/bold) of the row if one of the files was changed
-	auto range = ET_FileList::matching_range(artist);
+	auto range = priv->file_list->matching_range(artist);
 
-	bool unsaved = any_unsaved(range);
+	bool unsaved = priv->file_list->any_unsaved_in_range(range);
 	gboolean bold = g_settings_get_boolean(MainSettings, "file-changed-bold");
 
 	gtk_list_store_set(priv->artist_model, &iter,
@@ -2558,7 +2267,7 @@ static void Browser_Album_List_Load_Files(EtBrowser *self, ET_FileList::index_ra
 	// Create a first row to select all albums of the artist
 	gtk_list_store_insert_with_values(priv->album_model, &iter, G_MAXINT,
 		ALBUM_NAME, _("All albums"),
-		ALBUM_NUM_FILES, ET_FileList::files_in_range(range),
+		ALBUM_NUM_FILES, priv->file_list->files_in_range(range),
 		ALBUM_STATE, ALBUM_STATE_ALL_ALBUMS,
 		-1);
 
@@ -2570,7 +2279,7 @@ static void Browser_Album_List_Load_Files(EtBrowser *self, ET_FileList::index_ra
 	gboolean bold = g_settings_get_boolean(MainSettings, "file-changed-bold");
 	GtkTreePath *path = NULL;
 	const ET_File* etfile = MainWindow->get_displayed_file();
-	if (etfile && !ET_FileList::is_in_range(range, etfile))
+	if (etfile && !priv->file_list->is_in_range(range, etfile))
 		etfile = nullptr; // no match within this artist => select first
 
 	// Create a line for each album of the artist
@@ -2578,18 +2287,18 @@ static void Browser_Album_List_Load_Files(EtBrowser *self, ET_FileList::index_ra
 
 	for (auto end = range.second; range.first != end; range.first = range.second)
 	{	range.second = range.first + 1;
-		bool unsaved = any_unsaved(range);
+		bool unsaved = priv->file_list->any_unsaved_in_range(range);
 		/* Add the new row. */
 		gtk_list_store_insert_with_values(priv->album_model, &iter, G_MAXINT,
 			ALBUM_GICON, icon,
 			ALBUM_NAME, range.first->Album.get(),
-			ALBUM_NUM_FILES, ET_FileList::files_in_range(range),
+			ALBUM_NUM_FILES, priv->file_list->files_in_range(range),
 			ALBUM_FONT_WEIGHT, (unsaved && bold ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL),
 			ALBUM_ROW_FOREGROUND, (unsaved && !bold ? &RED : NULL),
 			-1);
 
 		// Select the first line if we weren't asked to select anything
-		if (!path && (!etfile || ET_FileList::is_in_range(range, etfile)))
+		if (!path && (!etfile || priv->file_list->is_in_range(range, etfile)))
 		{	path = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->album_model), &iter);
 
 			gtk_tree_selection_select_iter(selection, &iter);
@@ -2632,16 +2341,16 @@ Browser_Album_List_Row_Selected (EtBrowser *self, GtkTreeSelection *selection)
 
 	xStringD0 Artist(artist);
 	if (state & ALBUM_STATE_ALL_ALBUMS)
-		ET_FileList::set_visible_range(&Artist);
+		priv->file_list->set_visible_range(&Artist);
 	else
 	{	xStringD0 Album(album);
-		ET_FileList::set_visible_range(&Artist, &Album);
+		priv->file_list->set_visible_range(&Artist, &Album);
 	}
 
 	g_free(artist);
 	g_free(album);
 
-	self->load_file_list();
+	self->reload_file_list(false);
 }
 
 /*
@@ -2654,10 +2363,10 @@ static void Browser_Album_List_Set_Row_Appearance(EtBrowser *self, GtkTreeIter& 
 	gchar* album;
 	gint state;
 	gtk_tree_model_get(GTK_TREE_MODEL(priv->album_model), &iter, ALBUM_NAME, &album, ALBUM_STATE, &state, -1);
-	auto range = state & ALBUM_STATE_ALL_ALBUMS ? ET_FileList::matching_range(artist) : ET_FileList::matching_range(artist, xStringD0(album));
+	auto range = state & ALBUM_STATE_ALL_ALBUMS ? priv->file_list->matching_range(artist) : priv->file_list->matching_range(artist, xStringD0(album));
 	g_free(album);
 
-	bool unsaved = any_unsaved(range);
+	bool unsaved = priv->file_list->any_unsaved_in_range(range);
 	gboolean bold = g_settings_get_boolean(MainSettings, "file-changed-bold");
 
 	gtk_list_store_set(priv->album_model, &iter,
@@ -2678,16 +2387,16 @@ void EtBrowser::set_display_mode(EtBrowserMode mode)
 
 	case ET_BROWSER_MODE_FILE:
 		/* Set the whole list as "Displayed list". */
-		ET_FileList::set_display_mode(ET_BROWSER_MODE_FILE);
-		ET_FileList::set_visible_range();
+		priv->file_list->set_display_mode(ET_BROWSER_MODE_FILE);
+		priv->file_list->set_visible_range();
 
 		/* Display Tree Browser. */
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(priv->directory_album_artist_notebook), 0);
-		load_file_list();
+		reload_file_list(true);
 		break;
 
 	case ET_BROWSER_MODE_ARTIST:
-		ET_FileList::set_display_mode(ET_BROWSER_MODE_ARTIST_ALBUM);
+		priv->file_list->set_display_mode(ET_BROWSER_MODE_ARTIST_ALBUM);
 		Browser_Artist_List_Load_Files(this);
 
 		/* Display Artist + Album lists. */
@@ -2892,7 +2601,7 @@ on_file_tree_button_press_event (GtkWidget *widget,
             return GDK_EVENT_PROPAGATE;
 
         EtBrowserPrivate* priv = et_browser_get_instance_private(self);
-        GtkTreeModel* model = GTK_TREE_MODEL(priv->file_model);
+        GtkTreeModel* model = GTK_TREE_MODEL(priv->file_list);
         GtkTreeIter iter;
         gtk_tree_model_get_iter(model, &iter, tree_path);
         gtk_tree_path_free(tree_path);
@@ -2900,8 +2609,7 @@ on_file_tree_button_press_event (GtkWidget *widget,
         if (!column)
             return GDK_EVENT_PROPAGATE;
 
-        ET_File* selected;
-        gtk_tree_model_get(model, &iter, LIST_FILE_POINTER, &selected, -1);
+        ET_File* selected = priv->file_list->from_iter(iter);
 
         // matching compare function
         string nick = gtk_buildable_get_name(GTK_BUILDABLE(column));
@@ -2924,9 +2632,7 @@ on_file_tree_button_press_event (GtkWidget *widget,
         GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->file_view));
         g_signal_handler_block(selection, priv->file_selected_handler);
         do
-        {   ET_File *file;
-            gtk_tree_model_get(model, &iter, LIST_FILE_POINTER, &file, -1);
-            if (abs(cmp(selected, file)) != 1)
+        {   if (abs(cmp(selected, priv->file_list->from_iter(iter))) != 1)
                 Browser_List_Select_File_By_Iter(self, &iter, SelectAction::SelectAndScroll);
         } while (gtk_tree_model_iter_next(model, &iter));
         g_signal_handler_unblock(selection, priv->file_selected_handler);
@@ -3026,40 +2732,31 @@ static void on_visible_columns_changed(EtBrowser *self, const gchar *key, GSetti
 	FileColumnRenderer::ShowHideColumns(et_browser_get_instance_private(self)->file_view, (EtColumn)g_settings_get_flags(settings, key));
 }
 
-static void
-on_sort_order_changed (EtBrowser *self, const gchar *key, GSettings *settings)
+static void on_sort_order_changed(EtBrowser *self, const gchar *key, GSettings *settings)
 {
-    EtBrowserPrivate *priv;
-    GtkTreeViewColumn *column;
+	EtBrowserPrivate* priv = et_browser_get_instance_private (self);
+	GtkTreeViewColumn *column;
 
-    priv = et_browser_get_instance_private (self);
+	/* If the column to sort is different than the old sorted column. */
+	if (strcmp(key, "sort-order") == 0)
+	{	column = et_browser_get_column_for_sort_order(self, priv->file_sort_order);
+		if (column != NULL)
+			gtk_tree_view_column_set_sort_indicator(column, FALSE);
+		priv->file_sort_order = (EtSortMode)g_settings_get_enum(settings, key);
+	}
 
-    /* If the column to sort is different than the old sorted column. */
-    if (strcmp(key, "sort-order") == 0)
-    {
-        column = et_browser_get_column_for_sort_order(self, priv->file_sort_order);
-        if (column != NULL)
-            gtk_tree_view_column_set_sort_indicator(column, FALSE);
-        priv->file_sort_order = (EtSortMode)g_settings_get_enum(settings, key);
-    }
+	/* New sort mode is for a column with a visible counterpart. */
+	column = et_browser_get_column_for_sort_order(self, priv->file_sort_order);
+	if (column != NULL)
+	{	gtk_tree_view_column_set_sort_order(column, g_settings_get_boolean(settings, "sort-descending") ? GTK_SORT_DESCENDING : GTK_SORT_ASCENDING);
+		gtk_tree_view_column_set_sort_indicator(column, TRUE);
+	}
 
-    /* New sort mode is for a column with a visible counterpart. */
-    column = et_browser_get_column_for_sort_order(self, priv->file_sort_order);
-    if (column != NULL)
-    {
-        gtk_tree_view_column_set_sort_order(column, g_settings_get_boolean(settings, "sort-descending") ? GTK_SORT_DESCENDING : GTK_SORT_ASCENDING);
-        gtk_tree_view_column_set_sort_indicator(column, TRUE);
-    }
+	priv->file_list->set_sort_func(ET_File::get_comp_func(
+		(EtSortMode)g_settings_get_enum(MainSettings, "sort-order"),
+		g_settings_get_boolean(MainSettings, "sort-descending")));
 
-    et_browser_refresh_sort (self);
-
-#ifdef ENABLE_ACOUSTID
-    if (MainWindow)
-    {   auto ad = MainWindow->acoustid_dialog();
-        if (ad)
-            ad->update_button_sensitivity();
-    }
-#endif
+	self->reload_file_list(true);
 }
 
 /*
@@ -3144,8 +2841,8 @@ album_list_separator_func (GtkTreeModel *model,
 
 static void set_cell_data(GtkTreeViewColumn* column, GtkCellRenderer* cell, GtkTreeModel* model, GtkTreeIter* iter, gpointer data)
 {
-	const ET_File *file;
-	gtk_tree_model_get(model, iter, LIST_FILE_POINTER, &file, -1);
+	const ET_File* file = ET_FILE_LIST(model)->from_iter(*iter);
+	g_return_if_fail(file);
 	auto renderer = (const FileColumnRenderer*)data;
 	string text = renderer->RenderText(file);
 	bool saved = file->is_saved();
@@ -3193,6 +2890,7 @@ static void et_browser_init(EtBrowser *self)
     }
 
     /* The tree view */
+    priv->file_list = (EtFileList*)g_object_new(ET_TYPE_FILE_LIST, NULL);
     priv->DirectoryWorker = new ExpandDirectoryWorker(self);
     priv->DirectoryWorker->Initialize();
 
@@ -3252,7 +2950,7 @@ static void et_browser_init(EtBrowser *self)
         if (enum_value == NULL)
         	g_error("No sort mode with name %s found.", id.c_str());
 
-        g_signal_connect (column, "clicked", G_CALLBACK (et_browser_on_column_clicked), enum_value);
+        g_signal_connect(column, "clicked", G_CALLBACK(et_browser_on_column_clicked), enum_value);
     }
     g_type_class_unref(enum_class);
 
@@ -3261,14 +2959,12 @@ static void et_browser_init(EtBrowser *self)
 
     g_signal_connect_swapped(MainSettings, "changed::sort-order", G_CALLBACK(on_sort_order_changed), self);
     priv->file_sort_descending_handler = g_signal_connect_swapped(MainSettings, "changed::sort-descending", G_CALLBACK(on_sort_order_changed), self);
-    // To sort list
-    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->file_model), 0, GTK_SORT_ASCENDING);
-    on_sort_order_changed(self, "sort-order", MainSettings);
-
     priv->file_selected_handler = g_signal_connect_swapped (gtk_tree_view_get_selection (priv->file_view),
                                                             "changed",
                                                             G_CALLBACK (Browser_List_Row_Selected),
                                                             self);
+    // To sort list
+    on_sort_order_changed(self, "", MainSettings);
 
     /* Create popup menu on file list. */
     menu_model = G_MENU_MODEL (gtk_builder_get_object (builder, "file-menu"));
@@ -3321,6 +3017,7 @@ et_browser_on_column_clicked (GtkTreeViewColumn *column, gpointer data)
 
 	EtBrowser *self = ET_BROWSER(g_object_get_data(G_OBJECT(column), "browser"));
 	EtBrowserPrivate *priv = et_browser_get_instance_private (self);
+
 	if (ev->value == priv->file_sort_order)
 		// change direction only
 		g_settings_set_boolean(MainSettings, "sort-descending",
@@ -3465,7 +3162,7 @@ void EtBrowser::show_rename_directory_dialog()
 static bool Rename_Directory_Error(const char* message, const char* title, const char* secondary_text = nullptr)
 {
 	GtkWidget *msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-		GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_MESSAGE_ERROR,
 		GTK_BUTTONS_CLOSE,
 		"%s",
@@ -3623,7 +3320,7 @@ static bool Rename_Directory(EtBrowser *self)
 	}
 	if (args.RelationToCurrentRoot)
 		// Update File_Name instances if they belong to the renamed directory
-		ET_FileList::update_directory_name(args);
+		priv->file_list->update_directory_name(args);
 	if ((args.RelationToCurrentRoot == PATH_SUBDIR)
 		&& MainWindow->get_displayed_file())
 		// To update file path in the browser entry
@@ -4064,7 +3761,7 @@ et_browser_destroy (GtkWidget *widget)
         /* The model is disposed when the combo box is disposed. */
     }
 
-    if (priv->file_model)
+    if (priv->file_view)
         ET_BROWSER(widget)->clear();
 
     GTK_WIDGET_CLASS (et_browser_parent_class)->destroy (widget);
@@ -4081,6 +3778,7 @@ et_browser_finalize (GObject *object)
     g_free(priv->current_path_name);
     priv->current_path_name = NULL;
     g_clear_object (&priv->run_program_model);
+    g_object_unref(priv->file_list);
 
     g_object_unref(priv->folder_icon);
     g_object_unref(priv->folder_open_icon);
@@ -4105,7 +3803,6 @@ void et_browser_class_init (EtBrowserClass *klass)
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, entry_model);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, entry_combo);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, directory_album_artist_notebook);
-    gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, file_model);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, file_view);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, album_model);
     gtk_widget_class_bind_template_child_private(widget_class, EtBrowser, album_view);

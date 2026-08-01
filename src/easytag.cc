@@ -86,7 +86,6 @@ Save_List_Of_Files(const vector<xPtr<ET_File>>& etfilelist, gboolean force_savin
     gint       nb_files_to_save;
     gint       nb_files_changed_by_ext_program;
     GtkWidget *widget_focused;
-    GtkTreePath *currentPath = NULL;
 
     window = MainWindow;
 
@@ -154,7 +153,7 @@ Save_List_Of_Files(const vector<xPtr<ET_File>>& etfilelist, gboolean force_savin
         gint response;
 
         msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                            GTK_MESSAGE_WARNING,
                                            GTK_BUTTONS_NONE,
                                            ngettext ("A file was changed by an external program",
@@ -196,10 +195,7 @@ Save_List_Of_Files(const vector<xPtr<ET_File>>& etfilelist, gboolean force_savin
          * files if force_saving_files==TRUE */
         if (force_saving_files || !ETFile->is_saved())
         {
-            /* ET_Display_File_Data_To_UI ((ET_File *)l->data);
-             * Use of 'currentPath' to try to increase speed. Indeed, in many
-             * cases, the next file to select, is the next in the list. */
-            currentPath = et_browser_select_file_by_et_file2(window->browser(), ETFile, FALSE, currentPath);
+            et_browser_select_file_by_et_file(window->browser(), ETFile, FALSE);
 
             et_application_window_progress_set(window, ++progress_bar_index, nb_files_to_save);
             /* Needed to refresh status bar */
@@ -219,17 +215,10 @@ Save_List_Of_Files(const vector<xPtr<ET_File>>& etfilelist, gboolean force_savin
                 et_browser_set_sensitive(window->browser(), TRUE);
                 window->displayed_file_sensitive(true);
 
-                if (currentPath)
-                {
-                    gtk_tree_path_free (currentPath);
-                }
                 return -1; /* We stop all actions */
             }
         }
     }
-
-    if (currentPath)
-        gtk_tree_path_free(currentPath);
 
     const gchar* msg = Main_Stop_Button_Pressed ? _("Saving files was stopped") : _("All files have been saved");
 
@@ -259,7 +248,7 @@ Save_List_Of_Files(const vector<xPtr<ET_File>>& etfilelist, gboolean force_savin
  */
 gint Save_All_Files_With_Answer(gboolean force_saving_files)
 {
-    return Save_List_Of_Files(ET_FileList::all_files(), force_saving_files);
+    return Save_List_Of_Files(MainWindow->browser()->file_list().all_files(), force_saving_files);
 }
 
 /*
@@ -304,7 +293,7 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
             // ET_Display_File_Data_To_UI(ETFile);
 
             msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-                                               GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                                GTK_MESSAGE_QUESTION,
                                                GTK_BUTTONS_NONE,
                                                _("Do you want to write the tag of file ‘%s’?"),
@@ -411,7 +400,7 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
             }
 
             msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-                                               GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                                GTK_MESSAGE_QUESTION,
                                                GTK_BUTTONS_NONE,
                                                "%s",
@@ -467,7 +456,7 @@ Save_File (ET_File *ETFile, gboolean multiple_files,
                     if (!SF_HideMsgbox_Rename_File)
                     {
                         msgdialog = gtk_message_dialog_new (GTK_WINDOW (MainWindow),
-                                                            GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                            GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                                             GTK_MESSAGE_ERROR,
                                                             GTK_BUTTONS_CLOSE,
                                                             _("Cannot rename file ‘%s’ to ‘%s’"),
@@ -545,7 +534,7 @@ Write_File_Tag (ET_File *ETFile, gboolean hide_msgbox)
         if (g_error_matches (error, ET_ID3_ERROR, ET_ID3_ERROR_BUGGY_ID3LIB))
         {
             msgdialog = gtk_message_dialog_new (GTK_WINDOW (MainWindow),
-                                                GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                                 GTK_MESSAGE_ERROR,
                                                 GTK_BUTTONS_CLOSE,
                                                 "%s",
@@ -574,7 +563,7 @@ Write_File_Tag (ET_File *ETFile, gboolean hide_msgbox)
 #endif
         {
             msgdialog = gtk_message_dialog_new (GTK_WINDOW (MainWindow),
-                                                GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                                 GTK_MESSAGE_ERROR,
                                                 GTK_BUTTONS_CLOSE,
                                                 _("Cannot write tag in file ‘%s’"),
@@ -897,7 +886,7 @@ void ReadDirectoryWorker::OnDirCompleted(GFile* child_dir, const char* error)
 		else
 		{	// Message if the root directory doesn't exist...
 			GtkWidget *msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-				GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_MESSAGE_ERROR,
 				GTK_BUTTONS_CLOSE,
 				_("Cannot read directory ‘%s’"),
@@ -935,8 +924,25 @@ void ReadDirectoryWorker::OnFinished()
 		msg = _("Directory scan aborted.");
 	else
 	{
+		/* Clear entry boxes  */
+		window->change_displayed_file(nullptr);
+
+		#ifdef ENABLE_ACOUSTID
+		auto ad = window->acoustid_dialog();
+		if (ad)
+				ad->reset();
+		#endif
+
+		/* Initialize browser list */
+		window->browser()->clear();
+		et_application_window_search_dialog_clear (window);
+
+		/* Initialize file list */
 		ET_File::reset_undo_history();
-		ET_FileList::set_file_list(move(ResultList));
+		window->browser()->file_list().clear();
+		et_application_window_update_actions(window);
+
+		window->browser()->file_list().set_file_list(move(ResultList));
 
 		if (count)
 		{	/* Load the list of file into the browser list widget */
@@ -1106,26 +1112,6 @@ gboolean Read_Directory(gString path_real)
 {
     g_return_val_if_fail (path_real != NULL, FALSE);
 
-    EtApplicationWindow *window = MainWindow;
-
-    /* Clear entry boxes  */
-    window->change_displayed_file(nullptr);
-
-#ifdef ENABLE_ACOUSTID
-    auto ad = window->acoustid_dialog();
-    if (ad)
-        ad->reset();
-#endif
-
-    /* Initialize browser list */
-    window->browser()->clear();
-    et_application_window_search_dialog_clear (window);
-
-    /* Initialize file list */
-    ET_File::reset_undo_history();
-    ET_FileList::clear();
-    et_application_window_update_actions(MainWindow);
-
     return ReadDirectoryWorker::Start(move(path_real));
 }
 
@@ -1203,7 +1189,7 @@ et_run_program (const gchar *program_name,
         GtkWidget *msgdialog;
 
         msgdialog = gtk_message_dialog_new(GTK_WINDOW(MainWindow),
-                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                            GTK_MESSAGE_ERROR,
                                            GTK_BUTTONS_OK,
                                            "%s",

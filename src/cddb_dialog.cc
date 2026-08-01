@@ -1997,7 +1997,7 @@ Cddb_Set_Track_Infos_To_File_List (EtCDDBDialog *self)
 
     auto file_selection = MainWindow->browser()->get_selected_files();
     /* No rows selected? Use the first x items in the list */
-    const vector<xPtr<ET_File>>& files = file_selection.size() ? file_selection : ET_FileList::all_files();
+    const vector<xPtr<ET_File>>& files = file_selection.size() ? file_selection : MainWindow->browser()->file_list().all_files();
 
     if (files.size() != rows_to_loop)
     {
@@ -2005,7 +2005,7 @@ Cddb_Set_Track_Infos_To_File_List (EtCDDBDialog *self)
         gint response;
 
         msgdialog = gtk_message_dialog_new(GTK_WINDOW(self),
-                                           GTK_DIALOG_MODAL  | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_DIALOG_MODAL + GTK_DIALOG_DESTROY_WITH_PARENT,
                                            GTK_MESSAGE_QUESTION,
                                            GTK_BUTTONS_NONE,
                                            "%s",
@@ -2406,7 +2406,7 @@ et_cddb_dialog_search_from_selection (EtCDDBDialog *self)
     auto filelist = MainWindow->browser()->get_selected_files();
     n_files = filelist.size();
     if (n_files == 0) /* No rows selected, use the whole list */
-    {   filelist = ET_FileList::all_files();
+    {   filelist = MainWindow->browser()->file_list().all_files();
         n_files = filelist.size();
     }
 

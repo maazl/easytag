@@ -66,8 +66,8 @@ ET_File::ET_File(gString&& filepath) noexcept
 ,	ETFileDescription(nullptr)
 ,	ETFileInfo{}
 ,	force_tag_save_(false)
-,	activate_bg_color(false)
 ,	IndexKey(~0) // invalid value
+,	activate_bg_color(false)
 {
 #ifndef NDEBUG
 	++Instances;

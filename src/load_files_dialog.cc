@@ -96,7 +96,7 @@ Load_Filename_Set_Filenames (EtLoadFilesDialog *self)
 
     priv = et_load_files_dialog_get_instance_private (self);
 
-    if (ET_FileList::empty() || !priv->file_content_view || !priv->file_name_view)
+    if (MainWindow->browser()->empty() || !priv->file_content_view || !priv->file_name_view)
         return;
 
     et_application_window_update_et_file_from_ui(MainWindow);
@@ -632,7 +632,7 @@ Load_File_List (EtLoadFilesDialog *self)
 
 	EtLoadFilesDialogPrivate* priv = et_load_files_dialog_get_instance_private (self);
 
-	for (xPtr<ET_File> etfile : ET_FileList::all_files())
+	for (xPtr<ET_File> etfile : MainWindow->browser()->file_list().all_files())
 		gtk_list_store_insert_with_values(priv->file_name_model, NULL, G_MAXINT,
 			LOAD_FILE_NAME_TEXT, ET_Remove_File_Extension(etfile->FileNameNew()->file()).c_str(),
 			LOAD_FILE_NAME_POINTER, xPtr<ET_File>::toCptr(etfile),
