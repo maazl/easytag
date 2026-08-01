@@ -84,11 +84,11 @@ AC_DEFUN([AX_CHECK_ENABLE_DEBUG],[
       ],
       [info],[
         AC_MSG_RESULT(info)
-        CFLAGS="${CFLAGS} -g -O2"
-        CXXFLAGS="${CXXFLAGS} -g -O2"
-        FFLAGS="${FFLAGS} -g -O2"
-        FCFLAGS="${FCFLAGS} -g -O2"
-        OBJCFLAGS="${OBJCFLAGS} -g -O2"
+        CFLAGS="${CFLAGS} -g -Og"
+        CXXFLAGS="${CXXFLAGS} -g -Og"
+        FFLAGS="${FFLAGS} -g -Og"
+        FCFLAGS="${FCFLAGS} -g -Og"
+        OBJCFLAGS="${OBJCFLAGS} -g -Og"
       ],
       [profile],[
         AC_MSG_RESULT(profile)
