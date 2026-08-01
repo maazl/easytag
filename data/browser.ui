@@ -153,24 +153,31 @@
                                                 <child>
                                                     <object class="GtkTreeView" id="artist_view">
                                                         <property name="model">artist_model</property>
+                                                        <property name="has-tooltip">true</property>
                                                         <property name="visible">True</property>
                                                         <signal name="button-press-event" handler="on_artist_tree_button_press_event"/>
                                                         <signal name="popup-menu" handler="on_artist_tree_popup_menu"/>
+                                                        <child>
+                                                            <object class="GtkTreeViewColumn" id="artist_icon_column">
+                                                                <property name="sizing">autosize</property>
+                                                                <child>
+                                                                    <object class="GtkCellRendererPixbuf" id="artist_icon_renderer">
+                                                                    </object>
+                                                                    <attributes>
+                                                                        <attribute name="pixbuf">0</attribute>
+                                                                    </attributes>
+                                                                </child>
+                                                            </object>
+                                                        </child>
                                                         <child>
                                                             <object class="GtkTreeViewColumn" id="artist_view_column">
                                                                 <property name="sizing">autosize</property>
                                                                 <property name="expand">true</property>
                                                                 <property name="title" translatable="yes">Artist</property>
                                                                 <child>
-                                                                    <object class="GtkCellRendererPixbuf" id="artist_icon_renderer">
-                                                                        <property name="xpad">2</property>
+                                                                    <object class="GtkCellRendererText" id="artist_text_renderer">
+                                                                        <property name="ellipsize">end</property> 
                                                                     </object>
-                                                                    <attributes>
-                                                                        <attribute name="pixbuf">0</attribute>
-                                                                    </attributes>
-                                                                </child>
-                                                                <child>
-                                                                    <object class="GtkCellRendererText" id="artist_text_renderer"/>
                                                                     <attributes>
                                                                         <attribute name="foreground-rgba">5</attribute>
                                                                         <attribute name="text">1</attribute>
@@ -224,24 +231,31 @@
                                                 <child>
                                                     <object class="GtkTreeView" id="album_view">
                                                         <property name="model">album_model</property>
+                                                        <property name="has-tooltip">true</property>
                                                         <property name="visible">True</property>
                                                         <signal name="button-press-event" handler="on_album_tree_button_press_event"/>
                                                         <signal name="popup-menu" handler="on_album_tree_popup_menu"/>
+                                                        <child>
+                                                            <object class="GtkTreeViewColumn" id="album_icon_column">
+                                                                <property name="sizing">autosize</property>
+                                                                <child>
+                                                                    <object class="GtkCellRendererPixbuf" id="album_icon_renderer">
+                                                                    </object>
+                                                                    <attributes>
+                                                                        <attribute name="gicon">0</attribute>
+                                                                    </attributes>
+                                                                </child>
+                                                            </object>
+                                                        </child>
                                                         <child>
                                                             <object class="GtkTreeViewColumn" id="album_view_column">
                                                                 <property name="sizing">autosize</property>
                                                                 <property name="expand">true</property>
                                                                 <property name="title" translatable="yes">Album</property>
                                                                 <child>
-                                                                    <object class="GtkCellRendererPixbuf" id="album_icon_renderer">
-                                                                        <property name="xpad">2</property>
+                                                                    <object class="GtkCellRendererText" id="album_text_renderer">
+                                                                        <property name="ellipsize">end</property> 
                                                                     </object>
-                                                                    <attributes>
-                                                                        <attribute name="gicon">0</attribute>
-                                                                    </attributes>
-                                                                </child>
-                                                                <child>
-                                                                    <object class="GtkCellRendererText" id="album_text_renderer"/>
                                                                     <attributes>
                                                                         <attribute name="foreground-rgba">4</attribute>
                                                                         <attribute name="text">1</attribute>

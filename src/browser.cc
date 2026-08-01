@@ -87,12 +87,12 @@ typedef struct
     EtSortMode file_sort_order;
     guint file_sort_descending_handler;
 
-    GtkWidget *album_view;
+    GtkTreeView *album_view;
     GtkWidget *album_menu;
     GtkListStore *album_model;
     guint album_selected_handler;
 
-    GtkWidget *artist_view;
+    GtkTreeView *artist_view;
     GtkWidget *artist_menu;
     GtkListStore *artist_model;
     guint artist_selected_handler;
@@ -1051,14 +1051,14 @@ void EtBrowser::run_player_for_album_list()
 
     g_return_if_fail (priv->album_view != NULL);
 
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->album_view));
+    selection = gtk_tree_view_get_selection(priv->album_view);
     if (!gtk_tree_selection_get_selected(selection, NULL, &iter))
         return;
 
     gchar* album;
     gtk_tree_model_get(GTK_TREE_MODEL(priv->album_model), &iter, ALBUM_NAME, &album, -1);
 
-    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->artist_view));
+    selection = gtk_tree_view_get_selection(priv->artist_view);
     if (!gtk_tree_selection_get_selected(selection, NULL, &iter))
     {   g_free(album);
         return;
@@ -1080,7 +1080,7 @@ void EtBrowser::run_player_for_artist_list()
 
     g_return_if_fail (priv->artist_view != NULL);
 
-    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->artist_view));
+    selection = gtk_tree_view_get_selection(priv->artist_view);
     if (!gtk_tree_selection_get_selected(selection, NULL, &iter))
         return;
 
@@ -1734,7 +1734,7 @@ void et_browser_refresh_list(EtBrowser *self)
 	if (strcmp(g_variant_get_string(variant, NULL), "artist") == 0)
 	{
 		xStringD0 selected_artist;
-		GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->artist_view));
+		GtkTreeSelection* selection = gtk_tree_view_get_selection(priv->artist_view);
 		GtkTreeIter iter;
 		gboolean valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->artist_model), &iter);
 		while (valid)
@@ -2363,11 +2363,71 @@ static bool any_unsaved(const ET_FileList::index_range_type& range)
 	return false;
 }
 
+/// Hide tooltip if no ellipsis.
+static gboolean browser_query_tooltip(GtkWidget *widget, gint x, gint y, gboolean keyboard_tip, GtkTooltip* tooltip, gpointer user_data)
+{
+	GtkTreeView* tree_view = GTK_TREE_VIEW(widget);
+	GtkTreeModel* model = NULL;
+	GtkTreePath* path = NULL;
+	GtkTreeIter iter;
+
+	// 1. Resolve mouse coordinates into exact structural row/column/cell components
+	if (!gtk_tree_view_get_tooltip_context(tree_view, &x, &y, keyboard_tip, &model, &path, &iter))
+			return FALSE; // No row hovered, do not show tooltip
+
+	// 2. Identify the specific column and cell renderer under the coordinates
+	GtkTreeViewColumn* column = NULL;
+	if (!gtk_tree_view_get_path_at_pos(tree_view, x, y, NULL, &column, NULL, NULL)
+		|| !gtk_tree_view_column_get_expand(column))
+	{	gtk_tree_path_free(path);
+		return FALSE;
+	}
+
+	// 3. Bind cell data to synchronize properties (weight, foreground-rgba, text)
+	gtk_tree_view_column_cell_set_cell_data(column, model, &iter, FALSE, FALSE);
+
+	// 4. Let the renderer calculate its preferred width natively using its internal styles
+	// Grab the cell renderer
+	GtkCellRenderer* cell = NULL;
+	{	GList *renderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(column));
+		cell = GTK_CELL_RENDERER(renderers->data);
+		g_list_free(renderers);
+	}
+
+	gint minimum_width = 0;
+	gint natural_width = 0;
+	gtk_cell_renderer_get_preferred_width(cell, widget, &minimum_width, &natural_width);
+
+	// 5. Get the actual physical width currently assigned to this cell layout
+	GdkRectangle cell_area;
+	gtk_tree_view_get_cell_area(tree_view, path, column, &cell_area);
+
+	// Adjust for horizontal cell padding properties
+	gint xpad;
+	gtk_cell_renderer_get_padding(cell, &xpad, NULL);
+	gint real_available_width = cell_area.width - (2 * xpad);
+
+	// 6. If the natural desired text size exceeds the visible window width, it is ellipsized
+	gboolean show_tooltip = FALSE;
+	if (natural_width > real_available_width) {
+		// Text is actively truncated/ellipsized! Enable the tooltip.
+		gchar* cell_text;
+		gtk_tree_model_get(model, &iter, 1, &cell_text, -1);
+		gtk_tooltip_set_text(tooltip, cell_text);
+		g_free(cell_text);
+		gtk_tree_view_set_tooltip_row(tree_view, tooltip, path);
+		show_tooltip = TRUE;
+	}
+
+	gtk_tree_path_free(path);
+	return show_tooltip;
+}
+
 static void et_browser_clear_artist_model(EtBrowser *self)
 {
 	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-	GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->artist_view));
+	GtkTreeSelection* selection = gtk_tree_view_get_selection(priv->artist_view);
 	gtk_tree_selection_unselect_all(selection);
 
 	g_signal_handler_block(selection, priv->artist_selected_handler);
@@ -2386,7 +2446,7 @@ static void Browser_Artist_List_Load_Files(EtBrowser *self)
 	gboolean bold = g_settings_get_boolean(MainSettings, "file-changed-bold");
 	GtkTreePath* path = NULL;
 	const ET_File* etfile = MainWindow->get_displayed_file();
-	GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->artist_view));
+	GtkTreeSelection* selection = gtk_tree_view_get_selection(priv->artist_view);
 
 	// Iterate over blocks of the same artist
 	g_signal_handler_block(selection, priv->artist_selected_handler);
@@ -2415,7 +2475,7 @@ static void Browser_Artist_List_Load_Files(EtBrowser *self)
 			gtk_tree_selection_select_iter(selection, &iter);
 
 			path = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->artist_model), &iter);
-			gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(priv->artist_view), path, NULL, FALSE, 0, 0);
+			gtk_tree_view_scroll_to_cell(priv->artist_view, path, NULL, FALSE, 0, 0);
 			gtk_tree_path_free(path);
 
 			Browser_Album_List_Load_Files(self, range);
@@ -2470,7 +2530,7 @@ static void et_browser_clear_album_model(EtBrowser *self)
 {
 	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-	GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->album_view));
+	GtkTreeSelection* selection = gtk_tree_view_get_selection(priv->album_view);
 	// unselect first to get exactly one selection event
 	gtk_tree_selection_unselect_all(selection);
 
@@ -2493,7 +2553,7 @@ static void Browser_Album_List_Load_Files(EtBrowser *self, ET_FileList::index_ra
 	g_return_if_fail (priv->album_view != NULL);
 
 	et_browser_clear_album_model(self);
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->album_view));
+	selection = gtk_tree_view_get_selection(priv->album_view);
 
 	// Create a first row to select all albums of the artist
 	gtk_list_store_insert_with_values(priv->album_model, &iter, G_MAXINT,
@@ -2534,7 +2594,7 @@ static void Browser_Album_List_Load_Files(EtBrowser *self, ET_FileList::index_ra
 
 			gtk_tree_selection_select_iter(selection, &iter);
 
-			gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(priv->album_view), path, NULL, FALSE, 0, 0);
+			gtk_tree_view_scroll_to_cell(priv->album_view, path, NULL, FALSE, 0, 0);
 			gtk_tree_path_free(path);
 		}
 	}
@@ -2561,7 +2621,7 @@ Browser_Album_List_Row_Selected (EtBrowser *self, GtkTreeSelection *selection)
 	gint state;
 	gtk_tree_model_get(GTK_TREE_MODEL(priv->album_model), &iter, ALBUM_NAME, &album, ALBUM_STATE, &state, -1);
 
-  selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->artist_view));
+  selection = gtk_tree_view_get_selection(priv->artist_view);
 	if (!gtk_tree_selection_get_selected(selection, NULL, &iter))
 	{	g_free(album);
 		return; // We might be called with no row selected
@@ -2760,8 +2820,7 @@ on_album_tree_button_press_event (GtkWidget *widget,
     if (gdk_event_triggers_context_menu ((GdkEvent *)event))
     {
         EtBrowserPrivate *priv = et_browser_get_instance_private(self);
-        do_popup_menu (self, event, GTK_TREE_VIEW (priv->album_view),
-                       priv->album_menu);
+        do_popup_menu(self, event, priv->album_view, priv->album_menu);
 
         return GDK_EVENT_STOP;
     }
@@ -2777,8 +2836,7 @@ on_artist_tree_button_press_event (GtkWidget *widget,
     if (gdk_event_triggers_context_menu ((GdkEvent *)event))
     {
         EtBrowserPrivate *priv = et_browser_get_instance_private(self);
-        do_popup_menu (self, event, GTK_TREE_VIEW (priv->artist_view),
-                       priv->artist_menu);
+        do_popup_menu(self, event, priv->artist_view, priv->artist_menu);
 
         return GDK_EVENT_STOP;
     }
@@ -3149,30 +3207,28 @@ static void et_browser_init(EtBrowser *self)
     g_settings_bind(MainSettings, "browse-single-click", priv->directory_view, "activate-on-single-click", G_SETTINGS_BIND_DEFAULT);
 
     /* The ScrollWindows with the Artist and Album Lists. */
-    priv->artist_selected_handler = g_signal_connect_swapped(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->artist_view)),
+    g_signal_connect(priv->artist_view, "query-tooltip", G_CALLBACK(browser_query_tooltip), NULL);
+    priv->artist_selected_handler = g_signal_connect_swapped(gtk_tree_view_get_selection(priv->artist_view),
         "changed", G_CALLBACK(Browser_Artist_List_Row_Selected), self);
 
     /* Create popup menu on browser artist list. */
     menu_model = G_MENU_MODEL (gtk_builder_get_object (builder,
                                                        "directory-artist-menu"));
     priv->artist_menu = gtk_menu_new_from_model (menu_model);
-    gtk_menu_attach_to_widget (GTK_MENU (priv->artist_menu), priv->artist_view,
-                               NULL);
+    gtk_menu_attach_to_widget(GTK_MENU(priv->artist_menu), GTK_WIDGET(priv->artist_view), NULL);
     g_signal_connect_swapped(priv->artist_menu, "hide", G_CALLBACK(on_popup_closed), priv->artist_view);
 
-    gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (priv->album_view),
-                                          album_list_separator_func, NULL,
-                                          NULL);
+    gtk_tree_view_set_row_separator_func(priv->album_view, album_list_separator_func, NULL, NULL);
 
-    priv->album_selected_handler = g_signal_connect_swapped(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->album_view)),
+    g_signal_connect(priv->album_view, "query-tooltip", G_CALLBACK(browser_query_tooltip), NULL);
+    priv->album_selected_handler = g_signal_connect_swapped(gtk_tree_view_get_selection(priv->album_view),
         "changed", G_CALLBACK(Browser_Album_List_Row_Selected), self);
 
     /* Create Popup Menu on browser album list. */
     menu_model = G_MENU_MODEL (gtk_builder_get_object (builder,
                                                        "directory-album-menu"));
     priv->album_menu = gtk_menu_new_from_model (menu_model);
-    gtk_menu_attach_to_widget (GTK_MENU (priv->album_menu), priv->album_view,
-                               NULL);
+    gtk_menu_attach_to_widget(GTK_MENU(priv->album_menu), GTK_WIDGET(priv->album_view), NULL);
     g_signal_connect_swapped(priv->album_menu, "hide", G_CALLBACK(on_popup_closed), priv->album_view);
 
     /* The file list */
