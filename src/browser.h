@@ -58,10 +58,10 @@ public:
 
 	bool has_prev();
 	bool has_next();
-	ET_File* select_first_file();
-	ET_File* select_last_file();
-	ET_File* select_prev_file();
-	ET_File* select_next_file();
+	void select_first_file();
+	void select_last_file();
+	void select_prev_file();
+	void select_next_file();
 
 	GFile* get_current_path();
 	const gchar* get_current_path_name();

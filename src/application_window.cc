@@ -917,28 +917,28 @@ void EtApplicationWindow::change_displayed_file(ET_File *etfile)
 static void on_go_first(GSimpleAction *action, GVariant *variant, gpointer user_data)
 {	EtApplicationWindow* self = ET_APPLICATION_WINDOW(user_data);
 	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
-	self->change_displayed_file(priv->browser->select_first_file());
+	priv->browser->select_first_file();
 }
 
 /* Go to the prev item of the list */
 static void on_go_previous(GSimpleAction *action, GVariant *variant, gpointer user_data)
 {	EtApplicationWindow* self = ET_APPLICATION_WINDOW(user_data);
 	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
-	self->change_displayed_file(priv->browser->select_prev_file());
+	priv->browser->select_prev_file();
 }
 
 /* Go to the next item of the list */
 static void on_go_next(GSimpleAction *action, GVariant *variant, gpointer user_data)
 {	EtApplicationWindow* self = ET_APPLICATION_WINDOW(user_data);
 	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
-	self->change_displayed_file(priv->browser->select_next_file());
+	priv->browser->select_next_file();
 }
 
 /* Go to the last item of the list */
 static void on_go_last(GSimpleAction *action, GVariant *variant, gpointer user_data)
 {	EtApplicationWindow* self = ET_APPLICATION_WINDOW(user_data);
 	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
-	self->change_displayed_file(priv->browser->select_last_file());
+	priv->browser->select_last_file();
 }
 
 #ifdef ENABLE_CDDB
