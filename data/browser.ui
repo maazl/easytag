@@ -5,11 +5,6 @@
             <column type="gchararray"/>
         </columns>
     </object>
-    <object class="GtkListStore" id="file_model">
-        <columns>
-            <column type="gpointer"/>
-        </columns>
-    </object>
     <object class="GtkTreeStore" id="directory_model">
         <columns>
             <column type="EtxString"/>
@@ -304,7 +299,6 @@
                                 <property name="visible">True</property>
                                 <child>
                                     <object class="GtkTreeView" id="file_view">
-                                        <property name="model">file_model</property>
                                         <property name="visible">True</property>
                                         <signal name="button-press-event" handler="on_file_tree_button_press_event"/>
                                         <signal name="key-press-event" handler="Browser_List_Key_Press"/>

@@ -76,6 +76,7 @@ private:
 
 	gint (*SortFunc)(const ET_File *ETFile1, const ET_File *ETFile2);
 
+	void clear();
 	void sort_list();
 	void calc_totals();
 
@@ -87,7 +88,6 @@ private:
 
 public:
 	ET_FileList();
-	void clear();
 
 	bool empty() const noexcept { return FileList.empty(); }
 	const list_type& all_files() noexcept { return FileList; }

@@ -47,7 +47,13 @@ private:
 	ET_File* current_file();
 
 public:
-	void reload_file_list(bool keep_selection);
+	/// Disconnect the backend model from the main browser view.
+	/// @remarks This is intended to do bulk updates without screen flickering excessive update events.
+	void disconnect_model();
+	/// (Re)connect the backend model to the main browser view.
+	/// @param files Optional: restore selected files when still valid.
+	void connect_model(const std::vector<xPtr<ET_File>>* files = nullptr);
+
 	void clear();
 
 	bool has_prev();

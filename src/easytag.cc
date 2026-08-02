@@ -934,14 +934,11 @@ void ReadDirectoryWorker::OnFinished()
 		#endif
 
 		/* Initialize browser list */
-		window->browser()->clear();
-		et_application_window_search_dialog_clear (window);
+		window->browser()->disconnect_model();
+		et_application_window_search_dialog_clear(window);
 
 		/* Initialize file list */
 		ET_File::reset_undo_history();
-		window->browser()->file_list().clear();
-		et_application_window_update_actions(window);
-
 		window->browser()->file_list().set_file_list(move(ResultList));
 
 		if (count)

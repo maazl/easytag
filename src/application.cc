@@ -122,9 +122,6 @@ on_idle_init (EtApplication *self)
 
     priv = et_application_get_instance_private (self);
 
-    ET_File::reset_undo_history();
-    MainWindow->browser()->file_list().clear();
-
     if (g_settings_get_boolean (MainSettings, "scan-startup"))
     {
         g_action_group_activate_action (G_ACTION_GROUP (MainWindow), "scanner",
