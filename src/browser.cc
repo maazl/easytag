@@ -394,7 +394,7 @@ public: // public API, main thread only
 	/// Search for a node matching a path.
 	/// @param fullPath Directory to search in the tree.
 	/// @param iter [out] Iterator to node matching \a fullPath.
-	/// @return \c true if \a iter is set to the mathing node.
+	/// @return \c true if \a iter is set to the matching node.
 	bool FindNode(const char* fullPath, GtkTreeIter* iter);
 
 	/// Populate the children of a tree node in background.
@@ -1089,25 +1089,17 @@ void EtBrowser::run_player_for_selection()
 /*
  * Set the current path to be shown in the browser.
  */
-static void
-et_browser_set_current_path (EtBrowser *self,
-                             GFile *file)
+static void et_browser_set_current_path(EtBrowser *self, const gchar* path)
 {
-    EtBrowserPrivate *priv;
+	g_return_if_fail(path != NULL);
+	EtBrowserPrivate* priv = et_browser_get_instance_private(self);
 
-    g_return_if_fail (file != NULL);
+	if (priv->current_path)
+		g_object_unref(priv->current_path);
+	g_free(priv->current_path_name);
 
-    priv = et_browser_get_instance_private (self);
-
-    /* Ref the new file first, in case the current file is passed in. */
-    g_object_ref (file);
-
-    if (priv->current_path)
-        g_object_unref (priv->current_path);
-    g_free(priv->current_path_name);
-
-    priv->current_path = file;
-    priv->current_path_name = g_file_get_path(file);
+	priv->current_path = g_file_new_for_path(path);
+	priv->current_path_name = g_strdup(path);
 }
 
 
@@ -1463,11 +1455,10 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreePath* path, GtkTreeViewColum
     }
 
     /* Memorize the current path */
-    gObject<GFile> file(g_file_new_for_path(pathName));
-    et_browser_set_current_path(self, file.get());
+    et_browser_set_current_path(self, pathName);
 
     /* Display the selected path into the BrowserEntry */
-    parse_name = g_file_get_parse_name(file.get());
+    parse_name = g_file_get_parse_name(priv->current_path);
     gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->entry_combo))),
                         parse_name);
     g_free (parse_name);
@@ -1495,7 +1486,7 @@ Browser_Tree_Node_Selected (EtBrowser *self, GtkTreePath* path, GtkTreeViewColum
                 GtkTreePath* selectedPath = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->directory_model), &parentIter);
                 gtk_tree_selection_select_iter(gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->directory_view)), &parentIter);
                 if (gtk_tree_model_iter_has_child(GTK_TREE_MODEL(priv->directory_model), &iter) == FALSE
-                    && !g_file_query_exists(file.get(), NULL))
+                    && !g_file_query_exists(priv->current_path, NULL))
                 {
                     gtk_tree_view_collapse_row(GTK_TREE_VIEW(priv->directory_view), selectedPath);
                     if (g_settings_get_boolean(MainSettings, "browse-expand-children"))
@@ -1805,15 +1796,14 @@ static void Browser_List_Select_File_By_Iter(EtBrowser *self, GtkTreeIter *rowIt
 			gtk_tree_view_set_cursor(priv->file_view, rowPath, NULL, FALSE);
 
 		if (select_it->*SelectAction::ScrollTo)
-			gtk_tree_view_scroll_to_cell (priv->file_view, rowPath, NULL, FALSE, 0, 0);
+			gtk_tree_view_scroll_to_cell(priv->file_view, rowPath, NULL, FALSE, 0, 0);
 
-		gtk_tree_path_free (rowPath);
+		gtk_tree_path_free(rowPath);
 	}
 
 	if (select_it->*SelectAction::Select)
 	{	GtkTreeSelection *selection = gtk_tree_view_get_selection(priv->file_view);
-		if (rowIter)
-			gtk_tree_selection_select_iter(selection, rowIter);
+		gtk_tree_selection_select_iter(selection, rowIter);
 	}
 }
 
@@ -2817,7 +2807,6 @@ static void et_browser_init(EtBrowser *self)
     gsize i;
     GtkBuilder *builder;
     GMenuModel *menu_model;
-    GFile *file;
 
     priv = et_browser_get_instance_private (self);
 
@@ -2933,9 +2922,7 @@ static void et_browser_init(EtBrowser *self)
     /* TODO: Give the browser area a sensible default size. */
 
     /* Set home variable as current path */
-    file = g_file_new_for_path (g_get_home_dir ());
-    et_browser_set_current_path (self, file);
-    g_object_unref (file);
+    et_browser_set_current_path(self, g_get_home_dir());
 
     // Use reasonable background highlight color for dark themes
     // It is impossible to detect a dark theme without using deprecated APIs
@@ -3171,7 +3158,7 @@ static bool Rename_Directory(EtBrowser *self)
 	/* Build the current and new absolute paths */
 	UpdateDirectoyNameArgs args(
 		gString(g_build_filename(directory_parent, directory_last_name, NULL)),
-		gString(g_build_filename (directory_parent, directory_new_name_file.get(), NULL)),
+		gString(g_build_filename(directory_parent, directory_new_name_file.get(), NULL)),
 		priv->current_path_name);
 
 	/* TODO: Replace with g_file_move(). */
@@ -3266,10 +3253,8 @@ static bool Rename_Directory(EtBrowser *self)
 
 	if ((args.RelationToCurrentRoot & PATH_SUPERDIR)
 		&& priv->current_file.stamp)
-	{	// Update the variable of the current path
-		gString new_current_path(ExpandDirectoryWorker::GetFullPath(GTK_TREE_MODEL(priv->directory_model), priv->current_file));
-		et_browser_set_current_path(self, gObject<GFile>(g_file_new_for_path(new_current_path)).get());
-	}
+		// Update the variable of the current path
+		et_browser_set_current_path(self, gString(g_strconcat(args.NewPath, priv->current_path_name + strlen(args.OldPath), NULL)));
 	if (args.RelationToCurrentRoot)
 		// Update File_Name instances if they belong to the renamed directory
 		priv->file_list->update_directory_name(args);
