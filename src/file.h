@@ -126,9 +126,11 @@ public:
 	bool read_file(GFile *file, const gchar *root, GError **error);
 
 	/// Add new version of file and tag data to the undo list.
-	/// @return Undo key generated, i.e. at least one of \a fileName or \a fileTag caused a change.
+	/// @return true: Undo key generated, i.e. at least one of \a fileName or \a fileTag caused a change.
 	/// @details The function always takes the ownership of \a fileName and \a fileTag.
 	/// If the values are identical to the current state or an argument is \c nullptr no action is taken.
+	/// @remarks Calling this function does not cause any update of the UI.
+	/// Normally you should prefer EtBrowser::apply_file_changes.
 	bool apply_changes(File_Name *fileName, File_Tag *fileTag);
 
 	/// @return \c true if file contains undo data (filename or tag)

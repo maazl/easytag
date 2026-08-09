@@ -664,13 +664,12 @@ void ReplayGainWorker::OnAlbumCompleted(FileListIterator first, FileListIterator
 		File_Tag* file_tag = new File_Tag(*file->FileTagNew());
 		file_tag->album_gain = album_gain;
 		file_tag->album_peak = album_peak;
-		file->apply_changes(nullptr, file_tag);
 
-		if (MainWindow->get_displayed_file() == file)
+		if (window->browser()->apply_file_changes(file, nullptr, file_tag)
+			&& MainWindow->get_displayed_file() == file)
 			et_application_window_update_ui_from_et_file(window, ET_COLUMN_REPLAYGAIN);
 	}
 	Log_Print(LOG_OK, _("ReplayGain of album is %.1f dB, peak %.2f"), album_gain, album_peak);
-	et_browser_refresh_list(window->browser()); // hmm, maybe a bit too much
 }
 
 void ReplayGainWorker::OnFileCompleted(FileListIterator cur, string err, float track_gain, float track_peak)
@@ -689,11 +688,10 @@ void ReplayGainWorker::OnFileCompleted(FileListIterator cur, string err, float t
 			Log_Print(LOG_WARNING, _("Rejecting unreasonable large peak value %.1f. Possibly corrupted file '%s'."), track_peak, file_name.full_name().get());
 		else
 			file_tag->track_peak = track_peak;
-		file->apply_changes(nullptr, file_tag);
 
-		if (MainWindow->get_displayed_file() == file)
+		if (window->browser()->apply_file_changes(file, nullptr, file_tag)
+			&& MainWindow->get_displayed_file() == file)
 			et_application_window_update_ui_from_et_file(window, ET_COLUMN_REPLAYGAIN);
-		et_browser_refresh_file_in_list(window->browser(), file);
 	}
 
 	CurrentDuration += GetFileDuration(*cur);

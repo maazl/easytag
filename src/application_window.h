@@ -20,12 +20,13 @@
 #ifndef ET_APPLICATION_WINDOW_H_
 #define ET_APPLICATION_WINDOW_H_
 
-#include <gtk/gtk.h>
-
-#include "file.h"
+#include "setting.h"
 
 struct _EtBrowser;
 struct _EtAcoustIDDialog;
+class ET_File;
+class File_Name;
+class File_Tag;
 
 #define ET_TYPE_APPLICATION_WINDOW (et_application_window_get_type ())
 #define ET_APPLICATION_WINDOW(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), ET_TYPE_APPLICATION_WINDOW, EtApplicationWindow))
@@ -35,27 +36,27 @@ typedef struct _EtApplicationWindowClass EtApplicationWindowClass;
 
 struct _EtApplicationWindow
 {
-    /*< private >*/
-    GtkApplicationWindow parent_instance;
+	/*< private >*/
+	GtkApplicationWindow parent_instance;
 
-    /// Access the browser instance.
-    struct _EtBrowser* browser();
+	/// Access the browser instance.
+	struct _EtBrowser* browser();
 #ifdef ENABLE_ACOUSTID
-    /// Access the acoustid dialog instance if already initialized.
-    struct _EtAcoustIDDialog* acoustid_dialog();
+	/// Access the acoustid dialog instance if already initialized.
+	struct _EtAcoustIDDialog* acoustid_dialog();
 #endif
 
-    /// Get the file currently displayed in tag file/area or `nullptr` if none.
-    ET_File* get_displayed_file();
-    /// Replaces the currently edited file.
-    /// @param etfile New file to show. `nullptr` to clear the controls.
-    /// @details Any changes to the previous file are applied first.
-    /// @remarks This function is dedicated to the browser.
-    /// It does not change the browser's selection.
-    void change_displayed_file(ET_File* etfile);
+	/// Get the file currently displayed in tag file/area or `nullptr` if none.
+	ET_File* get_displayed_file();
+	/// Replaces the currently edited file.
+	/// @param etfile New file to show. `nullptr` to clear the controls.
+	/// @details Any changes to the previous file are applied first.
+	/// @remarks This function is dedicated to the browser.
+	/// It does not change the browser's selection.
+	void change_displayed_file(ET_File* etfile);
 
-    /// Disable (`false`) / enable (`true`) all user widgets related to the currently displayed file.
-    void displayed_file_sensitive(bool sensitive);
+	/// Disable (`false`) / enable (`true`) all user widgets related to the currently displayed file.
+	void displayed_file_sensitive(bool sensitive);
 };
 
 struct _EtApplicationWindowClass
@@ -87,8 +88,9 @@ void et_application_window_select_file_by_et_file (EtApplicationWindow *self, ET
 GFile * et_application_window_get_current_path (EtApplicationWindow *self);
 const gchar* et_application_window_get_current_path_name (EtApplicationWindow *self);
 GtkWidget * et_application_window_get_scan_dialog (EtApplicationWindow *self);
+/// Save some settings before exit
 void et_application_window_apply_changes (EtApplicationWindow *self);
-/// Ssve changes in tag area to global file list.
+/// Save changes in tag area to global file list.
 void et_application_window_update_et_file_from_ui (EtApplicationWindow *self);
 /// Update tag area from current file.
 /// @param columns Only update this fields.

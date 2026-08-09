@@ -311,6 +311,18 @@ bool EtFileList::to_iter(GtkTreeIter& iter, const ET_File* file) const noexcept
 {	return to_iter(&iter, is_valid(file), *this);
 }
 
+void EtFileList::file_changed(const ET_File* etfile)
+{
+	if (!is_valid(etfile))
+		return;
+
+	GtkTreeIter iter;
+	to_iter(iter, etfile);
+	GtkTreePath* path = gtk_tree_path_new_from_indices(visible_index(etfile), -1);
+	g_signal_emit_by_name(this, "row-changed", path, &iter);
+	gtk_tree_path_free(path);
+}
+
 void EtFileList::remove_file(ET_File *etfile)
 {	GtkTreePath* path = NULL;
 	if (is_valid(etfile))

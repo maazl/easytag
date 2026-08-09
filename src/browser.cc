@@ -1696,11 +1696,7 @@ void et_browser_refresh_file_in_list(EtBrowser *self, const ET_File *file)
 		return;
 
 	// Displayed the filename and refresh other fields
-	GtkTreeIter selectedIter;
-	priv->file_list->to_iter(selectedIter, file);
-	GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(priv->file_list), &selectedIter);
-	gtk_tree_model_row_changed(GTK_TREE_MODEL(priv->file_list), path, &selectedIter);
-	gtk_tree_path_free(path);
+	priv->file_list->file_changed(file);
 
 	/* When displaying Artist + Album lists => refresh also rows color. */
 	GVariant* variant = g_action_group_get_action_state(G_ACTION_GROUP(MainWindow), "file-artist-view");
@@ -1714,6 +1710,7 @@ void et_browser_refresh_file_in_list(EtBrowser *self, const ET_File *file)
 	if (album_range.first == album_range.second)
 		return;
 
+	GtkTreeIter selectedIter;
 	xStringD0 matchingArtist;
 	gboolean valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(priv->artist_model), &selectedIter);
 	while (valid)
@@ -2006,6 +2003,15 @@ pair<ET_File*, ET_File*> EtBrowser::prev_next_if(ET_File* file, bool (*predicate
 
 	result.second = nullptr;
 	return result;
+}
+
+bool EtBrowser::apply_file_changes(ET_File* etfile, File_Name *fileName, File_Tag *fileTag)
+{
+	if (!etfile->apply_changes(fileName, fileTag))
+		return false;
+
+	et_browser_refresh_file_in_list(this, etfile);
+	return true;
 }
 
 /// Hide tooltip if no ellipsis.

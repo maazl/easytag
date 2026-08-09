@@ -191,7 +191,7 @@ static void apply_field_to_selection(const F& value_to_set, const vector<xPtr<ET
 	{	ET_File *etfile = l.get();
 		File_Tag *FileTag = new File_Tag(*etfile->FileTagNew());
 		FileTag->*field = value_to_set;
-		etfile->apply_changes(nullptr, FileTag);
+		MainWindow->browser()->apply_file_changes(etfile, nullptr, FileTag);
 	}
 }
 static gchar* apply_field_to_selection(GtkWidget* widget, const vector<xPtr<ET_File>>& etfilelist,
@@ -288,7 +288,7 @@ static void on_apply_to_selection(GtkWidget *object, GTypeInstance *context)
             FileTag->disc_number = disc_number;
             FileTag->disc_total = disc_total;
             FileTag->padnumbers();
-            etfile->apply_changes(nullptr, FileTag);
+            MainWindow->browser()->apply_file_changes(etfile, nullptr, FileTag);
         }
 
         if (!et_str_empty (string_to_set))
@@ -324,7 +324,7 @@ static void on_apply_to_selection(GtkWidget *object, GTypeInstance *context)
             if (track)
                 FileTag->track = track;
             FileTag->track_total = total;
-            etfile->apply_changes(nullptr, FileTag);
+            MainWindow->browser()->apply_file_changes(etfile, nullptr, FileTag);
         }
 
         if (et_str_empty(total))
@@ -380,7 +380,7 @@ static void on_apply_to_selection(GtkWidget *object, GTypeInstance *context)
             File_Tag* FileTag = new File_Tag(*etfile->FileTagNew());
             FileTag->track = File_Tag::track_number_to_string(track);
             FileTag->track_total = File_Tag::track_number_to_string(by_path.find(etfile->FileNameNew()->path())->second);
-            etfile->apply_changes(nullptr, FileTag);
+            MainWindow->browser()->apply_file_changes(etfile, nullptr, FileTag);
         }
 
         msg = g_strdup_printf (_("Selected tracks numbered sequentially"));
@@ -479,7 +479,7 @@ static void on_apply_to_selection(GtkWidget *object, GTypeInstance *context)
         {
             File_Tag* FileTag = new File_Tag(*etfile->FileTagNew());
             FileTag->pictures = pics;
-            etfile->apply_changes(nullptr, FileTag);
+            MainWindow->browser()->apply_file_changes(etfile.get(), nullptr, FileTag);
         }
         if (!pics.empty())
         {
@@ -492,9 +492,6 @@ static void on_apply_to_selection(GtkWidget *object, GTypeInstance *context)
     }
 
 finish:
-    /* Refresh the whole list (faster than file by file) to show changes. */
-    et_browser_refresh_list(window->browser());
-
     if (msg)
     {
         Log_Print(LOG_OK,"%s",msg);

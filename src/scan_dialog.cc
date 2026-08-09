@@ -275,7 +275,7 @@ Scan_Tag_With_Mask (EtScanDialog *self, ET_File *ETFile)
 #endif
 
     // Save changes of the 'File_Tag' item
-    ETFile->apply_changes(nullptr, FileTag);
+    MainWindow->browser()->apply_file_changes(ETFile, nullptr, FileTag);
 
     et_application_window_status_bar_message(MainWindow, _("Tag successfully scanned"), TRUE);
     Log_Print (LOG_OK, _("Tag successfully scanned ‘%s’"), ETFile->FileNameNew()->file().get());
@@ -649,7 +649,7 @@ Scan_Rename_File_With_Mask (EtScanDialog *self, ET_File *ETFile)
     /* Build the filename with the full path or relative to old path */
     File_Name *FileName = ETFile->FileNameNew()->generate_name(filename_generated_utf8.c_str(), false);
     // Save changes of the 'File_Name' item
-    ETFile->apply_changes(FileName, nullptr);
+    MainWindow->browser()->apply_file_changes(ETFile, FileName, nullptr);
 
     et_application_window_status_bar_message(MainWindow, _("New filename successfully scanned"), TRUE);
 
@@ -891,8 +891,7 @@ Scan_Process_Fields (EtScanDialog *self, ET_File *ETFile)
             Scan_Process_Tag_Field(self, FileTag, &File_Tag::encoded_by);
     }
 
-    ETFile->apply_changes(FileName, FileTag);
-
+    MainWindow->browser()->apply_file_changes(ETFile, FileName, FileTag);
 }
 
 /******************
@@ -1815,9 +1814,6 @@ et_scan_dialog_scan_selected_files (EtScanDialog *self)
     }
 
     selfilelist.clear();
-
-    /* Refresh the whole list (faster than file by file) to show changes. */
-    et_browser_refresh_list(window->browser());
 
     /* Update the current file */
     et_application_window_update_ui_from_et_file(window);

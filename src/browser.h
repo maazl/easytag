@@ -89,6 +89,12 @@ public:
 	/// @remarks The current implementation needs to scan the entire model.
 	std::pair<ET_File*, ET_File*> prev_next_if(ET_File* file, bool (*predicate)(const ET_File*));
 
+	/// Apply changes to a given file and update the UI.
+	/// @return true: Undo key generated, i.e. at least one of \a fileName or \a fileTag caused a change.
+	/// @details The function always takes the ownership of \a fileName and \a fileTag.
+	/// If the values are identical to the current state or an argument is \c nullptr no action is taken.
+	bool apply_file_changes(ET_File* etfile, File_Name *fileName, File_Tag *fileTag);
+
 	// Actions ...
 
 	/// Select the directory corresponding to the 'path' in the browser.

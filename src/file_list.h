@@ -231,6 +231,8 @@ public:
 	ET_File* from_iter(const GtkTreeIter& iter) const noexcept;
 	bool to_iter(GtkTreeIter& iter, const ET_File* file) const noexcept;
 
+	/// Send a row changed signal to the tree view if the file is visible.
+	void file_changed(const ET_File* etfile);
 	/// Remove a file from the list.
 	void remove_file(ET_File *etfile);
 };

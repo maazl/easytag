@@ -1936,7 +1936,7 @@ set_et_file_from_cddb_album (ET_File * etfile,
         FileName = etfile->FileNameNew()->generate_name(filename_generated_utf8.c_str(), true);
     }
 
-    etfile->apply_changes(FileName, FileTag);
+    MainWindow->browser()->apply_file_changes(etfile, FileName, FileTag);
 
     /* Then run current scanner if requested. */
     if (g_settings_get_boolean (MainSettings, "cddb-run-scanner"))

@@ -298,8 +298,6 @@ static bool apply_row(EtAcoustIDDialog *self, GtkTreeIter* iter)
 			assign(tag->disc_total, to_string(value).c_str(), ET_COLUMN_DISC_NUMBER);
 	}
 
-	bool changed = priv->current_file->apply_changes(nullptr, tag);
-
 	g_free(artist);
 	g_free(title);
 	g_free(album);
@@ -307,12 +305,12 @@ static bool apply_row(EtAcoustIDDialog *self, GtkTreeIter* iter)
 	g_free(year);
 	g_free(rel_year);
 
+	bool changed = MainWindow->browser()->apply_file_changes(priv->current_file, nullptr, tag);
 	if (!changed)
 		return false;
 
 	if (MainWindow->get_displayed_file() == priv->current_file)
 		et_application_window_update_ui_from_et_file(MainWindow, toUpdate);
-	et_browser_refresh_file_in_list(MainWindow->browser(), priv->current_file);
 	return true;
 }
 

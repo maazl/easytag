@@ -511,52 +511,40 @@ done:
     et_application_window_progress_set (self, 0, 0);
 }
 
-static void
-on_undo_file_changes (GSimpleAction *action,
-                      GVariant *variant,
-                      gpointer user_data)
+static void on_undo_file_changes(GSimpleAction *action, GVariant *variant, gpointer user_data)
 {
-    EtApplicationWindow* self = ET_APPLICATION_WINDOW (user_data);
-    EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
+	EtApplicationWindow* self = ET_APPLICATION_WINDOW(user_data);
+	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
 
-    g_return_if_fail(!priv->browser->empty());
+	g_return_if_fail(!priv->browser->empty());
 
-    et_application_window_update_et_file_from_ui (self);
+	et_application_window_update_et_file_from_ui(self);
 
-    bool state = false;
-    for (auto& file : priv->browser->get_selected_files())
-        state |= file->undo();
+	for (auto& file : priv->browser->get_selected_files())
+	{	if (!file->undo())
+			continue;
+		et_browser_refresh_file_in_list(priv->browser, file);
+	}
 
-    /* Refresh the whole list (faster than file by file) to show changes. */
-    et_browser_refresh_list(priv->browser);
-
-    /* Display the current file */
-    et_application_window_update_ui_from_et_file(self);
-    et_application_window_update_actions (self);
+	et_application_window_update_actions(self);
 }
 
-static void
-on_redo_file_changes (GSimpleAction *action,
-                      GVariant *variant,
-                      gpointer user_data)
+static void on_redo_file_changes(GSimpleAction *action, GVariant *variant, gpointer user_data)
 {
-    EtApplicationWindow* self = ET_APPLICATION_WINDOW (user_data);
-    EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
+	EtApplicationWindow* self = ET_APPLICATION_WINDOW(user_data);
+	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
 
-    g_return_if_fail(!priv->browser->empty());
+	g_return_if_fail(!priv->browser->empty());
 
-    et_application_window_update_et_file_from_ui (self);
+	et_application_window_update_et_file_from_ui(self);
 
-    bool state = false;
-    for (auto& file : priv->browser->get_selected_files())
-        state |= file->redo();
+	for (auto& file : priv->browser->get_selected_files())
+	{	if (!file->redo())
+			continue;
+		et_browser_refresh_file_in_list(priv->browser, file);
+	}
 
-    /* Refresh the whole list (faster than file by file) to show changes. */
-    et_browser_refresh_list(priv->browser);
-
-    /* Display the current file */
-    et_application_window_update_ui_from_et_file(self);
-    et_application_window_update_actions (self);
+	et_application_window_update_actions(self);
 }
 
 static void
@@ -693,47 +681,20 @@ on_redo_last_changes (GSimpleAction *action,
     }
 }
 
-static void
-on_remove_tags (GSimpleAction *action,
-                GVariant *variant,
-                gpointer user_data)
+static void on_remove_tags(GSimpleAction *action, GVariant *variant, gpointer user_data)
 {
-    EtApplicationWindow* self = ET_APPLICATION_WINDOW(user_data);
-    EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
-    File_Tag *FileTag;
-    gint progress_bar_index;
-    gint selectcount;
+	EtApplicationWindow* self = ET_APPLICATION_WINDOW(user_data);
+	EtApplicationWindowPrivate* priv = et_application_window_get_instance_private(self);
 
-    g_return_if_fail(!priv->browser->empty());
+	g_return_if_fail(!priv->browser->empty());
 
-    et_application_window_update_et_file_from_ui (self);
+	et_application_window_update_et_file_from_ui(self);
 
-    /* Initialize status bar */
-    auto etfilelist = priv->browser->get_selected_files();
-    selectcount = etfilelist.size();
-    progress_bar_index = 0;
-    et_application_window_progress_set(self, 0, selectcount);
+	for (const xPtr<ET_File>& etfile : priv->browser->get_selected_files())
+		priv->browser->apply_file_changes(etfile.get(), nullptr, new File_Tag());
 
-    for (const xPtr<ET_File>& etfile : etfilelist)
-    {
-        FileTag = new File_Tag();
-        etfile->apply_changes(nullptr, FileTag);
-
-        et_application_window_progress_set(self, ++progress_bar_index, selectcount);
-        /* Needed to refresh status bar */
-        while (gtk_events_pending ())
-            gtk_main_iteration ();
-    }
-
-    /* Refresh the whole list (faster than file by file) to show changes. */
-    et_browser_refresh_list(priv->browser);
-
-    /* Display the current file */
-    et_application_window_update_ui_from_et_file(self);
-    et_application_window_update_actions (self);
-
-    et_application_window_progress_set(self, 0, 0);
-    et_application_window_status_bar_message (self, _("All tags have been removed"), TRUE);
+	et_application_window_update_actions(self);
+	et_application_window_status_bar_message(self, _("All tags have been removed"), TRUE);
 }
 
 static void
@@ -1500,7 +1461,7 @@ et_application_window_update_et_file_from_ui (EtApplicationWindow *self)
                       && et_file->FileTagCur() != NULL);
 
     /* Save filename and generate undo for filename. */
-    File_Name* FileName = et_application_window_create_file_name_from_ui(self, et_file);
+    File_Name* fileName = et_application_window_create_file_name_from_ui(self, et_file);
 
     File_Tag* fileTag = new File_Tag(*et_file->FileTagNew()); // clone
     et_tag_area_store_file_tag(priv->tag_area, fileTag);
@@ -1509,9 +1470,7 @@ et_application_window_update_et_file_from_ui (EtApplicationWindow *self)
      * Generate undo for the file and the main undo list.
      * If no changes detected, FileName and FileTag item are deleted.
      */
-    if (et_file->apply_changes(FileName, fileTag))
-        /* Refresh file into browser list */
-        et_browser_refresh_file_in_list(priv->browser, et_file);
+    priv->browser->apply_file_changes(et_file, fileName, fileTag);
 }
 
 /*
