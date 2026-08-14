@@ -81,7 +81,7 @@
 				</child>
 				<child>
 					<object class="GtkScrolledWindow" id="results_scrolled">
-						<property name="expand">False</property>
+						<property name="expand">True</property>
 						<property name="margin-left">12</property>
 						<property name="margin-right">12</property>
 						<property name="margin-top">6</property>
@@ -89,7 +89,7 @@
 						<property name="min-content-width">750</property>
 						<child>
 							<object class="GtkTreeView" id="results_view">
-								<property name="expand">False</property>
+								<property name="expand">True</property>
 								<property name="model">results_list_model</property>
 								<signal name="button-press-event" handler="on_results_button_press_event"/>
 								<child>
