@@ -84,7 +84,6 @@ typedef struct
     GtkTreeView *file_view;
     GtkWidget *file_menu;
     guint file_selected_handler;
-    EtSortMode file_sort_order;
     guint file_sort_descending_handler;
 
     GtkTreeView *album_view;
@@ -1581,11 +1580,17 @@ void EtBrowser::disconnect_model()
 void EtBrowser::connect_model(const vector<xPtr<ET_File>>* files)
 {
 	EtBrowserPrivate* priv = et_browser_get_instance_private(this);
+
+	// sort
+	EtSortMode sort_order = (EtSortMode)g_settings_get_enum(MainSettings, "sort-order");
+	priv->file_list->set_sort_func(ET_File::get_comp_func(sort_order,
+		g_settings_get_boolean(MainSettings, "sort-descending")));
+
+	// activate model
 	gtk_tree_view_set_model(priv->file_view, GTK_TREE_MODEL(priv->file_list));
 
 	// restore sort marker
-	priv->file_sort_order = (EtSortMode)g_settings_get_enum(MainSettings, "sort-order");
-	GtkTreeViewColumn* column = et_browser_get_column_for_sort_order(this, priv->file_sort_order);
+	GtkTreeViewColumn* column = et_browser_get_column_for_sort_order(this, sort_order);
 	if (column != NULL)
 	{	gtk_tree_view_column_set_sort_order(column, g_settings_get_boolean(MainSettings, "sort-descending") ? GTK_SORT_DESCENDING : GTK_SORT_ASCENDING);
 		gtk_tree_view_column_set_sort_indicator(column, TRUE);
@@ -2685,25 +2690,9 @@ static void on_sort_order_changed(EtBrowser *self, const gchar *key, GSettings *
 {
 	EtBrowserPrivate* priv = et_browser_get_instance_private (self);
 
-	if (strcmp(key, "sort-order") == 0)
-		priv->file_sort_order = (EtSortMode)g_settings_get_enum(settings, key);
-
 	vector<xPtr<ET_File>> selectedFiles = self->get_selected_files();
 	self->disconnect_model();
-
-	// sort
-	priv->file_list->set_sort_func(ET_File::get_comp_func(
-		(EtSortMode)g_settings_get_enum(MainSettings, "sort-order"),
-		g_settings_get_boolean(MainSettings, "sort-descending")));
-
 	self->connect_model(&selectedFiles);
-
-	GtkTreeViewColumn* column = et_browser_get_column_for_sort_order(self, priv->file_sort_order);
-	if (column != NULL)
-	{	// New sort mode is for a column with a visible counterpart.
-		gtk_tree_view_column_set_sort_order(column, g_settings_get_boolean(settings, "sort-descending") ? GTK_SORT_DESCENDING : GTK_SORT_ASCENDING);
-		gtk_tree_view_column_set_sort_indicator(column, TRUE);
-	}
 }
 
 /*
@@ -2963,7 +2952,7 @@ et_browser_on_column_clicked (GtkTreeViewColumn *column, gpointer data)
 	EtBrowser *self = ET_BROWSER(g_object_get_data(G_OBJECT(column), "browser"));
 	EtBrowserPrivate *priv = et_browser_get_instance_private (self);
 
-	if (ev->value == priv->file_sort_order)
+	if (ev->value == g_settings_get_enum(MainSettings, "sort-order"))
 		// change direction only
 		g_settings_set_boolean(MainSettings, "sort-descending",
 			!g_settings_get_boolean(MainSettings, "sort-descending"));
