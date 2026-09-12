@@ -523,6 +523,7 @@ static void on_undo_file_changes(GSimpleAction *action, GVariant *variant, gpoin
 	for (auto& file : priv->browser->get_selected_files())
 	{	if (!file->undo())
 			continue;
+		et_application_window_notify_file_change(self, file);
 		et_browser_refresh_file_in_list(priv->browser, file);
 	}
 
@@ -541,6 +542,7 @@ static void on_redo_file_changes(GSimpleAction *action, GVariant *variant, gpoin
 	for (auto& file : priv->browser->get_selected_files())
 	{	if (!file->redo())
 			continue;
+		et_application_window_notify_file_change(self, file);
 		et_browser_refresh_file_in_list(priv->browser, file);
 	}
 
@@ -657,7 +659,7 @@ on_undo_last_changes (GSimpleAction *action,
     ETFile = ET_File::global_undo();
     if (ETFile)
     {
-        et_browser_select_file_by_et_file(priv->browser, ETFile, TRUE);
+        et_application_window_select_file_by_et_file(self, ETFile);
         et_browser_refresh_file_in_list(priv->browser, ETFile);
     }
 }
@@ -676,7 +678,7 @@ on_redo_last_changes (GSimpleAction *action,
     ETFile = ET_File::global_redo();
     if (ETFile)
     {
-        et_browser_select_file_by_et_file(priv->browser, ETFile, TRUE);
+        et_application_window_select_file_by_et_file(self, ETFile);
         et_browser_refresh_file_in_list(priv->browser, ETFile);
     }
 }

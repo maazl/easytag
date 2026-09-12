@@ -309,8 +309,7 @@ static bool apply_row(EtAcoustIDDialog *self, GtkTreeIter* iter)
 	if (!changed)
 		return false;
 
-	if (MainWindow->get_displayed_file() == priv->current_file)
-		et_application_window_update_ui_from_et_file(MainWindow, toUpdate);
+	et_application_window_notify_file_change(MainWindow, priv->current_file, toUpdate);
 	return true;
 }
 

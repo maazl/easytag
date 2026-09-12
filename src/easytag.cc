@@ -665,9 +665,8 @@ void ReplayGainWorker::OnAlbumCompleted(FileListIterator first, FileListIterator
 		file_tag->album_gain = album_gain;
 		file_tag->album_peak = album_peak;
 
-		if (window->browser()->apply_file_changes(file, nullptr, file_tag)
-			&& MainWindow->get_displayed_file() == file)
-			et_application_window_update_ui_from_et_file(window, ET_COLUMN_REPLAYGAIN);
+		if (window->browser()->apply_file_changes(file, nullptr, file_tag))
+			et_application_window_notify_file_change(window, file, ET_COLUMN_REPLAYGAIN);
 	}
 	Log_Print(LOG_OK, _("ReplayGain of album is %.1f dB, peak %.2f"), album_gain, album_peak);
 }
@@ -689,9 +688,8 @@ void ReplayGainWorker::OnFileCompleted(FileListIterator cur, string err, float t
 		else
 			file_tag->track_peak = track_peak;
 
-		if (window->browser()->apply_file_changes(file, nullptr, file_tag)
-			&& MainWindow->get_displayed_file() == file)
-			et_application_window_update_ui_from_et_file(window, ET_COLUMN_REPLAYGAIN);
+		if (window->browser()->apply_file_changes(file, nullptr, file_tag))
+			et_application_window_notify_file_change(window, file, ET_COLUMN_REPLAYGAIN);
 	}
 
 	CurrentDuration += GetFileDuration(*cur);

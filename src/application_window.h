@@ -92,9 +92,16 @@ GtkWidget * et_application_window_get_scan_dialog (EtApplicationWindow *self);
 void et_application_window_apply_changes (EtApplicationWindow *self);
 /// Save changes in tag area to global file list.
 void et_application_window_update_et_file_from_ui (EtApplicationWindow *self);
-/// Update tag area from current file.
+/// Update file and tag area from current file.
 /// @param columns Only update this fields.
 void et_application_window_update_ui_from_et_file (EtApplicationWindow *self, EtColumn columns = (EtColumn)~0);
+/// Notify the UI about changes by background process.
+/// @param file The file that has changed.
+/// @param columns Update this fields.
+/// @remarks This is basically the same than et_application_window_update_ui_from_et_file but it applies only
+/// if \a file happens to be the currently selected one.
+inline void et_application_window_notify_file_change(EtApplicationWindow *self, const ET_File* file, EtColumn columns = (EtColumn)~0)
+{	if (self->get_displayed_file() == file) et_application_window_update_ui_from_et_file(self, columns); }
 void et_application_window_browser_unselect_all (EtApplicationWindow *self);
 
 void et_application_window_scan_dialog_update_previews (EtApplicationWindow *self);
