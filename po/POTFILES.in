@@ -1,21 +1,21 @@
 data/org.gnome.EasyTAG.appdata.xml.in
 data/org.gnome.EasyTAG.desktop.in
-[type: gettext/glade]data/acoustid_dialog.ui
-[type: gettext/glade]data/browser.ui
-[type: gettext/glade]data/browser_dialogs.ui
-[type: gettext/glade]data/cddb_dialog.ui
-[type: gettext/glade]data/file_area.ui
-[type: gettext/glade]data/image_properties_dialog.ui
-[type: gettext/glade]data/log_area.ui
-[type: gettext/glade]data/load_files_dialog.ui
-[type: gettext/glade]data/menus.ui
-[type: gettext/glade]data/playlist_dialog.ui
-[type: gettext/glade]data/preferences_dialog.ui
-[type: gettext/glade]data/scan_dialog.ui
-[type: gettext/glade]data/search_dialog.ui
-[type: gettext/glade]data/tag_area.ui
-[type: gettext/glade]data/toolbar.ui
-[type: gettext/gsettings]data/org.gnome.EasyTAG.gschema.xml
+data/acoustid_dialog.ui
+data/browser.ui
+data/browser_dialogs.ui
+data/cddb_dialog.ui
+data/file_area.ui
+data/image_properties_dialog.ui
+data/log_area.ui
+data/load_files_dialog.ui
+data/menus.ui
+data/playlist_dialog.ui
+data/preferences_dialog.ui
+data/scan_dialog.ui
+data/search_dialog.ui
+data/tag_area.ui
+data/toolbar.ui
+data/org.gnome.EasyTAG.gschema.xml
 src/about.cc
 src/acoustid_dialog.cc
 src/acoustid.cc

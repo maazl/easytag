@@ -30,11 +30,12 @@ LT_INIT([disable-static])
 dnl -------------------------------
 dnl Translation files.
 dnl -------------------------------
-IT_PROG_INTLTOOL([0.50.0])
 AC_SUBST([GETTEXT_PACKAGE], [$PACKAGE_TARNAME])
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [Package name for gettext])
 AS_IF([test "x$USE_NLS" != "xno"],
       [AC_DEFINE([ENABLE_NLS], [1], [Native Language support is enabled])])
+AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION([0.19.8])
 
 dnl -------------------------------
 dnl Checks for programs.

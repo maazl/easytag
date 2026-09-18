@@ -1,10 +1,13 @@
 # ignore file
+*~
 *.lo
 *.o
+*.orig
 .dirstamp
 .dstamp
 .libs
 /build-aux
+/.settings
 m4/*
 Makefile
 Makefile.in
@@ -32,16 +35,22 @@ configure
 /help/*/*.stamp
 /help/*/legal.xml
 !/help/C
+/ABOUT-NLS
 /INSTALL
 /libtool
 /org.gnome.EasyTAG.enums.xml
+/po/*.header
 /po/*.gmo
 /po/*.mo
+/po/*.sed
+/po/*.sin
 /po/.intltool-merge-cache
 /po/Makefile.in.in
 /po/POTFILES
+/po/Rules-quot
 /po/easytag.pot
 /po/stamp-it
+/po/stamp-po
 /src/.deps/
 /src/tags/id3lib/.deps/
 /src/tags/libapetag/.deps/

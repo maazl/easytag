@@ -254,20 +254,25 @@ easytag-win32-installer.nsi: easytag-win32-installer.nsi.in Makefile
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_at)touch $@
 
-@INTLTOOL_XML_RULE@
+appdatadir = $(datadir)/metainfo
 appdata_in_files = data/org.gnome.EasyTAG.appdata.xml.in
-appdata_XML = $(appdata_in_files:.xml.in=.xml)
+appdata_DATA = $(appdata_in_files:.xml.in=.xml)
+$(appdata_DATA): $(appdata_in_files)
+	$(AM_V_GEN)$(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
-@INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
 desktop_in_files = data/org.gnome.EasyTAG.desktop.in
 $(desktop_in_files:.desktop.in=.desktop): share/glib-2.0/schemas/gschemas.compiled
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+$(desktop_DATA): $(desktop_in_files)
+	$(AM_V_GEN)$(MSGFMT) --desktop --template $< -d $(top_srcdir)/po -o $@
 
 gsettings_ENUM_FILES = src/setting.h
 gsettings_ENUM_NAMESPACE = org.gnome.EasyTAG
 gsettings_SCHEMAS = data/org.gnome.EasyTAG.gschema.xml
 @GSETTINGS_RULES@
+
+all-local: $(appdata_DATA) $(desktop_DATA)
 
 if ENABLE_MAN
 doc/easytag.1: doc/easytag.xml Makefile
@@ -328,6 +333,8 @@ dist_appiconscalable_DATA = \
 	data/icons/scalable/org.gnome.EasyTAG.svg
 dist_appiconsymbolic_DATA = \
 	data/icons/symbolic/org.gnome.EasyTAG-symbolic.svg
+
+EXTRA_DIST = $(appdata_DATA) $(desktop_DATA)
 
 UPDATE_ICON_CACHE = gtk-update-icon-cache --ignore-theme-index --force
 
@@ -546,7 +553,7 @@ TESTS = \
 endif
 
 CLEANFILES = \
-	$(appdata_XML) \
+	$(appdata_DATA) \
 	$(check_SCRIPTS) \
 	$(desktop_DATA) \
 	$(easytag_rc) \

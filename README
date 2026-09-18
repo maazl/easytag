@@ -77,7 +77,8 @@ Installation
 * yelp-tools (https://gitlab.gnome.org/GNOME/yelp-tools)
 * libc 6 (glibc 2.1) or greater
 * appdata-tools (https://github.com/hughsie/appdata-tools)
-* intltool (if not deactivated by './configure --disable-nls')
+* gettext (if not deactivated by './configure --disable-nls')
+- autopoint
 
 ### Compilation instructions
 
