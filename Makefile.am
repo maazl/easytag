@@ -1,7 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4
 
 AM_DISTCHECK_CONFIGURE_FLAGS = \
-	--enable-appdata-check \
 	--enable-flac \
 	--enable-id3v23 \
 	--enable-ogg \
@@ -254,10 +253,10 @@ easytag-win32-installer.nsi: easytag-win32-installer.nsi.in Makefile
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_at)touch $@
 
-appdatadir = $(datadir)/metainfo
-appdata_in_files = data/org.gnome.EasyTAG.appdata.xml.in
-appdata_DATA = $(appdata_in_files:.xml.in=.xml)
-$(appdata_DATA): $(appdata_in_files)
+metainfodir = $(datadir)/metainfo
+metainfo_in_files = data/org.gnome.EasyTAG.metainfo.xml.in
+metainfo_DATA = $(metainfo_in_files:.xml.in=.xml)
+$(metainfo_DATA): $(metainfo_in_files)
 	$(AM_V_GEN)$(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
 desktopdir = $(datadir)/applications
@@ -272,7 +271,7 @@ gsettings_ENUM_NAMESPACE = org.gnome.EasyTAG
 gsettings_SCHEMAS = data/org.gnome.EasyTAG.gschema.xml
 @GSETTINGS_RULES@
 
-all-local: $(appdata_DATA) $(desktop_DATA)
+all-local: $(metainfo_DATA) $(desktop_DATA)
 
 if ENABLE_MAN
 doc/easytag.1: doc/easytag.xml Makefile
@@ -334,7 +333,7 @@ dist_appiconscalable_DATA = \
 dist_appiconsymbolic_DATA = \
 	data/icons/symbolic/org.gnome.EasyTAG-symbolic.svg
 
-EXTRA_DIST = $(appdata_DATA) $(desktop_DATA)
+EXTRA_DIST = $(metainfo_DATA) $(desktop_DATA)
 
 UPDATE_ICON_CACHE = gtk-update-icon-cache --ignore-theme-index --force
 
@@ -350,7 +349,7 @@ uninstall-update-icon-cache:
 	test -n "$(DESTDIR)" || $(UPDATE_ICON_CACHE) "$(iconthemedir)"
 
 dist_noinst_DATA = \
-	$(appdata_in_files) \
+	$(metainfo_in_files) \
 	$(desktop_in_files) \
 	$(gsettings_SCHEMAS) \
 	$(easytag_headers) \
@@ -553,7 +552,7 @@ TESTS = \
 endif
 
 CLEANFILES = \
-	$(appdata_DATA) \
+	$(metainfo_DATA) \
 	$(check_SCRIPTS) \
 	$(desktop_DATA) \
 	$(easytag_rc) \

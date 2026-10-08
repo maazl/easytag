@@ -7,16 +7,16 @@
     <project_license>GPL-2.0+</project_license>
 
 <!-- Name and summary taken from the desktop file. -->
-    <_name>EasyTAG</_name>
-    <_summary>Edit audio file metadata</_summary>
+    <name>EasyTAG</name>
+    <summary>Edit audio file metadata</summary>
     <developer_name>The EasyTAG developers</developer_name>
     <description>
-        <_p>View and edit tags for MP3, MP2, MP4/AAC, FLAC, Ogg Opus, Ogg
-        Speex, Ogg Vorbis, Windows Media, MusePack, Monkey's Audio and WavPack files.</_p>
-        <_p>Look up albums in online databases, bulk edit tags, create
-        playlists and rename a collection of files.</_p>
-        <_p>A simple and nice GTK+ interface makes tagging easier under
-        GNU/Linux and Windows.</_p>
+        <p>View and edit tags for MP3, MP2, MP4/AAC, FLAC, Ogg Opus, Ogg
+        Speex, Ogg Vorbis, Windows Media, MusePack, Monkey's Audio and WavPack files.</p>
+        <p>Look up albums in online databases, bulk edit tags, create
+        playlists and rename a collection of files.</p>
+        <p>A simple and nice GTK+ interface makes tagging easier under
+        GNU/Linux and Windows.</p>
     </description>
     <!--url type="homepage">https://github.com/maazl/easytag</url-->
     <url type="bugtracker">https://github.com/maazl/easytag/issues</url>
@@ -35,7 +35,7 @@
     </kudos>
     <content_rating type="oars-1.1"/>
     <releases>
-        <release version="3.0.0" date="2026-02-08"/>
+        <release version="3.0.1" date="2026-09-18"/>
     </releases>
     <update_contact>github@maazl.de</update_contact>
     <translation type="gettext">easytag</translation>

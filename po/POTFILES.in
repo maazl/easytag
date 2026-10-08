@@ -1,4 +1,4 @@
-data/org.gnome.EasyTAG.appdata.xml.in
+data/org.gnome.EasyTAG.metainfo.xml.in
 data/org.gnome.EasyTAG.desktop.in
 data/acoustid_dialog.ui
 data/browser.ui
